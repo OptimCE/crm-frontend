@@ -1,0 +1,94 @@
+<!-- Header Section -->
+<div class="flex flex-wrap -mx-2 items-center pb-3">
+  <div class="lg:w-8/12 px-2 flex items-center">
+    <i class="pi pi-key text-xl text-primary mr-2"></i>
+    <h2 class="mt-0 mb-0 text-lg font-medium">{{ "KEY.CREATE.KEY_TITLE" | translate }}</h2>
+  </div>
+  <div class="lg:w-4/12 text-end">
+    <p-button pRipple label="{{ 'KEY.SHARED.BACK' | translate }}" class="p-button-outlined" icon="pi pi-arrow-left" routerLink="/key"></p-button>
+  </div>
+</div>
+@if(isLoaded){
+  <div>
+    <div class="container">
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
+        <!-- Key Name -->
+        <div class="form-group pb-3 flex flex-col">
+          <label for="name" class="text-base font-medium">{{ "KEY.CREATE.FORM.KEY_NAME_LABEL" | translate }}</label>
+          <input pInputText type="text" class="form-control" formControlName="name" id="name" placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}" />
+          <app-error-handler controlName="name" [errorsAdd]="errorsAdded"></app-error-handler>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group pb-3 flex flex-col">
+          <label for="description" class="text-base font-medium">{{ "KEY.CREATE.FORM.KEY_DESCRIPTION_LABEL" | translate }}</label>
+          <textarea pInputTextarea rows="5" cols="50" class="form-control" formControlName="description" id="description" placeholder="{{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate }}"></textarea>
+          <app-error-handler controlName="description" [errorsAdd]="errorsAdded"></app-error-handler>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons text-center pb-3">
+          @if(key.iterations.length <3){
+            <p-button
+              pRipple
+              label="{{ 'KEY.CREATE.FORM.KEY_ADD_ITERATION_BUTTON_LABEL' | translate }}"
+              (click)="newIteration()"
+              class="p-button-outlined"
+            ></p-button>
+            <p-button
+              pRipple
+              label="{{ 'KEY.CREATE.FORM.KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL' | translate }}"
+              (click)="newIterationProrata()"
+              class="p-button-outlined"
+            ></p-button>
+          }
+
+          @if(key.iterations.length > 0){
+            <p-button
+              pRipple
+              label="{{ 'KEY.CREATE.FORM.KEY_ADD_CONSUMER_BUTTON_LABEL' | translate }}"
+              (click)="newConsumer()"
+              class="p-button-outlined"
+            ></p-button>
+          }
+        </div>
+        <!-- Ag-Grid Wrapper -->
+        <div class="card p-4 grid-container mb-4">
+          <h4 class="text-center mb-3 text-primary">{{ "KEY.CREATE.FORM.KEY_DATAS_LABEL" | translate }}</h4>
+          <ag-grid-angular
+            style="width: 100%; height: 500px; overflow-x: hidden"
+            [rowData]="rowData"
+            [columnDefs]="colDefs"
+            [class]="themeClass"
+            (gridReady)="onGridReady($event)"
+            [defaultColDef]="defaultColDef"
+            (cellValueChanged)="onCellValueChanged($event)"
+            [components]="frameworkComponents"
+            [context]="getContext()"
+            [gridOptions]="gridOptions"
+            id="key_data"
+          >
+          </ag-grid-angular>
+        </div>
+        <app-error-handler controlName="key_data" [errorsAdd]="errorsAdded"></app-error-handler>
+
+        <!-- Submit Button -->
+        <div class="form-field text-center">
+          <app-summary-error
+            [errorsAdd]="errorsSummaryAdded"
+            [controlLabels]="{
+              'name': 'KEY.CREATE.FORM.ERROR.KEY_NAME_LABEL',
+              'description':'KEY.CREATE.FORM.ERROR.DESCRIPTION_LABEL'
+            }"
+          ></app-summary-error>
+          <p-button
+            pRipple
+            type="submit"
+            label="{{ 'KEY.CREATE.FORM.KEY_CREATE_BUTTON_LABEL' | translate }}"
+            class="p-button-lg p-button-primary"
+          ></p-button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

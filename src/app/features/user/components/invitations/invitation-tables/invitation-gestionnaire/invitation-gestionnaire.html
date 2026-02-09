@@ -1,0 +1,43 @@
+<p-table
+  [value]="gestionnaireInvitation()"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [lazy]="true"
+  (onLazyLoad)="lazyLoadGestionnaireInvitation($event)"
+  [rows]="pagination().limit"
+  [totalRecords]="pagination().total"
+  [first]="(pagination().page - 1) * pagination().limit"
+  [showCurrentPageReport]="true"
+  [currentPageReportTemplate]="currentPageReportTemplateDocuments"
+  (onPage)="pageChangeGestionnaire($event)"
+  [paginator]="pagination().total_pages > 1"
+  [loading]="loadingGestionnaire()"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        {{ "INVITATION.MANAGER.HEADERS.EMAIL_ADDRESS" | translate }}
+      </th>
+      <th>
+        {{ "INVITATION.MANAGER.HEADERS.COMMUNITY" | translate }}
+      </th>
+      <th>
+        {{ "INVITATION.MANAGER.HEADERS.ACTIONS" | translate }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-invitation>
+    <tr>
+      <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
+      <td class="text-sm px-3 py-2">{{ invitation.communityName }}</td>
+      <td>
+        <p-button label="{{ 'INVITATION.MANAGER.ACCEPT' | translate }}" severity="success" (click)="acceptGestionnaireInvitation(invitation)"></p-button>
+        <p-button label="{{ 'INVITATION.MANAGER.REFUSE' | translate }}" severity="danger" (click)="refuseGestionnaireInvitation(invitation)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptyMessage pTemplate="emptymessage">
+    <tr>
+      <td colspan="6" style="text-align: center" class="text-base">{{ "INVITATION.MANAGER.NO_INVITATIONS_AVAILABLE" | translate }}</td>
+    </tr>
+  </ng-template>
+</p-table>

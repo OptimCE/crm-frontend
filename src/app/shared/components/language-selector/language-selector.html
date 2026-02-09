@@ -1,0 +1,17 @@
+<p-select
+  [options]="langs"
+  [(ngModel)]="currentLang"
+  optionLabel="label"
+  optionValue="code"
+  [filter]="true"
+  [ariaLabel]="'COMMON.LANGUAGE_SELECTOR' | translate"
+  (onChange)="setLang($event.value)"
+  class="w-40"
+>
+  <ng-template #selectedItem>
+    <i class="pi pi-globe mr-2"></i>{{ currentLangLabel }}
+  </ng-template>
+  <ng-template let-opt #item>
+    {{ opt.label }} <span class="opacity-60 text-sm ml-1">({{ opt.code }})</span>
+  </ng-template>
+</p-select>

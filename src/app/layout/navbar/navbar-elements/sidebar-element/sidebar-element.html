@@ -1,0 +1,14 @@
+<div class="menu-link" [class.menu-link-opened]="sidebarOpen">
+  <a
+    pRipple
+    routerLink="{{routerLinkUrl}}"
+    (click)="closeSideBar()"
+    [class.pcontent-end]="!sidebarOpen"
+    [class.active-class]="isRouteActive"
+  >
+    <i class="{{icon}}" [class.mr-2]="sidebarOpen"></i>
+    @if(sidebarOpen){
+      <span>{{name}}</span>
+    }
+  </a>
+</div>

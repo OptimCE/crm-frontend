@@ -1,0 +1,9 @@
+.error {
+  color: red;
+  display: block; /* Ensures it behaves as a block-level element */
+  left: 0;
+  right: 0;
+  overflow-wrap: break-word; /* Breaks long words to avoid overflow */
+  word-break: break-word; /* Adds additional support for breaking words */
+  white-space: normal; /* Ensures text wraps to the next line */
+}

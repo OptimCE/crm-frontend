@@ -1,0 +1,28 @@
+<div class="bg">
+  <div class="fixed top-4 right-4 z-50">
+    <app-language-selector></app-language-selector>
+  </div>
+  <div class="center-screen">
+    <p-card class="m-shadow rounded bg-card">
+      <ng-template #header>
+        <div class="flex justify-center pt-2">
+          <img src="../../../../../assets/images/logo.png" alt="logo" class="logo" />
+        </div>
+      </ng-template>
+
+      <ng-template #title>
+        <h3 class="text-2xl">{{ "TITLE" | translate }}</h3>
+      </ng-template>
+      <p-button
+        label="{{'LOGIN.LOGIN' |translate}}"
+        icon="pi pi-key"
+        (onClick)="login()"
+        styleClass="w-full"
+      ></p-button>
+
+    </p-card>
+  </div>
+  <div class="wave"></div>
+  <div class="wave"></div>
+  <div class="wave"></div>
+</div>

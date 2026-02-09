@@ -1,0 +1,31 @@
+<p-tabs [value]="0">
+  <p-tablist>
+    @if(member.status === 1){
+      <p-tab [value]="0">{{ 'MEMBER.VIEW.TAB_HEADER.METER_LABEL' | translate }}</p-tab>
+    }
+    <p-tab [value]="1">{{'MEMBER.VIEW.TAB_HEADER.BANKING_INFO_LABEL' |translate}}</p-tab>
+    <p-tab [value]="2">{{'MEMBER.VIEW.TAB_HEADER.DOCUMENTS_LABEL' |translate}}</p-tab>
+    @if(member.manager){
+      <p-tab [value]="3">{{ 'MEMBER.VIEW.TAB_HEADER.MANAGER_LABEL' | translate }}</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel [value]="0">
+      <app-member-view-meter-tab
+        [id]="id"
+      ></app-member-view-meter-tab>
+    </p-tabpanel>
+    <p-tabpanel [value]="1">
+      <app-member-view-banking-info-tab
+        [member]="member"></app-member-view-banking-info-tab>
+    </p-tabpanel>
+    <p-tabpanel [value]="2">
+      <app-member-view-documents-tab
+        [id]="id"></app-member-view-documents-tab>
+    </p-tabpanel>
+    <p-tabpanel [value]="3">
+      <app-member-view-manager-tab
+        [member]="member"></app-member-view-manager-tab>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

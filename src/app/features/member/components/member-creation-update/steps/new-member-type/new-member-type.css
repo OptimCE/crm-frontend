@@ -1,0 +1,6 @@
+.radio-button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10rem;
+  margin-right: 10rem;
+}

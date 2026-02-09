@@ -1,0 +1,14 @@
+<div class="app-layout-wrapper">
+  @if(showNavbar){
+    <app-navbar></app-navbar>
+    <main class="app-content">
+      <router-outlet></router-outlet>
+    </main>
+  }@else{
+    <main class="app-content-auth">
+      
+    <router-outlet></router-outlet>
+    </main>
+  }
+</div>
+<p-toast position="bottom-right" key="br"></p-toast>

@@ -1,0 +1,22 @@
+.file-upload {
+  border: 2px dashed #007bff;
+  border-radius: 5px;
+  padding: 40px;
+  text-align: center;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  background-color: white;
+}
+.file-upload.dragging {
+  background-color: #e9f7fe;
+}
+.file-input {
+  display: none;
+}
+.file-upload-message {
+  color: #007bff;
+}
+.grid-container {
+  display: flex;
+  justify-content: center;
+}

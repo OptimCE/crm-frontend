@@ -1,0 +1,135 @@
+<div>
+  <form [formGroup]="metersForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-wrap w-full pb-3 flex-col">
+      <h3 class="text-lg font-medium">{{ "METER.INFORMATIONS.DESCRIPTION_LABEL" | translate }}</h3>
+      <textarea rows="5" class="w-full" pInputTextarea formControlName="description"></textarea>
+      <app-error-handler controlName="description" />
+    </div>
+    <div class="flex flex-wrap pb-3">
+      <h3 class="text-lg font-medium">{{ "METER.UPDATE_DATA.ENERGY_CHARACTERISTIC_TITLE" | translate }}</h3>
+    </div>
+    <div class="flex flex-wrap">
+      <div class="flex flex-col w-4/12">
+        <span class="text-base">{{ "METER.INFORMATIONS.WITHDRAWAL_POWER_LABEL" | translate }}</span>
+        <input type="number" pInputText formControlName="samplingPower" [min]="0" />
+        <app-error-handler controlName="samplingPower" />
+      </div>
+      <div class="flex flex-col w-4/12 ps-2">
+        <span class="text-base">{{ "METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_LABEL" | translate }}</span>
+        <input type="number" pInputText formControlName="totalGeneratingCapacity" [min]="0" />
+        <app-error-handler controlName="totalGeneratingCapacity" />
+      </div>
+      <div class="flex flex-col w-4/12 ps-2">
+        <span class="text-base">{{ "METER.INFORMATIONS.AMPERAGE_LABEL" | translate }}</span>
+        <input type="number" pInputText formControlName="amperage" [min]="0" />
+        <app-error-handler controlName="amperage" />
+      </div>
+    </div>
+    <div class="flex flex-wrap">
+      <div class="flex flex-col w-4/12">
+        <span class="text-base">{{ "METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL" | translate }}</span>
+        @for(production of productionChainCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'production_' + production.id" [value]="production" formControlName="productionChain" />
+            <label [for]="'production_' + production.id" class="text-small">
+              {{ production.name }}
+            </label>
+          </div>
+        }
+        <app-error-handler controlName="productionChain" />
+      </div>
+      <div class="flex flex-col w-4/12 ps-2">
+        <span class="text-base">{{ "METER.INFORMATIONS.INJECTION_STATUS_LABEL" | translate }}</span>
+        @for(inj of injectionStatusCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'injection_' + inj.id" [value]="inj" formControlName="injectionStatus" />
+            <label [for]="'injection_' + inj.id" class="text-small">
+              {{ inj.name }}
+            </label>
+          </div>
+        }
+        <app-error-handler controlName="injectionStatus" />
+      </div>
+      <div class="flex flex-col w-4/12 ps-2">
+        <span class="text-base">{{ "METER.INFORMATIONS.GRD_LABEL" | translate }}</span>
+        @for(grd of grdAvailable; track $index){
+          <div>
+            <p-radioButton [inputId]="'grd_' + grd.id" [value]="grd" formControlName="grd" />
+            <label [for]="'grd_' + grd.id" class="text-small">
+              {{ grd.name }}
+            </label>
+          </div>
+        }
+
+        <app-error-handler controlName="grd" />
+      </div>
+    </div>
+    <div class="flex flex-wrap pb-3">
+      <h3 class="text-lg font-medium">{{ "METER.UPDATE_DATA.FINANCIAL_CHARACTERISTIC_TITLE" | translate }}</h3>
+    </div>
+    <div class="flex flex-wrap pb-3">
+      <div class="flex flex-col w-4/12">
+        <span class="text-base">{{ "METER.INFORMATIONS.RATE_LABEL" | translate }}</span>
+        @for(rate of rateCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'rate_' + rate.id" [value]="rate" formControlName="rate" />
+            <label [for]="'rate_' + rate.id" class="text-small">
+              {{ rate.name }}
+            </label>
+          </div>
+        }
+        <app-error-handler controlName="rate" />
+      </div>
+      <div class="flex flex-col w-4/12 ps-2">
+        <span class="text-base">{{ "METER.INFORMATIONS.USAGE_LABEL" | translate }}</span>
+        @for(client of clientCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'client_' + client.id" [value]="client" formControlName="clientType" />
+            <label [for]="'client_' + client.id" class="text-small">
+              {{ client.name }}
+            </label>
+          </div>
+        }
+        <app-error-handler controlName="clientType" />
+      </div>
+      <div class="flex flex-col w-4/12 ps-2">
+        <div class="flex flex-wrap">
+          <i class="pi pi-user text-lg"></i>
+          <h4 class="ml-3 p text-base">{{ "METER.INFORMATIONS.OWNER_LABEL" | translate }}</h4>
+        </div>
+        <p-select
+          [options]="membersList"
+          formControlName="member"
+          optionLabel="name"
+          [showClear]="true"
+          [editable]="true"
+          placeholder="{{ 'METER.UPDATE_DATA.PLACEHOLDER.SELECT_OWNER_LABEL' | translate }}"
+        >
+        </p-select>
+        <app-error-handler controlName="member" [errorsAdd]="errorMemberAdded" />
+      </div>
+    </div>
+    <div class="flex flex-wrap text-center pb-1 flex-col w-full justify-center items-center">
+      <label for="dateStart" class="text-base">{{ "METER.UPDATE_DATA.START_DATE_METER_LABEL" | translate }}</label>
+      <p-date-picker id="dateStart" formControlName="dateStart" [showIcon]="true" [showOnFocus]="true" dateFormat="dd/mm/yy"> </p-date-picker>
+      <app-error-handler controlName="dateStart" />
+    </div>
+    <div class="flex flex-wrap text-center flex-col w-full justify-center">
+      <app-summary-error
+        [controlLabels]="{
+      'description':'METER.UPDATE_DATA.FORM_ERROR.DESCRIPTION',
+      'samplingPower':'METER.UPDATE_DATA.FORM_ERROR.SAMPLINGPOWER',
+      'totalGeneratingCapacity':'METER.UPDATE_DATA.FORM_ERROR.TOTALGENERATINGCAPACITY',
+      'amperage':'METER.UPDATE_DATA.FORM_ERROR.AMPERAGE',
+      'productionChain':'METER.UPDATE_DATA.FORM_ERROR.PRODUCTIONCHAIN',
+      'injectionStatus':'METER.UPDATE_DATA.FORM_ERROR.INJECTIONSTATUS',
+      'grd':'METER.UPDATE_DATA.FORM_ERROR.GRD',
+      'rate':'METER.UPDATE_DATA.FORM_ERROR.RATE',
+      'clientType':'METER.UPDATE_DATA.FORM_ERROR.CLIENTTYPE',
+      'member':'METER.UPDATE_DATA.FORM_ERROR.MEMBER',
+      'dateStart':'METER.UPDATE_DATA.FORM_ERROR.DATESTART',
+      }"></app-summary-error>
+      <p-button icon="pi pi-check" label="{{ 'METER.UPDATE_DATA.VALIDATE_BUTTON_FORM_LABEL' | translate }}" type="submit"></p-button>
+    </div>
+  </form>
+</div>

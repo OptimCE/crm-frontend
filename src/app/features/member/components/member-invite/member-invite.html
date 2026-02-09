@@ -1,0 +1,5 @@
+<form [formGroup]="form" (submit)="inviteMember()" class="grid">
+  <label for="email">{{"MEMBER.INVITE.EMAIL_OF_MEMBER_TO_INVITE_LABEL" | translate}}</label>
+  <input id="email" pInputText formControlName="email" />
+  <p-button type="submit" label="{{'MEMBER.INVITE.INVITE_BUTTON_LABEL' | translate}}" class="text-center mt-2"></p-button>
+</form>

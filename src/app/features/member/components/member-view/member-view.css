@@ -1,0 +1,23 @@
+::ng-deep .p-tabview a {
+  text-decoration: none;
+  color: inherit;
+}
+.p-button-lg {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.hover-row:hover {
+  background-color: rgba(0, 123, 255, 0.1) !important;
+  transition: background 0.3s ease-in-out;
+}
+
+.p-datatable th {
+  background: #f8f9fa;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.p-datatable td {
+  padding: 10px;
+}

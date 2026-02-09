@@ -1,0 +1,77 @@
+.bg-card {
+  background-color: white;
+  max-width: 500px;
+  max-height: 1000px;
+  height: 100%;
+  width: 100%;
+}
+.logo {
+  width: 35%;
+}
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.wave {
+  background: rgb(255 255 255 / 25%);
+  border-radius: 1000% 1000% 0 0;
+  position: fixed;
+  width: 200%;
+  /*height: 12em;*/
+  height: 25%;
+  animation: wave 10s -3s linear infinite;
+  transform: translate3d(0, 0, 0);
+  opacity: 0.8;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.wave:nth-of-type(2) {
+  /*bottom: +1.25em;*/
+  height: 20%;
+  animation: wave 18s linear reverse infinite;
+  opacity: 0.8;
+}
+
+.wave:nth-of-type(3) {
+  /*bottom: -2.5em;*/
+  height: 15%;
+  animation: wave 20s -1s reverse infinite;
+  opacity: 0.9;
+}
+
+@keyframes wave {
+  2% {
+    transform: translateX(1%);
+  }
+
+  25% {
+    transform: translateX(-25%);
+  }
+
+  50% {
+    transform: translateX(-50%);
+  }
+
+  75% {
+    transform: translateX(-25%);
+  }
+
+  100% {
+    transform: translateX(1%);
+  }
+}
+.bg {
+  margin: auto;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(315deg, rgb(113, 216, 218) 3%, rgb(95, 162, 190) 28%, rgb(76, 108, 163) 48%, rgb(39, 0, 107) 68%, rgb(39, 0, 107) 88%);
+  animation: gradient 15s ease infinite;
+  backdrop-filter: blur(50px);
+  background-size: 400% 400%;
+  overflow: hidden;
+}

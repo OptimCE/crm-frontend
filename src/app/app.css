@@ -1,0 +1,22 @@
+.app-layout-wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-content {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+   margin-left: 20px;
+
+  padding: 20px;
+  box-sizing: border-box;
+}
+.app-content-auth {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}

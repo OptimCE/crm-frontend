@@ -1,0 +1,211 @@
+<div class="flex flex-wrap -mx-2">
+  <div class="w-2/12 flex items-center">
+    <span class="pi pi-user text-primary mr-2 !text-xl"></span>
+    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ "MEMBER.LIST.MEMBER_TITLE" | translate }}</h2>
+  </div>
+  <p-toast />
+  <p-confirmDialog />
+  <div class="w-10/12 flex place-content-end gap-2">
+    <p-button
+      type="button"
+      icon="pi pi-plus"
+      label="{{ 'MEMBER.LIST.ADD_BUTTON_LABEL' | translate }}"
+      (click)="onAddMember($event)"
+    ></p-button>
+    <p-button
+      type="button"
+      severity="help"
+      icon="pi pi-envelope"
+      label="{{'MEMBER.LIST.INVITE_NEW_MEMBER_BUTTON_LABEL' | translate}}"
+      (click)="onInviteMember()"
+    ></p-button>
+    <p-button
+      type="button"
+      severity="contrast"
+      icon="pi pi-eye"
+      label="{{'MEMBER.LIST.SEE_PENDING_INVITATION_BUTTON_LABEL' | translate}}"
+      (click)="seePendingInvite()"
+    >
+    </p-button>
+  </div>
+</div>
+
+<p-table
+  #dt
+  [value]="membersPartialList()"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [lazy]="true"
+  (onLazyLoad)="lazyLoadMembers($event)"
+  [rows]="paginationInfo.limit"
+  [totalRecords]="paginationInfo.total"
+  [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+  [showCurrentPageReport]="true"
+  [currentPageReportTemplate]="currentPageReportTemplate"
+  (onPage)="pageChange($event)"
+  [paginator]="paginationInfo.total_pages > 1"
+>
+  <ng-template pTemplate="caption">
+    <div class="justify-between">
+      <p-button
+        [outlined]="true"
+        icon="pi pi-filter-slash"
+        label="{{ 'MEMBER.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+        (onClick)="clear(dt)"
+      />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-base px-3">
+        <div [pSortableColumn]="'type'" class="items-center">
+          {{ "MEMBER.LIST.TYPE_LABEL" | translate }}
+          <p-sortIcon [field]="'type'"></p-sortIcon>
+          <br />
+          <p-columnFilter field="membre_type" display="{{'MEMBER.LIST.TYPE_LABEL' | translate}}" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+            <ng-template pTemplate="header">
+              <span>{{ "MEMBER.LIST.FILTER_BY_TYPE_LABEL" | translate }}</span>
+            </ng-template>
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-select
+                [ngModel]="value"
+                [options]="membreTypeCategory"
+                (onChange)="filter($event.value)"
+                placeholder="{{ 'MEMBER.LIST.SELECT_A_TYPE_PLACEHOLDER' | translate }}"
+                [showClear]="true"
+              >
+                <ng-template let-option pTemplate="item">
+                  @if(MemberType.INDIVIDUAL){
+                    <div>
+                      <i class="pi pi-user mr-2"></i>
+                      <span>{{ "MEMBER.LIST.TYPE.INDIVIDUAL_LABEL" | translate }}</span>
+                    </div>
+                  }
+                  @if(MemberType.COMPANY){
+                    <div>
+                      <i class="pi pi-building mr-2"></i>
+                      <span>{{ "MEMBER.LIST.TYPE.COMPANY_LABEL" | translate }}</span>
+                    </div>
+                  }
+                </ng-template>
+                <ng-template pTemplate="selectedItem">
+                  @if(value === MemberType.INDIVIDUAL){
+                    <div>
+                      <i class="pi pi-user mr-2"></i>
+                      <span>{{ "MEMBER.LIST.TYPE.INDIVIDUAL_LABEL" | translate }}</span>
+                    </div>
+                  }
+                  @if(value === MemberType.COMPANY){
+                    <div>
+                      <i class="pi pi-building mr-2"></i>
+                      <span>{{ "MEMBER.LIST.TYPE.COMPANY_LABEL" | translate }}</span>
+                    </div>
+                  }
+                </ng-template>
+              </p-select>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th [pSortableColumn]="'name'" class="text-base px-3">
+        <div class="items-center">
+          {{ "MEMBER.LIST.NAME_LABEL" | translate }}
+          <p-sortIcon [field]="'name'"></p-sortIcon>
+          <br />
+          <p-columnFilter
+            type="text"
+            field="name"
+            display="{{'MEMBER.LIST.NAME_LABEL' | translate}}"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th [pSortableColumn]="'status'" class="text-base px-3">
+        <div class="items-center">
+          {{ "MEMBER.LIST.STATUS_LABEL" | translate }}
+          <p-sortIcon [field]="'status'"></p-sortIcon>
+          <br />
+          <p-columnFilter field="status" display="{{'MEMBER.LIST.STATUS_LABEL' | translate}}" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+            <ng-template pTemplate="header">
+              <span>{{ "MEMBER.LIST.FILTER_BY_STATUS_LABEL" | translate }}</span>
+            </ng-template>
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-select
+                [ngModel]="value"
+                [options]="status"
+                (onChange)="filter($event.value)"
+                placeholder="{{'MEMBER.LIST.SELECT_A_STATUS_PLACEHOLDER' | translate}}"
+                [showClear]="true"
+              >
+                <ng-template let-option pTemplate="item">
+                  @switch(option){
+                    @case(MemberStatus.ACTIVE){
+                      <p-tag severity="success" value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}" class="text-small"></p-tag>
+                    }
+                    @case(MemberStatus.INACTIVE){
+                      <p-tag severity="danger" value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}" class="text-small"></p-tag>
+                    }
+                    @case(MemberStatus.PENDING){
+                      <p-tag severity="warn" value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}" class="text-small"></p-tag>
+                    }
+                  }
+                </ng-template>
+                <ng-template pTemplate="selectedItem">
+                  @switch(value){
+                    @case(MemberStatus.ACTIVE){
+                      <p-tag severity="success" value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}" class="text-small"></p-tag>
+                    }
+                    @case(MemberStatus.INACTIVE){
+                      <p-tag severity="danger" value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}" class="text-small"></p-tag>
+                    }
+                    @case(MemberStatus.PENDING){
+                      <p-tag severity="warn" value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}" class="text-small"></p-tag>
+                    }
+                  }
+                </ng-template>
+              </p-select>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-member>
+    <tr (click)="onRowClick(member)" class="flex-wrap -mx-2 hover:!bg-green-50 cursor-pointer">
+      <td>
+        @if(member.member_type === MemberType.INDIVIDUAL){
+          <div>
+            <i class="pi pi-user mr-2 text-base"></i>
+            <span class="text-small px-3 py-2">{{ "MEMBER.LIST.TYPE.INDIVIDUAL_LABEL" | translate }}</span>
+          </div>
+        }
+        @if(member.member_type === MemberType.COMPANY){
+          <div>
+            <i class="pi pi-building mr-2 text-base"></i>
+            <span class="text-small px-3 py-2">{{ "MEMBER.LIST.TYPE.COMPANY_LABEL" | translate }}</span>
+          </div>
+        }
+      </td>
+      <td class="text-small px-3 py-2">{{ member.name }}</td>
+      <td>
+        @switch(member.status){
+          @case (MemberStatus.ACTIVE){
+            <p-tag severity="success" value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}" class="text-small px-3 py-2"></p-tag>
+          }
+          @case (MemberStatus.INACTIVE){
+            <p-tag severity="danger" value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}" class="text-small px-3 py-2"></p-tag>
+          }
+          @case (MemberStatus.PENDING){
+            <p-tag severity="warn" value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}" class="text-small px-3 py-2"></p-tag>
+          }
+        }
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptyMessage pTemplate="emptymessage">
+    <tr>
+      <td colspan="6" style="text-align: center" class="text-base">{{ "MEMBER.LIST.NO_MEMBER_FOUND_LABEL" | translate }}</td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -1,0 +1,24 @@
+<div class="container mx-auto px-4">
+  <form [formGroup]="formGroup" (ngSubmit)="uploadDocument()">
+    <div class="flex flex-wrap -mx-2 mt-2">
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" class="file-input text-base" />
+      <label for="fileInput" class="file-upload-message">
+        <div
+          class="file-upload"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          [class.dragging]="dragging">
+          <p class="text-base">{{ "MEMBER.ADD_DOCUMENT.SELECT_FILE_DRAG_N_DROP_LABEL" | translate }}</p>
+        </div>
+      </label>
+    </div>
+    @if(fileToUpload){
+      <div>
+        <p class="text-base">{{ "MEMBER.ADD_DOCUMENT.SELECTED_FILE_LABEL" | translate }} : {{ fileToUpload.name }}</p>
+      </div>
+    }
+    <app-error-handler controlName="fileToUpload"></app-error-handler>
+    <p-button class="mt-2 w-full" type="submit">{{ "MEMBER.ADD_DOCUMENT.UPLOAD_DOCUMENT_BUTTON_LABEL" | translate }}</p-button>
+  </form>
+</div>

@@ -1,0 +1,71 @@
+<div class="flex flex-wrap -mx-2">
+  <span class="pi pi-keys x-3 mr-1 text-xl"></span>
+  <h2 class="ml-3 text-lg">{{ "SHARING_OPERATION.ADD_KEY.ALLOCATION_KEYS_TITLE" | translate }}</h2>
+</div>
+<p-table
+  #dt
+  [value]="keysList"
+  [loading]="loading"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [lazy]="true"
+  (onLazyLoad)="loadKeys($event)"
+  [rows]="paginated.limit"
+  [totalRecords]="paginated.total"
+  [first]="(paginated.page - 1) * paginated.limit"
+  [showCurrentPageReport]="true"
+  [currentPageReportTemplate]="currentPageReportTemplate"
+  (onPage)="pageChange($event)"
+  [paginator]="paginated.total_pages > 1"
+  [(selection)]="selectedKey"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex content-between">
+      <p-button [outlined]="true" icon="pi pi-filter-slash" label="{{ 'SHARING_OPERATION.ADD_KEY.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+               (onClick)="clear(dt)"></p-button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th></th>
+      <th>
+        {{ "SHARING_OPERATION.ADD_KEY.NAME_LABEL" | translate }}
+        <p-columnFilter
+          type="text"
+          field="nom"
+          display="{{'SHARING_OPERATION.ADD_KEY.NAME_LABEL' | translate}}"
+          [showMatchModes]="false"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </th>
+      <th>
+        {{ "SHARING_OPERATION.ADD_KEY.DESCRIPTION_LABEL" | translate }}
+        <p-columnFilter
+          type="text"
+          field="description"
+          display="{{'SHARING_OPERATION.ADD_KEY.DESCRIPTION_LABEL' | translate}}"
+          [showMatchModes]="false"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-key>
+    <tr style="cursor: pointer">
+      <td>
+        <p-tableRadioButton [value]="key" class="text-sm" />
+      </td>
+      <td class="text-sm">{{ key.name }}</td>
+      <td class="text-sm">{{ key.description }}</td>
+    </tr>
+  </ng-template>
+  <ng-template #emptyMessage pTemplate="emptymessage">
+    <tr>
+      <td colspan="6" style="text-align: center" class="text-base">{{ "SHARING_OPERATION.ADD_KEY.NO_ALLOCATION_KEYS_FOUND_LABEL" | translate }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+<div class="flex flex-wrap -mx-2 text-center">
+  <p-button label="{{ 'SHARING_OPERATION.ADD_KEY.ADD_BUTTON_LABEL' | translate }}" icon="pi pi-plus" (click)="addKey()"></p-button>
+</div>

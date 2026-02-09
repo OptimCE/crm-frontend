@@ -1,0 +1,9 @@
+::ng-deep .p-panel .p-panel-header {
+  background-color: var(--highlight-bg) !important;
+  color: var(--highlight-text-color) !important;
+  font-weight: bold;
+  border-radius: 6px 6px 0 0;
+}
+
+::ng-deep .p-panel .p-panel-content {
+}

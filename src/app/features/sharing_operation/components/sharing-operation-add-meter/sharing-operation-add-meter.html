@@ -1,0 +1,218 @@
+<div class="container">
+  <div class="flex flex-wrap -mx-2 pb-3">
+    <p-table
+      #dt
+      [value]="metersPartialList"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [lazy]="true"
+      (onLazyLoad)="lazyLoadMeters($event)"
+      [rows]="paginationMetersInfo.limit"
+      [totalRecords]="paginationMetersInfo.total"
+      [first]="(paginationMetersInfo.page - 1) * paginationMetersInfo.limit"
+      [showCurrentPageReport]="true"
+      [currentPageReportTemplate]="currentPageReportTemplate"
+      (onPage)="pageChange($event)"
+      [paginator]="paginationMetersInfo.total_pages > 1"
+      [(selection)]="selectedMeters"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex content-between">
+          <p-button
+            [outlined]="true"
+            icon="pi pi-filter-slash"
+            label="{{ 'SHARING_OPERATION.ADD_METER.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+            (onClick)="clear(dt)"
+          />
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th><p-tableHeaderCheckbox /></th>
+          <th>
+            <div class="flex items-center text-base px-3">
+              {{ "SHARING_OPERATION.ADD_METER.ADDRESS_LABEL" | translate }} <br />
+              <p-columnFilter
+                field="address"
+                display="{{'SHARING_OPERATION.ADD_METER.ADDRESS_LABEL' | translate}}"
+                [showMatchModes]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showClearButton]="false"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <div class="grid">
+                    <div class="flex">
+                      <label for="streetName">{{ "SHARING_OPERATION.ADD_METER.ADDRESS.STREET_NAME_LABEL" | translate }}</label>
+                      <input pInputText id="streetName" [(ngModel)]="addressFilter.streetName"
+                             placeholder="{{'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate}}" />
+                    </div>
+                    <div class="flex">
+                      <label for="postcode">{{ "SHARING_OPERATION.ADD_METER.ADDRESS.POSTAL_CODE_LABEL" | translate }}</label>
+                      <input pInputText id="postcode" [(ngModel)]="addressFilter.postcode"
+                             placeholder="{{'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate}}"/>
+                    </div>
+                    <div class="flex">
+                      <label for="city">{{ "SHARING_OPERATION.ADD_METER.ADDRESS.CITY_LABEL" | translate }}</label>
+                      <input pInputText id="city" [(ngModel)]="addressFilter.cityName"
+                             placeholder="{{'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate}}"/>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center text-base px-3">
+              {{ "SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.EAN_LABEL" | translate }} <br />
+              <p-columnFilter
+                type="text"
+                field="EAN"
+                display="{{'SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.EAN_LABEL' | translate}}"
+                [showMatchModes]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+              ></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center text-base px-3">
+              {{ "SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.METER_NUMBER_LABEL" | translate }} <br />
+              <p-columnFilter
+                type="text"
+                field="meter_number"
+                display="{{'SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.METER_NUMBER_LABEL' | translate}}"
+                [showMatchModes]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+              ></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center text-base px-3">
+              {{ "SHARING_OPERATION.ADD_METER.METER.STATUS_LABEL" | translate }} <br />
+              <p-columnFilter field="statut" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                <ng-template pTemplate="header">
+                  <span class="text-sm px-3">{{ "SHARING_OPERATION.ADD_METER.FILTER_BY_STATUS_LABEL" | translate }}</span>
+                </ng-template>
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-select
+                    [ngModel]="value"
+                    [options]="statutCategory"
+                    (onChange)="filter($event.value)"
+                    placeholder="{{ 'SHARING_OPERATION.ADD_METER.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
+                    [showClear]="true"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      @switch(option.value){
+                        @case(MeterStatus.ACTIVE){
+                          <p-tag class="text-sm px-3" severity="success" value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL' | translate }}"></p-tag>
+                        }
+                        @case(MeterStatus.INACTIVE){
+                          <p-tag class="text-sm px-3" severity="danger" value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL' | translate }}"></p-tag>
+                        }
+                        @case(MeterStatus.WAITING_GRD){
+                          <p-tag
+                            class="text-sm px-3"
+                            severity="danger"
+                            value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate }}"
+                          ></p-tag>
+                        }
+                        @case(MeterStatus.WAITING_MANAGER){
+                          <p-tag
+                            class="text-sm px-3"
+                            severity="danger"
+                            value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL' | translate }}"
+                          ></p-tag>
+                        }
+                      }
+                    </ng-template>
+                    <ng-template pTemplate="selectedItem">
+                      @switch(value){
+                        @case(MeterStatus.ACTIVE){
+                          <p-tag class="text-sm px-3" severity="success" value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL' | translate }}"></p-tag>
+                        }
+                        @case(MeterStatus.INACTIVE){
+                          <p-tag class="text-sm px-3" severity="danger" value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL' | translate }}"></p-tag>
+                        }
+                        @case(MeterStatus.WAITING_GRD){
+                          <p-tag
+                            class="text-sm px-3"
+                            severity="danger"
+                            value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate }}"
+                          ></p-tag>
+                        }
+                        @case(MeterStatus.WAITING_MANAGER){
+                          <p-tag
+                            class="text-sm px-3"
+                            severity="danger"
+                            value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL' | translate }}"
+                          ></p-tag>
+                        }
+                      }
+                    </ng-template>
+                  </p-select>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-meter>
+        <tr style="cursor: pointer" class="hover-flex flex-wrap -mx-2">
+          <td class="text-sm px-3 py-2">
+            <p-tableCheckbox [value]="meter"></p-tableCheckbox>
+          </td>
+          <td [innerHTML]="meter.adresse | address" class="text-sm"></td>
+          <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
+          <td class="text-sm px-3 py-2">{{ meter.meterNumber }}</td>
+          <td class="text-sm px-3 py-2">
+            @switch(meter.status){
+              @case(MeterStatus.ACTIVE){
+                <p-tag class="text-sm px-3 py-2" severity="success" value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL' | translate }}"></p-tag>
+              }
+              @case(MeterStatus.INACTIVE){
+                <p-tag class="text-sm px-3 py-2" severity="danger" value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL' | translate }}"></p-tag>
+              }
+              @case(MeterStatus.WAITING_GRD){
+                <p-tag
+                  class="text-sm px-3 py-2"
+                  severity="danger"
+                  value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate }}"
+                ></p-tag>
+              }
+              @case(MeterStatus.WAITING_MANAGER){
+                <p-tag
+                  class="text-sm px-3 py-2"
+                  severity="danger"
+                  value="{{ 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL' | translate }}"
+                ></p-tag>
+              }
+            }
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptyMessage pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="text-align: center" class="text-base">{{ "SHARING_OPERATION.ADD_METER.NO_METERS_FOUND_LABEL" | translate }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="flex flex-wrap -mx-2 pb-3 text-center">
+    <span class="text-base">{{ "SHARING_OPERATION.ADD_METER.START_DATE_METERS_LABEL" | translate }}</span>
+  </div>
+  <div class="flex flex-wrap -mx-2 pb-3 text-center">
+    <p-date-picker
+      id="dateStart"
+      [(ngModel)]="dateSelected"
+      [showIcon]="true"
+      [showOnFocus]="true"
+      [minDate]="minDate"
+      dateFormat="dd/mm/yy"
+      appendTo="body"
+    ></p-date-picker>
+  </div>
+  <div class="flex flex-wrap -mx-2 text-center pb-3">
+    <p-button label="{{ 'SHARING_OPERATION.ADD_METER.VALIDATE_BUTTON_LABEL' | translate }}" (click)="onValidate()"></p-button>
+  </div>
+</div>

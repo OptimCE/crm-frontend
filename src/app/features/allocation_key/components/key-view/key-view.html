@@ -1,0 +1,61 @@
+@if(isLoaded){
+  <div>
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap -mx-2 pb-3 items-center">
+        <div class="w-8/12 ">
+          <div class="flex flex-wrap -mx-2">
+            <h2 class="text-xl font-medium">{{ key!.name }}</h2>
+          </div>
+        </div>
+        <div class="w-4/12 text-center">
+          <p-button icon="pi pi-pencil" [rounded]="true" [outlined]="true" (click)="updateKey()" />
+          <p-button icon="pi pi-trash" [rounded]="true" rounded="true" [outlined]="true" (click)="deleteKey()" severity="danger" />
+        </div>
+      </div>
+      <p-card class="mb-4">
+        <ng-template #pTemplate content>
+          <p class="text-base">
+            @if(key!.description.length > 200 && !displayAllDescription){
+              <span>
+                {{ key!.description | slice: 0 : 200 }}
+                {{ key!.description.length > 200 ? "..." : "" }}
+              </span>
+            }
+            @if(key!.description.length <= 200 ||displayAllDescription){
+              <span>
+                {{ this.key!.description }}
+              </span>
+            }
+            @if(key!.description.length > 200){
+              <span class="toggle-description" (click)="displayAllDescription = !displayAllDescription">
+                @if(displayAllDescription){
+                  <i class="pi pi-chevron-up"></i>
+                }
+                @else{
+                  <i class="pi pi-chevron-down"></i>
+                }
+              </span>
+            }
+
+          </p>
+        </ng-template>
+      </p-card>
+      <div class="grid-container">
+        <div class="grid-wrapper">
+          <ag-grid-angular
+            style="width: 100%; height: 550px; overflow: auto"
+            [rowData]="rowData"
+            [columnDefs]="colDefs"
+            (gridReady)="onGridReady($event)"
+            [defaultColDef]="defaultColDef"
+            domLayout="autoHeight"
+          >
+          </ag-grid-angular>
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-2 text-center mt-4">
+        <p-button icon="pi pi-download" class="p-button-primary" (click)="exportExcel()" label="{{ 'KEY.SIMULATION.EXPORT_EXCEL_BUTTON_LABEL' | translate }}"> </p-button>
+      </div>
+    </div>
+  </div>
+}

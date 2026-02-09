@@ -1,0 +1,124 @@
+<div class="container mx-auto py-4">
+  <!-- First Step -->
+  <form [formGroup]="formFirstStep" (ngSubmit)="submitFirstForm()" class="mb-4 shadow-sm p-4 rounded bg-white">
+    <div class="text-center mb-3">
+      <h5 class="font-medium">{{ "KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL" | translate }} *</h5>
+    </div>
+    <div class="flex flex-wrap -mx-2 justify-self-center">
+      <div class="md:w-6/12 px-2">
+        <p-inputNumber class="w-full" formControlName="nb_consumers" [min]="1"></p-inputNumber>
+        <app-error-handler controlName="nb_consumers"></app-error-handler>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <p-button type="submit" label="{{ 'VALIDATE' | translate }}" class="p-button-lg"></p-button>
+    </div>
+  </form>
+
+  <!-- Second Step -->
+  @if(secondStep){
+    <div>
+      <form [formGroup]="formSecondStep" (ngSubmit)="submitSecondForm()" class="mb-4 shadow-sm p-4 rounded bg-white">
+        <div class="flex flex-wrap -mx-2  gap-2">
+          @for(consumer of controls; let i = $index; track i){
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="mb-3">
+                <label for="consumer_name_{{ i }}" class="font-medium">{{ "KEY.CREATE.CONSUMER_NAME_LABEL" | translate }} {{ i + 1 }} *</label>
+                <input id="consumer_name_{{ i }}" pInputText class="w-full" [formControlName]="'consumer_name_' + i" />
+                <app-error-handler [controlName]="'consumer_name_' + i"></app-error-handler>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="text-center mt-3">
+          <p-button type="submit" label="{{ 'VALIDATE' | translate }}" class="p-button-lg"></p-button>
+        </div>
+      </form>
+    </div>
+  }
+  @for(iterForm of formIterations; let i = $index; track i){
+    <div>
+      <form [formGroup]="iterForm" class="container shadow-sm p-4 bg-white rounded mb-3" (ngSubmit)="submitIteration()">
+        <div class="flex flex-wrap -mx-2">
+          <!-- Type de clef -->
+          <div class="lg:w-6/12 mb-3">
+            <span class="font-medium">{{ "KEY.CREATE.KEY_TYPE_LABEL" | translate }} *</span>
+            <div class="flex gap-3 mt-2">
+              <div>
+                <p-radioButton [inputId]="'type_' + i + '_1'" value="1" formControlName="type"></p-radioButton>
+                <label [for]="'type_' + i + '_1'" class="ms-2">{{ "KEY.CREATE.PRORATA_LABEL" | translate }}</label>
+              </div>
+              <div>
+                <p-radioButton [inputId]="'type_' + i + '_2'" value="2" formControlName="type"></p-radioButton>
+                <label [for]="'type_' + i + '_2'" class="ms-2">{{ "KEY.CREATE.EGALITARIAN_LABEL" | translate }}</label>
+              </div>
+            </div>
+            <app-error-handler controlName="type"></app-error-handler>
+          </div>
+
+          <!-- Pourcentage d'injection -->
+          <div class="lg:w-6/12 mb-3">
+            <label for="injection_percetange" class="font-medium">{{ "KEY.CREATE.INJECTION_PERCENTAGE_LABEL" | translate }} *</label>
+            <p-inputNumber id="injection_percentage" class="w-full" formControlName="inj_percentage"></p-inputNumber>
+            <app-error-handler controlName="inj_percentage"></app-error-handler>
+          </div>
+        </div>
+
+        <div class="flex justify-between mt-3">
+          @if(iterations.length === 0 || i === formIterations.length -1){
+            <p-button
+              type="submit"
+              label="{{ 'VALIDATE' | translate }}"
+              class="p-button-lg"
+            ></p-button>
+          }
+          @if(formIterations.length > 1 && i !== formIterations.length - 1){
+            <p-button
+              class="w-full text-end"
+              icon="pi pi-trash"
+              severity="danger"
+              (click)="deleteIteration(i)"
+            ></p-button>
+          }
+          @else{
+            @if(formIterations.length > 1){
+              <p-button icon="pi pi-trash" severity="danger" (click)="deleteIteration(i)"></p-button>
+            }
+          }
+        </div>
+      </form>
+    </div>
+  }
+  <!-- Iteration Forms -->
+  @if(displayErrorInj){
+    <div class="alert alert-danger text-center">
+      {{ "KEY.CREATE.SUM_MUST_BE_100_LABEL" | translate }}
+    </div>
+  }
+  @if(displayEnd){
+    <div class="container shadow-sm p-4 rounded bg-white mt-4">
+      <form [formGroup]="lastForm" (ngSubmit)="submitKey()">
+        <h5 class="font-medium text-center mb-3">{{ "KEY.CREATE.FINALISATION" | translate }}</h5>
+
+        <!-- Key Name -->
+        <div class="mb-3">
+          <label class="font-medium" for="key_name">{{ "KEY.CREATE.FORM.KEY_NAME_LABEL" | translate }}</label>
+          <input pInputText class="w-full" formControlName="key_name" id="key_name" placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}" />
+          <app-error-handler controlName="key_name"></app-error-handler>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label class="font-medium" for="key_description">{{ "KEY.CREATE.FORM.KEY_DESCRIPTION_LABEL" | translate }}</label>
+          <input pInputTextarea class="w-full" formControlName="key_description" id="key_description" placeholder="{{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate }}" />
+          <app-error-handler controlName="key_description"></app-error-handler>
+        </div>
+
+        <div class="text-center">
+          <p-button label="{{ 'VALIDATE' | translate }}" type="submit" class="p-button-lg"></p-button>
+        </div>
+      </form>
+    </div>
+  }
+  <!-- Final Step -->
+</div>

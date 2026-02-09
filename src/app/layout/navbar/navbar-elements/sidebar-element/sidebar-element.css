@@ -1,0 +1,22 @@
+.menu-item {
+  position: relative;
+}
+.menu-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.active-class > i,
+.active-class > span {
+  color: var(--primary-color) !important;
+}
+
+.menu-link-opened {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.pcontent-end {
+  place-content: end;
+}

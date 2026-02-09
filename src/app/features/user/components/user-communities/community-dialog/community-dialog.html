@@ -1,0 +1,5 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+  <h4>{{ "COMMUNITY.CREATE.NAME" | translate }}</h4>
+  <input pInputText placeholder="{{ 'COMMUNITY.CREATE.NAME_PLACEHOLDER' | translate }}" formControlName="new_name" />
+  <p-button label="{{ 'COMMUNITY.CREATE.VALIDATE' | translate }}" type="submit"></p-button>
+</form>

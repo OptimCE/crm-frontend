@@ -1,0 +1,80 @@
+<div class="flex flex-wrap -mx-2 mb-3">
+  <div class="w-6/12 flex items-center">
+    <span class="pi pi-building text-primary mr-1 !text-xl"></span>
+    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ "SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE" | translate }}</h2>
+  </div>
+  <div class="w-6/12 text-end">
+    <p-button
+      type="button"
+      icon="pi pi-plus"
+      label="{{ 'SHARING_OPERATION.LIST.ADD_BUTTON_LABEL' | translate }}"
+      (click)="onAddSharingOperation()"
+    ></p-button>
+  </div>
+</div>
+
+<p-table
+  #dt
+  [value]="sharingOperationList()"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [lazy]="true"
+  (onLazyLoad)="lazyLoadSharingOperation($event)"
+  [rows]="paginationInfo.limit"
+  [totalRecords]="paginationInfo.total"
+  [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+  [showCurrentPageReport]="true"
+  [currentPageReportTemplate]="currentPageReportTemplate"
+  (onPage)="pageChange($event)"
+  [paginator]="paginationInfo.total_pages > 1"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex content-between">
+      <p-button [outlined]="true" icon="pi pi-filter-slash" label="{{ 'SHARING_OPERATION.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}" (onClick)="clear(dt)" />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th [pSortableColumn]="'name'" class="text-base px-3">
+        <div class="flex items-center">
+          {{ "SHARING_OPERATION.LIST.NAME_LABEL" | translate }}
+          <p-sortIcon [field]="'name'"></p-sortIcon>
+          <br/>
+          <p-columnFilter
+            type="text"
+            field="name"
+            display="{{'SHARING_OPERATION.LIST.NAME_LABEL' | translate}}"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th [pSortableColumn]="'type'" class="text-base px-3">
+        <div class="flex items-center">
+          {{ "SHARING_OPERATION.LIST.TYPE_LABEL" | translate }}
+          <p-sortIcon [field]="'type'"></p-sortIcon>
+          <br/>
+          <p-columnFilter
+            type="type"
+            field="type"
+            display="{{'SHARING_OPERATION.LIST.TYPE_LABEL' | translate}}"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-sharingOp>
+    <tr (click)="onRowClick(sharingOp)" class="flex-wrap -mx-2 hover:!bg-green-50 cursor-pointer">
+      <td class="text-sm px-3 py-2">{{ sharingOp.name }}</td>
+      <td class="text-sm px-3 py-2">{{ sharingOp.type | sharingOperationType }}</td>
+    </tr>
+  </ng-template>
+  <ng-template #emptyMessage pTemplate="emptymessage">
+    <tr>
+      <td colspan="6" style="text-align: center" class="text-base">{{ "SHARING_OPERATION.LIST.NO_SHARING_OPERATION_FOUND_LABEL" | translate }}</td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -1,0 +1,130 @@
+<div class="container">
+  <form [formGroup]="metersForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-wrap -mx-2 pb-1">
+      <div class="flex items-center">
+        <i class="pi pi-home text-lg"></i>
+        <h4 class="ml-3 p text-base">{{ "COMMON.ADDRESS" | translate }}</h4>
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-2 pb-3">
+      <!--Address -->
+      <div class="flex">
+        <label for="address_street" class="text-base">{{ "METER.ADDRESS.STREET_NAME_LABEL" | translate }} *</label>
+        <p-input-group>
+          <input pInputText formControlName="address_street" id="address_street" placeholder="{{'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' |translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="address_street" />
+      </div>
+      <div class="flex">
+        <label for="address_number" class="text-base">{{ "METER.ADDRESS.NUMBER_LABEL" | translate }} *</label>
+        <p-input-group>
+          <input pInputText formControlName="address_number" id="address_number" placeholder="{{'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' |translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="address_number" />
+      </div>
+
+      <div class="flex">
+        <label for="address_supplement" class="text-base">{{ "METER.ADDRESS.BOX_LABEL" | translate }}</label>
+        <p-input-group>
+          <input pInputText formControlName="address_supplement" id="address_supplement" placeholder="{{'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' |translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="address_supplement" />
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-2 pb-3">
+      <div class="flex">
+        <label for="address_postcode" class="text-base">{{ "METER.ADDRESS.POSTAL_CODE_LABEL" | translate }} *</label>
+        <p-input-group>
+          <input pInputText formControlName="address_postcode" id="address_postcode" placeholder="{{'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' |translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="address_postcode" />
+      </div>
+      <div class="flex">
+        <label for="address_city" class="text-base">{{ "METER.ADDRESS.CITY_LABEL" | translate }} *</label>
+        <p-input-group>
+          <input pInputText formControlName="address_city" id="address_city" placeholder="{{'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' |translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="address_city" />
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-2 pb-3">
+      <div class="flex items-center">
+        <i class="pi pi-info text-lg"></i>
+        <h4 class="ml-3 p text-base">{{ "METER.UPDATE.METER_INFORMATION_TITLE" | translate }}</h4>
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-2 pb-3">
+      <!--EAN number group -->
+      <div class="flex">
+        <label for="EAN" class="text-base">{{ "METER.INFORMATIONS.EAN_LABEL" | translate }}</label>
+        <p-input-group>
+          <input pInputText formControlName="EAN" id="EAN" placeholder="{{'METER.INFORMATIONS.PLACEHOLDER.EAN_LABEL' |translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="EAN" />
+      </div>
+      <div class="flex">
+        <label for="meterNumber" class="text-base">{{ "METER.INFORMATIONS.METER_NUMBER_LABEL" | translate }}</label>
+        <p-input-group>
+          <input pInputText formControlName="meterNumber" id="meterNumber" placeholder="{{'METER.INFORMATIONS.PLACEHOLDER.METER_NUMBER_LABEL' | translate}}" />
+        </p-input-group>
+        <app-error-handler controlName="meterNumber" />
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-2 pb-3">
+      <div class="flex">
+        <span class="text-base">{{ "METER.INFORMATIONS.PHASE_NUMBER_LABEL" | translate }}</span>
+        @for(phase of phaseCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'phase_' + phase.id" [value]="phase" formControlName="phasesNumber" />
+            <label [for]="'phase_' + phase.id" class="text-small">
+              {{ phase.name }}
+            </label>
+          </div>
+        }
+
+        <app-error-handler controlName="phasesNumber" />
+      </div>
+      <div class="flex">
+        <span class="text-base">{{ "METER.INFORMATIONS.READING_FREQUENCY_LABEL" | translate }}</span>
+        @for(readingFreq of readingFrequencyCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'readingFreq_' + readingFreq.id" [value]="readingFreq" formControlName="readingFrequency" />
+            <label [for]="'readingFreq_' + readingFreq.id" class="text-small">
+              {{ readingFreq.name }}
+            </label>
+          </div>
+        }
+        <app-error-handler controlName="readingFrequency" />
+      </div>
+      <div class="flex">
+        <span class="text-base">{{ "METER.INFORMATIONS.TARIF_GROUP_LABEL" | translate }}</span>
+        @for(tarifGroup of tarifGroupCategory; track $index){
+          <div>
+            <p-radioButton [inputId]="'tarifGroup_' + tarifGroup.id" [value]="tarifGroup" formControlName="tarifGroup" />
+            <label [for]="'tarifGroup_' + tarifGroup.id" class="text-small">
+              {{ tarifGroup.name }}
+            </label>
+          </div>
+        }
+        <app-error-handler controlName="tarifGroup" />
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-2 pb-3 text-center">
+      <app-summary-error
+        [controlLabels]="{
+          'address_street':'METER.UPDATE.FORM_ERROR.ADDRESS_STREET',
+          'address_number':'METER.UPDATE.FORM_ERROR.ADDRESS_NUMBER',
+          'address_supplement':'METER.UPDATE.FORM_ERROR.ADDRESS_SUPPLEMENT',
+          'address_postcode':'METER.UPDATE.FORM_ERROR.ADDRESS_POSTCODE',
+          'address_city':'METER.UPDATE.FORM_ERROR.ADDRESS_CITY',
+          'EAN':'METER.UPDATE.FORM_ERROR.EAN',
+          'meterNumber':'METER.UPDATE.FORM_ERROR.METERNUMBER',
+          'phasesNumber':'METER.UPDATE.FORM_ERROR.PHASESNUMBER',
+          'readingFrequency':'METER.UPDATE.FORM_ERROR.READINGFREQUENCY',
+          'tarifGroup':'METER.UPDATE.FORM_ERROR.TARIFGROUP',
+        }"
+      ></app-summary-error>
+      <p-button icon="pi pi-check" label="{{ 'METER.UPDATE.VALIDATE_BUTTON_LABEL' | translate }}" type="submit"></p-button>
+    </div>
+  </form>
+</div>

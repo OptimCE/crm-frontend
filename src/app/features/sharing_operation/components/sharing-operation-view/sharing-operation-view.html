@@ -1,0 +1,418 @@
+<p-drawer [(visible)]="sidebarHistoryKey" position="right" styleClass="!w-1/2">
+  <h3 class="font-medium text-lg pb-2">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.KEY_HISTORY_TITLE" | translate }}</h3>
+  <!--Liste trois colonnes : date deb, date fin, clé -->
+  @if(sharingOperation.history_keys && sharingOperation.history_keys.length > 0){
+    <div>
+      <p-table #dtHistory  [value]="sharingOperation.history_keys">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-base px-3">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.START_DATE_LABEL" | translate }}</th>
+            <th class="text-base px-3">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.END_DATE_LABEL" | translate }}</th>
+            <th class="text-base px-3">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.KEY_LABEL" | translate }}</th>
+            <th class="text-base px-3">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.STATUS_LABEL" | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-historyKey>
+          <tr class="hover-flex flex-wrap">
+            <td class="text-sm px-3 py-2">{{ historyKey.startDate | date: "dd/MM/yyyy" }}</td>
+            <td class="text-sm px-3 py-2">{{ historyKey.endDate | date: "dd/MM/yyyy" }}</td>
+            <td class="text-sm px-3 py-2">{{ historyKey.key.name }}</td>
+            <td class="text-sm px-3 py-2">
+              @switch (historyKey.status){
+                @case (KeyStatus.APPROVED){
+                  <p-tag value="{{'SHARING_OPERATION.VIEW.HISTORY_KEY.APPROVED_LABEL' | translate}}" severity="success" class="text-sm px-3 py-2" />
+                }
+                @case (KeyStatus.REJECTED){
+                  <p-tag value="{{'SHARING_OPERATION.VIEW.HISTORY_KEY.DENIED_LABEL' | translate}}" severity="danger" class="text-sm px-3 py-2" />
+                }
+              }
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptyMessage pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" class="text-center text-base">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.NO_HISTORY_KEY_FOUND_LABEL" | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+  @else{
+    <p class="text-base text-center">{{ "SHARING_OPERATION.VIEW.HISTORY_KEY.NO_HISTORY_KEY_AVAILABLE_LABEL" | translate }}</p>
+  }
+</p-drawer>
+<div>
+  @if(isLoading){
+    <p-progressSpinner></p-progressSpinner>
+  }
+  @else{
+    <div>
+      <div class="flex flex-wrap items-center mb-4">
+        <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 flex items-center">
+          <i class="pi pi-building mr-1 !text-xl text-primary"></i>
+          <h2 class="mt-0 mb-0 text-lg font-medium">{{ "SHARING_OPERATION.VIEW.SHARING_OPERATION_TITLE" | translate }}</h2>
+        </div>
+        <div class="lg:w-6/12 md:w-6/12 sm:w-10/12 text-end">
+          <p-button pRipple label="{{ 'SHARING_OPERATION.VIEW.EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL' | translate }}"
+                    severity="success" icon="pi pi-file-export" (click)="exportExcelCWAPe()"></p-button>
+        </div>
+      </div>
+      <div class="flex flex-wrap g-3 mb-3">
+        <div class="lg:w-6/12 flex">
+          <p-card class="w-full flex-grow-1 !shadow-lg/30 h-full ">
+            <div class="text-center">
+              <h3 class="font-medium text-lg">{{ "SHARING_OPERATION.VIEW.NAME_LABEL" | translate }}</h3>
+              <span class="text-sm">{{ sharingOperation.name }}</span>
+            </div>
+            <div class="text-center mt-3">
+              <h3 class="font-medium text-lg">{{ "SHARING_OPERATION.VIEW.TYPE_LABEL" | translate }}</h3>
+              <span class="text-sm">{{ sharingOperation.type | sharingOperationType }}</span>
+            </div>
+          </p-card>
+        </div>
+
+        <div class="lg:w-6/12 flex">
+          <p-card class="w-full flex-grow-1 !shadow-lg/30">
+            <ng-template pTemplate="content">
+              <div class="text-center">
+                <h3 class="font-medium text-lg">{{ "SHARING_OPERATION.VIEW.KEY.ACTUAL_KEY_LABEL" | translate }}</h3>
+                @if(sharingOperation.key && sharingOperation.key.key){
+                  <a class="text-sm" routerLink="/key/{{ sharingOperation.key.key.id }}">
+                    {{ sharingOperation.key.key.name }}
+                  </a>
+                }
+                @else{
+                  <span class="text-sm">{{'SHARING_OPERATION.VIEW.KEY.NO_ACTUAL_KEY_LABEL' | translate}}</span>
+                }
+              </div>
+              <div class="text-center mt-3">
+                <p-button pRipple icon="pi pi-pencil" severity="warn" label="{{ 'SHARING_OPERATION.VIEW.KEY.CHOOSE_KEY_BUTTON_LABEL' | translate }}" (click)="editKey()"></p-button>
+                <p-button pRipple icon="pi pi-history" severity="info" class="ms-2" (click)="sidebarHistoryKey = true"></p-button>
+                <p-button pRipple icon="pi pi-plus" severity="success" class="ms-2" label="{{ 'SHARING_OPERATION.VIEW.KEY.CREATE_KEY_BUTTON_LABEL' | translate }}" (click)="newKey()"></p-button>
+              </div>
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center mb-4">
+        <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 flex items-center">
+          <i class="pi pi-gauge mr-2 !text-xl text-primary"></i>
+          <h2 class="mt-0 mb-0 text-lg font-medium">{{ "SHARING_OPERATION.VIEW.METER.METERS_TITLE" | translate }}</h2>
+        </div>
+        <div class="lg:w-6/12 md:w-6/12 sm:w-10/12 text-end">
+          <p-button pRipple label="{{ 'SHARING_OPERATION.VIEW.METER.ADD_METER_BUTTON_LABEL' | translate }}"
+                    icon="pi pi-plus" severity="success" (click)="addMeter()"></p-button>
+        </div>
+      </div>
+      <p-table
+        #dt
+        [value]="metersPartialList"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [lazy]="true"
+        (onLazyLoad)="lazyLoadMeters($event)"
+        [rows]="paginationMetersInfo.limit"
+        [totalRecords]="paginationMetersInfo.total"
+        [first]="(paginationMetersInfo.page - 1) * paginationMetersInfo.limit"
+        [showCurrentPageReport]="true"
+        [currentPageReportTemplate]="currentPageReportTemplate"
+        (onPage)="pageChange($event)"
+        [paginator]="paginationMetersInfo.total_pages > 1"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex justify-content-between">
+            <p-button
+              [outlined]="true"
+              icon="pi pi-filter-slash"
+              label="{{ 'SHARING_OPERATION.VIEW.METER.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+              (onClick)="clear(dt)"
+            />
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <div class="flex items-center text-base px-3">
+                {{ "SHARING_OPERATION.VIEW.ADDRESS_LABEL" | translate }} <br />
+                <p-columnFilter
+                  field="address"
+                  display="{{'SHARING_OPERATION.VIEW.ADDRESS_LABEL' | translate}}"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  [showClearButton]="false"
+                >
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <div class="grid">
+                      <div class="flex">
+                        <label for="streetName">{{ "SHARING_OPERATION.VIEW.ADDRESS.STREET_NAME_LABEL" | translate }}</label>
+                        <input pInputText id="streetName" [(ngModel)]="addressFilter.streetName"
+                               placeholder="{{'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate}}" />
+                      </div>
+                      <div class="flex">
+                        <label for="postcode">{{ "SHARING_OPERATION.VIEW.ADDRESS.POSTAL_CODE_LABEL" | translate }}</label>
+                        <input pInputText id="postcode" [(ngModel)]="addressFilter.postcode"
+                               placeholder="{{'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate}}"/>
+                      </div>
+                      <div class="flex">
+                        <label for="city">{{ "SHARING_OPERATION.VIEW.ADDRESS.CITY_LABEL" | translate }}</label>
+                        <input pInputText id="city" [(ngModel)]="addressFilter.cityName"
+                               placeholder="{{'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate}}" />
+                      </div>
+                    </div>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+            <th>
+              <div class="flex items-center text-base px-3">
+                {{ "SHARING_OPERATION.VIEW.METER.INFORMATIONS.EAN_LABEL" | translate }} <br />
+                <p-columnFilter
+                  type="text"
+                  field="EAN"
+                  display="{{'SHARING_OPERATION.VIEW.METER.INFORMATIONS.EAN_LABEL' | translate}}"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th>
+              <div class="flex items-center text-base px-3">
+                {{ "SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL" | translate }} <br />
+                <p-columnFilter
+                  type="text"
+                  field="meter_number"
+                  display="{{'SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL' | translate}}"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th>
+              <div class="flex items-center text-base px-3">
+                {{ "SHARING_OPERATION.VIEW.METER.STATUS_LABEL" | translate }} <br />
+                <p-columnFilter field="statut" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                  <ng-template pTemplate="header">
+                    <span class="text-sm px-3">{{ "SHARING_OPERATION.VIEW.METER.FILTER_BY_STATUS_LABEL" | translate }}</span>
+                  </ng-template>
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-select
+                      [ngModel]="value"
+                      [options]="statutCategory"
+                      (onChange)="filter($event.value)"
+                      placeholder="{{ 'SHARING_OPERATION.VIEW.METER.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
+                      [showClear]="true"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        @switch (option.value){
+                          @case(MeterStatus.ACTIVE){
+                            <p-tag class="text-sm" severity="success" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"></p-tag>
+                          }
+                          @case(MeterStatus.INACTIVE){
+                            <p-tag class="text-sm" severity="danger" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"></p-tag>
+                          }
+                          @case(MeterStatus.WAITING_GRD){
+                            <p-tag
+                              class="text-sm"
+                              severity="danger"
+                              value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate }}"
+                            ></p-tag>
+                          }
+                          @case(MeterStatus.WAITING_MANAGER){
+                            <p-tag
+                              class="text-sm"
+                              severity="danger"
+                              value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL' | translate }}"
+                            ></p-tag>
+                          }
+                        }
+                      </ng-template>
+                      <ng-template pTemplate="selectedItem">
+                        @switch (value){
+                          @case(MeterStatus.ACTIVE){
+                            <p-tag class="text-sm" severity="success" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"></p-tag>
+                          }
+                          @case(MeterStatus.INACTIVE){
+                            <p-tag class="text-sm" severity="danger" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"></p-tag>
+                          }
+                          @case(MeterStatus.WAITING_GRD){
+                            <p-tag class="text-sm" severity="danger" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate }}"></p-tag>
+                          }
+                          @case(MeterStatus.WAITING_MANAGER){
+                            <p-tag
+                              class="text-sm"
+                              severity="danger"
+                              value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL' | translate }}"
+                            ></p-tag>
+                          }
+                        }
+                      </ng-template>
+                    </p-select>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+            <th class="flex items-center text-base px-3">
+              Actions <br />
+              <wbr />
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-meter>
+          <tr (click)="onRowClick(meter)" style="cursor: pointer" class="hover-flex flex-wrap">
+            <td class="text-sm px-3 py-2" [innerHTML]="meter.adresse | address"></td>
+            <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
+            <td class="text-sm px-3 py-2">{{ meter.meterNumber }}</td>
+            <td class="text-sm px-3 py-2">
+              @switch (meter.status){
+                @case(MeterStatus.ACTIVE){
+                  <p-tag class="text-sm px-3 py-2" severity="success" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"></p-tag>
+                }
+                @case(MeterStatus.INACTIVE){
+                  <p-tag class="text-sm px-3 py-2" severity="danger" value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"></p-tag>
+                }
+                @case(MeterStatus.WAITING_GRD){
+                  <p-tag
+                    class="text-sm px-3 py-2"
+                    severity="danger"
+                    value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate }}"
+                  ></p-tag>
+                }
+                @case(MeterStatus.WAITING_MANAGER){
+                  <p-tag
+                    class="text-sm px-3 py-2"
+                    severity="danger"
+                    value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL' | translate }}"
+                  ></p-tag>
+                }
+              }
+            </td>
+            <td>
+              <p-toast />
+              <p-confirmpopup>
+                <ng-template pTemplate="content" let-message>
+                  <div class="flex flex-column items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3">
+                    <h3 class="font-medium text-lg">{{ textChangeStatusMeter }}</h3>
+                    <p-date-picker
+                      id="dateStartMeter"
+                      [(ngModel)]="dateStartMeter"
+                      [showIcon]="true"
+                      [showOnFocus]="true"
+                      [minDate]="minDate"
+                      [inline]="false"
+                      dateFormat="dd/mm/yy"
+                      appendTo="body"
+                    ></p-date-picker>
+                  </div>
+                </ng-template>
+              </p-confirmpopup>
+              <p-toast />
+              <div class="flex flex-wrap gap-1">
+                <div class="flex">
+                  @if(meter.status === MeterStatus.ACTIVE){
+                    <p-button
+                      pRipple
+                      pButton
+                      label="{{ 'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate }}"
+                      severity="warn"
+                      (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
+                      icon="pi pi-clock"
+                      size="small"
+                    ></p-button>
+                  }
+                  @else{
+                    <p-button
+                      pRipple
+                      pButton
+                      label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
+                      severity="success"
+                      (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
+                      icon="pi pi-check"
+                      size="small"
+                    ></p-button>
+                  }
+                </div>
+                <div class="flex">
+                  <p-button
+                    pRipple
+                    pButton
+                    label="{{ 'SHARING_OPERATION.VIEW.METER.DELETE_BUTTON_LABEL' | translate }}"
+                    severity="danger"
+                    (onClick)="openMeterChangeStatusPopup($event, meter, 2)"
+                    icon="pi pi-times"
+                    size="small"
+                  ></p-button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptyMessage pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" style="text-align: center" class="text-base">{{ "SHARING_OPERATION.VIEW.METER.NO_METERS_FOUND_LABEL" | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div class="flex flex-wrap items-center mb-4 mt-4">
+        <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 flex items-center">
+          <i class="pi pi-chart-bar mr-2 !text-xl text-primary"></i>
+          <h2 class="mt-0 mb-0 text-lg font-medium">{{ "SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.CONSUMPTION_MONITORING_TITLE" | translate }}</h2>
+        </div>
+      </div>
+      <form [formGroup]="formChart" class="flex mb-4" (submit)="loadChart()">
+        <div class="grid me-2">
+          <label for="dateDeb">{{'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.START_DATE_LABEL' | translate}}</label>
+          <p-date-picker id="dateDeb" formControlName="dateDeb" dateFormat="dd/mm/yy" [firstDayOfWeek]="1"></p-date-picker>
+          <app-error-handler controlName="dateDeb"></app-error-handler>
+        </div>
+        <div class="grid me-2">
+          <label for="dateFin">{{'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.END_DATE_LABEL' | translate}}</label>
+          <p-date-picker id="dateFin" formControlName="dateFin" dateFormat="dd/mm/yy" [firstDayOfWeek]="1"></p-date-picker>
+          <app-error-handler controlName="dateFin"></app-error-handler>
+        </div>
+        <div class="content-center">
+          <p-button pRipple label="{{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SEARCH_BUTTON_LABEL' | translate }}" icon="pi pi-search" severity="info"  type="submit"></p-button>
+        </div>
+      </form>
+      <div class="card">
+        <p-chart type="bar" [data]="data" [options]="options" />
+      </div>
+      @if(displayDownloadButton){
+        <div class="flex flex-wrap text-center mt-4">
+          <p-button pRipple label="{{'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.DOWNLOAD_BUTTON_LABEL' | translate}}"
+                    icon="pi pi-file-export" severity="success" (click)="downloadTotalConsumption()"></p-button>
+        </div>
+      }
+
+      <div class="w-3/4 mx-auto">
+        <form [formGroup]="formGroup" (ngSubmit)="addConsumptionInformations()">
+          <div class="card">
+            <input type="file" id="fileInput" (change)="onFileSelected($event)" class="file-input" />
+            <label for="fileInput" class="file-upload-message">
+              <div
+                class="file-upload"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)"
+                [class.dragging]="dragging"
+              >
+                <p>{{ "SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECT_FILE_DRAG_N_DROP_LABEL" | translate }}</p>
+              </div>
+            </label>
+          </div>
+          @if(fileConsumption){
+            <div>
+              <p>{{ "SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECTED_FILE_LABEL" | translate }} : {{ fileConsumption.name }}</p>
+            </div>
+          }
+          <div class="flex flex-wrap flex-col mt-2 content-center">
+            <app-error-handler controlName="fileConsumption"></app-error-handler>
+            <p-button type="submit" icon="pi pi-upload" severity="success" label="{{'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_BUTTON_LABEL' | translate}}"></p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+</div>

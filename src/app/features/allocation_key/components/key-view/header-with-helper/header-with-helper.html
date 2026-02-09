@@ -1,0 +1,18 @@
+<!-- Use AG Grid header classes so the theme lays out content on one line -->
+<div class="ag-header-cell-label">
+  <span class="ag-header-cell-text" [title]="params?.tooltip">
+    {{ params?.label }}
+  </span>
+
+  <!-- right-side icon/button area -->
+  <span class="ag-header-icon ag-header-label-icon hover:accent-purple-600">
+    <button
+      type="button"
+      class="ag-header-icon-button button-helper hover:accent-purple-600"
+      (click)="onClick()"
+      [attr.aria-label]="'KEY.SHARED.HELP_LABEL' | translate"
+    >
+      <i class="pi pi-question-circle icon-button-helper hover:accent-purple-600"></i>
+    </button>
+  </span>
+</div>

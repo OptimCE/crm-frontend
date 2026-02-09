@@ -1,0 +1,968 @@
+{
+  "TITLE": "OptimCE",
+  "COMMON": {
+    "LANGUAGE_SELECTOR": "Sélecteur de langue",
+    "ADDRESS": "Adresse",
+    "ACTIONS": {
+      "YES": "Oui",
+      "NO": "Non",
+      "VALIDATE": "Valider",
+      "CANCEL": "Annuler"
+    },
+    "ERRORS": {
+      "EXCEPTION": "Une erreur inattendue est survenue. Veuillez réessayer plus tard",
+      "TIMEOUT": "La requête a expiré. Veuillez réessayer",
+      "DECORATOR": "Erreur d’exécution du décorateur. Veuillez contacter l’administrateur",
+      "UNAUTHORIZED": "Vous n’êtes pas autorisé à effectuer cette action",
+      "PAGE_INCORRECT": "Le numéro de la page doit être positif",
+      "DATE_FORMAT_ISO8601": "La date doit être au format ISO 8601",
+      "BODY_ID_INCORRECT": "L’identifiant dans le corps est manquant ou incorrect",
+      "PARAM_IS_STRING": "Le paramètre doit être une chaîne de caractères",
+      "QUERY_IS_STRING": "La valeur de la requête doit être une chaîne",
+      "QUERY_IS_NUMERIC": "La valeur de la requête doit être numérique",
+      "QUERY_IS_BOOLEAN": "La valeur de la requête doit être un booléen"
+    }
+  },
+  "LOGIN": {
+    "LOGIN": "Connectez-vous"
+  },
+  "NAVBAR": {
+    "PROFILE": "Profil",
+    "INVITATIONS": "Invitations",
+    "KEY_HANDLER": "Gestionnaire de clefs",
+    "HANDLE_KEY": "Gérer les clefs",
+    "GENERATE_KEY": "Générer une clef",
+    "MEMBRE_HANDLER": "Gestionnaire de membres",
+    "HANDLE_MEMBRE": "Gérer les membres",
+    "HANDLE_METER": "Gérer les compteurs",
+    "HANDLE_SHARING_OP": "Opérations de partage",
+    "COMMUNITIES": "Communautés",
+    "MY_COMMUNITIES": "Mes communautés",
+    "COMMUNITY_USERS": "Utilisateurs",
+    "USER_GUIDE": "Guide utilisateur",
+    "REPORT_BUG": "Signaler un bug",
+    "DISCONNECT": "Déconnexion",
+    "APP_TITLE": "OptimCE",
+    "ERROR_AUTH_UPDATE": "Erreur lors de la mise à jour de l'autorisation",
+    "ERROR_LOGOUT": "Erreur lors de la déconnexion",
+    "DELETE": "Supprimer",
+    "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier"
+  },
+  "PROFILE": {
+    "MY_PROFILE": "Mon profil",
+    "UPDATE": "Mettre à jour",
+    "UPDATE_PROFILE": "Mise à jour du profil",
+    "ACCOUNT_INFORMATION": "Informations du compte",
+    "UPDATE_PASSWORD": "Changer de mot de passe",
+    "DOCUMENTS": "Documents",
+    "MY_REPRESENTATIONS": "Mes représentations",
+    "DISPLAY_NAME": "Nom",
+    "DISPLAY_TYPE": "Type",
+    "DISPLAY_SIZE": "Taille",
+    "PERSONAL_INFORMATION": {
+      "TITLE": "Information personnelle",
+      "SOCIAL_NUMBER": "Numéro de registre national",
+      "LAST_NAME": "Nom",
+      "FIRST_NAME": "Prénom",
+      "PHONE_NUMBER": "Numéro de téléphone",
+      "HOUSE_ADDRESS": "Adresse de domicile",
+      "BILLING_ADDRESS": "Adresse de facturation",
+      "EMAIL": "Adresse e-mail"
+    }
+  },
+  "INVITATION": {
+    "MEMBER": {
+      "TITLE": "Membres",
+      "HEADERS": {
+        "NAME": "Nom",
+        "COMMUNITY": "Communauté",
+        "STATE": "Statut",
+        "CREATED_AT": "Crée le",
+        "ACTIONS": "Actions"
+      },
+      "TO_BE_ENCODED": "A encodé",
+      "ENCODED": "Encodé",
+      "ENCODE_AND_ACCEPT": "Encoder et accepter",
+      "REFUSE": "Refuser",
+      "ACCEPT": "Accepter",
+      "SEE": "Voir",
+      "NO_INVITATIONS_AVAILABLE": "Aucune invitation de membres trouvées"
+    },
+    "MANAGER": {
+      "TITLE": "Gestionnaire",
+      "HEADERS": {
+        "EMAIL_ADDRESS": "Adresse e-mail",
+        "COMMUNITY": "Communauté",
+        "ACTIONS": "Actions"
+      },
+      "ACCEPT": "Accepter",
+      "REFUSE": "Refuser",
+      "NO_INVITATIONS_AVAILABLE": "Aucune invitations de manager trouvées"
+    }
+  },
+  "COMMUNITY": {
+    "LIST": {
+      "CREATE_COMMUNITY": "Créer une communauté",
+      "TITLE": "Mes communautés",
+      "HEADERS": {
+        "NAME": "Nom",
+        "ROLE": "Rôle",
+        "ACTIVATE": "Activer",
+        "ACTIONS": "Actions"
+      },
+      "ACTIVATED": "Activer",
+      "NON_ACTIVATED": "Désactiver",
+      "UPDATE_COMMUNITY": "Mettre à jour",
+      "ACTIVATE_BUTTON": "Activer",
+      "ACTIVATE_BUTTON_TOOLTIP": "Changer de communauté",
+      "LEAVE_BUTTON": "Quitter",
+      "LEAVE_BUTTON_TOOLTIP": "Quitter la communauté",
+      "NO_COMMUNITY_FOUND": "Aucune communauté trouvée"
+    },
+    "CREATE": {
+      "TITLE": "Créer une communauté",
+      "EDIT_TITLE": "Mettre à jour une communauté",
+      "NAME": "Nom",
+      "NAME_PLACEHOLDER": "Ma communauté locale",
+      "VALIDATE": "Valider"
+    }
+  },
+  "KEY": {
+    "SHARED": {
+      "BACK": "Retour",
+      "HELP_LABEL": "Aide"
+    },
+    "CREATE": {
+      "KEY_TITLE": "Création d'une clef de répartition",
+      "FORM": {
+        "KEY_NAME_LABEL": "Nom de la clef",
+        "KEY_NAME_PLACEHOLDER": "Nom de la clef",
+        "KEY_DESCRIPTION_LABEL": "Description",
+        "KEY_DESCRIPTION_PLACEHOLDER": "Clef de ma communauté",
+        "KEY_ADD_ITERATION_BUTTON_LABEL": "Ajouter une itération",
+        "KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL": "Ajouter une itération prorata",
+        "KEY_ADD_CONSUMER_BUTTON_LABEL": "Ajouter un consommateur",
+        "KEY_DATAS_LABEL": "Données",
+        "KEY_CREATE_BUTTON_LABEL": "Créer",
+        "ERROR": {
+          "KEY_NAME_LABEL": "nom de la clef",
+          "DESCRIPTION_LABEL": "description"
+        }
+      },
+      "ERROR": {
+        "NO_ITERATION": "Il doit y avoir au moins une itération",
+        "NO_CONSUMERS": "Il doit y avoir au moins un consommateur",
+        "SUM_ITERATIONS_ERROR": "La somme des itérations doit être égale à 1",
+        "SUM_CONSUMERS": "La somme des consommateurs doit être égale à 1",
+        "CONSUMER_NAME_REQUIRED": "Le nom du consommateur est requis",
+        "NO_CHANGE": "Aucun changement détecté"
+      },
+      "HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL": "Combien de consommateurs doit contenir votre clef",
+      "VALIDATE_BUTTON_LABEL": "Valider",
+      "CONSUMER_NAME_LABEL": "Nom du consommateur",
+      "KEY_TYPE_LABEL": "Type de clef",
+      "PRORATA_LABEL": "Prorata",
+      "EGALITARIAN_LABEL": "Egalitaire",
+      "INJECTION_PERCENTAGE_LABEL": "Pourcentage d'injection",
+      "SUM_MUST_BE_100_LABEL": "La somme des pourcentages doit être égale à 100 !",
+      "FINALISATION": "Finalisation"
+    },
+    "TABLE": {
+      "COLUMNS": {
+        "ITERATION_NUMBER_LABEL": "Itération n°",
+        "ITERATION_TOOLTIP": "Numéro de l'itération dans la séquence",
+        "VA_PERCENTAGE_LABEL": "Pourcentage VA",
+        "VA_PERCENTAGE_SHORT_LABEL": "% VA",
+        "VA_PERCENTAGE_TOOLTIP": "Valeur de l'injection allouée à cette itération (en %)",
+        "CONSUMER_LABEL": "Consommateurs",
+        "CONSUMER_NAME_LABEL": "Nom",
+        "CONSUMER_VAP_LABEL": "VAP",
+        "CONSUMER_VAP_TOOLTIP": "Valeur allouée à un consommateur (en %)",
+        "ALLOCONSUMPTION_LABEL": "Alloconsommation",
+        "SURPLUS_LABEL": "Surplus",
+        "SHARED_PERCENTAGE_LABEL": "% Partage",
+        "SELF_SUFFICIENCY_PERCENTAGE_LABEL": "% Autosuffisance",
+        "TOTAL_CONSUMPTION_LABEL": "Consommation totale",
+        "VP_TOTAL_LABEL": "VP total",
+        "VPC_TOTAL_LABEL": "VPC total",
+        "SURPLUS_TOTAL_LABEL": "Surplus total",
+        "ALLOCONSUMPTION_TOTAL_LABEL": "Alloconsommation totale",
+        "TIME_LABEL": "Temps",
+        "VPC_LABEL": "VPC",
+        "CONSUMPTION_LABEL": "Consommation",
+        "VP_LABEL": "VP"
+      },
+      "DELETE_ITERATION_BUTTON_LABEL": "Supprimer l'itération",
+      "DELETE_CONSUMER_BUTTON_LABEL": "Supprimer le consommateur"
+    },
+    "LIST": {
+      "TITLE": "Clefs de répartition",
+      "ERASE_FILTERS_BUTTON_LABEL": "Effacer les filtres",
+      "ADD_BUTTON_LABEL": "Ajouter",
+      "ADD_STANDARD_KEY_BUTTON_LABEL": "Ajouter une clef standard",
+      "NAME_LABEL": "Nom",
+      "DESCRIPTION_LABEL": "Description",
+      "PAGINATED_TEMPLATE_LIST": "Page {{ page }} sur {{ total_pages }} ({{ total }} clefs)",
+      "EMPTY": "Aucune clef trouvée"
+    },
+    "GENERATION": {
+      "TITLE": "Génération de clefs",
+      "SELECT_ALGORITHM_TITLE": "Sélection de l'algorithme",
+      "SELECT_ALGORITHME_LABEL": "Sélectionner l'algorithme",
+      "SELECT_ALGORITHME_PLACEHOLDER": "Choisir un algorithme",
+      "PARAMETERS_LABELS": "Paramètres de génération",
+      "PRODUCTION_COLUMN_LABEL": "Colonne de production",
+      "REQUIRED_PARAMETERS_LABEL": "Paramètres obligatoires",
+      "OPTIONAL_PARAMETERS_LABEL": "Paramètres additionnels",
+      "FILE_UPLOAD_LABEL": "Fichier de simulation",
+      "FILE_UPLOAD_SELECTED_LABEL": "Fichier sélectionné",
+      "START_GENERATION_BUTTON_LABEL": "Démarrer la génération",
+      "ALGORITHM_RESULTS_TITLE": "Résultats",
+      "NO_GENERATED_KEY": "Aucune clef générée",
+      "SAVE_RESULT_BUTTON_LABEL": "Sauvegarder"
+    },
+    "SIMULATION": {
+      "SUMMARY_KEY_TITLE": "Clef résumé",
+      "EXPORT_EXCEL_BUTTON_LABEL": "Exporter sous format excel",
+      "CHART_TITLE": "Graphique",
+      "NO_DATA_TO_DISPLAY_LABEL": "Aucune donnée à afficher",
+      "DETAILED_KEY_TITLE": "Clef détaillée",
+      "SIMULATIONS_TITLE": "Simulations",
+      "NO_SIMULATION_FOUND": "Aucune simulation n'a été trouvée",
+      "SEARCH_LABEL": "Rechercher une simulation",
+      "ADD_TEST_BUTTON_LABEL": "Ajouter un test",
+      "DRAG_OR_CLICK_TO_UPLOAD_FILE_LABEL": "Déposez un fichier ici ou cliquez pour sélectionner",
+      "SELECTED_FILE_LABEL": "Fichier sélectionné",
+      "INJECTION_PLACEHOLDER": "Injection",
+      "PRODUCTION_PLACEHOLDER": "Production",
+      "INPUT_INJECTION_COLUMN_LABEL": "Nom de la colonne contenant l'injection",
+      "SIMULATION_START_BUTTON_LABEL": "Démarrer la simulation"
+    },
+    "FORM_ERROR": {
+      "REQUIRED_FIELD": "Ce champ est obligatoire",
+      "INVALID_EMAIL": "Adresse e-mail invalide",
+      "MIN_LENGTH": "Ce champ doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
+      "FIX_THE_FOLLOWING_ERROR": "Veuillez corriger les erreurs suivantes",
+      "FIELD_REQUIRED": "Le champ \"{{ controlName }}\" est obligatoire.",
+      "FIELD_INVALID_EMAIL": "Le champ \"{{ controlName }}\" contient une adresse email invalide.",
+      "FIELD_MIN_LENGTH": "Le champ \"{{ controlName }}\" doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
+      "UNKNOWN_ERROR": "Erreur inconnue sur \"{{ controlName }}\""
+    },
+    "SUCCESS": {
+      "KEY_UPDATED": "Clé mise à jour avec succès",
+      "KEY_ADDED": "Clé ajoutée avec succès",
+      "KEY_DELETED": "Clé supprimée avec succès",
+      "KEY_EXPORTED": "Clé exporté avec succès",
+      "SIMULATION_DONE": "Simulation effectuée avec succès",
+      "SIMULATION_EXPORTED": "Simulation exporté avec succès",
+      "GENERATION_REQUEST_SENT": "Demande de génération envoyé avec succès",
+      "GENERATED_KEY_SAVED": "Clé générée sauvegardée avec succès"
+    },
+    "ERRORS": {
+      "FILL_REQUIRED_FIELDS": "Veuillez remplir tous les champs obligatoires",
+      "FIRST_STEP_ERROR": "Une erreur est survenue lors de la première étape",
+      "SECOND_STEP_ERROR": "Une erreur est survenue lors de la deuxième étape",
+      "PAGE_INCORRECT": "Le numéro de la page doit être positif",
+      "LIMIT_INCORRECT": "La limite doit être comprise entre 1 et 100",
+      "ID_INCORRECT": "L'identifiant doit être un entier positif",
+      "NAME_REQUIRED": "Le nom est requis",
+      "DESCRIPTION_REQUIRED": "La description est requise",
+      "ITERATIONS_REQUIRED": "Une itération minimum est requise",
+      "ITERATION_ENERGY_ALLOCATION": "Le pourcentage d'allocation à chaque itération ne peut être négatif",
+      "CONSUMERS_REQUIRED": "Un consommateur minimum est requis",
+      "ITERATION_NUMBER_FAILED": "Le numéro des itérations doit être strictement positif",
+      "CONSUMER_ENERGY_ALLOCATION": "Le pourcentage d'allocation à chaque consommateur est requis",
+      "ENERGY_ALLOCATION_NEGATIVE": "Le pourcentage d'allocation à chaque consommateur doit être strictement positif",
+      "SUM_ENERGY_ALLOCATION": "La somme des énergies allouées à toutes les itérations doit être égale à 100%",
+      "CONSUMERS_NAME_REQUIRED": "Chaque consommateur doit être identifié par un nom (ou un n° de compteur)",
+      "CONSUMERS_SUM_ENERGY_ALLOCATION": "La somme des allocations à chaque consommateur lors d'une itération doit être égale à 100%",
+      "ALGORITHME_NAME_ERROR": "Une erreur est survenue avec le nom de l'exception",
+      "INJECTION_NAME_ERROR": "Le nom de l'injection est incorrect",
+      "FILE_MISSING": "Veuillez inclure un fichier",
+      "FILE_FORMAT_INCORRECT": "Le format du fichier est incorrect (uniquement .xls/xlsx et .csv)",
+      "ERROR_EXCEPTION": "Une erreur inattendue est survenue. Veuillez réessayer plus tard",
+      "TIMEOUT": "Timeout...",
+      "ERROR_GET_PARTIAL_KEY_LIST": "Une erreur est survenue lors de la récupération de clef de répartition",
+      "ERROR_GET_PARTIAL_KEY_LIST_BY_ID": "Une erreur est survenue lors de la récupération des clés de répartition par leurs identifiants",
+      "ERROR_GET_COMPLETE_KEY": "Une erreur est survenue lors de la récupération de la clef de répartition",
+      "ERROR_ADD_KEY": "Une erreur est survenue lors de l'ajout de la clef de répartition. Veuillez réessayer plus tard",
+      "ERROR_UPDATE_KEY": "Une erreur est survenue lors de la mise à jour de la clef. Veuillez réessayer plus tard",
+      "ERROR_DELETE_KEY": "Une erreur est survenue lors de la suppression de la clef. Veuillez réessayer plus tard",
+      "ERROR_LOCAL_SIMULATE_KEY": "Une erreur est survenue lors de la simulation de la clé. Veuillez réessayer plus tard.",
+      "ERROR_GET_PARTIAL_KEY_SIMULATION_LIST": "Une erreur est survenue lors de la récupération des simulations de la clef.",
+      "ERROR_GET_COMPLETE_KEY_SIMULATION": "Une erreur est survenue lors de la récupération de la simulation",
+      "ERROR_MISSING_PARAMETERS_ADD_KEY_GENERATORS": "Un paramètre obligatoire est manquant pour la demande de génération.",
+      "ERROR_GET_PARTIAL_GENERATED_KEY_LIST": "Une erreur est survenue lors de la récupération des clés générées.",
+      "ERROR_SAVE_GENERATED_KEY": "Une erreur est survenue lors de la sauvegarde de la clef générée",
+      "ERROR_GENERATE_KEY": "Une erreur est survenue lors de la génération de la clef. Veuillez réessayer plus tard",
+      "ERROR_NO_GENERATOR_AVAILABLE": "Aucun générateur n'est actuellement disponible",
+      "ERROR_DOWNLOAD_SIMULATION": "Une erreur est survenue lors du téléchargement de la simulation. Veuillez réessayer plus tard",
+      "ERROR_DOWNLOAD_KEY": "Une erreur est survenue lors du téléchargement de la clef. Veuillez réessayer plus tard",
+      "ERROR_ACTIVATE_KEY": "Une erreur est survenue lors de l'activation de la clef.",
+      "ERROR_GET_AVAILABLE_GENERATOR": "Une erreur est survenue lors de la récupération des générateurs disponibles. Veuillez réessayer plus tard",
+      "ERROR_DECORATOR": "DECORATOR ERROR. Veuillez contacter l'administrateur",
+      "ERROR_USER_NOT_FOUND": "Vous n'êtes pas authentifié.",
+      "ERROR_USER_NOT_AUTHORIZED": "Vous n'avez pas l'autorisation de réaliser cette action."
+    }
+  },
+  "MEMBER": {
+    "VIEW": {
+      "MEMBER_TITLE": "Membre",
+      "STATUS_ACTION": {
+        "ACTIVATE_BUTTON_LABEL": "Activer",
+        "DEACTIVATE_BUTTON_LABEL": "Désactiver",
+        "PUT_TO_PENDING_LIST_BUTTON_LABEL": "Placer en attente",
+        "MODIFY_BUTTON_LABEL": "Modifier"
+      },
+      "ERROR_DEACTIVATING_MEMBER": {
+        "HEADER_LABEL": "Action impossible",
+        "MEMBER_CANT_DEACTIVATE_MEMBER_WITH_ACTIVATED_METER_LABEL": "Vous ne pouvez pas désactiver un membre s'il possède encore des compteurs actifs.",
+        "CLOSE_BUTTON_LABEL": "Fermer"
+      },
+      "INFORMATION_TITLE": "Informations générales",
+      "INVITATIONS": {
+        "NO_INVITE_LABEL": "Pas d'invitation",
+        "PENDING_LABEL": "En attente",
+        "ACCEPTED_LABEL": "Acceptée"
+      },
+      "MEMBER_GUARDIANSHIP_TITLE": "Tuteur",
+      "MANAGER_TITLE": "Gestionnaire",
+      "SOCIAL_LABEL": "Social",
+      "BANK_TITLE": "Informations bancaires",
+      "TAB_HEADER": {
+        "METER_LABEL": "Compteurs",
+        "BANKING_INFO_LABEL": "Informations bancaires",
+        "DOCUMENTS_LABEL": "Documents",
+        "MANAGER_LABEL": "Gestionnaire"
+      },
+      "INFORMATIONS": {
+        "COMPANY_VAT_NUMBER_LABEL": "N° de TVA",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "N° de registre national",
+        "NAME_LABEL": "Nom",
+        "FIRST_NAME_LABEL": "Prénom",
+        "EMAIL_LABEL": "Adresse e-mail",
+        "PHONE_LABEL": "N° de téléphone",
+        "SOCIAL_RATE_LABEL": "Tarif social",
+        "ADDRESSES_LABEL": "Adresses",
+        "ADDRESS": {
+          "HOUSE": "Adresse de domicile",
+          "BILLING": "Adresse de facturation"
+        }
+      },
+      "STATUS_LABEL": "Statut",
+      "STATUS": {
+        "ACTIVE_LABEL": "Activé",
+        "INACTIVE_LABEL": "Désactivé",
+        "PENDING_LABEL": "En attente"
+      },
+      "UPDATE_A_MEMBER_HEADER": "Mise à jour d'un membre",
+      "MEMBER_UPDATE_SUCCESSFULLY_LABEL": "Membre mis à jour avec succès",
+      "MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL": "Statut mis à jour avec succès",
+      "METERS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+        "ADDRESS_LABEL": "Adresse",
+        "ADDRESS": {
+          "STREET_NAME_LABEL": "Rue",
+          "POSTAL_CODE_LABEL": "Code postal",
+          "CITY_LABEL": "Ville",
+          "PLACEHOLDER": {
+            "STREET_NAME_LABEL": "Rue Jacquemin",
+            "POSTAL_CODE_LABEL": "1000",
+            "CITY_LABEL": "Bruxelles"
+          }
+        },
+        "EAN_LABEL": "EAN",
+        "METER_NUMBER_LABEL": "N° du compteur",
+        "STATUS_LABEL": "Statut",
+        "FILTER_BY_STATUS_LABEL": "Filtrer par statut",
+        "SELECT_A_STATUS_PLACEHOLDER": "Sélectionner un statut",
+        "SHARING_OPERATION_TITLE": "Opération de partage",
+        "FILTER_BY_SHARING_OPERATION_LABEL": "Filtrer par opération de partage",
+        "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Sélectionner une opération de partage",
+        "NO_METER_FOUND_LABEL": "Aucun compteur trouvé",
+        "ADD_METER_BUTTON_LABEL": "Ajouter un compteur",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} compteurs)",
+        "ADD_A_METER_HEADER": "Ajout d'un compteur",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Compteur ajouté avec succès"
+      },
+      "DOCUMENTS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+        "NAME_LABEL": "Nom",
+        "TYPE_LABEL": "Type",
+        "SIZE_LABEL": "Taille",
+        "UPLOAD_DATE_LABEL": "Date de téléchargement",
+        "NO_DOCUMENT_FOUND_LABEL": "Aucun document trouvé",
+        "ADD_DOCUMENT_LABEL": "Ajouter un document",
+        "PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} documents)",
+        "ADD_DOCUMENT_HEADER": "Ajout d'un document",
+        "SUCCESS_ADDING_DOCUMENT_LABEL": "Document ajouté avec succès"
+      },
+      "MANAGER": {
+        "SOCIAL_SECURITY_NUMBER_LABEL": "N° de registre national",
+        "SURNAME_LABEL": "Nom",
+        "FIRST_NAME_LABEL": "Prénom",
+        "EMAIL_LABEL": "Adresse e-mail",
+        "PHONE_NUMBER_LABEL": "N° de téléphone"
+      }
+    },
+    "LIST": {
+      "MEMBER_TITLE": "Membres",
+      "ADD_BUTTON_LABEL": "Ajouter",
+      "INVITE_NEW_MEMBER_BUTTON_LABEL": "Inviter un nouveau membre",
+      "SEE_PENDING_INVITATION_BUTTON_LABEL": "Voir les invitations en attente",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NAME_LABEL": "Nom",
+      "TYPE_LABEL": "Type",
+      "FILTER_BY_TYPE_LABEL": "Filtrer par type",
+      "SELECT_A_TYPE_PLACEHOLDER": "Sélectionner un type",
+      "STATUS_LABEL": "Status",
+      "FILTER_BY_STATUS_LABEL": "Filtrer par statut",
+      "SELECT_A_STATUS_PLACEHOLDER": "Sélectionner un statut",
+      "NO_MEMBER_FOUND_LABEL": "Aucun membre trouvé",
+      "PAGE_REPORT_TEMPLATE_MEMBER_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} membres)",
+      "INVITE_MEMBER_HEADER": "Inviter un membre",
+      "ADD_MEMBER_HEADER": "Ajout d'un membre",
+      "ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL": "Souhaitez-vous ajouter un nouveau compteur pour ce membre ?",
+      "CONFIRMATION_HEADER": "Confirmation",
+      "ADD_METER_HEADER": "Ajout d'un compteur",
+      "METER_MEMBER_ADDED_SUCCESSFULLY_LABEL": "Membre et compteur ajouté avec succès",
+      "MEMBER_ADDED_SUCCESSFULLY_LABEL": "Membre ajouté avec succès",
+      "PENDING_INVITATION_HEADER": "Invitations en attente",
+      "TYPE": {
+        "INDIVIDUAL_LABEL": "Personne physique",
+        "COMPANY_LABEL": "Personne morale"
+      }
+    },
+    "INVITE": {
+      "EMAIL_OF_MEMBER_TO_INVITE_LABEL": "Mail du membre à inviter",
+      "INVITE_BUTTON_LABEL": "Inviter"
+    },
+    "PENDING_INVITE": {
+      "EMAIL_LABEL": "Email",
+      "MEMBER_NAME_LABEL": "Nom du membre",
+      "MEMBER_STATE_LABEL": "Etat",
+      "ACTION_LABEL": "Action",
+      "CANCEL_BUTTON_LABEL": "Annuler",
+      "NO_PENDING_INVITATIONS_LABEL": "Aucune invitation en attente",
+      "TO_ENCODE_TAG_LABEL": "A encoder",
+      "ENCODED_TAG_LABEL": "Encodé"
+    },
+    "ADD_DOCUMENT": {
+      "SELECT_FILE_DRAG_N_DROP_LABEL": "Glissez-déposez un fichier ici ou cliquez pour sélectionner un fichier",
+      "SELECTED_FILE_LABEL": "Fichier sélectionné",
+      "UPLOAD_DOCUMENT_BUTTON_LABEL": "Téléverser ce document"
+    },
+    "ADD": {
+      "ADDRESS": {
+        "BACK_TO_PERSONAL_INFORMATIONS": "Revenir aux informations personnelles",
+        "HOUSE_ADDRESS_TITLE": "Adresse de domicile",
+        "SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL": "Même adresse pour la facturation",
+        "BILLING_ADDRESS_TITLE": "Adresse de facturation",
+        "VALIDATE_ADDRESS_FORM_BUTTON": "Valider",
+        "FORM_ERROR": {
+          "HOME_ADDRESS_STREET": "rue de l'adresse du domicile",
+          "HOME_ADDRESS_NUMBER": "numéro de l'adresse du domicile",
+          "HOME_ADDRESS_SUPPLEMENT": "supplément de l'adresse du domicile",
+          "HOME_ADDRESS_POSTCODE": "code postal de l'adresse du domicile",
+          "HOME_ADDRESS_CITY": "ville de l'adresse du domicile",
+          "BILLING_ADDRESS_STREET": "rue de l'adresse de facturation",
+          "BILLING_ADDRESS_NUMBER": "numéro de l'adresse de facturation",
+          "BILLING_ADDRESS_SUPPLEMENT": "supplément de l'adresse de facturation",
+          "BILLING_ADDRESS_POSTCODE": "code postal de l'adresse de facturation",
+          "BILLING_ADDRESS_CITY": "ville de l'adresse de facturation"
+        }
+      },
+      "BANK": {
+        "BACK_TO_ADDRESS": "Revenir aux adresses",
+        "BANKING_INFO_TITLE": "Informations bancaires",
+        "IBAN_LABEL": "IBAN",
+        "VALIDATE_BANKING_INFO_FORM_BUTTON": "Valider",
+        "ERROR": {
+          "IBAN": "Le numéro IBAN est invalide"
+        }
+      },
+      "INFORMATIONS": {
+        "BACK_TO_STATUS": "Revenir au statut",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Numéro de registre national",
+        "SURNAME_LABEL": "Nom",
+        "FIRST_NAME_LABEL": "Prénom",
+        "EMAIL_LABEL": "Adresse e-mail",
+        "PHONE_NUMBER_LABEL": "N° de téléphone",
+        "SOCIAL_RATE_CHECKBOX_LABEL": "Tarif social",
+        "GUARDIAN_CHECKBOX_LABEL": "Tutelle",
+        "COMPANY_NUMBER_LABEL": "N° d'entreprise",
+        "COMPANY_NAME_LABEL": "Nom",
+        "VAT_NUMBER_LABEL": "N° de TVA",
+        "GUARDIAN_TITLE": "Informations sur le gestionnaire",
+        "VALIDATE_INFORMATION_FORM_BUTTON": "Valider",
+        "ERROR": {
+          "SOCIAL_SECURITY_NUMBER": "Le numéro IBAN est invalide"
+        },
+        "FORM_ERROR": {
+          "ID": "numéro de registre national",
+          "SURNAME": "nom de famille",
+          "NAME": "nom",
+          "EMAIL": "adresse e-mail",
+          "PHONE": "numéro de téléphone",
+          "SOCIALRATE": "tarif social",
+          "VATNUMBER": "numéro tva",
+          "NRN_MANAGER": "numéro de registre national du tuteur",
+          "SURNAME_MANAGER": "nom de famille du tuteur",
+          "NAME_MANAGER": "nom du tuteur",
+          "EMAIL_MANAGER": "adresse du tuteur",
+          "PHONE_MANAGER": "numéro de téléphone du tuteur"
+        }
+      },
+      "STATUS": {
+        "STATUS_TITLE": "Statut du membre",
+        "INDIVIDUAL_RADIOBUTTON_LABEL": "Particulier",
+        "COMPANY_RADIOBUTTON_LABEL": "Entreprise",
+        "VALIDATE_STATUS_FORM_BUTTON": "Valider"
+      },
+      "TAB_HEADER": {
+        "STATUS_LABEL": "Statut",
+        "PERSONAL_INFORMATIONS_LABEL": "Informations personnelles",
+        "ADDRESS_LABEL": "Adresses",
+        "BANKING_INFO": "Informations bancaire"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_MEMBER_LIST": "Erreur lors de la récupération des membres partiels",
+      "GET_FULL_MEMBER": "Erreur lors de la récupération complète du membre",
+      "ADD_MEMBER": "Erreur lors de l’ajout du membre",
+      "UPDATE_MEMBER": "Erreur lors de la mise à jour du membre",
+      "UPDATE_STATUS_MEMBER": "Erreur lors de la mise à jour du statut du membre",
+      "UPLOAD_DOCUMENT_UNDEFINED": "Aucun fichier n’a été fourni",
+      "UPLOAD_DOCUMENT": "Erreur lors de l’envoi du document",
+      "GET_DOCUMENT": "Erreur lors de la récupération des documents",
+      "GET_DOCUMENT_FULL": "Erreur lors de la récupération complète du document",
+      "DELETE_DOCUMENT": "Erreur lors de la suppression du document"
+    }
+  },
+
+  "METER": {
+    "METER_LABEL": "Compteur",
+    "ADDRESS": {
+      "STREET_NAME_LABEL": "Rue",
+      "NUMBER_LABEL": "Numéro",
+      "BOX_LABEL": "Boîte",
+      "POSTAL_CODE_LABEL": "Code postal",
+      "CITY_LABEL": "Ville",
+      "PLACEHOLDER": {
+        "STREET_NAME_LABEL": "Rue Jacquemin",
+        "NUMBER_LABEL": "12",
+        "BOX_LABEL": "1",
+        "POSTAL_CODE_LABEL": "1000",
+        "CITY_LABEL": "Bruxelles"
+      }
+    },
+    "INFORMATIONS": {
+      "EAN_LABEL": "EAN",
+      "METER_NUMBER_LABEL": "N° du compteur",
+      "STATUS_LABEL": "Statut",
+      "PHASE_NUMBER_LABEL": "Nombre de phases",
+      "READING_FREQUENCY_LABEL": "Fréquence de relevée",
+      "TARIF_GROUP_LABEL": "Groupe de tarif",
+      "DESCRIPTION_LABEL": "Description",
+      "WITHDRAWAL_POWER_LABEL": "Puissance de prélèvement (kVA)",
+      "TOTAL_GENERATING_CAPACITY_LABEL": "Puissance totale de production (kVA)",
+      "AMPERAGE_LABEL": "Ampérage (A)",
+      "PRODUCTION_CHAIN_LABEL": "Filière de production",
+      "INJECTION_STATUS_LABEL": "Statut d'injection",
+      "GRD_LABEL": "GRD",
+      "RATE_LABEL": "Tarif",
+      "USAGE_LABEL": "Usage",
+      "OWNER_LABEL": "Titulaire",
+      "PLACEHOLDER": {
+        "EAN_LABEL": "1234567890123",
+        "METER_NUMBER_LABEL": "1234567890123"
+      }
+    },
+    "CATEGORIES": {
+      "PRODUCTION_CHAIN": {
+        "PHOTOVOLTAIC": "Photovoltaïque",
+        "WIND": "Eolien",
+        "HYDROELECTRIC": "Hydroélectrique",
+        "SOLID_BIOMASS": "Biomasse solide",
+        "BIOGAS": "Biogaz",
+        "FOSSIL_FIRE_COGENERATION": "Cogénération fossile",
+        "OTHER": "Autre",
+        "NONE": "Aucun"
+      },
+      "RATE": {
+        "SIMPLE": "Simple",
+        "BI_HOURLY": "Bi-horaire",
+        "EXCLUSIVE_NIGHT": "Exclusif nuit"
+      },
+      "CLIENT": {
+        "RESIDENTIAL": "Résidientiel",
+        "PROFESSIONAL": "Professionnel",
+        "INDUSTRIAL": "Industriel"
+      },
+      "INJECTION_STATUS": {
+        "AUTOPRODUCER_OWNER": "Autoproducteur propriétaire",
+        "SELF_PRODUCTION_RIGHT_OF_USER": "Autoproducteur droit de jouissance",
+        "OWNER_PURE_INJECTION": "Injection pure propriétaire",
+        "PURE_INJECTION_RIGHT_OF_USE": "Injection pure droit de jouissance",
+        "NONE": "Aucun"
+      },
+      "READING_FREQUENCY": {
+        "MONTHLY": "Mensuel",
+        "ANNUAL": "Annuel"
+      },
+      "PHASE": {
+        "SINGLE_PHASE": "Monophasé",
+        "THREE_PHASES": "Triphasé"
+      },
+      "TARIF_GROUP": {
+        "LOW_VOLTAGE": "Basse tension",
+        "HIGH_VOLTAGE": "Haute tension"
+      }
+    },
+    "ADD": {
+      "INFORMATION_HEADER": "Informations du compteur",
+      "ENERGY_CHARACTERISTIC_HEADER": "Caractéristiques énergétiques",
+      "FINANCIAL_CHARACTERISTIC_HEADER": "Caractéristiques financières",
+      "RATE_LABEL": "Tarif",
+      "USAGE_LABEL": "Usage",
+      "OWNER_LABEL": "Titulaire",
+      "START_DATE_METER_LABEL": "Date d'entrée en fonction",
+      "VALIDATE_BUTTON_FORM_LABEL": "Valider",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Sélectionner un titulaire"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "Le membre sélectionné est incorrect"
+      },
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "rue",
+        "ADDRESS_NUMBER": "numéro",
+        "ADDRESS_SUPPLEMENT": "supplément",
+        "ADDRESS_POSTCODE": "code postal",
+        "ADDRESS_CITY": "ville",
+        "EAN": "EAN",
+        "METERNUMBER": "numéro du compteur",
+        "PHASESNUMBER": "nombre de phases",
+        "READINGFREQUENCY": "fréquence de lecture",
+        "TARIFGROUP": "groupe tarifaire",
+        "DESCRIPTION": "description",
+        "SAMPLINGPOWER": "puissance de prélèvement",
+        "TOTALGENERATINGCAPACITY": "puissance totale",
+        "AMPERAGE": "amperage",
+        "PRODUCTIONCHAIN": "chaine de production",
+        "INJECTIONSTATUS": "statut d'injection",
+        "GRD": "grd",
+        "RATE": "taux",
+        "CLIENTTYPE": "type de client",
+        "MEMBER": "membre",
+        "DATESTART": "date de début"
+      }
+    },
+    "UPDATE_DATA": {
+      "ENERGY_CHARACTERISTIC_TITLE": "Caractéristiques énergétiques",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Caractéristiques financières",
+      "START_DATE_METER_LABEL": "Date d'entrée en fonction",
+      "VALIDATE_BUTTON_FORM_LABEL": "Valider",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Sélectionner un titulaire"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "Le membre sélectionné est incorrect"
+      },
+      "FORM_ERROR": {
+        "DESCRIPTION": "description",
+        "SAMPLINGPOWER": "puissance de prélèvement",
+        "TOTALGENERATINGCAPACITY": "puissance totale",
+        "AMPERAGE": "amperage",
+        "PRODUCTIONCHAIN": "chaine de production",
+        "INJECTIONSTATUS": "statut d'injection",
+        "GRD": "grd",
+        "RATE": "taux",
+        "CLIENTTYPE": "type de client",
+        "MEMBER": "membre",
+        "DATESTART": "date de début"
+      }
+    },
+    "DEACTIVATE": {
+      "END_DATE_METER_LABEL": "Date de désactivation",
+      "DELETE_BUTTON_LABEL": "Supprimer"
+    },
+    "DATA": {
+      "ENERGY_CHARACTERISTIC_TITLE": "Caractéristiques énergétiques",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Caractéristiques financières",
+      "SHARING_OPERATION_TITLE": "Opération de partage",
+      "NO_SHARING_OPERATION_FOUND": "Aucune opération de partage",
+      "NO_OWNER_FOUND_LABEL": "Aucun titulaire attribué"
+    },
+    "FULL": {
+      "MODIFY_BUTTON_LABEL": "Modifier",
+      "METER_INFORMATION_TITLE": "Information compteur",
+      "TABS": {
+        "ACTUAL_DATA_HEADER": "Données actuelles",
+        "HISTORICAL_DATA_HEADER": "Données historiques",
+        "FUTUR_DATA_HEADER": "Données futures",
+        "CONSUMPTION_HEADER": "Suivi des consommations",
+        "UPDATE_BUTTON_LABEL": "Mettre à jour"
+      },
+      "NO_DATA_FOUND_LABEL": "Aucune donnée actuellement disponible",
+      "PLACEHOLDER": {
+        "SELECT_PERIOD_LABEL": "Sélectionner une période"
+      },
+      "NO_HISTORY_DATA_FOUND_LABEL": "Aucune donnée historique disponible",
+      "NO_FUTURE_DATA_FOUND_LABEL": "Aucune donnée future disponible",
+      "BEGINNING_DATE_LABEL": "Date de début",
+      "END_DATE_LABEL": "Date de fin",
+      "SEARCH_BUTTON_LABEL": "Rechercher",
+      "DOWNLOAD_BUTTON_LABEL": "Télécharger",
+      "METER_MODIFICATION_HEADER": "Modification du compteur",
+      "METER_MODIFIED_SUCCESS_LABEL": "Compteur modifié avec succès",
+      "METER_DATA_UPDATE_HEADER": "Mise à jour des données du compteur",
+      "METER_DATA_UPDATE_SUCCESS_LABEL": "Données du compteur mises à jour avec succès",
+      "METER_DEACTIVATE_HEADER": "Désactivation du compteur",
+      "METER_DEACTIVATED_SUCCESS_LABEL": "Compteur désactivé avec succès",
+      "CONSUMPTION_FILE_PREFIX": "consommation_",
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Consommation (kWh)",
+        "X_TITLE_DATE": "Date",
+        "CONSUMPTION_SHARED_LABEL": "Consommation - Partagée",
+        "CONSUMPTION_NET_LABEL": "Consommation - Net",
+        "INJECTION_NET_LABEL": "Injection - Net",
+        "INJECTION_SHARED_LABEL": "Injection - Partagée"
+      }
+    },
+    "LIST": {
+      "METERS_TITLE": "Compteurs",
+      "ADD_BUTTON_LABEL": "Ajouter",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "FILTER_BY_OWNER_LABEL": "Filtrer par titulaire",
+      "SELECT_AN_OWNER_PLACEHOLDER": "Sélectionner un titulaire",
+      "FILTER_BY_STATUS_LABEL": "Filtrer par statut",
+      "SELECT_A_STATUS_PLACEHOLDER": "Sélectionner un statut",
+      "SHARING_OPERATION_TITLE": "Opération de partage",
+      "FILTER_BY_SHARING_OPERATION_LABEL": "Filtrer par opération de partage",
+      "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Sélectionner une opération de partage",
+      "NO_METERS_FOUND_LABEL": "Aucun compteur trouvé",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} compteurs)",
+      "ADD_METER_HEADER": "Ajout d'un compteur",
+      "METER_ADDED_SUCCESSFULLY_LABEL": "Compteur ajouté avec succès"
+    },
+    "UPDATE": {
+      "METER_INFORMATION_TITLE": "Information compteur",
+      "VALIDATE_BUTTON_LABEL": "Valider",
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "rue",
+        "ADDRESS_NUMBER": "numéro",
+        "ADDRESS_SUPPLEMENT": "supplément",
+        "ADDRESS_POSTCODE": "code postal",
+        "ADDRESS_CITY": "ville",
+        "EAN": "EAN",
+        "METERNUMBER": "numéro du compteur",
+        "PHASESNUMBER": "nombre de phases",
+        "READINGFREQUENCY": "fréquence de lecture",
+        "TARIFGROUP": "groupe tarifaire"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_METERS_LIST": "Erreur lors de la récupération des compteurs partiels",
+      "GET_FULL_METER": "Erreur lors de la récupération du compteur complet",
+      "ADD_METER": "Erreur lors de l’ajout du compteur",
+      "UPDATE_METER_DATA": "Erreur lors de la mise à jour des données du compteur",
+      "UPDATE_METER": "Erreur lors de la mise à jour du compteur",
+      "DELETE_METER": "Erreur lors de la suppression du compteur",
+      "DEACTIVATE_METER": "Erreur lors de la désactivation du compteur",
+      "CHANGE_STATUS_METER": "Erreur lors du changement de statut du compteur",
+      "EAN_MISSING": "Le code EAN est manquant",
+      "METER_NUMBER_MISSING": "Le numéro du compteur est manquant",
+      "TARIF_GROUP_MISSING": "Le groupe tarifaire est manquant",
+      "PHASE_NUMBER_MISSING": "Le nombre de phases est manquant",
+      "READING_FREQUENCY_MISSING": "La fréquence de relève est manquante",
+      "READING_FREQUENCY_INCORRECT": "La fréquence de relève est incorrecte",
+      "SAMPLING_POWER_MISSING": "La puissance de prélèvement est manquante",
+      "AMPERAGE_MISSING": "L’intensité (ampérage) est manquante",
+      "RATE_MISSING": "Le tarif est manquant",
+      "CLIENT_TYPE_MISSING": "Le type de client est manquant",
+      "CLIENT_TYPE_INCORRECT": "Le type de client est incorrect",
+      "START_DATE_MISSING": "La date de début est manquante",
+      "INJECTION_STATUS_MISSING": "Le statut d’injection est manquant",
+      "INJECTION_STATUS_INCORRECT": "Le statut d’injection est incorrect",
+      "PRODUCTION_CHAIN_MISSING": "La chaîne de production est manquante",
+      "PRODUCTION_CHAIN_INCORRECT": "La chaîne de production est incorrecte",
+      "TOTAL_GENERATING_CAPACITY_INCORRECT": "La puissance totale installée est manquante ou incorrecte",
+      "STATUS_MISSING": "Le statut du compteur est manquant",
+      "STATUS_INCORRECT": "Le statut du compteur est incorrect",
+      "RATE_INCORRECT": "Le tarif est incorrect",
+      "TARIF_GROUP_INCORRECT": "Le groupe tarifaire est incorrect",
+      "PHASE_NUMBER_INCORRECT": "Le nombre de phases est incorrect"
+    },
+    "STATUS": {
+      "ACTIVE_LABEL": "Activé",
+      "INACTIVE_LABEL": "Désactivé",
+      "WAITING_GRD_LABEL": "En attente d'acceptation du GRD",
+      "WAITING_MANAGER_LABEL": "En attente d'acceptation du gestionnaire"
+    }
+  },
+
+  "SHARING_OPERATION": {
+    "TYPE": {
+      "INSIDE_BUILDING": "Au sein d'un batiment",
+      "CER": "CER",
+      "CEC": "CEC"
+    },
+    "ADD": {
+      "NAME_LABEL": "Nom",
+      "TYPE_LABEL": "Type",
+      "ADD_BUTTON_LABEL": "Ajouter"
+    },
+    "ADD_KEY": {
+      "ALLOCATION_KEYS_TITLE": "Clefs de répartition",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NAME_LABEL": "Nom",
+      "DESCRIPTION_LABEL": "Description",
+      "NO_ALLOCATION_KEYS_FOUND_LABEL": "Aucune clef trouvée",
+      "ADD_BUTTON_LABEL": "Ajouter",
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} clefs)"
+    },
+    "ADD_METER": {
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "FILTER_BY_STATUS_LABEL": "Filtrer par statut",
+      "SELECT_A_STATUS_PLACEHOLDER": "Sélectionner un statut",
+      "NO_METERS_FOUND_LABEL": "Aucun compteur trouvé",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} compteurs)",
+      "START_DATE_METERS_LABEL": "Date d'entrée en fonction",
+      "VALIDATE_BUTTON_LABEL": "Valider",
+      "ADDRESS_LABEL": "Adresse",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Rue",
+        "POSTAL_CODE_LABEL": "Code postal",
+        "CITY_LABEL": "Ville",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Rue Jacquemin",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Bruxelles"
+        }
+      },
+      "METER": {
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "N° du compteur"
+        },
+        "STATUS_LABEL": "Statut",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Activé",
+          "DEACTIVATED_LABEL": "Désactivé",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "En attente d'acceptation du GRD",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "En attente d'acceptation du gestionnaire"
+        }
+      }
+    },
+    "VIEW": {
+      "SHARING_OPERATION_TITLE": "Opération de partage",
+      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporter sous format excel (CWAPE)",
+      "NAME_LABEL": "Nom",
+      "TYPE_LABEL": "Type",
+      "ADDRESS_LABEL": "Adresse",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Rue",
+        "POSTAL_CODE_LABEL": "Code postal",
+        "CITY_LABEL": "Ville",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Rue Jacquemin",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Bruxelles"
+        }
+      },
+      "KEY": {
+        "ACTUAL_KEY_LABEL": "Clef actuelle",
+        "CHOOSE_KEY_BUTTON_LABEL": "Choisir une clef",
+        "CREATE_KEY_BUTTON_LABEL": "Créer une clef",
+        "NO_ACTUAL_KEY_LABEL": "Aucune clef actuellement",
+        "MODIFY_KEY_HEADER": "Modifier la clé",
+        "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Clé modifiée avec succès"
+      },
+      "METER": {
+        "METERS_TITLE": "Compteurs",
+        "ADD_METER_BUTTON_LABEL": "Ajouter un compteur",
+        "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+        "FILTER_BY_STATUS_LABEL": "Filtrer par statut",
+        "SELECT_A_STATUS_PLACEHOLDER": "Sélectionner un statut",
+        "PUT_TO_WAITING_LIST_BUTTON_LABEL": "Placer en attente",
+        "APPROVE_BUTTON_LABEL": "Approuver",
+        "DELETE_BUTTON_LABEL": "Supprimer",
+        "NO_METERS_FOUND_LABEL": "Aucun compteur trouvé",
+        "CHANGE_STATUS_METER_STARTING_LABEL": "Date de début d'activité du compteur",
+        "CHANGE_STATUS_METER_ENDING_LABEL": "Date de fin de présence du compteur",
+        "CHANGE_STATUS_METER_WAITING_LABEL": "Date de début de la mise en attente d'approbation du GRD",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} compteurs)",
+        "ADD_METERS_HEADER": "Ajouter des compteurs",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Compteur(s) ajouté avec succès",
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "N° du compteur"
+        },
+        "STATUS_LABEL": "Statut",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Activé",
+          "DEACTIVATED_LABEL": "Désactivé",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "En attente d'acceptation du GRD",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "En attente d'acceptation du gestionnaire"
+        }
+      },
+      "CONSUMPTION_MONITORING": {
+        "CONSUMPTION_MONITORING_TITLE": "Suivi de consommation",
+        "START_DATE_LABEL": "Date de début",
+        "END_DATE_LABEL": "Date de fin",
+        "SEARCH_BUTTON_LABEL": "Rechercher",
+        "DOWNLOAD_BUTTON_LABEL": "Télécharger",
+        "SELECT_FILE_DRAG_N_DROP_LABEL": "Glissez-déposez un fichier ici ou cliquez pour sélectionner un fichier",
+        "SELECTED_FILE_LABEL": "Fichier sélectionné",
+        "UPLOAD_BUTTON_LABEL": "Téléverser",
+        "UPLOAD_SUCCESS_LABEL": "Le fichier a bien été reçu",
+        "CONSUMPTION_FILE_PREFIX": "consommation_"
+      },
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Consommation (kWh)",
+        "X_TITLE_DATE": "Date",
+        "CONSUMPTION_SHARED_LABEL": "Consommation - Partagée",
+        "CONSUMPTION_NET_LABEL": "Consommation - Net",
+        "INJECTION_NET_LABEL": "Injection - Net",
+        "INJECTION_SHARED_LABEL": "Injection - Partagée"
+      },
+      "HISTORY_KEY": {
+        "KEY_HISTORY_TITLE": "Historique des clés",
+        "START_DATE_LABEL": "Date de début",
+        "END_DATE_LABEL": "Date de fin",
+        "KEY_LABEL": "Clé",
+        "STATUS_LABEL": "Statut",
+        "APPROVED_LABEL": "Approuvée",
+        "DENIED_LABEL": "Refusée",
+        "NO_HISTORY_KEY_FOUND_LABEL": "Aucun historique de clé trouvé",
+        "NO_HISTORY_KEY_AVAILABLE_LABEL": "Aucun historique de clé disponible"
+      }
+    },
+    "LIST": {
+      "SHARING_OPERATION_TITLE": "Opération de partage",
+      "ADD_BUTTON_LABEL": "Ajouter",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NAME_LABEL": "Nom",
+      "TYPE_LABEL": "Type",
+      "NO_SHARING_OPERATION_FOUND_LABEL": "Aucune opération de partage trouvée",
+      "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} opérations de partages)",
+      "ADD_SHARING_OP_HEADER": "Ajout d'une opération de partage",
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès"
+    },
+    "ERRORS": {
+      "GET_SHARING_OPERATION_PARTIAL_LIST": "Erreur lors de la récupération des partages partiels",
+      "GET_FULL_SHARING_OPERATION": "Erreur lors de la récupération complète du partage",
+      "ADD_SHARING_OPERATION": "Erreur lors de l’ajout d’un partage",
+      "ADD_METER_TO_SHARING_OPERATION": "Erreur lors de l’ajout du compteur au partage",
+      "ADD_KEY_TO_WAITING": "Erreur lors de l’ajout de la clef en attente",
+      "CHANGE_STATUS_KEY": "Erreur lors du changement de statut de la clef",
+      "GET_SHARING_CONSUMPTION_METERS": "Erreur lors de la récupération des consommations des compteurs",
+      "GET_SHARING_CONSUMPTION": "Erreur lors de la récupération des consommations partagées",
+      "UPLOAD_CONSUMPTION_DATA": "Erreur lors de l’importation des données de consommation",
+      "GET_METER_CONSUMPTION": "Erreur lors de la récupération de la consommation du compteur",
+      "DOWNLOAD_METER_CONSUMPTION": "Erreur lors du téléchargement de la consommation du compteur",
+      "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Erreur lors du téléchargement de la consommation des compteurs partagés"
+    }
+  }
+}
