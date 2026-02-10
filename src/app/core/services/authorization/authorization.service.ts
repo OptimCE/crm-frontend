@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed, effect } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import Keycloak from 'keycloak-js';
 import { Role } from '../../dtos/role';
 
@@ -131,6 +131,14 @@ export class UserContextService {
     const currentHierarchy = ROLE_HIERARCHY[current];
     const targetHierarchy = ROLE_HIERARCHY[role];
     return currentHierarchy >= targetHierarchy;
+  }
+
+  isActiveRole(role: Role){
+    const current = this.activeCommunityRole();
+    if(!current) return false;
+    const currentHierarchy = ROLE_HIERARCHY[current];
+    const targetHierarchy = ROLE_HIERARCHY[role];
+    return currentHierarchy === targetHierarchy;
   }
 
   private loadStoredCommunityId(): string | null {

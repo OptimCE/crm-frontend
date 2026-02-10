@@ -49,4 +49,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/sharing_operation/sharing_operation.routes').then(m =>m.SHARING_OPERATION_ROUTES)
   },
+  {
+    path: 'communities',
+    canActivate: [canActivateAuth, minRoleGuard],
+    data: {minRole: Role.MEMBER},
+    loadChildren: () =>
+      import('./features/community/community.routes').then(m =>m.COMMUNITY_ROUTES)
+  },
 ];
