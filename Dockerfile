@@ -4,8 +4,8 @@ FROM node:22-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Set environment to production
-ENV NODE_ENV=production
+# Set environment to development for installing dev dependencies and building the application
+ENV NODE_ENV=development
 
 # Copy package files
 COPY package*.json ./
