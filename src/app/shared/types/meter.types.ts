@@ -32,7 +32,7 @@ export enum InjectionStatus {
   AUTOPROD_RIGHTS = 2,
   INJECTION_OWNER = 3,
   INJECTION_RIGHTS = 4,
-  NONE = 5
+  NONE = 5,
 }
 
 export enum ProductionChain {
@@ -43,9 +43,9 @@ export enum ProductionChain {
   BIOGAS = 5,
   COGEN_FOSSIL = 6,
   OTHER = 7,
-  NONE = 8
+  NONE = 8,
 }
-export enum PhaseCategory{
+export enum PhaseCategory {
   SINGLE = 1,
-  THREE = 3
+  THREE = 3,
 }

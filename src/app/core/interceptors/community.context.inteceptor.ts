@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import {UserContextService} from '../services/authorization/authorization.service';
+import { UserContextService } from '../services/authorization/authorization.service';
 
 export const communityContextInterceptor: HttpInterceptorFn = (req, next) => {
   const userContext = inject(UserContextService);
@@ -10,8 +10,8 @@ export const communityContextInterceptor: HttpInterceptorFn = (req, next) => {
   if (activeId) {
     const clonedRequest = req.clone({
       setHeaders: {
-        'X-Community-ID': activeId
-      }
+        'X-Community-ID': activeId,
+      },
     });
     return next(clonedRequest);
   }

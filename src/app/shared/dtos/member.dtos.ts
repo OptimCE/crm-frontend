@@ -1,8 +1,8 @@
-import {AddressDTO, CreateAddressDTO, UpdateAddressDTO} from './address.dtos';
-import {MemberStatus, MemberType} from '../types/member.types';
-import {PaginationQuery, Sort} from './query.dtos';
+import { AddressDTO, CreateAddressDTO, UpdateAddressDTO } from './address.dtos';
+import { MemberStatus, MemberType } from '../types/member.types';
+import { PaginationQuery, Sort } from './query.dtos';
 
-export interface MemberPartialQuery extends PaginationQuery{
+export interface MemberPartialQuery extends PaginationQuery {
   name?: string;
   member_type?: MemberType;
   status?: MemberStatus;
@@ -20,7 +20,7 @@ export interface MemberDTO extends MembersPartialDTO {
   iban: string;
   home_address: AddressDTO;
   billing_address: AddressDTO;
-  user_link_email?: string
+  user_link_email?: string;
 }
 
 export interface ManagerDTO {
@@ -114,6 +114,6 @@ export interface MemberLinkDTO {
   id?: number;
 }
 
-export interface MemberLinkQueryDTO{
+export interface MemberLinkQueryDTO {
   email: string;
 }

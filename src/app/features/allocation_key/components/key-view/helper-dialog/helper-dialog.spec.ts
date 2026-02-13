@@ -8,9 +8,8 @@ describe('HelperDialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HelperDialog]
-    })
-    .compileComponents();
+      imports: [HelperDialog],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HelperDialog);
     component = fixture.componentInstance;

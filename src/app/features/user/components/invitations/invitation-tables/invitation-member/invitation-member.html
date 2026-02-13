@@ -15,49 +15,74 @@
   <ng-template pTemplate="header">
     <tr>
       <th>
-        {{ "INVITATION.MEMBER.HEADERS.NAME" | translate }}
+        {{ 'INVITATION.MEMBER.HEADERS.NAME' | translate }}
       </th>
       <th>
-        {{ "INVITATION.MEMBER.HEADERS.COMMUNITY" | translate }}
+        {{ 'INVITATION.MEMBER.HEADERS.COMMUNITY' | translate }}
       </th>
-      <th>{{ "INVITATION.MEMBER.HEADERS.STATE" | translate }}</th>
+      <th>{{ 'INVITATION.MEMBER.HEADERS.STATE' | translate }}</th>
       <th>
-        {{ "INVITATION.MEMBER.HEADERS.CREATED_AT" | translate }}
+        {{ 'INVITATION.MEMBER.HEADERS.CREATED_AT' | translate }}
       </th>
       <th>
-        {{ "INVITATION.MEMBER.HEADERS.ACTIONS" | translate }}
+        {{ 'INVITATION.MEMBER.HEADERS.ACTIONS' | translate }}
       </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-invitation>
     <tr>
-      <td class="text-sm px-3 py-2">{{ invitation.memberName ?? "/" }}</td>
+      <td class="text-sm px-3 py-2">{{ invitation.memberName ?? '/' }}</td>
       <td class="text-sm px-3 py-2">{{ invitation.communityName }}</td>
       <td>
-        @if(invitation.toBeEncoded){
-          <p-tag severity="warn" value="{{ 'INVITATION.MEMBER.TO_BE_ENCODED' | translate }}"></p-tag>
-        }
-        @else{
+        @if (invitation.toBeEncoded) {
+          <p-tag
+            severity="warn"
+            value="{{ 'INVITATION.MEMBER.TO_BE_ENCODED' | translate }}"
+          ></p-tag>
+        } @else {
           <p-tag severity="success" value="{{ 'INVITATION.MEMBER.ENCODED' | translate }}"></p-tag>
         }
       </td>
-      <td class="text-sm px-3 py-2">{{ invitation.createdAt | date: ('date_format.short_date_dash' | translate) }}</td>
-      <td  class="flex gap-3">
-        @if(invitation.toBeEncoded){
-          <p-button label="{{ 'INVITATION.MEMBER.ENCODE_AND_ACCEPT' | translate }}" severity="success" (click)="encodeNewMember(invitation)"></p-button>
-          <p-button label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}" severity="danger" (click)="refuseInvitation(invitation)"></p-button>
-        }
-        @else{
-          <p-button label="{{ 'INVITATION.MEMBER.ACCEPT' | translate }}" severity="success" (click)="acceptInvitation(invitation)"></p-button>
-          <p-button label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}" severity="danger" (click)="refuseInvitation(invitation)"></p-button>
-          <p-button label="{{ 'INVITATION.MEMBER.SEE' | translate }}" severity="help" (click)="fetchDetail(invitation)"></p-button>
+      <td class="text-sm px-3 py-2">
+        {{ invitation.createdAt | date: ('date_format.short_date_dash' | translate) }}
+      </td>
+      <td class="flex gap-3">
+        @if (invitation.toBeEncoded) {
+          <p-button
+            label="{{ 'INVITATION.MEMBER.ENCODE_AND_ACCEPT' | translate }}"
+            severity="success"
+            (click)="encodeNewMember(invitation)"
+          ></p-button>
+          <p-button
+            label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}"
+            severity="danger"
+            (click)="refuseInvitation(invitation)"
+          ></p-button>
+        } @else {
+          <p-button
+            label="{{ 'INVITATION.MEMBER.ACCEPT' | translate }}"
+            severity="success"
+            (click)="acceptInvitation(invitation)"
+          ></p-button>
+          <p-button
+            label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}"
+            severity="danger"
+            (click)="refuseInvitation(invitation)"
+          ></p-button>
+          <p-button
+            label="{{ 'INVITATION.MEMBER.SEE' | translate }}"
+            severity="help"
+            (click)="fetchDetail(invitation)"
+          ></p-button>
         }
       </td>
     </tr>
   </ng-template>
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
-      <td colspan="6" style="text-align: center" class="text-base">{{ "INVITATION.MEMBER.NO_INVITATIONS_AVAILABLE" | translate }}</td>
+      <td colspan="6" style="text-align: center" class="text-base">
+        {{ 'INVITATION.MEMBER.NO_INVITATIONS_AVAILABLE' | translate }}
+      </td>
     </tr>
   </ng-template>
 </p-table>

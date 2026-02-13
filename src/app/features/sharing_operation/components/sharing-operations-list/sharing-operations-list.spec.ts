@@ -8,9 +8,8 @@ describe('SharingOperationsList', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharingOperationsList]
-    })
-    .compileComponents();
+      imports: [SharingOperationsList],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SharingOperationsList);
     component = fixture.componentInstance;

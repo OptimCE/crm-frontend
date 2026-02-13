@@ -1,5 +1,5 @@
-import {Role} from '../../core/dtos/role';
-import {PaginationQuery, Sort} from './query.dtos';
+import { Role } from '../../core/dtos/role';
+import { PaginationQuery, Sort } from './query.dtos';
 
 export interface CommunityQueryDTO extends PaginationQuery {
   name?: string;
@@ -23,7 +23,7 @@ export interface MyCommunityDTO {
   id: number;
   auth_community_id: string;
   name: string;
-  role: Role
+  role: Role;
 }
 
 export interface UsersCommunityDTO {
@@ -39,5 +39,5 @@ export interface CreateCommunityDTO {
 
 export interface PatchRoleUserDTO {
   id_user: number;
-  new_role: Role
+  new_role: Role;
 }

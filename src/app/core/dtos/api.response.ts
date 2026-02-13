@@ -1,4 +1,3 @@
-
 export class ApiResponse<T> {
   /** The data payload returned by the operation */
   data: T;

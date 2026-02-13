@@ -1,49 +1,36 @@
-import {Component, NgZone, OnDestroy, OnInit, signal} from '@angular/core';
-import {Toast} from 'primeng/toast';
-import {ConfirmDialog} from 'primeng/confirmdialog';
-import {Button} from 'primeng/button';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Tooltip} from 'primeng/tooltip';
-import {Tag} from 'primeng/tag';
-import {TableLazyLoadEvent, TableModule} from "primeng/table";
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {CommunityQueryDTO, MyCommunityDTO} from '../../../../shared/dtos/community.dtos';
-import {CommunityService} from '../../../../shared/services/community.service';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {UserContextService} from '../../../../core/services/authorization/authorization.service';
-import {CommunityDialog} from './community-dialog/community-dialog';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import { Toast } from 'primeng/toast';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { Button } from 'primeng/button';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Tooltip } from 'primeng/tooltip';
+import { Tag } from 'primeng/tag';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CommunityQueryDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import { CommunityService } from '../../../../shared/services/community.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { CommunityDialog } from './community-dialog/community-dialog';
 
 @Component({
   selector: 'app-user-communities',
-  imports: [
-    Toast,
-    ConfirmDialog,
-    Button,
-    TranslatePipe,
-    Tooltip,
-    Tag,
-    TableModule
-  ],
+  imports: [Toast, ConfirmDialog, Button, TranslatePipe, Tooltip, Tag, TableModule],
   templateUrl: './user-communities.html',
   styleUrl: './user-communities.css',
-  providers: [DialogService, ConfirmationService, MessageService]
+  providers: [DialogService, ConfirmationService, MessageService],
 })
 export class UserCommunities implements OnInit, OnDestroy {
+  private communityService = inject(CommunityService);
+  protected userContextService = inject(UserContextService);
+  private dialogService = inject(DialogService);
+  private translate = inject(TranslateService);
   communities = signal<MyCommunityDTO[]>([]);
-  filter= signal<CommunityQueryDTO>({page: 1, limit: 10})
+  filter = signal<CommunityQueryDTO>({ page: 1, limit: 10 });
   // communityID = 0;
   // protected activeGroup = signal<string|null>(null)
   ref?: DynamicDialogRef | null;
 
-  constructor(
-    private communityService: CommunityService,
-    protected userContextService: UserContextService,
-    private zone: NgZone,
-    private dialogService: DialogService,
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService,
-    private translate: TranslateService,
-  ) {}
 
   ngOnInit(): void {
     this.fetchCurrentCommunityId();
@@ -54,44 +41,41 @@ export class UserCommunities implements OnInit, OnDestroy {
   }
 
   loadCommunities() {
-    this.communityService.getMyCommunities(this.filter()).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.communities.set(response.data as MyCommunityDTO[]);
-          } else {
-            // this.errorHandler.handleError(response);
-          }
-        },
-        error:(error) => {
-          // this.errorHandler.handleError(error);
-        },
-      }
-    );
+    this.communityService.getMyCommunities(this.filter()).subscribe({
+      next: (response) => {
+        if (response) {
+          this.communities.set(response.data as MyCommunityDTO[]);
+        } else {
+          // this.errorHandler.handleError(response);
+        }
+      },
+      error: (_error) => {
+        // this.errorHandler.handleError(error);
+      },
+    });
   }
 
   lazyLoadCommunities($event: TableLazyLoadEvent) {
-    const current: any = {...this.filter()};
-    if($event.sortField){
+    const current: any = { ...this.filter() };
+    if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_name;
-      switch($event.sortField){
-        case 'name':{
+      switch ($event.sortField) {
+        case 'name': {
           current.sort_name = sortDirection;
           break;
         }
       }
     }
 
-    this.loadCommunities()
+    this.loadCommunities();
   }
 
   joinCommunity(community: MyCommunityDTO) {
-    this.userContextService.switchCommunity(community.auth_community_id)
-    console.log("SWITCHED")
-    console.log(this.userContextService.activeCommunityId())
-    console.log(this.userContextService.activeCommunityRole())
+    this.userContextService.switchCommunity(community.auth_community_id);
+    console.log('SWITCHED');
+    console.log(this.userContextService.activeCommunityId());
+    console.log(this.userContextService.activeCommunityRole());
     // this.communityService.getAuthorize(community.id_community).subscribe(
     //   {
     //     next: async(response)=>
@@ -113,7 +97,7 @@ export class UserCommunities implements OnInit, OnDestroy {
     // );
   }
 
-  updateNameCommunity(community: MyCommunityDTO) {
+  updateNameCommunity(_community: MyCommunityDTO) {
     // this.ref = this.dialogService.open(CommunityUpdateComponent, {
     //   modal: true,
     //   closable: true,
@@ -155,7 +139,7 @@ export class UserCommunities implements OnInit, OnDestroy {
     });
   }
 
-  leaveCommunity(event: Event, community: any) {
+  leaveCommunity(_event: Event, _community: any) {
     // this.communityService.leaveCommunity(new LeaveCommunity(community.id_community, false)).subscribe(
     //   {
     //     next: (response)=>
@@ -215,7 +199,7 @@ export class UserCommunities implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.ref){
+    if (this.ref) {
       this.ref.destroy();
     }
   }

@@ -1,0 +1,287 @@
+<form [formGroup]="formData" (submit)="submitForm()" class="w-full">
+  <!-- NRN -->
+  <div class="grid grid-cols-1 gap-4 mt-2">
+    <div class="flex flex-col">
+      <label for="nrn" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.SOCIAL_NUMBER' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          type="text"
+          name="nrn"
+          id="nrn"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.SOCIAL_NUMBER_PLACEHOLDER' | translate }}"
+          formControlName="id"
+        />
+      </p-input-group>
+    </div>
+  </div>
+
+  <!-- Surname / First name -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+    <div class="flex flex-col">
+      <label for="surname" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.SURNAME' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          type="text"
+          name="surname"
+          id="surname"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.SURNAME_PLACEHOLDER' | translate }}"
+          formControlName="surname"
+        />
+      </p-input-group>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="name" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.FIRST_NAME' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          type="text"
+          name="name"
+          id="name"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.FIRST_NAME_PLACEHOLDER' | translate }}"
+          formControlName="name"
+        />
+      </p-input-group>
+    </div>
+  </div>
+
+  <!-- Phone -->
+  <div class="grid grid-cols-1 gap-4 mt-2">
+    <div class="flex flex-col">
+      <label for="phone" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.PHONE_NUMBER' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          type="text"
+          name="phone"
+          id="phone"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.PHONE_NUMBER_PLACEHOLDER' | translate }}"
+          formControlName="phone"
+        />
+      </p-input-group>
+    </div>
+  </div>
+
+  <!-- IBAN -->
+  <div class="grid grid-cols-1 gap-4 mt-2">
+    <div class="flex flex-col">
+      <label for="iban" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.IBAN' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          type="text"
+          name="iban"
+          id="iban"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.IBAN_PLACEHOLDER' | translate }}"
+          formControlName="iban"
+        />
+      </p-input-group>
+    </div>
+  </div>
+
+  <!-- Home address title -->
+  <div class="mt-4">
+    <div class="flex items-center">
+      <h3 class="text-xl font-semibold">
+        {{ 'PROFILE.UPDATE_PROFILE.HOUSE_ADDRESS' | translate }}
+      </h3>
+    </div>
+  </div>
+
+  <!-- Home address line 1 -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pb-3">
+    <div class="flex flex-col">
+      <label for="home_address_street" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.STREET_NAME' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          formControlName="home_address_street"
+          id="home_address_street"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.STREET_NAME_PLACEHOLDER' | translate }}"
+        />
+      </p-input-group>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="home_address_number" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.NUMBER' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          formControlName="home_address_number"
+          id="home_address_number"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.NUMBER_PLACEHOLDER' | translate }}"
+        />
+      </p-input-group>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="home_address_supplement" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.BOX' | translate }}
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          formControlName="home_address_supplement"
+          id="home_address_supplement"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.BOX_PLACEHOLDER' | translate }}"
+        />
+      </p-input-group>
+    </div>
+  </div>
+
+  <!-- Home address line 2 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-3">
+    <div class="flex flex-col">
+      <label for="home_address_postcode" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.POSTAL_CODE' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          formControlName="home_address_postcode"
+          id="home_address_postcode"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.POSTAL_CODE_PLACEHOLDER' | translate }}"
+        />
+      </p-input-group>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="home_address_city" class="text-sm font-medium mb-1">
+        {{ 'PROFILE.UPDATE_PROFILE.CITY' | translate }} *
+      </label>
+      <p-input-group>
+        <input
+          pInputText
+          formControlName="home_address_city"
+          id="home_address_city"
+          placeholder="{{ 'PROFILE.UPDATE_PROFILE.CITY_PLACEHOLDER' | translate }}"
+        />
+      </p-input-group>
+    </div>
+  </div>
+
+  <!-- Same address checkbox -->
+  <div class="mt-3 flex items-center gap-2">
+    <p-checkbox
+      formControlName="same_address"
+      [value]="true"
+      (onChange)="toggleSameAddress($event)"
+      inputId="sameAddress"
+    ></p-checkbox>
+    <label for="sameAddress" class="text-sm">
+      {{ 'PROFILE.UPDATE_PROFILE.SAME_ADDRESS' | translate }}
+    </label>
+  </div>
+
+  <!-- Billing address -->
+  @if (formData.get('billing_address_street')) {
+    <div class="mt-4">
+      <div class="flex items-center">
+        <h3 class="text-xl font-semibold">
+          {{ 'PROFILE.UPDATE_PROFILE.BILLING_ADDRESS' | translate }}
+        </h3>
+      </div>
+
+      <!-- Billing line 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pb-3 mt-2">
+        <div class="flex flex-col">
+          <label for="billing_address_street" class="text-sm font-medium mb-1">
+            {{ 'PROFILE.UPDATE_PROFILE.STREET_NAME' | translate }} *
+          </label>
+          <p-input-group>
+            <input
+              pInputText
+              formControlName="billing_address_street"
+              id="billing_address_street"
+              placeholder="{{ 'PROFILE.UPDATE_PROFILE.STREET_NAME_PLACEHOLDER' | translate }}"
+            />
+          </p-input-group>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="billing_address_number" class="text-sm font-medium mb-1">
+            {{ 'PROFILE.UPDATE_PROFILE.NUMBER' | translate }} *
+          </label>
+          <p-input-group>
+            <input
+              pInputText
+              formControlName="billing_address_number"
+              id="billing_address_number"
+              placeholder="{{ 'PROFILE.UPDATE_PROFILE.NUMBER_PLACEHOLDER' | translate }}"
+            />
+          </p-input-group>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="billing_address_supplement" class="text-sm font-medium mb-1">
+            {{ 'PROFILE.UPDATE_PROFILE.BOX' | translate }}
+          </label>
+          <p-input-group>
+            <input
+              pInputText
+              formControlName="billing_address_supplement"
+              id="billing_address_supplement"
+              placeholder="{{ 'PROFILE.UPDATE_PROFILE.BOX_PLACEHOLDER' | translate }}"
+            />
+          </p-input-group>
+        </div>
+      </div>
+
+      <!-- Billing line 2 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-3">
+        <div class="flex flex-col">
+          <label for="billing_address_postcode" class="text-sm font-medium mb-1">
+            {{ 'PROFILE.UPDATE_PROFILE.POSTAL_CODE' | translate }} *
+          </label>
+          <p-input-group>
+            <input
+              pInputText
+              formControlName="billing_address_postcode"
+              id="billing_address_postcode"
+              placeholder="{{ 'PROFILE.UPDATE_PROFILE.POSTAL_CODE_PLACEHOLDER' | translate }}"
+            />
+          </p-input-group>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="billing_address_city" class="text-sm font-medium mb-1">
+            {{ 'PROFILE.UPDATE_PROFILE.CITY' | translate }} *
+          </label>
+          <p-input-group>
+            <input
+              pInputText
+              formControlName="billing_address_city"
+              id="billing_address_city"
+              placeholder="{{ 'PROFILE.UPDATE_PROFILE.CITY_LABEL' | translate }}"
+            />
+          </p-input-group>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Submit -->
+  <div class="mt-4">
+    <p-button
+      pRipple
+      type="submit"
+      label="{{ 'PROFILE.UPDATE_PROFILE.VALIDATE' | translate }}"
+    ></p-button>
+  </div>
+</form>

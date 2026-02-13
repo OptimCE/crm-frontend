@@ -1,24 +1,31 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environments} from '../../../environments/environments';
-import {DocumentExposedDTO, DocumentQueryDTO} from '../dtos/document.dtos';
-import {ApiResponse, ApiResponsePaginated} from '../../core/dtos/api.response';
-import {Observable} from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environments } from '../../../environments/environments';
+import { DocumentExposedDTO, DocumentQueryDTO } from '../dtos/document.dtos';
+import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentService {
+  private http = inject(HttpClient)
   private apiAddress: string;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.apiAddress = environments.apiUrl + '/documents';
   }
 
-  getDocuments(memberId: number, query: DocumentQueryDTO): Observable<ApiResponsePaginated<DocumentExposedDTO[]>> {
-    return this.http.get<ApiResponsePaginated<DocumentExposedDTO[]>>(this.apiAddress + '/' + memberId, {
-      params: { ...query },
-    });
+  getDocuments(
+    memberId: number,
+    query: DocumentQueryDTO,
+  ): Observable<ApiResponsePaginated<DocumentExposedDTO[]>> {
+    return this.http.get<ApiResponsePaginated<DocumentExposedDTO[]>>(
+      this.apiAddress + '/' + memberId,
+      {
+        params: { ...query },
+      },
+    );
   }
 
   downloadDocument(memberId: number, documentId: number): Observable<Blob> {

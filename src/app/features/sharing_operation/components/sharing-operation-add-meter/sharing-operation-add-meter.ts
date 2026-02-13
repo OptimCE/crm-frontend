@@ -1,23 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {AddressPipe} from '../../../../shared/pipes/address/address-pipe';
-import {Button} from 'primeng/button';
-import {InputTextModule} from 'primeng/inputtext';
-import {PaginatorModule} from 'primeng/paginator';
-import {PrimeTemplate} from 'primeng/api';
-import {TableModule} from 'primeng/table';
-import {TagModule} from 'primeng/tag';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Select} from 'primeng/select';
-import {DatePicker} from 'primeng/datepicker';
-import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.handler';
-import {PartialMeterDTO} from '../../../../shared/dtos/meter.dtos';
-import {Pagination} from '../../../../core/dtos/api.response';
-import {SharingOperationService} from '../../../../shared/services/sharing_operation.service';
-import {MeterService} from '../../../../shared/services/meter.service';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {MeterDataStatus} from '../../../../shared/types/meter.types';
-import {AddMeterToSharingOperationDTO} from '../../../../shared/dtos/sharing_operation.dtos';
+import {Component, inject, OnInit} from '@angular/core';
+import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
+import { Button } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { PrimeTemplate } from 'primeng/api';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MeterDataStatus } from '../../../../shared/types/meter.types';
+import { AddMeterToSharingOperationDTO } from '../../../../shared/dtos/sharing_operation.dtos';
 
 @Component({
   selector: 'app-sharing-operation-add-meter',
@@ -41,6 +41,11 @@ import {AddMeterToSharingOperationDTO} from '../../../../shared/dtos/sharing_ope
   providers: [ErrorMessageHandler],
 })
 export class SharingOperationAddMeter implements OnInit {
+  private sharingOperationService = inject(SharingOperationService);
+  private metersService = inject(MeterService);
+  private config = inject(DynamicDialogConfig);
+  private ref = inject(DynamicDialogRef);
+  private translate = inject(TranslateService);
   id: number;
   metersPartialList: PartialMeterDTO[] = [];
   addressFilter = {
@@ -56,11 +61,7 @@ export class SharingOperationAddMeter implements OnInit {
   currentPageReportTemplate: string = '';
 
   constructor(
-    private sharingOperationService: SharingOperationService,
-    private metersService: MeterService,
-    private config: DynamicDialogConfig,
-    private ref: DynamicDialogRef,
-    private translate: TranslateService
+
   ) {
     this.id = this.config.data.id;
   }
@@ -86,24 +87,49 @@ export class SharingOperationAddMeter implements OnInit {
         'SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL',
         'SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL',
         'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL',
-        'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'])
+        'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL',
+      ])
       .subscribe((translation) => {
         this.statutCategory = [
-          { value: MeterDataStatus.ACTIVE, label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL'] },
-          { value: MeterDataStatus.INACTIVE, label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL'] },
-          { value: MeterDataStatus.WAITING_GRD, label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'] },
-          { value: MeterDataStatus.WAITING_MANAGER, label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'] },
+          {
+            value: MeterDataStatus.ACTIVE,
+            label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL'],
+          },
+          {
+            value: MeterDataStatus.INACTIVE,
+            label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL'],
+          },
+          {
+            value: MeterDataStatus.WAITING_GRD,
+            label:
+              translation[
+                'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
+              ],
+          },
+          {
+            value: MeterDataStatus.WAITING_MANAGER,
+            label:
+              translation[
+                'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+              ],
+          },
         ];
       });
   }
 
-  loadMeters(changeIsLoaded: boolean = true, filter?: any, page?: number) {
+  loadMeters(filter?: any, page?: number) {
     try {
       const params: any = {
         notSharingOperationsId: this.id,
       };
       // Check for address
-      if (!(this.addressFilter.streetName == '' && this.addressFilter.postcode == '' && this.addressFilter.cityName == '')) {
+      if (
+        !(
+          this.addressFilter.streetName == '' &&
+          this.addressFilter.postcode == '' &&
+          this.addressFilter.cityName == ''
+        )
+      ) {
         // Il y a un filtre d'adresse
         if (this.addressFilter.streetName != '') {
           params['streetname'] = this.addressFilter.streetName;
@@ -132,23 +158,20 @@ export class SharingOperationAddMeter implements OnInit {
           }
         }
       }
-      this.metersService.getMetersList({page: page, limit: 10, ...params}).subscribe(
-        {
-          next:(response)=>
-          {
-            if (response) {
-              this.metersPartialList = response.data as PartialMeterDTO[];
-              this.paginationMetersInfo = response.pagination;
-              this.updatePaginationTranslation();
-            } else {
-              console.error('Error fetching meters partial list');
-            }
-          },
-          error:(_error) => {
+      this.metersService.getMetersList({ page: page, limit: 10, ...params }).subscribe({
+        next: (response) => {
+          if (response) {
+            this.metersPartialList = response.data as PartialMeterDTO[];
+            this.paginationMetersInfo = response.pagination;
+            this.updatePaginationTranslation();
+          } else {
             console.error('Error fetching meters partial list');
-          },
-        }
-      );
+          }
+        },
+        error: (_error) => {
+          console.error('Error fetching meters partial list');
+        },
+      });
     } catch (e) {
       console.error('Error fetching meters partial list ' + e);
     }
@@ -159,7 +182,7 @@ export class SharingOperationAddMeter implements OnInit {
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
     }
-    this.loadMeters(true, $event.filters, page);
+    this.loadMeters($event.filters, page);
   }
 
   clear(table: any) {
@@ -186,8 +209,10 @@ export class SharingOperationAddMeter implements OnInit {
       return;
     }
     const metersToAdd: AddMeterToSharingOperationDTO = {
-      date: this.dateSelected, ean_list: this.selectedMeters.map((meter) => meter.EAN), id_sharing: this.id
-    }
+      date: this.dateSelected,
+      ean_list: this.selectedMeters.map((meter) => meter.EAN),
+      id_sharing: this.id,
+    };
 
     this.sharingOperationService.addMeterToSharing(metersToAdd).subscribe((response) => {
       if (response) {

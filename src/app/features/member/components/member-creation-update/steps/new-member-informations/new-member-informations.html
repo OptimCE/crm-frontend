@@ -1,97 +1,214 @@
 <div (click)="goBack()" class="cursor-pointer hover:text-green-700">
-  <i class="pi pi-arrow-left flex-wrap-left mr-2 !text-xs"></i>
-  <span class="!text-sm">{{ "MEMBER.ADD.INFORMATIONS.BACK_TO_STATUS" | translate }}</span>
+  <i class="pi pi-arrow-left flex-wrap-left mr-2 text-xs!"></i>
+  <span class="text-sm!">{{ 'MEMBER.ADD.INFORMATIONS.BACK_TO_STATUS' | translate }}</span>
 </div>
 <form [formGroup]="form" (submit)="submit()">
-  @if(typeClient == MemberType.INDIVIDUAL){
+  @if (typeClient === MemberType.INDIVIDUAL) {
     <div>
       <div class="flex flex-wrap flex-col w-full items-center">
-        <label for="nrn" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL" | translate }} *</label>
-        <input pInputText type="text" name="nrn" id="nrn" placeholder="123456789" formControlName="id" />
+        <label for="nrn" class="text-base"
+          >{{ 'MEMBER.ADD.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL' | translate }} *</label
+        >
+        <input
+          pInputText
+          type="text"
+          name="nrn"
+          id="nrn"
+          placeholder="123456789"
+          formControlName="id"
+        />
         <app-error-handler controlName="id" [errorsAdd]="idErrorAdded" />
       </div>
       <div class="flex flex-wrap mt-2 w-full">
         <div class="flex flex-col w-1/2">
-          <label for="surname" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.SURNAME_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="surname" id="surname" placeholder="Doe" formControlName="surname" />
+          <label for="surname" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.SURNAME_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="surname"
+            id="surname"
+            placeholder="Doe"
+            formControlName="surname"
+          />
           <app-error-handler controlName="surname" />
         </div>
         <div class="flex flex-col w-1/2 ps-2">
-          <label for="name" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.FIRST_NAME_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="name" id="name" placeholder="John" formControlName="name" />
+          <label for="name" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.FIRST_NAME_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="name"
+            id="name"
+            placeholder="John"
+            formControlName="name"
+          />
           <app-error-handler controlName="name" />
         </div>
       </div>
       <div class="flex flex-wrap mt-2 w-full">
         <div class="flex flex-col w-1/2">
-          <label for="email" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.EMAIL_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="email" id="email" placeholder="john.doe@gmail.com" formControlName="email" />
+          <label for="email" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.EMAIL_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="email"
+            id="email"
+            placeholder="john.doe@gmail.com"
+            formControlName="email"
+          />
           <app-error-handler controlName="email" />
         </div>
         <div class="flex flex-col w-1/2 ps-2">
-          <label for="phone" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.PHONE_NUMBER_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="phone" id="phone" placeholder="049477113344" formControlName="phone" />
+          <label for="phone" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.PHONE_NUMBER_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="phone"
+            id="phone"
+            placeholder="049477113344"
+            formControlName="phone"
+          />
           <app-error-handler controlName="phone" />
         </div>
       </div>
       <div class="flex flex-wrap mt-2 w-full">
         <div class="flex flex-col mt-2 w-1/2 items-center">
-          <label for="social_rate" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.SOCIAL_RATE_CHECKBOX_LABEL" | translate }}</label>
-          <p-checkbox id="social_rate" class="justify-center text-sm" formControlName="socialRate" value="true" inputId="socialRate" />
+          <label for="social_rate" class="text-base">{{
+            'MEMBER.ADD.INFORMATIONS.SOCIAL_RATE_CHECKBOX_LABEL' | translate
+          }}</label>
+          <p-checkbox
+            id="social_rate"
+            class="justify-center text-sm"
+            formControlName="socialRate"
+            value="true"
+            inputId="socialRate"
+          />
         </div>
         <div class="flex flex-col mt-2 w-1/2 items-center">
-          <label for="guardian_ship" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.GUARDIAN_CHECKBOX_LABEL" | translate }}</label>
-          <p-checkbox id="guardian_ship" class="justify-center text-sm" (onChange)="gestionnaireChange($event)" value="true" />
+          <label for="guardian_ship" class="text-base">{{
+            'MEMBER.ADD.INFORMATIONS.GUARDIAN_CHECKBOX_LABEL' | translate
+          }}</label>
+          <p-checkbox
+            id="guardian_ship"
+            class="justify-center text-sm"
+            (onChange)="gestionnaireChange($event)"
+            value="true"
+          />
         </div>
       </div>
     </div>
-  }
-  @else if(typeClient === MemberType.COMPANY){
+  } @else if (typeClient === MemberType.COMPANY) {
     <div>
       <div class="flex flex-wrap mt-2 flex-col w-full items-center">
-        <label for="nrn_soc" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.COMPANY_NUMBER_LABEL" | translate }} *</label>
-        <input pInputText type="text" name="nrn" id="nrn_soc" placeholder="123456789" formControlName="id" />
+        <label for="nrn_soc" class="text-base"
+          >{{ 'MEMBER.ADD.INFORMATIONS.COMPANY_NUMBER_LABEL' | translate }} *</label
+        >
+        <input
+          pInputText
+          type="text"
+          name="nrn"
+          id="nrn_soc"
+          placeholder="123456789"
+          formControlName="id"
+        />
         <app-error-handler controlName="id" />
       </div>
       <div class="flex flex-wrap mt-2 w-full">
         <div class="flex flex-col w-1/2">
-          <label for="name_soc" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.COMPANY_NAME_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="name" id="name_soc" placeholder="Locomotrice cie." formControlName="name" />
+          <label for="name_soc" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.COMPANY_NAME_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="name"
+            id="name_soc"
+            placeholder="Locomotrice cie."
+            formControlName="name"
+          />
           <app-error-handler controlName="name" />
         </div>
         <div class="flex flex-col w-1/2 ps-2">
-          <label for="vatNumber" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.VAT_NUMBER_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="vatNumber" id="vatNumber" placeholder="BE0999991234" formControlName="vatNumber" />
+          <label for="vatNumber" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.VAT_NUMBER_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="vatNumber"
+            id="vatNumber"
+            placeholder="BE0999991234"
+            formControlName="vatNumber"
+          />
           <app-error-handler controlName="vatNumber" />
         </div>
       </div>
     </div>
   }
-  @if(gestionnaire){
+  @if (gestionnaire) {
     <div>
       <div class="flex flex-wrap mt-2">
-        <h3 class="text-lg font-medium">{{ "MEMBER.ADD.INFORMATIONS.GUARDIAN_TITLE" | translate }}</h3>
+        <h3 class="text-lg font-medium">
+          {{ 'MEMBER.ADD.INFORMATIONS.GUARDIAN_TITLE' | translate }}
+        </h3>
       </div>
       <div class="flex flex-wrap mt-2 flex-col w-full items-center">
-        <label for="NRN_manager" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL" | translate }} *</label>
-        <input pInputText type="text" name="NRN_manager" id="NRN_manager" placeholder="123456789" formControlName="NRN_manager" />
+        <label for="NRN_manager" class="text-base"
+          >{{ 'MEMBER.ADD.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL' | translate }} *</label
+        >
+        <input
+          pInputText
+          type="text"
+          name="NRN_manager"
+          id="NRN_manager"
+          placeholder="123456789"
+          formControlName="NRN_manager"
+        />
         <app-error-handler controlName="NRN_manager" [errorsAdd]="idErrorAdded" />
       </div>
       <div class="flex flex-wrap mt-2 w-full">
         <div class="flex flex-col w-1/2">
-          <label for="surname_manager" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.SURNAME_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="surname_manager" id="surname_manager" placeholder="Doe" formControlName="surname_manager" />
+          <label for="surname_manager" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.SURNAME_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="surname_manager"
+            id="surname_manager"
+            placeholder="Doe"
+            formControlName="surname_manager"
+          />
           <app-error-handler controlName="surname_manager" />
         </div>
         <div class="flex flex-col w-1/2 ps-2">
-          <label for="name_manager" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.FIRST_NAME_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="name_manager" id="name_manager" placeholder="John" formControlName="name_manager" />
+          <label for="name_manager" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.FIRST_NAME_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="name_manager"
+            id="name_manager"
+            placeholder="John"
+            formControlName="name_manager"
+          />
           <app-error-handler controlName="name_manager" />
         </div>
       </div>
       <div class="flex flex-wrap mt-2 w-full">
         <div class="flex flex-col w-1/2">
-          <label for="email_manager" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.EMAIL_LABEL" | translate }} *</label>
+          <label for="email_manager" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.EMAIL_LABEL' | translate }} *</label
+          >
           <input
             pInputText
             type="text"
@@ -103,32 +220,47 @@
           <app-error-handler controlName="email_manager" />
         </div>
         <div class="flex flex-col w-1/2 ps-2">
-          <label for="phone_manager" class="text-base">{{ "MEMBER.ADD.INFORMATIONS.PHONE_NUMBER_LABEL" | translate }} *</label>
-          <input pInputText type="text" name="phone_manager" id="phone_manager" placeholder="049477113344" formControlName="phone_manager" />
+          <label for="phone_manager" class="text-base"
+            >{{ 'MEMBER.ADD.INFORMATIONS.PHONE_NUMBER_LABEL' | translate }} *</label
+          >
+          <input
+            pInputText
+            type="text"
+            name="phone_manager"
+            id="phone_manager"
+            placeholder="049477113344"
+            formControlName="phone_manager"
+          />
           <app-error-handler controlName="phone_manager" />
         </div>
       </div>
-
     </div>
   }
   <div class="flex flex-wrap mt-2">
     <div class="flex flex-col">
-      <app-summary-error [errorsAdd]="errorsSummaryAdded"
-                         [controlLabels]="{
-      'id':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.ID',
-      'surname':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.SURNAME',
-      'name':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.NAME',
-      'email':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.EMAIL',
-      'phone':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.PHONE',
-      'socialRate':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.SOCIALRATE',
-      'vatNumber':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.VATNUMBER',
-      'NRN_manager':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.NRN_MANAGER',
-      'surname_manager':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.SURNAME_MANAGER',
-      'name_manager':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.NAME_MANAGER',
-      'email_manager':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.EMAIL_MANAGER',
-      'phone_manager':'MEMBER.ADD.INFORMATIONS.FORM_ERROR.PHONE_MANAGER',
-      }"> </app-summary-error>
-      <p-button pRipple type="submit" label="{{ 'MEMBER.ADD.INFORMATIONS.VALIDATE_INFORMATION_FORM_BUTTON' | translate }}"></p-button>
+      <app-summary-error
+        [errorsAdd]="errorsSummaryAdded"
+        [controlLabels]="{
+          id: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.ID',
+          surname: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.SURNAME',
+          name: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.NAME',
+          email: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.EMAIL',
+          phone: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.PHONE',
+          socialRate: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.SOCIALRATE',
+          vatNumber: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.VATNUMBER',
+          NRN_manager: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.NRN_MANAGER',
+          surname_manager: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.SURNAME_MANAGER',
+          name_manager: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.NAME_MANAGER',
+          email_manager: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.EMAIL_MANAGER',
+          phone_manager: 'MEMBER.ADD.INFORMATIONS.FORM_ERROR.PHONE_MANAGER',
+        }"
+      >
+      </app-summary-error>
+      <p-button
+        pRipple
+        type="submit"
+        label="{{ 'MEMBER.ADD.INFORMATIONS.VALIDATE_INFORMATION_FORM_BUTTON' | translate }}"
+      ></p-button>
     </div>
   </div>
 </form>

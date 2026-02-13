@@ -1,7 +1,7 @@
-import {PaginationQuery, Sort} from './query.dtos';
-import {SharingKeyStatus, SharingOperationType} from '../types/sharing_operation.types';
-import {KeyPartialDTO} from './key.dtos';
-import {MeterDataStatus} from '../types/meter.types';
+import { PaginationQuery, Sort } from './query.dtos';
+import { SharingKeyStatus, SharingOperationType } from '../types/sharing_operation.types';
+import { KeyPartialDTO } from './key.dtos';
+import { MeterDataStatus } from '../types/meter.types';
 /**
  * Query parameters for filtering and paginating a list of sharing operations.
  */
@@ -36,7 +36,7 @@ export interface SharingOperationKeyDTO {
   key: KeyPartialDTO;
   start_date: Date;
   end_date: Date;
-  status: SharingKeyStatus
+  status: SharingKeyStatus;
 }
 /**
  * Full DTO including keys and history for a sharing operation.
@@ -103,7 +103,6 @@ export interface PatchKeyToSharingOperationDTO {
   status: SharingKeyStatus;
   date: Date;
 }
-
 
 /**
  * DTO for updating the status of a meter within a sharing operation.

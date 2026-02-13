@@ -1,4 +1,4 @@
-import {PaginationQuery, Sort} from './query.dtos';
+import { PaginationQuery, Sort } from './query.dtos';
 
 /**
  * DTO for querying keys with pagination and filtering.
@@ -8,7 +8,6 @@ export interface KeyPartialQuery extends PaginationQuery {
   name?: string;
   sort_name?: Sort;
 }
-
 
 /**
  * Partial DTO representing a key (summary view).
@@ -41,7 +40,6 @@ export interface IterationDTO {
 export interface KeyDTO extends KeyPartialDTO {
   iterations: IterationDTO[];
 }
-
 
 /**
  * DTO for creating a new consumer.

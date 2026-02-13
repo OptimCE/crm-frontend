@@ -56,7 +56,6 @@
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
     "UPDATE": "Mettre à jour",
-    "UPDATE_PROFILE": "Mise à jour du profil",
     "ACCOUNT_INFORMATION": "Informations du compte",
     "UPDATE_PASSWORD": "Changer de mot de passe",
     "DOCUMENTS": "Documents",
@@ -73,6 +72,44 @@
       "HOUSE_ADDRESS": "Adresse de domicile",
       "BILLING_ADDRESS": "Adresse de facturation",
       "EMAIL": "Adresse e-mail"
+    },
+    "TABS": {
+      "HEADERS": {
+        "METERS": "Compteurs",
+        "BANKING_INFORMATIONS": "Informations bancaires",
+        "DOCUMENTS": "Documents",
+        "REPRESENTATIONS": "Représentations"
+      },
+      "BANKING_INFORMATION": {
+        "IBAN": "Iban"
+      }
+    },
+    "UPDATE_PROFILE": {
+      "TITLE": "Mise à jour du profil",
+      "SOCIAL_NUMBER": "Numéro de registre national",
+      "SOCIAL_NUMBER_PLACEHOLDER": "123456789",
+      "SURNAME": "Nom",
+      "SURNAME_PLACEHOLDER": "Dupont",
+      "FIRST_NAME": "Prénom",
+      "FIRST_NAME_PLACEHOLDER": "Jean",
+      "PHONE_NUMBER": "Numéro de téléphone",
+      "PHONE_NUMBER_PLACEHOLDER": "04 99 44 11 33",
+      "IBAN": "Iban",
+      "IBAN_PLACEHOLDER": "BE76 30003 03000 000000000000000",
+      "HOUSE_ADDRESS": "Adresse du domicile",
+      "BILLING_ADDRESS": "Adresse de facturation",
+      "STREET_NAME": "Nom de la rue",
+      "STREET_NAME_PLACEHOLDER": "Rue de la Paix",
+      "NUMBER": "Numéro",
+      "NUMBER_PLACEHOLDER": "123",
+      "BOX": "Boîte",
+      "BOX_PLACEHOLDER": "B123",
+      "POSTAL_CODE": "Code postal",
+      "POSTAL_CODE_PLACEHOLDER": "12345",
+      "CITY": "Ville",
+      "CITY_PLACEHOLDER": "Bruxelles",
+      "SAME_ADDRESS": "Même adresse que l'adresse du domicile",
+      "VALIDATE": "Valider"
     }
   },
   "INVITATION": {

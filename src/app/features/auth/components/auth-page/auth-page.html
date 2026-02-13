@@ -11,15 +11,14 @@
       </ng-template>
 
       <ng-template #title>
-        <h3 class="text-2xl">{{ "TITLE" | translate }}</h3>
+        <h3 class="text-2xl">{{ 'TITLE' | translate }}</h3>
       </ng-template>
       <p-button
-        label="{{'LOGIN.LOGIN' |translate}}"
+        label="{{ 'LOGIN.LOGIN' | translate }}"
         icon="pi pi-key"
         (onClick)="login()"
         styleClass="w-full"
       ></p-button>
-
     </p-card>
   </div>
   <div class="wave"></div>

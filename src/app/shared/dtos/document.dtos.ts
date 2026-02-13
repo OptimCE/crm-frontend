@@ -1,4 +1,4 @@
-import {PaginationQuery, Sort} from './query.dtos';
+import { PaginationQuery, Sort } from './query.dtos';
 
 export interface DocumentQueryDTO extends PaginationQuery {
   file_name?: string;
@@ -11,7 +11,7 @@ export interface DocumentQueryDTO extends PaginationQuery {
  * DTO for uploading a new document.
  */
 export interface UploadDocumentDTO {
-  id_member: number
+  id_member: number;
   // file: Express.Multer.File; TODO: Fix this
 }
 

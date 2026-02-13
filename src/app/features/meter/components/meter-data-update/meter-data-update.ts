@@ -1,26 +1,31 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import {
-  FormErrorSummaryComponent
-} from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
-import {CheckboxModule} from 'primeng/checkbox';
-import {InputTextModule} from 'primeng/inputtext';
-import {PaginatorModule} from 'primeng/paginator';
-import {RadioButtonModule} from 'primeng/radiobutton';
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
-import {Button} from 'primeng/button';
-import {ErrorHandlerComponent} from '../../../../shared/components/error.handler/error.handler.component';
-import {ToggleButtonModule} from 'primeng/togglebutton';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Textarea} from 'primeng/textarea';
-import {Select} from 'primeng/select';
-import {DatePicker} from 'primeng/datepicker';
-import {ErrorAdded, ErrorSummaryAdded} from '../../../../shared/types/error.types';
-import {MetersDataDTO, PatchMeterDataDTO} from '../../../../shared/dtos/meter.dtos';
-import {MembersPartialDTO} from '../../../../shared/dtos/member.dtos';
-import {MemberService} from '../../../../shared/services/member.service';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {MeterService} from '../../../../shared/services/meter.service';
-import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.handler';
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { Button } from 'primeng/button';
+import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Textarea } from 'primeng/textarea';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
+import { MetersDataDTO, PatchMeterDataDTO } from '../../../../shared/dtos/meter.dtos';
+import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
+import { MemberService } from '../../../../shared/services/member.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 
 @Component({
   selector: 'app-meter-data-update',
@@ -43,6 +48,12 @@ import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.
   styleUrl: './meter-data-update.css',
 })
 export class MeterDataUpdate implements OnInit {
+  private memberService = inject(MemberService)
+  private config = inject(DynamicDialogConfig)
+  private meterService = inject(MeterService)
+  private ref = inject(DynamicDialogRef)
+  private translate = inject(TranslateService)
+  private errorHandler = inject(ErrorMessageHandler)
   errorMemberAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
 
@@ -103,39 +114,31 @@ export class MeterDataUpdate implements OnInit {
   ];
   membersList!: MembersPartialDTO[];
   constructor(
-    private memberService: MemberService,
-    private config: DynamicDialogConfig,
-    private meterService: MeterService,
-    private ref: DynamicDialogRef,
-    private translate: TranslateService,
-    private errorHandler: ErrorMessageHandler,
+
   ) {
     this.meterData = this.config.data.meterData;
     this.id = this.config.data.id;
   }
 
   ngOnInit(): void {
-    this.memberService.getMembersList({page: 1, limit: 10}).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response && response.data) {
-            this.membersList = response.data as MembersPartialDTO[];
-            if (this.meterData && this.meterData.member) {
-              const member = this.meterData.member;
-              this.metersForm.patchValue({
-                member: this.membersList.find((m) => m.id === member.id),
-              });
-            }
-          } else {
-            console.error(response);
+    this.memberService.getMembersList({ page: 1, limit: 10 }).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.membersList = response.data as MembersPartialDTO[];
+          if (this.meterData && this.meterData.member) {
+            const member = this.meterData.member;
+            this.metersForm.patchValue({
+              member: this.membersList.find((m) => m.id === member.id),
+            });
           }
-        },
-        error:(error) => {
-          console.error(error);
-        },
-      }
-    );
+        } else {
+          console.error(response);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
     this.metersForm = new FormGroup({
       description: new FormControl('', []),
       samplingPower: new FormControl('', [Validators.required]),
@@ -157,14 +160,20 @@ export class MeterDataUpdate implements OnInit {
       console.log('PATCH VALUE');
       console.log(this.productionChainCategory);
       console.log(this.meterData?.production_chain);
-      console.log(this.productionChainCategory.find((p) => p.id == this.meterData?.production_chain));
+      console.log(
+        this.productionChainCategory.find((p) => p.id == this.meterData?.production_chain),
+      );
       this.metersForm.patchValue({
         description: this.meterData.description,
         samplingPower: this.meterData.sampling_power,
         totalGeneratingCapacity: this.meterData.totalGenerating_capacity,
         amperage: this.meterData.amperage,
-        productionChain: this.productionChainCategory.find((p) => p.id == this.meterData?.production_chain),
-        injectionStatus: this.injectionStatusCategory.find((p) => p.id == this.meterData?.injection_status),
+        productionChain: this.productionChainCategory.find(
+          (p) => p.id == this.meterData?.production_chain,
+        ),
+        injectionStatus: this.injectionStatusCategory.find(
+          (p) => p.id == this.meterData?.injection_status,
+        ),
         rate: this.rateCategory.find((p) => p.id == this.meterData?.rate),
         clientType: this.clientCategory.find((p) => p.id == this.meterData?.client_type),
         grd: this.grdAvailable.find((p) => p.name == this.meterData?.grd),
@@ -173,14 +182,17 @@ export class MeterDataUpdate implements OnInit {
     }
   }
   setupErrorTranslation() {
-    this.translate.get(['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT']).subscribe((translation) => {
-      this.errorMemberAdded = {
-        invalidMember: () => translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
-      };
-      this.errorsSummaryAdded = {
-        invalidMember: (_: any, _controlName: string) => translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
-      };
-    });
+    this.translate
+      .get(['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'])
+      .subscribe((translation) => {
+        this.errorMemberAdded = {
+          invalidMember: () => translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
+        };
+        this.errorsSummaryAdded = {
+          invalidMember: (_: any, _controlName: string) =>
+            translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
+        };
+      });
   }
 
   setupTranslationCategory() {
@@ -220,37 +232,42 @@ export class MeterDataUpdate implements OnInit {
   }
 
   setupRateCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.RATE.SIMPLE',
-      'METER.CATEGORIES.RATE.BI_HOURLY',
-      'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'
-    ]).subscribe((translation) => {
-      const translations = [
-        translation['METER.CATEGORIES.RATE.SIMPLE'],
-        translation['METER.CATEGORIES.RATE.BI_HOURLY'],
-        translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT']];
-      this.rateCategory.forEach((item, index) => {
-        item.name = translations[index];
+    this.translate
+      .get([
+        'METER.CATEGORIES.RATE.SIMPLE',
+        'METER.CATEGORIES.RATE.BI_HOURLY',
+        'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
+      ])
+      .subscribe((translation) => {
+        const translations = [
+          translation['METER.CATEGORIES.RATE.SIMPLE'],
+          translation['METER.CATEGORIES.RATE.BI_HOURLY'],
+          translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'],
+        ];
+        this.rateCategory.forEach((item, index) => {
+          item.name = translations[index];
+        });
       });
-    });
   }
 
   setupClientCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.CLIENT.RESIDENTIAL',
-      'METER.CATEGORIES.CLIENT.PROFESSIONAL',
-      'METER.CATEGORIES.CLIENT.INDUSTRIAL'
-    ]).subscribe((translation) => {
-      const translations = [
-        translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
-        translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
-        translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'],
-      ];
+    this.translate
+      .get([
+        'METER.CATEGORIES.CLIENT.RESIDENTIAL',
+        'METER.CATEGORIES.CLIENT.PROFESSIONAL',
+        'METER.CATEGORIES.CLIENT.INDUSTRIAL',
+      ])
+      .subscribe((translation) => {
+        const translations = [
+          translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
+          translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
+          translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'],
+        ];
 
-      this.clientCategory.forEach((item, index) => {
-        item.name = translations[index];
+        this.clientCategory.forEach((item, index) => {
+          item.name = translations[index];
+        });
       });
-    });
   }
 
   setupInjectionStatusCategory() {
@@ -287,7 +304,10 @@ export class MeterDataUpdate implements OnInit {
       }
 
       // Check if value is a valid member
-      const isValid = typeof value === 'object' && true && this.membersList.some((member) => member.id === value.id);
+      const isValid =
+        typeof value === 'object' &&
+        true &&
+        this.membersList.some((member) => member.id === value.id);
       return isValid ? null : { invalidMember: true };
     };
   }
@@ -312,25 +332,20 @@ export class MeterDataUpdate implements OnInit {
       sharing_operation_id: undefined,
       start_date: this.metersForm.get('dateStart')?.value,
       status: this.metersForm.get('status')?.value,
-      total_generating_capacity: this.metersForm.get('totalGeneratingCapacity')?.value
+      total_generating_capacity: this.metersForm.get('totalGeneratingCapacity')?.value,
+    };
 
-    }
-
-    this.meterService.patchMeterData(updateMeterData).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.ref.close(true);
-          } else {
-            this.errorHandler.handleError();
-          }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error.data?? null);
-        },
-      }
-    );
+    this.meterService.patchMeterData(updateMeterData).subscribe({
+      next: (response) => {
+        if (response) {
+          this.ref.close(true);
+        } else {
+          this.errorHandler.handleError();
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error.data ?? null);
+      },
+    });
   }
-
 }

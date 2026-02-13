@@ -2,24 +2,21 @@ import {
   APP_INITIALIZER,
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection
+  provideZoneChangeDetection,
 } from '@angular/core';
-import {provideRouter, withComponentInputBinding, withInMemoryScrolling} from '@angular/router';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
-import {providePrimeNG} from "primeng/config";
+import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
-import {provideTranslateService, TranslateStore} from "@ngx-translate/core";
-import {provideKeycloakAngular} from './core/guards/keycloack.config';
-import {provideHttpClient, withInterceptors} from '@angular/common/http';
-import {includeBearerTokenInterceptor} from 'keycloak-angular';
-import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
-import {LanguageService} from './core/services/language/language.service';
-import {communityContextInterceptor} from './core/interceptors/community.context.inteceptor';
-import {initUserContextAfterKeycloak, registerKeycloakHooks} from './core/interceptors/user.context.initialize';
-import {UserContextService} from './core/services/authorization/authorization.service';
-import Keycloak from 'keycloak-js';
-export function initializeLanguage(languageService: LanguageService) {
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideKeycloakAngular } from './core/guards/keycloack.config';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { includeBearerTokenInterceptor } from 'keycloak-angular';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LanguageService } from './core/services/language/language.service';
+import { communityContextInterceptor } from './core/interceptors/community.context.inteceptor';
+export function initializeLanguage(_languageService: LanguageService) {
   return () => {
     // If your logic is in the constructor, just returning a resolved promise is enough.
     // If you have an init() method, call it here: return languageService.init();
@@ -29,12 +26,9 @@ export function initializeLanguage(languageService: LanguageService) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideKeycloakAngular(),
-    provideHttpClient(withInterceptors(
-      [
-        includeBearerTokenInterceptor,
-        communityContextInterceptor
-      ]
-    )),
+    provideHttpClient(
+      withInterceptors([includeBearerTokenInterceptor, communityContextInterceptor]),
+    ),
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
@@ -42,29 +36,29 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
         anchorScrolling: 'enabled',
       }),
-      withComponentInputBinding()
+      withComponentInputBinding(),
     ),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: './assets/i18n/',
-        suffix: '.json'
-      })
+        suffix: '.json',
+      }),
     }),
-    provideZoneChangeDetection({eventCoalescing: true}),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     providePrimeNG({
       theme: {
         preset: Aura,
         options: {
           darkMode: false,
-          darkModeSelector: 'none'
-        }
-      }
+          darkModeSelector: 'none',
+        },
+      },
     }),
     {
       provide: APP_INITIALIZER,
       useFactory: initializeLanguage,
       deps: [LanguageService],
-      multi: true
+      multi: true,
     },
     // {
     //   provide: APP_INITIALIZER,
@@ -78,5 +72,5 @@ export const appConfig: ApplicationConfig = {
     //   deps: [UserContextService, Keycloak],
     //   multi: true,
     // }
-  ]
+  ],
 };

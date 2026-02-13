@@ -1,31 +1,31 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {ProgressSpinner} from 'primeng/progressspinner';
-import {Dialog} from 'primeng/dialog';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Button} from 'primeng/button';
-import {Ripple} from 'primeng/ripple';
-import {CompanyDTO, IndividualDTO, MemberLinkDTO} from '../../../../shared/dtos/member.dtos';
-import {PartialMeterDTO} from '../../../../shared/dtos/meter.dtos';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MemberService} from '../../../../shared/services/member.service';
-import {SnackbarNotification} from '../../../../shared/services-ui/snackbar.notifcation.service';
-import {MemberCreationUpdate} from '../member-creation-update/member-creation-update';
-import {VALIDATION_TYPE} from '../../../../core/dtos/notification';
-import {InvitationService} from '../../../../shared/services/invitation.service';
-import {MemberStatus, MemberType} from '../../../../shared/types/member.types';
-import {Tag} from 'primeng/tag';
-import {Divider} from 'primeng/divider';
-import {Checkbox} from 'primeng/checkbox';
-import {AddressPipe} from '../../../../shared/pipes/address/address-pipe';
-import {MemberViewTabs} from './member-view-tabs/member-view-tabs';
-import {FormsModule} from '@angular/forms';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { Dialog } from 'primeng/dialog';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Button } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { CompanyDTO, IndividualDTO, MemberLinkDTO } from '../../../../shared/dtos/member.dtos';
+import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MemberService } from '../../../../shared/services/member.service';
+import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
+import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
+import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { InvitationService } from '../../../../shared/services/invitation.service';
+import { MemberStatus, MemberType } from '../../../../shared/types/member.types';
+import { Tag } from 'primeng/tag';
+import { Divider } from 'primeng/divider';
+import { Checkbox } from 'primeng/checkbox';
+import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
+import { MemberViewTabs } from './member-view-tabs/member-view-tabs';
+import { FormsModule } from '@angular/forms';
 
 enum InvitationStatus {
   LOADING = 0,
   ACCEPTED = 1,
   PENDING = 2,
-  NO_INVITE = 3
+  NO_INVITE = 3,
 }
 @Component({
   selector: 'app-member-view',
@@ -41,18 +41,25 @@ enum InvitationStatus {
     Checkbox,
     AddressPipe,
     MemberViewTabs,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './member-view.html',
   styleUrl: './member-view.css',
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class MemberView implements OnInit {
+  private route = inject(ActivatedRoute);
+  private memberService = inject(MemberService);
+  private invitationService = inject(InvitationService);
+  private routing = inject(Router);
+  private dialogService = inject(DialogService);
+  private snackbar = inject(SnackbarNotification);
+  private translate = inject(TranslateService);
   isLoading = signal<boolean>(true);
   id!: number;
   individual?: IndividualDTO;
   legalEntity?: CompanyDTO;
-  member?: IndividualDTO|CompanyDTO;
+  member?: IndividualDTO | CompanyDTO;
   status?: number;
   membersType?: number;
   metersPartialList?: PartialMeterDTO[];
@@ -63,15 +70,7 @@ export class MemberView implements OnInit {
   ref?: DynamicDialogRef | null;
   alertPopupVisible: boolean = false;
   currentPageReportTemplate: string = '';
-  constructor(
-    private route: ActivatedRoute,
-    private memberService: MemberService,
-    private invitationService: InvitationService,
-    private routing: Router,
-    private dialogService: DialogService,
-    private snackbar: SnackbarNotification,
-    private translate: TranslateService,
-  ) {}
+
 
   ngOnInit(): void {
     this.isLoading.set(true);
@@ -85,7 +84,6 @@ export class MemberView implements OnInit {
       this.loadMember();
     }
   }
-
 
   loadMember() {
     this.memberService.getMember(this.id).subscribe((response) => {
@@ -113,46 +111,52 @@ export class MemberView implements OnInit {
 
   loadInvitationStatusIndividual(id: number, email: string) {
     this.individualInvitationStatus = InvitationStatus.LOADING;
-    this.memberService.getMemberLink(id, {email: email}).subscribe((response) => {
-      if (response) {
-        this.individualInvitationLink = response.data as MemberLinkDTO;
-        switch(this.individualInvitationLink.status){
-          case MemberStatus.ACTIVE:
-            this.individualInvitationStatus = InvitationStatus.ACCEPTED
-            break;
-          case MemberStatus.PENDING:
-            this.individualInvitationStatus = InvitationStatus.PENDING
-            break;
-          case MemberStatus.INACTIVE:
-            this.individualInvitationStatus = InvitationStatus.NO_INVITE;
-            break;
+    this.memberService.getMemberLink(id, { email: email }).subscribe(
+      (response) => {
+        if (response) {
+          this.individualInvitationLink = response.data as MemberLinkDTO;
+          switch (this.individualInvitationLink.status) {
+            case MemberStatus.ACTIVE:
+              this.individualInvitationStatus = InvitationStatus.ACCEPTED;
+              break;
+            case MemberStatus.PENDING:
+              this.individualInvitationStatus = InvitationStatus.PENDING;
+              break;
+            case MemberStatus.INACTIVE:
+              this.individualInvitationStatus = InvitationStatus.NO_INVITE;
+              break;
+          }
         }
-      }
-    }, (error) => {
-      this.individualInvitationStatus = InvitationStatus.NO_INVITE;
-    });
+      },
+      (_error) => {
+        this.individualInvitationStatus = InvitationStatus.NO_INVITE;
+      },
+    );
   }
 
   loadInvitationStatusManager(id: number, email: string) {
     this.managerInvitationStatus = InvitationStatus.LOADING;
-    this.memberService.getMemberLink(id, {email}).subscribe((response) => {
-      if (response) {
-        this.managerInvitationLink = response.data as MemberLinkDTO;
-        switch(this.managerInvitationLink.status){
-          case MemberStatus.ACTIVE:
-            this.managerInvitationStatus = InvitationStatus.ACCEPTED
-            break;
-          case MemberStatus.PENDING:
-            this.managerInvitationStatus = InvitationStatus.PENDING
-            break;
-          case MemberStatus.INACTIVE:
-            this.managerInvitationStatus = InvitationStatus.NO_INVITE;
-            break;
+    this.memberService.getMemberLink(id, { email }).subscribe(
+      (response) => {
+        if (response) {
+          this.managerInvitationLink = response.data as MemberLinkDTO;
+          switch (this.managerInvitationLink.status) {
+            case MemberStatus.ACTIVE:
+              this.managerInvitationStatus = InvitationStatus.ACCEPTED;
+              break;
+            case MemberStatus.PENDING:
+              this.managerInvitationStatus = InvitationStatus.PENDING;
+              break;
+            case MemberStatus.INACTIVE:
+              this.managerInvitationStatus = InvitationStatus.NO_INVITE;
+              break;
+          }
         }
-      }
-    }, (error) => {
-      this.managerInvitationStatus = InvitationStatus.NO_INVITE;
-    });
+      },
+      (_error) => {
+        this.managerInvitationStatus = InvitationStatus.NO_INVITE;
+      },
+    );
   }
 
   toModify() {
@@ -165,15 +169,17 @@ export class MemberView implements OnInit {
         member: this.individual || this.legalEntity,
       },
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('MEMBER.VIEW.MEMBER_UPDATE_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
+          this.snackbar.openSnackBar(
+            this.translate.instant('MEMBER.VIEW.MEMBER_UPDATE_SUCCESSFULLY_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.loadMember();
         }
       });
     }
-
   }
 
   setStatus(status: number) {
@@ -193,12 +199,17 @@ export class MemberView implements OnInit {
         }
       }
     }
-    this.memberService.patchMemberStatus({status: status, id_member: this.id}).subscribe((response) => {
-      if (response) {
-        this.snackbar.openSnackBar(this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
-        this.loadMember();
-      }
-    });
+    this.memberService
+      .patchMemberStatus({ status: status, id_member: this.id })
+      .subscribe((response) => {
+        if (response) {
+          this.snackbar.openSnackBar(
+            this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL'),
+            VALIDATION_TYPE,
+          );
+          this.loadMember();
+        }
+      });
   }
 
   invite(manager = false) {
@@ -209,15 +220,17 @@ export class MemberView implements OnInit {
       email = this.individual?.email;
     }
     const id = this.individual ? this.individual.id : this.legalEntity?.id;
-    this.memberService.patchMemberLink({id_member: id!, user_email: email as string}).subscribe((response) => {
-      if (response) {
-        if (manager) {
-          this.loadInvitationStatusManager(id as number, email as string);
-        } else {
-          this.loadInvitationStatusIndividual(id as number, email as string);
+    this.memberService
+      .patchMemberLink({ id_member: id!, user_email: email as string })
+      .subscribe((response) => {
+        if (response) {
+          if (manager) {
+            this.loadInvitationStatusManager(id as number, email as string);
+          } else {
+            this.loadInvitationStatusIndividual(id as number, email as string);
+          }
         }
-      }
-    });
+      });
   }
 
   cancel(memberLink: MemberLinkDTO, manager = false) {

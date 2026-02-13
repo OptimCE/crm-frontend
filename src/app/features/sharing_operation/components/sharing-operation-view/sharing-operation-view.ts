@@ -1,46 +1,52 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {Button, ButtonDirective} from 'primeng/button';
-import {Ripple} from 'primeng/ripple';
-import {AddressPipe} from '../../../../shared/pipes/address/address-pipe';
-import {InputTextModule} from 'primeng/inputtext';
-import {ConfirmationService, MessageService, PrimeTemplate} from 'primeng/api';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {TableModule} from 'primeng/table';
-import {TagModule} from 'primeng/tag';
-import {ProgressSpinnerModule} from 'primeng/progressspinner';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {DatePipe} from '@angular/common';
-import {ToastModule} from 'primeng/toast';
-import {SplitButtonModule} from 'primeng/splitbutton';
-import {ConfirmPopupModule} from 'primeng/confirmpopup';
-import {CardModule} from 'primeng/card';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {ChartModule} from 'primeng/chart';
-import {ErrorHandlerComponent} from '../../../../shared/components/error.handler/error.handler.component';
-import {CheckboxModule} from 'primeng/checkbox';
-import {Drawer} from 'primeng/drawer';
-import {Select} from 'primeng/select';
-import {DatePicker} from 'primeng/datepicker';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.handler';
+import { Component, inject, OnInit } from '@angular/core';
+import { Button, ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
+import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { CardModule } from 'primeng/card';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ChartModule } from 'primeng/chart';
+import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Drawer } from 'primeng/drawer';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import {
   AddConsumptionDataDTO,
   PatchMeterToSharingOperationDTO,
   SharingOpConsumptionDTO,
-  SharingOperationDTO
+  SharingOperationDTO,
 } from '../../../../shared/dtos/sharing_operation.dtos';
-import {PartialMeterDTO} from '../../../../shared/dtos/meter.dtos';
-import {Pagination} from '../../../../core/dtos/api.response';
-import {SharingOperationService} from '../../../../shared/services/sharing_operation.service';
-import {MeterService} from '../../../../shared/services/meter.service';
-import {SnackbarNotification} from '../../../../shared/services-ui/snackbar.notifcation.service';
-import {EventBusService} from '../../../../core/services/event_bus/eventbus.service';
-import {MeterDataStatus} from '../../../../shared/types/meter.types';
-import {SharingOperationAddMeter} from '../sharing-operation-add-meter/sharing-operation-add-meter';
-import {SharingOperationAddKey} from '../sharing-operation-add-key/sharing-operation-add-key';
-import {SharingKeyStatus} from '../../../../shared/types/sharing_operation.types';
-import {VALIDATION_TYPE} from '../../../../core/dtos/notification';
-import {SharingOperationTypePipe} from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
+import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
+import { EventBusService } from '../../../../core/services/event_bus/eventbus.service';
+import { MeterDataStatus } from '../../../../shared/types/meter.types';
+import { SharingOperationAddMeter } from '../sharing-operation-add-meter/sharing-operation-add-meter';
+import { SharingOperationAddKey } from '../sharing-operation-add-key/sharing-operation-add-key';
+import { SharingKeyStatus } from '../../../../shared/types/sharing_operation.types';
+import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 
 @Component({
   selector: 'app-sharing-operation-view',
@@ -77,7 +83,16 @@ import {SharingOperationTypePipe} from '../../../../shared/pipes/sharing-operati
   providers: [DialogService, ConfirmationService, MessageService, ErrorMessageHandler],
 })
 export class SharingOperationView implements OnInit {
-  private translate = inject(TranslateService)
+  private sharingOperationService = inject(SharingOperationService);
+  private routing = inject(Router);
+  private route = inject(ActivatedRoute);
+  private metersService = inject(MeterService);
+  private dialogService = inject(DialogService);
+  private confirmationService = inject(ConfirmationService);
+  private snackbar = inject(SnackbarNotification);
+  private eventBus = inject(EventBusService);
+  private errorHandler = inject(ErrorMessageHandler);
+  private translate = inject(TranslateService);
   isLoading: boolean = true;
   id!: number;
   sharingOperation!: SharingOperationDTO;
@@ -121,7 +136,7 @@ export class SharingOperationView implements OnInit {
           display: true,
           text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.X_TITLE_DATE'),
         },
-        ticks:{
+        ticks: {
           callback: (value: any, index: number) => {
             // Make sure 'this' refers to the component context
             const label = this.data?.labels?.[index];
@@ -138,8 +153,8 @@ export class SharingOperationView implements OnInit {
             const seconds = String(date.getSeconds()).padStart(2, '0');
 
             return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-          }
-        }
+          },
+        },
       },
       y: {
         stacked: true,
@@ -158,17 +173,7 @@ export class SharingOperationView implements OnInit {
   public dragging: boolean = false;
   public fileConsumption: File | null = null;
   formGroup!: FormGroup;
-  constructor(
-    private sharingOperationService: SharingOperationService,
-    private routing: Router,
-    private route: ActivatedRoute,
-    private metersService: MeterService,
-    private dialogService: DialogService,
-    private confirmationService: ConfirmationService,
-    private snackbar: SnackbarNotification,
-    private eventBus: EventBusService,
-    private errorHandler: ErrorMessageHandler,
-  ) {}
+
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -229,14 +234,30 @@ export class SharingOperationView implements OnInit {
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
-        'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL'
+        'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
       ])
       .subscribe((translation) => {
         this.statutCategory = [
-          { value: MeterDataStatus.ACTIVE, label: translation['SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL'] },
-          { value: MeterDataStatus.INACTIVE, label: translation['SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL'] },
-          { value: MeterDataStatus.WAITING_GRD, label: translation['SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'] },
-          { value: MeterDataStatus.WAITING_MANAGER, label: translation['SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'] },
+          {
+            value: MeterDataStatus.ACTIVE,
+            label: translation['SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL'],
+          },
+          {
+            value: MeterDataStatus.INACTIVE,
+            label: translation['SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL'],
+          },
+          {
+            value: MeterDataStatus.WAITING_GRD,
+            label:
+              translation['SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'],
+          },
+          {
+            value: MeterDataStatus.WAITING_MANAGER,
+            label:
+              translation[
+                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+              ],
+          },
         ];
       });
   }
@@ -257,34 +278,37 @@ export class SharingOperationView implements OnInit {
       const params: any = {
         sharingOperationsId: this.id,
       };
-      this.metersService.getMetersList(params).subscribe(
-        {
-          next:(response)=>
-          {
-            if (response) {
-              this.metersCharts = response.data as PartialMeterDTO[];
-              this.selectedMeterCharts = this.metersCharts.map((_) => false);
-            } else {
-              console.error('Error fetching meters partial list');
-            }
-          },
-          error: (_error) => {
+      this.metersService.getMetersList(params).subscribe({
+        next: (response) => {
+          if (response) {
+            this.metersCharts = response.data as PartialMeterDTO[];
+            this.selectedMeterCharts = this.metersCharts.map((_) => false);
+          } else {
             console.error('Error fetching meters partial list');
-          },
-        }
-      );
+          }
+        },
+        error: (_error) => {
+          console.error('Error fetching meters partial list');
+        },
+      });
     } catch (e) {
       console.error('Error fetching meters partial list ' + e);
     }
   }
 
-  loadMeters(changeIsLoaded: boolean = true, filter?: any, page?: number) {
+  loadMeters(filter?: any, page?: number) {
     try {
       const params: any = {
         sharingOperationsId: this.id,
       };
       // Check for address
-      if (!(this.addressFilter.streetName == '' && this.addressFilter.postcode == '' && this.addressFilter.cityName == '')) {
+      if (
+        !(
+          this.addressFilter.streetName == '' &&
+          this.addressFilter.postcode == '' &&
+          this.addressFilter.cityName == ''
+        )
+      ) {
         // Il y a un filtre d'adresse
         if (this.addressFilter.streetName != '') {
           params['streetname'] = this.addressFilter.streetName;
@@ -313,23 +337,20 @@ export class SharingOperationView implements OnInit {
           }
         }
       }
-      this.metersService.getMetersList({page: page, limit: 10, ...params}).subscribe(
-        {
-          next:(response)=>
-          {
-            if (response) {
-              this.metersPartialList = response.data as PartialMeterDTO[];
-              this.paginationMetersInfo = response.pagination;
-              this.updatePaginationTranslation()
-            } else {
-              console.error('Error fetching meters partial list');
-            }
-          },
-          error:(_error) => {
+      this.metersService.getMetersList({ page: page, limit: 10, ...params }).subscribe({
+        next: (response) => {
+          if (response) {
+            this.metersPartialList = response.data as PartialMeterDTO[];
+            this.paginationMetersInfo = response.pagination;
+            this.updatePaginationTranslation();
+          } else {
             console.error('Error fetching meters partial list');
-          },
-        }
-      );
+          }
+        },
+        error: (_error) => {
+          console.error('Error fetching meters partial list');
+        },
+      });
     } catch (e) {
       console.error('Error fetching meters partial list ' + e);
     }
@@ -340,7 +361,7 @@ export class SharingOperationView implements OnInit {
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
     }
-    this.loadMeters(true, $event.filters, page);
+    this.loadMeters($event.filters, page);
   }
 
   clear(table: any) {
@@ -370,11 +391,14 @@ export class SharingOperationView implements OnInit {
         id: this.id,
       },
     });
-    if(this.ref) {
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
-          this.loadMeters(true);
+          this.snackbar.openSnackBar(
+            this.translate.instant('SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL'),
+            VALIDATION_TYPE,
+          );
+          this.loadMeters();
         }
       });
     }
@@ -390,26 +414,29 @@ export class SharingOperationView implements OnInit {
         id: this.id,
       },
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
+          this.snackbar.openSnackBar(
+            this.translate.instant('SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.loadOperationSharing();
         }
       });
     }
-
   }
 
   revokeWaitingKey() {
-    this.sharingOperationService.patchKeyStatus({
-      id_key: this.sharingOperation!.key_waiting_approval.key.id,
-      id_sharing: this.id,
-      date: new Date(),
-      status: SharingKeyStatus.REJECTED}).subscribe(
-      {
-        next:(response)=>
-        {
+    this.sharingOperationService
+      .patchKeyStatus({
+        id_key: this.sharingOperation!.key_waiting_approval.key.id,
+        id_sharing: this.id,
+        date: new Date(),
+        status: SharingKeyStatus.REJECTED,
+      })
+      .subscribe({
+        next: (response) => {
           if (response) {
             this.loadOperationSharing();
 
@@ -418,25 +445,24 @@ export class SharingOperationView implements OnInit {
             this.errorHandler.handleError();
           }
         },
-        error:(error) => {
+        error: (error) => {
           this.errorHandler.handleError(error.data ?? null);
         },
-      }
-    );
+      });
   }
 
   approveWaitingKey() {
-    this.sharingOperationService.patchKeyStatus({
-      id_key: this.sharingOperation!.key_waiting_approval.key.id,
-      id_sharing: this.id,
-      date: this.dateStartApproved,
-      status: SharingKeyStatus.APPROVED
-    }).subscribe(
-      {
-        next:(response)=>
-        {
+    this.sharingOperationService
+      .patchKeyStatus({
+        id_key: this.sharingOperation!.key_waiting_approval.key.id,
+        id_sharing: this.id,
+        date: this.dateStartApproved,
+        status: SharingKeyStatus.APPROVED,
+      })
+      .subscribe({
+        next: (response) => {
           if (response) {
-            if(this.ref){
+            if (this.ref) {
               this.ref.close(true);
             }
             this.loadOperationSharing();
@@ -444,11 +470,10 @@ export class SharingOperationView implements OnInit {
             this.errorHandler.handleError(response);
           }
         },
-        error:(error) => {
+        error: (error) => {
           this.errorHandler.handleError(error);
         },
-      }
-    );
+      });
   }
 
   openDateApprovedKey(event: Event) {
@@ -467,11 +492,17 @@ export class SharingOperationView implements OnInit {
   openMeterChangeStatusPopup(event: Event, meter: PartialMeterDTO, action: number) {
     event.stopPropagation();
     if (action == 1) {
-      this.textChangeStatusMeter = this.translate.instant("SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL");
+      this.textChangeStatusMeter = this.translate.instant(
+        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
+      );
     } else if (action == 2) {
-      this.textChangeStatusMeter = this.translate.instant("SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL");
+      this.textChangeStatusMeter = this.translate.instant(
+        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
+      );
     } else if (action == 3) {
-      this.textChangeStatusMeter = this.translate.instant("SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL");
+      this.textChangeStatusMeter = this.translate.instant(
+        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
+      );
     }
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -493,70 +524,70 @@ export class SharingOperationView implements OnInit {
 
   approveMeter(meter: PartialMeterDTO) {
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter, id_meter: meter.EAN, id_sharing: this.sharingOperation!.id, status: MeterDataStatus.ACTIVE
-    }
+      date: this.dateStartMeter,
+      id_meter: meter.EAN,
+      id_sharing: this.sharingOperation!.id,
+      status: MeterDataStatus.ACTIVE,
+    };
 
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.loadMeters(true);
-          } else {
-            this.errorHandler.handleError(response);
-          }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error);
-        },
-      }
-    );
+    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadMeters();
+        } else {
+          this.errorHandler.handleError(response);
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error);
+      },
+    });
 
     this.dateStartMeter = null;
   }
 
   removeMeter(meter: PartialMeterDTO) {
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter, id_meter: meter.EAN, id_sharing: this.sharingOperation!.id, status: MeterDataStatus.INACTIVE
-    }
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.loadMeters(true);
-          } else {
-            this.errorHandler.handleError();
-          }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error.data?? null);
-        },
-      }
-    );
+      date: this.dateStartMeter,
+      id_meter: meter.EAN,
+      id_sharing: this.sharingOperation!.id,
+      status: MeterDataStatus.INACTIVE,
+    };
+    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadMeters();
+        } else {
+          this.errorHandler.handleError();
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error.data ?? null);
+      },
+    });
 
     this.dateStartMeter = null;
   }
 
   putMeterToWaiting(meter: PartialMeterDTO) {
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter, id_meter: meter.EAN, id_sharing: this.sharingOperation!.id, status: MeterDataStatus.WAITING_GRD
-    }
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.loadMeters(true);
-          } else {
-            this.errorHandler.handleError(response);
-          }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error);
-        },
-      }
-    );
+      date: this.dateStartMeter,
+      id_meter: meter.EAN,
+      id_sharing: this.sharingOperation!.id,
+      status: MeterDataStatus.WAITING_GRD,
+    };
+    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadMeters();
+        } else {
+          this.errorHandler.handleError(response);
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error);
+      },
+    });
 
     this.dateStartMeter = null;
   }
@@ -574,8 +605,10 @@ export class SharingOperationView implements OnInit {
       return;
     }
     this.sharingOperationService
-      .getSharingOperationConsumptions(this.id, {date_start: this.formChart.value.dateDeb,
-        date_end: this.formChart.value.dateFin})
+      .getSharingOperationConsumptions(this.id, {
+        date_start: this.formChart.value.dateDeb,
+        date_end: this.formChart.value.dateFin,
+      })
       .subscribe((response) => {
         if (response) {
           const tmpData = response.data as SharingOpConsumptionDTO;
@@ -584,7 +617,9 @@ export class SharingOperationView implements OnInit {
             datasets: [
               {
                 type: 'bar',
-                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.CONSUMPTION_SHARED_LABEL'),
+                label: this.translate.instant(
+                  'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_SHARED_LABEL',
+                ),
                 stack: 'consumption',
                 data: tmpData.shared,
               },
@@ -602,7 +637,9 @@ export class SharingOperationView implements OnInit {
               },
               {
                 type: 'bar',
-                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.INJECTION_SHARED_LABEL'),
+                label: this.translate.instant(
+                  'SHARING_OPERATION.VIEW.CHART.INJECTION_SHARED_LABEL',
+                ),
                 stack: 'inj',
                 data: tmpData.inj_shared,
               },
@@ -616,10 +653,10 @@ export class SharingOperationView implements OnInit {
   downloadTotalConsumption() {
     this.sharingOperationService
       .downloadSharingOperationConsumptions(this.sharingOperation!.id, {
-        date_start:this.formChart.value.dateDeb,
-        date_end: this.formChart.value.dateFin
+        date_start: this.formChart.value.dateDeb,
+        date_end: this.formChart.value.dateFin,
       })
-      .subscribe((response) => {
+      .subscribe((_response) => {
         // if (response) {
         //   const blob = new Blob([response], { type: 'xlsx' });
         //   const url = window.URL.createObjectURL(blob);
@@ -676,22 +713,26 @@ export class SharingOperationView implements OnInit {
     formData.append('idSharing', this.sharingOperation!.id.toString());
     const addConsumption: AddConsumptionDataDTO = {
       id_sharing_operation: this.sharingOperation!.id,
-
-    }
-    this.sharingOperationService.addConsumptionDataToSharing(addConsumption).subscribe( // TODO: To fix
+    };
+    this.sharingOperationService.addConsumptionDataToSharing(addConsumption).subscribe(
+      // TODO: To fix
       {
-        next:(response)=>
-        {
+        next: (response) => {
           if (response) {
-            this.snackbar.openSnackBar(this.translate.instant('SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL'), VALIDATION_TYPE);
+            this.snackbar.openSnackBar(
+              this.translate.instant(
+                'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
+              ),
+              VALIDATION_TYPE,
+            );
           } else {
             this.errorHandler.handleError(response);
           }
         },
-        error:(error) => {
+        error: (error) => {
           this.errorHandler.handleError(error);
         },
-      }
+      },
     );
   }
 

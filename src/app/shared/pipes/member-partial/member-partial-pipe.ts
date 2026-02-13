@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {MembersPartialDTO} from '../../dtos/member.dtos';
+import { MembersPartialDTO } from '../../dtos/member.dtos';
 
 @Pipe({
   name: 'memberPartial',

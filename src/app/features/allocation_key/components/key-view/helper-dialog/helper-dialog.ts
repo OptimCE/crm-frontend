@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Component, inject, OnInit} from '@angular/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-helper-dialog',
@@ -8,18 +8,16 @@ import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
   templateUrl: './helper-dialog.html',
   styleUrl: './helper-dialog.css',
 })
-export class HelperDialog implements OnInit{
+export class HelperDialog implements OnInit {
+  private config = inject(DynamicDialogConfig);
+  private ref = inject(DynamicDialogRef);
   displayedText!: string;
-  constructor(private config: DynamicDialogConfig,
-              private ref: DynamicDialogRef) {
-
-  }
 
   ngOnInit() {
     const text = this.config.data.displayText;
-    if(text) {
+    if (text) {
       this.displayedText = text;
-    }else{
+    } else {
       this.ref.close();
     }
   }

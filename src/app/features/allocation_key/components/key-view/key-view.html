@@ -1,42 +1,53 @@
-@if(isLoaded){
+@if (isLoaded) {
   <div>
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap -mx-2 pb-3 items-center">
-        <div class="w-8/12 ">
+        <div class="w-8/12">
           <div class="flex flex-wrap -mx-2">
             <h2 class="text-xl font-medium">{{ key!.name }}</h2>
           </div>
         </div>
         <div class="w-4/12 text-center">
           <p-button icon="pi pi-pencil" [rounded]="true" [outlined]="true" (click)="updateKey()" />
-          <p-button icon="pi pi-trash" [rounded]="true" rounded="true" [outlined]="true" (click)="deleteKey()" severity="danger" />
+          <p-button
+            icon="pi pi-trash"
+            [rounded]="true"
+            rounded="true"
+            [outlined]="true"
+            (click)="deleteKey()"
+            severity="danger"
+          />
         </div>
       </div>
       <p-card class="mb-4">
-        <ng-template #pTemplate content>
+        <ng-template #content>
           <p class="text-base">
-            @if(key!.description.length > 200 && !displayAllDescription){
+            @if (key!.description.length > 200 && !displayAllDescription) {
               <span>
                 {{ key!.description | slice: 0 : 200 }}
-                {{ key!.description.length > 200 ? "..." : "" }}
+                {{ key!.description.length > 200 ? '...' : '' }}
               </span>
             }
-            @if(key!.description.length <= 200 ||displayAllDescription){
+            @if (key!.description.length <= 200 || displayAllDescription) {
               <span>
                 {{ this.key!.description }}
               </span>
             }
-            @if(key!.description.length > 200){
-              <span class="toggle-description" (click)="displayAllDescription = !displayAllDescription">
-                @if(displayAllDescription){
-                  <i class="pi pi-chevron-up"></i>
+            @if (key!.description.length > 200) {
+              <button
+                type="button"
+                class="toggle-description-btn"
+                (click)="displayAllDescription = !displayAllDescription"
+                [attr.aria-expanded]="displayAllDescription"
+                aria-label="Toggle description"
+              >
+                @if (displayAllDescription) {
+                  <i class="pi pi-chevron-up" aria-hidden="true"></i>
+                } @else {
+                  <i class="pi pi-chevron-down" aria-hidden="true"></i>
                 }
-                @else{
-                  <i class="pi pi-chevron-down"></i>
-                }
-              </span>
+              </button>
             }
-
           </p>
         </ng-template>
       </p-card>
@@ -54,7 +65,13 @@
         </div>
       </div>
       <div class="flex flex-wrap -mx-2 text-center mt-4">
-        <p-button icon="pi pi-download" class="p-button-primary" (click)="exportExcel()" label="{{ 'KEY.SIMULATION.EXPORT_EXCEL_BUTTON_LABEL' | translate }}"> </p-button>
+        <p-button
+          icon="pi pi-download"
+          class="p-button-primary"
+          (click)="exportExcel()"
+          label="{{ 'KEY.SIMULATION.EXPORT_EXCEL_BUTTON_LABEL' | translate }}"
+        >
+        </p-button>
       </div>
     </div>
   </div>

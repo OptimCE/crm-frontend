@@ -8,9 +8,8 @@ describe('KeyCreationStepByStep', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KeyCreationStepByStep]
-    })
-    .compileComponents();
+      imports: [KeyCreationStepByStep],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(KeyCreationStepByStep);
     component = fixture.componentInstance;

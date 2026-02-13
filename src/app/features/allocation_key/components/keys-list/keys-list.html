@@ -1,11 +1,17 @@
 <div class="flex flex-wrap -mx-2 mb-3">
   <div class="w-6/12 flex items-center">
     <i class="pi pi-key text-primary mr-1 !text-2xl"></i>
-    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ "KEY.LIST.TITLE" | translate }}</h2>
+    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ 'KEY.LIST.TITLE' | translate }}</h2>
   </div>
   <div class="w-6/12 text-end">
     <p-toast />
-    <p-split-button label="{{ 'KEY.LIST.ADD_BUTTON_LABEL' | translate }}" icon="pi pi-plus" (onClick)="addKey()" [model]="optionsSplitButton"> </p-split-button>
+    <p-split-button
+      label="{{ 'KEY.LIST.ADD_BUTTON_LABEL' | translate }}"
+      icon="pi pi-plus"
+      (onClick)="addKey()"
+      [model]="optionsSplitButton"
+    >
+    </p-split-button>
   </div>
 </div>
 
@@ -19,7 +25,8 @@
   [first]="(paginated.page - 1) * paginated.limit"
   [currentPageReportTemplate]="currentPageReportTemplate"
   (onPage)="pageChange($event)"
-  [lazy]="lazy">
+  [lazy]="lazy"
+>
   <ng-template #caption>
     <div class="flex justify-between">
       <p-button
@@ -33,7 +40,7 @@
   <ng-template #header>
     <tr>
       <th [pSortableColumn]="'nom'" class="text-base px-3">
-        {{ "KEY.LIST.NAME_LABEL" | translate }}
+        {{ 'KEY.LIST.NAME_LABEL' | translate }}
         <p-sortIcon [field]="'nom'"></p-sortIcon>
         <br />
         <p-columnFilter
@@ -46,7 +53,7 @@
         ></p-columnFilter>
       </th>
       <th [pSortableColumn]="'description'" class="text-base px-3">
-        {{ "KEY.LIST.DESCRIPTION_LABEL" | translate }}
+        {{ 'KEY.LIST.DESCRIPTION_LABEL' | translate }}
         <p-sortIcon [field]="'description'"></p-sortIcon>
         <br />
         <p-columnFilter
@@ -68,7 +75,7 @@
   </ng-template>
   <ng-template #emptymessage>
     <tr>
-      <td colspan="2">{{'KEY.LIST.EMPTY' | translate}}</td>
+      <td colspan="2">{{ 'KEY.LIST.EMPTY' | translate }}</td>
     </tr>
   </ng-template>
 </p-table>

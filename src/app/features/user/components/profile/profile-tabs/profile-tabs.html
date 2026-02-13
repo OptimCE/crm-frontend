@@ -1,0 +1,30 @@
+<p-tabs [value]="0">
+  <p-tablist>
+    <p-tab [value]="0">{{ 'PROFILE.TABS.HEADERS.METERS' | translate }}</p-tab>
+    <p-tab [value]="1">{{ 'PROFILE.TABS.HEADERS.BANKING_INFORMATIONS' | translate }}</p-tab>
+    <p-tab [value]="2">{{ 'PROFILE.TABS.HEADERS.DOCUMENTS' | translate }}</p-tab>
+    <p-tab [value]="3">{{ 'PROFILE.TABS.HEADERS.REPRESENTATIONS' | translate }}</p-tab>
+  </p-tablist>
+
+  <p-tabpanels>
+    <!-- METERS -->
+    <p-tabpanel [value]="0">
+      <app-meters-user></app-meters-user>
+    </p-tabpanel>
+
+    <!-- BANK -->
+    <p-tabpanel [value]="1">
+      <app-banking-info-user [user]="user"></app-banking-info-user>
+    </p-tabpanel>
+
+    <!-- DOCUMENTS -->
+    <p-tabpanel [value]="2">
+      <app-documents-user></app-documents-user>
+    </p-tabpanel>
+
+    <!-- REPRESENTATIONS -->
+    <p-tabpanel [value]="3">
+      <app-representations-user></app-representations-user>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

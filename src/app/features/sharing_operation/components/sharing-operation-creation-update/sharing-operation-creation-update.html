@@ -2,7 +2,9 @@
   <form [formGroup]="formAddSharingOp" (submit)="onSubmitForm()">
     <div class="flex flex-wrap gap-2">
       <div class="flex flex-col w-full items-center">
-        <label for="name" class="text-normal">{{ "SHARING_OPERATION.ADD.NAME_LABEL" | translate }} *</label>
+        <label for="name" class="text-normal"
+          >{{ 'SHARING_OPERATION.ADD.NAME_LABEL' | translate }} *</label
+        >
         <input id="name" pInputText type="text" formControlName="name" />
         <app-error-handler controlName="name"></app-error-handler>
       </div>
@@ -10,12 +12,19 @@
     <div class="flex mt-2">
       <div class="flex flex-wrap w-full">
         <div class="flex flex-col w-full">
-          <span class="text-normal text-center">{{ "SHARING_OPERATION.ADD.TYPE_LABEL" | translate }} *</span>
-          <div class="flex flex-wrap gap-2 flex-col  w-full">
-            @for(category of categories; track $index){
+          <span class="text-normal text-center"
+            >{{ 'SHARING_OPERATION.ADD.TYPE_LABEL' | translate }} *</span
+          >
+          <div class="flex flex-wrap gap-2 flex-col w-full">
+            @for (category of categories; track $index) {
               <div class="flex flex-col items-center">
                 <label [for]="category.key" class="text-sm">{{ category.value }}</label>
-                <p-radioButton [inputId]="category.key" [value]="category.key" formControlName="type" class="flex text-sm" />
+                <p-radioButton
+                  [inputId]="category.key"
+                  [value]="category.key"
+                  formControlName="type"
+                  class="flex text-sm"
+                />
               </div>
             }
           </div>
@@ -24,7 +33,11 @@
       </div>
     </div>
     <div class="flex flex-wrap justify-center mt-2">
-      <p-button type="submit" label="{{ 'SHARING_OPERATION.ADD.ADD_BUTTON_LABEL' | translate }}" class="text-center" />
+      <p-button
+        type="submit"
+        label="{{ 'SHARING_OPERATION.ADD.ADD_BUTTON_LABEL' | translate }}"
+        class="text-center"
+      />
     </div>
   </form>
 </div>

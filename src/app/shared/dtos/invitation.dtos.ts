@@ -1,9 +1,8 @@
-import {PaginationQuery, Sort} from './query.dtos';
-import {CommunityDTO} from './community.dtos';
-import {CreateMemberDTO} from './member.dtos';
+import { PaginationQuery, Sort } from './query.dtos';
+import { CommunityDTO } from './community.dtos';
+import { CreateMemberDTO } from './member.dtos';
 
 export interface UserMemberInvitationQuery extends PaginationQuery {
-
   name?: string;
   to_be_encoded?: boolean;
   sort_name?: Sort;
@@ -47,8 +46,6 @@ export interface UserManagerInvitationDTO {
 export interface InviteUser {
   user_email: string;
 }
-
-
 
 /**
  * DTO for accepting an invitation.

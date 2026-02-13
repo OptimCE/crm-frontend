@@ -1,41 +1,59 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environments} from '../../../environments/environments';
+import {inject, Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environments } from '../../../environments/environments';
 import {
   CompanyDTO,
   CreateMemberDTO,
   IndividualDTO,
-  MemberLinkDTO, MemberLinkQueryDTO,
+  MemberLinkDTO,
+  MemberLinkQueryDTO,
   MemberPartialQuery,
-  MembersPartialDTO, PatchMemberInviteUserDTO, PatchMemberStatusDTO, UpdateMemberDTO
+  MembersPartialDTO,
+  PatchMemberInviteUserDTO,
+  PatchMemberStatusDTO,
+  UpdateMemberDTO,
 } from '../dtos/member.dtos';
-import {ApiResponse, ApiResponsePaginated} from '../../core/dtos/api.response';
-import {Observable} from 'rxjs';
+import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemberService {
+  private http = inject(HttpClient)
   private apiAddress: string;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.apiAddress = environments.apiUrl + '/members';
   }
 
-  getMembersList(query: MemberPartialQuery): Observable<ApiResponsePaginated<MembersPartialDTO[] | string>> {
-    return this.http.get<ApiResponsePaginated<MembersPartialDTO[] | string>>(this.apiAddress + '/', {
-      params: {...query},
-    });
+  getMembersList(
+    query: MemberPartialQuery,
+  ): Observable<ApiResponsePaginated<MembersPartialDTO[] | string>> {
+    return this.http.get<ApiResponsePaginated<MembersPartialDTO[] | string>>(
+      this.apiAddress + '/',
+      {
+        params: { ...query },
+      },
+    );
   }
 
   getMember(id_member: number): Observable<ApiResponse<IndividualDTO | CompanyDTO | string>> {
-    return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(this.apiAddress + '/' + id_member);
+    return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
+      this.apiAddress + '/' + id_member,
+    );
   }
 
-  getMemberLink(id_member: number, query: MemberLinkQueryDTO): Observable<ApiResponse<MemberLinkDTO | string>> {
-    return this.http.get<ApiResponse<MemberLinkDTO | string>>(this.apiAddress + '/' + id_member + '/link', {
-      params: {...query},
-    });
+  getMemberLink(
+    id_member: number,
+    query: MemberLinkQueryDTO,
+  ): Observable<ApiResponse<MemberLinkDTO | string>> {
+    return this.http.get<ApiResponse<MemberLinkDTO | string>>(
+      this.apiAddress + '/' + id_member + '/link',
+      {
+        params: { ...query },
+      },
+    );
   }
 
   addMember(create_member: CreateMemberDTO): Observable<ApiResponse<string>> {
@@ -50,8 +68,13 @@ export class MemberService {
     return this.http.patch<ApiResponse<string>>(this.apiAddress + '/status', patch_member_status);
   }
 
-  patchMemberLink(patch_member_invite_user: PatchMemberInviteUserDTO): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(this.apiAddress + '/invite', patch_member_invite_user);
+  patchMemberLink(
+    patch_member_invite_user: PatchMemberInviteUserDTO,
+  ): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(
+      this.apiAddress + '/invite',
+      patch_member_invite_user,
+    );
   }
 
   deleteMember(id_member: number): Observable<ApiResponse<string>> {

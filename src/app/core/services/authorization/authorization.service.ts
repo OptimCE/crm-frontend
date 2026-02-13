@@ -16,7 +16,6 @@ export interface TokenOrg {
 }
 const ACTIVE_COMMUNITY_STORAGE_KEY = 'activeCommunityId';
 
-
 function highestRole(roles: Role[]): Role | null {
   if (!roles?.length) return null;
   return [...roles].sort((a, b) => (ROLE_HIERARCHY[b] ?? 0) - (ROLE_HIERARCHY[a] ?? 0))[0] ?? null;
@@ -43,7 +42,7 @@ export class UserContextService {
   readonly activeCommunity = computed(() => {
     const id = this.activeCommunityId();
     const all = this.communitiesById();
-    return id ? all[id] ?? null : null;
+    return id ? (all[id] ?? null) : null;
   });
 
   readonly activeCommunityRole = computed(() => {
@@ -52,22 +51,20 @@ export class UserContextService {
   });
 
 
-  constructor() {
-  }
-
   refreshUserContext() {
     const token = this.keycloak.tokenParsed as any;
 
     // New source: orgs claim
-    const rawOrgs: Array<{ orgId: string; orgPath: string; roles: unknown[] }> = token?.orgs ?? [];
-    console.log(rawOrgs);
+    const rawOrgs: { orgId: string; orgPath: string; roles: unknown[] }[] = token?.orgs ?? [];
     const parsed: Record<string, CommunityContext> = {};
 
     for (const o of rawOrgs) {
       if (!o?.orgId || !o?.orgPath) continue;
 
       // Keep only roles that match your Role enum
-      const roles = (o.roles ?? []).filter((r): r is Role => Object.values(Role).includes(r as Role));
+      const roles = (o.roles ?? []).filter((r): r is Role =>
+        Object.values(Role).includes(r as Role),
+      );
 
       parsed[o.orgId] = {
         orgId: o.orgId,
@@ -83,7 +80,7 @@ export class UserContextService {
 
   switchCommunity(orgId: string) {
     const all = this.communitiesById();
-    if (all[orgId]){
+    if (all[orgId]) {
       this.activeCommunityId.set(orgId);
       this.storeCommunityId(orgId);
     }
@@ -125,17 +122,17 @@ export class UserContextService {
     }
   }
 
-  compareWithActiveRole(role: Role){
+  compareWithActiveRole(role: Role) {
     const current = this.activeCommunityRole();
-    if(!current) return false;
+    if (!current) return false;
     const currentHierarchy = ROLE_HIERARCHY[current];
     const targetHierarchy = ROLE_HIERARCHY[role];
     return currentHierarchy >= targetHierarchy;
   }
 
-  isActiveRole(role: Role){
+  isActiveRole(role: Role) {
     const current = this.activeCommunityRole();
-    if(!current) return false;
+    if (!current) return false;
     const currentHierarchy = ROLE_HIERARCHY[current];
     const targetHierarchy = ROLE_HIERARCHY[role];
     return currentHierarchy === targetHierarchy;

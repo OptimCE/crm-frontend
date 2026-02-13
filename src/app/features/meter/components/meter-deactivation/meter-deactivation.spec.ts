@@ -8,9 +8,8 @@ describe('MeterDeactivation', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MeterDeactivation]
-    })
-    .compileComponents();
+      imports: [MeterDeactivation],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MeterDeactivation);
     component = fixture.componentInstance;

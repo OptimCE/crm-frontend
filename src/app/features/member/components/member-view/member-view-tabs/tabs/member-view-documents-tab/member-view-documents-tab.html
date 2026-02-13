@@ -25,11 +25,11 @@
     <tr>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.DOCUMENTS.NAME_LABEL" | translate }}<br />
+          {{ 'MEMBER.VIEW.DOCUMENTS.NAME_LABEL' | translate }}<br />
           <p-columnFilter
             type="text"
             field="fileName"
-            display="{{'MEMBER.VIEW.DOCUMENTS.NAME_LABEL' |translate}}"
+            display="{{ 'MEMBER.VIEW.DOCUMENTS.NAME_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -38,11 +38,11 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.DOCUMENTS.TYPE_LABEL" | translate }}<br />
+          {{ 'MEMBER.VIEW.DOCUMENTS.TYPE_LABEL' | translate }}<br />
           <p-columnFilter
             type="text"
             field="fileType"
-            display="{{'MEMBER.VIEW.DOCUMENTS.TYPE_LABEL' | translate}}"
+            display="{{ 'MEMBER.VIEW.DOCUMENTS.TYPE_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -51,11 +51,11 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.DOCUMENTS.SIZE_LABEL" | translate }}<br />
+          {{ 'MEMBER.VIEW.DOCUMENTS.SIZE_LABEL' | translate }}<br />
           <p-columnFilter
             type="text"
             field="fileSize"
-            display="{{'MEMBER.VIEW.DOCUMENTS.SIZE_LABEL' | translate}}"
+            display="{{ 'MEMBER.VIEW.DOCUMENTS.SIZE_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -64,11 +64,11 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.DOCUMENTS.UPLOAD_DATE_LABEL" | translate }}<br />
+          {{ 'MEMBER.VIEW.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}<br />
           <p-columnFilter
             type="text"
             field="uploadDate"
-            display="{{'MEMBER.VIEW.DOCUMENTS.UPLOAD_DATE_LABEL' |translate}}"
+            display="{{ 'MEMBER.VIEW.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -85,14 +85,27 @@
       <td class="text-sm px-3 py-2">{{ document.fileSize }}</td>
       <td class="text-sm px-3 py-2">{{ document.uploadDate }}</td>
       <td>
-        <p-button icon="pi pi-download" [rounded]="true" [text]="true" (click)="onDownloadDocument(document)"></p-button>
-        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [text]="true" (click)="deleteDocument(document.id)"></p-button>
+        <p-button
+          icon="pi pi-download"
+          [rounded]="true"
+          [text]="true"
+          (click)="onDownloadDocument(document)"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          severity="danger"
+          [rounded]="true"
+          [text]="true"
+          (click)="deleteDocument(document.id)"
+        ></p-button>
       </td>
     </tr>
   </ng-template>
   <ng-template #emptymessage>
     <tr>
-      <td colspan="6"  class="text-base">{{ "MEMBER.VIEW.DOCUMENTS.NO_DOCUMENT_FOUND_LABEL" | translate }}</td>
+      <td colspan="6" class="text-base">
+        {{ 'MEMBER.VIEW.DOCUMENTS.NO_DOCUMENT_FOUND_LABEL' | translate }}
+      </td>
     </tr>
   </ng-template>
 </p-table>

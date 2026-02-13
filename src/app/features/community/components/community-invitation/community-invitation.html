@@ -1,6 +1,10 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col">
-  <h4>{{ "COMMUNITY_INVITATION.INPUT_EMAIL_ADDRESS_LABEL" | translate }}</h4>
-  <input pInputText placeholder="{{ 'COMMUNITY_INVITATION.EMAIL_PLACEHOLDER' | translate }}" formControlName="email" />
+  <h4>{{ 'COMMUNITY_INVITATION.INPUT_EMAIL_ADDRESS_LABEL' | translate }}</h4>
+  <input
+    pInputText
+    placeholder="{{ 'COMMUNITY_INVITATION.EMAIL_PLACEHOLDER' | translate }}"
+    formControlName="email"
+  />
   <app-error-handler controlName="email"></app-error-handler>
   <p-button label="{{ 'COMMON.ACTIONS.VALIDATE' | translate }}" type="submit"></p-button>
 </form>

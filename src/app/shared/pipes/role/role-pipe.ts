@@ -1,6 +1,6 @@
-import {inject, Pipe, PipeTransform} from '@angular/core';
-import {Role} from '../../../core/dtos/role';
-import {TranslateService} from '@ngx-translate/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
+import { Role } from '../../../core/dtos/role';
+import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({
   name: 'role',
@@ -16,8 +16,7 @@ export class RolePipe implements PipeTransform {
       case Role.MEMBER:
         return this.translateService.instant('COMMON.ROLE.MEMBER');
       default:
-        return "/"
+        return '/';
     }
   }
-
 }

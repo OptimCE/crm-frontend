@@ -9,11 +9,11 @@
   <ng-template pTemplate="header">
     <tr>
       <th [pSortableColumn]="'email'" class="text-base px-3">
-        {{ "COMMUNITY_PENDING_INVITATION.MANAGERS.HEADERS.EMAIL" | translate }}
+        {{ 'COMMUNITY_PENDING_INVITATION.MANAGERS.HEADERS.EMAIL' | translate }}
         <p-sortIcon [field]="'email'"></p-sortIcon>
       </th>
       <th class="text-base px-3">
-        {{ "COMMUNITY_PENDING_INVITATION.MANAGERS.HEADERS.ACTIONS" | translate }}
+        {{ 'COMMUNITY_PENDING_INVITATION.MANAGERS.HEADERS.ACTIONS' | translate }}
       </th>
     </tr>
   </ng-template>
@@ -21,13 +21,20 @@
     <tr>
       <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
       <td class="text-sm px-3 py-2">
-        <p-button type="button" icon="pi pi-cross" label="{{ 'COMMUNITY_PENDING_INVITATION.MANAGERS.CANCEL_BUTTON_LABEL' | translate }}" (click)="cancelInvitation(invitation)"></p-button>
+        <p-button
+          type="button"
+          icon="pi pi-cross"
+          label="{{ 'COMMUNITY_PENDING_INVITATION.MANAGERS.CANCEL_BUTTON_LABEL' | translate }}"
+          (click)="cancelInvitation(invitation)"
+        ></p-button>
       </td>
     </tr>
   </ng-template>
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
-      <td colspan="4" class="text-center text-base">{{ "COMMUNITY_PENDING_INVITATION.MANAGERS.NO_INVITATION_FOUND" | translate }}</td>
+      <td colspan="4" class="text-center text-base">
+        {{ 'COMMUNITY_PENDING_INVITATION.MANAGERS.NO_INVITATION_FOUND' | translate }}
+      </td>
     </tr>
   </ng-template>
 </p-table>

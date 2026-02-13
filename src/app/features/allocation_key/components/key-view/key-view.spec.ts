@@ -8,9 +8,8 @@ describe('KeyView', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KeyView]
-    })
-    .compileComponents();
+      imports: [KeyView],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(KeyView);
     component = fixture.componentInstance;

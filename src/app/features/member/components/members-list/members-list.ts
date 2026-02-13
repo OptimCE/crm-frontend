@@ -1,26 +1,26 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
-import {Toast} from 'primeng/toast';
-import {ConfirmDialog} from 'primeng/confirmdialog';
-import {Button} from 'primeng/button';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.handler';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {TableModule} from 'primeng/table';
-import {TagModule} from 'primeng/tag';
-import {MemberPartialQuery, MembersPartialDTO} from '../../../../shared/dtos/member.dtos';
-import {MemberType, MemberStatus} from '../../../../shared/types/member.types';
-import {MemberService} from '../../../../shared/services/member.service';
-import {Router} from '@angular/router';
-import {SnackbarNotification} from '../../../../shared/services-ui/snackbar.notifcation.service';
-import {MemberInvite} from '../member-invite/member-invite';
-import {InvitationService} from '../../../../shared/services/invitation.service';
-import {MemberCreationUpdate} from '../member-creation-update/member-creation-update';
-import {MeterCreation} from '../../../meter/components/meter-creation/meter-creation';
-import {VALIDATION_TYPE} from '../../../../core/dtos/notification';
-import {MemberPendingInvite} from '../member-pending-invite/member-pending-invite';
-import {Select} from 'primeng/select';
-import {FormsModule} from "@angular/forms";
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import { Toast } from 'primeng/toast';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { Button } from 'primeng/button';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { MemberPartialQuery, MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
+import { MemberType, MemberStatus } from '../../../../shared/types/member.types';
+import { MemberService } from '../../../../shared/services/member.service';
+import { Router } from '@angular/router';
+import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
+import { MemberInvite } from '../member-invite/member-invite';
+import { InvitationService } from '../../../../shared/services/invitation.service';
+import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
+import { MeterCreation } from '../../../meter/components/meter-creation/meter-creation';
+import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { MemberPendingInvite } from '../member-pending-invite/member-pending-invite';
+import { Select } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-members-list',
@@ -32,13 +32,21 @@ import {FormsModule} from "@angular/forms";
     TableModule,
     TagModule,
     Select,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './members-list.html',
   styleUrl: './members-list.css',
   providers: [DialogService, ErrorMessageHandler, ConfirmationService, MessageService],
 })
 export class MembersList implements OnInit, OnDestroy {
+  private membersService = inject(MemberService);
+  private invitationService = inject(InvitationService);
+  private router = inject(Router);
+  private dialogService = inject(DialogService);
+  private snackbarNotification = inject(SnackbarNotification);
+  private errorHandler = inject(ErrorMessageHandler);
+  private translate = inject(TranslateService);
+  private confirmationService = inject(ConfirmationService);
   membersPartialList = signal<MembersPartialDTO[]>([]);
   ref?: DynamicDialogRef | null;
 
@@ -50,19 +58,9 @@ export class MembersList implements OnInit, OnDestroy {
     total: 0,
     total_pages: 1,
   };
-  filter = signal<MemberPartialQuery>({page: 1, limit: 10});
+  filter = signal<MemberPartialQuery>({ page: 1, limit: 10 });
   currentPageReportTemplate: string = '';
 
-  constructor(
-    private membersService: MemberService,
-    private invitationService: InvitationService,
-    private router: Router,
-    private dialogService: DialogService,
-    private snackbarNotification: SnackbarNotification,
-    private errorHandler: ErrorMessageHandler,
-    private translate: TranslateService,
-    private confirmationService: ConfirmationService,
-  ) {}
 
   ngOnInit(): void {
     this.updatePaginationTranslation();
@@ -80,26 +78,23 @@ export class MembersList implements OnInit, OnDestroy {
       });
   }
   loadMembers() {
-    this.membersService.getMembersList(this.filter()).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.membersPartialList.set(response.data as MembersPartialDTO[]);
-            this.paginationInfo = response.pagination;
+    this.membersService.getMembersList(this.filter()).subscribe({
+      next: (response) => {
+        if (response) {
+          this.membersPartialList.set(response.data as MembersPartialDTO[]);
+          this.paginationInfo = response.pagination;
 
-            this.updatePaginationTranslation();
-          } else {
-            this.errorHandler.handleError(response);
-            console.error('Error fetching meters partial list');
-          }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error);
+          this.updatePaginationTranslation();
+        } else {
+          this.errorHandler.handleError(response);
           console.error('Error fetching meters partial list');
-        },
-      }
-    );
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error);
+        console.error('Error fetching meters partial list');
+      },
+    });
   }
   onInviteMember() {
     this.ref = this.dialogService.open(MemberInvite, {
@@ -108,28 +103,24 @@ export class MembersList implements OnInit, OnDestroy {
       closeOnEscape: true,
       header: this.translate.instant('MEMBER.LIST.INVITE_MEMBER_HEADER'),
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((email) => {
         if (email) {
-          this.invitationService.inviteUserToBecomeMember({user_email:email}).subscribe(
-            {
-              next: (response) => {
-                if (response) {
-                  console.log('SUCCESS');
-                } else {
-                  console.error(response);
-                }
-              },
-              error: (error) => {
-                console.error(error);
-              },
-            }
-          )
-          ;
+          this.invitationService.inviteUserToBecomeMember({ user_email: email }).subscribe({
+            next: (response) => {
+              if (response) {
+                console.log('SUCCESS');
+              } else {
+                console.error(response);
+              }
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
         }
       });
     }
-
   }
   onAddMember(event: Event) {
     this.ref = this.dialogService.open(MemberCreationUpdate, {
@@ -138,7 +129,7 @@ export class MembersList implements OnInit, OnDestroy {
       closeOnEscape: true,
       header: this.translate.instant('MEMBER.LIST.ADD_MEMBER_HEADER'),
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((result) => {
         if (result > -1) {
           // Show "Do you want to add meter associated"
@@ -162,7 +153,6 @@ export class MembersList implements OnInit, OnDestroy {
         }
       });
     }
-
   }
 
   addMeter(member_id: number) {
@@ -175,68 +165,73 @@ export class MembersList implements OnInit, OnDestroy {
         holder_id: member_id,
       },
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbarNotification.openSnackBar(this.translate.instant('MEMBER.LIST.METER_MEMBER_ADDED_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
+          this.snackbarNotification.openSnackBar(
+            this.translate.instant('MEMBER.LIST.METER_MEMBER_ADDED_SUCCESSFULLY_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.loadMembers();
         }
       });
     }
-
   }
 
   addMemberSuccess() {
-    this.snackbarNotification.openSnackBar(this.translate.instant('MEMBER.LIST.MEMBER_ADDED_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
+    this.snackbarNotification.openSnackBar(
+      this.translate.instant('MEMBER.LIST.MEMBER_ADDED_SUCCESSFULLY_LABEL'),
+      VALIDATION_TYPE,
+    );
     this.loadMembers();
   }
 
   lazyLoadMembers($event: any) {
-    const current: any = {...this.filter()};
-    if($event.first !== undefined && $event.rows !== undefined){
-      if($event.rows){
-        current.page = ($event.first / $event.rows) + 1
-      }
-      else{
+    const current: any = { ...this.filter() };
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      if ($event.rows) {
+        current.page = $event.first / $event.rows + 1;
+      } else {
         current.page = 1;
       }
     }
 
-    if($event.sortField){
+    if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_type;
       delete current.sort_name;
       delete current.sort_status;
 
-      switch($event.sortField){
-        case 'type':{
+      switch ($event.sortField) {
+        case 'type': {
           current.sort_type = sortDirection;
           break;
         }
-        case 'name':{
+        case 'name': {
           current.sort_name = sortDirection;
           break;
         }
-        case 'status':{
+        case 'status': {
           current.sort_status = sortDirection;
           break;
         }
       }
     }
-    if($event.filters){
+    if ($event.filters) {
       Object.entries($event.filters).forEach(([field, meta]) => {
         if ((meta as any).value) {
           current[field] = (meta as any).value;
         } else {
           delete current[field];
-        }})
+        }
+      });
     }
     this.loadMembers();
   }
 
   pageChange($event: any) {
-    const current: any = {...this.filter()}
-    current.page= $event.first / $event.rows + 1;
+    const current: any = { ...this.filter() };
+    current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadMembers();
   }
@@ -259,7 +254,7 @@ export class MembersList implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.ref){
+    if (this.ref) {
       this.ref.destroy();
     }
   }

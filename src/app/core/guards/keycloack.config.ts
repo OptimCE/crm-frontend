@@ -1,8 +1,16 @@
-import { provideKeycloak, createInterceptorCondition, withAutoRefreshToken, AutoRefreshTokenService, UserActivityService, INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG, IncludeBearerTokenCondition } from 'keycloak-angular';
-import {environments} from '../../../environments/environments';
+import {
+  provideKeycloak,
+  createInterceptorCondition,
+  withAutoRefreshToken,
+  AutoRefreshTokenService,
+  UserActivityService,
+  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+  IncludeBearerTokenCondition,
+} from 'keycloak-angular';
+import { environments } from '../../../environments/environments';
 
 const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: environments.keycloak.urlPattern
+  urlPattern: environments.keycloak.urlPattern,
 });
 
 export const provideKeycloakAngular = () =>
@@ -15,20 +23,20 @@ export const provideKeycloakAngular = () =>
     initOptions: {
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
-      redirectUri: window.location.origin + '/'
+      redirectUri: window.location.origin + '/',
     },
     features: [
       withAutoRefreshToken({
         onInactivityTimeout: 'logout',
-        sessionTimeout: 60000
-      })
+        sessionTimeout: 60000,
+      }),
     ],
     providers: [
       AutoRefreshTokenService,
       UserActivityService,
       {
         provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-        useValue: [localhostCondition]
-      }
-    ]
+        useValue: [localhostCondition],
+      },
+    ],
   });

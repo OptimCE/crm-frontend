@@ -25,11 +25,11 @@
     <tr>
       <th>
         <div class="flex items-center">
-          {{ "MEMBER.VIEW.METERS.ADDRESS_LABEL" | translate }}
+          {{ 'MEMBER.VIEW.METERS.ADDRESS_LABEL' | translate }}
           <br />
           <p-columnFilter
             field="address"
-            display="{{'MEMBER.VIEW.METERS.ADDRESS_LABEL' | translate}}"
+            display="{{ 'MEMBER.VIEW.METERS.ADDRESS_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -38,16 +38,43 @@
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <div class="p-grid">
                 <div class="p-col">
-                  <label for="streetName" class="text-sm">{{ "MEMBER.VIEW.METERS.ADDRESS.STREET_NAME_LABEL" | translate }}</label>
-                  <input pInputText id="streetName" [(ngModel)]="addressFilter.streetName" placeholder="{{'MEMBER.VIEW.METERS.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate}}" />
+                  <label for="streetName" class="text-sm">{{
+                    'MEMBER.VIEW.METERS.ADDRESS.STREET_NAME_LABEL' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    id="streetName"
+                    [(ngModel)]="addressFilter.streetName"
+                    placeholder="{{
+                      'MEMBER.VIEW.METERS.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate
+                    }}"
+                  />
                 </div>
                 <div class="p-col">
-                  <label for="postcode" class="text-sm">{{ "MEMBER.VIEW.METERS.ADDRESS.POSTAL_CODE_LABEL" | translate }}</label>
-                  <input pInputText id="postcode" [(ngModel)]="addressFilter.postcode" placeholder="{{'MEMBER.VIEW.METERS.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate}}" />
+                  <label for="postcode" class="text-sm">{{
+                    'MEMBER.VIEW.METERS.ADDRESS.POSTAL_CODE_LABEL' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    id="postcode"
+                    [(ngModel)]="addressFilter.postcode"
+                    placeholder="{{
+                      'MEMBER.VIEW.METERS.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate
+                    }}"
+                  />
                 </div>
                 <div class="p-col">
-                  <label for="city" class="text-sm">{{ "MEMBER.VIEW.METERS.ADDRESS.CITY_LABEL" | translate }}</label>
-                  <input pInputText id="city" [(ngModel)]="addressFilter.cityName" placeholder="{{'MEMBER.VIEW.METERS.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate}}" />
+                  <label for="city" class="text-sm">{{
+                    'MEMBER.VIEW.METERS.ADDRESS.CITY_LABEL' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    id="city"
+                    [(ngModel)]="addressFilter.cityName"
+                    placeholder="{{
+                      'MEMBER.VIEW.METERS.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate
+                    }}"
+                  />
                 </div>
               </div>
             </ng-template>
@@ -56,11 +83,11 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.METERS.EAN_LABEL" | translate }} <br />
+          {{ 'MEMBER.VIEW.METERS.EAN_LABEL' | translate }} <br />
           <p-columnFilter
             type="text"
             field="EAN"
-            display="{{'MEMBER.VIEW.METERS.EAN_LABEL' | translate}}"
+            display="{{ 'MEMBER.VIEW.METERS.EAN_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -69,11 +96,11 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.METERS.METER_NUMBER_LABEL" | translate }} <br />
+          {{ 'MEMBER.VIEW.METERS.METER_NUMBER_LABEL' | translate }} <br />
           <p-columnFilter
             type="text"
             field="meter_number"
-            display="{{'MEMBER.VIEW.METERS.METER_NUMBER_LABEL' |translate}}"
+            display="{{ 'MEMBER.VIEW.METERS.METER_NUMBER_LABEL' | translate }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -82,35 +109,51 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.METERS.STATUS_LABEL" | translate }}
-          <p-columnFilter field="statut" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+          {{ 'MEMBER.VIEW.METERS.STATUS_LABEL' | translate }}
+          <p-columnFilter
+            field="statut"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          >
             <ng-template pTemplate="header">
-              <span class="text-sm">{{ "MEMBER.VIEW.METERS.FILTER_BY_STATUS_LABEL" | translate }}</span>
+              <span class="text-sm">{{
+                'MEMBER.VIEW.METERS.FILTER_BY_STATUS_LABEL' | translate
+              }}</span>
             </ng-template>
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-select
                 [ngModel]="value"
                 [options]="statutCategory"
                 (onChange)="filter($event.value)"
-                placeholder="{{'MEMBER.VIEW.METERS.SELECT_A_STATUS_PLACEHOLDER' |translate}}"
+                placeholder="{{ 'MEMBER.VIEW.METERS.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
                 [showClear]="true"
               >
                 <ng-template let-option pTemplate="item">
-                  @switch(option.value){
-                    @case(MeterDataStatus.ACTIVE){
-                      <p-tag class="text-sm" severity="success" value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"></p-tag>
+                  @switch (option.value) {
+                    @case (MeterDataStatus.ACTIVE) {
+                      <p-tag
+                        class="text-sm"
+                        severity="success"
+                        value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                      ></p-tag>
                     }
-                    @case(MeterDataStatus.INACTIVE){
-                      <p-tag class="text-sm" severity="danger" value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"></p-tag>
+                    @case (MeterDataStatus.INACTIVE) {
+                      <p-tag
+                        class="text-sm"
+                        severity="danger"
+                        value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                      ></p-tag>
                     }
-                    @case(MeterDataStatus.WAITING_GRD){
+                    @case (MeterDataStatus.WAITING_GRD) {
                       <p-tag
                         class="text-sm"
                         severity="danger"
                         value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
                       ></p-tag>
                     }
-                    @case(MeterDataStatus.WAITING_MANAGER){
+                    @case (MeterDataStatus.WAITING_MANAGER) {
                       <p-tag
                         class="text-sm"
                         severity="danger"
@@ -120,21 +163,29 @@
                   }
                 </ng-template>
                 <ng-template pTemplate="selectedItem">
-                  @switch (value){
-                    @case(MeterDataStatus.ACTIVE){
-                      <p-tag class="text-sm" severity="success" value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"></p-tag>
+                  @switch (value) {
+                    @case (MeterDataStatus.ACTIVE) {
+                      <p-tag
+                        class="text-sm"
+                        severity="success"
+                        value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                      ></p-tag>
                     }
-                    @case(MeterDataStatus.INACTIVE){
-                      <p-tag class="text-sm" severity="danger" value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"></p-tag>
+                    @case (MeterDataStatus.INACTIVE) {
+                      <p-tag
+                        class="text-sm"
+                        severity="danger"
+                        value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                      ></p-tag>
                     }
-                    @case(MeterDataStatus.WAITING_GRD){
+                    @case (MeterDataStatus.WAITING_GRD) {
                       <p-tag
                         class="text-sm"
                         severity="danger"
                         value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
                       ></p-tag>
                     }
-                    @case(MeterDataStatus.WAITING_MANAGER){
+                    @case (MeterDataStatus.WAITING_MANAGER) {
                       <p-tag
                         class="text-sm"
                         severity="danger"
@@ -150,17 +201,27 @@
       </th>
       <th>
         <div class="flex items-center text-base px-3">
-          {{ "MEMBER.VIEW.METERS.SHARING_OPERATION_TITLE" | translate }} <br />
-          <p-columnFilter field="sharingOperation" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+          {{ 'MEMBER.VIEW.METERS.SHARING_OPERATION_TITLE' | translate }} <br />
+          <p-columnFilter
+            field="sharingOperation"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          >
             <ng-template pTemplate="header">
-              <span class="text-sm">{{ "MEMBER.VIEW.METERS.FILTER_BY_SHARING_OPERATION_LABEL" | translate }}</span>
+              <span class="text-sm">{{
+                'MEMBER.VIEW.METERS.FILTER_BY_SHARING_OPERATION_LABEL' | translate
+              }}</span>
             </ng-template>
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-select
                 [ngModel]="value"
                 [options]="sharingOperations"
                 (onChange)="filter($event.value)"
-                placeholder="{{'MEMBER.VIEW.METERS.SELECT_A_SHARING_OPERATION_PLACEHOLDER' |translate}}"
+                placeholder="{{
+                  'MEMBER.VIEW.METERS.SELECT_A_SHARING_OPERATION_PLACEHOLDER' | translate
+                }}"
                 [showClear]="true"
               >
                 <ng-template let-option pTemplate="item">
@@ -182,17 +243,29 @@
       <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
       <td class="text-sm px-3 py-2">{{ meter.meterNumber }}</td>
       <td>
-        @switch (meter.status){
-          @case(MeterDataStatus.ACTIVE){
-            <p-tag severity="success" value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}" class="text-sm"></p-tag>
+        @switch (meter.status) {
+          @case (MeterDataStatus.ACTIVE) {
+            <p-tag
+              severity="success"
+              value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+              class="text-sm"
+            ></p-tag>
           }
-          @case(MeterDataStatus.INACTIVE){
-            <p-tag severity="danger" value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}" class="text-sm"></p-tag>
+          @case (MeterDataStatus.INACTIVE) {
+            <p-tag
+              severity="danger"
+              value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+              class="text-sm"
+            ></p-tag>
           }
-          @case(MeterDataStatus.WAITING_GRD){
-            <p-tag severity="danger" value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}" class="text-sm"></p-tag>
+          @case (MeterDataStatus.WAITING_GRD) {
+            <p-tag
+              severity="danger"
+              value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+              class="text-sm"
+            ></p-tag>
           }
-          @case(MeterDataStatus.WAITING_MANAGER){
+          @case (MeterDataStatus.WAITING_MANAGER) {
             <p-tag
               severity="danger"
               value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
@@ -202,10 +275,9 @@
         }
       </td>
       <td>
-        @if(meter.sharingOperation){
+        @if (meter.sharingOperation) {
           <span class="text-sm px-3 py-2">{{ meter.sharingOperation.name }}</span>
-        }
-        @else{
+        } @else {
           <span class="text-sm px-3 py-2"> / </span>
         }
       </td>
@@ -213,7 +285,9 @@
   </ng-template>
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
-      <td colspan="6" class="text-base">{{ "MEMBER.VIEW.METERS.NO_METER_FOUND_LABEL" | translate }}</td>
+      <td colspan="6" class="text-base">
+        {{ 'MEMBER.VIEW.METERS.NO_METER_FOUND_LABEL' | translate }}
+      </td>
     </tr>
   </ng-template>
 </p-table>
