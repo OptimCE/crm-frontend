@@ -305,4 +305,5 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/angular,node,visualstudiocode,webstorm
-src/environments/*
+src/environments/environments.prod.ts
+
