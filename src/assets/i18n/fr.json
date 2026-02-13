@@ -9,6 +9,11 @@
       "VALIDATE": "Valider",
       "CANCEL": "Annuler"
     },
+    "ROLE": {
+      "ADMIN": "Administrateur",
+      "MEMBER": "Membre",
+      "MANAGER": "Gestionnaire"
+    },
     "ERRORS": {
       "EXCEPTION": "Une erreur inattendue est survenue. Veuillez réessayer plus tard",
       "TIMEOUT": "La requête a expiré. Veuillez réessayer",
@@ -125,6 +130,67 @@
       "NAME": "Nom",
       "NAME_PLACEHOLDER": "Ma communauté locale",
       "VALIDATE": "Valider"
+    }
+  },
+  "COMMUNITY_INVITATION": {
+    "TITLE": "Invitation d'un gestionnaire",
+    "INPUT_EMAIL_ADDRESS_LABEL": "Saisir l'adresse mail du gestionnaire à inviter",
+    "EMAIL_PLACEHOLDER": "exemple@outlook.be"
+  },
+  "COMMUNITY_PENDING_INVITATION": {
+    "TITLE": "Invitation en attente",
+    "MEMBERS": {
+      "TITLE": "Membres",
+      "HEADERS": {
+        "EMAIL": "Email",
+        "MEMBER_NAME": "Nom du membre",
+        "STATUS": "État",
+        "ACTIONS": "Action"
+      },
+      "TO_ENCODE_LABEL": "À encoder",
+      "ENCODED_LABEL": "Encodé",
+      "CANCEL_BUTTON_LABEL": "Annuler",
+      "NO_INVITATION_FOUND": "Aucune invitation de membre en attente"
+    },
+    "MANAGERS": {
+      "TITLE": "Gestionnaire",
+      "HEADERS": {
+        "EMAIL": "Email",
+        "ACTIONS": "Action"
+      },
+      "CANCEL_BUTTON_LABEL": "Annuler",
+      "NO_INVITATION_FOUND": "Aucune invitation de gestionnaire en attente"
+    }
+  },
+  "MANAGERS_COMMUNITY_LIST": {
+    "TITLE": "Gestionnaires de la communauté",
+    "HEADERS": {
+      "NAME": "Nom",
+      "EMAIL": "Email",
+      "PHONE": "N° de téléphone",
+      "ROLE": "Rôle"
+    }
+  },
+  "USERS_COMMUNITY_LIST": {
+    "TITLE": "Utilisateur de la communauté",
+    "SEE_PENDING_INVITE_BUTTON_LABEL": "Voir invitation en attente",
+    "INVITE_MANAGER_BUTTON_LABEL": "Inviter un gestionnaire",
+    "HEADERS": {
+      "NAME": "Nom",
+      "EMAIL": "Email",
+      "PHONE": "N° de téléphone",
+      "ROLE": "Rôle",
+      "ACTIONS": "Actions"
+    },
+    "EDIT_ROLE_BUTTON_LABEL": "Modifier le rôle",
+    "EDIT_ROLE_BUTTON_TOOLTIP": "Modifier le rôle de cet utilisateur",
+    "DELETE_BUTTON_LABEL": "Supprimer",
+    "UPDATE_ROLE_DIALOG": {
+      "TITLE": "Mise à jour du rôle utilisateur",
+      "NEW_ROLE_FOR_USER_LABEL": "Nouveau rôle de l'utilisateur",
+      "SELECT_ROLE_PLACEHOLDER": "Choisissez un rôle",
+      "CANCEL_BUTTON_LABEL": "Annuler",
+      "SAVE_BUTTON_LABEL": "Enregistrer"
     }
   },
   "KEY": {
