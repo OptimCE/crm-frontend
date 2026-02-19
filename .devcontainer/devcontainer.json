@@ -23,7 +23,9 @@
     // Allow git commands to work inside the container, and use the host's SSH agent for authentication.
     "source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind",
     // Mount the project into the container so it can be edited and run.
-    "source=./,target=/app,type=bind"
+    "source=./,target=/app,type=bind",
+    //ignore the node_modules folder to use the prebuild dependencies in the container, but still allow it to be edited and viewed in the container.
+    "source=./node_modules,target=/app/node_modules,type=bind,consistency=cached,bind-propagation=rprivate"
   ],
   "remoteEnv": {
     "SSH_AUTH_SOCK": "/ssh-agent"
