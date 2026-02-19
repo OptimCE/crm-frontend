@@ -1,24 +1,25 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environments} from '../../../environments/environments';
-import {ApiResponse} from '../../core/dtos/api.response';
-import {UpdateUserDTO, UserDTO} from '../dtos/user.dtos';
+import {inject, Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environments } from '../../../environments/environments';
+import { ApiResponse } from '../../core/dtos/api.response';
+import { UpdateUserDTO, UserDTO } from '../dtos/user.dtos';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private http = inject(HttpClient)
   private apiAddress: string;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.apiAddress = environments.apiUrl + '/users';
   }
 
   getUserInfo() {
-    return this.http.get<ApiResponse<UserDTO|string>>(this.apiAddress + '/');
+    return this.http.get<ApiResponse<UserDTO | string>>(this.apiAddress + '/');
   }
 
-  updateUserInfo(update_user: UpdateUserDTO){
-    return this.http.put<ApiResponse<string>>(this.apiAddress+"/", update_user);
+  updateUserInfo(update_user: UpdateUserDTO) {
+    return this.http.put<ApiResponse<string>>(this.apiAddress + '/', update_user);
   }
 }

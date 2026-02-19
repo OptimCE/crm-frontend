@@ -1,7 +1,9 @@
 <div class="flex flex-wrap -mx-2 mb-3">
   <div class="w-6/12 flex items-center">
     <span class="pi pi-user x-3 mr-1 text-xl text-primary"></span>
-    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ "MANAGERS_COMMUNITY_LIST.TITLE" | translate }}</h2>
+    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">
+      {{ 'MANAGERS_COMMUNITY_LIST.TITLE' | translate }}
+    </h2>
   </div>
 </div>
 
@@ -15,17 +17,17 @@
   <ng-template pTemplate="header">
     <tr>
       <th [pSortableColumn]="'name'" class="text-base px-3">
-        {{ "MANAGERS_COMMUNITY_LIST.HEADERS.NAME" | translate }}
+        {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}
         <p-sortIcon [field]="'name'"></p-sortIcon>
       </th>
       <th class="text-base px-3">
-        {{ "MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL" | translate }}
+        {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}
       </th>
       <th class="text-base px-3">
-        {{ "MANAGERS_COMMUNITY_LIST.HEADERS.PHONE" | translate }}
+        {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.PHONE' | translate }}
       </th>
       <th [pSortableColumn]="'role'" class="text-base px-3">
-        {{ "MANAGERS_COMMUNITY_LIST.HEADERS.ROLE" | translate }}
+        {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}
         <p-sortIcon [field]="'role'"></p-sortIcon>
       </th>
     </tr>
@@ -33,10 +35,18 @@
   <ng-template pTemplate="body" let-user>
     <tr>
       <td class="text-sm px-3 py-2">
-        {{ user.name ? (user.firstName ? user.firstName + " " + user.name : user.name) : user.firstName ? user.firstName : "/" }}
+        {{
+          user.name
+            ? user.firstName
+              ? user.firstName + ' ' + user.name
+              : user.name
+            : user.firstName
+              ? user.firstName
+              : '/'
+        }}
       </td>
       <td class="text-sm px-3 py-2">{{ user.mail }}</td>
-      <td class="text-sm px-3 py-2">{{ user.phoneNumber ? user.phoneNumber : "/" }}</td>
+      <td class="text-sm px-3 py-2">{{ user.phoneNumber ? user.phoneNumber : '/' }}</td>
 
       <td class="text-sm px-3 py-2">{{ user.role | role }}</td>
     </tr>

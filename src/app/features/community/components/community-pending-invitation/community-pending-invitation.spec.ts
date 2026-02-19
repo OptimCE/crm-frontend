@@ -8,9 +8,8 @@ describe('CommunityPendingInvitation', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommunityPendingInvitation]
-    })
-    .compileComponents();
+      imports: [CommunityPendingInvitation],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CommunityPendingInvitation);
     component = fixture.componentInstance;

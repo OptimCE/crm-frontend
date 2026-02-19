@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class SSEService {
-
   getServerSentEvent(url: string) {
     return new Observable((observer) => {
       const eventSource = new EventSource(url, { withCredentials: true });

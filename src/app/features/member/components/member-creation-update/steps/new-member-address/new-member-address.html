@@ -1,50 +1,85 @@
 <div (click)="goBack()" class="cursor-pointer hover:text-green-700">
   <i class="pi pi-arrow-left flex-wrap-left mr-2 !text-xs"></i>
-  <span class="!text-sm">{{ "MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS"| translate }}</span>
+  <span class="!text-sm">{{ 'MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS' | translate }}</span>
 </div>
 <form [formGroup]="addressForm" (submit)="submit()">
   <div class="flex flex-wrap pb-1">
     <div class="flex items-center">
-      <h3 class="text-primary">{{ "MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE" | translate }}</h3>
+      <h3 class="text-primary">{{ 'MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE' | translate }}</h3>
     </div>
   </div>
   <div class="flex flex-wrap pb-3 gap-2">
     <!--Address -->
     <div class="flex flex-col">
-      <label for="home_address_street" class="text-base">{{ "METER.ADDRESS.STREET_NAME_LABEL" | translate }} *</label>
+      <label for="home_address_street" class="text-base"
+        >{{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *</label
+      >
       <p-input-group>
-        <input pInputText formControlName="home_address_street" id="home_address_street" placeholder="{{'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate}}" />
+        <input
+          pInputText
+          formControlName="home_address_street"
+          id="home_address_street"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
+        />
       </p-input-group>
       <app-error-handler controlName="home_address_street" />
     </div>
     <div class="flex flex-col">
-      <label for="home_address_number" class="text-base">{{ "METER.ADDRESS.NUMBER_LABEL" | translate }} *</label>
+      <label for="home_address_number" class="text-base"
+        >{{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *</label
+      >
       <p-input-group>
-        <input pInputText formControlName="home_address_number" id="home_address_number" placeholder="{{'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate}}"  />
+        <input
+          pInputText
+          formControlName="home_address_number"
+          id="home_address_number"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+        />
       </p-input-group>
       <app-error-handler controlName="home_address_number" />
     </div>
 
     <div class="flex flex-col">
-      <label for="home_address_supplement" class="text-base">{{ "METER.ADDRESS.BOX_LABEL" | translate }}</label>
+      <label for="home_address_supplement" class="text-base">{{
+        'METER.ADDRESS.BOX_LABEL' | translate
+      }}</label>
       <p-input-group>
-        <input pInputText formControlName="home_address_supplement" id="home_address_supplement" placeholder="{{'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate}}"  />
+        <input
+          pInputText
+          formControlName="home_address_supplement"
+          id="home_address_supplement"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+        />
       </p-input-group>
       <app-error-handler controlName="home_address_supplement" />
     </div>
   </div>
   <div class="flex flex-wrap pb-3 gap-2">
     <div class="flex flex-col">
-      <label for="home_address_postcode" class="text-base">{{ "METER.ADDRESS.POSTAL_CODE_LABEL" | translate }} *</label>
+      <label for="home_address_postcode" class="text-base"
+        >{{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *</label
+      >
       <p-input-group>
-        <input pInputText formControlName="home_address_postcode" id="home_address_postcode" placeholder="{{'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate}}"  />
+        <input
+          pInputText
+          formControlName="home_address_postcode"
+          id="home_address_postcode"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+        />
       </p-input-group>
       <app-error-handler controlName="home_address_postcode" />
     </div>
     <div class="flex flex-col">
-      <label for="home_address_city" class="text-base">{{ "METER.ADDRESS.CITY_LABEL" | translate }} *</label>
+      <label for="home_address_city" class="text-base"
+        >{{ 'METER.ADDRESS.CITY_LABEL' | translate }} *</label
+      >
       <p-input-group>
-        <input pInputText formControlName="home_address_city" id="home_address_city" placeholder="{{'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate}}" />
+        <input
+          pInputText
+          formControlName="home_address_city"
+          id="home_address_city"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+        />
       </p-input-group>
       <app-error-handler controlName="home_address_city" />
     </div>
@@ -57,50 +92,89 @@
       id="sameAddress"
       class="mr_1"
     ></p-checkbox>
-    <label for="sameAddress">{{ "MEMBER.ADD.ADDRESS.SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL" | translate }}</label>
+    <label for="sameAddress">{{
+      'MEMBER.ADD.ADDRESS.SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL' | translate
+    }}</label>
   </div>
-  @if(addressForm.get('billing_address_street')){
+  @if (addressForm.get('billing_address_street')) {
     <div class="mt-3">
       <div class="flex items-center">
-        <h3 class="font-medium text-lg">{{ "MEMBER.ADD.ADDRESS.BILLING_ADDRESS_TITLE" | translate }}</h3>
+        <h3 class="font-medium text-lg">
+          {{ 'MEMBER.ADD.ADDRESS.BILLING_ADDRESS_TITLE' | translate }}
+        </h3>
       </div>
       <div class="flex flex-wrap pb-3 gap-2">
         <!--Address -->
         <div class="flex flex-col">
-          <label for="billing_address_street" class="text-base">{{ "METER.ADDRESS.STREET_NAME_LABEL" | translate }} *</label>
+          <label for="billing_address_street" class="text-base"
+            >{{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *</label
+          >
           <p-input-group>
-            <input pInputText formControlName="billing_address_street" id="billing_address_street" placeholder="{{'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate}}" />
+            <input
+              pInputText
+              formControlName="billing_address_street"
+              id="billing_address_street"
+              placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
+            />
           </p-input-group>
           <app-error-handler controlName="billing_address_street" />
         </div>
         <div class="flex flex-col">
-          <label for="billing_address_number" class="text-base">{{ "METER.ADDRESS.NUMBER_LABEL" | translate }} *</label>
+          <label for="billing_address_number" class="text-base"
+            >{{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *</label
+          >
           <p-input-group>
-            <input pInputText formControlName="billing_address_number" id="billing_address_number" placeholder="{{'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate}}" />
+            <input
+              pInputText
+              formControlName="billing_address_number"
+              id="billing_address_number"
+              placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+            />
           </p-input-group>
           <app-error-handler controlName="billing_address_number" />
         </div>
 
         <div class="flex flex-col">
-          <label for="billing_address_supplement" class="text-base">{{ "METER.ADDRESS.BOX_LABEL" | translate }}</label>
+          <label for="billing_address_supplement" class="text-base">{{
+            'METER.ADDRESS.BOX_LABEL' | translate
+          }}</label>
           <p-input-group>
-            <input pInputText formControlName="billing_address_supplement" id="billing_address_supplement" placeholder="{{'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate}}" />
+            <input
+              pInputText
+              formControlName="billing_address_supplement"
+              id="billing_address_supplement"
+              placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+            />
           </p-input-group>
           <app-error-handler controlName="billing_address_supplement" />
         </div>
       </div>
       <div class="flex flex-wrap pb-3 gap-2">
         <div class="flex flex-col">
-          <label for="billing_address_postcode" class="text-base">{{ "METER.ADDRESS.POSTAL_CODE_LABEL" | translate }} *</label>
+          <label for="billing_address_postcode" class="text-base"
+            >{{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *</label
+          >
           <p-input-group>
-            <input pInputText formControlName="billing_address_postcode" id="billing_address_postcode" placeholder="{{'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate}}" />
+            <input
+              pInputText
+              formControlName="billing_address_postcode"
+              id="billing_address_postcode"
+              placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+            />
           </p-input-group>
           <app-error-handler controlName="billing_address_postcode" />
         </div>
         <div class="flex flex-col">
-          <label for="billing_address_city" class="text-base">{{ "METER.ADDRESS.CITY_LABEL" | translate }} *</label>
+          <label for="billing_address_city" class="text-base"
+            >{{ 'METER.ADDRESS.CITY_LABEL' | translate }} *</label
+          >
           <p-input-group>
-            <input pInputText formControlName="billing_address_city" id="billing_address_city" placeholder="{{'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate}}" />
+            <input
+              pInputText
+              formControlName="billing_address_city"
+              id="billing_address_city"
+              placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+            />
           </p-input-group>
           <app-error-handler controlName="billing_address_city" />
         </div>
@@ -110,17 +184,18 @@
   <div class="flex flex-col flex-wrap mt-2">
     <app-summary-error
       [controlLabels]="{
-    'home_address_street': 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_STREET',
-    'home_address_number': 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_NUMBER',
-    'home_address_supplement': 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_SUPPLEMENT',
-    'home_address_postcode': 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_POSTCODE',
-    'home_address_city': 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_CITY',
-    'billing_address_street': 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_STREET',
-    'billing_address_number': 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_NUMBER',
-    'billing_address_supplement': 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_SUPPLEMENT',
-    'billing_address_postcode': 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_POSTCODE',
-    'billing_address_city': 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_CITY'
-    }"></app-summary-error>
+        home_address_street: 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_STREET',
+        home_address_number: 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_NUMBER',
+        home_address_supplement: 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_SUPPLEMENT',
+        home_address_postcode: 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_POSTCODE',
+        home_address_city: 'MEMBER.ADD.ADDRESS.FORM_ERROR.HOME_ADDRESS_CITY',
+        billing_address_street: 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_STREET',
+        billing_address_number: 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_NUMBER',
+        billing_address_supplement: 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_SUPPLEMENT',
+        billing_address_postcode: 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_POSTCODE',
+        billing_address_city: 'MEMBER.ADD.ADDRESS.FORM_ERROR.BILLING_ADDRESS_CITY',
+      }"
+    ></app-summary-error>
     <p-button pRipple type="submit">
       <span pButtonLabel>{{ 'MEMBER.ADD.ADDRESS.VALIDATE_ADDRESS_FORM_BUTTON' | translate }}</span>
     </p-button>

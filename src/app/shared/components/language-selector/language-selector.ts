@@ -1,20 +1,16 @@
-import {Component, inject} from '@angular/core';
-import {Select} from "primeng/select";
-import {FormsModule} from "@angular/forms";
-import {TranslatePipe} from "@ngx-translate/core";
-import {LanguageService} from '../../../core/services/language/language.service';
-import {EventBusService} from '../../../core/services/event_bus/eventbus.service';
+import { Component, inject } from '@angular/core';
+import { Select } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language/language.service';
+import { EventBusService } from '../../../core/services/event_bus/eventbus.service';
 
 @Component({
   selector: 'app-language-selector',
-  imports: [
-    Select,
-    FormsModule,
-    TranslatePipe
-  ],
+  imports: [Select, FormsModule, TranslatePipe],
   templateUrl: './language-selector.html',
   styleUrl: './language-selector.css',
-  standalone: true
+  standalone: true,
 })
 export class LanguageSelector {
   langs = [
@@ -24,25 +20,18 @@ export class LanguageSelector {
     { label: 'Deutsch', code: 'de' },
   ];
   private languageService = inject(LanguageService);
-  private eventBus = inject(EventBusService)
+  private eventBus = inject(EventBusService);
 
-
-  constructor() {
-  }
   currentLang = this.detectInitialLang();
   get currentLangLabel() {
-    return this.langs.find(l => l.code === this.currentLang)?.label;
+    return this.langs.find((l) => l.code === this.currentLang)?.label;
   }
 
   setLang(code: string) {
     this.languageService.changeLanguage(code);
-    this.eventBus.emit(
-      'changeLanguage', code
-    )
+    this.eventBus.emit('changeLanguage', code);
   }
   detectInitialLang() {
-    console.log("DETECT INITIAL LANGE")
-    console.log(this.languageService.getCurrentLanguage())
     return this.languageService.getCurrentLanguage();
   }
 }

@@ -1,15 +1,16 @@
-import {PaginationQuery} from './query.dtos';
-import {AddressDTO, CreateAddressDTO} from './address.dtos';
-import {MembersPartialDTO} from './member.dtos';
+import { PaginationQuery } from './query.dtos';
+import { AddressDTO, CreateAddressDTO } from './address.dtos';
+import { MembersPartialDTO } from './member.dtos';
 import {
   ClientType,
-  InjectionStatus, MeterDataStatus,
+  InjectionStatus,
+  MeterDataStatus,
   MeterRate,
   ProductionChain,
   ReadingFrequency,
-  TarifGroup
+  TarifGroup,
 } from '../types/meter.types';
-import {SharingOperationPartialDTO} from './sharing_operation.dtos';
+import { SharingOperationPartialDTO } from './sharing_operation.dtos';
 
 /**
  * Query parameters for filtering and paginating a list of meters.
@@ -43,7 +44,7 @@ export interface PartialMeterDTO {
   EAN: string;
   meter_number: string;
   address: AddressDTO;
-  holder?: MembersPartialDTO
+  holder?: MembersPartialDTO;
   status: MeterDataStatus;
   sharing_operation?: SharingOperationPartialDTO;
 }
@@ -76,7 +77,7 @@ export interface MetersDTO {
   EAN: string;
   meter_number: string;
   address: AddressDTO;
-  holder?: MembersPartialDTO
+  holder?: MembersPartialDTO;
   tarif_group: TarifGroup;
   phases_number: number;
   reading_frequency: ReadingFrequency;
@@ -168,7 +169,6 @@ export interface CreateMeterDataDTO {
  * DTO for creating a new physical meter and its initial configuration.
  */
 export interface CreateMeterDTO {
-
   EAN: string;
   meter_number: string;
   address: CreateAddressDTO;
@@ -177,7 +177,6 @@ export interface CreateMeterDTO {
   reading_frequency: ReadingFrequency;
   initial_data: CreateMeterDataDTO;
 }
-
 
 /**
  * DTO for patching meter data configuration.

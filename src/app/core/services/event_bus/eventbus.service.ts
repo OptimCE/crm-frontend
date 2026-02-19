@@ -5,11 +5,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class EventBusService {
-  emit(eventName: string, payload: any) {
+  emit(eventName: string, payload: unknown) {
     window.dispatchEvent(new CustomEvent(eventName, { detail: payload }));
   }
 
-  on(eventName: string, callback: (event: any) => void) {
+  on(eventName: string, callback: (event: unknown) => void) {
     window.addEventListener(eventName, callback);
   }
 }

@@ -1,30 +1,36 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {DialogModule} from 'primeng/dialog';
-import {PrimeTemplate} from 'primeng/api';
-import {RolePipe} from '../../../../shared/pipes/role/role-pipe';
-import {SplitButtonModule} from 'primeng/splitbutton';
-import {TableLazyLoadEvent, TableModule} from 'primeng/table';
-import {TranslatePipe} from '@ngx-translate/core';
-import {FormsModule} from '@angular/forms';
-import {CommunityService} from '../../../../shared/services/community.service';
-import {CommunityUsersQueryDTO, UsersCommunityDTO} from '../../../../shared/dtos/community.dtos';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import { DialogModule } from 'primeng/dialog';
+import { PrimeTemplate } from 'primeng/api';
+import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TranslatePipe } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
+import { CommunityService } from '../../../../shared/services/community.service';
+import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
 
 @Component({
   selector: 'app-managers-community-list',
   standalone: true,
-  imports: [DialogModule, PrimeTemplate, RolePipe, SplitButtonModule, TableModule, TranslatePipe, FormsModule],
+  imports: [
+    DialogModule,
+    PrimeTemplate,
+    RolePipe,
+    SplitButtonModule,
+    TableModule,
+    TranslatePipe,
+    FormsModule,
+  ],
   templateUrl: './managers-community-list.html',
   styleUrl: './managers-community-list.css',
 })
 export class ManagersCommunityList implements OnInit {
+  private communityService = inject(CommunityService)
   users = signal<UsersCommunityDTO[]>([]);
-  filter = signal<CommunityUsersQueryDTO>({page:1, limit: 10})
+  filter = signal<CommunityUsersQueryDTO>({ page: 1, limit: 10 });
   dialogVisible: boolean = false;
   userSelected: any;
   roleSelected: any;
-  constructor(
-    private communityService: CommunityService,
-) {}
 
   ngOnInit(): void {
     this.dialogVisible = false;
@@ -40,25 +46,24 @@ export class ManagersCommunityList implements OnInit {
     });
   }
   lazyLoadUsers($event: TableLazyLoadEvent) {
-    const current: any = {...this.filter()};
-    if($event.first !== undefined && $event.rows !== undefined){
-      if($event.rows){
-        current.page = ($event.first / $event.rows) + 1
-      }
-      else{
+    const current: any = { ...this.filter() };
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      if ($event.rows) {
+        current.page = $event.first / $event.rows + 1;
+      } else {
         current.page = 1;
       }
     }
-    if($event.sortField){
+    if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_name;
       delete current.sort_role;
-      switch($event.sortField){
-        case 'name':{
+      switch ($event.sortField) {
+        case 'name': {
           current.sort_name = sortDirection;
           break;
         }
-        case 'role':{
+        case 'role': {
           current.sort_role = sortDirection;
           break;
         }

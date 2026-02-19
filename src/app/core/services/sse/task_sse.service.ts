@@ -1,19 +1,18 @@
 import { SSEService } from './sse.service';
-import { Injectable } from '@angular/core';
-import {environments} from '../../../../environments/environments';
-import {ERROR_TYPE, VALIDATION_TYPE} from '../../dtos/notification';
-import {EventBusService} from '../event_bus/eventbus.service';
-import {ApiResponse} from '../../dtos/api.response';
-
+import {inject, Injectable} from '@angular/core';
+import { environments } from '../../../../environments/environments';
+import { ERROR_TYPE, VALIDATION_TYPE } from '../../dtos/notification';
+import { EventBusService } from '../event_bus/eventbus.service';
+import { ApiResponse } from '../../dtos/api.response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskSSEServie {
   connected: boolean = false;
+  private sseService = inject(SSEService);
+  private eventBus = inject(EventBusService);
   constructor(
-    private sseService: SSEService,
-    private eventBus: EventBusService,
   ) {
     this.connected = false;
   }
@@ -23,7 +22,7 @@ export class TaskSSEServie {
       this.connected = true;
       this.sseService.getServerSentEvent(environments.apiUrl + '/notification/event').subscribe({
         next: (d: any) => {
-          let data = d.msg as ApiResponse<any>;
+          let data = d.msg as ApiResponse<unknown>;
           if (Array.isArray(data)) {
             data = data[0];
           }
@@ -31,13 +30,13 @@ export class TaskSSEServie {
             this.eventBus.emit('snack-notification', { message: data.data, type: VALIDATION_TYPE });
           }
         },
-        error: (err)=>{
-          if(err.data){
+        error: (err) => {
+          if (err.data) {
             this.eventBus.emit('snack-notification', { message: err.data, type: ERROR_TYPE });
-          }else {
+          } else {
             this.eventBus.emit('snack-notification', { message: 'Error', type: ERROR_TYPE });
           }
-        }
+        },
       });
     }
   }

@@ -1,17 +1,16 @@
 <div class="menu-link" [class.menu-link-opened]="sidebarOpen" [class.active-class]="isRouteActive">
-  <i class="{{icon}}" [class.mr_0_5]="sidebarOpen"></i>
-  @if (sidebarOpen){
-    <span>{{name}}</span>
+  <i class="{{ icon }}" [class.mr_0_5]="sidebarOpen"></i>
+  @if (sidebarOpen) {
+    <span>{{ name }}</span>
     <i class="pi pi-chevron-down ms-auto" [ngClass]="{ 'rotate-180': activeSublist }"></i>
   }
-
 </div>
-@if(sidebarOpen && activeSublist){
+@if (sidebarOpen && activeSublist) {
   <ul class="submenu">
-    @for(link of links; let idx = $index; track idx){
+    @for (link of links; let idx = $index; track idx) {
       <li>
-        <a routerLink="{{link.url}}" (click)="closeSideBar()">
-          <i class="{{link.icon}}"></i>{{link.name | translate}}
+        <a routerLink="{{ link.url }}" (click)="closeSideBar()">
+          <i class="{{ link.icon }}"></i>{{ link.name | translate }}
         </a>
       </li>
     }

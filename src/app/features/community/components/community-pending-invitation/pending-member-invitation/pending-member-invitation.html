@@ -9,18 +9,18 @@
   <ng-template pTemplate="header">
     <tr>
       <th [pSortableColumn]="'email'" class="text-base px-3">
-        {{ "COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.EMAIL" | translate }}
+        {{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.EMAIL' | translate }}
         <p-sortIcon [field]="'email'"></p-sortIcon>
       </th>
       <th [pSortableColumn]="'name'" class="text-base px-3">
-        {{ "COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.MEMBER_NAME" | translate }}
+        {{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.MEMBER_NAME' | translate }}
         <p-sortIcon [field]="'name'"></p-sortIcon>
       </th>
       <th class="text-base px-3">
-        {{ "COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.STATUS" | translate }}
+        {{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.STATUS' | translate }}
       </th>
       <th class="text-base px-3">
-        {{ "COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.ACTIONS" | translate }}
+        {{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.HEADERS.ACTIONS' | translate }}
       </th>
     </tr>
   </ng-template>
@@ -29,21 +29,34 @@
       <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
       <td class="text-sm px-3 py-2">{{ invitation.memberName }}</td>
       <td class="text-sm px-3 py-2">
-        @if(invitation.toBeEncoded){
-          <p-tag value="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.TO_ENCODE_LABEL' | translate }}" severity="warn"></p-tag>
-        }
-        @else{
-          <p-tag value="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.ENCODED_LABEL' | translate }}" severity="success"></p-tag>
+        @if (invitation.toBeEncoded) {
+          <p-tag
+            value="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.TO_ENCODE_LABEL' | translate }}"
+            severity="warn"
+          ></p-tag>
+        } @else {
+          <p-tag
+            value="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.ENCODED_LABEL' | translate }}"
+            severity="success"
+          ></p-tag>
         }
       </td>
       <td class="text-sm px-3 py-2">
-        <p-button type="button" icon="pi pi-times" severity="danger" label="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.CANCEL_BUTTON_LABEL' | translate }}" (click)="cancelMemberInvitation(invitation)"></p-button>
+        <p-button
+          type="button"
+          icon="pi pi-times"
+          severity="danger"
+          label="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.CANCEL_BUTTON_LABEL' | translate }}"
+          (click)="cancelMemberInvitation(invitation)"
+        ></p-button>
       </td>
     </tr>
   </ng-template>
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
-      <td colspan="4" class="text-center text-base">{{ "COMMUNITY_PENDING_INVITATION.MEMBERS.NO_INVITATION_FOUND" | translate }}</td>
+      <td colspan="4" class="text-center text-base">
+        {{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.NO_INVITATION_FOUND' | translate }}
+      </td>
     </tr>
   </ng-template>
 </p-table>

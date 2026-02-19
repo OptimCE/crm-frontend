@@ -8,9 +8,8 @@ describe('SharingOperationAddKey', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharingOperationAddKey]
-    })
-    .compileComponents();
+      imports: [SharingOperationAddKey],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SharingOperationAddKey);
     component = fixture.componentInstance;

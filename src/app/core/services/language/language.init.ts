@@ -1,4 +1,9 @@
-import { ENVIRONMENT_INITIALIZER, EnvironmentProviders, inject, makeEnvironmentProviders } from '@angular/core';
+import {
+  ENVIRONMENT_INITIALIZER,
+  EnvironmentProviders,
+  inject,
+  makeEnvironmentProviders,
+} from '@angular/core';
 import { LanguageService } from './language.service';
 
 export function provideLanguageInitForRoute(): EnvironmentProviders {

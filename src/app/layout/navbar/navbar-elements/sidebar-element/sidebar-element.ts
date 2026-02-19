@@ -1,15 +1,12 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Ripple} from "primeng/ripple";
-import {RouterLink} from "@angular/router";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Ripple } from 'primeng/ripple';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'li[appSidebarItem]',
-    imports: [
-        Ripple,
-        RouterLink
-    ],
+  imports: [Ripple, RouterLink],
   templateUrl: './sidebar-element.html',
-  styleUrl: './sidebar-element.css'
+  styleUrl: './sidebar-element.css',
 })
 export class SidebarElement {
   @Input() sidebarOpen!: boolean;
@@ -17,10 +14,9 @@ export class SidebarElement {
   @Input() name!: string;
   @Input() icon!: string;
   @Input() routerLinkUrl!: string;
-  @Output() close = new EventEmitter<void>();
+  @Output() sidebarClose = new EventEmitter<void>();
 
   closeSideBar(): void {
-    this.close.emit();
+    this.sidebarClose.emit();
   }
-
 }

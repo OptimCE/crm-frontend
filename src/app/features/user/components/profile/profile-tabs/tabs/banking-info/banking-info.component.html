@@ -1,0 +1,7 @@
+<div class="flex items-center gap-2 mb-2">
+  <i class="pi pi-credit-card text-xl"></i>
+  <h3 class="text-base font-medium">{{ 'PROFILE.TABS.BANKING_INFORMATION.IBAN' | translate }}</h3>
+</div>
+@if (user) {
+  <span class="text-sm">{{ user.iban ?? '/' }}</span>
+}

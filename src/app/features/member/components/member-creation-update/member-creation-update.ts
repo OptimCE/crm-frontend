@@ -1,26 +1,26 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MemberType} from '../../../../shared/types/member.types';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {CheckboxChangeEvent} from 'primeng/checkbox';
+import {AfterViewInit, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import { MemberType } from '../../../../shared/types/member.types';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CheckboxChangeEvent } from 'primeng/checkbox';
 import {
   CompanyDTO,
   CreateManagerDTO,
   CreateMemberDTO,
   IndividualDTO,
-  ManagerDTO, UpdateMemberDTO
+  UpdateMemberDTO,
 } from '../../../../shared/dtos/member.dtos';
-import {MemberService} from '../../../../shared/services/member.service';
-import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.handler';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {ibanValidator} from './iban.validator';
-import {numRegistreBeValidator} from './num_registre_nat_be.validator';
-import {AddressDTO} from '../../../../shared/dtos/address.dtos';
-import {Step, StepList, StepPanel, StepPanels, Stepper} from 'primeng/stepper';
-import {NewMemberType} from './steps/new-member-type/new-member-type';
-import {NewMemberInformations} from './steps/new-member-informations/new-member-informations';
-import {NewMemberAddress} from './steps/new-member-address/new-member-address';
-import {NewMemberBankingInfo} from './steps/new-member-banking-info/new-member-banking-info';
+import { MemberService } from '../../../../shared/services/member.service';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { TranslatePipe } from '@ngx-translate/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ibanValidator } from './iban.validator';
+import { numRegistreBeValidator } from './num_registre_nat_be.validator';
+import { AddressDTO } from '../../../../shared/dtos/address.dtos';
+import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
+import { NewMemberType } from './steps/new-member-type/new-member-type';
+import { NewMemberInformations } from './steps/new-member-informations/new-member-informations';
+import { NewMemberAddress } from './steps/new-member-address/new-member-address';
+import { NewMemberBankingInfo } from './steps/new-member-banking-info/new-member-banking-info';
 
 @Component({
   selector: 'app-member-creation-update',
@@ -34,13 +34,18 @@ import {NewMemberBankingInfo} from './steps/new-member-banking-info/new-member-b
     NewMemberType,
     NewMemberInformations,
     NewMemberAddress,
-    NewMemberBankingInfo
+    NewMemberBankingInfo,
   ],
   templateUrl: './member-creation-update.html',
   styleUrl: './member-creation-update.css',
   providers: [ErrorMessageHandler],
 })
 export class MemberCreationUpdate implements OnInit, AfterViewInit {
+  private membersService = inject(MemberService);
+  private config = inject(DynamicDialogConfig);
+  private ref = inject(DynamicDialogRef);
+  private errorHandler = inject(ErrorMessageHandler);
+  private cdr = inject(ChangeDetectorRef);
   typeClient: number = -1;
   formData!: FormGroup;
   addressForm!: FormGroup;
@@ -48,14 +53,6 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
   gestionnaire: boolean = false;
   existingMember?: IndividualDTO | CompanyDTO;
 
-  constructor(
-    private membersService: MemberService,
-    private config: DynamicDialogConfig,
-    private ref: DynamicDialogRef,
-    private translate: TranslateService,
-    private errorHandler: ErrorMessageHandler,
-    private cdr: ChangeDetectorRef,
-  ) {}
 
   ngOnInit(): void {
     this.addressForm = new FormGroup({
@@ -98,11 +95,9 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     }
   }
 
-
   ngAfterViewInit() {
     this.cdr.markForCheck(); // Force change detection once content is rendered
   }
-
 
   buildFormGroup() {
     this.formData = new FormGroup({
@@ -113,7 +108,10 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
       this.formData.controls['id'].addValidators([numRegistreBeValidator]);
       // Build form group for individuals
       this.formData.addControl('surname', new FormControl('', [Validators.required]));
-      this.formData.addControl('email', new FormControl('', [Validators.required, Validators.email]));
+      this.formData.addControl(
+        'email',
+        new FormControl('', [Validators.required, Validators.email]),
+      );
       this.formData.addControl('phone', new FormControl('', [Validators.required]));
       this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
       if (this.existingMember) {
@@ -168,8 +166,8 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
       number: this.addressForm.value.home_address_number,
       postcode: this.addressForm.value.home_address_postcode,
       supplement: this.addressForm.value.home_address_supplement,
-      city: this.addressForm.value.home_address_city
-    }
+      city: this.addressForm.value.home_address_city,
+    };
     if (this.existingMember) {
       if (
         this.existingMember.home_address.street == homeAddress.street &&
@@ -181,7 +179,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         homeAddress.id = this.existingMember.home_address.id;
       }
     }
-    let billingAddress:AddressDTO = homeAddress;
+    let billingAddress: AddressDTO = homeAddress;
     if (this.addressForm.value.same_address.length == 0) {
       billingAddress = {
         id: -1,
@@ -189,8 +187,8 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         number: this.addressForm.value.billing_address_number,
         postcode: this.addressForm.value.billing_address_postcode,
         supplement: this.addressForm.value.billing_address_supplement,
-        city: this.addressForm.value.billing_address.city
-      }
+        city: this.addressForm.value.billing_address.city,
+      };
     }
     let status = 1;
     if (this.existingMember) {
@@ -214,7 +212,6 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         billingAddress.id = this.existingMember.billing_address.id;
       }
     }
-    let managerId: number | undefined = undefined;
     let manager: CreateManagerDTO | undefined = undefined;
     if (this.gestionnaire) {
       manager = {
@@ -222,27 +219,25 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         name: this.formData.value.name_manager,
         surname: this.formData.value.surname_manager,
         email: this.formData.value.email_manager,
-        phone_number: this.formData.value.phone_manager
-      }
+        phone_number: this.formData.value.phone_manager,
+      };
     }
     // let memberToAdd: IndividualDTO | CompanyDTO;
-    let memberToAdd: CreateMemberDTO;
-
-      memberToAdd = {
-        NRN: this.formData.value.id,
-        billing_address: billingAddress,
-        email: this.formData.value.email,
-        first_name: this.formData.value.name,
-        home_address: homeAddress,
-        iban: this.ibanForm.value.iban,
-        member_type: this.typeClient,
-        phone_number: this.formData.value.phone,
-        social_rate: this.formData.value.socialRate && this.formData.value.socialRate.length > 0,
-        status: status,
-        vat_number: this.formData.value.vatNumber,
-        name: this.formData.value.surname,
-        manager: manager
-      }
+    const memberToAdd: CreateMemberDTO = {
+      NRN: this.formData.value.id,
+      billing_address: billingAddress,
+      email: this.formData.value.email,
+      first_name: this.formData.value.name,
+      home_address: homeAddress,
+      iban: this.ibanForm.value.iban,
+      member_type: this.typeClient,
+      phone_number: this.formData.value.phone,
+      social_rate: this.formData.value.socialRate && this.formData.value.socialRate.length > 0,
+      status: status,
+      vat_number: this.formData.value.vatNumber,
+      name: this.formData.value.surname,
+      manager: manager,
+    };
     if (this.typeClient === MemberType.COMPANY) {
       // Individuals
       if (manager === undefined) {
@@ -252,50 +247,50 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     if (this.existingMember) {
       const memberToUpdate: UpdateMemberDTO = {
         id: this.existingMember.id,
-        ...memberToAdd
-      }
-      this.membersService.updateMember(memberToUpdate).subscribe(
-        {
-          next:(response)=>
-          {
-            // this.ref.close(response)
-            if (response) {
-              this.ref.close(true);
-            } else {
-              this.errorHandler.handleError();
-            }
-          },
-          error:(error) => {
-            this.errorHandler.handleError(error.data ? error.data : null);
-          },
-        }
-      );
+        ...memberToAdd,
+      };
+      this.membersService.updateMember(memberToUpdate).subscribe({
+        next: (response) => {
+          // this.ref.close(response)
+          if (response) {
+            this.ref.close(true);
+          } else {
+            this.errorHandler.handleError();
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error.data ? error.data : null);
+        },
+      });
     } else {
-      this.membersService.addMember(memberToAdd).subscribe(
-        {
-          next:(response)=>
-          {
-            if (response) {
-              this.ref.close(response.data);
-            } else {
-              this.errorHandler.handleError();
-            }
-          },
-          error:(error) => {
-            this.errorHandler.handleError(error.data ? error.data : null);
-          },
-        }
-      );
+      this.membersService.addMember(memberToAdd).subscribe({
+        next: (response) => {
+          if (response) {
+            this.ref.close(response.data);
+          } else {
+            this.errorHandler.handleError();
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error.data ? error.data : null);
+        },
+      });
     }
   }
 
   updateGestionnaire(value: boolean) {
     this.gestionnaire = value;
     if (this.gestionnaire) {
-      this.formData.addControl('NRN_manager', new FormControl('', [Validators.required, numRegistreBeValidator]));
+      this.formData.addControl(
+        'NRN_manager',
+        new FormControl('', [Validators.required, numRegistreBeValidator]),
+      );
       this.formData.addControl('name_manager', new FormControl('', [Validators.required]));
       this.formData.addControl('surname_manager', new FormControl('', [Validators.required]));
-      this.formData.addControl('email_manager', new FormControl('', [Validators.required, Validators.email]));
+      this.formData.addControl(
+        'email_manager',
+        new FormControl('', [Validators.required, Validators.email]),
+      );
       this.formData.addControl('phone_manager', new FormControl('', [Validators.required]));
       if (this.existingMember) {
         if (this.existingMember.manager) {

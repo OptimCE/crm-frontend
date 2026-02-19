@@ -1,7 +1,7 @@
 <div class="flex flex-wrap -mx-2">
   <div class="w-6/12 flex items-center">
     <span class="pi pi-user x-3 mr-1 !text-2xl !text-green-500"></span>
-    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ "COMMUNITY.LIST.TITLE" | translate }}</h2>
+    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">{{ 'COMMUNITY.LIST.TITLE' | translate }}</h2>
   </div>
   <div class="w-6/12 text-end">
     <p-button
@@ -23,17 +23,17 @@
   <ng-template #header>
     <tr>
       <th [pSortableColumn]="'name'" class="text-base px-3">
-        {{ "COMMUNITY.LIST.HEADERS.NAME" | translate }}
+        {{ 'COMMUNITY.LIST.HEADERS.NAME' | translate }}
         <p-sortIcon [field]="'name'"></p-sortIcon>
       </th>
       <th class="text-base px-3">
-        {{ "COMMUNITY.LIST.HEADERS.ROLE" | translate }}
+        {{ 'COMMUNITY.LIST.HEADERS.ROLE' | translate }}
       </th>
       <th class="text-base px-3 text-center">
-        {{ "COMMUNITY.LIST.HEADERS.ACTIVATE" | translate }}
+        {{ 'COMMUNITY.LIST.HEADERS.ACTIVATE' | translate }}
       </th>
       <th class="text-base px-3 text-center">
-        {{ "COMMUNITY.LIST.HEADERS.ACTIONS" | translate }}
+        {{ 'COMMUNITY.LIST.HEADERS.ACTIONS' | translate }}
       </th>
     </tr>
   </ng-template>
@@ -42,19 +42,18 @@
       <td class="text-sm px-3 py-2">{{ community.name }}</td>
       <td class="text-sm px-3 py-2">{{ community.role }}</td>
       <td class="text-sm px-3 py-2 text-center">
-        @if(userContextService.activeCommunityId() === community.auth_community_id){
-          <p-tag
-            value="{{ 'COMMUNITY.LIST.ACTIVATED' | translate }}"
-            severity="success"
-          ></p-tag>
-        }
-        @else{
+        @if (userContextService.activeCommunityId() === community.auth_community_id) {
+          <p-tag value="{{ 'COMMUNITY.LIST.ACTIVATED' | translate }}" severity="success"></p-tag>
+        } @else {
           <p-tag value="{{ 'COMMUNITY.LIST.NON_ACTIVATED' | translate }}" severity="danger"></p-tag>
         }
       </td>
       <!-- Join Button -->
       <td class="text-sm px-3 py-2 text-center">
-        @if(userContextService.activeCommunityId() === community.auth_community_id && community.role >= 1){
+        @if (
+          userContextService.activeCommunityId() === community.auth_community_id &&
+          community.role >= 1
+        ) {
           <p-button
             type="button"
             icon="pi pi-check"
@@ -62,18 +61,17 @@
             (click)="updateNameCommunity(community)"
           >
           </p-button>
-        }@else{
+        } @else {
           <div class="flex flex-wrap -mx-2 gap-2">
-            @if(userContextService.activeCommunityId() !== community.auth_community_id){
-
-            <p-button
-              type="button"
-              icon="pi pi-check"
-              label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
-              (click)="joinCommunity(community)"
-              [pTooltip]="'COMMUNITY.LIST.ACTIVATE_BUTTON_TOOLTIP' | translate"
-            >
-            </p-button>
+            @if (userContextService.activeCommunityId() !== community.auth_community_id) {
+              <p-button
+                type="button"
+                icon="pi pi-check"
+                label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
+                (click)="joinCommunity(community)"
+                [pTooltip]="'COMMUNITY.LIST.ACTIVATE_BUTTON_TOOLTIP' | translate"
+              >
+              </p-button>
             }
             <p-button
               type="button"
@@ -93,7 +91,9 @@
   </ng-template>
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
-      <td colspan="4" class="text-center text-base">{{ "COMMUNITY.LIST.NO_COMMUNITY_FOUND" | translate }}</td>
+      <td colspan="4" class="text-center text-base">
+        {{ 'COMMUNITY.LIST.NO_COMMUNITY_FOUND' | translate }}
+      </td>
     </tr>
   </ng-template>
 </p-table>

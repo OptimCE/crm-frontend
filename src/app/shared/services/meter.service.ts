@@ -1,30 +1,35 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environments} from '../../../environments/environments';
+import {inject, Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environments } from '../../../environments/environments';
 import {
   CreateMeterDTO,
   MeterConsumptionDTO,
   MeterConsumptionQuery,
   MeterPartialQuery,
   MetersDTO,
-  PartialMeterDTO, PatchMeterDataDTO, UpdateMeterDTO
+  PartialMeterDTO,
+  PatchMeterDataDTO,
+  UpdateMeterDTO,
 } from '../dtos/meter.dtos';
-import {ApiResponse, ApiResponsePaginated} from '../../core/dtos/api.response';
-import {Observable} from 'rxjs';
+import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MeterService {
+  private http = inject(HttpClient)
   private apiAddress: string;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.apiAddress = environments.apiUrl + '/meters';
   }
 
-  getMetersList(query: MeterPartialQuery): Observable<ApiResponsePaginated<PartialMeterDTO[] | string>> {
+  getMetersList(
+    query: MeterPartialQuery,
+  ): Observable<ApiResponsePaginated<PartialMeterDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(this.apiAddress + '/', {
-      params: {...query},
+      params: { ...query },
     });
   }
 
@@ -32,16 +37,28 @@ export class MeterService {
     return this.http.get<ApiResponse<MetersDTO | string>>(this.apiAddress + '/' + id);
   }
 
-  getMeterConsumptions(id: string, query: MeterConsumptionQuery): Observable<ApiResponse<MeterConsumptionDTO | string>> {
-    return this.http.get<ApiResponse<MeterConsumptionDTO | string>>(this.apiAddress + '/' + id + '/consumptions', {
-      params: {...query},
-    });
+  getMeterConsumptions(
+    id: string,
+    query: MeterConsumptionQuery,
+  ): Observable<ApiResponse<MeterConsumptionDTO | string>> {
+    return this.http.get<ApiResponse<MeterConsumptionDTO | string>>(
+      this.apiAddress + '/' + id + '/consumptions',
+      {
+        params: { ...query },
+      },
+    );
   }
 
-  downloadMeterConsumptions(id: string, query: MeterConsumptionQuery): Observable<ApiResponse<any | string>> {
-    return this.http.get<ApiResponse<any | string>>(this.apiAddress + '/' + id + '/consumptions/download', {
-      params: {...query},
-    });
+  downloadMeterConsumptions(
+    id: string,
+    query: MeterConsumptionQuery,
+  ): Observable<ApiResponse<any | string>> {
+    return this.http.get<ApiResponse<any | string>>(
+      this.apiAddress + '/' + id + '/consumptions/download',
+      {
+        params: { ...query },
+      },
+    );
   }
 
   addMeter(create_meter: CreateMeterDTO): Observable<ApiResponse<string>> {
@@ -49,7 +66,7 @@ export class MeterService {
   }
 
   updateMeter(updated_meter: UpdateMeterDTO): Observable<ApiResponse<string>> {
-    return this.http.put<ApiResponse<string>>(this.apiAddress + '/', updated_meter)
+    return this.http.put<ApiResponse<string>>(this.apiAddress + '/', updated_meter);
   }
 
   patchMeterData(patch_meter_data: PatchMeterDataDTO): Observable<ApiResponse<string>> {

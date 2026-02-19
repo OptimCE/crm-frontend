@@ -1,13 +1,11 @@
-import {Component, Input} from '@angular/core';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {IHeaderAngularComp} from "ag-grid-angular";
+import { Component, Input } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { IHeaderAngularComp } from 'ag-grid-angular';
 import { IHeaderParams } from 'ag-grid-community';
 @Component({
   selector: 'app-header-with-helper',
   standalone: true,
-  imports: [
-    TranslatePipe
-  ],
+  imports: [TranslatePipe],
   templateUrl: './header-with-helper.html',
   styleUrl: './header-with-helper.css',
 })
@@ -18,8 +16,6 @@ export class HeaderWithHelper implements IHeaderAngularComp {
 
   @Input() params: any;
 
-  constructor(private translate: TranslateService) {}
-
   agInit(params: any): void {
     this.params = params;
   }
@@ -28,5 +24,4 @@ export class HeaderWithHelper implements IHeaderAngularComp {
     const tooltip = this.params?.tooltip;
     this.params?.click?.(tooltip);
   }
-
 }

@@ -1,26 +1,39 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
-import {filter} from 'rxjs';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {Role} from '../../core/dtos/role';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { filter } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { Role } from '../../core/dtos/role';
 import { DrawerModule } from 'primeng/drawer';
-import {NgStyle} from '@angular/common';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Divider} from 'primeng/divider';
-import {SidebarElement} from './navbar-elements/sidebar-element/sidebar-element';
-import {SidebarMultiElements} from './navbar-elements/sidebar-multi-elements/sidebar-multi-elements';
-import {Links} from './navbar-elements/dtos';
-import {Title} from '@angular/platform-browser';
-import {LanguageSelector} from '../../shared/components/language-selector/language-selector';
+import { NgStyle } from '@angular/common';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Divider } from 'primeng/divider';
+import { SidebarElement } from './navbar-elements/sidebar-element/sidebar-element';
+import { SidebarMultiElements } from './navbar-elements/sidebar-multi-elements/sidebar-multi-elements';
+import { Links } from './navbar-elements/dtos';
+import { Title } from '@angular/platform-browser';
+import { LanguageSelector } from '../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
-import {UserContextService} from '../../core/services/authorization/authorization.service';
+import { UserContextService } from '../../core/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [DrawerModule, NgStyle, TranslatePipe, Divider, SidebarElement, SidebarMultiElements, LanguageSelector],
+  imports: [
+    DrawerModule,
+    NgStyle,
+    TranslatePipe,
+    Divider,
+    SidebarElement,
+    SidebarMultiElements,
+    LanguageSelector,
+  ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar implements OnInit{
+export class Navbar implements OnInit {
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  protected userContextService = inject(UserContextService);
+  private titleService = inject(Title);
+  private translateService = inject(TranslateService);
   private readonly keycloak = inject(Keycloak);
 
   title = 'front-end-orchestrator';
@@ -45,47 +58,42 @@ export class Navbar implements OnInit{
 
   keysLinks: Links[] = [
     {
-      name: "NAVBAR.HANDLE_KEY",
+      name: 'NAVBAR.HANDLE_KEY',
       // name: "Gérer les clefs",
-      icon: "pi pi-key",
-      url: "/keys"
+      icon: 'pi pi-key',
+      url: '/keys',
     },
     {
-      name: "NAVBAR.GENERATE_KEY",
+      name: 'NAVBAR.GENERATE_KEY',
       // name: "Générer une clef",
-      icon: "pi pi-code",
-      url: "/keys/generate"
-    }
-  ]
+      icon: 'pi pi-code',
+      url: '/keys/generate',
+    },
+  ];
 
   memberLinks: Links[] = [
     {
-      name: "NAVBAR.HANDLE_MEMBRE",
+      name: 'NAVBAR.HANDLE_MEMBRE',
       // name: "Gérer les membres",
-      icon: "pi pi-users",
-      url: "/members"
+      icon: 'pi pi-users',
+      url: '/members',
     },
     {
-      name: "NAVBAR.HANDLE_METER",
+      name: 'NAVBAR.HANDLE_METER',
       // name: "Gérer les compteurs",
-      icon: "pi pi-gauge",
-      url: "/meters"
+      icon: 'pi pi-gauge',
+      url: '/meters',
     },
     {
-      name: "NAVBAR.HANDLE_SHARING_OP",
+      name: 'NAVBAR.HANDLE_SHARING_OP',
       // name: "Opérations de partage",
-      icon: "pi pi-building",
-      url: "/sharing_operations"
+      icon: 'pi pi-building',
+      url: '/sharing_operations',
     },
-  ]
+  ];
 
   constructor(
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    protected userContextService: UserContextService,
-    private route: ActivatedRoute,
-    private titleService: Title,
-    private translateService: TranslateService,
+
   ) {
     this.sidebarOpen = false;
     this.setSidebarWidth();
@@ -125,7 +133,6 @@ export class Navbar implements OnInit{
     });
   }
 
-
   openSubmenu(index: number) {
     this.showSubmenu[index] = !this.showSubmenu[index];
     this.isExpanded[index] = !this.isExpanded[index];
@@ -133,15 +140,15 @@ export class Navbar implements OnInit{
 
   logout() {
     this.keycloak.logout({
-      redirectUri: window.location.origin+"/auth",
-    })
+      redirectUri: window.location.origin + '/auth',
+    });
   }
-  onMouseEnter($event: MouseEvent) {
+  onMouseEnter(_$event: MouseEvent) {
     this.sidebarOpen = true;
     this.setSidebarWidth();
   }
 
-  onMouseLeave($event: MouseEvent) {
+  onMouseLeave(_$event: MouseEvent) {
     this.sidebarOpen = false;
     this.setSidebarWidth();
   }

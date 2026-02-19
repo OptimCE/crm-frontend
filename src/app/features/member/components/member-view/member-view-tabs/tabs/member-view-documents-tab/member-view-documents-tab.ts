@@ -1,81 +1,71 @@
-import {Component, Input, OnDestroy, OnInit, signal} from '@angular/core';
-import {Button} from 'primeng/button';
-import {Ripple} from 'primeng/ripple';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {TableLazyLoadEvent, TableModule} from 'primeng/table';
-import {MemberService} from '../../../../../../../shared/services/member.service';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {SnackbarNotification} from '../../../../../../../shared/services-ui/snackbar.notifcation.service';
-import {DocumentExposedDTO, DocumentQueryDTO} from '../../../../../../../shared/dtos/document.dtos';
-import {Pagination} from '../../../../../../../core/dtos/api.response';
-import {DocumentService} from '../../../../../../../shared/services/document.service';
-import {MemberAddDocument} from '../../../../member-add-document/member-add-document';
-import {VALIDATION_TYPE} from '../../../../../../../core/dtos/notification';
-import {FilterMetadata} from 'primeng/api';
+import {Component, inject, Input, OnDestroy, OnInit, signal} from '@angular/core';
+import { Button } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SnackbarNotification } from '../../../../../../../shared/services-ui/snackbar.notifcation.service';
+import {
+  DocumentExposedDTO,
+  DocumentQueryDTO,
+} from '../../../../../../../shared/dtos/document.dtos';
+import { Pagination } from '../../../../../../../core/dtos/api.response';
+import { DocumentService } from '../../../../../../../shared/services/document.service';
+import { MemberAddDocument } from '../../../../member-add-document/member-add-document';
+import { VALIDATION_TYPE } from '../../../../../../../core/dtos/notification';
+import { FilterMetadata } from 'primeng/api';
 
 @Component({
   selector: 'app-member-view-documents-tab',
-  imports: [
-    Button,
-    Ripple,
-    TranslatePipe,
-    TableModule
-  ],
+  imports: [Button, Ripple, TranslatePipe, TableModule],
   templateUrl: './member-view-documents-tab.html',
   styleUrl: './member-view-documents-tab.css',
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class MemberViewDocumentsTab implements OnInit, OnDestroy {
-
+  private documentService = inject(DocumentService);
+  private translate = inject(TranslateService)
+  private dialogService = inject(DialogService)
+  private snackbar = inject(SnackbarNotification)
   @Input() id!: number;
-  filter = signal<DocumentQueryDTO>({page: 1, limit: 10})
-  constructor(private memberService: MemberService,
-              private documentService: DocumentService,
-              private translate: TranslateService,
-              private dialogService: DialogService,
-              private snackbar: SnackbarNotification) {
-  }
+  filter = signal<DocumentQueryDTO>({ page: 1, limit: 10 });
+
   documentsPartialList = signal<DocumentExposedDTO[]>([]);
   paginationDocumentsInfo: Pagination = new Pagination(1, 10, 0, 1);
   currentPageReportTemplateDocuments: string = '';
   ref?: DynamicDialogRef | null;
 
   ngOnInit() {
-    this.updateDocumentPaginationTranslation()
+    this.updateDocumentPaginationTranslation();
   }
 
   loadDocument() {
     try {
-
-      this.documentsPartialList.set([])
-      this.documentService.getDocuments(this.id, this.filter()).subscribe(
-        {
-          next:(response)=>
-          {
-            if (response) {
-              this.documentsPartialList.set(response.data as DocumentExposedDTO[]);
-              this.paginationDocumentsInfo = response.pagination;
-            } else {
-              console.error('Error fetching documents partial list');
-            }
-          },
-          error:(error) => {
-            console.error('Error fetching documents partial list : ', error);
-          },
-        }
-      );
+      this.documentsPartialList.set([]);
+      this.documentService.getDocuments(this.id, this.filter()).subscribe({
+        next: (response) => {
+          if (response) {
+            this.documentsPartialList.set(response.data as DocumentExposedDTO[]);
+            this.paginationDocumentsInfo = response.pagination;
+          } else {
+            console.error('Error fetching documents partial list');
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching documents partial list : ', error);
+        },
+      });
     } catch (e) {
       console.error('Error fetching partials documents ' + e);
     }
   }
 
   lazyLoadDocuments($event: TableLazyLoadEvent) {
-    const current: any = {...this.filter()};
-    if($event.first !== undefined && $event.rows !== undefined){
-      if($event.rows){
-        current.page = ($event.first / $event.rows) + 1
-      }
-      else{
+    const current: any = { ...this.filter() };
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      if ($event.rows) {
+        current.page = $event.first / $event.rows + 1;
+      } else {
         current.page = 1;
       }
     }
@@ -114,7 +104,6 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     this.loadDocument();
   }
 
-
   updateDocumentPaginationTranslation() {
     this.translate
       .get('MEMBER.VIEW.DOCUMENTS.PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL', {
@@ -129,7 +118,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
 
   clear(table: any) {
     table.clear();
-    this.filter.set({page: 1, limit: 10});
+    this.filter.set({ page: 1, limit: 10 });
   }
 
   onDownloadDocument(doc: any) {
@@ -166,12 +155,14 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
         idMember: this.id,
       },
     });
-    if(this.ref) {
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.translate.get("MEMBER.VIEW.DOCUMENTS.SUCCESS_ADDING_DOCUMENT_LABEL").subscribe((translatedText: string)=>{
-            this.snackbar.openSnackBar(translatedText, VALIDATION_TYPE);
-          })
+          this.translate
+            .get('MEMBER.VIEW.DOCUMENTS.SUCCESS_ADDING_DOCUMENT_LABEL')
+            .subscribe((translatedText: string) => {
+              this.snackbar.openSnackBar(translatedText, VALIDATION_TYPE);
+            });
           this.loadDocument();
         }
       });
@@ -179,8 +170,8 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.ref){
-      this.ref.destroy()
+    if (this.ref) {
+      this.ref.destroy();
     }
   }
 }

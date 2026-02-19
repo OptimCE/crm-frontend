@@ -3,7 +3,7 @@ import { BehaviorSubject, distinctUntilChanged, merge, Subscription } from 'rxjs
 import { FormGroupDirective, ValidationErrors } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
-import {ErrorAdded, ErrorHandlerParams} from '../../types/error.types';
+import { ErrorAdded, ErrorHandlerParams } from '../../types/error.types';
 
 @Component({
   selector: 'app-error-handler',
@@ -57,16 +57,18 @@ export class ErrorHandlerComponent implements OnInit, OnDestroy {
   }
 
   private loadDefaultErrorMessages() {
-    this.translate.get(['form_error.required_field', 'form_error.invalid_email', 'form_error.min_length']).subscribe((translations) => {
-      this.errors = {
-        required: () => translations['form_error.required_field'] || 'Ce champ est obligatoire',
-        minlength: ({ requiredLength, actualLength }: any) =>
-          translations['form_error.min_length']
-            ? this.translate.instant('form_error.min_length', { requiredLength, actualLength })
-            : `Ce champ doit contenir au moins ${requiredLength} caractères (actuellement ${actualLength}).`,
-        email: () => translations['form_error.invalid_email'] || 'Adresse email invalide',
-      };
-    });
+    this.translate
+      .get(['form_error.required_field', 'form_error.invalid_email', 'form_error.min_length'])
+      .subscribe((translations) => {
+        this.errors = {
+          required: () => translations['form_error.required_field'] || 'Ce champ est obligatoire',
+          minlength: ({ requiredLength, actualLength }: any) =>
+            translations['form_error.min_length']
+              ? this.translate.instant('form_error.min_length', { requiredLength, actualLength })
+              : `Ce champ doit contenir au moins ${requiredLength} caractères (actuellement ${actualLength}).`,
+          email: () => translations['form_error.invalid_email'] || 'Adresse email invalide',
+        };
+      });
   }
 
   private setError(text: string) {

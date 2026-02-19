@@ -1,12 +1,8 @@
-module.exports= {
-  content:[
-    './src/**/*.{html,ts}',
-  ],
+module.exports = {
+  content: ['./src/**/*.{html,ts}'],
   theme: {
-    extend:{}
+    extend: {},
   },
   corePlugins: { preflight: false },
-  plugins: [
-    require('tailwindcss-primeui')
-  ],
-}
+  plugins: [require('tailwindcss-primeui')],
+};

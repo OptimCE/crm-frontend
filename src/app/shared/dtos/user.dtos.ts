@@ -1,4 +1,4 @@
-import {AddressDTO, CreateAddressDTO} from './address.dtos';
+import { AddressDTO, CreateAddressDTO } from './address.dtos';
 
 /**
  * DTO representing a user's profile and contact information.

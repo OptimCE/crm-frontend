@@ -1,33 +1,38 @@
-import {Component, inject, Input, OnInit, signal} from '@angular/core';
-import {Button} from 'primeng/button';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AddressPipe} from '../../../../shared/pipes/address/address-pipe';
-import {InputTextModule} from 'primeng/inputtext';
-import {CheckboxModule} from 'primeng/checkbox';
-import {DatePipe} from '@angular/common';
-import {TagModule} from 'primeng/tag';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {ChartModule} from 'primeng/chart';
-import {Ripple} from 'primeng/ripple';
-import {ErrorHandlerComponent} from '../../../../shared/components/error.handler/error.handler.component';
-import {Select} from 'primeng/select';
-import {DatePicker} from 'primeng/datepicker';
-import {Tab, TabList, TabPanel, TabPanels, Tabs} from 'primeng/tabs';
-import {TableModule} from 'primeng/table';
-import {Card} from 'primeng/card';
-import {MeterConsumptionDTO, MetersDataDTO, MetersDTO} from '../../../../shared/dtos/meter.dtos';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MeterService} from '../../../../shared/services/meter.service';
-import {SnackbarNotification} from '../../../../shared/services-ui/snackbar.notifcation.service';
-import {MeterUpdate} from '../meter-update/meter-update';
-import {VALIDATION_TYPE} from '../../../../core/dtos/notification';
-import {MeterDataUpdate} from '../meter-data-update/meter-data-update';
-import {MeterDeactivation} from '../meter-deactivation/meter-deactivation';
-import {MeterDataStatus} from '../../../../shared/types/meter.types';
-import {MapNumberStringPipe} from '../../../../shared/pipes/map-number-string/map-number-string-pipe';
-import {MeterDataView} from './meter-data-view/meter-data-view';
-
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { Button } from 'primeng/button';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
+import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DatePipe } from '@angular/common';
+import { TagModule } from 'primeng/tag';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ChartModule } from 'primeng/chart';
+import { Ripple } from 'primeng/ripple';
+import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { TableModule } from 'primeng/table';
+import { Card } from 'primeng/card';
+import { MeterConsumptionDTO, MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
+import { MeterUpdate } from '../meter-update/meter-update';
+import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { MeterDataUpdate } from '../meter-data-update/meter-data-update';
+import { MeterDeactivation } from '../meter-deactivation/meter-deactivation';
+import { MeterDataStatus } from '../../../../shared/types/meter.types';
+import { MapNumberStringPipe } from '../../../../shared/pipes/map-number-string/map-number-string-pipe';
+import { MeterDataView } from './meter-data-view/meter-data-view';
 
 @Component({
   selector: 'app-meter-view',
@@ -59,10 +64,15 @@ import {MeterDataView} from './meter-data-view/meter-data-view';
   ],
   templateUrl: './meter-view.html',
   styleUrl: './meter-view.css',
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class MeterView implements OnInit {
-  private translate = inject(TranslateService)
+  private translate = inject(TranslateService);
+  private route = inject(ActivatedRoute);
+  private metersService = inject(MeterService);
+  private dialogService = inject(DialogService);
+  private snackbar = inject(SnackbarNotification);
+  private router = inject(Router);
   @Input()
   id!: string;
   meter!: MetersDTO;
@@ -102,7 +112,7 @@ export class MeterView implements OnInit {
           display: true,
           text: this.translate.instant('METER.FULL.CHART.X_TITLE_DATE'),
         },
-        ticks:{
+        ticks: {
           _callback: (_value: any, index: number) => {
             // Make sure 'this' refers to the component context
             const label = this.data?.labels?.[index];
@@ -119,14 +129,14 @@ export class MeterView implements OnInit {
             const seconds = String(date.getSeconds()).padStart(2, '0');
 
             return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-          }
-        }
+          },
+        },
       },
       y: {
         stacked: true,
         title: {
           display: true,
-          text: this.translate.instant('METER.FULL.CHART.Y_TITLE_CONSUMPTION')
+          text: this.translate.instant('METER.FULL.CHART.Y_TITLE_CONSUMPTION'),
         },
       },
     },
@@ -134,11 +144,7 @@ export class MeterView implements OnInit {
   displayDownloadButton: any;
   formChart!: FormGroup;
   constructor(
-    private route: ActivatedRoute,
-    private metersService: MeterService,
-    private dialogService: DialogService,
-    private snackbar: SnackbarNotification,
-    private router: Router,
+
   ) {
     this.isLoaded = false;
     this.historySelected = undefined;
@@ -167,24 +173,21 @@ export class MeterView implements OnInit {
     if (changeIsLoaded) {
       this.isLoaded = false;
     }
-    this.metersService.getMeter(this.id).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.meter = response.data as MetersDTO;
-            if (changeIsLoaded) {
-              this.isLoaded = true;
-            }
-          } else {
-            console.error('Error fetching meter', response);
+    this.metersService.getMeter(this.id).subscribe({
+      next: (response) => {
+        if (response) {
+          this.meter = response.data as MetersDTO;
+          if (changeIsLoaded) {
+            this.isLoaded = true;
           }
-        },
-        error:(error) => {
-          console.error('Error fetching meter', error);
-        },
-      }
-    );
+        } else {
+          console.error('Error fetching meter', response);
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching meter', error);
+      },
+    });
   }
 
   setupTranslationCategory() {
@@ -225,32 +228,37 @@ export class MeterView implements OnInit {
   }
 
   setupRateCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.RATE.SIMPLE',
-      'METER.CATEGORIES.RATE.BI_HOURLY',
-      'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'
-    ]).subscribe((translation) => {
-      this.rateMap = [
-        '',
-        translation['METER.CATEGORIES.RATE.SIMPLE'],
-        translation['METER.CATEGORIES.RATE.BI_HOURLY'],
-        translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT']];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.RATE.SIMPLE',
+        'METER.CATEGORIES.RATE.BI_HOURLY',
+        'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
+      ])
+      .subscribe((translation) => {
+        this.rateMap = [
+          '',
+          translation['METER.CATEGORIES.RATE.SIMPLE'],
+          translation['METER.CATEGORIES.RATE.BI_HOURLY'],
+          translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'],
+        ];
+      });
   }
 
   setupClientCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.CLIENT.RESIDENTIAL',
-      'METER.CATEGORIES.CLIENT.PROFESSIONAL',
-      'METER.CATEGORIES.CLIENT.INDUSTRIAL'
-    ]).subscribe((translation) => {
-      this.clientTypeMap = [
-        '',
-        translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
-        translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
-        translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'],
-      ];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.CLIENT.RESIDENTIAL',
+        'METER.CATEGORIES.CLIENT.PROFESSIONAL',
+        'METER.CATEGORIES.CLIENT.INDUSTRIAL',
+      ])
+      .subscribe((translation) => {
+        this.clientTypeMap = [
+          '',
+          translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
+          translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
+          translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'],
+        ];
+      });
   }
 
   setupInjectionStatusCategory() {
@@ -275,39 +283,45 @@ export class MeterView implements OnInit {
   }
 
   setupReadingFrequencyCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
-      'METER.CATEGORIES.READING_FREQUENCY.ANNUAL'
-    ]).subscribe((translation) => {
-      this.readingFrequencyMap = [
-        '',
-        translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
-        translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL']];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
+        'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
+      ])
+      .subscribe((translation) => {
+        this.readingFrequencyMap = [
+          '',
+          translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
+          translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
+        ];
+      });
   }
 
   setupPhaseCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.PHASE.SINGLE_PHASE',
-      'METER.CATEGORIES.PHASE.THREE_PHASES'
-    ]).subscribe((translation) => {
-      this.phasesNumberMap = [
-        '',
-        translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
-        translation['METER.CATEGORIES.PHASE.THREE_PHASES']];
-    });
+    this.translate
+      .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
+      .subscribe((translation) => {
+        this.phasesNumberMap = [
+          '',
+          translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
+          translation['METER.CATEGORIES.PHASE.THREE_PHASES'],
+        ];
+      });
   }
 
   setupTarifGroupCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
-      'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'
-    ]).subscribe((translation) => {
-      this.tarifGroupMap = [
-        '',
-        translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
-        translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE']];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
+        'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
+      ])
+      .subscribe((translation) => {
+        this.tarifGroupMap = [
+          '',
+          translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
+          translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
+        ];
+      });
   }
 
   toModify() {
@@ -320,15 +334,17 @@ export class MeterView implements OnInit {
         meter: this.meter,
       },
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('METER.FULL.METER_MODIFIED_SUCCESS_LABEL'), VALIDATION_TYPE);
+          this.snackbar.openSnackBar(
+            this.translate.instant('METER.FULL.METER_MODIFIED_SUCCESS_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.getFullMeter(false);
         }
       });
     }
-
   }
   toUpdate($event: Event) {
     $event.stopPropagation();
@@ -343,15 +359,17 @@ export class MeterView implements OnInit {
         meterData: this.meter.meter_data,
       },
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('METER.FULL.METER_DATA_UPDATE_SUCCESS_LABEL'), VALIDATION_TYPE);
+          this.snackbar.openSnackBar(
+            this.translate.instant('METER.FULL.METER_DATA_UPDATE_SUCCESS_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.getFullMeter(false);
         }
       });
     }
-
   }
 
   toDeactivate() {
@@ -364,31 +382,38 @@ export class MeterView implements OnInit {
         ean: this.meter.EAN,
       },
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('METER.FULL.METER_DEACTIVATED_SUCCESS_LABEL'), VALIDATION_TYPE);
+          this.snackbar.openSnackBar(
+            this.translate.instant('METER.FULL.METER_DEACTIVATED_SUCCESS_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.getFullMeter(false);
         }
       });
     }
-
   }
 
   downloadTotalConsumption() {
-    this.metersService.downloadMeterConsumptions(this.meter.EAN, {date_start: this.formChart.value.dateDeb, date_end: this.formChart.value.dateFin }).subscribe((response) => {
-      if (response) {
-        // const blob = new Blob([response], { type: 'xlsx' });
-        // const url = window.URL.createObjectURL(blob);
-        // const a = document.createElement('a');
-        // a.href = url;
-        // a.download = this.translate.instant('meters.full.consumption_file_prefix') + this.meter.EAN + '.xlsx';
-        // document.body.appendChild(a);
-        // a.click();
-        // window.URL.revokeObjectURL(url);
-        // document.body.removeChild(a);
-      }
-    });
+    this.metersService
+      .downloadMeterConsumptions(this.meter.EAN, {
+        date_start: this.formChart.value.dateDeb,
+        date_end: this.formChart.value.dateFin,
+      })
+      .subscribe((response) => {
+        if (response) {
+          // const blob = new Blob([response], { type: 'xlsx' });
+          // const url = window.URL.createObjectURL(blob);
+          // const a = document.createElement('a');
+          // a.href = url;
+          // a.download = this.translate.instant('meters.full.consumption_file_prefix') + this.meter.EAN + '.xlsx';
+          // document.body.appendChild(a);
+          // a.click();
+          // window.URL.revokeObjectURL(url);
+          // document.body.removeChild(a);
+        }
+      });
   }
 
   loadChart() {
@@ -397,41 +422,46 @@ export class MeterView implements OnInit {
       return;
     }
 
-    this.metersService.getMeterConsumptions(this.meter.EAN, {date_start: this.formChart.value.dateDeb, date_end: this.formChart.value.dateFin}).subscribe((response) => {
-      if (response) {
-        const tmpData = response.data as MeterConsumptionDTO;
-        this.data = {
-          labels: tmpData.timestamps,
-          datasets: [
-            {
-              type: 'bar',
-              label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_SHARED_LABEL'),
-              stack: 'consumption',
-              data: tmpData.shared,
-            },
-            {
-              type: 'bar',
-              label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_NET_LABEL'),
-              stack: 'consumption',
-              data: tmpData.net,
-            },
-            {
-              type: 'bar',
-              label: this.translate.instant('METER.FULL.CHART.INJECTION_NET_LABEL'),
-              stack: 'inj',
-              data: tmpData.inj_net,
-            },
-            {
-              type: 'bar',
-              label: this.translate.instant('METER.FULL.CHART.INJECTION_SHARED_LABEL'),
-              stack: 'inj',
-              data: tmpData.inj_shared,
-            },
-          ],
-        };
-        this.displayDownloadButton = true;
-      }
-    });
+    this.metersService
+      .getMeterConsumptions(this.meter.EAN, {
+        date_start: this.formChart.value.dateDeb,
+        date_end: this.formChart.value.dateFin,
+      })
+      .subscribe((response) => {
+        if (response) {
+          const tmpData = response.data as MeterConsumptionDTO;
+          this.data = {
+            labels: tmpData.timestamps,
+            datasets: [
+              {
+                type: 'bar',
+                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_SHARED_LABEL'),
+                stack: 'consumption',
+                data: tmpData.shared,
+              },
+              {
+                type: 'bar',
+                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_NET_LABEL'),
+                stack: 'consumption',
+                data: tmpData.net,
+              },
+              {
+                type: 'bar',
+                label: this.translate.instant('METER.FULL.CHART.INJECTION_NET_LABEL'),
+                stack: 'inj',
+                data: tmpData.inj_net,
+              },
+              {
+                type: 'bar',
+                label: this.translate.instant('METER.FULL.CHART.INJECTION_SHARED_LABEL'),
+                stack: 'inj',
+                data: tmpData.inj_shared,
+              },
+            ],
+          };
+          this.displayDownloadButton = true;
+        }
+      });
   }
 
   protected readonly MeterStatus = MeterDataStatus;

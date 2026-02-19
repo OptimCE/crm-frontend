@@ -1,16 +1,14 @@
-import {Routes} from '@angular/router';
-import {MembersList} from './components/members-list/members-list';
-import {MemberView} from './components/member-view/member-view';
-
-
+import { Routes } from '@angular/router';
+import { MembersList } from './components/members-list/members-list';
+import { MemberView } from './components/member-view/member-view';
 
 export const MEMBER_ROUTES: Routes = [
   {
     path: '',
-    component: MembersList
+    component: MembersList,
   },
   {
     path: ':id',
-    component: MemberView
-  }
-]
+    component: MemberView,
+  },
+];

@@ -1,26 +1,26 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {MeterPartialQuery, PartialMeterDTO} from '../../../../shared/dtos/meter.dtos';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {MembersPartialDTO} from '../../../../shared/dtos/member.dtos';
-import {Pagination} from '../../../../core/dtos/api.response';
-import {MeterService} from '../../../../shared/services/meter.service';
-import {Router} from '@angular/router';
-import {MemberService} from '../../../../shared/services/member.service';
-import {SnackbarNotification} from '../../../../shared/services-ui/snackbar.notifcation.service';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {MeterDataStatus} from '../../../../shared/types/meter.types';
-import {MeterCreation} from '../meter-creation/meter-creation';
-import {VALIDATION_TYPE} from '../../../../core/dtos/notification';
-import {TableModule} from 'primeng/table';
-import {AddressPipe} from '../../../../shared/pipes/address/address-pipe';
-import {IconFieldModule} from 'primeng/iconfield';
-import {InputIconModule} from 'primeng/inputicon';
-import {Button} from 'primeng/button';
-import {TagModule} from 'primeng/tag';
-import {FormsModule} from '@angular/forms';
-import {Select} from 'primeng/select';
-import {InputText} from 'primeng/inputtext';
-import {MemberPartialPipe} from '../../../../shared/pipes/member-partial/member-partial-pipe';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { Router } from '@angular/router';
+import { MemberService } from '../../../../shared/services/member.service';
+import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { MeterDataStatus } from '../../../../shared/types/meter.types';
+import { MeterCreation } from '../meter-creation/meter-creation';
+import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { TableModule } from 'primeng/table';
+import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { Button } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { FormsModule } from '@angular/forms';
+import { Select } from 'primeng/select';
+import { InputText } from 'primeng/inputtext';
+import { MemberPartialPipe } from '../../../../shared/pipes/member-partial/member-partial-pipe';
 
 @Component({
   selector: 'app-meters-list',
@@ -40,12 +40,18 @@ import {MemberPartialPipe} from '../../../../shared/pipes/member-partial/member-
   ],
   templateUrl: './meters-list.html',
   styleUrl: './meters-list.css',
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class MetersList implements OnInit {
+  private metersService = inject(MeterService);
+  private routing = inject(Router);
+  private dialogService = inject(DialogService);
+  private memberService = inject(MemberService);
+  private snackbar = inject(SnackbarNotification);
+  private translate = inject(TranslateService);
   isLoaded: boolean;
   metersPartialList = signal<PartialMeterDTO[]>([]);
-  filter = signal<MeterPartialQuery>({page: 1, limit: 10})
+  filter = signal<MeterPartialQuery>({ page: 1, limit: 10 });
   ref?: DynamicDialogRef | null;
   addressFilter = {
     streetName: '',
@@ -60,15 +66,9 @@ export class MetersList implements OnInit {
   paginationInfo: Pagination = new Pagination(1, 10, 0, 1);
   currentPageReportTemplate: string = '';
   constructor(
-    private metersService: MeterService,
-    private routing: Router,
-    private dialogService: DialogService,
-    private memberService: MemberService,
-    private snackbar: SnackbarNotification,
-    private translate: TranslateService,
+
   ) {
     this.isLoaded = false;
-
   }
   ngOnInit() {
     this.isLoaded = false;
@@ -94,18 +94,25 @@ export class MetersList implements OnInit {
         'METER.STATUS.ACTIVE_LABEL',
         'METER.STATUS.INACTIVE_LABEL',
         'METER.STATUS.WAITING_GRD_LABEL',
-        'METER.STATUS.WAITING_MANAGER_LABEL'])
+        'METER.STATUS.WAITING_MANAGER_LABEL',
+      ])
       .subscribe((translation) => {
         this.statutCategory = [
           { value: MeterDataStatus.ACTIVE, label: translation['METER.STATUS.ACTIVE_LABEL'] },
           { value: MeterDataStatus.INACTIVE, label: translation['METER.STATUS.INACTIVE_LABEL'] },
-          { value: MeterDataStatus.WAITING_GRD, label: translation['METER.STATUS.WAITING_GRD_LABEL'] },
-          { value: MeterDataStatus.WAITING_MANAGER, label: translation['METER.STATUS.WAITING_MANAGER_LABEL'] },
+          {
+            value: MeterDataStatus.WAITING_GRD,
+            label: translation['METER.STATUS.WAITING_GRD_LABEL'],
+          },
+          {
+            value: MeterDataStatus.WAITING_MANAGER,
+            label: translation['METER.STATUS.WAITING_MANAGER_LABEL'],
+          },
         ];
       });
   }
   loadHolders() {
-    this.memberService.getMembersList({page: 1, limit: 10}).subscribe((response) => {
+    this.memberService.getMembersList({ page: 1, limit: 10 }).subscribe((response) => {
       if (response) {
         this.holders = response.data as MembersPartialDTO[];
       }
@@ -113,25 +120,22 @@ export class MetersList implements OnInit {
   }
 
   loadMeters() {
-    this.metersService.getMetersList(this.filter()).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.metersPartialList.set(response.data as PartialMeterDTO[]);
-            this.paginationInfo = response.pagination;
-            this.updatePaginationTranslation();
-          } else {
-            this.isLoaded = true;
-            console.error('Error fetching meters partial list');
-          }
-        },
-        error:(error) => {
+    this.metersService.getMetersList(this.filter()).subscribe({
+      next: (response) => {
+        if (response) {
+          this.metersPartialList.set(response.data as PartialMeterDTO[]);
+          this.paginationInfo = response.pagination;
+          this.updatePaginationTranslation();
+        } else {
           this.isLoaded = true;
           console.error('Error fetching meters partial list');
-        },
-      }
-    );
+        }
+      },
+      error: (_error) => {
+        this.isLoaded = true;
+        console.error('Error fetching meters partial list');
+      },
+    });
   }
 
   onRowClick(meter: PartialMeterDTO) {
@@ -145,35 +149,37 @@ export class MetersList implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('METER.LIST.ADD_METER_HEADER'),
     });
-    if(this.ref){
+    if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
-          this.snackbar.openSnackBar(this.translate.instant('METER.LIST.METER_ADDED_SUCCESSFULLY_LABEL'), VALIDATION_TYPE);
+          this.snackbar.openSnackBar(
+            this.translate.instant('METER.LIST.METER_ADDED_SUCCESSFULLY_LABEL'),
+            VALIDATION_TYPE,
+          );
           this.loadMeters();
         }
       });
     }
-
   }
 
   lazyLoadMeters($event: any) {
-    const current: any = {...this.filter()};
-    if($event.first !== undefined && $event.rows !== undefined){
-      if($event.rows){
-        current.page = ($event.first / $event.rows) + 1
-      }
-      else{
+    const current: any = { ...this.filter() };
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      if ($event.rows) {
+        current.page = $event.first / $event.rows + 1;
+      } else {
         current.page = 1;
       }
     }
 
-    if($event.filters){
+    if ($event.filters) {
       Object.entries($event.filters).forEach(([field, meta]) => {
         if ((meta as any).value) {
           current[field] = (meta as any).value;
         } else {
           delete current[field];
-        }})
+        }
+      });
     }
     this.loadMeters();
   }
@@ -194,8 +200,8 @@ export class MetersList implements OnInit {
   }
 
   pageChange($event: any) {
-    const current: any = {...this.filter()}
-    current.page= $event.first / $event.rows + 1;
+    const current: any = { ...this.filter() };
+    current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadMeters();
   }

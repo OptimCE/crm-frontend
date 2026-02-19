@@ -8,9 +8,8 @@ describe('MeterView', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MeterView]
-    })
-    .compileComponents();
+      imports: [MeterView],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MeterView);
     component = fixture.componentInstance;

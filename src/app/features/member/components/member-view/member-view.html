@@ -1,120 +1,202 @@
 <div class="container mx-auto px-4 m-3">
-  @if(isLoading()){
+  @if (isLoading()) {
     <p-progressSpinner></p-progressSpinner>
-  }
-  @else{
+  } @else {
     <div>
-      <p-dialog header="{{'MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.HEADER_LABEL'|translate}}" [modal]="true" [(visible)]="alertPopupVisible">
+      <p-dialog
+        header="{{ 'MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.HEADER_LABEL' | translate }}"
+        [modal]="true"
+        [(visible)]="alertPopupVisible"
+      >
         <div class="p-3 text-center">
           <p class="text-base">
-            {{ "MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.MEMBER_CANT_DEACTIVATE_MEMBER_WITH_ACTIVATED_METER_LABEL" | translate }}
+            {{
+              'MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.MEMBER_CANT_DEACTIVATE_MEMBER_WITH_ACTIVATED_METER_LABEL'
+                | translate
+            }}
           </p>
-          <p-button pRipple label="{{ 'MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.CLOSE_BUTTON_LABEL' | translate }}" (onClick)="alertPopupVisible = false" class="p-button-primary mt-2" />
+          <p-button
+            pRipple
+            label="{{ 'MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.CLOSE_BUTTON_LABEL' | translate }}"
+            (onClick)="alertPopupVisible = false"
+            class="p-button-primary mt-2"
+          />
         </div>
       </p-dialog>
       <div class="flex flex-wrap -mx-2 mb-4">
         <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 px-2 flex items-center gap-2">
-          @switch (membersType){
-            @case (MemberType.INDIVIDUAL){
-              <i class="pi pi-user  !text-green-500 mr-1 !text-2xl"></i>
+          @switch (membersType) {
+            @case (MemberType.INDIVIDUAL) {
+              <i class="pi pi-user !text-green-500 mr-1 !text-2xl"></i>
             }
-            @case (MemberType.COMPANY){
-              <i class="pi pi-building  !text-green-500 mr-1 !text-2xl"></i>
+            @case (MemberType.COMPANY) {
+              <i class="pi pi-building !text-green-500 mr-1 !text-2xl"></i>
             }
           }
-          <h2 class="text-xl font-medium">{{ "MEMBER.VIEW.MEMBER_TITLE" | translate }}</h2>
+          <h2 class="text-xl font-medium">{{ 'MEMBER.VIEW.MEMBER_TITLE' | translate }}</h2>
         </div>
         <div class="lg:w-6/12 md:w-6/12 sm:w-10/12 flex flex-wrap place-content-end gap-2">
-          @if(status !== MemberStatus.ACTIVE){
-            <p-button label="{{ 'MEMBER.VIEW.STATUS_ACTION.ACTIVATE_BUTTON_LABEL' | translate }}" icon="pi pi-circle-on" severity="success" (click)="setStatus(1)"></p-button>
+          @if (status !== MemberStatus.ACTIVE) {
+            <p-button
+              label="{{ 'MEMBER.VIEW.STATUS_ACTION.ACTIVATE_BUTTON_LABEL' | translate }}"
+              icon="pi pi-circle-on"
+              severity="success"
+              (click)="setStatus(1)"
+            ></p-button>
           }
-          @if(status !== MemberStatus.INACTIVE){
-            <p-button label="{{ 'MEMBER.VIEW.STATUS_ACTION.DEACTIVATE_BUTTON_LABEL' | translate }}" icon="pi pi-circle-off" severity="danger" (click)="setStatus(2)"></p-button>
+          @if (status !== MemberStatus.INACTIVE) {
+            <p-button
+              label="{{ 'MEMBER.VIEW.STATUS_ACTION.DEACTIVATE_BUTTON_LABEL' | translate }}"
+              icon="pi pi-circle-off"
+              severity="danger"
+              (click)="setStatus(2)"
+            ></p-button>
           }
-          @if(status !== MemberStatus.PENDING){
-            <p-button label="{{ 'MEMBER.VIEW.STATUS_ACTION.PUT_TO_PENDING_LIST_BUTTON_LABEL' | translate }}" severity="warn" icon="pi pi-pause"  (click)="setStatus(3)"></p-button>
+          @if (status !== MemberStatus.PENDING) {
+            <p-button
+              label="{{ 'MEMBER.VIEW.STATUS_ACTION.PUT_TO_PENDING_LIST_BUTTON_LABEL' | translate }}"
+              severity="warn"
+              icon="pi pi-pause"
+              (click)="setStatus(3)"
+            ></p-button>
           }
-          <p-button label="{{ 'MEMBER.VIEW.STATUS_ACTION.MODIFY_BUTTON_LABEL' | translate }}" icon="pi pi-pencil" severity="help" (click)="toModify()"></p-button>
+          <p-button
+            label="{{ 'MEMBER.VIEW.STATUS_ACTION.MODIFY_BUTTON_LABEL' | translate }}"
+            icon="pi pi-pencil"
+            severity="help"
+            (click)="toModify()"
+          ></p-button>
         </div>
       </div>
       <div class="flex flex-wrap -mx-2">
-        <h3 class="text-lg font-medium">{{ "MEMBER.VIEW.INFORMATION_TITLE" | translate }}</h3>
+        <h3 class="text-lg font-medium">{{ 'MEMBER.VIEW.INFORMATION_TITLE' | translate }}</h3>
       </div>
       <div class="flex flex-wrap -mx-2">
         <div class="lg:w-2/12 md:w-4/12 sm:w-full px-2">
-          @if(legalEntity){
+          @if (legalEntity) {
             <div>
-              <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.COMPANY_VAT_NUMBER_LABEL" | translate }}</h4>
+              <h4 class="text-md font-medium">
+                {{ 'MEMBER.VIEW.INFORMATIONS.COMPANY_VAT_NUMBER_LABEL' | translate }}
+              </h4>
               <span class="text-sm">{{ legalEntity.vat_number }}</span>
             </div>
           }
-          @if(individual){
+          @if (individual) {
             <div>
-              <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL" | translate }}</h4>
+              <h4 class="text-md font-medium">
+                {{ 'MEMBER.VIEW.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL' | translate }}
+              </h4>
               <span class="text-sm">{{ individual.NRN }}</span>
             </div>
           }
         </div>
         <div class="lg:w-2/12 md:w-4/12 sm:w-full px-2">
-          <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.NAME_LABEL" | translate }}</h4>
-          @if(legalEntity){
+          <h4 class="text-md font-medium">
+            {{ 'MEMBER.VIEW.INFORMATIONS.NAME_LABEL' | translate }}
+          </h4>
+          @if (legalEntity) {
             <span class="text-sm">{{ legalEntity.name }}</span>
           }
-          @if(individual){
+          @if (individual) {
             <span class="text-sm">{{ individual.name }}</span>
           }
         </div>
-        @if(individual){
+        @if (individual) {
           <ng-container>
             <div class="lg:w-2/12 md:w-4/12 sm:w-full">
-              <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.FIRST_NAME_LABEL" | translate }}</h4>
+              <h4 class="text-md font-medium">
+                {{ 'MEMBER.VIEW.INFORMATIONS.FIRST_NAME_LABEL' | translate }}
+              </h4>
               <span class="text-sm">{{ individual.first_name }}</span>
             </div>
             <div class="lg:w-2/12 md:w-4/12 sm:w-full">
-              <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.EMAIL_LABEL" | translate }}</h4>
+              <h4 class="text-md font-medium">
+                {{ 'MEMBER.VIEW.INFORMATIONS.EMAIL_LABEL' | translate }}
+              </h4>
               <span class="text-sm">{{ individual.email }}</span>
-              @switch(individualInvitationStatus){
-                @case(InvitationStatus.LOADING){
+              @switch (individualInvitationStatus) {
+                @case (InvitationStatus.LOADING) {
                   <div class="text-center">
                     <p-progressSpinner class="h-1/2 w-1/4"></p-progressSpinner>
                   </div>
                 }
-                @case(InvitationStatus.NO_INVITE){
+                @case (InvitationStatus.NO_INVITE) {
                   <div class="flex flex-wrap gap-2">
-                    <p-tag severity="danger" value="{{'MEMBER.VIEW.INVITATIONS.NO_INVITE_LABEL'|translate}}"></p-tag>
-                    <p-button label="Inviter" icon="pi pi-envelope" size="small" severity="success" (click)="invite()"></p-button>
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'MEMBER.VIEW.INVITATIONS.NO_INVITE_LABEL' | translate }}"
+                    ></p-tag>
+                    <p-button
+                      label="Inviter"
+                      icon="pi pi-envelope"
+                      size="small"
+                      severity="success"
+                      (click)="invite()"
+                    ></p-button>
                   </div>
                 }
-                @case(InvitationStatus.PENDING){
+                @case (InvitationStatus.PENDING) {
                   <div class="flex flex-wrap gap-2">
-                    <p-tag severity="warn" value="{{'MEMBER.VIEW.INVITATIONS.PENDING_LABEL'|translate}}"></p-tag>
-                    <p-button label="Annuler" icon="pi pi-times" size="small" severity="danger" (click)="cancel(individualInvitationLink!)"></p-button>
+                    <p-tag
+                      severity="warn"
+                      value="{{ 'MEMBER.VIEW.INVITATIONS.PENDING_LABEL' | translate }}"
+                    ></p-tag>
+                    <p-button
+                      label="Annuler"
+                      icon="pi pi-times"
+                      size="small"
+                      severity="danger"
+                      (click)="cancel(individualInvitationLink!)"
+                    ></p-button>
                   </div>
                 }
-                @case(InvitationStatus.ACCEPTED){
+                @case (InvitationStatus.ACCEPTED) {
                   <div class="flex flex-wrap gap-2">
-                    <p-tag severity="success" value="{{'MEMBER.VIEW.INVITATIONS.ACCEPTED_LABEL'|translate}}"></p-tag>
-                    <p-button label="Supprimer" icon="pi pi-times" severity="danger" size="small" (click)="delete(individualInvitationLink!)"></p-button>
+                    <p-tag
+                      severity="success"
+                      value="{{ 'MEMBER.VIEW.INVITATIONS.ACCEPTED_LABEL' | translate }}"
+                    ></p-tag>
+                    <p-button
+                      label="Supprimer"
+                      icon="pi pi-times"
+                      severity="danger"
+                      size="small"
+                      (click)="delete(individualInvitationLink!)"
+                    ></p-button>
                   </div>
                 }
               }
             </div>
             <div class="lg:w-2/12 md:w-4/12 sm:w-full">
-              <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.PHONE_LABEL" | translate }}</h4>
+              <h4 class="text-md font-medium">
+                {{ 'MEMBER.VIEW.INFORMATIONS.PHONE_LABEL' | translate }}
+              </h4>
               <span class="text-sm">{{ individual.phone_number }}</span>
             </div>
             <div class="lg:w-2/12 md:w-4/12 sm:w-full">
-              <h4 class="text-md font-medium">{{ "MEMBER.VIEW.STATUS_LABEL" | translate }}</h4>
+              <h4 class="text-md font-medium">{{ 'MEMBER.VIEW.STATUS_LABEL' | translate }}</h4>
               <span class="text-sm">
-                @switch(status){
-                  @case(MemberStatus.ACTIVE){
-                    <p-tag severity="success" value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}" class="text-base"></p-tag>
+                @switch (status) {
+                  @case (MemberStatus.ACTIVE) {
+                    <p-tag
+                      severity="success"
+                      value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
+                      class="text-base"
+                    ></p-tag>
                   }
-                  @case(MemberStatus.INACTIVE){
-                    <p-tag severity="danger" value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}" class="text-base"></p-tag>
+                  @case (MemberStatus.INACTIVE) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
+                      class="text-base"
+                    ></p-tag>
                   }
-                  @case(MemberStatus.PENDING){
-                    <p-tag severity="warn" value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}" class="text-base"></p-tag>
+                  @case (MemberStatus.PENDING) {
+                    <p-tag
+                      severity="warn"
+                      value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
+                      class="text-base"
+                    ></p-tag>
                   }
                 }
               </span>
@@ -122,81 +204,133 @@
           </ng-container>
         }
       </div>
-      @if(individual?.manager || legalEntity?.manager){
+      @if (individual?.manager || legalEntity?.manager) {
         <div>
           <p-divider></p-divider>
           <div class="flex flex-wrap -mx-2">
-            @if(individual){
+            @if (individual) {
               <div>
-                <h2>{{ "MEMBER.VIEW.MEMBER_GUARDIANSHIP_TITLE" | translate }}</h2>
+                <h2>{{ 'MEMBER.VIEW.MEMBER_GUARDIANSHIP_TITLE' | translate }}</h2>
               </div>
             }
-            @if(legalEntity){
+            @if (legalEntity) {
               <div>
-                <h2>{{ "MEMBER.VIEW.MANAGER_TITLE" | translate }}</h2>
+                <h2>{{ 'MEMBER.VIEW.MANAGER_TITLE' | translate }}</h2>
               </div>
             }
             <div class="flex flex-wrap -mx-2">
               <div class="lg:w-2/12 md:w-4-12 sm:w-full">
-                <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL" | translate }}</h4>
-                <span class="text-sm">{{ individual?.manager ? individual?.manager?.NRN : legalEntity?.manager?.NRN }}</span>
+                <h4 class="text-md font-medium">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL' | translate }}
+                </h4>
+                <span class="text-sm">{{
+                  individual?.manager ? individual?.manager?.NRN : legalEntity?.manager?.NRN
+                }}</span>
               </div>
               <div class="lg:w-2/12 md:w-4-12 sm:w-full">
-                <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.NAME_LABEL" | translate }}</h4>
-                <span class="text-sm">{{ individual?.manager ? individual?.manager?.surname : legalEntity?.manager?.surname }}</span>
+                <h4 class="text-md font-medium">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.NAME_LABEL' | translate }}
+                </h4>
+                <span class="text-sm">{{
+                  individual?.manager ? individual?.manager?.surname : legalEntity?.manager?.surname
+                }}</span>
               </div>
               <div class="lg:w-2/12 md:w-4-12 sm:w-full">
-                <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.FIRST_NAME_LABEL" | translate }}</h4>
-                <span class="text-sm">{{ individual?.manager ? individual?.manager?.name : legalEntity?.manager?.name }}</span>
+                <h4 class="text-md font-medium">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.FIRST_NAME_LABEL' | translate }}
+                </h4>
+                <span class="text-sm">{{
+                  individual?.manager ? individual?.manager?.name : legalEntity?.manager?.name
+                }}</span>
               </div>
               <div class="lg:w-2/12 md:w-4-12 sm:w-full">
-                <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.EMAIL_LABEL" | translate }}</h4>
-                <span class="text-sm">{{ individual?.manager ? individual?.manager?.email : legalEntity?.manager?.email }}</span>
-                @switch(managerInvitationStatus){
-                  @case(InvitationStatus.LOADING){
+                <h4 class="text-md font-medium">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.EMAIL_LABEL' | translate }}
+                </h4>
+                <span class="text-sm">{{
+                  individual?.manager ? individual?.manager?.email : legalEntity?.manager?.email
+                }}</span>
+                @switch (managerInvitationStatus) {
+                  @case (InvitationStatus.LOADING) {
                     <div class="text-center">
                       <p-progressSpinner class="h-1/2 w-1/4"></p-progressSpinner>
                     </div>
                   }
-                  @case(InvitationStatus.NO_INVITE){
+                  @case (InvitationStatus.NO_INVITE) {
                     <div class="flex flex-wrap gap-2">
-                      <p-tag severity="danger" value="{{'MEMBER.VIEW.INVITATIONS.NO_INVITE_LABEL' | translate}}"></p-tag>
-                      <p-button label="Inviter" icon="pi pi-envelope" size="small" (click)="invite(true)"></p-button>
+                      <p-tag
+                        severity="danger"
+                        value="{{ 'MEMBER.VIEW.INVITATIONS.NO_INVITE_LABEL' | translate }}"
+                      ></p-tag>
+                      <p-button
+                        label="Inviter"
+                        icon="pi pi-envelope"
+                        size="small"
+                        (click)="invite(true)"
+                      ></p-button>
                     </div>
                   }
-                  @case(InvitationStatus.PENDING){
+                  @case (InvitationStatus.PENDING) {
                     <div class="flex flex-wrap gap-2">
-                      <p-tag severity="warn" value="{{'MEMBER.VIEW.INVITATIONS.PENDING_LABEL' | translate}}"></p-tag>
-                      <p-button label="Annuler" icon="pi pi-times" size="small" (click)="cancel(managerInvitationLink!, true)"></p-button>
+                      <p-tag
+                        severity="warn"
+                        value="{{ 'MEMBER.VIEW.INVITATIONS.PENDING_LABEL' | translate }}"
+                      ></p-tag>
+                      <p-button
+                        label="Annuler"
+                        icon="pi pi-times"
+                        size="small"
+                        (click)="cancel(managerInvitationLink!, true)"
+                      ></p-button>
                     </div>
                   }
-                  @case(InvitationStatus.ACCEPTED){
+                  @case (InvitationStatus.ACCEPTED) {
                     <div class="flex flex-wrap gap-2">
-                      <p-tag severity="success" value="{{'MEMBER.VIEW.INVITATIONS.ACCEPTED_LABEL' | translate}}"></p-tag>
-                      <p-button label="Supprimer" icon="pi pi-times" severity="danger" (click)="delete(managerInvitationLink!, true)"></p-button>
+                      <p-tag
+                        severity="success"
+                        value="{{ 'MEMBER.VIEW.INVITATIONS.ACCEPTED_LABEL' | translate }}"
+                      ></p-tag>
+                      <p-button
+                        label="Supprimer"
+                        icon="pi pi-times"
+                        severity="danger"
+                        (click)="delete(managerInvitationLink!, true)"
+                      ></p-button>
                     </div>
                   }
                 }
               </div>
               <div class="lg:w-2/12 md:w-4-12 sm:w-full">
-                <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.PHONE_LABEL" | translate }}</h4>
-                <span class="text-sm">{{ individual?.manager ? individual?.manager?.phone_number : legalEntity?.manager?.phone_number }}</span>
+                <h4 class="text-md font-medium">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.PHONE_LABEL' | translate }}
+                </h4>
+                <span class="text-sm">{{
+                  individual?.manager
+                    ? individual?.manager?.phone_number
+                    : legalEntity?.manager?.phone_number
+                }}</span>
               </div>
             </div>
           </div>
         </div>
       }
       <p-divider></p-divider>
-      @if(individual){
+      @if (individual) {
         <div>
           <div class="flex flex-wrap -mx-2">
-            <h3 class="text-lg font-medium">{{ "MEMBER.VIEW.SOCIAL_LABEL" | translate }}</h3>
+            <h3 class="text-lg font-medium">{{ 'MEMBER.VIEW.SOCIAL_LABEL' | translate }}</h3>
           </div>
           <div class="flex flex-wrap -mx-2">
             <div class="md:w-6/12 px-2">
               <div class="md:w-6/12 px-2">
-                <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.SOCIAL_RATE_LABEL" | translate }}</h4>
-                <p-checkbox [disabled]="true" [binary]="true" [ngModel]="individual.social_rate"></p-checkbox>
+                <h4 class="text-md font-medium">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.SOCIAL_RATE_LABEL' | translate }}
+                </h4>
+                <p-checkbox
+                  [disabled]="true"
+                  [binary]="true"
+                  [ngModel]="individual.social_rate"
+                ></p-checkbox>
               </div>
             </div>
           </div>
@@ -204,33 +338,35 @@
         </div>
       }
       <div class="flex flex-wrap -mx-2">
-        <h3  class="text-lg font-medium">{{ "MEMBER.VIEW.INFORMATIONS.ADDRESSES_LABEL" | translate }}</h3>
+        <h3 class="text-lg font-medium">
+          {{ 'MEMBER.VIEW.INFORMATIONS.ADDRESSES_LABEL' | translate }}
+        </h3>
       </div>
       <div class="flex flex-wrap -mx-2">
         <div class="md:w-6/12 px-2">
-          <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.ADDRESS.HOUSE" | translate }}</h4>
-          @if(individual){
+          <h4 class="text-md font-medium">
+            {{ 'MEMBER.VIEW.INFORMATIONS.ADDRESS.HOUSE' | translate }}
+          </h4>
+          @if (individual) {
             <p [innerHTML]="individual.home_address | address" class="text-sm"></p>
           }
-          @if(legalEntity){
+          @if (legalEntity) {
             <p [innerHTML]="legalEntity.home_address | address" class="text-sm"></p>
           }
         </div>
         <div class="md:w-6/12">
-          <h4 class="text-md font-medium">{{ "MEMBER.VIEW.INFORMATIONS.ADDRESS.BILLING" | translate }}</h4>
-          @if(individual){
+          <h4 class="text-md font-medium">
+            {{ 'MEMBER.VIEW.INFORMATIONS.ADDRESS.BILLING' | translate }}
+          </h4>
+          @if (individual) {
             <p [innerHTML]="individual.billing_address | address" class="text-sm"></p>
           }
-          @if(legalEntity){
+          @if (legalEntity) {
             <p [innerHTML]="legalEntity.billing_address | address" class="text-sm"></p>
           }
         </div>
       </div>
-      <app-member-view-tabs
-        [id]="id"
-        [member]="individual??legalEntity!"
-      ></app-member-view-tabs>
+      <app-member-view-tabs [id]="id" [member]="individual ?? legalEntity!"></app-member-view-tabs>
     </div>
   }
-
 </div>

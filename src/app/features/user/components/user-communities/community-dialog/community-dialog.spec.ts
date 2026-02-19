@@ -8,9 +8,8 @@ describe('CommunityDialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommunityDialog]
-    })
-    .compileComponents();
+      imports: [CommunityDialog],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CommunityDialog);
     component = fixture.componentInstance;

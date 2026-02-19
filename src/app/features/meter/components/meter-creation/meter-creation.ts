@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {ErrorAdded, ErrorSummaryAdded} from '../../../../shared/types/error.types';
+import {Component, inject, OnInit} from '@angular/core';
+import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import {
   AbstractControl,
   FormControl,
@@ -7,15 +7,15 @@ import {
   FormsModule,
   ReactiveFormsModule,
   ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
-import {MembersPartialDTO} from '../../../../shared/dtos/member.dtos';
-import {MemberService} from '../../../../shared/services/member.service';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {MeterService} from '../../../../shared/services/meter.service';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {ErrorMessageHandler} from '../../../../shared/services-ui/error.message.handler';
-import {eanValidator} from './ean.validator';
+import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
+import { MemberService } from '../../../../shared/services/member.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { eanValidator } from './ean.validator';
 import {
   ClientType,
   InjectionStatus,
@@ -24,23 +24,21 @@ import {
   PhaseCategory,
   ProductionChain,
   ReadingFrequency,
-  TarifGroup
+  TarifGroup,
 } from '../../../../shared/types/meter.types';
-import {CreateMeterDataDTO, CreateMeterDTO} from '../../../../shared/dtos/meter.dtos';
-import {CreateAddressDTO} from '../../../../shared/dtos/address.dtos';
-import {Panel} from 'primeng/panel';
-import {InputText} from 'primeng/inputtext';
-import {ErrorHandlerComponent} from '../../../../shared/components/error.handler/error.handler.component';
-import {InputGroup} from 'primeng/inputgroup';
-import {RadioButton} from 'primeng/radiobutton';
-import {Textarea} from 'primeng/textarea';
-import {Select} from 'primeng/select';
-import {DatePicker} from 'primeng/datepicker';
-import {
-  FormErrorSummaryComponent
-} from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
-import {Button} from 'primeng/button';
-interface ListRadio{
+import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
+import { Panel } from 'primeng/panel';
+import { InputText } from 'primeng/inputtext';
+import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
+import { InputGroup } from 'primeng/inputgroup';
+import { RadioButton } from 'primeng/radiobutton';
+import { Textarea } from 'primeng/textarea';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
+import { Button } from 'primeng/button';
+interface ListRadio {
   id: number;
   name: string;
 }
@@ -60,12 +58,18 @@ interface ListRadio{
     DatePicker,
     FormErrorSummaryComponent,
     Button,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './meter-creation.html',
   styleUrl: './meter-creation.css',
 })
 export class MeterCreation implements OnInit {
+  private memberService = inject(MemberService);
+  private config = inject(DynamicDialogConfig);
+  private meterService = inject(MeterService);
+  private ref = inject(DynamicDialogRef);
+  private translate = inject(TranslateService);
+  private errorHandler = inject(ErrorMessageHandler);
   errorsSummaryAdded: ErrorSummaryAdded = {};
   errorMemberAdd: ErrorAdded = {};
   metersForm!: FormGroup;
@@ -89,12 +93,6 @@ export class MeterCreation implements OnInit {
   ];
 
   constructor(
-    private memberService: MemberService,
-    private config: DynamicDialogConfig,
-    private meterService: MeterService,
-    private ref: DynamicDialogRef,
-    private translate: TranslateService,
-    private errorHandler: ErrorMessageHandler,
   ) {
     this.holder_id = undefined;
     if (this.config.data && this.config.data.holder_id) {
@@ -120,35 +118,39 @@ export class MeterCreation implements OnInit {
       totalGeneratingCapacity: new FormControl('', [Validators.required]),
       amperage: new FormControl('', [Validators.required]),
       rate: new FormControl('', [Validators.required]),
-      productionChain: new FormControl(this.productionChainCategory[this.productionChainCategory.length - 1], [Validators.required]),
+      productionChain: new FormControl(
+        this.productionChainCategory[this.productionChainCategory.length - 1],
+        [Validators.required],
+      ),
       clientType: new FormControl('', [Validators.required]),
       member: new FormControl('', [Validators.required, this.validMemberValidator()]),
       dateStart: new FormControl('', [Validators.required]),
-      injectionStatus: new FormControl({ value: this.injectionStatusCategory[this.injectionStatusCategory.length - 1], disabled: true }, [
-        Validators.required,
-      ]),
+      injectionStatus: new FormControl(
+        {
+          value: this.injectionStatusCategory[this.injectionStatusCategory.length - 1],
+          disabled: true,
+        },
+        [Validators.required],
+      ),
     });
     console.log('TEST : ', this.metersForm.value.productionChain);
-    this.memberService.getMembersList({page: 1, limit: 100}).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response && response.data) {
-            this.membersList = response.data as MembersPartialDTO[];
-            if (this.holder_id) {
-              this.metersForm.patchValue({
-                member: this.membersList.find((member) => member.id == this.holder_id),
-              });
-            }
-          } else {
-            this.errorHandler.handleError(response);
+    this.memberService.getMembersList({ page: 1, limit: 100 }).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.membersList = response.data as MembersPartialDTO[];
+          if (this.holder_id) {
+            this.metersForm.patchValue({
+              member: this.membersList.find((member) => member.id == this.holder_id),
+            });
           }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error);
-        },
-      }
-    );
+        } else {
+          this.errorHandler.handleError(response);
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error);
+      },
+    });
     this.setupTranslationError();
     this.setupTranslationCategory();
   }
@@ -159,7 +161,8 @@ export class MeterCreation implements OnInit {
         errorMember: () => translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
       };
       this.errorsSummaryAdded = {
-        errorMember: (_: any, _controlName: string) => translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
+        errorMember: (_: any, _controlName: string) =>
+          translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
       };
     });
   }
@@ -187,44 +190,72 @@ export class MeterCreation implements OnInit {
       ])
       .subscribe((translation) => {
         this.productionChainCategory = [
-          { id: ProductionChain.PHOTOVOLTAIC, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'] },
+          {
+            id: ProductionChain.PHOTOVOLTAIC,
+            name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'],
+          },
           { id: ProductionChain.WIND, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.WIND'] },
-          { id: ProductionChain.HYDRO, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.HYDROELECTRIC'] },
-          { id: ProductionChain.BIOMASS, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.SOLID_BIOMASS'] },
-          { id: ProductionChain.BIOGAS, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.BIOGAS'] },
-          { id: ProductionChain.COGEN_FOSSIL, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.FOSSIL_FIRE_COGENERATION'] },
-          { id: ProductionChain.OTHER, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.OTHER'] },
+          {
+            id: ProductionChain.HYDRO,
+            name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.HYDROELECTRIC'],
+          },
+          {
+            id: ProductionChain.BIOMASS,
+            name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.SOLID_BIOMASS'],
+          },
+          {
+            id: ProductionChain.BIOGAS,
+            name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.BIOGAS'],
+          },
+          {
+            id: ProductionChain.COGEN_FOSSIL,
+            name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.FOSSIL_FIRE_COGENERATION'],
+          },
+          {
+            id: ProductionChain.OTHER,
+            name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.OTHER'],
+          },
           { id: ProductionChain.NONE, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.NONE'] },
         ];
       });
   }
 
   setupRateCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.RATE.SIMPLE',
-      'METER.CATEGORIES.RATE.BI_HOURLY',
-      'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'
-    ]).subscribe((translation) => {
-      this.rateCategory = [
-        { id: MeterRate.SIMPLE, name: translation['METER.CATEGORIES.RATE.SIMPLE'] },
-        { id: MeterRate.BI_HOURLY, name: translation['METER.CATEGORIES.RATE.BI_HOURLY'] },
-        { id: MeterRate.EXCLUSIVE_NIGHT, name: translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'] },
-      ];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.RATE.SIMPLE',
+        'METER.CATEGORIES.RATE.BI_HOURLY',
+        'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
+      ])
+      .subscribe((translation) => {
+        this.rateCategory = [
+          { id: MeterRate.SIMPLE, name: translation['METER.CATEGORIES.RATE.SIMPLE'] },
+          { id: MeterRate.BI_HOURLY, name: translation['METER.CATEGORIES.RATE.BI_HOURLY'] },
+          {
+            id: MeterRate.EXCLUSIVE_NIGHT,
+            name: translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'],
+          },
+        ];
+      });
   }
 
   setupClientCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.CLIENT.RESIDENTIAL',
-      'METER.CATEGORIES.CLIENT.PROFESSIONAL',
-      'METER.CATEGORIES.CLIENT.INDUSTRIAL'
-    ]).subscribe((translation) => {
-      this.clientCategory = [
-        { id: ClientType.RESIDENTIAL, name: translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'] },
-        { id: ClientType.PROFESSIONAL, name: translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'] },
-        { id: ClientType.INDUSTRIAL, name: translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'] },
-      ];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.CLIENT.RESIDENTIAL',
+        'METER.CATEGORIES.CLIENT.PROFESSIONAL',
+        'METER.CATEGORIES.CLIENT.INDUSTRIAL',
+      ])
+      .subscribe((translation) => {
+        this.clientCategory = [
+          { id: ClientType.RESIDENTIAL, name: translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'] },
+          {
+            id: ClientType.PROFESSIONAL,
+            name: translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
+          },
+          { id: ClientType.INDUSTRIAL, name: translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'] },
+        ];
+      });
   }
 
   setupInjectionStatusCategory() {
@@ -260,39 +291,54 @@ export class MeterCreation implements OnInit {
   }
 
   setupReadingFrequencyCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
-      'METER.CATEGORIES.READING_FREQUENCY.ANNUAL'
-    ]).subscribe((translation) => {
-      this.readingFrequencyCategory = [
-        { id: ReadingFrequency.MONTHLY, name: translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'] },
-        { id: ReadingFrequency.YEARLY, name: translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'] },
-      ];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
+        'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
+      ])
+      .subscribe((translation) => {
+        this.readingFrequencyCategory = [
+          {
+            id: ReadingFrequency.MONTHLY,
+            name: translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
+          },
+          {
+            id: ReadingFrequency.YEARLY,
+            name: translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
+          },
+        ];
+      });
   }
 
   setupPhaseCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.PHASE.SINGLE_PHASE',
-      'METER.CATEGORIES.PHASE.THREE_PHASES'
-    ]).subscribe((translation) => {
-      this.phaseCategory = [
-        { id: PhaseCategory.SINGLE, name: translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'] },
-        { id: PhaseCategory.THREE, name: translation['METER.CATEGORIES.PHASE.THREE_PHASES'] },
-      ];
-    });
+    this.translate
+      .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
+      .subscribe((translation) => {
+        this.phaseCategory = [
+          { id: PhaseCategory.SINGLE, name: translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'] },
+          { id: PhaseCategory.THREE, name: translation['METER.CATEGORIES.PHASE.THREE_PHASES'] },
+        ];
+      });
   }
 
   setupTarifGroupCategory() {
-    this.translate.get([
-      'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
-      'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'
-    ]).subscribe((translation) => {
-      this.tarifGroupCategory = [
-        { id: TarifGroup.LOW_TENSION, name: translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'] },
-        { id: TarifGroup.HIGH_TENSION, name: translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'] },
-      ];
-    });
+    this.translate
+      .get([
+        'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
+        'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
+      ])
+      .subscribe((translation) => {
+        this.tarifGroupCategory = [
+          {
+            id: TarifGroup.LOW_TENSION,
+            name: translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
+          },
+          {
+            id: TarifGroup.HIGH_TENSION,
+            name: translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
+          },
+        ];
+      });
   }
 
   validMemberValidator(): ValidatorFn {
@@ -305,7 +351,10 @@ export class MeterCreation implements OnInit {
       }
 
       // Check if value is a valid member
-      const isValid = typeof value === 'object' && true && this.membersList.some((member) => member.id === value.id);
+      const isValid =
+        typeof value === 'object' &&
+        true &&
+        this.membersList.some((member) => member.id === value.id);
       return isValid ? null : { invalidMember: true };
     };
   }
@@ -328,15 +377,14 @@ export class MeterCreation implements OnInit {
       total_generating_capacity: this.metersForm.get('totalGeneratingCapacity')?.value,
       grd: this.metersForm.get('grd')?.value,
       member_id: this.metersForm.get('member')?.value.id,
-      end_date: undefined
-    }
-    const newAddress: CreateAddressDTO =
-      {
-        street: this.metersForm.value.address_street,
-        number: this.metersForm.value.address_number,
-        postcode: this.metersForm.value.address_postcode,
-        city: this.metersForm.value.address_city
-      }
+      end_date: undefined,
+    };
+    const newAddress: CreateAddressDTO = {
+      street: this.metersForm.value.address_street,
+      number: this.metersForm.value.address_number,
+      postcode: this.metersForm.value.address_postcode,
+      city: this.metersForm.value.address_city,
+    };
     const newMeter: CreateMeterDTO = {
       EAN: this.metersForm.value.EAN,
       address: newAddress,
@@ -345,30 +393,30 @@ export class MeterCreation implements OnInit {
       phases_number: this.metersForm.value.phasesNumber.id,
       reading_frequency: this.metersForm.value.readingFrequency.id,
       tarif_group: this.metersForm.value.tarifGroup.id,
-
-
-    }
-    this.meterService.addMeter(newMeter).subscribe(
-      {
-        next:(response)=>
-        {
-          if (response) {
-            this.ref.close(true);
-          } else {
-            this.errorHandler.handleError();
-          }
-        },
-        error:(error) => {
-          this.errorHandler.handleError(error.data?? null);
-        },
-      }
-    );
+    };
+    this.meterService.addMeter(newMeter).subscribe({
+      next: (response) => {
+        if (response) {
+          this.ref.close(true);
+        } else {
+          this.errorHandler.handleError();
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error.data ?? null);
+      },
+    });
   }
 
   onChangeProductionChain() {
     if (this.metersForm.value.productionChain.id == 8) {
-      if (this.metersForm.value.injectionStatus.id != this.injectionStatusCategory[this.injectionStatusCategory.length - 1].id) {
-        this.metersForm.get('injectionStatus')?.setValue(this.injectionStatusCategory[this.injectionStatusCategory.length - 1]);
+      if (
+        this.metersForm.value.injectionStatus.id !=
+        this.injectionStatusCategory[this.injectionStatusCategory.length - 1].id
+      ) {
+        this.metersForm
+          .get('injectionStatus')
+          ?.setValue(this.injectionStatusCategory[this.injectionStatusCategory.length - 1]);
       }
       this.metersForm.get('injectionStatus')?.disable();
     } else {

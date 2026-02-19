@@ -8,9 +8,8 @@ describe('SharingOperationCreationUpdate', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharingOperationCreationUpdate]
-    })
-    .compileComponents();
+      imports: [SharingOperationCreationUpdate],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SharingOperationCreationUpdate);
     component = fixture.componentInstance;

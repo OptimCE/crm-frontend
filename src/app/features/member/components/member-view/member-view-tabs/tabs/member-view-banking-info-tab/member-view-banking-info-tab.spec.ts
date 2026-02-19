@@ -8,9 +8,8 @@ describe('MemberViewBankingInfoTab', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberViewBankingInfoTab]
-    })
-    .compileComponents();
+      imports: [MemberViewBankingInfoTab],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MemberViewBankingInfoTab);
     component = fixture.componentInstance;

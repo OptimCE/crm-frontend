@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {ConsumerDTO, IterationDTO, KeyDTO} from '../../../../../shared/dtos/key.dtos';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {EventBusService} from '../../../../../core/services/event_bus/eventbus.service';
-import {Router} from '@angular/router';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {InputNumber} from 'primeng/inputnumber';
-import {Button} from 'primeng/button';
-import {InputText} from 'primeng/inputtext';
-import {RadioButton} from 'primeng/radiobutton';
-import {ErrorHandlerComponent} from '../../../../../shared/components/error.handler/error.handler.component';
-import {Textarea} from 'primeng/textarea';
-import {SnackbarNotification} from '../../../../../shared/services-ui/snackbar.notifcation.service';
-import {ERROR_TYPE} from '../../../../../core/dtos/notification';
-import {DialogService} from 'primeng/dynamicdialog';
+import {Component, inject, OnInit} from '@angular/core';
+import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EventBusService } from '../../../../../core/services/event_bus/eventbus.service';
+import { Router } from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { InputNumber } from 'primeng/inputnumber';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { RadioButton } from 'primeng/radiobutton';
+import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
+import { Textarea } from 'primeng/textarea';
+import { SnackbarNotification } from '../../../../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../../../../core/dtos/notification';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-key-creation-step-by-step',
@@ -25,13 +25,17 @@ import {DialogService} from 'primeng/dynamicdialog';
     InputText,
     RadioButton,
     ErrorHandlerComponent,
-    Textarea
+    Textarea,
   ],
   templateUrl: './key-creation-step-by-step.html',
   styleUrl: './key-creation-step-by-step.css',
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class KeyCreationStepByStep implements OnInit {
+  private eventBus = inject(EventBusService);
+  private router = inject(Router);
+  private translate = inject(TranslateService);
+  private snackbar = inject(SnackbarNotification);
   formFirstStep!: FormGroup;
   secondStep = false;
   nbConsumers = -1;
@@ -46,12 +50,6 @@ export class KeyCreationStepByStep implements OnInit {
   numberIterations: number[] = [];
   displayErrorInj = false;
   lastForm!: FormGroup;
-  constructor(
-    private eventBus: EventBusService,
-    private router: Router,
-    private translate: TranslateService,
-    private snackbar: SnackbarNotification
-  ) {}
 
   ngOnInit() {
     this.formFirstStep = new FormGroup({
@@ -69,7 +67,10 @@ export class KeyCreationStepByStep implements OnInit {
         this.nbConsumers = this.formFirstStep.value.nb_consumers;
         this.formSecondStep = new FormGroup({});
         for (let i = 0; i < this.nbConsumers; i++) {
-          this.formSecondStep.addControl('consumer_name_' + i, new FormControl('', [Validators.required]));
+          this.formSecondStep.addControl(
+            'consumer_name_' + i,
+            new FormControl('', [Validators.required]),
+          );
         }
         this.secondStep = true;
       } else {
@@ -77,7 +78,10 @@ export class KeyCreationStepByStep implements OnInit {
           if (this.nbConsumers < this.formFirstStep.value.nb_consumers) {
             // Add missing ones
             for (let i = this.nbConsumers; i < this.formFirstStep.value.nb_consumers; i++) {
-              this.formSecondStep.addControl('consumer_name_' + i, new FormControl('', [Validators.required]));
+              this.formSecondStep.addControl(
+                'consumer_name_' + i,
+                new FormControl('', [Validators.required]),
+              );
             }
           } else {
             // Remove the excedent
@@ -91,7 +95,11 @@ export class KeyCreationStepByStep implements OnInit {
               this.consumers.splice(this.consumers.length - difference - 1, difference);
               for (let i = 0; i < this.iterations.length; i++) {
                 const type = this.formIterations[i].value.type;
-                this.iterations[i] = this.computeIteration(type, this.formIterations[i].value.inj_percentage, i + 1);
+                this.iterations[i] = this.computeIteration(
+                  type,
+                  this.formIterations[i].value.inj_percentage,
+                  i + 1,
+                );
               }
             }
           }
@@ -119,8 +127,8 @@ export class KeyCreationStepByStep implements OnInit {
         this.consumers.push({
           id: -1,
           name: this.formSecondStep.get('consumer_name_' + i)?.value,
-          energy_allocated_percentage: -1
-        })
+          energy_allocated_percentage: -1,
+        });
       }
       if (this.formIterations.length == 0) {
         this.formIterations.push(
@@ -134,7 +142,11 @@ export class KeyCreationStepByStep implements OnInit {
       } else {
         // Update the iterations with the new consumers set
         for (let i = 0; i < this.iterations.length; i++) {
-          this.iterations[i] = this.computeIteration(this.formIterations[i].value.type, this.formIterations[i].value.inj_percentage, i + 1);
+          this.iterations[i] = this.computeIteration(
+            this.formIterations[i].value.type,
+            this.formIterations[i].value.inj_percentage,
+            i + 1,
+          );
         }
       }
     }
@@ -142,23 +154,21 @@ export class KeyCreationStepByStep implements OnInit {
 
   getSumOfIter() {
     let sumInj = 0;
-    for (let i = 0; i < this.iterations.length; i++) {
-      sumInj += this.iterations[i].energy_allocated_percentage;
+    for(const iteration of this.iterations) {
+      sumInj += iteration.energy_allocated_percentage;
     }
     return sumInj;
   }
 
   computeIteration(type: number, inj_percentage: number, number_iteration: number): IterationDTO {
     // Create a deep copy of consumers to avoid reference issues
-    const newConsumers: ConsumerDTO[] = this.consumers.map(
-      (con) => {
-        return <ConsumerDTO>{
-          id: con.id,
-          name: con.name,
-          energy_allocated_percentage: con.energy_allocated_percentage
-        }
-      }
-    );
+    const newConsumers: ConsumerDTO[] = this.consumers.map((con) => {
+      return {
+        id: con.id,
+        name: con.name,
+        energy_allocated_percentage: con.energy_allocated_percentage,
+      } as ConsumerDTO;
+    });
 
     if (type == 1) {
       // Prorata: Keep initial value (-1) to be computed later
@@ -171,8 +181,8 @@ export class KeyCreationStepByStep implements OnInit {
       id: -1,
       number: number_iteration,
       consumers: newConsumers,
-      energy_allocated_percentage: inj_percentage/100
-    }
+      energy_allocated_percentage: inj_percentage / 100,
+    };
   }
 
   addIteration(index: number) {
@@ -197,7 +207,10 @@ export class KeyCreationStepByStep implements OnInit {
 
     if (!this.formSecondStep.valid) {
       this.formSecondStep.markAllAsTouched();
-      this.snackbar.openSnackBar(this.translate.instant('KEY.ERRORS.SECOND_STEP_ERROR'), ERROR_TYPE);
+      this.snackbar.openSnackBar(
+        this.translate.instant('KEY.ERRORS.SECOND_STEP_ERROR'),
+        ERROR_TYPE,
+      );
       return;
     }
     this.submitSecondForm();
@@ -209,7 +222,11 @@ export class KeyCreationStepByStep implements OnInit {
 
     for (let i = 0; i < this.formIterations.length; i++) {
       const type = this.formIterations[i].value.type;
-      this.iterations[i] = this.computeIteration(type, this.formIterations[i].value.inj_percentage, i + 1);
+      this.iterations[i] = this.computeIteration(
+        type,
+        this.formIterations[i].value.inj_percentage,
+        i + 1,
+      );
     }
 
     const sumInj = this.getSumOfIter();
@@ -247,7 +264,10 @@ export class KeyCreationStepByStep implements OnInit {
 
     if (!this.formSecondStep.valid) {
       this.formSecondStep.markAllAsTouched();
-      this.snackbar.openSnackBar(this.translate.instant('KEY.ERRORS.SECOND_STEP_ERROR'), ERROR_TYPE);
+      this.snackbar.openSnackBar(
+        this.translate.instant('KEY.ERRORS.SECOND_STEP_ERROR'),
+        ERROR_TYPE,
+      );
       return;
     }
     this.submitSecondForm();
@@ -261,7 +281,12 @@ export class KeyCreationStepByStep implements OnInit {
     this.submitIteration();
 
     if (this.lastForm.valid) {
-      const key: KeyDTO = {id: -1, name: this.lastForm.value.key_name, description: this.lastForm.value.key_description, iterations: this.iterations}
+      const key: KeyDTO = {
+        id: -1,
+        name: this.lastForm.value.key_name,
+        description: this.lastForm.value.key_description,
+        iterations: this.iterations,
+      };
       this.eventBus.emit('keyStepByStep', key);
       this.router.navigate(['/key/add']);
     }

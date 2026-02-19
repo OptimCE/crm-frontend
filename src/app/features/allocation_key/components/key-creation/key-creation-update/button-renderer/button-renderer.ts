@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
-import {Button} from 'primeng/button';
-import {ICellRendererAngularComp} from 'ag-grid-angular';
+import { Button } from 'primeng/button';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
+import {Ripple} from 'primeng/ripple';
 
 @Component({
   selector: 'app-button-renderer',
   standalone: true,
-  imports: [
-    Button
-  ],
+  imports: [Button, Ripple],
   templateUrl: './button-renderer.html',
   styleUrl: './button-renderer.css',
 })
-export class ButtonRenderer  implements ICellRendererAngularComp {
+export class ButtonRenderer implements ICellRendererAngularComp {
   params: any;
   label!: string;
 

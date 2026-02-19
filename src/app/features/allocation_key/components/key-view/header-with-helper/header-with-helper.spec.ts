@@ -8,9 +8,8 @@ describe('HeaderWithHelper', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderWithHelper]
-    })
-    .compileComponents();
+      imports: [HeaderWithHelper],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderWithHelper);
     component = fixture.componentInstance;

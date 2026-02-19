@@ -8,9 +8,8 @@ describe('PendingManagerInvitation', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PendingManagerInvitation]
-    })
-    .compileComponents();
+      imports: [PendingManagerInvitation],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PendingManagerInvitation);
     component = fixture.componentInstance;
