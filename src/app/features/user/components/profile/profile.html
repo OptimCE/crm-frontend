@@ -1,4 +1,4 @@
-<div class="w-full p-4">
+<div class="container mx-auto my-auto">
   @if (isLoading()) {
     <div class="flex items-center justify-center py-10">
       <p-progressSpinner></p-progressSpinner>
@@ -7,8 +7,8 @@
     <div class="space-y-4">
       <!-- Header -->
       <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="pi pi-user !text-green-500 mr-1 !text-2xl"></i>
+        <div class="flex items-center space-x-2">
+          <i class="pi pi-user text-green-500! text-2xl!"></i>
           <h2 class="text-xl font-medium">{{ 'PROFILE.MY_PROFILE' | translate }}</h2>
         </div>
         <p-button
@@ -26,7 +26,7 @@
         <p-card class="h-full">
           <ng-template #header>
             <div class="flex items-center gap-2 rounded-t-2xl p-2">
-              <i class="pi pi-user !text-green-300 mr-1 !text-xl"></i>
+              <i class="pi pi-user text-green-300! mr-1 text-xl!"></i>
               <h5 class="m-0 font-medium text-lg">
                 {{ 'PROFILE.PERSONAL_INFORMATION.TITLE' | translate }}
               </h5>
@@ -66,7 +66,7 @@
         <p-card class="h-full">
           <ng-template #header>
             <div class="flex items-center gap-2 rounded-t-2xl p-2">
-              <i class="pi pi-home !text-green-300 mr-1 !text-xl"></i>
+              <i class="pi pi-home text-green-300! mr-1 text-xl!"></i>
               <h5 class="m-0 text-md">{{ 'COMMON.ADDRESS' | translate }}</h5>
             </div>
           </ng-template>
@@ -104,7 +104,7 @@
         <p-card class="h-full">
           <ng-template #header>
             <div class="flex items-center gap-2 rounded-t-2xl p-2">
-              <i class="pi pi-lock !text-green-300 mr-1 !text-xl"></i>
+              <i class="pi pi-lock text-green-300! mr-1 text-xl!"></i>
               <h5 class="m-0 font-medium text-lg">
                 {{ 'PROFILE.ACCOUNT_INFORMATION' | translate }}
               </h5>
@@ -120,12 +120,11 @@
                   <p class="m-0">{{ user()!.email }}</p>
                 </div>
               </div>
-              <div class="flex items-center">
+              <div class="flex items-end">
                 <p-button
                   pRipple
                   icon="pi pi-key"
                   label="{{ 'PROFILE.UPDATE_PASSWORD' | translate }}"
-                  class="p-button-secondary"
                 ></p-button>
               </div>
             </div>

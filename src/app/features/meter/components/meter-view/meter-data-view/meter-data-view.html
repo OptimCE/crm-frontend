@@ -128,8 +128,8 @@
       <h4 class="text-md font-medium">{{ 'METER.DATA.SHARING_OPERATION_TITLE' | translate }}</h4>
       @if (meterData.sharing_operation) {
         <div>
-          <a href="/members/sharing/{{ meterData.sharing_operation.id }}">
-            <span class="text-sm underline !decoration-green-500 hover:!text-green-700">
+          <a href="/sharing_operations/{{ meterData.sharing_operation.id }}">
+            <span class="text-sm underline decoration-green-500! hover:text-green-700!">
               {{ meterData.sharing_operation.name }}
             </span>
           </a>
@@ -154,8 +154,8 @@
           </h4>
         </div>
         <div class="text-center">
-          <a href="/members/member/{{ meterData.member.id }}">
-            <span class="text-sm underline !decoration-green-500 hover:!text-green-700">
+          <a href="/members/{{ meterData.member.id }}">
+            <span class="text-sm underline decoration-green-500! hover:text-green-700!">
               {{ meterData.member.name }}
             </span>
           </a>

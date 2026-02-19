@@ -1,4 +1,4 @@
-<div class="container mx-auto py-4">
+<div class="container mx-auto my-auto">
   <!-- First Step -->
   <form
     [formGroup]="formFirstStep"
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="text-center mt-3">
-      <p-button type="submit" label="{{ 'VALIDATE' | translate }}" class="p-button-lg"></p-button>
+      <p-button type="submit" label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}" class="p-button-lg"></p-button>
     </div>
   </form>
 
@@ -50,7 +50,7 @@
         <div class="text-center mt-3">
           <p-button
             type="submit"
-            label="{{ 'VALIDATE' | translate }}"
+            label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
             class="p-button-lg"
           ></p-button>
         </div>
@@ -111,7 +111,7 @@
           @if (iterations.length === 0 || i === formIterations.length - 1) {
             <p-button
               type="submit"
-              label="{{ 'VALIDATE' | translate }}"
+              label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
               class="p-button-lg"
             ></p-button>
           }
@@ -178,7 +178,7 @@
 
         <div class="text-center">
           <p-button
-            label="{{ 'VALIDATE' | translate }}"
+            label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
             type="submit"
             class="p-button-lg"
           ></p-button>

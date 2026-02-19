@@ -193,3 +193,9 @@ export interface UpdateMeterDTO {
   phases_number: number;
   reading_frequency: ReadingFrequency;
 }
+
+
+export interface DeleteFutureMeterDataDTO{
+  id_meter_data: number;
+  active_previous_meter_data?: boolean;
+}

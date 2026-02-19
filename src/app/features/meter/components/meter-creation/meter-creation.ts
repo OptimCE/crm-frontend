@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import {
   AbstractControl,
@@ -15,7 +15,6 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
-import { eanValidator } from './ean.validator';
 import {
   ClientType,
   InjectionStatus,
@@ -92,8 +91,7 @@ export class MeterCreation implements OnInit {
     { id: 6, name: 'ELIA' },
   ];
 
-  constructor(
-  ) {
+  constructor() {
     this.holder_id = undefined;
     if (this.config.data && this.config.data.holder_id) {
       this.holder_id = this.config.data.holder_id;
@@ -107,7 +105,9 @@ export class MeterCreation implements OnInit {
       address_postcode: new FormControl('', [Validators.required]),
       address_supplement: new FormControl('', []),
       address_city: new FormControl('', [Validators.required]),
-      EAN: new FormControl('', [Validators.required, eanValidator]),
+      EAN: new FormControl('', [Validators.required,
+        // eanValidator
+      ]),
       grd: new FormControl('', [Validators.required]),
       meterNumber: new FormControl('', [Validators.required]),
       tarifGroup: new FormControl('', [Validators.required]),
@@ -123,7 +123,9 @@ export class MeterCreation implements OnInit {
         [Validators.required],
       ),
       clientType: new FormControl('', [Validators.required]),
-      member: new FormControl('', [Validators.required, this.validMemberValidator()]),
+      member: new FormControl('', [Validators.required,
+        // this.validMemberValidator()
+      ]),
       dateStart: new FormControl('', [Validators.required]),
       injectionStatus: new FormControl(
         {
@@ -389,7 +391,7 @@ export class MeterCreation implements OnInit {
       EAN: this.metersForm.value.EAN,
       address: newAddress,
       initial_data: newMeterData,
-      meter_number: this.metersForm.value.meter_number,
+      meter_number: this.metersForm.value.meterNumber,
       phases_number: this.metersForm.value.phasesNumber.id,
       reading_frequency: this.metersForm.value.readingFrequency.id,
       tarif_group: this.metersForm.value.tarifGroup.id,

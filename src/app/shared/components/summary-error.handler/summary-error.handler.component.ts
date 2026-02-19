@@ -62,15 +62,15 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
   private loadDefaultErrorMessages() {
     this.translate
       .stream([
-        'form_error.field_required',
-        'form_error.field_invalid_email',
-        'form_error.field_min_length',
+        'FORM_ERROR.REQUIRED_FIELD',
+        'FORM_ERROR.INVALID_EMAIL',
+        'FORM_ERROR.MIN_LENGTH',
       ])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.defaultErrors = {
           required: (_: any, controlName: string, displayName?: string) => {
-            return this.translate.instant('form_error.field_required', {
+            return this.translate.instant('FORM_ERROR.REQUIRED_FIELD', {
               controlName: displayName ?? controlName,
             });
           },
@@ -80,7 +80,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
             controlName: string,
             displayName?: string,
           ) => {
-            return this.translate.instant('form_error.field_min_length', {
+            return this.translate.instant('FORM_ERROR.MIN_LENGTH', {
               controlName: displayName ?? controlName,
               requiredLength,
               actualLength,
@@ -88,7 +88,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
           },
 
           email: (_: any, controlName: string, displayName?: string) => {
-            return this.translate.instant('form_error.field_invalid_email', {
+            return this.translate.instant('FORM_ERROR.INVALID_EMAIL', {
               controlName: displayName ?? controlName,
             });
           },
@@ -179,7 +179,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
   private fallbackUnknownError(displayName: string) {
     // You can i18n this if you want:
     return (
-      this.translate.instant('form_error.unknown_error', { controlName: displayName }) ||
+      this.translate.instant('FORM_ERROR.UNKNOWN_ERROR', { controlName: displayName }) ||
       `Erreur inconnue sur "${displayName}".`
     );
   }

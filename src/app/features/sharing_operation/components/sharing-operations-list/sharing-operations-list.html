@@ -1,7 +1,8 @@
+<div class="container mx-auto my-auto">
 <div class="flex flex-wrap -mx-2 mb-3">
-  <div class="w-6/12 flex items-center">
-    <span class="pi pi-building text-primary mr-1 !text-xl"></span>
-    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">
+  <div class="w-6/12 flex items-center space-x-2">
+    <span class="pi pi-building text-2xl! text-green-500!"></span>
+    <h2 class="text-xl! font-medium">
       {{ 'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate }}
     </h2>
   </div>
@@ -74,7 +75,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-sharingOp>
-    <tr (click)="onRowClick(sharingOp)" class="flex-wrap -mx-2 hover:!bg-green-50 cursor-pointer">
+    <tr (click)="onRowClick(sharingOp)" class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer">
       <td class="text-sm px-3 py-2">{{ sharingOp.name }}</td>
       <td class="text-sm px-3 py-2">{{ sharingOp.type | sharingOperationType }}</td>
     </tr>
@@ -87,3 +88,4 @@
     </tr>
   </ng-template>
 </p-table>
+</div>

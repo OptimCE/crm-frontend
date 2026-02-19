@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { PrimeTemplate } from 'primeng/api';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -23,7 +23,6 @@ export class PendingMemberInvitation {
   pendingMembresInvitation = signal<UserMemberInvitationDTO[]>([]);
   loadingMembers = true;
   filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
-
 
   loadPendingMemberInvitation() {
     this.loadingMembers = true;

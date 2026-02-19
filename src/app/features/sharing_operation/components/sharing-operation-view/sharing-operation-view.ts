@@ -1,7 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Button, ButtonDirective } from 'primeng/button';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
 import {
@@ -11,7 +10,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TableModule } from 'primeng/table';
+import {TableLazyLoadEvent, TableModule, TablePageEvent} from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -25,15 +24,14 @@ import { ChartModule } from 'primeng/chart';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Drawer } from 'primeng/drawer';
-import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import {
   AddConsumptionDataDTO,
-  PatchMeterToSharingOperationDTO,
   SharingOpConsumptionDTO,
-  SharingOperationDTO,
+  SharingOperationDTO, SharingOperationKeyDTO,
+  SharingOperationMetersQueryType
 } from '../../../../shared/dtos/sharing_operation.dtos';
 import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { Pagination } from '../../../../core/dtos/api.response';
@@ -47,15 +45,15 @@ import { SharingOperationAddKey } from '../sharing-operation-add-key/sharing-ope
 import { SharingKeyStatus } from '../../../../shared/types/sharing_operation.types';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
+import {KeyPartialQuery} from '../../../../shared/dtos/key.dtos';
+import {Tab, TabList, TabPanel, TabPanels, Tabs} from 'primeng/tabs';
+import {SharingOperationMetersList} from './sharing-operation-meters-list/sharing-operation-meters-list';
 
 @Component({
   selector: 'app-sharing-operation-view',
   standalone: true,
   imports: [
-    Button,
     Ripple,
-    AddressPipe,
-    ButtonDirective,
     InputTextModule,
     PrimeTemplate,
     ReactiveFormsModule,
@@ -74,9 +72,15 @@ import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-opera
     ErrorHandlerComponent,
     CheckboxModule,
     Drawer,
-    Select,
     DatePicker,
     SharingOperationTypePipe,
+    Button,
+    Tabs,
+    TabList,
+    Tab,
+    SharingOperationMetersList,
+    TabPanel,
+    TabPanels,
   ],
   templateUrl: './sharing-operation-view.html',
   styleUrl: './sharing-operation-view.css',
@@ -96,7 +100,12 @@ export class SharingOperationView implements OnInit {
   isLoading: boolean = true;
   id!: number;
   sharingOperation!: SharingOperationDTO;
-  metersPartialList: PartialMeterDTO[] = [];
+  sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
+  loadingSharingOperationKeys = signal<boolean>(true);
+  paginationSharingOperationKey = signal<Pagination>({total: 0, total_pages: 0, page: 0, limit: 0})
+  filterSharingOperationKey = signal<KeyPartialQuery>({page: 1, limit: 10});
+  metersPartialList= signal<PartialMeterDTO[]>([]);
+  loadinMeters = signal<boolean>(true);
   addressFilter = {
     streetName: '',
     postcode: '',
@@ -173,7 +182,6 @@ export class SharingOperationView implements OnInit {
   public dragging: boolean = false;
   public fileConsumption: File | null = null;
   formGroup!: FormGroup;
-
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -276,7 +284,7 @@ export class SharingOperationView implements OnInit {
   loadAllMeters() {
     try {
       const params: any = {
-        sharingOperationsId: this.id,
+        sharing_operation_id: this.id,
       };
       this.metersService.getMetersList(params).subscribe({
         next: (response) => {
@@ -299,7 +307,7 @@ export class SharingOperationView implements OnInit {
   loadMeters(filter?: any, page?: number) {
     try {
       const params: any = {
-        sharingOperationsId: this.id,
+        sharing_operation_id: this.id,
       };
       // Check for address
       if (
@@ -337,22 +345,30 @@ export class SharingOperationView implements OnInit {
           }
         }
       }
+      console.log("PARAMS")
+      console.log(params);
+      this.metersPartialList.set([]);
+      this.loadinMeters.set(true);
       this.metersService.getMetersList({ page: page, limit: 10, ...params }).subscribe({
         next: (response) => {
           if (response) {
-            this.metersPartialList = response.data as PartialMeterDTO[];
+            this.metersPartialList.set(response.data as PartialMeterDTO[]);
             this.paginationMetersInfo = response.pagination;
             this.updatePaginationTranslation();
+            this.loadinMeters.set(false);
           } else {
             console.error('Error fetching meters partial list');
+            this.loadinMeters.set(false);
           }
         },
         error: (_error) => {
           console.error('Error fetching meters partial list');
+          this.loadinMeters.set(false);
         },
       });
     } catch (e) {
       console.error('Error fetching meters partial list ' + e);
+      this.loadinMeters.set(false);
     }
   }
 
@@ -361,7 +377,7 @@ export class SharingOperationView implements OnInit {
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
     }
-    this.loadMeters($event.filters, page);
+    this.loadMeters($event.filters, page >= 1? page : 1);
   }
 
   clear(table: any) {
@@ -378,7 +394,7 @@ export class SharingOperationView implements OnInit {
   }
 
   onRowClick(meter: any) {
-    this.routing.navigate(['/members/meter/' + meter.EAN]);
+    this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
   addMeter() {
@@ -428,9 +444,10 @@ export class SharingOperationView implements OnInit {
   }
 
   revokeWaitingKey() {
+    console.log("Revoke ")
     this.sharingOperationService
       .patchKeyStatus({
-        id_key: this.sharingOperation!.key_waiting_approval.key.id,
+        id_key: this.sharingOperation!.key_waiting_approval!.key.id,
         id_sharing: this.id,
         date: new Date(),
         status: SharingKeyStatus.REJECTED,
@@ -454,7 +471,7 @@ export class SharingOperationView implements OnInit {
   approveWaitingKey() {
     this.sharingOperationService
       .patchKeyStatus({
-        id_key: this.sharingOperation!.key_waiting_approval.key.id,
+        id_key: this.sharingOperation!.key_waiting_approval!.key.id,
         id_sharing: this.id,
         date: this.dateStartApproved,
         status: SharingKeyStatus.APPROVED,
@@ -489,112 +506,12 @@ export class SharingOperationView implements OnInit {
     });
   }
 
-  openMeterChangeStatusPopup(event: Event, meter: PartialMeterDTO, action: number) {
-    event.stopPropagation();
-    if (action == 1) {
-      this.textChangeStatusMeter = this.translate.instant(
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
-      );
-    } else if (action == 2) {
-      this.textChangeStatusMeter = this.translate.instant(
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
-      );
-    } else if (action == 3) {
-      this.textChangeStatusMeter = this.translate.instant(
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
-      );
-    }
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      acceptIcon: 'pi pi-check',
-      rejectIcon: 'pi pi-times',
-      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE'),
-      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL'),
-      accept: () => {
-        if (action == 1) {
-          this.approveMeter(meter);
-        } else if (action == 2) {
-          this.removeMeter(meter);
-        } else if (action == 3) {
-          this.putMeterToWaiting(meter);
-        }
-      },
-    });
-  }
 
-  approveMeter(meter: PartialMeterDTO) {
-    const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter,
-      id_meter: meter.EAN,
-      id_sharing: this.sharingOperation!.id,
-      status: MeterDataStatus.ACTIVE,
-    };
 
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMeters();
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
-
-    this.dateStartMeter = null;
-  }
-
-  removeMeter(meter: PartialMeterDTO) {
-    const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter,
-      id_meter: meter.EAN,
-      id_sharing: this.sharingOperation!.id,
-      status: MeterDataStatus.INACTIVE,
-    };
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMeters();
-        } else {
-          this.errorHandler.handleError();
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ?? null);
-      },
-    });
-
-    this.dateStartMeter = null;
-  }
-
-  putMeterToWaiting(meter: PartialMeterDTO) {
-    const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter,
-      id_meter: meter.EAN,
-      id_sharing: this.sharingOperation!.id,
-      status: MeterDataStatus.WAITING_GRD,
-    };
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMeters();
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
-
-    this.dateStartMeter = null;
-  }
 
   newKey() {
     // Get all meters EAN
-    const metersEAN = this.metersPartialList.map((a) => a.EAN);
+    const metersEAN = this.metersPartialList().map((a) => a.EAN);
     this.eventBus.emit('setConsumers', metersEAN);
     this.routing.navigate(['/key/add']);
   }
@@ -738,4 +655,42 @@ export class SharingOperationView implements OnInit {
 
   protected readonly KeyStatus = SharingKeyStatus;
   protected readonly MeterStatus = MeterDataStatus;
+  loadSharingOperationKey(){
+    this.loadingSharingOperationKeys.set(true);
+    this.sharingOperationService.getSharingOperationKeysList(this.id, this.filterSharingOperationKey()).subscribe({
+      next: (response)=>{
+        if(response){
+          this.sharingOperationKeys.set(response.data as SharingOperationKeyDTO[]);
+          this.paginationSharingOperationKey.set(response.pagination);
+          this.loadingSharingOperationKeys.set(false);
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error.data ?? null);
+        this.loadingSharingOperationKeys.set(false);
+      }
+    })
+  }
+
+  protected onPageSharingOperationKey($event: TablePageEvent) {
+    const current: any = { ...this.filterSharingOperationKey() };
+    current.page = $event.first / $event.rows + 1;
+    this.filterSharingOperationKey.set(current);
+    this.loadSharingOperationKey();
+  }
+
+  protected onLazyLoadSharingOperationKey($event: TableLazyLoadEvent) {
+    const current: any = { ...this.filterSharingOperationKey() };
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      if ($event.rows) {
+        current.page = $event.first / $event.rows + 1;
+      } else {
+        current.page = 1;
+      }
+    }
+    this.filterSharingOperationKey.set(current);
+    this.loadSharingOperationKey();
+  }
+
+  public SharingOperationMetersQueryType = SharingOperationMetersQueryType
 }

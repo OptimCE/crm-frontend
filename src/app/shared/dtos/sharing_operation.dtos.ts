@@ -12,6 +12,25 @@ export interface SharingOperationPartialQuery extends PaginationQuery {
   sort_type?: Sort;
 }
 
+export enum SharingOperationMetersQueryType{
+  PAST = 1,
+  NOW = 2,
+  FUTURE = 3
+}
+
+export interface SharingOperationMetersQuery extends PaginationQuery {
+  street?: string;
+  postcode?: number;
+  address_number?: number;
+  city?: string;
+  supplement?: string;
+  EAN?: string;
+  meter_number?: string;
+  status?: MeterDataStatus;
+  holder_id?: number;
+  type: SharingOperationMetersQueryType;
+}
+
 /**
  * Query parameters for retrieving sharing operation consumption data.
  */
@@ -43,8 +62,7 @@ export interface SharingOperationKeyDTO {
  */
 export interface SharingOperationDTO extends SharingOperationPartialDTO {
   key: SharingOperationKeyDTO;
-  history_keys: SharingOperationKeyDTO[];
-  key_waiting_approval: SharingOperationKeyDTO;
+  key_waiting_approval?: SharingOperationKeyDTO;
 }
 
 /**
@@ -122,3 +140,4 @@ export interface RemoveMeterFromSharingOperationDTO {
   id_sharing: number;
   date: Date;
 }
+

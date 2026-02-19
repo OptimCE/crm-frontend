@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Button } from 'primeng/button';
@@ -33,9 +33,7 @@ export class SharingOperationAddKey implements OnInit {
   id: number;
   currentPageReportTemplate: string = '';
 
-  constructor(
-
-  ) {
+  constructor() {
     this.loading = true;
     this.page = 1;
     this.id = this.config.data.id;

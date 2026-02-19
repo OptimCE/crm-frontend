@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { InputText } from 'primeng/inputtext';
@@ -12,9 +12,8 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
   styleUrl: './member-invite.css',
 })
 export class MemberInvite implements OnInit {
-  private ref = inject(DynamicDialogRef)
+  private ref = inject(DynamicDialogRef);
   form!: FormGroup;
-
 
   ngOnInit() {
     this.form = new FormGroup({

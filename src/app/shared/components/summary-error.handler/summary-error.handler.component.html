@@ -1,6 +1,6 @@
 @if ((hasSubmitted || showBeforeSubmit) && errorMessages.length > 0) {
   <p>
-    <strong class="error"> {{ 'form_error.fix_the_following_error' | translate }} :</strong>
+    <strong class="error"> {{ 'FORM_ERROR.FIX_THE_FOLLOWING_ERROR' | translate }} :</strong>
   </p>
   <ul>
     @for (error of errorMessages; track $index) {

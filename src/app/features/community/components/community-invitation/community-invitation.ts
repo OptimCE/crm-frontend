@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
@@ -22,7 +22,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
   styleUrl: './community-invitation.css',
 })
 export class CommunityInvitation implements OnInit {
-  private ref = inject(DynamicDialogRef)
+  private ref = inject(DynamicDialogRef);
   form!: FormGroup;
 
   ngOnInit(): void {

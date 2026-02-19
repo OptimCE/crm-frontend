@@ -35,7 +35,6 @@ export class Navbar implements OnInit {
   private titleService = inject(Title);
   private translateService = inject(TranslateService);
   private readonly keycloak = inject(Keycloak);
-
   title = 'front-end-orchestrator';
   isExpanded: boolean[] = [false];
   showSubmenu: boolean[] = [false];
@@ -54,22 +53,6 @@ export class Navbar implements OnInit {
   mobile: any;
   isAuth: any = true;
   visibleSideBar: boolean = true;
-  userRole?: Role;
-
-  keysLinks: Links[] = [
-    {
-      name: 'NAVBAR.HANDLE_KEY',
-      // name: "Gérer les clefs",
-      icon: 'pi pi-key',
-      url: '/keys',
-    },
-    {
-      name: 'NAVBAR.GENERATE_KEY',
-      // name: "Générer une clef",
-      icon: 'pi pi-code',
-      url: '/keys/generate',
-    },
-  ];
 
   memberLinks: Links[] = [
     {
@@ -92,9 +75,7 @@ export class Navbar implements OnInit {
     },
   ];
 
-  constructor(
-
-  ) {
+  constructor() {
     this.sidebarOpen = false;
     this.setSidebarWidth();
   }
@@ -139,6 +120,7 @@ export class Navbar implements OnInit {
   }
 
   logout() {
+    this.userContextService.logout();
     this.keycloak.logout({
       redirectUri: window.location.origin + '/auth',
     });

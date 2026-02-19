@@ -38,6 +38,7 @@
               [inputId]="'production_' + production.id"
               [value]="production"
               formControlName="productionChain"
+              name="productionChain"
             />
             <label [for]="'production_' + production.id" class="text-small">
               {{ production.name }}
@@ -54,6 +55,7 @@
               [inputId]="'injection_' + inj.id"
               [value]="inj"
               formControlName="injectionStatus"
+              name="injectionStatus"
             />
             <label [for]="'injection_' + inj.id" class="text-small">
               {{ inj.name }}
@@ -66,7 +68,7 @@
         <span class="text-base">{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}</span>
         @for (grd of grdAvailable; track $index) {
           <div>
-            <p-radioButton [inputId]="'grd_' + grd.id" [value]="grd" formControlName="grd" />
+            <p-radioButton [inputId]="'grd_' + grd.id" [value]="grd" formControlName="grd" name="grd"/>
             <label [for]="'grd_' + grd.id" class="text-small">
               {{ grd.name }}
             </label>
@@ -86,7 +88,7 @@
         <span class="text-base">{{ 'METER.INFORMATIONS.RATE_LABEL' | translate }}</span>
         @for (rate of rateCategory; track $index) {
           <div>
-            <p-radioButton [inputId]="'rate_' + rate.id" [value]="rate" formControlName="rate" />
+            <p-radioButton [inputId]="'rate_' + rate.id" [value]="rate" formControlName="rate" name="rate" />
             <label [for]="'rate_' + rate.id" class="text-small">
               {{ rate.name }}
             </label>
@@ -102,6 +104,7 @@
               [inputId]="'client_' + client.id"
               [value]="client"
               formControlName="clientType"
+              name="clientType"
             />
             <label [for]="'client_' + client.id" class="text-small">
               {{ client.name }}
@@ -127,19 +130,48 @@
         <app-error-handler controlName="member" [errorsAdd]="errorMemberAdded" />
       </div>
     </div>
-    <div class="flex flex-wrap text-center pb-1 flex-col w-full justify-center items-center">
-      <label for="dateStart" class="text-base">{{
-        'METER.UPDATE_DATA.START_DATE_METER_LABEL' | translate
-      }}</label>
-      <p-date-picker
-        id="dateStart"
-        formControlName="dateStart"
-        [showIcon]="true"
-        [showOnFocus]="true"
-        dateFormat="dd/mm/yy"
-      >
-      </p-date-picker>
-      <app-error-handler controlName="dateStart" />
+    <div class="flex flex-wrap pb-1 w-full ">
+      <div class="flex flex-col flex-1 items-center">
+        <label for="status" class="text-base">{{
+            'METER.UPDATE_DATA.SELECT_STATUS' | translate
+          }}</label>
+        <p-select
+          id="status"
+          formControlName="status"
+          optionValue="value"
+          optionLabel="label"
+          [options]="statusOptions"
+        >
+          <ng-template #selectedItem let-selectedOption>
+            @if(selectedOption){
+              <div class="flex items-center gap-2">
+                <div>{{ selectedOption.label | translate }}</div>
+              </div>
+            }
+          </ng-template>
+          <ng-template let-option #item>
+            <div class="flex items-center gap-2">
+              <div>{{ option.label | translate}}</div>
+            </div>
+          </ng-template>
+        </p-select>
+        <app-error-handler controlName="status" />
+      </div>
+      <div class="flex flex-col flex-1 items-center">
+        <label for="dateStart" class="text-base">{{
+            'METER.UPDATE_DATA.START_DATE_METER_LABEL' | translate
+          }}</label>
+        <p-date-picker
+          id="dateStart"
+          formControlName="dateStart"
+          [showIcon]="true"
+          [showOnFocus]="true"
+          dateFormat="dd/mm/yy"
+        >
+        </p-date-picker>
+        <app-error-handler controlName="dateStart" />
+      </div>
+
     </div>
     <div class="flex flex-wrap text-center flex-col w-full justify-center">
       <app-summary-error

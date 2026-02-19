@@ -71,15 +71,13 @@
               ></li>
               @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
                 <li
-                  appSidebarMultiItems
+                  appSidebarItem
                   [name]="'NAVBAR.KEY_HANDLER' | translate"
                   [icon]="'pi pi-key'"
                   [sidebarOpen]="sidebarOpen"
                   [isRouteActive]="isRouteActive.key"
                   (sidebarClose)="closeSideBar()"
-                  [activeSublist]="activeSublist === 'keys'"
-                  [links]="keysLinks"
-                  (click)="toggleSublist('keys')"
+                  [routerLinkUrl]="'/keys'"
                 ></li>
                 <li
                   appSidebarMultiItems

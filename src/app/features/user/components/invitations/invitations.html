@@ -1,18 +1,24 @@
-<p-tabs value="0">
-  <p-tablist>
-    <p-tab value="0">
-      {{ 'INVITATION.MEMBER.TITLE' | translate }}
-    </p-tab>
-    <p-tab value="1">
-      {{ 'INVITATION.MANAGER.TITLE' | translate }}
-    </p-tab>
-  </p-tablist>
-  <p-tabpanels>
-    <p-tabpanel value="0">
-      <app-invitation-member></app-invitation-member>
-    </p-tabpanel>
-    <p-tabpanel value="1">
-      <app-invitation-gestionnaire>aires</app-invitation-gestionnaire>
-    </p-tabpanel>
-  </p-tabpanels>
-</p-tabs>
+<div class="container mx-auto my-auto">
+  <div class="w-6/12 flex items-center space-x-2">
+    <span class="pi pi-envelope text-2xl! text-green-500!"></span>
+    <h2 class="text-xl! font-medium">{{ 'INVITATION.TITLE' | translate }}</h2>
+  </div>
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">
+        {{ 'INVITATION.MEMBER.TITLE' | translate }}
+      </p-tab>
+      <p-tab value="1">
+        {{ 'INVITATION.MANAGER.TITLE' | translate }}
+      </p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <app-invitation-member></app-invitation-member>
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        <app-invitation-gestionnaire></app-invitation-gestionnaire>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>

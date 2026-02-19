@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Tag, TagModule } from 'primeng/tag';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -17,7 +17,7 @@ import { InvitationService } from '../../../../shared/services/invitation.servic
   styleUrl: './member-pending-invite.css',
 })
 export class MemberPendingInvite {
-  private invitationService = inject(InvitationService)
+  private invitationService = inject(InvitationService);
   pendingMembresInvitation = signal<UserMemberInvitationDTO[]>([]);
   filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
   loadingMembers = true;

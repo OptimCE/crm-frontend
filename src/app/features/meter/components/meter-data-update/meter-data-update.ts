@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,6 +26,7 @@ import { MemberService } from '../../../../shared/services/member.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import {MeterDataStatus} from '../../../../shared/types/meter.types';
 
 @Component({
   selector: 'app-meter-data-update',
@@ -48,12 +49,12 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
   styleUrl: './meter-data-update.css',
 })
 export class MeterDataUpdate implements OnInit {
-  private memberService = inject(MemberService)
-  private config = inject(DynamicDialogConfig)
-  private meterService = inject(MeterService)
-  private ref = inject(DynamicDialogRef)
-  private translate = inject(TranslateService)
-  private errorHandler = inject(ErrorMessageHandler)
+  private memberService = inject(MemberService);
+  private config = inject(DynamicDialogConfig);
+  private meterService = inject(MeterService);
+  private ref = inject(DynamicDialogRef);
+  private translate = inject(TranslateService);
+  private errorHandler = inject(ErrorMessageHandler);
   errorMemberAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
 
@@ -62,6 +63,12 @@ export class MeterDataUpdate implements OnInit {
   @Input()
   id: string;
   metersForm!: FormGroup;
+  statusOptions = [
+    { value: MeterDataStatus.ACTIVE, label: 'METER.STATUS.ACTIVE_LABEL' },
+    { value: MeterDataStatus.INACTIVE, label: 'METER.STATUS.INACTIVE_LABEL'},
+    { value: MeterDataStatus.WAITING_GRD, label: 'METER.STATUS.WAITING_GRD_LABEL'},
+    { value: MeterDataStatus.WAITING_MANAGER, label: 'METER.STATUS.WAITING_MANAGER_LABEL'},
+  ]
   productionChainCategory = [
     { id: 1, name: '' },
     { id: 2, name: '' },
@@ -113,9 +120,7 @@ export class MeterDataUpdate implements OnInit {
     { id: 6, name: 'ELIA' },
   ];
   membersList!: MembersPartialDTO[];
-  constructor(
-
-  ) {
+  constructor() {
     this.meterData = this.config.data.meterData;
     this.id = this.config.data.id;
   }
@@ -147,7 +152,8 @@ export class MeterDataUpdate implements OnInit {
       rate: new FormControl('', [Validators.required]),
       productionChain: new FormControl('', [Validators.required]),
       clientType: new FormControl('', [Validators.required]),
-      member: new FormControl('', [Validators.required, this.validMemberValidator()]),
+      member: new FormControl('', [Validators.required,
+        this.validMemberValidator()]),
       dateStart: new FormControl('', [Validators.required]),
       status: new FormControl('', [Validators.required]),
       injectionStatus: new FormControl('', [Validators.required]),
@@ -315,6 +321,7 @@ export class MeterDataUpdate implements OnInit {
   onSubmit() {
     if (!this.metersForm.valid) {
       console.error('Form not valid');
+      console.log('Form validation errors:', this.metersForm.errors);
       return;
     }
     const updateMeterData: PatchMeterDataDTO = {

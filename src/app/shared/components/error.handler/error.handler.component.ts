@@ -58,15 +58,15 @@ export class ErrorHandlerComponent implements OnInit, OnDestroy {
 
   private loadDefaultErrorMessages() {
     this.translate
-      .get(['form_error.required_field', 'form_error.invalid_email', 'form_error.min_length'])
+      .get(['FORM_ERROR.REQUIRED_FIELD', 'FORM_ERROR.INVALID_EMAIL', 'FORM_ERROR.MIN_LENGTH'])
       .subscribe((translations) => {
         this.errors = {
-          required: () => translations['form_error.required_field'] || 'Ce champ est obligatoire',
+          required: () => translations['FORM_ERROR.REQUIRED_FIELD'] || 'Ce champ est obligatoire',
           minlength: ({ requiredLength, actualLength }: any) =>
-            translations['form_error.min_length']
-              ? this.translate.instant('form_error.min_length', { requiredLength, actualLength })
+            translations['FORM_ERROR.MIN_LENGTH']
+              ? this.translate.instant('FORM_ERROR.min_length', { requiredLength, actualLength })
               : `Ce champ doit contenir au moins ${requiredLength} caractères (actuellement ${actualLength}).`,
-          email: () => translations['form_error.invalid_email'] || 'Adresse email invalide',
+          email: () => translations['FORM_ERROR.INVALID_EMAIL'] || 'Adresse email invalide',
         };
       });
   }

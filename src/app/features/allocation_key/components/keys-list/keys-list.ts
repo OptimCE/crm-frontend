@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Toast } from 'primeng/toast';
 import { SplitButton } from 'primeng/splitbutton';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -72,6 +72,9 @@ export class KeysList implements OnInit {
       } else {
         current.page = 1;
       }
+    }
+    if(current.page < 1){
+      current.page = 1;
     }
 
     if ($event.sortField) {

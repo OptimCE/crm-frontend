@@ -100,6 +100,7 @@
                   [inputId]="'phase' + phase.id"
                   [value]="phase"
                   formControlName="phasesNumber"
+                  name="phasesNumber"
                 />
                 <label [for]="'phase' + phase.id" class="text-sm">
                   {{ phase.name }}
@@ -120,6 +121,7 @@
                     [inputId]="'readingFreq' + readingFreq.id"
                     [value]="readingFreq"
                     formControlName="readingFrequency"
+                    name="readingFrequency"
                   />
                   <label [for]="'readingFreq' + readingFreq.id" class="text-sm">
                     {{ readingFreq.name }}
@@ -140,6 +142,7 @@
                   [inputId]="'tarifGroup' + tarifGroup.id"
                   [value]="tarifGroup"
                   formControlName="tarifGroup"
+                  name="tarifGroup"
                 />
                 <label [for]="'tarifGroup' + tarifGroup.id" class="text-sm">
                   {{ tarifGroup.name }}
@@ -189,6 +192,7 @@
                 [value]="production"
                 (onClick)="onChangeProductionChain()"
                 formControlName="productionChain"
+                name="productionChain"
               />
               <label [for]="'production' + production.id" class="text-sm">
                 {{ production.name }}
@@ -207,6 +211,7 @@
                 [inputId]="'inj' + inj.id"
                 [value]="inj"
                 formControlName="injectionStatus"
+                name="injectionStatus"
               />
               <label [for]="'inj' + inj.id" class="text-sm">
                 {{ inj.name }}
@@ -219,7 +224,7 @@
           <span class="text-base">{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }} *</span>
           @for (grd of grdAvailable; track $index) {
             <div>
-              <p-radioButton [inputId]="'grd' + grd.id" [value]="grd.name" formControlName="grd" />
+              <p-radioButton [inputId]="'grd' + grd.id" [value]="grd.name" formControlName="grd" name="grd" />
               <label [for]="'grd' + grd.id" class="text-sm">
                 {{ grd.name }}
               </label>
@@ -236,7 +241,7 @@
           <span class="text-base">{{ 'METER.INFORMATIONS.RATE_LABEL' | translate }} *</span>
           @for (rate of rateCategory; track $index) {
             <div>
-              <p-radioButton [inputId]="'rate' + rate.id" [value]="rate" formControlName="rate" />
+              <p-radioButton [inputId]="'rate' + rate.id" [value]="rate" formControlName="rate" name="rate" />
               <label [for]="'rate' + rate.id" class="text-sm">
                 {{ rate.name }}
               </label>
@@ -252,6 +257,7 @@
                 [inputId]="'client' + client.id"
                 [value]="client"
                 formControlName="clientType"
+                name="clientType"
               />
               <label [for]="'client' + client.id" class="text-sm">
                 {{ client.name }}

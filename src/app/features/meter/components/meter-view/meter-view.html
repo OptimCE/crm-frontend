@@ -1,247 +1,250 @@
-@if (isLoaded) {
-  <div class="p-3">
-    <div>
-      <div class="flex flex-wrap -mx-2 pt-3 pb-3 items-center">
-        <div class="lg:w-6/12 px-2 md:w-full flex items-center flex-nowrap">
-          <i class="pi pi-gauge mr-1 !text-green-500 !text-2xl"></i>
-          <h2 class="text-xl font-medium text-truncate mb-0 flex-grow" style="min-width: 0">
-            {{ 'METER.METER_LABEL' | translate }} {{ meter?.EAN }}
-          </h2>
+<div class="container mx-auto my-auto">
+  @if (isLoaded) {
+    <div class="p-3">
+      <div>
+        <div class="flex flex-wrap -mx-2 pt-3 pb-3 items-center">
+          <div class="lg:w-6/12 px-2 md:w-full flex items-center flex-nowrap space-x-2">
+            <i class="pi pi-gauge text-2xl! text-green-500!"></i>
+            <h2 class="text-xl! font-medium text-truncate mb-0 grow" style="min-width: 0">
+              {{ 'METER.METER_LABEL' | translate }} {{ meter.EAN }}
+            </h2>
+          </div>
+
+          <div class="lg:w-6/12 md:w-full text-end mt-md-2">
+            <p-button
+              type="button"
+              label="{{ 'METER.FULL.MODIFY_BUTTON_LABEL' | translate }}"
+              severity="warn"
+              icon="pi pi-pencil"
+              (click)="toModify()"
+            ></p-button>
+          </div>
         </div>
 
-        <div class="lg:w-6/12 md:w-full text-end mt-md-2">
-          <p-button
-            type="button"
-            label="{{ 'METER.FULL.MODIFY_BUTTON_LABEL' | translate }}"
-            severity="warn"
-            icon="pi pi-pencil"
-            (click)="toModify()"
-          ></p-button>
+        <div class="flex flex-wrap -mx-2 pb-3">
+          <div class="flex items-center">
+            <h4 class="text-md font-medium">
+              {{ 'METER.FULL.METER_INFORMATION_TITLE' | translate }}
+            </h4>
+          </div>
         </div>
-      </div>
-
-      <div class="flex flex-wrap -mx-2 pb-3">
-        <div class="flex items-center">
-          <h4 class="text-md font-medium">
-            {{ 'METER.FULL.METER_INFORMATION_TITLE' | translate }}
-          </h4>
-        </div>
-      </div>
-      <p-card class="m-5 !shadow-lg/30">
-        <div class="flex flex-wrap pb-3 w-full">
-          <div class="flex flex-wrap flex-col text-center w-1/3">
-            <div class="flex flex-col">
-              <div class="flex flex-wrap place-content-center">
-                <h4 class="text-md font-medium">{{ 'COMMON.ADDRESS' | translate }}</h4>
+        <p-card class="m-5 shadow-lg/30!">
+          <div class="flex flex-wrap pb-3 w-full">
+            <div class="flex flex-wrap flex-col text-center w-1/3">
+              <div class="flex flex-col">
+                <div class="flex flex-wrap place-content-center">
+                  <h4 class="text-md font-medium">{{ 'COMMON.ADDRESS' | translate }}</h4>
+                </div>
+                <p class="text-sm" [innerHTML]="meter.address | address"></p>
               </div>
-              <p class="text-sm" [innerHTML]="meter.address | address"></p>
+            </div>
+            <div class="flex flex-wrap flex-col text-center w-1/3">
+              <span class="text-md font-medium">{{
+                'METER.INFORMATIONS.EAN_LABEL' | translate
+              }}</span>
+              <span class="text-sm">{{ meter.EAN }}</span>
+            </div>
+            <div class="flex flex-wrap flex-col text-center w-1/3">
+              <span class="text-md font-medium">{{
+                'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
+              }}</span>
+              <span class="text-sm">{{ meter.meter_number }}</span>
             </div>
           </div>
-          <div class="flex flex-wrap flex-col text-center w-1/3">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.EAN_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{ meter.EAN }}</span>
-          </div>
-          <div class="flex flex-wrap flex-col text-center w-1/3">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{ meter.meter_number }}</span>
-          </div>
-        </div>
-        <div class="flex flex-wrap pb-3 w-full">
-          <div class="flex flex-wrap flex-col text-center pb-1 w-1/3">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{ meter.tarif_group | mapNumberString: tarifGroupMap }}</span>
-          </div>
-          <div class="flex flex-wrap flex-col text-center pb-1 w-1/3">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{
-              meter.phases_number | mapNumberString: phasesNumberMap
-            }}</span>
-          </div>
-          <div class="flex flex-wrap flex-col text-center pb-1 w-1/3">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{
-              meter.reading_frequency | mapNumberString: readingFrequencyMap
-            }}</span>
-          </div>
-        </div>
-      </p-card>
-
-      <p-tabs [value]="0">
-        <p-tablist>
-          <p-tab [value]="0">{{ 'METER.FULL.TABS.ACTUAL_DATA_HEADER' | translate }}</p-tab>
-          <p-tab [value]="1">{{ 'METER.FULL.TABS.HISTORICAL_DATA_HEADER' | translate }}</p-tab>
-          <p-tab [value]="2">{{ 'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate }}</p-tab>
-          <p-tab [value]="3">{{ 'METER.FULL.TABS.CONSUMPTION_HEADER' | translate }}</p-tab>
-          <p-tab [value]="-1">
-            <div class="p-0 w-full justify-end" id="testaaaa">
-              <p-button
-                type="button"
-                label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
-                class="p-button-raised p-button-rounded m-1"
-                (click)="toUpdate($event)"
-              ></p-button>
+          <div class="flex flex-wrap pb-3 w-full">
+            <div class="flex flex-wrap flex-col text-center pb-1 w-1/3">
+              <span class="text-md font-medium">{{
+                'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate
+              }}</span>
+              <span class="text-sm">{{ meter.tarif_group | mapNumberString: tarifGroupMap }}</span>
             </div>
-          </p-tab>
-        </p-tablist>
-        <p-tabpanels>
-          <p-tabpanel [value]="0">
-            @if (meter.meter_data) {
-              <app-meter-data-view
-                [meterData]="meter.meter_data"
-                [rateMap]="rateMap"
-                [productionChainMap]="productionChainMap"
-                [injectionStatusMap]="injectionStatusMap"
-                [clientTypeMap]="clientTypeMap"
-              ></app-meter-data-view>
-            } @else {
-              <p class="text-base">{{ 'METER.FULL.NO_DATA_FOUND_LABEL' | translate }}</p>
-            }
-          </p-tabpanel>
-          <p-tabpanel [value]="1">
-            @if (meter.meter_data_history && meter.meter_data_history.length > 0) {
-              <div>
-                <div class="flex flex-wrap -mx-2 pb-3 h-100">
-                  <p-select
-                    [options]="meter.meter_data_history"
-                    [(ngModel)]="historySelected"
-                    placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
-                  >
-                    <ng-template pTemplate="selectedItem">
-                      @if (historySelected) {
-                        <div class="flex items-center gap-2">
-                          <span class="text-sm">
-                            {{ historySelected.start_date | date: 'dd/MM/yyyy' }} -
-                            {{ historySelected.end_date | date: 'dd/MM/yyyy' }}
-                          </span>
-                        </div>
-                      }
-                    </ng-template>
-                    <ng-template let-history pTemplate="item">
-                      <div class="flex items-center gap-2">
-                        <span class="text-sm"
-                          >{{ history.start_date | date: 'dd/MM/yyyy' }} -
-                          {{ history.end_date | date: 'dd/MM/yyyy' }}</span
-                        >
-                      </div>
-                    </ng-template>
-                  </p-select>
-                </div>
-                @if (historySelected) {
-                  <app-meter-data-view
-                    [meterData]="historySelected"
-                    [rateMap]="rateMap"
-                    [productionChainMap]="productionChainMap"
-                    [injectionStatusMap]="injectionStatusMap"
-                    [clientTypeMap]="clientTypeMap"
-                  ></app-meter-data-view>
-                }
-              </div>
-            } @else {
-              <div>
-                <p class="text-base">{{ 'METER.FULL.NO_HISTORY_DATA_FOUND_LABEL' | translate }}</p>
-              </div>
-            }
-          </p-tabpanel>
-          <p-tabpanel [value]="2">
-            @if (meter.futur_meter_data && meter.futur_meter_data.length > 0) {
-              <div>
-                <div class="flex flex-wrap -mx-2 pb-3 h-100">
-                  <p-select
-                    [options]="meter.futur_meter_data"
-                    [(ngModel)]="futureSelected"
-                    placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
-                  >
-                    <ng-template pTemplate="selectedItem">
-                      @if (futureSelected) {
-                        <div class="flex items-center gap-2">
-                          <span class="text-sm">
-                            {{ futureSelected.start_date | date: 'dd/MM/yyyy' }} -
-                            {{ futureSelected.end_date | date: 'dd/MM/yyyy' }}
-                          </span>
-                        </div>
-                      }
-                    </ng-template>
-                    <ng-template let-futur pTemplate="item">
-                      <div class="flex items-center gap-2">
-                        <span class="text-sm"
-                          >{{ futur.start_date | date: 'dd/MM/yyyy' }} -
-                          {{ futur.end_date | date: 'dd/MM/yyyy' }}</span
-                        >
-                      </div>
-                    </ng-template>
-                  </p-select>
-                </div>
-                @if (futureSelected) {
-                  <app-meter-data-view
-                    [meterData]="futureSelected"
-                    [rateMap]="rateMap"
-                    [productionChainMap]="productionChainMap"
-                    [injectionStatusMap]="injectionStatusMap"
-                    [clientTypeMap]="clientTypeMap"
-                  ></app-meter-data-view>
-                }
-              </div>
-            } @else {
-              <div>
-                <p class="text-base">{{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}</p>
-              </div>
-            }
-          </p-tabpanel>
-          <p-tabpanel [value]="3">
-            <form [formGroup]="formChart" class="flex mb-4" (submit)="loadChart()">
-              <div class="grid me-2">
-                <label for="dateDeb">{{ 'METER.FULL.BEGINNING_DATE_LABEL' | translate }}</label>
-                <p-date-picker
-                  id="dateDeb"
-                  formControlName="dateDeb"
-                  dateFormat="dd/mm/yy"
-                  [firstDayOfWeek]="1"
-                ></p-date-picker>
-                <app-error-handler controlName="dateDeb"></app-error-handler>
-              </div>
-              <div class="grid me-2">
-                <label for="dateFin">{{ 'METER.FULL.END_DATE_LABEL' | translate }}</label>
-                <p-date-picker
-                  id="dateFin"
-                  formControlName="dateFin"
-                  dateFormat="dd/mm/yy"
-                  [firstDayOfWeek]="1"
-                ></p-date-picker>
-                <app-error-handler controlName="dateFin"></app-error-handler>
-              </div>
-              <div class="content-center">
+            <div class="flex flex-wrap flex-col text-center pb-1 w-1/3">
+              <span class="text-md font-medium">{{
+                'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate
+              }}</span>
+              <span class="text-sm">{{
+                meter.phases_number | mapNumberString: phasesNumberMap
+              }}</span>
+            </div>
+            <div class="flex flex-wrap flex-col text-center pb-1 w-1/3">
+              <span class="text-md font-medium">{{
+                'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
+              }}</span>
+              <span class="text-sm">{{
+                meter.reading_frequency | mapNumberString: readingFrequencyMap
+              }}</span>
+            </div>
+          </div>
+        </p-card>
+
+        <p-tabs [value]="0">
+          <p-tablist>
+            <p-tab [value]="0">{{ 'METER.FULL.TABS.ACTUAL_DATA_HEADER' | translate }}</p-tab>
+            <p-tab [value]="1">{{ 'METER.FULL.TABS.HISTORICAL_DATA_HEADER' | translate }}</p-tab>
+            <p-tab [value]="2">{{ 'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate }}</p-tab>
+            <p-tab [value]="3">{{ 'METER.FULL.TABS.CONSUMPTION_HEADER' | translate }}</p-tab>
+            <p-tab [value]="-1">
+              <div class="p-0 w-full justify-end" id="testaaaa">
                 <p-button
-                  pRipple
-                  label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
-                  type="submit"
+                  type="button"
+                  label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
+                  class="p-button-raised p-button-rounded m-1"
+                  severity="warn"
+                  (click)="toUpdate($event)"
                 ></p-button>
               </div>
-            </form>
-            <div class="card">
-              <p-chart type="bar" [data]="data" [options]="options" />
-            </div>
-            @if (displayDownloadButton) {
-              <div class="flex flex-wrap -mx-2 text-center mt-4">
-                <p-button
-                  pRipple
-                  label="{{ 'METER.FULL.DOWNLOAD_BUTTON_LABEL' | translate }}"
-                  (click)="downloadTotalConsumption()"
-                ></p-button>
+            </p-tab>
+          </p-tablist>
+          <p-tabpanels>
+            <p-tabpanel [value]="0">
+              @if (meter.meter_data) {
+                <app-meter-data-view
+                  [meterData]="meter.meter_data"
+                  [rateMap]="rateMap"
+                  [productionChainMap]="productionChainMap"
+                  [injectionStatusMap]="injectionStatusMap"
+                  [clientTypeMap]="clientTypeMap"
+                ></app-meter-data-view>
+              } @else {
+                <p class="text-base">{{ 'METER.FULL.NO_DATA_FOUND_LABEL' | translate }}</p>
+              }
+            </p-tabpanel>
+            <p-tabpanel [value]="1">
+              @if (meter.meter_data_history && meter.meter_data_history.length > 0) {
+                <div>
+                  <div class="flex flex-wrap -mx-2 pb-3">
+                    <p-select
+                      [options]="meter.meter_data_history"
+                      [(ngModel)]="historySelected"
+                      placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
+                    >
+                      <ng-template pTemplate="selectedItem">
+                        @if (historySelected) {
+                          <div class="flex items-center gap-2">
+                            <span class="text-sm">
+                              {{ historySelected.start_date | date: 'dd/MM/yyyy' }} -
+                              {{ historySelected.end_date | date: 'dd/MM/yyyy' }}
+                            </span>
+                          </div>
+                        }
+                      </ng-template>
+                      <ng-template let-history pTemplate="item">
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm"
+                            >{{ history.start_date | date: 'dd/MM/yyyy' }} -
+                            {{ history.end_date | date: 'dd/MM/yyyy' }}</span
+                          >
+                        </div>
+                      </ng-template>
+                    </p-select>
+                  </div>
+                  @if (historySelected) {
+                    <app-meter-data-view
+                      [meterData]="historySelected"
+                      [rateMap]="rateMap"
+                      [productionChainMap]="productionChainMap"
+                      [injectionStatusMap]="injectionStatusMap"
+                      [clientTypeMap]="clientTypeMap"
+                    ></app-meter-data-view>
+                  }
+                </div>
+              } @else {
+                <div>
+                  <p class="text-base">{{ 'METER.FULL.NO_HISTORY_DATA_FOUND_LABEL' | translate }}</p>
+                </div>
+              }
+            </p-tabpanel>
+            <p-tabpanel [value]="2">
+              @if (meter.futur_meter_data && meter.futur_meter_data.length > 0) {
+                <div>
+                  <div class="flex flex-wrap -mx-2 pb-3">
+                    <p-select
+                      [options]="meter.futur_meter_data"
+                      [(ngModel)]="futureSelected"
+                      placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
+                    >
+                      <ng-template pTemplate="selectedItem">
+                        @if (futureSelected) {
+                          <div class="flex items-center gap-2">
+                            <span class="text-sm">
+                              {{ futureSelected.start_date | date: 'dd/MM/yyyy' }} -
+                              {{ futureSelected.end_date | date: 'dd/MM/yyyy' }}
+                            </span>
+                          </div>
+                        }
+                      </ng-template>
+                      <ng-template let-futur pTemplate="item">
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm"
+                            >{{ futur.start_date | date: 'dd/MM/yyyy' }} -
+                            {{ futur.end_date | date: 'dd/MM/yyyy' }}</span
+                          >
+                        </div>
+                      </ng-template>
+                    </p-select>
+                  </div>
+                  @if (futureSelected) {
+                    <app-meter-data-view
+                      [meterData]="futureSelected"
+                      [rateMap]="rateMap"
+                      [productionChainMap]="productionChainMap"
+                      [injectionStatusMap]="injectionStatusMap"
+                      [clientTypeMap]="clientTypeMap"
+                    ></app-meter-data-view>
+                  }
+                </div>
+              } @else {
+                <div>
+                  <p class="text-base">{{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}</p>
+                </div>
+              }
+            </p-tabpanel>
+            <p-tabpanel [value]="3">
+              <form [formGroup]="formChart" class="flex mb-4" (submit)="loadChart()">
+                <div class="grid me-2">
+                  <label for="dateDeb">{{ 'METER.FULL.BEGINNING_DATE_LABEL' | translate }}</label>
+                  <p-date-picker
+                    id="dateDeb"
+                    formControlName="dateDeb"
+                    dateFormat="dd/mm/yy"
+                    [firstDayOfWeek]="1"
+                  ></p-date-picker>
+                  <app-error-handler controlName="dateDeb"></app-error-handler>
+                </div>
+                <div class="grid me-2">
+                  <label for="dateFin">{{ 'METER.FULL.END_DATE_LABEL' | translate }}</label>
+                  <p-date-picker
+                    id="dateFin"
+                    formControlName="dateFin"
+                    dateFormat="dd/mm/yy"
+                    [firstDayOfWeek]="1"
+                  ></p-date-picker>
+                  <app-error-handler controlName="dateFin"></app-error-handler>
+                </div>
+                <div class="content-center">
+                  <p-button
+                    pRipple
+                    label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
+                    type="submit"
+                  ></p-button>
+                </div>
+              </form>
+              <div class="card">
+                <p-chart type="bar" [data]="data" [options]="options" />
               </div>
-            }
-          </p-tabpanel>
-        </p-tabpanels>
-      </p-tabs>
+              @if (displayDownloadButton) {
+                <div class="flex flex-wrap -mx-2 text-center mt-4">
+                  <p-button
+                    pRipple
+                    label="{{ 'METER.FULL.DOWNLOAD_BUTTON_LABEL' | translate }}"
+                    (click)="downloadTotalConsumption()"
+                  ></p-button>
+                </div>
+              }
+            </p-tabpanel>
+          </p-tabpanels>
+        </p-tabs>
+      </div>
     </div>
-  </div>
-}
+  }
+</div>

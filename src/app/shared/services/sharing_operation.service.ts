@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import {
@@ -11,18 +11,20 @@ import {
   RemoveMeterFromSharingOperationDTO,
   SharingOpConsumptionDTO,
   SharingOperationConsumptionQuery,
-  SharingOperationDTO,
+  SharingOperationDTO, SharingOperationKeyDTO, SharingOperationMetersQuery,
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
 } from '../dtos/sharing_operation.dtos';
 import { Observable } from 'rxjs';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
+import {PartialMeterDTO} from '../dtos/meter.dtos';
+import {KeyPartialQuery} from '../dtos/key.dtos';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharingOperationService {
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
   private apiAddress: string;
 
   constructor() {
@@ -42,6 +44,20 @@ export class SharingOperationService {
 
   getSharingOperation(id: number): Observable<ApiResponse<SharingOperationDTO | string>> {
     return this.http.get<ApiResponse<SharingOperationDTO | string>>(this.apiAddress + '/' + id);
+  }
+
+  getSharingOperationMetersList(id: number, query: SharingOperationMetersQuery): Observable<ApiResponsePaginated<PartialMeterDTO[]|string>>{
+    return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(this.apiAddress + '/' + id+"/meters",
+      {
+        params: { ...query },
+      });
+  }
+
+  getSharingOperationKeysList(id: number, query: KeyPartialQuery): Observable<ApiResponsePaginated<SharingOperationKeyDTO[]|string>>{
+    return this.http.get<ApiResponsePaginated<SharingOperationKeyDTO[] | string>>(this.apiAddress + '/' + id+"/keys",
+      {
+        params: { ...query },
+      });
   }
 
   getSharingOperationConsumptions(

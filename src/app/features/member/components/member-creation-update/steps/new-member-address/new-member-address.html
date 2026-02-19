@@ -5,7 +5,8 @@
 <form [formGroup]="addressForm" (submit)="submit()">
   <div class="flex flex-wrap pb-1">
     <div class="flex items-center">
-      <h3 class="text-primary">{{ 'MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE' | translate }}</h3>
+      <h3 class="font-medium text-lg">
+        {{ 'MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE' | translate }}</h3>
     </div>
   </div>
   <div class="flex flex-wrap pb-3 gap-2">
@@ -84,13 +85,12 @@
       <app-error-handler controlName="home_address_city" />
     </div>
   </div>
-  <div class="mt-3">
+  <div class="mt-3 space-x-1 items-center flex">
     <p-checkbox
       formControlName="same_address"
       [value]="true"
       (onChange)="toggleSameAddress($event)"
       id="sameAddress"
-      class="mr_1"
     ></p-checkbox>
     <label for="sameAddress">{{
       'MEMBER.ADD.ADDRESS.SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL' | translate

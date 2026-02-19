@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
@@ -24,7 +24,6 @@ export class MemberAddDocument implements OnInit {
   public dragging: boolean = false;
   public fileToUpload: File | null = null;
   private idMember!: string;
-
 
   ngOnInit() {
     if (this.config.data && this.config.data.idMember) {

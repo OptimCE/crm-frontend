@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';

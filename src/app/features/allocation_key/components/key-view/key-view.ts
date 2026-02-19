@@ -1,6 +1,6 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { IterationDTO, KeyDTO } from '../../../../shared/dtos/key.dtos';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { KeyService } from '../../../../shared/services/key.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -13,12 +13,11 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import {ColumnKeyDefinition} from '../../../../shared/types/key.types';
-
+import { ColDef } from 'ag-grid-community';
 @Component({
   selector: 'app-key-view',
   standalone: true,
-  imports: [Button, Card, SlicePipe, AgGridAngular, TranslatePipe],
+  imports: [Button, Card, SlicePipe, AgGridAngular, TranslatePipe, RouterLink],
   templateUrl: './key-view.html',
   styleUrl: './key-view.css',
   providers: [DialogService],
@@ -32,12 +31,11 @@ export class KeyView implements OnInit, OnDestroy {
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
 
-
   key?: KeyDTO;
   public isLoaded: boolean;
   displayAllDescription: boolean = false;
   rowData: IterationDTO[] = [];
-  colDefs!: ColumnKeyDefinition[];
+  colDefs!: ColDef<any>[];
   public defaultColDef = {
     width: 250,
     flex: 1,
@@ -46,8 +44,7 @@ export class KeyView implements OnInit, OnDestroy {
   gridApi: any;
   ref?: DynamicDialogRef | null;
   frameworkComponents: any;
-  constructor(
-  ) {
+  constructor() {
     this.isLoaded = false;
     this.frameworkComponents = {
       headerHelperRenderer: HeaderWithHelper,
@@ -74,7 +71,7 @@ export class KeyView implements OnInit, OnDestroy {
     },
   ];
 
-  cellStyleNumber(params: any){
+  cellStyleNumber(params: any) {
     if (
       params.node.data.number !== undefined &&
       params.node.data.number != KeyView.lastNumberCellStyleNumber
@@ -123,20 +120,21 @@ export class KeyView implements OnInit, OnDestroy {
     const idParam = this.route.snapshot.paramMap.get('id');
     const id: number = idParam !== null ? +idParam : -1;
     if (id == -1) {
-      this.routing.navigate(['/key']);
+      this.routing.navigate(['/keys']);
     }
     this.keyService.getKey(id).subscribe({
       next: (response) => {
         if (response) {
           this.key = response.data as KeyDTO;
+          this.isLoaded = true;
         } else {
           this.errorHandler.handleError();
-          this.routing.navigate(['/key']);
+          this.routing.navigate(['/keys']);
         }
       },
       error: (error) => {
         this.errorHandler.handleError(error.data ? error.data : null);
-        this.routing.navigate(['/key']);
+        this.routing.navigate(['/keys']);
       },
     });
   }
@@ -235,11 +233,11 @@ export class KeyView implements OnInit, OnDestroy {
         } else {
           this.errorHandler.handleError();
         }
-        this.routing.navigate(['/key']);
+        this.routing.navigate(['/keys']);
       },
       error: (error) => {
         this.errorHandler.handleError(error.data ? error.data : null);
-        this.routing.navigate(['/key']);
+        this.routing.navigate(['/keys']);
       },
     });
   }
@@ -248,34 +246,33 @@ export class KeyView implements OnInit, OnDestroy {
     this.keyService.downloadKey(this.key!.id).subscribe({
       next: (response) => {
         if (response) {
-          if (response instanceof Blob) {
+          // Check if the response contains the blob/filename object
+          if ('blob' in response) {
             this.snackbarNotification.openSnackBar(
               this.translate.instant('KEY.SUCCESS.KEY_EXPORTED'),
-              VALIDATION_TYPE,
+              VALIDATION_TYPE
             );
-            const url = window.URL.createObjectURL(response);
+
+            const url = window.URL.createObjectURL(response.blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'cle_repartition.xlsx';
+            a.download = response.filename; // Use the dynamic filename!
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
           } else {
+            // This is the ApiResponse error case
             this.errorHandler.handleError(response.data ? response.data : null);
           }
-        } else {
-          this.errorHandler.handleError();
         }
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ? error.data : null);
-      },
+      error: (error) => this.errorHandler.handleError(error)
     });
   }
 
   updateKey() {
-    this.routing.navigate(['/key/add'], { queryParams: { id: this.key!.id } });
+    this.routing.navigate(['/keys/add'], { queryParams: { id: this.key!.id } });
   }
 
   openHelper(displayText: string) {

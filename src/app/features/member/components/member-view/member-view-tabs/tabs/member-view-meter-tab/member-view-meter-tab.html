@@ -239,9 +239,9 @@
   </ng-template>
   <ng-template pTemplate="body" let-meter>
     <tr (click)="onRowClick(meter)" style="cursor: pointer" class="hover-flex flex-wrap -mx-2">
-      <td [innerHTML]="meter.adresse | address" class="text-sm"></td>
+      <td [innerHTML]="meter.address | address" class="text-sm"></td>
       <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
-      <td class="text-sm px-3 py-2">{{ meter.meterNumber }}</td>
+      <td class="text-sm px-3 py-2">{{ meter.meter_number }}</td>
       <td>
         @switch (meter.status) {
           @case (MeterDataStatus.ACTIVE) {

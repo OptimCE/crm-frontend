@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
 import {
   AbstractControl,
@@ -48,14 +48,13 @@ import { VALIDATION_TYPE } from '../../../../../core/dtos/notification';
 })
 export class KeyCreationUpdate implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
-  private keyService= inject(KeyService);
+  private keyService = inject(KeyService);
   private routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
   private eventBus = inject(EventBusService);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
-
 
   key!: KeyDTO;
   @Input()
@@ -70,7 +69,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   };
   frameworkComponents: any;
 
-  colDefs: any;
+  colDefs: any = [];
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
@@ -84,9 +83,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     debug: true, // enables logs
     suppressReactUi: false,
   };
-  constructor(
-
-  ) {
+  constructor() {
     this.isLoaded = false;
     this.frameworkComponents = {
       buttonRenderer: ButtonRenderer,
@@ -98,16 +95,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       this.formGroup.updateValueAndValidity();
       this.gridApi.refreshCells({ force: true });
     } catch (error) {
-      console.error(error);
     }
   }
 
   initializeWithData(key: KeyDTO) {
+    console.log(`Initialize with data : ${key}`)
+    console.log(key)
     this.key = key;
     this.formGroup.get('name')?.setValue(key.name);
     this.formGroup.get('description')?.setValue(key.description);
-    this.isLoaded = true;
     this.rowData = this.formatData();
+    this.isLoaded = true;
+
   }
 
   ngOnInit(): void {
@@ -115,14 +114,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.loadErrorMessages();
     this.keyInput = null;
     this.isLoaded = false;
+
     this.formGroup = new FormGroup({
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       key_data: new FormControl('', [this.keyValidator.bind(this)]),
     });
+
     this.route.queryParams.subscribe((params) => {
       const id = params['id'];
+
       if (id) {
+        // 1. If ID exists in URL, fetch from API
         this.keyService.getKey(parseInt(id)).subscribe({
           next: (response) => {
             if (response) {
@@ -131,31 +134,38 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               this.initializeWithData(key as KeyDTO);
             } else {
               this.errorHandler.handleError();
-              // this.routing.navigate(['/key']);
             }
           },
           error: (error) => {
             this.errorHandler.handleError(error.data ? error.data : null);
-            //this.routing.navigate(['/key']);
           },
         });
       } else {
-        this.key = {
-          id: -1,
-          name: '',
-          description: '',
-          iterations: [],
-        };
-        this.isLoaded = true;
+        // 2. If no ID, check if we received data via Router State (history.state)
+        // We check this HERE so it doesn't conflict with the empty default below
+        const transferredKey = history.state['keyData'];
+
+        if (transferredKey) {
+          console.log("Found key in history.state:", transferredKey);
+          this.initializeWithData(JSON.parse(JSON.stringify(transferredKey)));
+          this.keyInput = transferredKey;
+        } else {
+          // 3. Fallback: Initialize as completely new empty key
+          this.key = {
+            id: -1,
+            name: '',
+            description: '',
+            iterations: [],
+          };
+          this.isLoaded = true;
+        }
       }
     });
+
+    // Global error handlers (optional to keep here)
     window.onerror = function (message, source, lineno, colno, error) {
       console.error('Global error caught:', { message, source, lineno, colno, error });
     };
-
-    window.addEventListener('unhandledrejection', function (e) {
-      console.error('Unhandled promise rejection:', e.reason);
-    });
   }
 
   loadColumnDefinitions() {
@@ -179,7 +189,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             {
               headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               field: 'number',
-              width: 115,
+              flex:1,
               editable: false,
               cellStyle: this.cellStyleNumber.bind(this),
               cellClassRules: {
@@ -195,7 +205,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.DELETE_ITERATION_BUTTON_LABEL'],
-              width: 200,
+              flex:1,
               field: 'delete1',
               cellRenderer: 'buttonRenderer',
               cellRendererParams: {
@@ -205,7 +215,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
-              width: 145,
+              flex:1,
               field: 'va_percentage',
               onCellValueChanged: this.onCellValueChanged.bind(this),
               headerComponent: 'headerHelperRenderer', // ✅ class, not string
@@ -218,18 +228,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_LABEL'],
-              width: 295,
+              flex:2,
               field: 'consumers',
               cellStyle: { 'text-align': 'center' },
               children: [
                 {
                   headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_NAME_LABEL'],
-                  width: 170,
+                  flex:1,
                   field: 'name',
                 },
                 {
                   headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
-                  width: 125,
+                  flex:1,
                   field: 'vp_percentage',
                   onCellValueChanged: this.onCellValueChanged.bind(this),
                   cellStyle: { 'text-align': 'center' },
@@ -245,7 +255,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.DELETE_CONSUMER_BUTTON_LABEL'],
-              width: 250,
+              flex:1,
               field: 'delete',
               cellRenderer: 'buttonRenderer',
               cellRendererParams: {
@@ -411,7 +421,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       }
       return errors;
     } catch (e) {
-      console.error(e);
       return null;
     }
   }
@@ -445,7 +454,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               this.translate.instant('KEY.SUCCESS.KEY_UPDATED'),
               VALIDATION_TYPE,
             );
-            this.routing.navigate(['/key']);
+            this.routing.navigate(['/keys']);
           } else {
             this.errorHandler.handleError();
           }
@@ -462,7 +471,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               this.translate.instant('KEY.SUCCESS.KEY_ADDED'),
               VALIDATION_TYPE,
             );
-            this.routing.navigate(['/key']);
+            this.routing.navigate(['/keys']);
           } else {
             this.errorHandler.handleError();
           }
@@ -476,6 +485,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
 
   gridApi: any;
   onGridReady(event: any) {
+    console.log("On grid ready")
     this.rowData = [];
     if (this.keyInput) {
       this.rowData = this.formatData();
@@ -500,10 +510,11 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       this.refreshGrid();
     });
 
-    this.eventBus.on('keyStepByStep', (data: any) => {
-      const key = data.detail;
-      this.initializeWithData(key);
-    });
+    // this.eventBus.on('keyStepByStep', (data: any) => {
+    //   console.log("Event Bus Key Step By Step : ", data)
+    //   const key = data.detail;
+    //   this.initializeWithData(key);
+    // });
   }
 
   formatData() {
@@ -525,6 +536,8 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         });
       });
     }
+    console.log("FORMATTED DATA");
+    console.log(formattedData);
     return formattedData;
   }
   newConsumer() {
@@ -535,7 +548,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     };
     for (const iteration of this.key.iterations) {
       if (iteration.consumers[0].energy_allocated_percentage === -1) {
-        iteration.consumers.push({ id: -1, name: '', energy_allocated_percentage: 0 });
+        iteration.consumers.push({ id: -1, name: '', energy_allocated_percentage:-1 });
       } else {
         iteration.consumers.push(newConsumer);
       }
@@ -569,7 +582,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             return {
               id: -1,
               name: consumer.name,
-              energy_allocated_percentage: consumer.energy_allocated_percentage,
+              energy_allocated_percentage: 0,
             };
           },
         );

@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SnackbarNotification } from './snackbar.notifcation.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ERROR_TYPE } from '../../core/dtos/notification';
@@ -7,14 +7,17 @@ import { ERROR_TYPE } from '../../core/dtos/notification';
   providedIn: 'root',
 })
 export class ErrorMessageHandler {
-  private snackbarNotification = inject(SnackbarNotification)
+  private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
 
   handleError(message: any = undefined) {
     if (message) {
       this.snackbarNotification.openSnackBar(message, ERROR_TYPE);
     } else {
-      this.snackbarNotification.openSnackBar(this.translate.instant('COMMON.ERRORS.EXCEPTION'), ERROR_TYPE);
+      this.snackbarNotification.openSnackBar(
+        this.translate.instant('COMMON.ERRORS.EXCEPTION'),
+        ERROR_TYPE,
+      );
     }
   }
 }

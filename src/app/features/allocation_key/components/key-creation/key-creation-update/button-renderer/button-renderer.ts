@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Button } from 'primeng/button';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-import {Ripple} from 'primeng/ripple';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-button-renderer',

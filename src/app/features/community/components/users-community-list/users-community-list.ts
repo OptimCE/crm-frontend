@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { PrimeTemplate } from 'primeng/api';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { SplitButtonModule } from 'primeng/splitbutton';
@@ -59,7 +59,6 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     { name: '', value: Role.ADMIN },
   ];
   ref?: DynamicDialogRef | null;
-
 
   ngOnInit(): void {
     this.dialogVisible = false;

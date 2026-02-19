@@ -1,0 +1,53 @@
+<div class="container mx-auto px-4">
+  <p-stepper [value]="0" [linear]="true">
+    <p-step-list>
+      <p-step [value]="0">{{ 'MEMBER.ADD.TAB_HEADER.STATUS_LABEL' | translate }}</p-step>
+      <p-step [value]="1">{{
+        'MEMBER.ADD.TAB_HEADER.PERSONAL_INFORMATIONS_LABEL' | translate
+      }}</p-step>
+      <p-step [value]="2">{{ 'MEMBER.ADD.TAB_HEADER.ADDRESS_LABEL' | translate }}</p-step>
+      <p-step [value]="3">{{ 'MEMBER.ADD.TAB_HEADER.BANKING_INFO' | translate }}</p-step>
+    </p-step-list>
+    <p-step-panels>
+      <p-step-panel [value]="0">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-new-member-type-self-encoding
+            [(typeClient)]="typeClient"
+            (formSubmitted)="submitForm1(activateCallback(1))"
+          ></app-new-member-type-self-encoding>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="1">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-new-member-informations-self-encoding
+            (formSubmitted)="submitForm2(activateCallback(2))"
+            (backClicked)="activateCallback(0)"
+            (gestionnaireChangeEvent)="gestionnaireChange($event)"
+            [form]="formData"
+            [gestionnaire]="gestionnaire"
+            [typeClient]="typeClient"
+          ></app-new-member-informations-self-encoding>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="2">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-new-member-address-self-encoding
+            (backClicked)="activateCallback(1)"
+            (formSubmitted)="submitForm3(activateCallback(3))"
+            (toggleSameAddressEvent)="toggleSameAddress($event)"
+            [addressForm]="addressForm"
+          ></app-new-member-address-self-encoding>
+        </ng-template>
+      </p-step-panel>
+      <p-step-panel [value]="3">
+        <ng-template #content let-activateCallback="activateCallback">
+          <app-new-member-banking-info-self-encoding
+            (formSubmitted)="onSubmitEnd()"
+            (backClicked)="activateCallback(2)"
+            [ibanForm]="ibanForm"
+          ></app-new-member-banking-info-self-encoding>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
+</div>
