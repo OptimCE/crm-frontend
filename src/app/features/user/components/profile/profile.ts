@@ -54,7 +54,7 @@ export class Profile implements OnInit, OnDestroy {
       closable: true,
       closeOnEscape: true,
       data: {
-        user: this.user,
+        user: this.user(),
       },
     });
     this.ref?.onClose.subscribe((response) => {

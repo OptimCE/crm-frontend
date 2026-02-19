@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Button } from 'primeng/button';
@@ -30,7 +30,6 @@ export class UserCommunities implements OnInit, OnDestroy {
   // communityID = 0;
   // protected activeGroup = signal<string|null>(null)
   ref?: DynamicDialogRef | null;
-
 
   ngOnInit(): void {
     this.fetchCurrentCommunityId();
@@ -73,28 +72,7 @@ export class UserCommunities implements OnInit, OnDestroy {
 
   joinCommunity(community: MyCommunityDTO) {
     this.userContextService.switchCommunity(community.auth_community_id);
-    console.log('SWITCHED');
-    console.log(this.userContextService.activeCommunityId());
-    console.log(this.userContextService.activeCommunityRole());
-    // this.communityService.getAuthorize(community.id_community).subscribe(
-    //   {
-    //     next: async(response)=>
-    //     {
-    //       if (response && response.success) {
-    //         this.authService.fetchWhoamiDataWReturn().then(() => {
-    //           this.fetchCurrentCommunityId();
-    //         });
-    //         // Send notification and refresh user view
-    //         this.snackbar.openSnackBar(this.translate.instant('success.community_joined', {name: community.community_name}), VALIDATION_TYPE);
-    //       } else {
-    //         this.errorHandler.handleError(response);
-    //       }
-    //     },
-    //     error:(error) => {
-    //       this.errorHandler.handleError(error);
-    //     },
-    //   }
-    // );
+
   }
 
   updateNameCommunity(_community: MyCommunityDTO) {

@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
@@ -15,7 +15,7 @@ import {
   providedIn: 'root',
 })
 export class CommunityService {
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
   private apiAddress: string;
 
   constructor() {

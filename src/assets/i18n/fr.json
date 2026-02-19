@@ -113,6 +113,7 @@
     }
   },
   "INVITATION": {
+    "TITLE": "Mes invitations",
     "MEMBER": {
       "TITLE": "Membres",
       "HEADERS": {
@@ -128,7 +129,25 @@
       "REFUSE": "Refuser",
       "ACCEPT": "Accepter",
       "SEE": "Voir",
-      "NO_INVITATIONS_AVAILABLE": "Aucune invitation de membres trouvées"
+      "NO_INVITATIONS_AVAILABLE": "Aucune invitation de membres trouvées",
+      "ENCODE_NEW_MEMBER_TITLE": "Encodage d'un nouveau membre",
+      "SEE_DETAIL": {
+        "TITLE": "Détails de l'invitation",
+        "MEMBER_TITLE": "Détails du membre",
+        "GENERAL_INFORMATIONS": "Informations générales",
+        "VAT_NUMBER": "Numéro de TVA",
+        "SOCIAL_NUMBER": "Numéro de sécurité sociale",
+        "SURNAME": "Nom",
+        "FIRST_NAME": "Prénom",
+        "EMAIL_ADDRESS": "Adresse e-mail",
+        "PHONE_NUMBER": "Numéro de téléphone",
+        "GUARDIANSHIP": "Responsable légal",
+        "SOCIAL": "Social",
+        "SOCIAL_TARIF": "Tarif social",
+        "ADDRESSES": "Adresses",
+        "HOUSE_ADDRESS": "Adresse de résidence",
+        "BILLING_ADDRESS": "Adresse de facturation"
+      }
     },
     "MANAGER": {
       "TITLE": "Gestionnaire",
@@ -234,6 +253,12 @@
     "SHARED": {
       "BACK": "Retour",
       "HELP_LABEL": "Aide"
+    },
+    "VIEW": {
+      "UPDATE": "Mettre à jour",
+      "DELETE": "Supprimer",
+      "DOWNLOAD": "Télécharger",
+      "BACK_TO_LIST": "Retour à la liste de clef"
     },
     "CREATE": {
       "KEY_TITLE": "Création d'une clef de répartition",
@@ -341,16 +366,6 @@
       "INPUT_INJECTION_COLUMN_LABEL": "Nom de la colonne contenant l'injection",
       "SIMULATION_START_BUTTON_LABEL": "Démarrer la simulation"
     },
-    "FORM_ERROR": {
-      "REQUIRED_FIELD": "Ce champ est obligatoire",
-      "INVALID_EMAIL": "Adresse e-mail invalide",
-      "MIN_LENGTH": "Ce champ doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
-      "FIX_THE_FOLLOWING_ERROR": "Veuillez corriger les erreurs suivantes",
-      "FIELD_REQUIRED": "Le champ \"{{ controlName }}\" est obligatoire.",
-      "FIELD_INVALID_EMAIL": "Le champ \"{{ controlName }}\" contient une adresse email invalide.",
-      "FIELD_MIN_LENGTH": "Le champ \"{{ controlName }}\" doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
-      "UNKNOWN_ERROR": "Erreur inconnue sur \"{{ controlName }}\""
-    },
     "SUCCESS": {
       "KEY_UPDATED": "Clé mise à jour avec succès",
       "KEY_ADDED": "Clé ajoutée avec succès",
@@ -411,6 +426,7 @@
   "MEMBER": {
     "VIEW": {
       "MEMBER_TITLE": "Membre",
+      "BACK_TO_LIST": "Retour à la liste de membres",
       "STATUS_ACTION": {
         "ACTIVATE_BUTTON_LABEL": "Activer",
         "DEACTIVATE_BUTTON_LABEL": "Désactiver",
@@ -762,6 +778,7 @@
       }
     },
     "UPDATE_DATA": {
+      "SELECT_STATUS": "Sélectionner un statut",
       "ENERGY_CHARACTERISTIC_TITLE": "Caractéristiques énergétiques",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Caractéristiques financières",
       "START_DATE_METER_LABEL": "Date d'entrée en fonction",
@@ -980,9 +997,17 @@
         "CREATE_KEY_BUTTON_LABEL": "Créer une clef",
         "NO_ACTUAL_KEY_LABEL": "Aucune clef actuellement",
         "MODIFY_KEY_HEADER": "Modifier la clé",
-        "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Clé modifiée avec succès"
+        "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Clé modifiée avec succès",
+        "WAITING_APPROVAL_KEY_LABEL": "Clef en attente d'approbation",
+        "APPROVE_KEY": "Approuver",
+        "REJECT_KEY": "Rejeter"
       },
       "METER": {
+        "HEADERS": {
+          "PAST": "Passé",
+          "NOW": "Actuel",
+          "FUTURE": "Futur"
+        },
         "METERS_TITLE": "Compteurs",
         "ADD_METER_BUTTON_LABEL": "Ajouter un compteur",
         "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
@@ -1067,5 +1092,15 @@
       "DOWNLOAD_METER_CONSUMPTION": "Erreur lors du téléchargement de la consommation du compteur",
       "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Erreur lors du téléchargement de la consommation des compteurs partagés"
     }
+  },
+  "FORM_ERROR": {
+    "REQUIRED_FIELD": "Ce champ est obligatoire",
+    "INVALID_EMAIL": "Adresse e-mail invalide",
+    "MIN_LENGTH": "Ce champ doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
+    "FIX_THE_FOLLOWING_ERROR": "Veuillez corriger les erreurs suivantes",
+    "FIELD_REQUIRED": "Le champ \"{{ controlName }}\" est obligatoire.",
+    "FIELD_INVALID_EMAIL": "Le champ \"{{ controlName }}\" contient une adresse email invalide.",
+    "FIELD_MIN_LENGTH": "Le champ \"{{ controlName }}\" doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
+    "UNKNOWN_ERROR": "Erreur inconnue sur \"{{ controlName }}\""
   }
 }

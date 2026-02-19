@@ -1,78 +1,68 @@
-@if (isLoaded) {
-  <div>
-    <div class="container mx-auto px-4">
-      <div class="flex flex-wrap -mx-2 pb-3 items-center">
-        <div class="w-8/12">
-          <div class="flex flex-wrap -mx-2">
-            <h2 class="text-xl font-medium">{{ key!.name }}</h2>
+<div class="container mx-auto my-auto">
+  @if (isLoaded) {
+    <div>
+        <div class="flex flex-wrap space-x-2">
+          <i class="pi pi-arrow-left text-sm!"></i>
+          <a class="text-sm decoration-0" [routerLink]="'/keys'">{{'KEY.VIEW.BACK_TO_LIST' | translate}}</a>
+        </div>
+        <div class="flex flex-wrap -mx-2 pb-3 items-center">
+          <div class="w-8/12">
+            <div class="flex items-center space-x-2">
+              <span class="pi pi-key text-2xl! text-green-500!"></span>
+              <h2 class="text-xl! font-medium">{{ key!.name }}</h2>
+            </div>
+          </div>
+          <div class="w-4/12 text-center space-x-2">
+            <p-button icon="pi pi-pencil" (click)="updateKey()" severity="warn" label="{{'KEY.VIEW.UPDATE' |translate}}"></p-button>
+            <p-button icon="pi pi-trash" (click)="deleteKey()" severity="danger" label="{{'KEY.VIEW.DELETE' |translate}}"></p-button>
+            <p-button icon="pi pi-download" (click)="exportExcel()" severity="help" label="{{'KEY.VIEW.DOWNLOAD' |translate}}"></p-button>
           </div>
         </div>
-        <div class="w-4/12 text-center">
-          <p-button icon="pi pi-pencil" [rounded]="true" [outlined]="true" (click)="updateKey()" />
-          <p-button
-            icon="pi pi-trash"
-            [rounded]="true"
-            rounded="true"
-            [outlined]="true"
-            (click)="deleteKey()"
-            severity="danger"
-          />
+        <p-card class="mb-4">
+          <ng-template #content>
+            <p class="text-base">
+              @if (key!.description.length > 200 && !displayAllDescription) {
+                <span>
+                  {{ key!.description | slice: 0 : 200 }}
+                  {{ key!.description.length > 200 ? '...' : '' }}
+                </span>
+              }
+              @if (key!.description.length <= 200 || displayAllDescription) {
+                <span>
+                  {{ this.key!.description }}
+                </span>
+              }
+              @if (key!.description.length > 200) {
+                <button
+                  type="button"
+                  class="toggle-description-btn"
+                  (click)="displayAllDescription = !displayAllDescription"
+                  [attr.aria-expanded]="displayAllDescription"
+                  aria-label="Toggle description"
+                >
+                  @if (displayAllDescription) {
+                    <i class="pi pi-chevron-up" aria-hidden="true"></i>
+                  } @else {
+                    <i class="pi pi-chevron-down" aria-hidden="true"></i>
+                  }
+                </button>
+              }
+            </p>
+          </ng-template>
+        </p-card>
+        <div class="grid-container">
+          <div class="grid-wrapper">
+            <ag-grid-angular
+              style="width: 100%; height: 550px; overflow: auto"
+              [rowData]="rowData"
+              [columnDefs]="colDefs"
+              (gridReady)="onGridReady($event)"
+              [defaultColDef]="defaultColDef"
+              domLayout="autoHeight"
+            >
+            </ag-grid-angular>
+          </div>
         </div>
-      </div>
-      <p-card class="mb-4">
-        <ng-template #content>
-          <p class="text-base">
-            @if (key!.description.length > 200 && !displayAllDescription) {
-              <span>
-                {{ key!.description | slice: 0 : 200 }}
-                {{ key!.description.length > 200 ? '...' : '' }}
-              </span>
-            }
-            @if (key!.description.length <= 200 || displayAllDescription) {
-              <span>
-                {{ this.key!.description }}
-              </span>
-            }
-            @if (key!.description.length > 200) {
-              <button
-                type="button"
-                class="toggle-description-btn"
-                (click)="displayAllDescription = !displayAllDescription"
-                [attr.aria-expanded]="displayAllDescription"
-                aria-label="Toggle description"
-              >
-                @if (displayAllDescription) {
-                  <i class="pi pi-chevron-up" aria-hidden="true"></i>
-                } @else {
-                  <i class="pi pi-chevron-down" aria-hidden="true"></i>
-                }
-              </button>
-            }
-          </p>
-        </ng-template>
-      </p-card>
-      <div class="grid-container">
-        <div class="grid-wrapper">
-          <ag-grid-angular
-            style="width: 100%; height: 550px; overflow: auto"
-            [rowData]="rowData"
-            [columnDefs]="colDefs"
-            (gridReady)="onGridReady($event)"
-            [defaultColDef]="defaultColDef"
-            domLayout="autoHeight"
-          >
-          </ag-grid-angular>
-        </div>
-      </div>
-      <div class="flex flex-wrap -mx-2 text-center mt-4">
-        <p-button
-          icon="pi pi-download"
-          class="p-button-primary"
-          (click)="exportExcel()"
-          label="{{ 'KEY.SIMULATION.EXPORT_EXCEL_BUTTON_LABEL' | translate }}"
-        >
-        </p-button>
-      </div>
     </div>
-  </div>
-}
+  }
+</div>

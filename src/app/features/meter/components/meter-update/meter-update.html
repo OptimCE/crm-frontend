@@ -1,14 +1,14 @@
 <div class="container">
   <form [formGroup]="metersForm" (ngSubmit)="onSubmit()">
     <div class="flex flex-wrap -mx-2 pb-1">
-      <div class="flex items-center">
-        <i class="pi pi-home text-lg"></i>
-        <h4 class="ml-3 p text-base">{{ 'COMMON.ADDRESS' | translate }}</h4>
+      <div class="flex items-center space-x-2">
+        <i class="pi pi-home text-lg!"></i>
+        <h4 class="text-base font-semibold">{{ 'COMMON.ADDRESS' | translate }}</h4>
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3">
+    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
       <!--Address -->
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <label for="address_street" class="text-base"
           >{{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *</label
         >
@@ -22,7 +22,7 @@
         </p-input-group>
         <app-error-handler controlName="address_street" />
       </div>
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <label for="address_number" class="text-base"
           >{{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *</label
         >
@@ -37,7 +37,7 @@
         <app-error-handler controlName="address_number" />
       </div>
 
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <label for="address_supplement" class="text-base">{{
           'METER.ADDRESS.BOX_LABEL' | translate
         }}</label>
@@ -52,8 +52,8 @@
         <app-error-handler controlName="address_supplement" />
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3">
-      <div class="flex">
+    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
+      <div class="flex flex-col">
         <label for="address_postcode" class="text-base"
           >{{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *</label
         >
@@ -67,7 +67,7 @@
         </p-input-group>
         <app-error-handler controlName="address_postcode" />
       </div>
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <label for="address_city" class="text-base"
           >{{ 'METER.ADDRESS.CITY_LABEL' | translate }} *</label
         >
@@ -82,15 +82,15 @@
         <app-error-handler controlName="address_city" />
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3">
-      <div class="flex items-center">
-        <i class="pi pi-info text-lg"></i>
-        <h4 class="ml-3 p text-base">{{ 'METER.UPDATE.METER_INFORMATION_TITLE' | translate }}</h4>
+    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
+      <div class="flex items-center space-x-2">
+        <i class="pi pi-info-circle text-lg!"></i>
+        <h4 class="text-base font-semibold">{{ 'METER.UPDATE.METER_INFORMATION_TITLE' | translate }}</h4>
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3">
+    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
       <!--EAN number group -->
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <label for="EAN" class="text-base">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</label>
         <p-input-group>
           <input
@@ -102,7 +102,7 @@
         </p-input-group>
         <app-error-handler controlName="EAN" />
       </div>
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <label for="meterNumber" class="text-base">{{
           'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
         }}</label>
@@ -117,8 +117,8 @@
         <app-error-handler controlName="meterNumber" />
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3">
-      <div class="flex">
+    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
+      <div class="flex flex-col flex-1">
         <span class="text-base">{{ 'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate }}</span>
         @for (phase of phaseCategory; track $index) {
           <div>
@@ -135,7 +135,7 @@
 
         <app-error-handler controlName="phasesNumber" />
       </div>
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <span class="text-base">{{
           'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
         }}</span>
@@ -153,7 +153,7 @@
         }
         <app-error-handler controlName="readingFrequency" />
       </div>
-      <div class="flex">
+      <div class="flex flex-col flex-1">
         <span class="text-base">{{ 'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate }}</span>
         @for (tarifGroup of tarifGroupCategory; track $index) {
           <div>

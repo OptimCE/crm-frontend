@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -60,9 +60,7 @@ export class SharingOperationAddMeter implements OnInit {
   dateSelected: any;
   currentPageReportTemplate: string = '';
 
-  constructor(
-
-  ) {
+  constructor() {
     this.id = this.config.data.id;
   }
 
@@ -120,7 +118,7 @@ export class SharingOperationAddMeter implements OnInit {
   loadMeters(filter?: any, page?: number) {
     try {
       const params: any = {
-        notSharingOperationsId: this.id,
+        not_sharing_operation_id: this.id,
       };
       // Check for address
       if (
@@ -182,7 +180,7 @@ export class SharingOperationAddMeter implements OnInit {
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
     }
-    this.loadMeters($event.filters, page);
+    this.loadMeters($event.filters, page >= 1 ? page : 1);
   }
 
   clear(table: any) {

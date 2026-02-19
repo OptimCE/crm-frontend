@@ -1,6 +1,6 @@
-import {Component, inject, OnDestroy, signal} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -11,6 +11,9 @@ import {
   UserMemberInvitationQuery,
 } from '../../../../../../shared/dtos/invitation.dtos';
 import { InvitationService } from '../../../../../../shared/services/invitation.service';
+import { EncodeNewMemberComponent } from './dialogs/encode-new-member/encode-new-member.component';
+import { CompanyDTO, IndividualDTO } from '../../../../../../shared/dtos/member.dtos';
+import { InvitationDetailComponent } from './dialogs/invitation-detail/invitation-detail.component';
 
 @Component({
   selector: 'app-invitation-member',
@@ -21,7 +24,8 @@ import { InvitationService } from '../../../../../../shared/services/invitation.
 })
 export class InvitationMember implements OnDestroy {
   private invitationService = inject(InvitationService);
-
+  private dialogService = inject(DialogService);
+  private translate = inject(TranslateService);
   pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
   invitations = signal<UserMemberInvitationDTO[] | []>([]);
   currentPageReportTemplateDocuments!: string;
@@ -30,7 +34,6 @@ export class InvitationMember implements OnDestroy {
   pageInvitation: number = 1;
   ref: DynamicDialogRef | null = null;
   filterMemberInvitation = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
-
 
   loadMemberInvitation() {
     this.loading.set(true);
@@ -90,45 +93,42 @@ export class InvitationMember implements OnDestroy {
     });
   }
 
-  fetchDetail(_invitation: UserMemberInvitationDTO) {
-    // this.userService.getInvitationDetailById(invitation.id).subscribe((response) => {
-    //   if (response && response.success) {
-    //     this.translate.get('invitation.invitation_detail').subscribe((translation) => {
-    //       this.ref = this.dialogService.open(InvitationDetailComponent, {
-    //         header: translation,
-    //         modal: true,
-    //         closable: true,
-    //         closeOnEscape: true,
-    //         data: {
-    //           member: response.data,
-    //           member_type: (response.data as IndividualsDTO | LegalEntitiesDTO).member_type,
-    //         },
-    //       });
-    //     });
-    //   }
-    // });
+  fetchDetail(invitation: UserMemberInvitationDTO) {
+    this.invitationService
+      .getOwnMemberPendingInvitationById(invitation.id)
+      .subscribe((response) => {
+        if (response) {
+          this.ref = this.dialogService.open(InvitationDetailComponent, {
+            header: this.translate.instant('INVITATION.SEE_DETAIL.TITLE'),
+            modal: true,
+            closable: true,
+            closeOnEscape: true,
+            data: {
+              member: response.data,
+              member_type: (response.data as IndividualDTO | CompanyDTO).member_type,
+            },
+          });
+        }
+      });
   }
 
-  encodeNewMember(_invitation: UserMemberInvitationDTO) {
-    // this.translate.get('invitation.encode_new_member').subscribe((translation) => {
-    //   this.ref = this.dialogService.open(EncodeNewMemberComponent, {
-    //     header: translation,
-    //     modal: true,
-    //     closable: true,
-    //     closeOnEscape: true,
-    //     data: {
-    //       invitationID: invitation.id,
-    //     },
-    //   });
-    //   if(this.ref){
-    //     this.ref.onClose.subscribe((result) => {
-    //       if (result) {
-    //         this.loadMemberInvitation();
-    //       }
-    //     });
-    //   }
-    //
-    // });
+  encodeNewMember(invitation: UserMemberInvitationDTO) {
+    this.ref = this.dialogService.open(EncodeNewMemberComponent, {
+      header: this.translate.instant('INVITATION.ENCODE_NEW_MEMBER_TITLE'),
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      data: {
+        invitationID: invitation.id,
+      },
+    });
+    if (this.ref) {
+      this.ref.onClose.subscribe((result) => {
+        if (result) {
+          this.loadMemberInvitation();
+        }
+      });
+    }
   }
   ngOnDestroy(): void {
     if (this.ref) {

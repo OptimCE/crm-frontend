@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
 import { InputText } from 'primeng/inputtext';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
@@ -26,7 +26,7 @@ import { MemberType } from '../../../../../../shared/types/member.types';
   styleUrl: './new-member-informations.css',
 })
 export class NewMemberInformations implements OnInit {
-  private translate = inject(TranslateService)
+  private translate = inject(TranslateService);
   @Input() form!: FormGroup;
   @Input() typeClient!: number;
   @Input() gestionnaire: boolean = false;
@@ -36,7 +36,6 @@ export class NewMemberInformations implements OnInit {
   @Output() gestionnaireChangeEvent = new EventEmitter<CheckboxChangeEvent>();
   idErrorAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
-
 
   ngOnInit() {
     this.setupErrorTranslation();
@@ -61,8 +60,12 @@ export class NewMemberInformations implements OnInit {
   }
 
   submit() {
+    console.log(this.form)
+    console.log(this.form.valid)
     if (this.form.valid) {
       this.formSubmitted.emit();
+    }else{
+      this.form.markAsTouched()
     }
   }
 

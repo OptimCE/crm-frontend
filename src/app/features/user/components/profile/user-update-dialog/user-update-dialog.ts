@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../../../shared/services/user.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -22,7 +22,6 @@ export class UserUpdateDialog implements OnInit {
   private userService = inject(UserService);
   formData!: FormGroup;
   user!: UpdateUserDTO;
-
 
   ngOnInit() {
     this.initializeForm();
@@ -137,6 +136,7 @@ export class UserUpdateDialog implements OnInit {
         city: this.formData.value.billing_address_city,
       };
     }
+    console.log(this.user);
     this.userService.updateUserInfo(this.user).subscribe((response) => {
       if (response) {
         this.ref.close(true);

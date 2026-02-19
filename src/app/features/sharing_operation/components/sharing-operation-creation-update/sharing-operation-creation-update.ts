@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { Button } from 'primeng/button';
@@ -33,7 +33,6 @@ export class SharingOperationCreationUpdate implements OnInit {
   private errorHandler = inject(ErrorMessageHandler);
   formAddSharingOp!: FormGroup;
   categories: any[] = [];
-
 
   ngOnInit(): void {
     this.formAddSharingOp = new FormGroup({

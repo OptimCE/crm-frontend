@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Button } from 'primeng/button';
@@ -60,7 +60,6 @@ export class MembersList implements OnInit, OnDestroy {
   };
   filter = signal<MemberPartialQuery>({ page: 1, limit: 10 });
   currentPageReportTemplate: string = '';
-
 
   ngOnInit(): void {
     this.updatePaginationTranslation();
@@ -131,7 +130,7 @@ export class MembersList implements OnInit, OnDestroy {
     });
     if (this.ref) {
       this.ref.onClose.subscribe((result) => {
-        if (result > -1) {
+        if (result === 1) {
           // Show "Do you want to add meter associated"
           this.confirmationService.confirm({
             target: event.target as EventTarget,
@@ -241,7 +240,7 @@ export class MembersList implements OnInit, OnDestroy {
   }
 
   onRowClick(member: any) {
-    this.router.navigate(['/members/member', member.id]);
+    this.router.navigate(['/members/', member.id]);
   }
 
   seePendingInvite() {

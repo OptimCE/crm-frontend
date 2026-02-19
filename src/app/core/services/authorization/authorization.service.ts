@@ -50,7 +50,6 @@ export class UserContextService {
     return comm ? highestRole(comm.roles) : null;
   });
 
-
   refreshUserContext() {
     const token = this.keycloak.tokenParsed as any;
 
@@ -84,6 +83,10 @@ export class UserContextService {
       this.activeCommunityId.set(orgId);
       this.storeCommunityId(orgId);
     }
+  }
+
+  logout(){
+    this.deleteStoreCommunityId();
   }
 
   // If you still want switching by name/path (UI dropdown using name)
@@ -145,5 +148,8 @@ export class UserContextService {
   private storeCommunityId(id: string | null) {
     if (!id) sessionStorage.removeItem(ACTIVE_COMMUNITY_STORAGE_KEY);
     else sessionStorage.setItem(ACTIVE_COMMUNITY_STORAGE_KEY, id);
+  }
+  private deleteStoreCommunityId(){
+    sessionStorage.removeItem(ACTIVE_COMMUNITY_STORAGE_KEY);
   }
 }

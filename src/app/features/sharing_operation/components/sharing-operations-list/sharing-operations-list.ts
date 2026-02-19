@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PrimeTemplate } from 'primeng/api';
@@ -48,7 +48,6 @@ export class SharingOperationsList implements OnInit {
   ref?: DynamicDialogRef | null;
   filter = signal<SharingOperationPartialQuery>({ page: 1, limit: 10 });
   currentPageReportTemplate: string = '';
-
 
   ngOnInit(): void {
     this.updatePaginationTranslation();
@@ -156,6 +155,6 @@ export class SharingOperationsList implements OnInit {
   }
 
   onRowClick(sharingOp: any) {
-    this.routing.navigate(['/members/sharing/', sharingOp.id]);
+    this.routing.navigate(['/sharing_operations/', sharingOp.id]);
   }
 }

@@ -1,0 +1,195 @@
+<div class="container mx-auto px-4 m-3">
+  @if (isLoading) {
+    <p-progressSpinner></p-progressSpinner>
+  } @else {
+    <div>
+      <div class="flex flex-wrap -mx-2 items-center mb-4">
+        <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 flex items-center">
+          @switch (membersType) {
+            @case (MemberType.INDIVIDUAL) {
+              <i class="pi pi-user mr-1 text-lg text-primary"></i>
+            }
+            @case (MemberType.COMPANY) {
+              <i class="pi pi-building mr-1 text-lg text-primary"></i>
+            }
+          }
+          <h2 class="mt-0 mb-0 text-lg font-medium">
+            {{ 'INVITATION.MEMBER.SEE_DETAIL.MEMBER_TITLE' | translate }}
+          </h2>
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-2">
+        <h3 class="font-medium text-lg">
+          {{ 'INVITATION.MEMBER.SEE_DETAIL.GENERAL_INFORMATIONS' | translate }}
+        </h3>
+      </div>
+      <div class="flex flex-wrap -mx-2 gap-2">
+        <div class="w-full text-center">
+          @if (legalEntity) {
+            <div>
+              <h4 class="text-md font-medium">
+                {{ 'INVITATION.MEMBER.SEE_DETAIL.VAT_NUMBER' | translate }}
+              </h4>
+              <span class="text-sm">{{ legalEntity.vat_number }}</span>
+            </div>
+          }
+          @if (individual) {
+            <div>
+              <h4 class="text-md font-medium">
+                {{ 'INVITATION.MEMBER.SEE_DETAIL.SOCIAL_NUMBER' | translate }}
+              </h4>
+              <span class="text-sm">{{ individual.NRN }}</span>
+            </div>
+          }
+        </div>
+        <div class="flex w-full">
+          <div class="w-1/2 px-2 text-center">
+            <h4 class="text-md font-medium">
+              {{ 'INVITATION.MEMBER.SEE_DETAIL.SURNAME' | translate }}
+            </h4>
+            @if (legalEntity) {
+              <span class="text-sm">{{ legalEntity.name }}</span>
+            }
+            @if (individual) {
+              <span class="text-sm">{{ individual.name }}</span>
+            }
+          </div>
+          @if (individual) {
+            <div class="w-1/2 px-2 text-center">
+              <h4 class="text-md font-medium">
+                {{ 'INVITATION.MEMBER.SEE_DETAIL.FIRST_NAME' | translate }}
+              </h4>
+              <span class="text-sm">{{ individual.first_name }}</span>
+            </div>
+          }
+        </div>
+        @if (individual) {
+          <div class="w-full flex">
+            <div class="w-1/2 px-2 text-center">
+              <h4 class="text-md font-medium">
+                {{ 'INVITATION.MEMBER.SEE_DETAIL.EMAIL_ADDRESS' | translate }}
+              </h4>
+              <span class="text-sm">{{ individual.email }}</span>
+            </div>
+            <div class="w-1/2 px-2 text-center">
+              <h4 class="text-md font-medium">
+                {{ 'INVITATION.MEMBER.SEE_DETAIL.PHONE_NUMBER' | translate }}
+              </h4>
+              <span class="text-sm">{{ individual.phone_number }}</span>
+            </div>
+          </div>
+        }
+      </div>
+      @if (individual?.manager || legalEntity?.manager) {
+        <div>
+          <p-divider></p-divider>
+          <div class="flex flex-wrap -mx-2">
+            <h2>{{ 'INVITATION.MEMBER.SEE_DETAIL.GUARDIANSHIP' | translate }}</h2>
+            <div class="flex flex-wrap -mx-2 gap-2">
+              <div class="w-full text-center">
+                <h4 class="text-md font-medium">
+                  {{ 'INVITATION.MEMBER.SEE_DETAIL.SOCIAL_NUMBER' | translate }}
+                </h4>
+                <span class="text-sm">{{
+                  individual?.manager ? individual?.manager?.NRN : legalEntity?.manager?.NRN
+                }}</span>
+              </div>
+              <div class="flex w-full">
+                <div class="w-1/2 px-2">
+                  <h4 class="text-md font-medium">
+                    {{ 'INVITATION.MEMBER.SEE_DETAIL.SURNAME' | translate }}
+                  </h4>
+                  <span class="text-sm">{{
+                    individual?.manager
+                      ? individual?.manager?.surname
+                      : legalEntity?.manager?.surname
+                  }}</span>
+                </div>
+                <div class="w-1/2 md:w-4/12 sm:w-full px-2">
+                  <h4 class="text-md font-medium">
+                    {{ 'INVITATION.MEMBER.SEE_DETAIL.FIRST_NAME' | translate }}
+                  </h4>
+                  <span class="text-sm">{{
+                    individual?.manager ? individual?.manager?.name : legalEntity?.manager?.name
+                  }}</span>
+                </div>
+              </div>
+              <div class="flex w-full">
+                <div class="w-1/2 px-2">
+                  <h4 class="text-md font-medium">
+                    {{ 'INVITATION.MEMBER.SEE_DETAIL.EMAIL_ADDRESS' | translate }}
+                  </h4>
+                  <span class="text-sm">{{
+                    individual?.manager ? individual?.manager?.email : legalEntity?.manager?.email
+                  }}</span>
+                </div>
+                <div class="w-1/2 px-2">
+                  <h4 class="text-md font-medium">
+                    {{ 'INVITATION.MEMBER.SEE_DETAIL.PHONE_NUMBER' | translate }}
+                  </h4>
+                  <span class="text-sm">{{
+                    individual?.manager
+                      ? individual?.manager?.phone_number
+                      : legalEntity?.manager?.phone_number
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      <p-divider></p-divider>
+      @if (individual) {
+        <div>
+          <div class="flex flex-wrap -mx-2">
+            <h3 class="mt-0 mb-0 text-lg font-medium">
+              {{ 'INVITATION.MEMBER.SEE_DETAIL.SOCIAL' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-wrap -mx-2 place-content-center">
+            <div class="text-center">
+              <h4 class="text-md font-medium">
+                {{ 'INVITATION.MEMBER.SEE_DETAIL.SOCIAL_TARIF' | translate }}
+              </h4>
+              <p-checkbox
+                [disabled]="true"
+                [binary]="true"
+                [ngModel]="individual.social_rate"
+              ></p-checkbox>
+            </div>
+          </div>
+          <p-divider></p-divider>
+        </div>
+      }
+      <div class="flex flex-wrap -mx-2">
+        <h3 class="mt-0 mb-0 text-lg font-medium">
+          {{ 'INVITATION.MEMBER.SEE_DETAIL.ADDRESSES' | translate }}
+        </h3>
+      </div>
+      <div class="flex flex-wrap -mx-2">
+        <div class="md:w-6/12 px-2">
+          <h4 class="text-md font-medium">
+            {{ 'INVITATION.MEMBER.SEE_DETAIL.HOUSE_ADDRESS' | translate }}
+          </h4>
+          @if (legalEntity) {
+            <p [innerHTML]="legalEntity.home_address | address" class="text-sm"></p>
+          }
+          @if (individual) {
+            <p [innerHTML]="individual.home_address | address" class="text-sm"></p>
+          }
+        </div>
+        <div class="md:w-6/12 px-2">
+          <h4 class="text-md font-medium">
+            {{ 'INVITATION.MEMBER.SEE_DETAIL.BILLING_ADDRESS' | translate }}
+          </h4>
+          @if (legalEntity) {
+            <p [innerHTML]="legalEntity.billing_address | address" class="text-sm"></p>
+          }
+          @if (individual) {
+            <p [innerHTML]="individual.billing_address | address" class="text-sm"></p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

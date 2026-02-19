@@ -1,7 +1,8 @@
+<div class="container mx-auto my-auto">
 <div class="flex flex-wrap -mx-2 mb-3">
-  <div class="w-6/12 flex items-center">
-    <span class="pi pi-user x-3 mr-1 text-xl! text-primary"></span>
-    <h2 class="mt-0 mb-0 ml-2 text-lg font-medium">
+  <div class="w-6/12 flex items-center space-x-2">
+    <span class="pi pi-user text-2xl! text-green-500!"></span>
+    <h2 class="text-xl! font-medium">
       {{ 'USERS_COMMUNITY_LIST.TITLE' | translate }}
     </h2>
   </div>
@@ -11,6 +12,7 @@
         type="button"
         icon="pi pi-eye"
         label="{{ 'USERS_COMMUNITY_LIST.SEE_PENDING_INVITE_BUTTON_LABEL' | translate }}"
+        severity="help"
         (click)="seePendingInvite()"
       >
       </p-button>
@@ -39,7 +41,6 @@
       <th [pSortableColumn]="'email'" class="text-base px-3">
         {{ 'USERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}
       </th>
-      <th class="text-base px-3">{{ 'USERS_COMMUNITY_LIST.HEADERS.PHONE' | translate }}</th>
       <th [pSortableColumn]="'role'" class="text-base px-3">
         {{ 'USERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}
       </th>
@@ -61,17 +62,16 @@
               : '/'
         }}
       </td>
-      <td class="text-small px-3 py-2">{{ user.mail }}</td>
-      <td class="text-small px-3 py-2">{{ user.phoneNumber ? user.phoneNumber : '/' }}</td>
-
+      <td class="text-small px-3 py-2">{{ user.email }}</td>
       <td class="text-small px-3 py-2">{{ user.role | role }}</td>
       <td>
         @if (ownId !== user.id_user) {
           <div class="flex flex-wrap gap-2">
-            @if (userContextService.isActiveRole(Role.ADMIN)) {
+            @if (userContextService.isActiveRole(Role.ADMIN) && user.role !== Role.ADMIN) {
               <p-button
                 label="{{ 'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_LABEL' | translate }}"
                 icon="pi pi-pencil"
+                severity="warn"
                 [pTooltip]="'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_TOOLTIP' | translate"
                 (onClick)="openDialogEditRole(user)"
               />
@@ -129,3 +129,4 @@
     />
   </div>
 </p-dialog>
+</div>

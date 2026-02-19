@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -21,7 +21,6 @@ export class PendingManagerInvitation {
   pendingGestionnaireInvitation = signal<UserManagerInvitationDTO[]>([]);
   filter = signal<UserManagerInvitationQuery>({ page: 1, limit: 10 });
   loadingGestionnaire = true;
-
 
   loadPendingGestionnaireInvitation() {
     this.loadingGestionnaire = true;

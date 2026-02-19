@@ -1,0 +1,32 @@
+<div (click)="goBack()" class="cursor-pointer hover:text-green-700">
+  <i class="pi pi-arrow-left flex-wrap-left mr-2 !text-xs"></i>
+  <span class="!text-sm">{{ 'MEMBER.ADD.BANK.BACK_TO_ADDRESS' | translate }}</span>
+</div>
+<div class="flex flex-wrap pb-1">
+  <div class="flex items-center">
+    <h3 class="text-primary">{{ 'MEMBER.ADD.BANK.BANKING_INFO_TITLE' | translate }}</h3>
+  </div>
+</div>
+<form [formGroup]="ibanForm" (submit)="submit()">
+  <div class="flex flex-wrap place-content-center">
+    <div class="flex w-6/12 flex-col">
+      <label for="iban" class="text-base">{{ 'MEMBER.ADD.BANK.IBAN_LABEL' | translate }} *</label>
+      <input
+        pInputText
+        type="text"
+        name="iban"
+        id="iban"
+        placeholder="BE68539007547034"
+        formControlName="iban"
+      />
+      <app-error-handler controlName="iban" [errorsAdd]="ibanErrorAdded" />
+    </div>
+  </div>
+  <div class="flex flex-wrap mt-2 justify-center">
+    <p-button pRipple type="submit" class="w-1/2">
+      <span pButtonLabel>{{
+        'MEMBER.ADD.BANK.VALIDATE_BANKING_INFO_FORM_BUTTON' | translate
+      }}</span>
+    </p-button>
+  </div>
+</form>

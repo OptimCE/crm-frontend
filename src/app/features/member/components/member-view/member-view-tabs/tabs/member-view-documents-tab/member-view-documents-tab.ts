@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnDestroy, OnInit, signal} from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -24,9 +24,9 @@ import { FilterMetadata } from 'primeng/api';
 })
 export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   private documentService = inject(DocumentService);
-  private translate = inject(TranslateService)
-  private dialogService = inject(DialogService)
-  private snackbar = inject(SnackbarNotification)
+  private translate = inject(TranslateService);
+  private dialogService = inject(DialogService);
+  private snackbar = inject(SnackbarNotification);
   @Input() id!: number;
   filter = signal<DocumentQueryDTO>({ page: 1, limit: 10 });
 

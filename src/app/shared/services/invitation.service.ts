@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
@@ -11,12 +11,13 @@ import {
   UserMemberInvitationDTO,
   UserMemberInvitationQuery,
 } from '../dtos/invitation.dtos';
+import { CompanyDTO, IndividualDTO } from '../dtos/member.dtos';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvitationService {
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
   private apiAddress: string;
 
   constructor() {
@@ -53,6 +54,12 @@ export class InvitationService {
           ...query,
         },
       },
+    );
+  }
+
+  getOwnMemberPendingInvitationById(id: number) {
+    return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
+      this.apiAddress + '/own/members/' + id,
     );
   }
 

@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Dialog } from 'primeng/dialog';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -7,7 +7,7 @@ import { Ripple } from 'primeng/ripple';
 import { CompanyDTO, IndividualDTO, MemberLinkDTO } from '../../../../shared/dtos/member.dtos';
 import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { MemberService } from '../../../../shared/services/member.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
@@ -42,6 +42,7 @@ enum InvitationStatus {
     AddressPipe,
     MemberViewTabs,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './member-view.html',
   styleUrl: './member-view.css',
@@ -70,7 +71,6 @@ export class MemberView implements OnInit {
   ref?: DynamicDialogRef | null;
   alertPopupVisible: boolean = false;
   currentPageReportTemplate: string = '';
-
 
   ngOnInit(): void {
     this.isLoading.set(true);

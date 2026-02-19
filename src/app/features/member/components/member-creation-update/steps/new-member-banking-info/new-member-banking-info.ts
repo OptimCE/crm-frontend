@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
 import { InputText } from 'primeng/inputtext';
 import { Button, ButtonLabel } from 'primeng/button';
@@ -27,7 +27,6 @@ export class NewMemberBankingInfo implements OnInit {
   @Output() backClicked = new EventEmitter<void>();
   @Output() formSubmitted = new EventEmitter<void>();
   ibanErrorAdded: ErrorAdded = {};
-
 
   ngOnInit() {
     this.setupErrorTranslation();

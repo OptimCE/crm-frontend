@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnDestroy, OnInit, signal} from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -56,7 +56,6 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
   statutCategory: any = [];
   sharingOperations = [];
   ref?: DynamicDialogRef | null;
-
 
   ngOnInit() {
     this.filter.set({ page: 1, limit: 10, holder_id: this.id });

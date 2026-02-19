@@ -1,5 +1,5 @@
 <div class="menu-link" [class.menu-link-opened]="sidebarOpen" [class.active-class]="isRouteActive">
-  <i class="{{ icon }}" [class.mr_0_5]="sidebarOpen"></i>
+  <i class="{{ icon }}" [class.mr-2]="sidebarOpen"></i>
   @if (sidebarOpen) {
     <span>{{ name }}</span>
     <i class="pi pi-chevron-down ms-auto" [ngClass]="{ 'rotate-180': activeSublist }"></i>

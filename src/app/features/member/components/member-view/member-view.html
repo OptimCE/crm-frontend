@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 m-3">
+<div class="container mx-auto my-auto">
   @if (isLoading()) {
     <p-progressSpinner></p-progressSpinner>
   } @else {
@@ -23,14 +23,18 @@
           />
         </div>
       </p-dialog>
+      <div class="flex flex-wrap space-x-2">
+        <i class="pi pi-arrow-left text-sm!"></i>
+        <a class="text-sm decoration-0" [routerLink]="'/members'">{{'MEMBER.VIEW.BACK_TO_LIST' | translate}}</a>
+      </div>
       <div class="flex flex-wrap -mx-2 mb-4">
-        <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 px-2 flex items-center gap-2">
+        <div class="lg:w-6/12 md:w-6/12 sm:w-2/12 px-2 flex items-center space-x-2">
           @switch (membersType) {
             @case (MemberType.INDIVIDUAL) {
-              <i class="pi pi-user !text-green-500 mr-1 !text-2xl"></i>
+              <i class="pi pi-user text-2xl! text-green-500!"></i>
             }
             @case (MemberType.COMPANY) {
-              <i class="pi pi-building !text-green-500 mr-1 !text-2xl"></i>
+              <i class="pi pi-building text-2xl! text-green-500!"></i>
             }
           }
           <h2 class="text-xl font-medium">{{ 'MEMBER.VIEW.MEMBER_TITLE' | translate }}</h2>

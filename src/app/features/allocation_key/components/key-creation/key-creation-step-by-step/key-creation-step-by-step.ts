@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventBusService } from '../../../../../core/services/event_bus/eventbus.service';
@@ -154,7 +154,7 @@ export class KeyCreationStepByStep implements OnInit {
 
   getSumOfIter() {
     let sumInj = 0;
-    for(const iteration of this.iterations) {
+    for (const iteration of this.iterations) {
       sumInj += iteration.energy_allocated_percentage;
     }
     return sumInj;
@@ -288,7 +288,9 @@ export class KeyCreationStepByStep implements OnInit {
         iterations: this.iterations,
       };
       this.eventBus.emit('keyStepByStep', key);
-      this.router.navigate(['/key/add']);
+      this.router.navigate(['/keys/add'], {
+        state: { keyData: key }
+      });
     }
   }
 }

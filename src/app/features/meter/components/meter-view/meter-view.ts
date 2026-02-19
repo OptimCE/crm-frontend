@@ -143,9 +143,7 @@ export class MeterView implements OnInit {
   };
   displayDownloadButton: any;
   formChart!: FormGroup;
-  constructor(
-
-  ) {
+  constructor() {
     this.isLoaded = false;
     this.historySelected = undefined;
     this.futureSelected = undefined;

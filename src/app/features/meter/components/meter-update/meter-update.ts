@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -53,8 +53,7 @@ export class MeterUpdate implements OnInit {
     { id: ReadingFrequency.MONTHLY, name: '' },
     { id: ReadingFrequency.YEARLY, name: '' },
   ];
-  constructor(
-  ) {
+  constructor() {
     this.meter = this.config.data.meter;
   }
 

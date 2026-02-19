@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
@@ -9,13 +9,13 @@ import {
   KeyPartialQuery,
   UpdateKeyDTO,
 } from '../dtos/key.dtos';
-import { Observable } from 'rxjs';
+import {from, map, Observable, switchMap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class KeyService {
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
   private apiAddress: string;
 
   constructor() {
@@ -32,8 +32,33 @@ export class KeyService {
     return this.http.get<ApiResponse<KeyDTO | string>>(this.apiAddress + '/' + id);
   }
 
-  downloadKey(id: number): Observable<ApiResponse<KeyDTO | string>> {
-    return this.http.get<ApiResponse<KeyDTO | string>>(this.apiAddress + '/' + id);
+  downloadKey(id: number): Observable<ApiResponse<string> | { blob: Blob, filename: string }> {
+    return this.http.get(this.apiAddress + '/' + id + "/download", {
+      observe: 'response', // Gives us access to headers
+      responseType: 'blob'
+    }).pipe(
+      switchMap((response) => {
+        const blob = response.body as Blob;
+
+        if (blob.type === 'application/json') {
+          return from(blob.text()).pipe(
+            map(text => JSON.parse(text) as ApiResponse<string>)
+          );
+        }
+
+        // Extract filename from Content-Disposition
+        const contentDisposition = response.headers.get('content-disposition');
+        let filename = 'cle_repartition.xlsx'; // Default
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename="(.+)"/);
+          if (match && match[1]) {
+            filename = match[1];
+          }
+        }
+
+        return [{ blob, filename }];
+      })
+    );
   }
 
   addKey(create_key: CreateKeyDTO): Observable<ApiResponse<string>> {

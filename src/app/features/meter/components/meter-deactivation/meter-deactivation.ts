@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,10 +11,7 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-meter-deactivation',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-  ],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './meter-deactivation.html',
   styleUrl: './meter-deactivation.css',
 })
@@ -26,8 +23,7 @@ export class MeterDeactivation implements OnInit {
   deleteForm!: FormGroup;
   calendarOpen: boolean;
 
-  constructor(
-  ) {
+  constructor() {
     this.ean = this.config.data.ean;
     this.calendarOpen = false;
   }

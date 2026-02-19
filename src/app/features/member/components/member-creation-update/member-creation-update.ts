@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
 import { MemberType } from '../../../../shared/types/member.types';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
@@ -52,7 +52,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
   ibanForm!: FormGroup;
   gestionnaire: boolean = false;
   existingMember?: IndividualDTO | CompanyDTO;
-
+  step = signal(0);
 
   ngOnInit(): void {
     this.addressForm = new FormGroup({
@@ -105,7 +105,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
       name: new FormControl('', [Validators.required]),
     });
     if (this.typeClient == 1) {
-      this.formData.controls['id'].addValidators([numRegistreBeValidator]);
+      // this.formData.controls['id'].addValidators([numRegistreBeValidator]);
       // Build form group for individuals
       this.formData.addControl('surname', new FormControl('', [Validators.required]));
       this.formData.addControl(
@@ -140,18 +140,22 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
   submitForm1(nextCallback: any) {
     if (this.typeClient != -1) {
       this.buildFormGroup();
+      this.step.set(1);
       nextCallback.emit();
     }
   }
 
   submitForm2(nextCallback: any) {
+    console.log(this.formData.valid)
     if (this.formData.valid) {
+      this.step.set(2);
       nextCallback.emit();
     }
   }
 
   submitForm3(nextCallback: any) {
     if (this.addressForm.valid) {
+      this.step.set(3);
       nextCallback.emit();
     }
   }
@@ -253,7 +257,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         next: (response) => {
           // this.ref.close(response)
           if (response) {
-            this.ref.close(true);
+            this.ref.close(2);
           } else {
             this.errorHandler.handleError();
           }
@@ -266,7 +270,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
       this.membersService.addMember(memberToAdd).subscribe({
         next: (response) => {
           if (response) {
-            this.ref.close(response.data);
+            this.ref.close(1);
           } else {
             this.errorHandler.handleError();
           }

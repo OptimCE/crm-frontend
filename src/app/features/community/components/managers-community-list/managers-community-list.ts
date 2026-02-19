@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { PrimeTemplate } from 'primeng/api';
 import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
@@ -25,7 +25,7 @@ import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dt
   styleUrl: './managers-community-list.css',
 })
 export class ManagersCommunityList implements OnInit {
-  private communityService = inject(CommunityService)
+  private communityService = inject(CommunityService);
   users = signal<UsersCommunityDTO[]>([]);
   filter = signal<CommunityUsersQueryDTO>({ page: 1, limit: 10 });
   dialogVisible: boolean = false;

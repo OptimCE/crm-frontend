@@ -16,6 +16,10 @@ import { includeBearerTokenInterceptor } from 'keycloak-angular';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageService } from './core/services/language/language.service';
 import { communityContextInterceptor } from './core/interceptors/community.context.inteceptor';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+
+// Register all Community features
+ModuleRegistry.registerModules([AllCommunityModule]);
 export function initializeLanguage(_languageService: LanguageService) {
   return () => {
     // If your logic is in the constructor, just returning a resolved promise is enough.

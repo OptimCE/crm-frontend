@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
@@ -65,9 +65,7 @@ export class MetersList implements OnInit {
 
   paginationInfo: Pagination = new Pagination(1, 10, 0, 1);
   currentPageReportTemplate: string = '';
-  constructor(
-
-  ) {
+  constructor() {
     this.isLoaded = false;
   }
   ngOnInit() {
@@ -139,7 +137,7 @@ export class MetersList implements OnInit {
   }
 
   onRowClick(meter: PartialMeterDTO) {
-    this.routing.navigate(['/members/meter/' + meter.EAN]);
+    this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
   onAddMeter() {

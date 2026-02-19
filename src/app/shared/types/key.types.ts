@@ -1,3 +1,4 @@
+import {IterationDTO} from '../dtos/key.dtos';
 
 export interface ColumnHeaderParameter {
   label: string;
@@ -7,10 +8,10 @@ export interface ColumnHeaderParameter {
 
 export interface ColumnKeyDefinition {
   headerName: string;
-  field: string;
+  field: keyof IterationDTO | string;
   cellStyle: any;
   headerComponent: any;
-  headerComponentParams?: ColumnHeaderParameter
+  headerComponentParams?: ColumnHeaderParameter;
   headerTooltip?: string;
   minWidth: number;
   suppressSizeToFit: boolean;

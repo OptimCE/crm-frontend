@@ -1,5 +1,5 @@
 import { SSEService } from './sse.service';
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environments } from '../../../../environments/environments';
 import { ERROR_TYPE, VALIDATION_TYPE } from '../../dtos/notification';
 import { EventBusService } from '../event_bus/eventbus.service';
@@ -12,8 +12,7 @@ export class TaskSSEServie {
   connected: boolean = false;
   private sseService = inject(SSEService);
   private eventBus = inject(EventBusService);
-  constructor(
-  ) {
+  constructor() {
     this.connected = false;
   }
 

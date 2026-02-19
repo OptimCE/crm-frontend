@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { TranslatePipe } from '@ngx-translate/core';
