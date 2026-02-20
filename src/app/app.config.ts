@@ -21,7 +21,7 @@ import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
 export function initializeLanguage(_languageService: LanguageService) {
-  return () => {
+  return (): Promise<void> => {
     // If your logic is in the constructor, just returning a resolved promise is enough.
     // If you have an init() method, call it here: return languageService.init();
     return Promise.resolve();

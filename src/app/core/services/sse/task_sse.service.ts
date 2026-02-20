@@ -16,27 +16,24 @@ export class TaskSSEServie {
     this.connected = false;
   }
 
-  startTaskSSE() {
-    if (!this.connected) {
-      this.connected = true;
-      this.sseService.getServerSentEvent(environments.apiUrl + '/notification/event').subscribe({
-        next: (d: any) => {
-          let data = d.msg as ApiResponse<unknown>;
-          if (Array.isArray(data)) {
-            data = data[0];
-          }
-          if (data && data.data) {
-            this.eventBus.emit('snack-notification', { message: data.data, type: VALIDATION_TYPE });
-          }
-        },
-        error: (err) => {
-          if (err.data) {
-            this.eventBus.emit('snack-notification', { message: err.data, type: ERROR_TYPE });
-          } else {
-            this.eventBus.emit('snack-notification', { message: 'Error', type: ERROR_TYPE });
-          }
-        },
-      });
-    }
+  startTaskSSE(): void {
+    if (this.connected) return;
+
+    this.connected = true;
+    this.sseService.getServerSentEvent(environments.apiUrl + '/notification/event').subscribe({
+      next: (response: ApiResponse<string>) => {
+        const data = Array.isArray(response) ? (response as ApiResponse<string>[])[0] : response;
+        if (data?.data) {
+          this.eventBus.emit('snack-notification', { message: data.data, type: VALIDATION_TYPE });
+        }
+      },
+      error: (err: unknown) => {
+        const message: string =
+          err instanceof ApiResponse
+            ? String((err as ApiResponse<string>).data)
+            : 'Error';
+        this.eventBus.emit('snack-notification', { message, type: ERROR_TYPE });
+      },
+    });
   }
 }

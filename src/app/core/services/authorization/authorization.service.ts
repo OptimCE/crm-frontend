@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import Keycloak from 'keycloak-js';
+import Keycloak, {KeycloakTokenParsed} from 'keycloak-js';
 import { Role } from '../../dtos/role';
 
 // The structure for our parsed data
@@ -13,6 +13,18 @@ export interface TokenOrg {
   orgId: string;
   orgPath: string;
   roles: Role[];
+}
+interface KeycloakTokenParsedExtends extends KeycloakTokenParsed{
+  orgs: TokenOrg[];
+  preferred_username: string;
+  email: string;
+}
+export interface UserInterface{
+  username: string;
+  email: string;
+  communitiesById: Record<string, CommunityContext>;
+  activeCommunity: CommunityContext|null;
+  activeRole: Role|null;
 }
 const ACTIVE_COMMUNITY_STORAGE_KEY = 'activeCommunityId';
 
@@ -50,11 +62,11 @@ export class UserContextService {
     return comm ? highestRole(comm.roles) : null;
   });
 
-  refreshUserContext() {
-    const token = this.keycloak.tokenParsed as any;
+  refreshUserContext(): void {
+    const token  = this.keycloak.tokenParsed as KeycloakTokenParsedExtends|undefined;
 
     // New source: orgs claim
-    const rawOrgs: { orgId: string; orgPath: string; roles: unknown[] }[] = token?.orgs ?? [];
+    const rawOrgs: TokenOrg[] = token?.orgs ?? [];
     const parsed: Record<string, CommunityContext> = {};
 
     for (const o of rawOrgs) {
@@ -62,7 +74,7 @@ export class UserContextService {
 
       // Keep only roles that match your Role enum
       const roles = (o.roles ?? []).filter((r): r is Role =>
-        Object.values(Role).includes(r as Role),
+        Object.values(Role).includes(r),
       );
 
       parsed[o.orgId] = {
@@ -77,7 +89,7 @@ export class UserContextService {
     this.initializeDefaultCommunity();
   }
 
-  switchCommunity(orgId: string) {
+  switchCommunity(orgId: string): void {
     const all = this.communitiesById();
     if (all[orgId]) {
       this.activeCommunityId.set(orgId);
@@ -85,12 +97,12 @@ export class UserContextService {
     }
   }
 
-  logout(){
+  logout(): void{
     this.deleteStoreCommunityId();
   }
 
   // If you still want switching by name/path (UI dropdown using name)
-  switchCommunityByPath(orgPath: string) {
+  switchCommunityByPath(orgPath: string): void {
     const all = this.communitiesById();
     const found = Object.values(all).find((c) => c.orgPath === orgPath);
     if (found) {
@@ -99,9 +111,9 @@ export class UserContextService {
     }
   }
 
-  getUserInfo() {
+  getUserInfo(): UserInterface|null {
     if (!this.keycloak.authenticated) return null;
-    const token = this.keycloak.tokenParsed as any;
+    const token = this.keycloak.tokenParsed as KeycloakTokenParsedExtends;
 
     return {
       username: token?.preferred_username,
@@ -112,7 +124,7 @@ export class UserContextService {
     };
   }
 
-  private initializeDefaultCommunity() {
+  private initializeDefaultCommunity(): void {
     const stored = this.loadStoredCommunityId();
     if (!stored) return;
 
@@ -125,7 +137,7 @@ export class UserContextService {
     }
   }
 
-  compareWithActiveRole(role: Role) {
+  compareWithActiveRole(role: Role): boolean {
     const current = this.activeCommunityRole();
     if (!current) return false;
     const currentHierarchy = ROLE_HIERARCHY[current];
@@ -133,7 +145,7 @@ export class UserContextService {
     return currentHierarchy >= targetHierarchy;
   }
 
-  isActiveRole(role: Role) {
+  isActiveRole(role: Role): boolean {
     const current = this.activeCommunityRole();
     if (!current) return false;
     const currentHierarchy = ROLE_HIERARCHY[current];
@@ -149,7 +161,7 @@ export class UserContextService {
     if (!id) sessionStorage.removeItem(ACTIVE_COMMUNITY_STORAGE_KEY);
     else sessionStorage.setItem(ACTIVE_COMMUNITY_STORAGE_KEY, id);
   }
-  private deleteStoreCommunityId(){
+  private deleteStoreCommunityId(): void{
     sessionStorage.removeItem(ACTIVE_COMMUNITY_STORAGE_KEY);
   }
 }

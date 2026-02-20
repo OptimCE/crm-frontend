@@ -35,11 +35,11 @@ export class UserCommunities implements OnInit, OnDestroy {
     this.fetchCurrentCommunityId();
   }
 
-  fetchCurrentCommunityId() {
+  fetchCurrentCommunityId(): void {
     // this.activeGroup.set(this.userContextService.activeCommunityId())
   }
 
-  loadCommunities() {
+  loadCommunities(): void {
     this.communityService.getMyCommunities(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -54,7 +54,7 @@ export class UserCommunities implements OnInit, OnDestroy {
     });
   }
 
-  lazyLoadCommunities($event: TableLazyLoadEvent) {
+  lazyLoadCommunities($event: TableLazyLoadEvent): void {
     const current: any = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
@@ -70,12 +70,12 @@ export class UserCommunities implements OnInit, OnDestroy {
     this.loadCommunities();
   }
 
-  joinCommunity(community: MyCommunityDTO) {
+  joinCommunity(community: MyCommunityDTO): void {
     this.userContextService.switchCommunity(community.auth_community_id);
 
   }
 
-  updateNameCommunity(_community: MyCommunityDTO) {
+  updateNameCommunity(_community: MyCommunityDTO): void {
     // this.ref = this.dialogService.open(CommunityUpdateComponent, {
     //   modal: true,
     //   closable: true,
@@ -103,12 +103,12 @@ export class UserCommunities implements OnInit, OnDestroy {
     // });
   }
 
-  createCommunity() {
+  createCommunity(): void {
     this.ref = this.dialogService.open(CommunityDialog, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('COMMUNITY.CREATE.TITLE'),
+      header: this.translate.instant('COMMUNITY.CREATE.TITLE') as string,
     });
     this.ref?.onClose.subscribe((result) => {
       if (result) {
@@ -117,7 +117,7 @@ export class UserCommunities implements OnInit, OnDestroy {
     });
   }
 
-  leaveCommunity(_event: Event, _community: any) {
+  leaveCommunity(_event: Event, _community: any): void {
     // this.communityService.leaveCommunity(new LeaveCommunity(community.id_community, false)).subscribe(
     //   {
     //     next: (response)=>

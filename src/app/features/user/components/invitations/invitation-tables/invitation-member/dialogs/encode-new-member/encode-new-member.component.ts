@@ -16,6 +16,7 @@ import { AddressDTO } from '../../../../../../../../shared/dtos/address.dtos';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { InvitationService } from '../../../../../../../../shared/services/invitation.service';
+import {ApiResponse} from '../../../../../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-encode-new-member',
@@ -71,11 +72,11 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void{
     this.cdr.markForCheck(); // Force change detection once content is rendered
   }
 
-  buildFormGroup() {
+  buildFormGroup(): void{
     this.formData = new FormGroup({
       id: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
@@ -96,26 +97,26 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
     this.updateGestionnaire(this.typeClient == 2);
   }
 
-  submitForm1(nextCallback: any) {
+  submitForm1(nextCallback: any): void{
     if (this.typeClient != -1) {
       this.buildFormGroup();
       nextCallback.emit();
     }
   }
 
-  submitForm2(nextCallback: any) {
+  submitForm2(nextCallback: any): void{
     if (this.formData.valid) {
       nextCallback.emit();
     }
   }
 
-  submitForm3(nextCallback: any) {
+  submitForm3(nextCallback: any): void{
     if (this.addressForm.valid) {
       nextCallback.emit();
     }
   }
 
-  onSubmitEnd() {
+  onSubmitEnd(): void{
     if (this.ibanForm.invalid) {
       return;
     }
@@ -182,13 +183,14 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData)
         },
       });
   }
 
-  updateGestionnaire(value: boolean) {
+  updateGestionnaire(value: boolean): void{
     this.gestionnaire = value;
     if (this.gestionnaire) {
       this.formData.addControl(
@@ -214,12 +216,12 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
     }
   }
 
-  gestionnaireChange($event: CheckboxChangeEvent) {
+  gestionnaireChange($event: CheckboxChangeEvent): void{
     const value = $event.checked.length > 0;
     this.updateGestionnaire(value);
   }
 
-  toggleSameAddress(event: CheckboxChangeEvent) {
+  toggleSameAddress(event: CheckboxChangeEvent): void{
     console.log('THIS EVENT : ', event);
     console.log(this.addressForm.value.same_address);
     if (this.addressForm.value.same_address[0]) {

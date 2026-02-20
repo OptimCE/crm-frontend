@@ -130,7 +130,7 @@ export class SharingOperationView implements OnInit {
         mode: 'index',
         intersect: false,
         callbacks: {
-          label: function (tooltipItem: any) {
+          label: function (tooltipItem: any): string {
             const label = tooltipItem.dataset.label || '';
             const value = tooltipItem.raw;
             return `${label}: ${value} kWh`;
@@ -143,10 +143,10 @@ export class SharingOperationView implements OnInit {
         stacked: true,
         title: {
           display: true,
-          text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.X_TITLE_DATE'),
+          text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.X_TITLE_DATE') as string,
         },
         ticks: {
-          callback: (value: any, index: number) => {
+          callback: (value: any, index: number): string => {
             // Make sure 'this' refers to the component context
             const label = this.data?.labels?.[index];
             if (!label) return '';
@@ -169,7 +169,7 @@ export class SharingOperationView implements OnInit {
         stacked: true,
         title: {
           display: true,
-          text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.Y_TITLE_CONSUMPTION'),
+          text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.Y_TITLE_CONSUMPTION') as string,
         },
       },
     },
@@ -187,7 +187,7 @@ export class SharingOperationView implements OnInit {
     this.isLoading = true;
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     if (id === '') {
-      this.routing.navigate(['//members/sharing/']);
+      void this.routing.navigate(['//members/sharing/']);
       return;
     }
     this.id = +id;
@@ -211,7 +211,7 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.VIEW.METER.PAGE_REPORT_TEMPLATE_METER_LABEL', {
         page: this.paginationMetersInfo.page,
@@ -222,7 +222,7 @@ export class SharingOperationView implements OnInit {
         this.currentPageReportTemplate = translatedText;
       });
   }
-  setupStatusCategory() {
+  setupStatusCategory(): void {
     this.translate
       .get([
         'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL',
@@ -244,7 +244,7 @@ export class SharingOperationView implements OnInit {
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
         'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.statutCategory = [
           {
             value: MeterDataStatus.ACTIVE,
@@ -270,7 +270,7 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  loadOperationSharing() {
+  loadOperationSharing(): void {
     this.sharingOperationService.getSharingOperation(this.id).subscribe((response) => {
       if (response) {
         this.sharingOperation = response.data as SharingOperationDTO;
@@ -278,10 +278,10 @@ export class SharingOperationView implements OnInit {
       this.isLoading = false;
     });
   }
-  exportExcelCWAPe() {
+  exportExcelCWAPe(): void {
     console.log('TO IMPLEMENT');
   }
-  loadAllMeters() {
+  loadAllMeters(): void {
     try {
       const params: any = {
         sharing_operation_id: this.id,
@@ -304,7 +304,7 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  loadMeters(filter?: any, page?: number) {
+  loadMeters(filter?: any, page?: number): void {
     try {
       const params: any = {
         sharing_operation_id: this.id,
@@ -372,7 +372,7 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  lazyLoadMeters($event: any) {
+  lazyLoadMeters($event: any): void{
     let page = 0;
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
@@ -380,7 +380,7 @@ export class SharingOperationView implements OnInit {
     this.loadMeters($event.filters, page >= 1? page : 1);
   }
 
-  clear(table: any) {
+  clear(table: any): void{
     table.clear();
     this.addressFilter = {
       streetName: '',
@@ -389,20 +389,20 @@ export class SharingOperationView implements OnInit {
     };
   }
 
-  pageChange(_$event: any) {
+  pageChange(_$event: any): void{
     console.log('TO IMPLEMENT');
   }
 
-  onRowClick(meter: any) {
-    this.routing.navigate(['/meters/' + meter.EAN]);
+  onRowClick(meter: any): void{
+    void this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
-  addMeter() {
+  addMeter(): void{
     this.ref = this.dialogService.open(SharingOperationAddMeter, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('SHARING_OPERATION.VIEW.METER.ADD_METERS_HEADER'),
+      header: this.translate.instant('SHARING_OPERATION.VIEW.METER.ADD_METERS_HEADER') as string,
       data: {
         id: this.id,
       },
@@ -411,7 +411,7 @@ export class SharingOperationView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL'),
+            this.translate.instant('SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMeters();
@@ -420,12 +420,12 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  editKey() {
+  editKey(): void{
     this.ref = this.dialogService.open(SharingOperationAddKey, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('SHARING_OPERATION.VIEW.KEY.MODIFY_KEY_HEADER'),
+      header: this.translate.instant('SHARING_OPERATION.VIEW.KEY.MODIFY_KEY_HEADER') as string,
       data: {
         id: this.id,
       },
@@ -434,7 +434,7 @@ export class SharingOperationView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL'),
+            this.translate.instant('SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadOperationSharing();
@@ -443,7 +443,7 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  revokeWaitingKey() {
+  revokeWaitingKey(): void{
     console.log("Revoke ")
     this.sharingOperationService
       .patchKeyStatus({
@@ -468,7 +468,7 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  approveWaitingKey() {
+  approveWaitingKey(): void{
     this.sharingOperationService
       .patchKeyStatus({
         id_key: this.sharingOperation!.key_waiting_approval!.key.id,
@@ -493,13 +493,13 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  openDateApprovedKey(event: Event) {
+  openDateApprovedKey(event: Event): void{
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       acceptIcon: 'pi pi-check',
       rejectIcon: 'pi pi-times',
-      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE'),
-      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL'),
+      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
       accept: () => {
         this.approveWaitingKey();
       },
@@ -509,14 +509,14 @@ export class SharingOperationView implements OnInit {
 
 
 
-  newKey() {
+  newKey(): void{
     // Get all meters EAN
     const metersEAN = this.metersPartialList().map((a) => a.EAN);
     this.eventBus.emit('setConsumers', metersEAN);
-    this.routing.navigate(['/key/add']);
+    void this.routing.navigate(['/key/add']);
   }
 
-  loadChart() {
+  loadChart(): void{
     this.displayDownloadButton = false;
     if (this.formChart.invalid) {
       return;
@@ -536,19 +536,19 @@ export class SharingOperationView implements OnInit {
                 type: 'bar',
                 label: this.translate.instant(
                   'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_SHARED_LABEL',
-                ),
+                ) as string,
                 stack: 'consumption',
                 data: tmpData.shared,
               },
               {
                 type: 'bar',
-                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.CONSUMPTION_NET_LABEL'),
+                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.CONSUMPTION_NET_LABEL') as string,
                 stack: 'consumption',
                 data: tmpData.net,
               },
               {
                 type: 'bar',
-                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.INJECTION_NET_LABEL'),
+                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.INJECTION_NET_LABEL') as string,
                 stack: 'inj',
                 data: tmpData.inj_net,
               },
@@ -556,7 +556,7 @@ export class SharingOperationView implements OnInit {
                 type: 'bar',
                 label: this.translate.instant(
                   'SHARING_OPERATION.VIEW.CHART.INJECTION_SHARED_LABEL',
-                ),
+                ) as string,
                 stack: 'inj',
                 data: tmpData.inj_shared,
               },
@@ -567,7 +567,7 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  downloadTotalConsumption() {
+  downloadTotalConsumption(): void{
     this.sharingOperationService
       .downloadSharingOperationConsumptions(this.sharingOperation!.id, {
         date_start: this.formChart.value.dateDeb,
@@ -621,7 +621,7 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  addConsumptionInformations() {
+  addConsumptionInformations(): void{
     if (this.formGroup.invalid) {
       return;
     }
@@ -639,7 +639,7 @@ export class SharingOperationView implements OnInit {
             this.snackbar.openSnackBar(
               this.translate.instant(
                 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
-              ),
+              ) as string,
               VALIDATION_TYPE,
             );
           } else {
@@ -672,14 +672,14 @@ export class SharingOperationView implements OnInit {
     })
   }
 
-  protected onPageSharingOperationKey($event: TablePageEvent) {
+  protected onPageSharingOperationKey($event: TablePageEvent): void{
     const current: any = { ...this.filterSharingOperationKey() };
     current.page = $event.first / $event.rows + 1;
     this.filterSharingOperationKey.set(current);
     this.loadSharingOperationKey();
   }
 
-  protected onLazyLoadSharingOperationKey($event: TableLazyLoadEvent) {
+  protected onLazyLoadSharingOperationKey($event: TableLazyLoadEvent): void{
     const current: any = { ...this.filterSharingOperationKey() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {

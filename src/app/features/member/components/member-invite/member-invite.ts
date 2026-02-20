@@ -15,13 +15,13 @@ export class MemberInvite implements OnInit {
   private ref = inject(DynamicDialogRef);
   form!: FormGroup;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required]),
     });
   }
 
-  inviteMember() {
+  inviteMember(): void {
     if (this.form.invalid) {
       return;
     }

@@ -31,7 +31,7 @@ export class CommunityInvitation implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.valid) {
       this.ref.close(this.form.value.email);
     }

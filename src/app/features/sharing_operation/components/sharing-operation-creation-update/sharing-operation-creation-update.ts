@@ -41,18 +41,18 @@ export class SharingOperationCreationUpdate implements OnInit {
     });
     this.setupTranslationCategory();
   }
-  setupTranslationCategory() {
+  setupTranslationCategory(): void {
     this.setupECCategory();
   }
 
-  setupECCategory() {
+  setupECCategory(): void {
     this.translate
       .get([
         'SHARING_OPERATION.TYPE.INSIDE_BUILDING',
         'SHARING_OPERATION.TYPE.CER',
         'SHARING_OPERATION.TYPE.CEC',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.categories = [
           {
             key: SharingOperationType.LOCAL,
@@ -63,7 +63,7 @@ export class SharingOperationCreationUpdate implements OnInit {
         ];
       });
   }
-  onSubmitForm() {
+  onSubmitForm(): void {
     if (this.formAddSharingOp.invalid) {
       return;
     }

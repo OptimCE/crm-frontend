@@ -157,18 +157,18 @@ export class MeterCreation implements OnInit {
     this.setupTranslationCategory();
   }
 
-  setupTranslationError() {
-    this.translate.get(['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT']).subscribe((translation) => {
+  setupTranslationError(): void{
+    this.translate.get(['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT']).subscribe((translation: Record<string, string>) => {
       this.errorMemberAdd = {
         errorMember: () => translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
       };
       this.errorsSummaryAdded = {
-        errorMember: (_: any, _controlName: string) =>
+        errorMember: (_: unknown, _controlName: string) =>
           translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
       };
     });
   }
-  setupTranslationCategory() {
+  setupTranslationCategory(): void{
     this.setupProductionChainCategory();
     this.setupRateCategory();
     this.setupClientCategory();
@@ -178,7 +178,7 @@ export class MeterCreation implements OnInit {
     this.setupTarifGroupCategory();
   }
 
-  setupProductionChainCategory() {
+  setupProductionChainCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC',
@@ -190,7 +190,7 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.PRODUCTION_CHAIN.OTHER',
         'METER.CATEGORIES.PRODUCTION_CHAIN.NONE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.productionChainCategory = [
           {
             id: ProductionChain.PHOTOVOLTAIC,
@@ -222,14 +222,14 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupRateCategory() {
+  setupRateCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.RATE.SIMPLE',
         'METER.CATEGORIES.RATE.BI_HOURLY',
         'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.rateCategory = [
           { id: MeterRate.SIMPLE, name: translation['METER.CATEGORIES.RATE.SIMPLE'] },
           { id: MeterRate.BI_HOURLY, name: translation['METER.CATEGORIES.RATE.BI_HOURLY'] },
@@ -241,14 +241,14 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupClientCategory() {
+  setupClientCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.CLIENT.RESIDENTIAL',
         'METER.CATEGORIES.CLIENT.PROFESSIONAL',
         'METER.CATEGORIES.CLIENT.INDUSTRIAL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.clientCategory = [
           { id: ClientType.RESIDENTIAL, name: translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'] },
           {
@@ -260,7 +260,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupInjectionStatusCategory() {
+  setupInjectionStatusCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.INJECTION_STATUS.NONE',
@@ -269,7 +269,7 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION',
         'METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.injectionStatusCategory = [
           {
             id: InjectionStatus.AUTOPROD_OWNER,
@@ -292,13 +292,13 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupReadingFrequencyCategory() {
+  setupReadingFrequencyCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
         'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.readingFrequencyCategory = [
           {
             id: ReadingFrequency.MONTHLY,
@@ -312,10 +312,10 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupPhaseCategory() {
+  setupPhaseCategory(): void{
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.phaseCategory = [
           { id: PhaseCategory.SINGLE, name: translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'] },
           { id: PhaseCategory.THREE, name: translation['METER.CATEGORIES.PHASE.THREE_PHASES'] },
@@ -323,13 +323,13 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupTarifGroupCategory() {
+  setupTarifGroupCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
         'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.tarifGroupCategory = [
           {
             id: TarifGroup.LOW_TENSION,
@@ -361,7 +361,7 @@ export class MeterCreation implements OnInit {
     };
   }
 
-  onSubmit() {
+  onSubmit(): void{
     if (!this.metersForm.valid) {
       console.error('Form not valid');
       return;
@@ -410,7 +410,7 @@ export class MeterCreation implements OnInit {
     });
   }
 
-  onChangeProductionChain() {
+  onChangeProductionChain(): void{
     if (this.metersForm.value.productionChain.id == 8) {
       if (
         this.metersForm.value.injectionStatus.id !=

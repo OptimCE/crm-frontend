@@ -35,11 +35,11 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   currentPageReportTemplateDocuments: string = '';
   ref?: DynamicDialogRef | null;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateDocumentPaginationTranslation();
   }
 
-  loadDocument() {
+  loadDocument(): void {
     try {
       this.documentsPartialList.set([]);
       this.documentService.getDocuments(this.id, this.filter()).subscribe({
@@ -60,7 +60,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     }
   }
 
-  lazyLoadDocuments($event: TableLazyLoadEvent) {
+  lazyLoadDocuments($event: TableLazyLoadEvent): void {
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
@@ -104,7 +104,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     this.loadDocument();
   }
 
-  updateDocumentPaginationTranslation() {
+  updateDocumentPaginationTranslation(): void {
     this.translate
       .get('MEMBER.VIEW.DOCUMENTS.PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL', {
         page: this.paginationDocumentsInfo.page,
@@ -116,12 +116,12 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
       });
   }
 
-  clear(table: any) {
+  clear(table: any): void {
     table.clear();
     this.filter.set({ page: 1, limit: 10 });
   }
 
-  onDownloadDocument(doc: any) {
+  onDownloadDocument(doc: any): void {
     this.documentService.downloadDocument(this.id, doc.id).subscribe((response) => {
       if (response) {
         const blob = new Blob([response], { type: doc.fileType });
@@ -137,7 +137,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     });
   }
 
-  deleteDocument(id: number) {
+  deleteDocument(id: number): void {
     this.documentService.deleteDocument(id).subscribe((response) => {
       if (response) {
         this.loadDocument();
@@ -145,12 +145,12 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     });
   }
 
-  toAddDocument() {
+  toAddDocument(): void {
     this.ref = this.dialogService.open(MemberAddDocument, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.VIEW.DOCUMENTS.ADD_DOCUMENT_HEADER'),
+      header: this.translate.instant('MEMBER.VIEW.DOCUMENTS.ADD_DOCUMENT_HEADER') as string,
       data: {
         idMember: this.id,
       },
@@ -169,7 +169,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.ref) {
       this.ref.destroy();
     }

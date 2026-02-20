@@ -79,7 +79,7 @@ export class Navbar implements OnInit {
     this.sidebarOpen = false;
     this.setSidebarWidth();
   }
-  ngOnInit() {
+  ngOnInit(): void {
     // Set the page title based on the current language
     this.updatePageTitle();
 
@@ -114,28 +114,28 @@ export class Navbar implements OnInit {
     });
   }
 
-  openSubmenu(index: number) {
+  openSubmenu(index: number): void {
     this.showSubmenu[index] = !this.showSubmenu[index];
     this.isExpanded[index] = !this.isExpanded[index];
   }
 
-  logout() {
+  logout(): void {
     this.userContextService.logout();
-    this.keycloak.logout({
+    void this.keycloak.logout({
       redirectUri: window.location.origin + '/auth',
     });
   }
-  onMouseEnter(_$event: MouseEvent) {
+  onMouseEnter(_$event: MouseEvent): void {
     this.sidebarOpen = true;
     this.setSidebarWidth();
   }
 
-  onMouseLeave(_$event: MouseEvent) {
+  onMouseLeave(_$event: MouseEvent): void {
     this.sidebarOpen = false;
     this.setSidebarWidth();
   }
 
-  setSidebarWidth() {
+  setSidebarWidth(): void {
     this.sidebarWidth = this.sidebarOpen ? '300px' : '70px';
   }
   toggleSublist(sublist: string): void {
@@ -149,12 +149,12 @@ export class Navbar implements OnInit {
     this.cdr.detectChanges();
   }
 
-  openSideBar() {
+  openSideBar(): void {
     this.visibleSideBar = true;
     this.sidebarOpen = true;
   }
 
-  closeSideBar() {
+  closeSideBar(): void {
     if (this.mobile) {
       this.visibleSideBar = false;
       this.sidebarOpen = false;

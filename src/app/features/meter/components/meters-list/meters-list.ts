@@ -68,13 +68,13 @@ export class MetersList implements OnInit {
   constructor() {
     this.isLoaded = false;
   }
-  ngOnInit() {
+  ngOnInit(): void {
     this.isLoaded = false;
     this.loadHolders();
     this.setupStatusCategory();
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('METER.LIST.PAGE_REPORT_TEMPLATE_METER_LABEL', {
         page: this.paginationInfo.page,
@@ -86,7 +86,7 @@ export class MetersList implements OnInit {
       });
   }
 
-  setupStatusCategory() {
+  setupStatusCategory(): void {
     this.translate
       .get([
         'METER.STATUS.ACTIVE_LABEL',
@@ -94,7 +94,7 @@ export class MetersList implements OnInit {
         'METER.STATUS.WAITING_GRD_LABEL',
         'METER.STATUS.WAITING_MANAGER_LABEL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.statutCategory = [
           { value: MeterDataStatus.ACTIVE, label: translation['METER.STATUS.ACTIVE_LABEL'] },
           { value: MeterDataStatus.INACTIVE, label: translation['METER.STATUS.INACTIVE_LABEL'] },
@@ -109,7 +109,7 @@ export class MetersList implements OnInit {
         ];
       });
   }
-  loadHolders() {
+  loadHolders(): void {
     this.memberService.getMembersList({ page: 1, limit: 10 }).subscribe((response) => {
       if (response) {
         this.holders = response.data as MembersPartialDTO[];
@@ -117,7 +117,7 @@ export class MetersList implements OnInit {
     });
   }
 
-  loadMeters() {
+  loadMeters(): void {
     this.metersService.getMetersList(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -136,22 +136,22 @@ export class MetersList implements OnInit {
     });
   }
 
-  onRowClick(meter: PartialMeterDTO) {
-    this.routing.navigate(['/meters/' + meter.EAN]);
+  onRowClick(meter: PartialMeterDTO): void {
+    void this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
-  onAddMeter() {
+  onAddMeter(): void {
     this.ref = this.dialogService.open(MeterCreation, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('METER.LIST.ADD_METER_HEADER'),
+      header: this.translate.instant('METER.LIST.ADD_METER_HEADER') as string,
     });
     if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('METER.LIST.METER_ADDED_SUCCESSFULLY_LABEL'),
+            this.translate.instant('METER.LIST.METER_ADDED_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMeters();
@@ -160,7 +160,7 @@ export class MetersList implements OnInit {
     }
   }
 
-  lazyLoadMeters($event: any) {
+  lazyLoadMeters($event: any): void {
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
@@ -182,7 +182,7 @@ export class MetersList implements OnInit {
     this.loadMeters();
   }
 
-  clear(table: any) {
+  clear(table: any): void {
     table.clear();
     this.addressFilter = {
       streetName: '',
@@ -191,13 +191,13 @@ export class MetersList implements OnInit {
     };
   }
 
-  applyAddressFilter(dt: any) {
+  applyAddressFilter(dt: any): void {
     dt.filter(this.addressFilter.streetName, 'streetName', 'contains');
     dt.filter(this.addressFilter.postcode, 'postcode', 'contains');
     dt.filter(this.addressFilter.cityName, 'cityName', 'contains');
   }
 
-  pageChange($event: any) {
+  pageChange($event: any): void {
     const current: any = { ...this.filter() };
     current.page = $event.first / $event.rows + 1;
     this.filter.set(current);

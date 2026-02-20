@@ -24,11 +24,11 @@ export class Profile implements OnInit, OnDestroy {
   protected isLoading = signal<boolean>(false);
   protected user = signal<UserDTO | null>(null);
   ref?: DynamicDialogRef<any> | null;
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadUser();
   }
 
-  private loadUser() {
+  private loadUser(): void {
     this.isLoading.set(true);
     this.userService.getUserInfo().subscribe({
       next: (response) => {
@@ -43,13 +43,13 @@ export class Profile implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.ref?.destroy();
   }
 
-  updateMember() {
+  updateMember(): void {
     this.ref = this.dialogService.open(UserUpdateDialog, {
-      header: this.translateService.instant('PROFILE.UPDATE_PROFILE.TITLE'),
+      header: this.translateService.instant('PROFILE.UPDATE_PROFILE.TITLE') as string,
       modal: true,
       closable: true,
       closeOnEscape: true,

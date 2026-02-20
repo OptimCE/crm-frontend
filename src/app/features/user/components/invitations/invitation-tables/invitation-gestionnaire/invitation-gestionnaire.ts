@@ -26,7 +26,7 @@ export class InvitationGestionnaire {
   filterManagerInvitation = signal<UserManagerInvitationQuery>({ page: 1, limit: 10 });
   page: number = 1;
 
-  loadGestionnaireInvitation() {
+  loadGestionnaireInvitation(): void {
     this.loadingGestionnaire.set(true);
     this.gestionnaireInvitation.set([]);
     this.invitationService
@@ -45,17 +45,17 @@ export class InvitationGestionnaire {
         },
       });
   }
-  lazyLoadGestionnaireInvitation(_$event?: TableLazyLoadEvent) {
+  lazyLoadGestionnaireInvitation(_$event?: TableLazyLoadEvent): void{
     // Set filters here
     this.loadGestionnaireInvitation();
   }
 
-  pageChangeGestionnaire($event: TablePageEvent) {
+  pageChangeGestionnaire($event: TablePageEvent): void{
     this.page = $event.first / $event.rows + 1;
     this.lazyLoadGestionnaireInvitation($event);
   }
 
-  acceptGestionnaireInvitation(invitation: UserManagerInvitationDTO) {
+  acceptGestionnaireInvitation(invitation: UserManagerInvitationDTO): void{
     this.invitationService.acceptInvitationManager({ invitation_id: invitation.id }).subscribe({
       next: (response) => {
         if (response) {
@@ -70,7 +70,7 @@ export class InvitationGestionnaire {
     });
   }
 
-  refuseGestionnaireInvitation(invitation: UserManagerInvitationDTO) {
+  refuseGestionnaireInvitation(invitation: UserManagerInvitationDTO): void{
     this.invitationService.refuseManagerInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {

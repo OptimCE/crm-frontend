@@ -23,15 +23,15 @@ export class LanguageSelector {
   private eventBus = inject(EventBusService);
 
   currentLang = this.detectInitialLang();
-  get currentLangLabel() {
+  get currentLangLabel(): string|undefined {
     return this.langs.find((l) => l.code === this.currentLang)?.label;
   }
 
-  setLang(code: string) {
+  setLang(code: string): void {
     this.languageService.changeLanguage(code);
     this.eventBus.emit('changeLanguage', code);
   }
-  detectInitialLang() {
+  detectInitialLang(): string|null {
     return this.languageService.getCurrentLanguage();
   }
 }

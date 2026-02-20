@@ -22,7 +22,7 @@ export class MemberPendingInvite {
   filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
   loadingMembers = true;
 
-  loadPendingMemberInvitation() {
+  loadPendingMemberInvitation(): void {
     this.loadingMembers = true;
     this.invitationService.getMembersPendingInviation(this.filter()).subscribe({
       next: (response) => {
@@ -39,7 +39,7 @@ export class MemberPendingInvite {
       },
     });
   }
-  lazyLoadPendingMemberInvitation($event: TableLazyLoadEvent) {
+  lazyLoadPendingMemberInvitation($event: TableLazyLoadEvent): void {
     const current: any = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
@@ -59,7 +59,7 @@ export class MemberPendingInvite {
     this.loadPendingMemberInvitation();
   }
 
-  cancelMemberInvitation(invitation: UserMemberInvitationDTO) {
+  cancelMemberInvitation(invitation: UserMemberInvitationDTO): void {
     this.invitationService.cancelMemberInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {

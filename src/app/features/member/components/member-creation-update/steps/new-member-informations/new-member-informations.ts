@@ -37,29 +37,29 @@ export class NewMemberInformations implements OnInit {
   idErrorAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setupErrorTranslation();
   }
 
-  goBack() {
+  goBack(): void{
     this.backClicked.emit();
   }
 
-  setupErrorTranslation() {
+  setupErrorTranslation(): void{
     this.translate
       .get(['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.idErrorAdded = {
           invalidNumReg: () => translation['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'],
         };
         this.errorsSummaryAdded = {
-          invalidNumReg: (_: any, _controlName: string) =>
+          invalidNumReg: (_: unknown, _controlName: string) =>
             translation['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'],
         };
       });
   }
 
-  submit() {
+  submit(): void {
     console.log(this.form)
     console.log(this.form.valid)
     if (this.form.valid) {
@@ -69,7 +69,7 @@ export class NewMemberInformations implements OnInit {
     }
   }
 
-  gestionnaireChange($event: CheckboxChangeEvent) {
+  gestionnaireChange($event: CheckboxChangeEvent): void {
     this.gestionnaireChangeEvent.emit($event);
   }
 

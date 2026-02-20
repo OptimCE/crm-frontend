@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DocumentService } from '../../../../shared/services/document.service';
+import {ApiResponse} from '../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-member-add-document',
@@ -25,7 +26,7 @@ export class MemberAddDocument implements OnInit {
   public fileToUpload: File | null = null;
   private idMember!: string;
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.config.data && this.config.data.idMember) {
       this.idMember = this.config.data.idMember;
     } else {
@@ -70,7 +71,7 @@ export class MemberAddDocument implements OnInit {
     }
   }
 
-  uploadDocument() {
+  uploadDocument(): void {
     if (this.formGroup.invalid) {
       return;
     }
@@ -85,8 +86,9 @@ export class MemberAddDocument implements OnInit {
           this.errorHandler.handleError();
         }
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ? error.data : null);
+      error: (error: unknown) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData)
       },
     });
   }

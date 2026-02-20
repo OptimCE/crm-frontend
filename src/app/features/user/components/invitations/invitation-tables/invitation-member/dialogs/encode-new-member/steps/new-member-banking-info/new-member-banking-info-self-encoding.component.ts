@@ -28,23 +28,23 @@ export class NewMemberBankingInfoSelfEncoding implements OnInit {
   @Output() formSubmitted = new EventEmitter<void>();
   ibanErrorAdded: ErrorAdded = {};
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setupErrorTranslation();
   }
 
-  setupErrorTranslation() {
-    this.translate.get(['MEMBER.ADD.BANK.ERROR.IBAN']).subscribe((translation) => {
+  setupErrorTranslation(): void {
+    this.translate.get(['MEMBER.ADD.BANK.ERROR.IBAN']).subscribe((translation: Record<string, string>) => {
       this.ibanErrorAdded = {
         invalidIban: () => translation['MEMBER.ADD.BANK.ERROR.IBAN'],
       };
     });
   }
 
-  goBack() {
+  goBack(): void {
     this.backClicked.emit();
   }
 
-  submit() {
+  submit(): void {
     if (this.ibanForm.valid) {
       this.formSubmitted.emit();
     }

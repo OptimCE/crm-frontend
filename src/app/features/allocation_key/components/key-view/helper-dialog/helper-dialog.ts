@@ -13,7 +13,7 @@ export class HelperDialog implements OnInit {
   private ref = inject(DynamicDialogRef);
   displayedText!: string;
 
-  ngOnInit() {
+  ngOnInit(): void {
     const text = this.config.data.displayText;
     if (text) {
       this.displayedText = text;

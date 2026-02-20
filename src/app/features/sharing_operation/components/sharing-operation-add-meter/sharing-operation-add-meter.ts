@@ -67,7 +67,7 @@ export class SharingOperationAddMeter implements OnInit {
   ngOnInit(): void {
     this.setupStatusCategory();
   }
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.ADD_METER.PAGE_REPORT_TEMPLATE_METER_LABEL', {
         page: this.paginationMetersInfo.page,
@@ -79,7 +79,7 @@ export class SharingOperationAddMeter implements OnInit {
       });
   }
 
-  setupStatusCategory() {
+  setupStatusCategory(): void {
     this.translate
       .get([
         'SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL',
@@ -87,7 +87,7 @@ export class SharingOperationAddMeter implements OnInit {
         'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL',
         'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.statutCategory = [
           {
             value: MeterDataStatus.ACTIVE,
@@ -115,7 +115,7 @@ export class SharingOperationAddMeter implements OnInit {
       });
   }
 
-  loadMeters(filter?: any, page?: number) {
+  loadMeters(filter?: any, page?: number): void {
     try {
       const params: any = {
         not_sharing_operation_id: this.id,
@@ -175,7 +175,7 @@ export class SharingOperationAddMeter implements OnInit {
     }
   }
 
-  lazyLoadMeters($event: any) {
+  lazyLoadMeters($event: any): void {
     let page = 0;
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
@@ -183,7 +183,7 @@ export class SharingOperationAddMeter implements OnInit {
     this.loadMeters($event.filters, page >= 1 ? page : 1);
   }
 
-  clear(table: any) {
+  clear(table: any): void{
     table.clear();
     this.addressFilter = {
       streetName: '',
@@ -192,11 +192,11 @@ export class SharingOperationAddMeter implements OnInit {
     };
   }
 
-  pageChange(_$event: any) {
+  pageChange(_$event: any): void {
     console.log('TO IMPLEMENT');
   }
 
-  onValidate() {
+  onValidate(): void {
     if (
       this.dateSelected === null ||
       this.dateSelected === undefined ||

@@ -34,7 +34,7 @@ export class InvitationDetailComponent implements OnInit {
   status!: MemberStatus;
   membersType!: MemberType;
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.config.data && this.config.data.member && this.config.data.member_type) {
       this.membersType = this.config.data.member_type;
       if (this.membersType == MemberType.INDIVIDUAL) {

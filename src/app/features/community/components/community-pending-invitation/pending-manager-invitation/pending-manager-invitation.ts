@@ -22,7 +22,7 @@ export class PendingManagerInvitation {
   filter = signal<UserManagerInvitationQuery>({ page: 1, limit: 10 });
   loadingGestionnaire = true;
 
-  loadPendingGestionnaireInvitation() {
+  loadPendingGestionnaireInvitation(): void {
     this.loadingGestionnaire = true;
     this.invitationService.getManagerPendingInvitation(this.filter()).subscribe({
       next: (response) => {
@@ -39,23 +39,23 @@ export class PendingManagerInvitation {
       },
     });
   }
-  lazyLoadPendingGestionnaireInvitation($event: TableLazyLoadEvent) {
-    const current: any = { ...this.filter() };
+  lazyLoadPendingGestionnaireInvitation($event: TableLazyLoadEvent): void {
+    const current: UserManagerInvitationQuery = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
-      delete current.sort_email;
-      switch ($event.sortField) {
-        case 'email': {
-          current.sort_email = sortDirection;
-          break;
-        }
-      }
+      // delete current.sort_email;
+      // switch ($event.sortField) {
+      //   case 'email': {
+      //     current.sort_email = sortDirection;
+      //     break;
+      //   }
+      // }
     }
     this.filter.set(current);
     this.loadPendingGestionnaireInvitation();
   }
 
-  cancelInvitation(invitation: UserManagerInvitationDTO) {
+  cancelInvitation(invitation: UserManagerInvitationDTO): void {
     this.invitationService.cancelManagerInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {

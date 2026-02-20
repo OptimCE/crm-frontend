@@ -68,7 +68,7 @@ export class SharingOperationMetersList implements OnInit{
   minDate = new Date();
   statutCategory: any[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setupStatusCategory();
     this.filter.set({
       page: 1,
@@ -77,7 +77,7 @@ export class SharingOperationMetersList implements OnInit{
     });
   }
 
-  setupStatusCategory() {
+  setupStatusCategory(): void {
     this.translate
       .get([
         'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL',
@@ -99,7 +99,7 @@ export class SharingOperationMetersList implements OnInit{
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
         'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.statutCategory = [
           {
             value: MeterDataStatus.ACTIVE,
@@ -125,7 +125,7 @@ export class SharingOperationMetersList implements OnInit{
       });
   }
 
-  private loadMetersSharingOperation(){
+  private loadMetersSharingOperation(): void{
     this.loading.set(true);
     this.sharingOperationService.getSharingOperationMetersList(this.id_sharing, this.filter()).subscribe({
       next: (response)=>{
@@ -142,7 +142,7 @@ export class SharingOperationMetersList implements OnInit{
     })
   }
 
-  protected lazyLoadMeter($event: TableLazyLoadEvent) {
+  protected lazyLoadMeter($event: TableLazyLoadEvent): void {
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
@@ -155,7 +155,7 @@ export class SharingOperationMetersList implements OnInit{
     this.loadMetersSharingOperation();
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.VIEW.METER.PAGE_REPORT_TEMPLATE_METER_LABEL', {
         page: this.pagination().page,
@@ -167,14 +167,14 @@ export class SharingOperationMetersList implements OnInit{
       });
   }
 
-  protected pageChange($event: TablePageEvent) {
+  protected pageChange($event: TablePageEvent): void {
     const current: any = { ...this.filter() };
     current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadMetersSharingOperation();
   }
 
-  clear(table: any) {
+  clear(table: any): void {
     table.clear();
     this.addressFilter = {
       streetName: '',
@@ -183,27 +183,27 @@ export class SharingOperationMetersList implements OnInit{
     };
   }
 
-  openMeterChangeStatusPopup(event: Event, meter: PartialMeterDTO, action: number) {
+  openMeterChangeStatusPopup(event: Event, meter: PartialMeterDTO, action: number): void {
     event.stopPropagation();
     if (action == 1) {
       this.textChangeStatusMeter = this.translate.instant(
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
-      );
+      ) as string;
     } else if (action == 2) {
       this.textChangeStatusMeter = this.translate.instant(
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
-      );
+      ) as string;
     } else if (action == 3) {
       this.textChangeStatusMeter = this.translate.instant(
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
-      );
+      ) as string;
     }
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       acceptIcon: 'pi pi-check',
       rejectIcon: 'pi pi-times',
-      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE'),
-      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL'),
+      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
       accept: () => {
         if (action == 1) {
           this.approveMeter(meter);
@@ -216,7 +216,7 @@ export class SharingOperationMetersList implements OnInit{
     });
   }
 
-  approveMeter(meter: PartialMeterDTO) {
+  approveMeter(meter: PartialMeterDTO): void {
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
       date: this.dateStartMeter,
       id_meter: meter.EAN,
@@ -238,7 +238,7 @@ export class SharingOperationMetersList implements OnInit{
     this.dateStartMeter = null;
   }
 
-  removeMeter(meter: PartialMeterDTO) {
+  removeMeter(meter: PartialMeterDTO): void {
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
       date: this.dateStartMeter,
       id_meter: meter.EAN,
@@ -259,7 +259,7 @@ export class SharingOperationMetersList implements OnInit{
     this.dateStartMeter = null;
   }
 
-  putMeterToWaiting(meter: PartialMeterDTO) {
+  putMeterToWaiting(meter: PartialMeterDTO): void {
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
       date: this.dateStartMeter,
       id_meter: meter.EAN,
@@ -279,8 +279,8 @@ export class SharingOperationMetersList implements OnInit{
 
     this.dateStartMeter = null;
   }
-  onRowClick(meter: any) {
-    this.routing.navigate(['/meters/' + meter.EAN]);
+  onRowClick(meter: any): void {
+    void this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
   public MeterStatus = MeterDataStatus;

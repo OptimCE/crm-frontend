@@ -88,19 +88,19 @@ export class MeterUpdate implements OnInit {
     });
     this.setupTranslationCategory();
   }
-  setupTranslationCategory() {
+  setupTranslationCategory(): void{
     this.setupReadingFrequencyCategory();
     this.setupPhaseCategory();
     this.setupTarifGroupCategory();
   }
 
-  setupReadingFrequencyCategory() {
+  setupReadingFrequencyCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
         'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
           translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
@@ -111,10 +111,10 @@ export class MeterUpdate implements OnInit {
       });
   }
 
-  setupPhaseCategory() {
+  setupPhaseCategory(): void{
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
           translation['METER.CATEGORIES.PHASE.THREE_PHASES'],
@@ -125,13 +125,13 @@ export class MeterUpdate implements OnInit {
       });
   }
 
-  setupTarifGroupCategory() {
+  setupTarifGroupCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
         'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
           translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
@@ -142,7 +142,7 @@ export class MeterUpdate implements OnInit {
       });
   }
 
-  onSubmit() {
+  onSubmit(): void{
     if (!this.metersForm.valid) {
       return;
     }

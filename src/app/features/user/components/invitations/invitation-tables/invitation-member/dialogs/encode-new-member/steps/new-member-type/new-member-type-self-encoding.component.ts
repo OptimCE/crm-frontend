@@ -16,7 +16,7 @@ export class NewMemberTypeSelfEncoding {
   @Output() typeClientChange = new EventEmitter<number>();
   @Output() formSubmitted = new EventEmitter<void>();
 
-  submit() {
+  submit(): void {
     if (this.typeClient != -1) {
       this.formSubmitted.emit();
     }

@@ -8,12 +8,13 @@ import {
   IncludeBearerTokenCondition,
 } from 'keycloak-angular';
 import { environments } from '../../../environments/environments';
+import {EnvironmentProviders} from '@angular/core';
 
 const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
   urlPattern: environments.keycloak.urlPattern,
 });
 
-export const provideKeycloakAngular = () =>
+export const provideKeycloakAngular = (): EnvironmentProviders =>
   provideKeycloak({
     config: {
       realm: environments.keycloak.realm,

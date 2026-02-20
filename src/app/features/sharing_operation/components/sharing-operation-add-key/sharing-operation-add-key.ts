@@ -39,7 +39,7 @@ export class SharingOperationAddKey implements OnInit {
     this.id = this.config.data.id;
   }
 
-  loadKeys($event?: any, changeIsLoaded: boolean = true) {
+  loadKeys($event?: any, changeIsLoaded: boolean = true): void {
     if (changeIsLoaded) {
       this.loading = true;
     }
@@ -80,11 +80,11 @@ export class SharingOperationAddKey implements OnInit {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updatePaginationTranslation();
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     console.log('THIS PAGINATED : ', this.paginated);
     this.translate
       .get('SHARING_OPERATION.ADD_KEY.PAGE_REPORT_TEMPLATE_KEYS_LABEL', {
@@ -96,16 +96,16 @@ export class SharingOperationAddKey implements OnInit {
         this.currentPageReportTemplate = translatedText;
       });
   }
-  pageChange($event: any) {
+  pageChange($event: any): void {
     this.page = $event.first / $event.rows + 1;
     this.loadKeys();
   }
 
-  clear(table: any) {
+  clear(table: any): void {
     table.clear();
   }
 
-  addKey() {
+  addKey(): void {
     this.sharingOpService
       .addKeyToSharing({ id_sharing: this.id, id_key: this.selectedKey!.id })
       .subscribe({

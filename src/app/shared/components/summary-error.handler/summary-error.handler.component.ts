@@ -72,7 +72,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
           required: (_: any, controlName: string, displayName?: string) => {
             return this.translate.instant('FORM_ERROR.REQUIRED_FIELD', {
               controlName: displayName ?? controlName,
-            });
+            }) as string;
           },
 
           minlength: (
@@ -84,13 +84,13 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
               controlName: displayName ?? controlName,
               requiredLength,
               actualLength,
-            });
+            }) as string;
           },
 
           email: (_: any, controlName: string, displayName?: string) => {
             return this.translate.instant('FORM_ERROR.INVALID_EMAIL', {
               controlName: displayName ?? controlName,
-            });
+            }) as string;
           },
         };
 
@@ -134,7 +134,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
     const fromInput = this.controlLabels[controlName];
     if (fromInput) {
       // If it looks like a i18n key, translate; otherwise treat as literal label.
-      const translated = this.translate.instant(fromInput);
+      const translated = this.translate.instant(fromInput) as string;
       if (translated !== fromInput) return translated;
       return fromInput;
     }
@@ -179,7 +179,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
   private fallbackUnknownError(displayName: string) {
     // You can i18n this if you want:
     return (
-      this.translate.instant('FORM_ERROR.UNKNOWN_ERROR', { controlName: displayName }) ||
+      this.translate.instant('FORM_ERROR.UNKNOWN_ERROR', { controlName: displayName }) as string ||
       `Erreur inconnue sur "${displayName}".`
     );
   }

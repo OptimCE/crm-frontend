@@ -10,6 +10,7 @@ import {
   PatchRoleUserDTO,
   UsersCommunityDTO,
 } from '../dtos/community.dtos';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class CommunityService {
     this.apiAddress = environments.apiUrl + '/communities';
   }
 
-  getMyCommunities(query: CommunityQueryDTO) {
+  getMyCommunities(query: CommunityQueryDTO): Observable<ApiResponsePaginated<MyCommunityDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<MyCommunityDTO[] | string>>(
       this.apiAddress + '/my-communities',
       {
@@ -33,7 +34,7 @@ export class CommunityService {
     );
   }
 
-  getUsers(query: CommunityUsersQueryDTO) {
+  getUsers(query: CommunityUsersQueryDTO): Observable<ApiResponsePaginated<UsersCommunityDTO[] |string>> {
     return this.http.get<ApiResponsePaginated<UsersCommunityDTO[] | string>>(
       this.apiAddress + '/users',
       {
@@ -43,7 +44,7 @@ export class CommunityService {
       },
     );
   }
-  getAdmins(query: CommunityUsersQueryDTO) {
+  getAdmins(query: CommunityUsersQueryDTO): Observable<ApiResponsePaginated<UsersCommunityDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UsersCommunityDTO[] | string>>(
       this.apiAddress + '/admins',
       {
@@ -54,27 +55,27 @@ export class CommunityService {
     );
   }
 
-  createCommunity(created_community: CreateCommunityDTO) {
+  createCommunity(created_community: CreateCommunityDTO): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(this.apiAddress + '/', created_community);
   }
 
-  updateCommunity(updated_community: CreateCommunityDTO) {
+  updateCommunity(updated_community: CreateCommunityDTO): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>(this.apiAddress + '/', updated_community);
   }
 
-  patchRoleUser(patched_role_user: PatchRoleUserDTO) {
+  patchRoleUser(patched_role_user: PatchRoleUserDTO): Observable<ApiResponse<string>> {
     return this.http.patch<ApiResponse<string>>(this.apiAddress + '/', patched_role_user);
   }
 
-  leave(id_community: number) {
+  leave(id_community: number): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(this.apiAddress + `/leave/${id_community}`);
   }
 
-  kick(id_user: number) {
+  kick(id_user: number): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(this.apiAddress + `/kick/${id_user}`);
   }
 
-  deleteCommunity(id_community: number) {
+  deleteCommunity(id_community: number): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(this.apiAddress + `/delete/${id_community}`);
   }
 }

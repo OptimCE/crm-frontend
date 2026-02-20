@@ -65,7 +65,7 @@ export class MembersList implements OnInit, OnDestroy {
     this.updatePaginationTranslation();
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void{
     this.translate
       .get('MEMBER.LIST.PAGE_REPORT_TEMPLATE_MEMBER_LABEL', {
         page: this.paginationInfo.page,
@@ -76,7 +76,7 @@ export class MembersList implements OnInit, OnDestroy {
         this.currentPageReportTemplate = translatedText;
       });
   }
-  loadMembers() {
+  loadMembers(): void{
     this.membersService.getMembersList(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -95,12 +95,12 @@ export class MembersList implements OnInit, OnDestroy {
       },
     });
   }
-  onInviteMember() {
+  onInviteMember(): void{
     this.ref = this.dialogService.open(MemberInvite, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.LIST.INVITE_MEMBER_HEADER'),
+      header: this.translate.instant('MEMBER.LIST.INVITE_MEMBER_HEADER') as string,
     });
     if (this.ref) {
       this.ref.onClose.subscribe((email) => {
@@ -121,12 +121,12 @@ export class MembersList implements OnInit, OnDestroy {
       });
     }
   }
-  onAddMember(event: Event) {
+  onAddMember(event: Event): void{
     this.ref = this.dialogService.open(MemberCreationUpdate, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.LIST.ADD_MEMBER_HEADER'),
+      header: this.translate.instant('MEMBER.LIST.ADD_MEMBER_HEADER') as string,
     });
     if (this.ref) {
       this.ref.onClose.subscribe((result) => {
@@ -134,13 +134,13 @@ export class MembersList implements OnInit, OnDestroy {
           // Show "Do you want to add meter associated"
           this.confirmationService.confirm({
             target: event.target as EventTarget,
-            message: this.translate.instant('MEMBER.LIST.ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL'),
-            header: this.translate.instant('MEMBER.LIST.CONFIRMATION_HEADER'),
+            message: this.translate.instant('MEMBER.LIST.ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL') as string,
+            header: this.translate.instant('MEMBER.LIST.CONFIRMATION_HEADER') as string,
             icon: 'pi pi-exclamation-triangle',
             acceptIcon: 'none',
             rejectIcon: 'none',
-            acceptLabel: this.translate.instant('COMMON.ACTIONS.YES'),
-            rejectLabel: this.translate.instant('COMMON.ACTIONS.NO'),
+            acceptLabel: this.translate.instant('COMMON.ACTIONS.YES') as string,
+            rejectLabel: this.translate.instant('COMMON.ACTIONS.NO') as string,
             rejectButtonStyleClass: 'p-button-text',
             accept: () => {
               this.addMeter(result);
@@ -154,12 +154,12 @@ export class MembersList implements OnInit, OnDestroy {
     }
   }
 
-  addMeter(member_id: number) {
+  addMeter(member_id: number): void{
     this.ref = this.dialogService.open(MeterCreation, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.LIST.ADD_METER_HEADER'),
+      header: this.translate.instant('MEMBER.LIST.ADD_METER_HEADER') as string,
       data: {
         holder_id: member_id,
       },
@@ -168,7 +168,7 @@ export class MembersList implements OnInit, OnDestroy {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbarNotification.openSnackBar(
-            this.translate.instant('MEMBER.LIST.METER_MEMBER_ADDED_SUCCESSFULLY_LABEL'),
+            this.translate.instant('MEMBER.LIST.METER_MEMBER_ADDED_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMembers();
@@ -177,15 +177,15 @@ export class MembersList implements OnInit, OnDestroy {
     }
   }
 
-  addMemberSuccess() {
+  addMemberSuccess(): void{
     this.snackbarNotification.openSnackBar(
-      this.translate.instant('MEMBER.LIST.MEMBER_ADDED_SUCCESSFULLY_LABEL'),
+      this.translate.instant('MEMBER.LIST.MEMBER_ADDED_SUCCESSFULLY_LABEL') as string,
       VALIDATION_TYPE,
     );
     this.loadMembers();
   }
 
-  lazyLoadMembers($event: any) {
+  lazyLoadMembers($event: any): void{
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
@@ -228,27 +228,27 @@ export class MembersList implements OnInit, OnDestroy {
     this.loadMembers();
   }
 
-  pageChange($event: any) {
+  pageChange($event: any): void{
     const current: any = { ...this.filter() };
     current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadMembers();
   }
 
-  clear(table: any) {
+  clear(table: any): void{
     table.clear();
   }
 
-  onRowClick(member: any) {
-    this.router.navigate(['/members/', member.id]);
+  onRowClick(member: any): void{
+    void this.router.navigate(['/members/', member.id]);
   }
 
-  seePendingInvite() {
+  seePendingInvite(): void{
     this.ref = this.dialogService.open(MemberPendingInvite, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.LIST.PENDING_INVITATION_HEADER'),
+      header: this.translate.instant('MEMBER.LIST.PENDING_INVITATION_HEADER') as string,
     });
   }
 

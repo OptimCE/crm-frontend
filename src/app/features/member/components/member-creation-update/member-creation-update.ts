@@ -21,6 +21,7 @@ import { NewMemberType } from './steps/new-member-type/new-member-type';
 import { NewMemberInformations } from './steps/new-member-informations/new-member-informations';
 import { NewMemberAddress } from './steps/new-member-address/new-member-address';
 import { NewMemberBankingInfo } from './steps/new-member-banking-info/new-member-banking-info';
+import {ApiResponse} from '../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-member-creation-update',
@@ -95,11 +96,11 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.cdr.markForCheck(); // Force change detection once content is rendered
   }
 
-  buildFormGroup() {
+  buildFormGroup(): void {
     this.formData = new FormGroup({
       id: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
@@ -137,7 +138,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     this.updateGestionnaire(this.typeClient == 2);
   }
 
-  submitForm1(nextCallback: any) {
+  submitForm1(nextCallback: any): void {
     if (this.typeClient != -1) {
       this.buildFormGroup();
       this.step.set(1);
@@ -145,7 +146,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     }
   }
 
-  submitForm2(nextCallback: any) {
+  submitForm2(nextCallback: any): void {
     console.log(this.formData.valid)
     if (this.formData.valid) {
       this.step.set(2);
@@ -153,14 +154,14 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     }
   }
 
-  submitForm3(nextCallback: any) {
+  submitForm3(nextCallback: any): void {
     if (this.addressForm.valid) {
       this.step.set(3);
       nextCallback.emit();
     }
   }
 
-  onSubmitEnd() {
+  onSubmitEnd(): void {
     if (this.ibanForm.invalid) {
       return;
     }
@@ -262,8 +263,9 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData)
         },
       });
     } else {
@@ -275,14 +277,15 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData)
         },
       });
     }
   }
 
-  updateGestionnaire(value: boolean) {
+  updateGestionnaire(value: boolean): void {
     this.gestionnaire = value;
     if (this.gestionnaire) {
       this.formData.addControl(
@@ -319,12 +322,12 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     }
   }
 
-  gestionnaireChange($event: CheckboxChangeEvent) {
+  gestionnaireChange($event: CheckboxChangeEvent): void {
     const value = $event.checked.length > 0;
     this.updateGestionnaire(value);
   }
 
-  toggleSameAddress(event: CheckboxChangeEvent) {
+  toggleSameAddress(event: CheckboxChangeEvent): void {
     console.log('THIS EVENT : ', event);
     console.log(this.addressForm.value.same_address);
     if (this.addressForm.value.same_address[0]) {

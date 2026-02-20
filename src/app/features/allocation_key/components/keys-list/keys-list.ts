@@ -6,7 +6,7 @@ import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/
 import { KeyService } from '../../../../shared/services/key.service';
 import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { Pagination } from '../../../../core/dtos/api.response';
+import {ApiResponse, Pagination} from '../../../../core/dtos/api.response';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Button } from 'primeng/button';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -34,17 +34,17 @@ export class KeysList implements OnInit {
   optionsSplitButton: MenuItem[] = [
     {
       label: '',
-      command: () => {
+      command: (): void => {
         this.addStepByStepKey();
       },
     },
   ];
   lazy = true;
-  ngOnInit() {
+  ngOnInit(): void {
     this.updatePaginationTranslation();
     this.initializeTranslations();
   }
-  loadKeys() {
+  loadKeys(): void {
     this.loading.set(true);
     this.keyService.getKeysList(this.filter()).subscribe({
       next: (response) => {
@@ -57,14 +57,15 @@ export class KeysList implements OnInit {
         }
         this.loading.set(false);
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ? error.data : null);
+      error: (error: unknown) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData)
         this.loading.set(false);
       },
     });
   }
 
-  lazyLoadKeys($event: TableLazyLoadEvent) {
+  lazyLoadKeys($event: TableLazyLoadEvent): void {
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
@@ -105,7 +106,7 @@ export class KeysList implements OnInit {
     this.loadKeys();
   }
 
-  initializeTranslations() {
+  initializeTranslations(): void {
     this.translate
       .get('KEY.LIST.ADD_STANDARD_KEY_BUTTON_LABEL')
       .subscribe((translatedText: string) => {
@@ -113,7 +114,7 @@ export class KeysList implements OnInit {
       });
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('KEY.LIST.PAGINATED_TEMPLATE_LIST', {
         page: this.paginated.page,
@@ -125,23 +126,23 @@ export class KeysList implements OnInit {
       });
   }
 
-  pageChange($event: TablePageEvent) {
+  pageChange($event: TablePageEvent): void {
     const current: any = { ...this.filter() };
     current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadKeys();
   }
 
-  clear(table: Table) {
+  clear(table: Table): void {
     table.clear();
     this.filter.set({ page: 1, limit: 10 });
   }
 
-  addKey() {
-    this.router.navigateByUrl('/keys/add');
+  addKey(): void {
+    void this.router.navigateByUrl('/keys/add');
   }
 
-  addStepByStepKey() {
-    this.router.navigateByUrl('/keys/add/step');
+  addStepByStepKey(): void {
+    void this.router.navigateByUrl('/keys/add/step');
   }
 }

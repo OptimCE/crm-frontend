@@ -53,7 +53,7 @@ export class SharingOperationsList implements OnInit {
     this.updatePaginationTranslation();
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.LIST.PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL', {
         page: this.paginationInfo.page,
@@ -65,12 +65,12 @@ export class SharingOperationsList implements OnInit {
       });
   }
 
-  onAddSharingOperation() {
+  onAddSharingOperation(): void {
     this.ref = this.dialogService.open(SharingOperationCreationUpdate, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('SHARING_OPERATION.LIST.ADD_SHARING_OP_HEADER'),
+      header: this.translate.instant('SHARING_OPERATION.LIST.ADD_SHARING_OP_HEADER') as string,
       baseZIndex: 1500,
     });
     if (this.ref) {
@@ -79,7 +79,7 @@ export class SharingOperationsList implements OnInit {
           this.snackbarNotification.openSnackBar(
             this.translate.instant(
               'SHARING_OPERATION.LIST.SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL',
-            ),
+            ) as string,
             VALIDATION_TYPE,
           );
           this.loadSharingOperation();
@@ -88,7 +88,7 @@ export class SharingOperationsList implements OnInit {
     }
   }
 
-  loadSharingOperation() {
+  loadSharingOperation(): void {
     this.sharingOperationsService.getSharingOperationList(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -104,7 +104,7 @@ export class SharingOperationsList implements OnInit {
     });
   }
 
-  lazyLoadSharingOperation($event: any) {
+  lazyLoadSharingOperation($event: any): void {
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
@@ -143,18 +143,18 @@ export class SharingOperationsList implements OnInit {
     this.loadSharingOperation();
   }
 
-  pageChange($event: any) {
+  pageChange($event: any): void {
     const current: any = { ...this.filter() };
     current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadSharingOperation();
   }
 
-  clear(dt: any) {
+  clear(dt: any): void {
     dt.clear();
   }
 
-  onRowClick(sharingOp: any) {
-    this.routing.navigate(['/sharing_operations/', sharingOp.id]);
+  onRowClick(sharingOp: any): void {
+    void this.routing.navigate(['/sharing_operations/', sharingOp.id]);
   }
 }

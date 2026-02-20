@@ -76,7 +76,7 @@ export class MemberView implements OnInit {
     this.isLoading.set(true);
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     if (id === '') {
-      this.routing.navigate(['//members/member/']);
+      void this.routing.navigate(['//members/member/']);
       return;
     }
     this.id = +id;
@@ -85,7 +85,7 @@ export class MemberView implements OnInit {
     }
   }
 
-  loadMember() {
+  loadMember(): void {
     this.memberService.getMember(this.id).subscribe((response) => {
       if (response) {
         if ((response.data as IndividualDTO | CompanyDTO).member_type === 1) {
@@ -109,7 +109,7 @@ export class MemberView implements OnInit {
     });
   }
 
-  loadInvitationStatusIndividual(id: number, email: string) {
+  loadInvitationStatusIndividual(id: number, email: string): void {
     this.individualInvitationStatus = InvitationStatus.LOADING;
     this.memberService.getMemberLink(id, { email: email }).subscribe(
       (response) => {
@@ -134,7 +134,7 @@ export class MemberView implements OnInit {
     );
   }
 
-  loadInvitationStatusManager(id: number, email: string) {
+  loadInvitationStatusManager(id: number, email: string): void {
     this.managerInvitationStatus = InvitationStatus.LOADING;
     this.memberService.getMemberLink(id, { email }).subscribe(
       (response) => {
@@ -159,12 +159,12 @@ export class MemberView implements OnInit {
     );
   }
 
-  toModify() {
+  toModify(): void {
     this.ref = this.dialogService.open(MemberCreationUpdate, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.VIEW.UPDATE_A_MEMBER_HEADER'),
+      header: this.translate.instant('MEMBER.VIEW.UPDATE_A_MEMBER_HEADER') as string,
       data: {
         member: this.individual || this.legalEntity,
       },
@@ -173,7 +173,7 @@ export class MemberView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('MEMBER.VIEW.MEMBER_UPDATE_SUCCESSFULLY_LABEL'),
+            this.translate.instant('MEMBER.VIEW.MEMBER_UPDATE_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMember();
@@ -182,7 +182,7 @@ export class MemberView implements OnInit {
     }
   }
 
-  setStatus(status: number) {
+  setStatus(status: number): void {
     if (this.status === 1) {
       let found = false;
       if (this.metersPartialList && this.metersPartialList.length > 0) {
@@ -204,7 +204,7 @@ export class MemberView implements OnInit {
       .subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL'),
+            this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMember();
@@ -212,7 +212,7 @@ export class MemberView implements OnInit {
       });
   }
 
-  invite(manager = false) {
+  invite(manager = false): void {
     let email;
     if (manager) {
       email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
@@ -233,7 +233,7 @@ export class MemberView implements OnInit {
       });
   }
 
-  cancel(memberLink: MemberLinkDTO, manager = false) {
+  cancel(memberLink: MemberLinkDTO, manager = false): void {
     let email;
     if (manager) {
       email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
@@ -253,7 +253,7 @@ export class MemberView implements OnInit {
       });
     }
   }
-  delete(memberLink: MemberLinkDTO, manager = false) {
+  delete(memberLink: MemberLinkDTO, manager = false): void {
     let email;
     if (manager) {
       email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;

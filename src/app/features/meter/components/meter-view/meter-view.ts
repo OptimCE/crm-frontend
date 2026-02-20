@@ -97,7 +97,7 @@ export class MeterView implements OnInit {
         mode: 'index',
         intersect: false,
         callbacks: {
-          label: function (tooltipItem: any) {
+          label: function (tooltipItem: any): string {
             const label = tooltipItem.dataset.label || '';
             const value = tooltipItem.raw;
             return `${label}: ${value} kWh`;
@@ -110,10 +110,10 @@ export class MeterView implements OnInit {
         stacked: true,
         title: {
           display: true,
-          text: this.translate.instant('METER.FULL.CHART.X_TITLE_DATE'),
+          text: this.translate.instant('METER.FULL.CHART.X_TITLE_DATE') as string,
         },
         ticks: {
-          _callback: (_value: any, index: number) => {
+          _callback: (_value: any, index: number): string => {
             // Make sure 'this' refers to the component context
             const label = this.data?.labels?.[index];
             if (!label) return '';
@@ -136,7 +136,7 @@ export class MeterView implements OnInit {
         stacked: true,
         title: {
           display: true,
-          text: this.translate.instant('METER.FULL.CHART.Y_TITLE_CONSUMPTION'),
+          text: this.translate.instant('METER.FULL.CHART.Y_TITLE_CONSUMPTION') as string,
         },
       },
     },
@@ -153,7 +153,7 @@ export class MeterView implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id === null) {
       console.error('No id provided');
-      this.router.navigate(['/members/meter']);
+      void this.router.navigate(['/members/meter']);
       return;
     }
     this.id = id;
@@ -167,7 +167,7 @@ export class MeterView implements OnInit {
     });
     this.setupTranslationCategory();
   }
-  getFullMeter(changeIsLoaded = true) {
+  getFullMeter(changeIsLoaded = true): void {
     if (changeIsLoaded) {
       this.isLoaded = false;
     }
@@ -188,7 +188,7 @@ export class MeterView implements OnInit {
     });
   }
 
-  setupTranslationCategory() {
+  setupTranslationCategory(): void {
     this.setupProductionChainCategory();
     this.setupRateCategory();
     this.setupClientCategory();
@@ -198,7 +198,7 @@ export class MeterView implements OnInit {
     this.setupTarifGroupCategory();
   }
 
-  setupProductionChainCategory() {
+  setupProductionChainCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC',
@@ -210,7 +210,7 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.PRODUCTION_CHAIN.OTHER',
         'METER.CATEGORIES.PRODUCTION_CHAIN.NONE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.productionChainMap = [
           '',
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'],
@@ -225,14 +225,14 @@ export class MeterView implements OnInit {
       });
   }
 
-  setupRateCategory() {
+  setupRateCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.RATE.SIMPLE',
         'METER.CATEGORIES.RATE.BI_HOURLY',
         'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.rateMap = [
           '',
           translation['METER.CATEGORIES.RATE.SIMPLE'],
@@ -242,14 +242,14 @@ export class MeterView implements OnInit {
       });
   }
 
-  setupClientCategory() {
+  setupClientCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.CLIENT.RESIDENTIAL',
         'METER.CATEGORIES.CLIENT.PROFESSIONAL',
         'METER.CATEGORIES.CLIENT.INDUSTRIAL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.clientTypeMap = [
           '',
           translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
@@ -259,7 +259,7 @@ export class MeterView implements OnInit {
       });
   }
 
-  setupInjectionStatusCategory() {
+  setupInjectionStatusCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.INJECTION_STATUS.NONE',
@@ -268,7 +268,7 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION',
         'METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.injectionStatusMap = [
           '',
           translation['METER.CATEGORIES.INJECTION_STATUS.AUTOPRODUCER_OWNER'],
@@ -280,13 +280,13 @@ export class MeterView implements OnInit {
       });
   }
 
-  setupReadingFrequencyCategory() {
+  setupReadingFrequencyCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
         'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.readingFrequencyMap = [
           '',
           translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
@@ -295,10 +295,10 @@ export class MeterView implements OnInit {
       });
   }
 
-  setupPhaseCategory() {
+  setupPhaseCategory(): void {
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.phasesNumberMap = [
           '',
           translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
@@ -307,13 +307,13 @@ export class MeterView implements OnInit {
       });
   }
 
-  setupTarifGroupCategory() {
+  setupTarifGroupCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
         'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.tarifGroupMap = [
           '',
           translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
@@ -322,12 +322,12 @@ export class MeterView implements OnInit {
       });
   }
 
-  toModify() {
+  toModify(): void {
     this.ref = this.dialogService.open(MeterUpdate, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('METER.FULL.METER_MODIFICATION_HEADER'),
+      header: this.translate.instant('METER.FULL.METER_MODIFICATION_HEADER') as string,
       data: {
         meter: this.meter,
       },
@@ -336,7 +336,7 @@ export class MeterView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('METER.FULL.METER_MODIFIED_SUCCESS_LABEL'),
+            this.translate.instant('METER.FULL.METER_MODIFIED_SUCCESS_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.getFullMeter(false);
@@ -344,13 +344,13 @@ export class MeterView implements OnInit {
       });
     }
   }
-  toUpdate($event: Event) {
+  toUpdate($event: Event): void {
     $event.stopPropagation();
     this.ref = this.dialogService.open(MeterDataUpdate, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('METER.FULL.METER_DATA_UPDATE_HEADER'),
+      header: this.translate.instant('METER.FULL.METER_DATA_UPDATE_HEADER') as string,
       width: '1000px',
       data: {
         id: this.meter.EAN,
@@ -361,7 +361,7 @@ export class MeterView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('METER.FULL.METER_DATA_UPDATE_SUCCESS_LABEL'),
+            this.translate.instant('METER.FULL.METER_DATA_UPDATE_SUCCESS_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.getFullMeter(false);
@@ -370,12 +370,12 @@ export class MeterView implements OnInit {
     }
   }
 
-  toDeactivate() {
+  toDeactivate(): void{
     this.ref = this.dialogService.open(MeterDeactivation, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('METER.FULL.METER_DEACTIVATE_HEADER'),
+      header: this.translate.instant('METER.FULL.METER_DEACTIVATE_HEADER') as string,
       data: {
         ean: this.meter.EAN,
       },
@@ -384,7 +384,7 @@ export class MeterView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('METER.FULL.METER_DEACTIVATED_SUCCESS_LABEL'),
+            this.translate.instant('METER.FULL.METER_DEACTIVATED_SUCCESS_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.getFullMeter(false);
@@ -393,7 +393,7 @@ export class MeterView implements OnInit {
     }
   }
 
-  downloadTotalConsumption() {
+  downloadTotalConsumption(): void {
     this.metersService
       .downloadMeterConsumptions(this.meter.EAN, {
         date_start: this.formChart.value.dateDeb,
@@ -414,7 +414,7 @@ export class MeterView implements OnInit {
       });
   }
 
-  loadChart() {
+  loadChart(): void {
     this.displayDownloadButton = false;
     if (this.formChart.invalid) {
       return;
@@ -433,25 +433,25 @@ export class MeterView implements OnInit {
             datasets: [
               {
                 type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_SHARED_LABEL'),
+                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_SHARED_LABEL') as string,
                 stack: 'consumption',
                 data: tmpData.shared,
               },
               {
                 type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_NET_LABEL'),
+                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_NET_LABEL') as string,
                 stack: 'consumption',
                 data: tmpData.net,
               },
               {
                 type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.INJECTION_NET_LABEL'),
+                label: this.translate.instant('METER.FULL.CHART.INJECTION_NET_LABEL') as string,
                 stack: 'inj',
                 data: tmpData.inj_net,
               },
               {
                 type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.INJECTION_SHARED_LABEL'),
+                label: this.translate.instant('METER.FULL.CHART.INJECTION_SHARED_LABEL') as string,
                 stack: 'inj',
                 data: tmpData.inj_shared,
               },

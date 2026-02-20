@@ -35,7 +35,7 @@ export class InvitationMember implements OnDestroy {
   ref: DynamicDialogRef | null = null;
   filterMemberInvitation = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
 
-  loadMemberInvitation() {
+  loadMemberInvitation(): void {
     this.loading.set(true);
     this.invitations.set([]);
     this.invitationService.getOwnMembersPendingInviation(this.filterMemberInvitation()).subscribe({
@@ -53,17 +53,17 @@ export class InvitationMember implements OnDestroy {
     });
   }
 
-  lazyLoadMemberInvitation(_$event?: TableLazyLoadEvent) {
+  lazyLoadMemberInvitation(_$event?: TableLazyLoadEvent): void {
     // Filter here
     this.loadMemberInvitation();
   }
 
-  pageChangeInvitation($event: TablePageEvent) {
+  pageChangeInvitation($event: TablePageEvent): void {
     this.pageInvitation = $event.first / $event.rows + 1;
     this.loadMemberInvitation();
   }
 
-  acceptInvitation(invitation: UserMemberInvitationDTO) {
+  acceptInvitation(invitation: UserMemberInvitationDTO): void {
     this.invitationService.acceptInvitationMember({ invitation_id: invitation.id }).subscribe({
       next: (response) => {
         if (response) {
@@ -78,7 +78,7 @@ export class InvitationMember implements OnDestroy {
     });
   }
 
-  refuseInvitation(invitation: UserMemberInvitationDTO) {
+  refuseInvitation(invitation: UserMemberInvitationDTO): void {
     this.invitationService.refuseMemberInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {
@@ -93,13 +93,13 @@ export class InvitationMember implements OnDestroy {
     });
   }
 
-  fetchDetail(invitation: UserMemberInvitationDTO) {
+  fetchDetail(invitation: UserMemberInvitationDTO): void {
     this.invitationService
       .getOwnMemberPendingInvitationById(invitation.id)
       .subscribe((response) => {
         if (response) {
           this.ref = this.dialogService.open(InvitationDetailComponent, {
-            header: this.translate.instant('INVITATION.SEE_DETAIL.TITLE'),
+            header: this.translate.instant('INVITATION.SEE_DETAIL.TITLE') as string,
             modal: true,
             closable: true,
             closeOnEscape: true,
@@ -112,9 +112,9 @@ export class InvitationMember implements OnDestroy {
       });
   }
 
-  encodeNewMember(invitation: UserMemberInvitationDTO) {
+  encodeNewMember(invitation: UserMemberInvitationDTO): void {
     this.ref = this.dialogService.open(EncodeNewMemberComponent, {
-      header: this.translate.instant('INVITATION.ENCODE_NEW_MEMBER_TITLE'),
+      header: this.translate.instant('INVITATION.ENCODE_NEW_MEMBER_TITLE') as string,
       modal: true,
       closable: true,
       closeOnEscape: true,

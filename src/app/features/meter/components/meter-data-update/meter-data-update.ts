@@ -187,28 +187,28 @@ export class MeterDataUpdate implements OnInit {
       });
     }
   }
-  setupErrorTranslation() {
+  setupErrorTranslation(): void{
     this.translate
       .get(['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.errorMemberAdded = {
           invalidMember: () => translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
         };
         this.errorsSummaryAdded = {
-          invalidMember: (_: any, _controlName: string) =>
+          invalidMember: (_: unknown, _controlName: string) =>
             translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
         };
       });
   }
 
-  setupTranslationCategory() {
+  setupTranslationCategory(): void{
     this.setupProductionChainCategory();
     this.setupRateCategory();
     this.setupClientCategory();
     this.setupInjectionStatusCategory();
   }
 
-  setupProductionChainCategory() {
+  setupProductionChainCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC',
@@ -220,7 +220,7 @@ export class MeterDataUpdate implements OnInit {
         'METER.CATEGORIES.PRODUCTION_CHAIN.OTHER',
         'METER.CATEGORIES.PRODUCTION_CHAIN.NONE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'],
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.WIND'],
@@ -237,14 +237,14 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupRateCategory() {
+  setupRateCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.RATE.SIMPLE',
         'METER.CATEGORIES.RATE.BI_HOURLY',
         'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.RATE.SIMPLE'],
           translation['METER.CATEGORIES.RATE.BI_HOURLY'],
@@ -256,14 +256,14 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupClientCategory() {
+  setupClientCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.CLIENT.RESIDENTIAL',
         'METER.CATEGORIES.CLIENT.PROFESSIONAL',
         'METER.CATEGORIES.CLIENT.INDUSTRIAL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
           translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
@@ -276,7 +276,7 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupInjectionStatusCategory() {
+  setupInjectionStatusCategory(): void{
     this.translate
       .get([
         'METER.CATEGORIES.INJECTION_STATUS.NONE',
@@ -285,7 +285,7 @@ export class MeterDataUpdate implements OnInit {
         'METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION',
         'METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.INJECTION_STATUS.AUTOPRODUCER_OWNER'],
           translation['METER.CATEGORIES.INJECTION_STATUS.SELF_PRODUCTION_RIGHT_OF_USER'],
@@ -318,7 +318,7 @@ export class MeterDataUpdate implements OnInit {
     };
   }
 
-  onSubmit() {
+  onSubmit(): void{
     if (!this.metersForm.valid) {
       console.error('Form not valid');
       console.log('Form validation errors:', this.metersForm.errors);

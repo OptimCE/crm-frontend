@@ -23,7 +23,7 @@ export class UserUpdateDialog implements OnInit {
   formData!: FormGroup;
   user!: UpdateUserDTO;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initializeForm();
     if (this.config.data && this.config.data.user) {
       this.user = this.config.data.user as UpdateUserDTO;
@@ -31,7 +31,7 @@ export class UserUpdateDialog implements OnInit {
     }
   }
 
-  initializeForm() {
+  initializeForm(): void {
     this.formData = new FormGroup({
       id: new FormControl('', []),
       name: new FormControl('', []),
@@ -52,7 +52,7 @@ export class UserUpdateDialog implements OnInit {
     });
   }
 
-  patchValue() {
+  patchValue(): void {
     if (this.user) {
       this.formData.patchValue({
         id: this.user.nrn,
@@ -82,7 +82,7 @@ export class UserUpdateDialog implements OnInit {
     }
   }
 
-  toggleSameAddress(_event: CheckboxChangeEvent) {
+  toggleSameAddress(_event: CheckboxChangeEvent): void {
     if (this.formData.value.same_address[0]) {
       // Remove billing address from form
       this.formData.removeControl('billing_address_street');
@@ -99,7 +99,7 @@ export class UserUpdateDialog implements OnInit {
     }
   }
 
-  submitForm() {
+  submitForm(): void {
     if (this.formData.invalid) {
       return;
     }

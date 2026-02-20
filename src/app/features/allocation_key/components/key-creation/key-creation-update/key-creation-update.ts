@@ -26,7 +26,14 @@ import { FormErrorSummaryComponent } from '../../../../../shared/components/summ
 import { SnackbarNotification } from '../../../../../shared/services-ui/snackbar.notifcation.service';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
 import { VALIDATION_TYPE } from '../../../../../core/dtos/notification';
-
+import { GridApi, GridReadyEvent } from 'ag-grid-community';
+import {KeyTableRow} from '../../../../../shared/types/key.types';
+import {ApiResponse} from '../../../../../core/dtos/api.response';
+import {ErrorHandlerParams, ErrorSummaryAdded} from '../../../../../shared/types/error.types';
+interface KeyForm{
+  name: string;
+  description: string;
+}
 @Component({
   selector: 'app-key-creation-update',
   standalone: true,
@@ -61,22 +68,24 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   keyInput?: KeyDTO | null;
   isLoaded: boolean;
   isSubmitted: boolean = false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rowData: any[] = [];
   public themeClass: string = 'ag-theme-quartz';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public defaultColDef: any = {
     width: 250,
     editable: true,
   };
   frameworkComponents: any;
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   colDefs: any = [];
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     key_data: new FormControl('', [this.keyValidator.bind(this)]),
   });
-  errorsAdded: Record<string, () => string> = {};
-  errorsSummaryAdded: Record<string, (params: any, controlName: string) => string> = {};
+  errorsAdded: ErrorHandlerParams = {};
+  errorsSummaryAdded: ErrorSummaryAdded = {};
   ref?: DynamicDialogRef | null;
   gridOptions = {
     suppressCellFocus: false, // just to reduce masking
@@ -90,17 +99,12 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       headerHelperRenderer: HeaderWithHelper,
     };
   }
-  refreshGrid() {
-    try {
-      this.formGroup.updateValueAndValidity();
-      this.gridApi.refreshCells({ force: true });
-    } catch (error) {
-    }
+  refreshGrid(): void {
+    this.formGroup.updateValueAndValidity();
+    this.gridApi.refreshCells({ force: true });
   }
 
-  initializeWithData(key: KeyDTO) {
-    console.log(`Initialize with data : ${key}`)
-    console.log(key)
+  initializeWithData(key: KeyDTO): void {
     this.key = key;
     this.formGroup.get('name')?.setValue(key.name);
     this.formGroup.get('description')?.setValue(key.description);
@@ -122,34 +126,50 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe((params) => {
-      const id = params['id'];
+      const id = +params['id'];
 
       if (id) {
         // 1. If ID exists in URL, fetch from API
-        this.keyService.getKey(parseInt(id)).subscribe({
+        this.keyService.getKey(id).subscribe({
           next: (response) => {
             if (response) {
-              const key = response.data;
-              this.keyInput = JSON.parse(JSON.stringify(key));
-              this.initializeWithData(key as KeyDTO);
+              const key = response.data as KeyDTO;
+              this.keyInput = structuredClone(key);
+              this.initializeWithData(key);
             } else {
               this.errorHandler.handleError();
             }
           },
           error: (error) => {
-            this.errorHandler.handleError(error.data ? error.data : null);
+            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+            this.errorHandler.handleError(errorData);
           },
         });
       } else {
         // 2. If no ID, check if we received data via Router State (history.state)
         // We check this HERE so it doesn't conflict with the empty default below
-        const transferredKey = history.state['keyData'];
-
+        const state = history.state as { keyData?: KeyDTO; consumers?: string[] };
+        const transferredKey = state.keyData;
+        const transferredConsumers = state.consumers;
         if (transferredKey) {
-          console.log("Found key in history.state:", transferredKey);
-          this.initializeWithData(JSON.parse(JSON.stringify(transferredKey)));
+          this.initializeWithData(structuredClone(transferredKey));
           this.keyInput = transferredKey;
-        } else {
+        }
+        else if (transferredConsumers && transferredConsumers.length > 0) {
+          const [first, ...rest] = transferredConsumers;
+          this.newIteration();
+          this.key.iterations[0].consumers[0].name = first;
+          for (const ean of rest) {
+            this.key.iterations[0].consumers.push({
+              id: -1,
+              name: ean,
+              energy_allocated_percentage: 0,
+            });
+          }
+          this.rowData = this.formatData();
+          this.refreshGrid();
+        }
+        else {
           // 3. Fallback: Initialize as completely new empty key
           this.key = {
             id: -1,
@@ -168,7 +188,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     };
   }
 
-  loadColumnDefinitions() {
+  loadColumnDefinitions(): void {
     this.translate
       .get([
         'KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL',
@@ -184,7 +204,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         'VAP_HEADER',
       ])
       .subscribe({
-        next: (translations) => {
+        next: (translations: Record<string, string>) => {
           this.colDefs = [
             {
               headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
@@ -271,7 +291,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       });
   }
 
-  loadErrorMessages() {
+  loadErrorMessages(): void {
     this.translate
       .get([
         'KEY.CREATE.ERROR.NO_ITERATION',
@@ -282,7 +302,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         'KEY.CREATE.ERROR.NO_CHANGE',
       ])
       .subscribe({
-        next: (translations) => {
+        next: (translations: Record<string, string>) => {
           this.errorsAdded = {
             NoIteration: () => translations['KEY.CREATE.ERROR.NO_ITERATION'],
             NoConsumers: () => translations['KEY.CREATE.ERROR.NO_CONSUMERS'],
@@ -293,17 +313,17 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
           };
 
           this.errorsSummaryAdded = {
-            NoIteration: (_: any, _controlName: string) =>
+            NoIteration: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.NO_ITERATION'],
-            NoConsumers: (_: any, _controlName: string) =>
+            NoConsumers: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.NO_CONSUMERS'],
-            SumIterations: (_: any, _controlName: string) =>
+            SumIterations: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.SUM_ITERATIONS_ERROR'],
-            SumConsumers: (_: any, _controlName: string) =>
+            SumConsumers: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.SUM_CONSUMERS'],
-            ConsumerName: (_: any, _controlName: string) =>
+            ConsumerName: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.CONSUMER_NAME_REQUIRED'],
-            NoChange: (_: any, _controlName: string) =>
+            NoChange: (_: unknown, _controlName: string) =>
               translations['CREATE_ALLOCATION_KEY_NO_CHANGE'],
           };
         },
@@ -316,7 +336,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   private keyValidator(control: AbstractControl): ValidationErrors | null {
     try {
       const invalid = false;
-      const errors: any = {};
+      const errors: ValidationErrors = {};
       if (this.key !== undefined) {
         if (this.key.iterations.length === 0) {
           errors['NoIteration'] = true;
@@ -344,6 +364,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                 errors['ConsumerName'] = true;
                 return errors;
               }
+              return;
             });
             if (sum >= 0.999 && sum <= 1.001) {
               sum = 1;
@@ -361,12 +382,13 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                 return errors;
               }
             }
+            return;
           });
         }
       }
       if (this.keyInput !== null && this.keyInput !== undefined) {
-        const name: string | null = control.get('name')?.value;
-        const description: string | null = control.get('description')?.value;
+        const name = control.get('name')?.value as string | undefined;
+        const description = control.get('description')?.value as string | undefined;
         let count = 0;
         if (this.keyInput.name === name) {
           count++;
@@ -420,12 +442,12 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         }
       }
       return errors;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }
 
-  openHelper(displayText: string) {
+  openHelper(displayText: string): void {
     this.ref = this.dialogService.open(HelperDialog, {
       modal: true,
       closable: true,
@@ -436,7 +458,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.isSubmitted = true;
     this.formGroup.get('key_data')?.updateValueAndValidity();
 
@@ -444,23 +466,25 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     if (this.formGroup.invalid) {
       return;
     }
-    this.key.name = this.formGroup.get('name')?.value;
-    this.key.description = this.formGroup.get('description')?.value;
+    const formValue = this.formGroup.getRawValue() as KeyForm;
+    this.key.name = formValue.name;
+    this.key.description = formValue.description;
     if (this.keyInput) {
       this.keyService.updateKey(this.key).subscribe({
         next: (response) => {
           if (response) {
             this.snackbarNotification.openSnackBar(
-              this.translate.instant('KEY.SUCCESS.KEY_UPDATED'),
+              this.translate.instant('KEY.SUCCESS.KEY_UPDATED') as string,
               VALIDATION_TYPE,
             );
-            this.routing.navigate(['/keys']);
+            void this.routing.navigate(['/keys']);
           } else {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData)
         },
       });
     } else {
@@ -468,24 +492,24 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         next: (response) => {
           if (response) {
             this.snackbarNotification.openSnackBar(
-              this.translate.instant('KEY.SUCCESS.KEY_ADDED'),
+              this.translate.instant('KEY.SUCCESS.KEY_ADDED') as string,
               VALIDATION_TYPE,
             );
-            this.routing.navigate(['/keys']);
+            void this.routing.navigate(['/keys']);
           } else {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData)
         },
       });
     }
   }
 
-  gridApi: any;
-  onGridReady(event: any) {
-    console.log("On grid ready")
+  gridApi!: GridApi;
+  onGridReady(event: GridReadyEvent): void {
     this.rowData = [];
     if (this.keyInput) {
       this.rowData = this.formatData();
@@ -493,39 +517,17 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
 
     this.gridApi = event.api;
     KeyCreationUpdate.displayedNumbers.clear();
-
-    this.eventBus.on('setConsumers', (data: any) => {
-      const listEAN = data.detail;
-      this.newIteration();
-      this.key.iterations[0].consumers[0].name = listEAN.shift();
-
-      for (const ean of listEAN) {
-        this.key.iterations[0].consumers.push({
-          id: -1,
-          name: ean,
-          energy_allocated_percentage: 0,
-        });
-      }
-      this.rowData = this.formatData();
-      this.refreshGrid();
-    });
-
-    // this.eventBus.on('keyStepByStep', (data: any) => {
-    //   console.log("Event Bus Key Step By Step : ", data)
-    //   const key = data.detail;
-    //   this.initializeWithData(key);
-    // });
   }
 
-  formatData() {
-    const formattedData: any[] = [];
+  formatData(): KeyTableRow[] {
+    const formattedData: KeyTableRow[] = [];
 
     if (this.key && this.key.iterations) {
       this.key.iterations.forEach((iteration) => {
         iteration.consumers.forEach((consumer) => {
           let vp_percentage = consumer.energy_allocated_percentage * 100 + '%';
           if (consumer.energy_allocated_percentage === -1) {
-            vp_percentage = this.translate.instant('KEY.CREATE.PRORATA_LABEL');
+            vp_percentage = this.translate.instant('KEY.CREATE.PRORATA_LABEL') as string;
           }
           formattedData.push({
             number: iteration.number,
@@ -536,11 +538,9 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         });
       });
     }
-    console.log("FORMATTED DATA");
-    console.log(formattedData);
     return formattedData;
   }
-  newConsumer() {
+  newConsumer(): void {
     const newConsumer: ConsumerDTO = {
       id: -1,
       name: '',
@@ -569,7 +569,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     return [number, consumers];
   }
 
-  newIteration() {
+  newIteration(): void {
     try {
       const [number, initialConsumers] = this.newIterationCheck();
       let consumers = initialConsumers;
@@ -602,7 +602,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       console.error(error);
     }
   }
-  newIterationProrata() {
+  newIterationProrata(): void {
     const [number, initialConsumer] = this.newIterationCheck();
     let consumers = initialConsumer;
     if (number === -1 || !consumers) {
@@ -632,7 +632,8 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   }
   static lastNumberCellStyleNumber = 0;
   static lastParams: any = null;
-  cellStyleNumber(params: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cellStyleNumber(params: any): {height: string} {
     KeyCreationUpdate.lastParams = params;
     if (params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber) {
       KeyCreationUpdate.lastNumberCellStyleNumber = params.node.data.number;
@@ -644,7 +645,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   }
   static displayedNumbers = new Set<number>();
 
-  onCellValueChanged(event: any) {
+  onCellValueChanged(event: any): void {
     const colId = event.colDef.field;
     const data = event.data;
     const iterationIndex = this.key.iterations.findIndex(
@@ -711,7 +712,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.formGroup.updateValueAndValidity();
   }
 
-  deleteIteration(params: any) {
+  deleteIteration(params: any): void {
     const number = params.rowData.number;
     const index = this.key.iterations.findIndex((iteration) => iteration.number === number);
     if (index !== -1) {
@@ -727,7 +728,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.rowData = this.formatData();
     this.refreshGrid();
   }
-  deleteConsumer(params: any) {
+  deleteConsumer(params: any): void {
     const name = params.rowData.name;
     for (const iteration of this.key.iterations) {
       const index = iteration.consumers.findIndex((consumer) => consumer.name === name);
@@ -748,7 +749,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.refreshGrid();
   }
 
-  getContext() {
+  getContext(): {form: FormGroup} {
     return {
       form: this.formGroup,
     };

@@ -38,14 +38,14 @@ export class ManagersCommunityList implements OnInit {
     this.userSelected = null;
   }
 
-  loadUsers() {
+  loadUsers(): void {
     this.communityService.getAdmins(this.filter()).subscribe((response) => {
       if (response) {
         this.users.set(response.data as UsersCommunityDTO[]);
       }
     });
   }
-  lazyLoadUsers($event: TableLazyLoadEvent) {
+  lazyLoadUsers($event: TableLazyLoadEvent): void {
     const current: any = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {

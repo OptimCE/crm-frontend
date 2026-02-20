@@ -20,7 +20,7 @@ export class HeaderWithHelper implements IHeaderAngularComp {
     this.params = params;
   }
 
-  onClick() {
+  onClick(): void {
     const tooltip = this.params?.tooltip;
     this.params?.click?.(tooltip);
   }

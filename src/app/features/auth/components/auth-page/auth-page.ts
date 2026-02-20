@@ -15,7 +15,7 @@ import Keycloak from 'keycloak-js';
 export class AuthPage {
   private readonly keycloak = inject(Keycloak);
 
-  login() {
-    this.keycloak.login({ redirectUri: window.location.origin + '/' });
+  login(): void {
+    void this.keycloak.login({ redirectUri: window.location.origin + '/' });
   }
 }
