@@ -3,7 +3,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export function eanValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value as string | null | undefined;
-    if (!value || typeof value !== 'string') {
+    if (!value) {
       return null; // No value means no validation error
     }
 
