@@ -12,7 +12,7 @@ import { FormGroupDirective } from '@angular/forms';
 import { merge, Subscription } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ErrorSummaryAdded } from '../../types/error.types';
+import { ErrorHandlerParams, ErrorSummaryAdded } from '../../types/error.types';
 
 @Component({
   selector: 'app-summary-error',
@@ -27,7 +27,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef); // <— add this
   private subscription = new Subscription();
   private cdr = inject(ChangeDetectorRef); // only needed if OnPush
-  private host = inject(ElementRef<HTMLElement>);
+  private host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   errorMessages: string[] = [];
 
@@ -59,27 +59,21 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
     );
   }
 
-  private loadDefaultErrorMessages() {
+  private loadDefaultErrorMessages(): void {
     this.translate
-      .stream([
-        'FORM_ERROR.REQUIRED_FIELD',
-        'FORM_ERROR.INVALID_EMAIL',
-        'FORM_ERROR.MIN_LENGTH',
-      ])
+      .stream(['FORM_ERROR.REQUIRED_FIELD', 'FORM_ERROR.INVALID_EMAIL', 'FORM_ERROR.MIN_LENGTH'])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.defaultErrors = {
-          required: (_: any, controlName: string, displayName?: string) => {
+          required: (_: ErrorHandlerParams, controlName: string, displayName?: string) => {
             return this.translate.instant('FORM_ERROR.REQUIRED_FIELD', {
               controlName: displayName ?? controlName,
             }) as string;
           },
 
-          minlength: (
-            { requiredLength, actualLength }: any,
-            controlName: string,
-            displayName?: string,
-          ) => {
+          minlength: (params: ErrorHandlerParams, controlName: string, displayName?: string) => {
+            const requiredLength = params['requiredLength'] as number;
+            const actualLength = params['actualLength'] as number;
             return this.translate.instant('FORM_ERROR.MIN_LENGTH', {
               controlName: displayName ?? controlName,
               requiredLength,
@@ -87,7 +81,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
             }) as string;
           },
 
-          email: (_: any, controlName: string, displayName?: string) => {
+          email: (_: ErrorHandlerParams, controlName: string, displayName?: string) => {
             return this.translate.instant('FORM_ERROR.INVALID_EMAIL', {
               controlName: displayName ?? controlName,
             }) as string;
@@ -120,7 +114,9 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
           const build = builders[errorKey];
 
           if (build) {
-            errors.push(build(controlErrors[errorKey], controlName, displayName));
+            errors.push(
+              build(controlErrors[errorKey] as ErrorHandlerParams, controlName, displayName),
+            );
           } else {
             errors.push(this.fallbackUnknownError(displayName));
           }
@@ -143,18 +139,14 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
     const formEl = this.host.nativeElement.closest('form');
     if (formEl) {
       // We try both id==controlName and [formcontrolname]==controlName to find a matching input id.
-      const labelViaFor = formEl.querySelector(
-        `label[for="${controlName}"]`,
-      ) as HTMLLabelElement | null;
+      const labelViaFor = formEl.querySelector(`label[for="${controlName}"]`);
       if (labelViaFor?.textContent?.trim()) return labelViaFor.textContent.trim();
 
       // Find the control element to get its id, then find a label[for=id].
-      const controlEl = formEl.querySelector(
-        `[formControlName="${controlName}"]`,
-      ) as HTMLElement | null;
+      const controlEl = formEl.querySelector(`[formControlName="${controlName}"]`);
       const id = controlEl?.getAttribute('id');
       if (id) {
-        const labelViaId = formEl.querySelector(`label[for="${id}"]`) as HTMLLabelElement | null;
+        const labelViaId = formEl.querySelector(`label[for="${id}"]`);
         if (labelViaId?.textContent?.trim()) return labelViaId.textContent.trim();
       }
 
@@ -179,8 +171,9 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
   private fallbackUnknownError(displayName: string) {
     // You can i18n this if you want:
     return (
-      this.translate.instant('FORM_ERROR.UNKNOWN_ERROR', { controlName: displayName }) as string ||
-      `Erreur inconnue sur "${displayName}".`
+      (this.translate.instant('FORM_ERROR.UNKNOWN_ERROR', {
+        controlName: displayName,
+      }) as string) || `Erreur inconnue sur "${displayName}".`
     );
   }
 

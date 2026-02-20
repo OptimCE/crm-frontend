@@ -11,6 +11,16 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
 import { CreateSharingOperationDTO } from '../../../../shared/dtos/sharing_operation.dtos';
 
+interface SharingOperationCategory {
+  key: SharingOperationType;
+  value: string;
+}
+
+interface SharingOperationFormValue {
+  name: string;
+  type: SharingOperationType;
+}
+
 @Component({
   selector: 'app-sharing-operation-creation-update',
   standalone: true,
@@ -32,7 +42,7 @@ export class SharingOperationCreationUpdate implements OnInit {
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   formAddSharingOp!: FormGroup;
-  categories: any[] = [];
+  categories: SharingOperationCategory[] = [];
 
   ngOnInit(): void {
     this.formAddSharingOp = new FormGroup({
@@ -67,9 +77,10 @@ export class SharingOperationCreationUpdate implements OnInit {
     if (this.formAddSharingOp.invalid) {
       return;
     }
+    const formValue = this.formAddSharingOp.getRawValue() as SharingOperationFormValue;
     const newSharing: CreateSharingOperationDTO = {
-      name: this.formAddSharingOp.value.name,
-      type: this.formAddSharingOp.value.type,
+      name: formValue.name,
+      type: formValue.type,
     };
     this.sharingOpService.createSharingOperation(newSharing).subscribe({
       next: (response) => {

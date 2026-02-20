@@ -12,7 +12,7 @@ import {
   UserMemberInvitationQuery,
 } from '../dtos/invitation.dtos';
 import { CompanyDTO, IndividualDTO } from '../dtos/member.dtos';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,52 +25,64 @@ export class InvitationService {
     this.apiAddress = environments.apiUrl + '/invitations';
   }
 
-  getMembersPendingInviation(query: UserMemberInvitationQuery): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
+  private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
+    const params: Record<string, string | number | boolean> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined && value !== null) {
+        params[key] = value as string | number | boolean;
+      }
+    }
+    return params;
+  }
+
+  getMembersPendingInviation(
+    query: UserMemberInvitationQuery,
+  ): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
       this.apiAddress + '/',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
 
-  getManagerPendingInvitation(query: UserManagerInvitationQuery): Observable<ApiResponsePaginated<UserManagerInvitationDTO[] | string>> {
+  getManagerPendingInvitation(
+    query: UserManagerInvitationQuery,
+  ): Observable<ApiResponsePaginated<UserManagerInvitationDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
       this.apiAddress + '/managers',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
 
-  getOwnMembersPendingInviation(query: UserMemberInvitationQuery): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
+  getOwnMembersPendingInviation(
+    query: UserMemberInvitationQuery,
+  ): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
       this.apiAddress + '/own',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
 
-  getOwnMemberPendingInvitationById(id: number): Observable<ApiResponse<IndividualDTO | CompanyDTO | string>> {
+  getOwnMemberPendingInvitationById(
+    id: number,
+  ): Observable<ApiResponse<IndividualDTO | CompanyDTO | string>> {
     return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
       this.apiAddress + '/own/members/' + id,
     );
   }
 
-  getOwnManagerPendingInvitation(query: UserManagerInvitationQuery): Observable<ApiResponsePaginated<UserManagerInvitationDTO[] | string>> {
+  getOwnManagerPendingInvitation(
+    query: UserManagerInvitationQuery,
+  ): Observable<ApiResponsePaginated<UserManagerInvitationDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
       this.apiAddress + '/own/managers',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
@@ -87,7 +99,9 @@ export class InvitationService {
     return this.http.post<ApiResponse<string>>(this.apiAddress + '/accept', accept_invitation);
   }
 
-  acceptInvitationMemberEncoded(accept_invitation: AcceptInvitationWEncodedDTO): Observable<ApiResponse<string>> {
+  acceptInvitationMemberEncoded(
+    accept_invitation: AcceptInvitationWEncodedDTO,
+  ): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(
       this.apiAddress + '/accept/encoded',
       accept_invitation,

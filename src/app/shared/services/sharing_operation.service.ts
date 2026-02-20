@@ -11,14 +11,16 @@ import {
   RemoveMeterFromSharingOperationDTO,
   SharingOpConsumptionDTO,
   SharingOperationConsumptionQuery,
-  SharingOperationDTO, SharingOperationKeyDTO, SharingOperationMetersQuery,
+  SharingOperationDTO,
+  SharingOperationKeyDTO,
+  SharingOperationMetersQuery,
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
 } from '../dtos/sharing_operation.dtos';
-import { Observable } from 'rxjs';
+import { from, map, Observable, switchMap } from 'rxjs';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
-import {PartialMeterDTO} from '../dtos/meter.dtos';
-import {KeyPartialQuery} from '../dtos/key.dtos';
+import { PartialMeterDTO } from '../dtos/meter.dtos';
+import { KeyPartialQuery } from '../dtos/key.dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -31,13 +33,23 @@ export class SharingOperationService {
     this.apiAddress = environments.apiUrl + '/sharing_operations';
   }
 
+  private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
+    const params: Record<string, string | number | boolean> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined && value !== null) {
+        params[key] = value as string | number | boolean;
+      }
+    }
+    return params;
+  }
+
   getSharingOperationList(
     query: SharingOperationPartialQuery,
   ): Observable<ApiResponsePaginated<SharingOperationPartialDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<SharingOperationPartialDTO[] | string>>(
       this.apiAddress + '/',
       {
-        params: { ...query },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
@@ -46,18 +58,28 @@ export class SharingOperationService {
     return this.http.get<ApiResponse<SharingOperationDTO | string>>(this.apiAddress + '/' + id);
   }
 
-  getSharingOperationMetersList(id: number, query: SharingOperationMetersQuery): Observable<ApiResponsePaginated<PartialMeterDTO[]|string>>{
-    return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(this.apiAddress + '/' + id+"/meters",
+  getSharingOperationMetersList(
+    id: number,
+    query: SharingOperationMetersQuery,
+  ): Observable<ApiResponsePaginated<PartialMeterDTO[] | string>> {
+    return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(
+      this.apiAddress + '/' + id + '/meters',
       {
-        params: { ...query },
-      });
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
+      },
+    );
   }
 
-  getSharingOperationKeysList(id: number, query: KeyPartialQuery): Observable<ApiResponsePaginated<SharingOperationKeyDTO[]|string>>{
-    return this.http.get<ApiResponsePaginated<SharingOperationKeyDTO[] | string>>(this.apiAddress + '/' + id+"/keys",
+  getSharingOperationKeysList(
+    id: number,
+    query: KeyPartialQuery,
+  ): Observable<ApiResponsePaginated<SharingOperationKeyDTO[] | string>> {
+    return this.http.get<ApiResponsePaginated<SharingOperationKeyDTO[] | string>>(
+      this.apiAddress + '/' + id + '/keys',
       {
-        params: { ...query },
-      });
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
+      },
+    );
   }
 
   getSharingOperationConsumptions(
@@ -67,7 +89,7 @@ export class SharingOperationService {
     return this.http.get<ApiResponse<SharingOpConsumptionDTO | string>>(
       this.apiAddress + '/' + id + '/consumptions',
       {
-        params: { ...query },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
@@ -75,13 +97,34 @@ export class SharingOperationService {
   downloadSharingOperationConsumptions(
     id: number,
     query: SharingOperationConsumptionQuery,
-  ): Observable<ApiResponse<any | string>> {
-    return this.http.get<ApiResponse<any | string>>(
-      this.apiAddress + '/' + id + '/consumptions/download',
-      {
-        params: { ...query },
-      },
-    );
+  ): Observable<ApiResponse<string> | { blob: Blob; filename: string }> {
+    return this.http
+      .get(this.apiAddress + '/' + id + '/consumptions/download', {
+        observe: 'response', // Gives us access to headers
+        responseType: 'blob',
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
+      })
+      .pipe(
+        switchMap((response) => {
+          const blob = response.body as Blob;
+
+          if (blob.type === 'application/json') {
+            return from(blob.text()).pipe(map((text) => JSON.parse(text) as ApiResponse<string>));
+          }
+
+          // Extract filename from Content-Disposition
+          const contentDisposition = response.headers.get('content-disposition');
+          let filename = 'cle_repartition.xlsx'; // Default
+          if (contentDisposition) {
+            const match = contentDisposition.match(/filename="(.+)"/);
+            if (match && match[1]) {
+              filename = match[1];
+            }
+          }
+
+          return [{ blob, filename }];
+        }),
+      );
   }
 
   createSharingOperation(

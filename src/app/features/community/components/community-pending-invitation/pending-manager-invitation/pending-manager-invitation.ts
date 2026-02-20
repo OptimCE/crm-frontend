@@ -42,7 +42,7 @@ export class PendingManagerInvitation {
   lazyLoadPendingGestionnaireInvitation($event: TableLazyLoadEvent): void {
     const current: UserManagerInvitationQuery = { ...this.filter() };
     if ($event.sortField) {
-      const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
+      // const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       // delete current.sort_email;
       // switch ($event.sortField) {
       //   case 'email': {

@@ -27,13 +27,23 @@ export class MemberService {
     this.apiAddress = environments.apiUrl + '/members';
   }
 
+  private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
+    const params: Record<string, string | number | boolean> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined && value !== null) {
+        params[key] = value as string | number | boolean;
+      }
+    }
+    return params;
+  }
+
   getMembersList(
     query: MemberPartialQuery,
   ): Observable<ApiResponsePaginated<MembersPartialDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<MembersPartialDTO[] | string>>(
       this.apiAddress + '/',
       {
-        params: { ...query },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
@@ -51,7 +61,7 @@ export class MemberService {
     return this.http.get<ApiResponse<MemberLinkDTO | string>>(
       this.apiAddress + '/' + id_member + '/link',
       {
-        params: { ...query },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }

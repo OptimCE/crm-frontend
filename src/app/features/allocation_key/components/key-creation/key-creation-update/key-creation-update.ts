@@ -26,11 +26,23 @@ import { FormErrorSummaryComponent } from '../../../../../shared/components/summ
 import { SnackbarNotification } from '../../../../../shared/services-ui/snackbar.notifcation.service';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
 import { VALIDATION_TYPE } from '../../../../../core/dtos/notification';
-import { GridApi, GridReadyEvent } from 'ag-grid-community';
-import {KeyTableRow} from '../../../../../shared/types/key.types';
-import {ApiResponse} from '../../../../../core/dtos/api.response';
-import {ErrorHandlerParams, ErrorSummaryAdded} from '../../../../../shared/types/error.types';
-interface KeyForm{
+import {
+  CellClassParams,
+  ColDef,
+  ColGroupDef,
+  GridApi,
+  GridReadyEvent,
+  NewValueParams,
+} from 'ag-grid-community';
+import { KeyTableRow } from '../../../../../shared/types/key.types';
+import { ApiResponse } from '../../../../../core/dtos/api.response';
+import { ErrorAdded, ErrorSummaryAdded } from '../../../../../shared/types/error.types';
+
+interface ButtonClickParams {
+  event: MouseEvent;
+  rowData: KeyTableRow;
+}
+interface KeyForm {
   name: string;
   description: string;
 }
@@ -68,23 +80,20 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   keyInput?: KeyDTO | null;
   isLoaded: boolean;
   isSubmitted: boolean = false;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  rowData: any[] = [];
+  rowData: KeyTableRow[] = [];
   public themeClass: string = 'ag-theme-quartz';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public defaultColDef: any = {
+  public defaultColDef: ColDef = {
     width: 250,
     editable: true,
   };
-  frameworkComponents: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  colDefs: any = [];
+  frameworkComponents: Record<string, unknown>;
+  colDefs: (ColDef<KeyTableRow> | ColGroupDef<KeyTableRow>)[] = [];
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     key_data: new FormControl('', [this.keyValidator.bind(this)]),
   });
-  errorsAdded: ErrorHandlerParams = {};
+  errorsAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
   ref?: DynamicDialogRef | null;
   gridOptions = {
@@ -110,7 +119,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.formGroup.get('description')?.setValue(key.description);
     this.rowData = this.formatData();
     this.isLoaded = true;
-
   }
 
   ngOnInit(): void {
@@ -125,8 +133,9 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       key_data: new FormControl('', [this.keyValidator.bind(this)]),
     });
 
-    this.route.queryParams.subscribe((params) => {
-      const id = +params['id'];
+    this.route.queryParamMap.subscribe((params) => {
+      const idParam = params.get('id');
+      const id = idParam ? +idParam : 0;
 
       if (id) {
         // 1. If ID exists in URL, fetch from API
@@ -154,8 +163,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         if (transferredKey) {
           this.initializeWithData(structuredClone(transferredKey));
           this.keyInput = transferredKey;
-        }
-        else if (transferredConsumers && transferredConsumers.length > 0) {
+        } else if (transferredConsumers && transferredConsumers.length > 0) {
           const [first, ...rest] = transferredConsumers;
           this.newIteration();
           this.key.iterations[0].consumers[0].name = first;
@@ -168,8 +176,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
           }
           this.rowData = this.formatData();
           this.refreshGrid();
-        }
-        else {
+        } else {
           // 3. Fallback: Initialize as completely new empty key
           this.key = {
             id: -1,
@@ -209,7 +216,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             {
               headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               field: 'number',
-              flex:1,
+              flex: 1,
               editable: false,
               cellStyle: this.cellStyleNumber.bind(this),
               cellClassRules: {
@@ -225,7 +232,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.DELETE_ITERATION_BUTTON_LABEL'],
-              flex:1,
+              flex: 1,
               field: 'delete1',
               cellRenderer: 'buttonRenderer',
               cellRendererParams: {
@@ -235,7 +242,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
-              flex:1,
+              flex: 1,
               field: 'va_percentage',
               onCellValueChanged: this.onCellValueChanged.bind(this),
               headerComponent: 'headerHelperRenderer', // ✅ class, not string
@@ -248,18 +255,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_LABEL'],
-              flex:2,
+              flex: 2,
               field: 'consumers',
               cellStyle: { 'text-align': 'center' },
               children: [
                 {
                   headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_NAME_LABEL'],
-                  flex:1,
+                  flex: 1,
                   field: 'name',
                 },
                 {
                   headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
-                  flex:1,
+                  flex: 1,
                   field: 'vp_percentage',
                   onCellValueChanged: this.onCellValueChanged.bind(this),
                   cellStyle: { 'text-align': 'center' },
@@ -275,7 +282,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.DELETE_CONSUMER_BUTTON_LABEL'],
-              flex:1,
+              flex: 1,
               field: 'delete',
               cellRenderer: 'buttonRenderer',
               cellRendererParams: {
@@ -484,7 +491,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData)
+          this.errorHandler.handleError(errorData);
         },
       });
     } else {
@@ -502,7 +509,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData)
+          this.errorHandler.handleError(errorData);
         },
       });
     }
@@ -548,7 +555,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     };
     for (const iteration of this.key.iterations) {
       if (iteration.consumers[0].energy_allocated_percentage === -1) {
-        iteration.consumers.push({ id: -1, name: '', energy_allocated_percentage:-1 });
+        iteration.consumers.push({ id: -1, name: '', energy_allocated_percentage: -1 });
       } else {
         iteration.consumers.push(newConsumer);
       }
@@ -631,11 +638,14 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     // this.grid
   }
   static lastNumberCellStyleNumber = 0;
-  static lastParams: any = null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  cellStyleNumber(params: any): {height: string} {
+  static lastParams: CellClassParams<KeyTableRow> | null = null;
+  cellStyleNumber(params: CellClassParams<KeyTableRow>): { height: string } {
     KeyCreationUpdate.lastParams = params;
-    if (params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber) {
+    if (
+      params.node.data &&
+      params.node.data.number !== undefined &&
+      params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber
+    ) {
       KeyCreationUpdate.lastNumberCellStyleNumber = params.node.data.number;
       return { height: '100%' };
     } else {
@@ -645,14 +655,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   }
   static displayedNumbers = new Set<number>();
 
-  onCellValueChanged(event: any): void {
+  onCellValueChanged(event: NewValueParams<KeyTableRow, string>): void {
     const colId = event.colDef.field;
     const data = event.data;
+    if (!data || !colId) return;
+    const iterationNumber = data.number;
+    if (iterationNumber === undefined) return;
+
     const iterationIndex = this.key.iterations.findIndex(
-      (iteration) => iteration.number === data.number,
+      (iteration) => iteration.number === iterationNumber,
     );
     if (iterationIndex !== -1) {
-      if (colId === 'va_percentage') {
+      if (colId === 'va_percentage' && data.va_percentage !== undefined) {
         this.key.iterations[iterationIndex].energy_allocated_percentage =
           parseFloat(data.va_percentage) / 100;
         if (data.va_percentage.includes('%')) {
@@ -662,15 +676,10 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
           //this.rowData[event.node.rowIndex].va_percentage = data.va_percentage + "%";
           data.va_percentage = data.va_percentage + '%';
           for (const rData of this.rowData) {
-            if (rData.number === data.number) {
+            if (rData.number === iterationNumber) {
               rData.va_percentage = data.va_percentage;
             }
           }
-          // for (let i = 0; i < this.rowData.length; i++) {
-          //   if (this.rowData[i].number === data.number) {
-          //     this.rowData[i].va_percentage = data.va_percentage;
-          //   }
-          // }
           this.refreshGrid();
         } else {
           data.va_percentage = '';
@@ -678,33 +687,32 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         }
       } else {
         //const consumerIndex = this.key.iterations[iterationIndex].consumers.findIndex(consumer => consumer.name === data.name);
-        const consumerIndex = event.node.rowIndex % this.key.iterations[0].consumers.length;
-        if (consumerIndex !== -1) {
-          if (colId === 'vp_percentage') {
-            if (data.vp_percentage.includes('%')) {
-              data.vp_percentage = data.vp_percentage.replace('%', '');
-            }
-            this.key.iterations[iterationIndex].consumers[
-              consumerIndex
-            ].energy_allocated_percentage = parseFloat(data.vp_percentage) / 100;
-            if (data.vp_percentage.match('^\\d+(\\.\\d+)*$')) {
-              this.rowData[event.node.rowIndex].vp_percentage = data.vp_percentage + '%';
+        const firstIteration = this.key.iterations[0];
+        const rowIndex = event.node?.rowIndex;
+        if (firstIteration && rowIndex !== null && rowIndex !== undefined) {
+          const consumerIndex = rowIndex % firstIteration.consumers.length;
+          if (consumerIndex !== -1) {
+            if (colId === 'vp_percentage' && data.vp_percentage !== undefined) {
+              if (data.vp_percentage.includes('%')) {
+                data.vp_percentage = data.vp_percentage.replace('%', '');
+              }
+              this.key.iterations[iterationIndex].consumers[
+                consumerIndex
+              ].energy_allocated_percentage = parseFloat(data.vp_percentage) / 100;
+              if (data.vp_percentage.match('^\\d+(\\.\\d+)*$')) {
+                this.rowData[rowIndex].vp_percentage = data.vp_percentage + '%';
+                this.refreshGrid();
+              } else {
+                data.vp_percentage = '';
+                this.refreshGrid();
+              }
+            } else if (colId === 'name' && data.name !== undefined) {
+              for (const iteration of this.key.iterations) {
+                iteration.consumers[consumerIndex].name = data.name;
+              }
+              this.rowData = this.formatData(); // A changer
               this.refreshGrid();
-            } else {
-              data.vp_percentage = '';
-              this.refreshGrid();
             }
-          } else if (colId === 'name') {
-            for (const iteration of this.key.iterations) {
-              iteration.consumers[consumerIndex].name = data.name;
-            }
-            // for (let i = 0; i < this.key.iterations.length; i++) {
-            //   this.key.iterations[i].consumers[consumerIndex].name = data.name;
-            // }
-            this.rowData = this.formatData(); // A changer
-            this.refreshGrid();
-
-            //this.key.iterations[iterationIndex].consumers[consumerIndex].name = data.name;
           }
         }
       }
@@ -712,7 +720,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.formGroup.updateValueAndValidity();
   }
 
-  deleteIteration(params: any): void {
+  deleteIteration(params: ButtonClickParams): void {
     const number = params.rowData.number;
     const index = this.key.iterations.findIndex((iteration) => iteration.number === number);
     if (index !== -1) {
@@ -728,7 +736,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.rowData = this.formatData();
     this.refreshGrid();
   }
-  deleteConsumer(params: any): void {
+  deleteConsumer(params: ButtonClickParams): void {
     const name = params.rowData.name;
     for (const iteration of this.key.iterations) {
       const index = iteration.consumers.findIndex((consumer) => consumer.name === name);
@@ -749,7 +757,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.refreshGrid();
   }
 
-  getContext(): {form: FormGroup} {
+  getContext(): { form: FormGroup } {
     return {
       form: this.formGroup,
     };

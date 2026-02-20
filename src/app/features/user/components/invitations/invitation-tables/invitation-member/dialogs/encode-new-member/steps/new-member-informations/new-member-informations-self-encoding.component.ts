@@ -40,7 +40,7 @@ export class NewMemberInformationsSelfEncoding implements OnInit {
   idErrorAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.setupErrorTranslation();
   }
 

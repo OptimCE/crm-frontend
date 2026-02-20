@@ -4,6 +4,7 @@ import { PrimeTemplate } from 'primeng/api';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ApiResponse } from '../../../../../core/dtos/api.response';
 import {
   UserMemberInvitationDTO,
   UserMemberInvitationQuery,
@@ -42,7 +43,7 @@ export class PendingMemberInvitation {
     });
   }
   lazyLoadPendingMemberInvitation($event: TableLazyLoadEvent): void {
-    const current: any = { ...this.filter() };
+    const current: UserMemberInvitationQuery = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_email;
@@ -71,8 +72,9 @@ export class PendingMemberInvitation {
           this.errorHandler.handleError();
         }
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ?? null);
+      error: (error: unknown) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData);
       },
     });
   }

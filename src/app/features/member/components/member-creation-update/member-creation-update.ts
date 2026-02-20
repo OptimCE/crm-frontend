@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { MemberType } from '../../../../shared/types/member.types';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
@@ -21,7 +21,44 @@ import { NewMemberType } from './steps/new-member-type/new-member-type';
 import { NewMemberInformations } from './steps/new-member-informations/new-member-informations';
 import { NewMemberAddress } from './steps/new-member-address/new-member-address';
 import { NewMemberBankingInfo } from './steps/new-member-banking-info/new-member-banking-info';
-import {ApiResponse} from '../../../../core/dtos/api.response';
+import { ApiResponse } from '../../../../core/dtos/api.response';
+
+interface AddressFormValue {
+  same_address: boolean | unknown[];
+  home_address_street: string;
+  home_address_number: string;
+  home_address_postcode: string;
+  home_address_supplement: string;
+  home_address_city: string;
+  billing_address_street?: string;
+  billing_address_number?: string;
+  billing_address_postcode?: string;
+  billing_address_supplement?: string;
+  billing_address_city?: string;
+}
+
+interface IbanFormValue {
+  iban: string;
+}
+
+interface MemberFormValue {
+  id: string;
+  name: string;
+  surname?: string;
+  email?: string;
+  phone?: string;
+  socialRate?: boolean | unknown[];
+  vatNumber?: string;
+  NRN_manager?: string;
+  name_manager?: string;
+  surname_manager?: string;
+  email_manager?: string;
+  phone_manager?: string;
+}
+
+interface NextCallback {
+  emit: () => void;
+}
 
 @Component({
   selector: 'app-member-creation-update',
@@ -43,11 +80,12 @@ import {ApiResponse} from '../../../../core/dtos/api.response';
 })
 export class MemberCreationUpdate implements OnInit, AfterViewInit {
   private membersService = inject(MemberService);
-  private config = inject(DynamicDialogConfig);
+  private config =
+    inject<DynamicDialogConfig<{ member: IndividualDTO | CompanyDTO }>>(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   private cdr = inject(ChangeDetectorRef);
-  typeClient: number = -1;
+  typeClient: MemberType | -1 = -1;
   formData!: FormGroup;
   addressForm!: FormGroup;
   ibanForm!: FormGroup;
@@ -105,7 +143,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
       id: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
     });
-    if (this.typeClient == 1) {
+    if (this.typeClient === MemberType.INDIVIDUAL) {
       // this.formData.controls['id'].addValidators([numRegistreBeValidator]);
       // Build form group for individuals
       this.formData.addControl('surname', new FormControl('', [Validators.required]));
@@ -125,7 +163,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
           socialRate: (this.existingMember as IndividualDTO).social_rate,
         });
       }
-    } else if (this.typeClient == 2) {
+    } else if (this.typeClient === MemberType.COMPANY) {
       this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
       if (this.existingMember) {
         this.formData.patchValue({
@@ -135,10 +173,10 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         });
       }
     }
-    this.updateGestionnaire(this.typeClient == 2);
+    this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
   }
 
-  submitForm1(nextCallback: any): void {
+  submitForm1(nextCallback: NextCallback): void {
     if (this.typeClient != -1) {
       this.buildFormGroup();
       this.step.set(1);
@@ -146,15 +184,15 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     }
   }
 
-  submitForm2(nextCallback: any): void {
-    console.log(this.formData.valid)
+  submitForm2(nextCallback: NextCallback): void {
+    console.log(this.formData.valid);
     if (this.formData.valid) {
       this.step.set(2);
       nextCallback.emit();
     }
   }
 
-  submitForm3(nextCallback: any): void {
+  submitForm3(nextCallback: NextCallback): void {
     if (this.addressForm.valid) {
       this.step.set(3);
       nextCallback.emit();
@@ -165,34 +203,38 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
     if (this.ibanForm.invalid) {
       return;
     }
+    const addressValue = this.addressForm.getRawValue() as AddressFormValue;
     const homeAddress: AddressDTO = {
       id: -1,
-      street: this.addressForm.value.home_address_street,
-      number: this.addressForm.value.home_address_number,
-      postcode: this.addressForm.value.home_address_postcode,
-      supplement: this.addressForm.value.home_address_supplement,
-      city: this.addressForm.value.home_address_city,
+      street: addressValue.home_address_street,
+      number: +addressValue.home_address_number,
+      postcode: addressValue.home_address_postcode,
+      supplement: addressValue.home_address_supplement,
+      city: addressValue.home_address_city,
     };
     if (this.existingMember) {
       if (
-        this.existingMember.home_address.street == homeAddress.street &&
-        this.existingMember.home_address.number == homeAddress.number &&
-        this.existingMember.home_address.postcode == homeAddress.postcode &&
-        this.existingMember.home_address.supplement == homeAddress.supplement &&
-        this.existingMember.home_address.city == homeAddress.city
+        this.existingMember.home_address.street === homeAddress.street &&
+        this.existingMember.home_address.number === homeAddress.number &&
+        this.existingMember.home_address.postcode === homeAddress.postcode &&
+        this.existingMember.home_address.supplement === homeAddress.supplement &&
+        this.existingMember.home_address.city === homeAddress.city
       ) {
         homeAddress.id = this.existingMember.home_address.id;
       }
     }
     let billingAddress: AddressDTO = homeAddress;
-    if (this.addressForm.value.same_address.length == 0) {
+    const sameAddressChecked = Array.isArray(addressValue.same_address)
+      ? addressValue.same_address.length > 0
+      : Boolean(addressValue.same_address);
+    if (!sameAddressChecked) {
       billingAddress = {
         id: -1,
-        street: this.addressForm.value.billing_address_street,
-        number: this.addressForm.value.billing_address_number,
-        postcode: this.addressForm.value.billing_address_postcode,
-        supplement: this.addressForm.value.billing_address_supplement,
-        city: this.addressForm.value.billing_address.city,
+        street: addressValue.billing_address_street ?? '',
+        number: addressValue.billing_address_number ? +addressValue.billing_address_number : 1,
+        postcode: addressValue.billing_address_postcode ?? '',
+        supplement: addressValue.billing_address_supplement ?? '',
+        city: addressValue.billing_address_city ?? '',
       };
     }
     let status = 1;
@@ -217,30 +259,37 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         billingAddress.id = this.existingMember.billing_address.id;
       }
     }
+    const formValue = this.formData.getRawValue() as MemberFormValue;
     let manager: CreateManagerDTO | undefined = undefined;
     if (this.gestionnaire) {
       manager = {
-        NRN: this.formData.value.NRN_manager,
-        name: this.formData.value.name_manager,
-        surname: this.formData.value.surname_manager,
-        email: this.formData.value.email_manager,
-        phone_number: this.formData.value.phone_manager,
+        NRN: formValue.NRN_manager ?? '',
+        name: formValue.name_manager ?? '',
+        surname: formValue.surname_manager ?? '',
+        email: formValue.email_manager ?? '',
+        phone_number: formValue.phone_manager ?? '',
       };
     }
-    // let memberToAdd: IndividualDTO | CompanyDTO;
+    const ibanValue = (this.ibanForm.getRawValue() as IbanFormValue).iban;
+    const socialRateValue = Array.isArray(formValue.socialRate)
+      ? formValue.socialRate.length > 0
+      : Boolean(formValue.socialRate);
+    if (this.typeClient === -1) {
+      return;
+    }
     const memberToAdd: CreateMemberDTO = {
-      NRN: this.formData.value.id,
+      NRN: formValue.id,
       billing_address: billingAddress,
-      email: this.formData.value.email,
-      first_name: this.formData.value.name,
+      email: formValue.email ?? '',
+      first_name: formValue.name,
       home_address: homeAddress,
-      iban: this.ibanForm.value.iban,
+      iban: ibanValue,
       member_type: this.typeClient,
-      phone_number: this.formData.value.phone,
-      social_rate: this.formData.value.socialRate && this.formData.value.socialRate.length > 0,
+      phone_number: formValue.phone ?? '',
+      social_rate: socialRateValue,
       status: status,
-      vat_number: this.formData.value.vatNumber,
-      name: this.formData.value.surname,
+      vat_number: formValue.vatNumber ?? '',
+      name: formValue.surname ?? '',
       manager: manager,
     };
     if (this.typeClient === MemberType.COMPANY) {
@@ -265,7 +314,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         },
         error: (error: unknown) => {
           const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData)
+          this.errorHandler.handleError(errorData);
         },
       });
     } else {
@@ -279,7 +328,7 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
         },
         error: (error: unknown) => {
           const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData)
+          this.errorHandler.handleError(errorData);
         },
       });
     }
@@ -323,14 +372,18 @@ export class MemberCreationUpdate implements OnInit, AfterViewInit {
   }
 
   gestionnaireChange($event: CheckboxChangeEvent): void {
-    const value = $event.checked.length > 0;
+    const c = ($event as { checked: unknown }).checked;
+    const value = Array.isArray(c) ? c.length > 0 : Boolean(c);
     this.updateGestionnaire(value);
   }
 
   toggleSameAddress(event: CheckboxChangeEvent): void {
     console.log('THIS EVENT : ', event);
-    console.log(this.addressForm.value.same_address);
-    if (this.addressForm.value.same_address[0]) {
+    const addressValue = this.addressForm.getRawValue() as AddressFormValue;
+    const sameSelected = Array.isArray(addressValue.same_address)
+      ? Boolean(addressValue.same_address[0])
+      : Boolean(addressValue.same_address);
+    if (sameSelected) {
       // Remove billing address from form
       this.addressForm.removeControl('billing_address_street');
       this.addressForm.removeControl('billing_address_number');

@@ -45,7 +45,10 @@
           @if (userContextService.activeCommunityId() === community.auth_community_id) {
             <p-tag value="{{ 'COMMUNITY.LIST.ACTIVATED' | translate }}" severity="success"></p-tag>
           } @else {
-            <p-tag value="{{ 'COMMUNITY.LIST.NON_ACTIVATED' | translate }}" severity="danger"></p-tag>
+            <p-tag
+              value="{{ 'COMMUNITY.LIST.NON_ACTIVATED' | translate }}"
+              severity="danger"
+            ></p-tag>
           }
         </td>
         <!-- Join Button -->

@@ -7,6 +7,8 @@ export interface MemberPartialQuery extends PaginationQuery {
   member_type?: MemberType;
   status?: MemberStatus;
   sort_name?: Sort;
+  sort_type?: Sort;
+  sort_status?: Sort;
 }
 
 export interface MembersPartialDTO {

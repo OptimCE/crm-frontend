@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,7 +10,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {TableLazyLoadEvent, TableModule, TablePageEvent} from 'primeng/table';
+import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -30,11 +30,12 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import {
   AddConsumptionDataDTO,
   SharingOpConsumptionDTO,
-  SharingOperationDTO, SharingOperationKeyDTO,
-  SharingOperationMetersQueryType
+  SharingOperationDTO,
+  SharingOperationKeyDTO,
+  SharingOperationMetersQueryType,
 } from '../../../../shared/dtos/sharing_operation.dtos';
-import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
-import { Pagination } from '../../../../core/dtos/api.response';
+import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -45,9 +46,15 @@ import { SharingOperationAddKey } from '../sharing-operation-add-key/sharing-ope
 import { SharingKeyStatus } from '../../../../shared/types/sharing_operation.types';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
-import {KeyPartialQuery} from '../../../../shared/dtos/key.dtos';
-import {Tab, TabList, TabPanel, TabPanels, Tabs} from 'primeng/tabs';
-import {SharingOperationMetersList} from './sharing-operation-meters-list/sharing-operation-meters-list';
+import { KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { SharingOperationMetersList } from './sharing-operation-meters-list/sharing-operation-meters-list';
+import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
+
+interface ChartFormValue {
+  dateDeb: string;
+  dateFin: string;
+}
 
 @Component({
   selector: 'app-sharing-operation-view',
@@ -97,30 +104,35 @@ export class SharingOperationView implements OnInit {
   private eventBus = inject(EventBusService);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
+  private meterEventService = inject(SharingOperationMeterEventService);
   isLoading: boolean = true;
   id!: number;
   sharingOperation!: SharingOperationDTO;
   sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
   loadingSharingOperationKeys = signal<boolean>(true);
-  paginationSharingOperationKey = signal<Pagination>({total: 0, total_pages: 0, page: 0, limit: 0})
-  filterSharingOperationKey = signal<KeyPartialQuery>({page: 1, limit: 10});
-  metersPartialList= signal<PartialMeterDTO[]>([]);
-  loadinMeters = signal<boolean>(true);
-  addressFilter = {
-    streetName: '',
-    postcode: '',
-    cityName: '',
-  };
+  paginationSharingOperationKey = signal<Pagination>({
+    total: 0,
+    total_pages: 0,
+    page: 0,
+    limit: 0,
+  });
+  filterSharingOperationKey = signal<KeyPartialQuery>({ page: 1, limit: 10 });
+  metersPartialList = signal<PartialMeterDTO[]>([]);
   paginationMetersInfo: Pagination = new Pagination(1, 10, 0, 1);
-  statutCategory: any[] = [];
+  statutCategory: { value: MeterDataStatus; label: string }[] = [];
   ref?: DynamicDialogRef | null;
   sidebarHistoryKey: boolean = false;
-  minDate = new Date();
-  dateStartApproved: any;
-  dateStartMeter: any;
-  textChangeStatusMeter!: string;
+  dateStartApproved: Date | null = null;
   currentPageReportTemplate: string = '';
-  data: any;
+  data: {
+    labels: string[];
+    datasets: {
+      type: string;
+      label: string;
+      stack: string;
+      data: number[];
+    }[];
+  } | null = null;
 
   options = {
     maintainAspectRatio: false,
@@ -130,9 +142,9 @@ export class SharingOperationView implements OnInit {
         mode: 'index',
         intersect: false,
         callbacks: {
-          label: function (tooltipItem: any): string {
+          label: function (tooltipItem: { dataset: { label?: string }; raw: unknown }): string {
             const label = tooltipItem.dataset.label || '';
-            const value = tooltipItem.raw;
+            const value = tooltipItem.raw as number;
             return `${label}: ${value} kWh`;
           },
         },
@@ -146,7 +158,7 @@ export class SharingOperationView implements OnInit {
           text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.X_TITLE_DATE') as string,
         },
         ticks: {
-          callback: (value: any, index: number): string => {
+          callback: (_value: unknown, index: number): string => {
             // Make sure 'this' refers to the component context
             const label = this.data?.labels?.[index];
             if (!label) return '';
@@ -169,7 +181,9 @@ export class SharingOperationView implements OnInit {
         stacked: true,
         title: {
           display: true,
-          text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.Y_TITLE_CONSUMPTION') as string,
+          text: this.translate.instant(
+            'SHARING_OPERATION.VIEW.CHART.Y_TITLE_CONSUMPTION',
+          ) as string,
         },
       },
     },
@@ -283,8 +297,10 @@ export class SharingOperationView implements OnInit {
   }
   loadAllMeters(): void {
     try {
-      const params: any = {
+      const params: MeterPartialQuery = {
         sharing_operation_id: this.id,
+        page: 1,
+        limit: 100,
       };
       this.metersService.getMetersList(params).subscribe({
         next: (response) => {
@@ -300,104 +316,11 @@ export class SharingOperationView implements OnInit {
         },
       });
     } catch (e) {
-      console.error('Error fetching meters partial list ' + e);
+      console.error('Error fetching meters partial list ' + String(e));
     }
   }
 
-  loadMeters(filter?: any, page?: number): void {
-    try {
-      const params: any = {
-        sharing_operation_id: this.id,
-      };
-      // Check for address
-      if (
-        !(
-          this.addressFilter.streetName == '' &&
-          this.addressFilter.postcode == '' &&
-          this.addressFilter.cityName == ''
-        )
-      ) {
-        // Il y a un filtre d'adresse
-        if (this.addressFilter.streetName != '') {
-          params['streetname'] = this.addressFilter.streetName;
-        }
-        if (this.addressFilter.postcode != '') {
-          params['postcode'] = this.addressFilter.postcode;
-        }
-        if (this.addressFilter.cityName != '') {
-          params['cityname'] = this.addressFilter.cityName;
-        }
-      }
-      if (filter) {
-        for (const key in filter) {
-          if (key == 'statut') {
-            if (filter[key][0].value != null) {
-              params[key] = filter[key][0].value;
-            }
-          } else {
-            if (filter[key][0].value != null && filter[key][0].value != '') {
-              if (key == 'holder') {
-                params[key] = filter[key][0].value.id;
-              } else {
-                params[key] = filter[key][0].value;
-              }
-            }
-          }
-        }
-      }
-      console.log("PARAMS")
-      console.log(params);
-      this.metersPartialList.set([]);
-      this.loadinMeters.set(true);
-      this.metersService.getMetersList({ page: page, limit: 10, ...params }).subscribe({
-        next: (response) => {
-          if (response) {
-            this.metersPartialList.set(response.data as PartialMeterDTO[]);
-            this.paginationMetersInfo = response.pagination;
-            this.updatePaginationTranslation();
-            this.loadinMeters.set(false);
-          } else {
-            console.error('Error fetching meters partial list');
-            this.loadinMeters.set(false);
-          }
-        },
-        error: (_error) => {
-          console.error('Error fetching meters partial list');
-          this.loadinMeters.set(false);
-        },
-      });
-    } catch (e) {
-      console.error('Error fetching meters partial list ' + e);
-      this.loadinMeters.set(false);
-    }
-  }
-
-  lazyLoadMeters($event: any): void{
-    let page = 0;
-    if ($event.first && $event.rows) {
-      page = $event.first / $event.rows + 1;
-    }
-    this.loadMeters($event.filters, page >= 1? page : 1);
-  }
-
-  clear(table: any): void{
-    table.clear();
-    this.addressFilter = {
-      streetName: '',
-      postcode: '',
-      cityName: '',
-    };
-  }
-
-  pageChange(_$event: any): void{
-    console.log('TO IMPLEMENT');
-  }
-
-  onRowClick(meter: any): void{
-    void this.routing.navigate(['/meters/' + meter.EAN]);
-  }
-
-  addMeter(): void{
+  addMeter(): void {
     this.ref = this.dialogService.open(SharingOperationAddMeter, {
       modal: true,
       closable: true,
@@ -411,16 +334,19 @@ export class SharingOperationView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL') as string,
+            this.translate.instant(
+              'SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL',
+            ) as string,
             VALIDATION_TYPE,
           );
-          this.loadMeters();
+          // TODO: throw event for the child component
+          this.meterEventService.notifyMeterAdded();
         }
       });
     }
   }
 
-  editKey(): void{
+  editKey(): void {
     this.ref = this.dialogService.open(SharingOperationAddKey, {
       modal: true,
       closable: true,
@@ -434,7 +360,9 @@ export class SharingOperationView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL') as string,
+            this.translate.instant(
+              'SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL',
+            ) as string,
             VALIDATION_TYPE,
           );
           this.loadOperationSharing();
@@ -443,57 +371,64 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  revokeWaitingKey(): void{
-    console.log("Revoke ")
-    this.sharingOperationService
-      .patchKeyStatus({
-        id_key: this.sharingOperation!.key_waiting_approval!.key.id,
-        id_sharing: this.id,
-        date: new Date(),
-        status: SharingKeyStatus.REJECTED,
-      })
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.loadOperationSharing();
+  revokeWaitingKey(): void {
+    console.log('Revoke ');
+    const waitingKey = this.sharingOperation?.key_waiting_approval;
+    if (waitingKey) {
+      this.sharingOperationService
+        .patchKeyStatus({
+          id_key: waitingKey.key.id,
+          id_sharing: this.id,
+          date: new Date(),
+          status: SharingKeyStatus.REJECTED,
+        })
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.loadOperationSharing();
 
-            // this.ref.close(true);
-          } else {
-            this.errorHandler.handleError();
-          }
-        },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ?? null);
-        },
-      });
-  }
-
-  approveWaitingKey(): void{
-    this.sharingOperationService
-      .patchKeyStatus({
-        id_key: this.sharingOperation!.key_waiting_approval!.key.id,
-        id_sharing: this.id,
-        date: this.dateStartApproved,
-        status: SharingKeyStatus.APPROVED,
-      })
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            if (this.ref) {
-              this.ref.close(true);
+              // this.ref.close(true);
+            } else {
+              this.errorHandler.handleError();
             }
-            this.loadOperationSharing();
-          } else {
-            this.errorHandler.handleError(response);
-          }
-        },
-        error: (error) => {
-          this.errorHandler.handleError(error);
-        },
-      });
+          },
+          error: (error: unknown) => {
+            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+            this.errorHandler.handleError(errorData);
+          },
+        });
+    }
   }
 
-  openDateApprovedKey(event: Event): void{
+  approveWaitingKey(): void {
+    const waitingKey = this.sharingOperation?.key_waiting_approval;
+    if (waitingKey && this.dateStartApproved) {
+      this.sharingOperationService
+        .patchKeyStatus({
+          id_key: waitingKey.key.id,
+          id_sharing: this.id,
+          date: this.dateStartApproved,
+          status: SharingKeyStatus.APPROVED,
+        })
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              if (this.ref) {
+                this.ref.close(true);
+              }
+              this.loadOperationSharing();
+            } else {
+              this.errorHandler.handleError(response);
+            }
+          },
+          error: (error) => {
+            this.errorHandler.handleError(error);
+          },
+        });
+    }
+  }
+
+  openDateApprovedKey(event: Event): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       acceptIcon: 'pi pi-check',
@@ -506,25 +441,23 @@ export class SharingOperationView implements OnInit {
     });
   }
 
-
-
-
-  newKey(): void{
+  newKey(): void {
     // Get all meters EAN
     const metersEAN = this.metersPartialList().map((a) => a.EAN);
     this.eventBus.emit('setConsumers', metersEAN);
     void this.routing.navigate(['/key/add']);
   }
 
-  loadChart(): void{
+  loadChart(): void {
     this.displayDownloadButton = false;
     if (this.formChart.invalid) {
       return;
     }
+    const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.sharingOperationService
       .getSharingOperationConsumptions(this.id, {
-        date_start: this.formChart.value.dateDeb,
-        date_end: this.formChart.value.dateFin,
+        date_start: formValue.dateDeb,
+        date_end: formValue.dateFin,
       })
       .subscribe((response) => {
         if (response) {
@@ -542,13 +475,17 @@ export class SharingOperationView implements OnInit {
               },
               {
                 type: 'bar',
-                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.CONSUMPTION_NET_LABEL') as string,
+                label: this.translate.instant(
+                  'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_NET_LABEL',
+                ) as string,
                 stack: 'consumption',
                 data: tmpData.net,
               },
               {
                 type: 'bar',
-                label: this.translate.instant('SHARING_OPERATION.VIEW.CHART.INJECTION_NET_LABEL') as string,
+                label: this.translate.instant(
+                  'SHARING_OPERATION.VIEW.CHART.INJECTION_NET_LABEL',
+                ) as string,
                 stack: 'inj',
                 data: tmpData.inj_net,
               },
@@ -567,29 +504,44 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  downloadTotalConsumption(): void{
-    this.sharingOperationService
-      .downloadSharingOperationConsumptions(this.sharingOperation!.id, {
-        date_start: this.formChart.value.dateDeb,
-        date_end: this.formChart.value.dateFin,
-      })
-      .subscribe((_response) => {
-        // if (response) {
-        //   const blob = new Blob([response], { type: 'xlsx' });
-        //   const url = window.URL.createObjectURL(blob);
-        //   const a = document.createElement('a');
-        //   a.href = url;
-        //   a.download = this.translate.instant('sharing_operations.full.consumption_monitoring.consumption_file_prefix') + this.sharingOperation.name + '.xlsx';
-        //   document.body.appendChild(a);
-        //   a.click();
-        //   window.URL.revokeObjectURL(url);
-        //   document.body.removeChild(a);
-        // }
-      });
+  downloadTotalConsumption(): void {
+    const formValue = this.formChart.getRawValue() as ChartFormValue;
+    if (this.sharingOperation) {
+      this.sharingOperationService
+        .downloadSharingOperationConsumptions(this.sharingOperation.id, {
+          date_start: formValue.dateDeb,
+          date_end: formValue.dateFin,
+        })
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              // Check if the response contains the blob/filename object
+              if ('blob' in response) {
+                const url = window.URL.createObjectURL(response.blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = response.filename; // Use the dynamic filename!
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+              } else {
+                // This is the ApiResponse error case
+                this.errorHandler.handleError(response.data ? response.data : null);
+              }
+            }
+          },
+          error: (error) => {
+            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+            this.errorHandler.handleError(errorData);
+          },
+        });
+    }
   }
 
-  onFileSelected(event: any): void {
-    const selectedFile = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const selectedFile = input.files?.[0];
     if (selectedFile) {
       this.fileConsumption = selectedFile;
       this.formGroup.patchValue({ fileConsumption: this.fileConsumption });
@@ -621,15 +573,15 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  addConsumptionInformations(): void{
-    if (this.formGroup.invalid) {
+  addConsumptionInformations(): void {
+    if (this.formGroup.invalid || !this.sharingOperation) {
       return;
     }
     const formData = new FormData();
     formData.append('file', this.fileConsumption as File);
-    formData.append('idSharing', this.sharingOperation!.id.toString());
+    formData.append('idSharing', this.sharingOperation.id.toString());
     const addConsumption: AddConsumptionDataDTO = {
-      id_sharing_operation: this.sharingOperation!.id,
+      id_sharing_operation: this.sharingOperation.id,
     };
     this.sharingOperationService.addConsumptionDataToSharing(addConsumption).subscribe(
       // TODO: To fix
@@ -655,32 +607,37 @@ export class SharingOperationView implements OnInit {
 
   protected readonly KeyStatus = SharingKeyStatus;
   protected readonly MeterStatus = MeterDataStatus;
-  loadSharingOperationKey(){
+  loadSharingOperationKey(): void {
     this.loadingSharingOperationKeys.set(true);
-    this.sharingOperationService.getSharingOperationKeysList(this.id, this.filterSharingOperationKey()).subscribe({
-      next: (response)=>{
-        if(response){
-          this.sharingOperationKeys.set(response.data as SharingOperationKeyDTO[]);
-          this.paginationSharingOperationKey.set(response.pagination);
+    this.sharingOperationService
+      .getSharingOperationKeysList(this.id, this.filterSharingOperationKey())
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.sharingOperationKeys.set(response.data as SharingOperationKeyDTO[]);
+            this.paginationSharingOperationKey.set(response.pagination);
+            this.loadingSharingOperationKeys.set(false);
+          }
+        },
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
           this.loadingSharingOperationKeys.set(false);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ?? null);
-        this.loadingSharingOperationKeys.set(false);
-      }
-    })
+        },
+      });
   }
 
-  protected onPageSharingOperationKey($event: TablePageEvent): void{
-    const current: any = { ...this.filterSharingOperationKey() };
-    current.page = $event.first / $event.rows + 1;
+  protected onPageSharingOperationKey($event: TablePageEvent): void {
+    const current: KeyPartialQuery = { ...this.filterSharingOperationKey() };
+    if ($event.rows) {
+      current.page = ($event.first ?? 0) / $event.rows + 1;
+    }
     this.filterSharingOperationKey.set(current);
     this.loadSharingOperationKey();
   }
 
-  protected onLazyLoadSharingOperationKey($event: TableLazyLoadEvent): void{
-    const current: any = { ...this.filterSharingOperationKey() };
+  protected onLazyLoadSharingOperationKey($event: TableLazyLoadEvent): void {
+    const current: KeyPartialQuery = { ...this.filterSharingOperationKey() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;
@@ -692,5 +649,5 @@ export class SharingOperationView implements OnInit {
     this.loadSharingOperationKey();
   }
 
-  public SharingOperationMetersQueryType = SharingOperationMetersQueryType
+  public SharingOperationMetersQueryType = SharingOperationMetersQueryType;
 }

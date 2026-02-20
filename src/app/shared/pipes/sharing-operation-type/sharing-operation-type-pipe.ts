@@ -13,11 +13,17 @@ export class SharingOperationTypePipe implements PipeTransform {
       id: SharingOperationType.LOCAL,
       name: this.translate.instant('SHARING_OPERATION.TYPE.INSIDE_BUILDING') as string,
     },
-    { id: SharingOperationType.CER, name: this.translate.instant('SHARING_OPERATION.TYPE.CER') as string },
-    { id: SharingOperationType.CEC, name: this.translate.instant('SHARING_OPERATION.TYPE.CEC') as string },
+    {
+      id: SharingOperationType.CER,
+      name: this.translate.instant('SHARING_OPERATION.TYPE.CER') as string,
+    },
+    {
+      id: SharingOperationType.CEC,
+      name: this.translate.instant('SHARING_OPERATION.TYPE.CEC') as string,
+    },
   ];
-  transform(value: number): string {
-    const type = this.type_dict.find((x) => x.id === value);
+  transform(value: SharingOperationType | number): string {
+    const type = this.type_dict.find((x) => x.id === (value as SharingOperationType));
     if (type) {
       return type.name;
     }

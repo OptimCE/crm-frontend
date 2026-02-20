@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { ApiResponse } from '../../core/dtos/api.response';
 import { UpdateUserDTO, UserDTO } from '../dtos/user.dtos';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class UserService {
     this.apiAddress = environments.apiUrl + '/users';
   }
 
-  getUserInfo(): Observable<ApiResponse<UserDTO|string>> {
+  getUserInfo(): Observable<ApiResponse<UserDTO | string>> {
     return this.http.get<ApiResponse<UserDTO | string>>(this.apiAddress + '/');
   }
 

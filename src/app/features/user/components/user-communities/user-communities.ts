@@ -55,7 +55,7 @@ export class UserCommunities implements OnInit, OnDestroy {
   }
 
   lazyLoadCommunities($event: TableLazyLoadEvent): void {
-    const current: any = { ...this.filter() };
+    const current: CommunityQueryDTO = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_name;
@@ -67,12 +67,12 @@ export class UserCommunities implements OnInit, OnDestroy {
       }
     }
 
+    this.filter.set(current);
     this.loadCommunities();
   }
 
   joinCommunity(community: MyCommunityDTO): void {
     this.userContextService.switchCommunity(community.auth_community_id);
-
   }
 
   updateNameCommunity(_community: MyCommunityDTO): void {
@@ -110,14 +110,14 @@ export class UserCommunities implements OnInit, OnDestroy {
       closeOnEscape: true,
       header: this.translate.instant('COMMUNITY.CREATE.TITLE') as string,
     });
-    this.ref?.onClose.subscribe((result) => {
+    this.ref?.onClose.subscribe((result: boolean) => {
       if (result) {
         this.loadCommunities();
       }
     });
   }
 
-  leaveCommunity(_event: Event, _community: any): void {
+  leaveCommunity(_event: Event, _community: MyCommunityDTO): void {
     // this.communityService.leaveCommunity(new LeaveCommunity(community.id_community, false)).subscribe(
     //   {
     //     next: (response)=>

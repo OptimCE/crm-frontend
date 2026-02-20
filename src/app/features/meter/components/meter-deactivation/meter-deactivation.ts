@@ -8,6 +8,10 @@ import {
 } from '@angular/forms';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
+interface MeterDeactivationDialogData {
+  ean: string;
+}
+
 @Component({
   selector: 'app-meter-deactivation',
   standalone: true,
@@ -19,12 +23,13 @@ export class MeterDeactivation implements OnInit {
   private config = inject(DynamicDialogConfig);
 
   @Input()
-  ean: string;
+  ean!: string;
   deleteForm!: FormGroup;
   calendarOpen: boolean;
 
   constructor() {
-    this.ean = this.config.data.ean;
+    const data = this.config.data as MeterDeactivationDialogData;
+    this.ean = data.ean;
     this.calendarOpen = false;
   }
 

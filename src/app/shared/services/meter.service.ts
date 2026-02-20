@@ -25,11 +25,21 @@ export class MeterService {
     this.apiAddress = environments.apiUrl + '/meters';
   }
 
+  private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
+    const params: Record<string, string | number | boolean> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined && value !== null) {
+        params[key] = value as string | number | boolean;
+      }
+    }
+    return params;
+  }
+
   getMetersList(
     query: MeterPartialQuery,
   ): Observable<ApiResponsePaginated<PartialMeterDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(this.apiAddress + '/', {
-      params: { ...query },
+      params: this.toHttpParams(query as unknown as Record<string, unknown>),
     });
   }
 
@@ -44,7 +54,7 @@ export class MeterService {
     return this.http.get<ApiResponse<MeterConsumptionDTO | string>>(
       this.apiAddress + '/' + id + '/consumptions',
       {
-        params: { ...query },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
@@ -52,11 +62,11 @@ export class MeterService {
   downloadMeterConsumptions(
     id: string,
     query: MeterConsumptionQuery,
-  ): Observable<ApiResponse<any | string>> {
-    return this.http.get<ApiResponse<any | string>>(
+  ): Observable<ApiResponse<unknown>> {
+    return this.http.get<ApiResponse<unknown>>(
       this.apiAddress + '/' + id + '/consumptions/download',
       {
-        params: { ...query },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }

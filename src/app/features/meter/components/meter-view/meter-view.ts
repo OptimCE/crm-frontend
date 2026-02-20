@@ -34,6 +34,11 @@ import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { MapNumberStringPipe } from '../../../../shared/pipes/map-number-string/map-number-string-pipe';
 import { MeterDataView } from './meter-data-view/meter-data-view';
 
+interface ChartFormValue {
+  dateDeb: string;
+  dateFin: string;
+}
+
 @Component({
   selector: 'app-meter-view',
   standalone: true,
@@ -88,7 +93,15 @@ export class MeterView implements OnInit {
   rateMap: string[] = [];
   clientTypeMap: string[] = [];
   injectionStatusMap: string[] = [];
-  data: any;
+  data: {
+    labels: string[];
+    datasets: {
+      type: string;
+      label: string;
+      stack: string;
+      data: number[];
+    }[];
+  } | null = null;
   options = {
     maintainAspectRatio: false,
     aspectRatio: 0.8,
@@ -97,9 +110,9 @@ export class MeterView implements OnInit {
         mode: 'index',
         intersect: false,
         callbacks: {
-          label: function (tooltipItem: any): string {
+          label: function (tooltipItem: { dataset: { label?: string }; raw: unknown }): string {
             const label = tooltipItem.dataset.label || '';
-            const value = tooltipItem.raw;
+            const value = tooltipItem.raw as number;
             return `${label}: ${value} kWh`;
           },
         },
@@ -113,7 +126,7 @@ export class MeterView implements OnInit {
           text: this.translate.instant('METER.FULL.CHART.X_TITLE_DATE') as string,
         },
         ticks: {
-          _callback: (_value: any, index: number): string => {
+          _callback: (_value: unknown, index: number): string => {
             // Make sure 'this' refers to the component context
             const label = this.data?.labels?.[index];
             if (!label) return '';
@@ -141,7 +154,7 @@ export class MeterView implements OnInit {
       },
     },
   };
-  displayDownloadButton: any;
+  displayDownloadButton: boolean = false;
   formChart!: FormGroup;
   constructor() {
     this.isLoaded = false;
@@ -370,7 +383,7 @@ export class MeterView implements OnInit {
     }
   }
 
-  toDeactivate(): void{
+  toDeactivate(): void {
     this.ref = this.dialogService.open(MeterDeactivation, {
       modal: true,
       closable: true,
@@ -394,10 +407,11 @@ export class MeterView implements OnInit {
   }
 
   downloadTotalConsumption(): void {
+    const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.metersService
       .downloadMeterConsumptions(this.meter.EAN, {
-        date_start: this.formChart.value.dateDeb,
-        date_end: this.formChart.value.dateFin,
+        date_start: formValue.dateDeb,
+        date_end: formValue.dateFin,
       })
       .subscribe((response) => {
         if (response) {
@@ -420,10 +434,11 @@ export class MeterView implements OnInit {
       return;
     }
 
+    const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.metersService
       .getMeterConsumptions(this.meter.EAN, {
-        date_start: this.formChart.value.dateDeb,
-        date_end: this.formChart.value.dateFin,
+        date_start: formValue.dateDeb,
+        date_end: formValue.dateFin,
       })
       .subscribe((response) => {
         if (response) {
@@ -433,7 +448,9 @@ export class MeterView implements OnInit {
             datasets: [
               {
                 type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_SHARED_LABEL') as string,
+                label: this.translate.instant(
+                  'METER.FULL.CHART.CONSUMPTION_SHARED_LABEL',
+                ) as string,
                 stack: 'consumption',
                 data: tmpData.shared,
               },

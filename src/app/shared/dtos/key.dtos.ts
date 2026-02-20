@@ -7,6 +7,7 @@ export interface KeyPartialQuery extends PaginationQuery {
   description?: string;
   name?: string;
   sort_name?: Sort;
+  sort_description?: Sort;
 }
 
 /**

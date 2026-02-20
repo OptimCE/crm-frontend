@@ -7,6 +7,10 @@ import { Button } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
+interface CommunityInvitationForm {
+  email: string;
+}
+
 @Component({
   selector: 'app-community-invitation',
   standalone: true,
@@ -33,7 +37,8 @@ export class CommunityInvitation implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.ref.close(this.form.value.email);
+      const formValue = this.form.getRawValue() as CommunityInvitationForm;
+      this.ref.close(formValue.email);
     }
   }
 }

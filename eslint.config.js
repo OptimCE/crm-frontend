@@ -33,7 +33,7 @@ export default defineConfig([
         'error',
         {
           type: 'element',
-          prefix: 'app',
+          prefix: ['app', 'li'],
           style: 'kebab-case',
         },
       ],
@@ -46,10 +46,7 @@ export default defineConfig([
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/unbound-method': [
-        'error',
-        { ignoreStatic: true },
-      ],
+      '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'warn',
@@ -59,11 +56,9 @@ export default defineConfig([
     },
   },
 
-
   {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     rules: {},
   },
-
 ]);

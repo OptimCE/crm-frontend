@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import Keycloak, {KeycloakTokenParsed} from 'keycloak-js';
+import Keycloak, { KeycloakTokenParsed } from 'keycloak-js';
 import { Role } from '../../dtos/role';
 
 // The structure for our parsed data
@@ -14,17 +14,17 @@ export interface TokenOrg {
   orgPath: string;
   roles: Role[];
 }
-interface KeycloakTokenParsedExtends extends KeycloakTokenParsed{
+interface KeycloakTokenParsedExtends extends KeycloakTokenParsed {
   orgs: TokenOrg[];
   preferred_username: string;
   email: string;
 }
-export interface UserInterface{
+export interface UserInterface {
   username: string;
   email: string;
   communitiesById: Record<string, CommunityContext>;
-  activeCommunity: CommunityContext|null;
-  activeRole: Role|null;
+  activeCommunity: CommunityContext | null;
+  activeRole: Role | null;
 }
 const ACTIVE_COMMUNITY_STORAGE_KEY = 'activeCommunityId';
 
@@ -63,7 +63,7 @@ export class UserContextService {
   });
 
   refreshUserContext(): void {
-    const token  = this.keycloak.tokenParsed as KeycloakTokenParsedExtends|undefined;
+    const token = this.keycloak.tokenParsed as KeycloakTokenParsedExtends | undefined;
 
     // New source: orgs claim
     const rawOrgs: TokenOrg[] = token?.orgs ?? [];
@@ -73,9 +73,7 @@ export class UserContextService {
       if (!o?.orgId || !o?.orgPath) continue;
 
       // Keep only roles that match your Role enum
-      const roles = (o.roles ?? []).filter((r): r is Role =>
-        Object.values(Role).includes(r),
-      );
+      const roles = (o.roles ?? []).filter((r): r is Role => Object.values(Role).includes(r));
 
       parsed[o.orgId] = {
         orgId: o.orgId,
@@ -97,7 +95,7 @@ export class UserContextService {
     }
   }
 
-  logout(): void{
+  logout(): void {
     this.deleteStoreCommunityId();
   }
 
@@ -111,7 +109,7 @@ export class UserContextService {
     }
   }
 
-  getUserInfo(): UserInterface|null {
+  getUserInfo(): UserInterface | null {
     if (!this.keycloak.authenticated) return null;
     const token = this.keycloak.tokenParsed as KeycloakTokenParsedExtends;
 
@@ -161,7 +159,7 @@ export class UserContextService {
     if (!id) sessionStorage.removeItem(ACTIVE_COMMUNITY_STORAGE_KEY);
     else sessionStorage.setItem(ACTIVE_COMMUNITY_STORAGE_KEY, id);
   }
-  private deleteStoreCommunityId(): void{
+  private deleteStoreCommunityId(): void {
     sessionStorage.removeItem(ACTIVE_COMMUNITY_STORAGE_KEY);
   }
 }

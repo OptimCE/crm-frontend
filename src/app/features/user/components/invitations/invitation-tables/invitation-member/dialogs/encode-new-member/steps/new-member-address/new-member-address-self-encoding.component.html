@@ -1,6 +1,11 @@
-<div (click)="goBack()" class="cursor-pointer hover:text-green-700">
-  <i class="pi pi-arrow-left flex-wrap-left mr-2 !text-xs"></i>
-  <span class="!text-sm">{{ 'MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS' | translate }}</span>
+<div
+  (click)="goBack()"
+  (keydown.enter)="goBack()"
+  tabindex="0"
+  class="cursor-pointer hover:text-green-700"
+>
+  <i class="pi pi-arrow-left flex-wrap-left mr-2 text-xs!"></i>
+  <span class="text-sm!">{{ 'MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS' | translate }}</span>
 </div>
 <form [formGroup]="addressForm" (submit)="submit()">
   <div class="flex flex-wrap pb-1">

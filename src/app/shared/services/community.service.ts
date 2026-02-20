@@ -10,7 +10,7 @@ import {
   PatchRoleUserDTO,
   UsersCommunityDTO,
 } from '../dtos/community.dtos';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,34 +23,44 @@ export class CommunityService {
     this.apiAddress = environments.apiUrl + '/communities';
   }
 
-  getMyCommunities(query: CommunityQueryDTO): Observable<ApiResponsePaginated<MyCommunityDTO[] | string>> {
+  private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
+    const params: Record<string, string | number | boolean> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined && value !== null) {
+        params[key] = value as string | number | boolean;
+      }
+    }
+    return params;
+  }
+
+  getMyCommunities(
+    query: CommunityQueryDTO,
+  ): Observable<ApiResponsePaginated<MyCommunityDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<MyCommunityDTO[] | string>>(
       this.apiAddress + '/my-communities',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
 
-  getUsers(query: CommunityUsersQueryDTO): Observable<ApiResponsePaginated<UsersCommunityDTO[] |string>> {
+  getUsers(
+    query: CommunityUsersQueryDTO,
+  ): Observable<ApiResponsePaginated<UsersCommunityDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UsersCommunityDTO[] | string>>(
       this.apiAddress + '/users',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }
-  getAdmins(query: CommunityUsersQueryDTO): Observable<ApiResponsePaginated<UsersCommunityDTO[] | string>> {
+  getAdmins(
+    query: CommunityUsersQueryDTO,
+  ): Observable<ApiResponsePaginated<UsersCommunityDTO[] | string>> {
     return this.http.get<ApiResponsePaginated<UsersCommunityDTO[] | string>>(
       this.apiAddress + '/admins',
       {
-        params: {
-          ...query,
-        },
+        params: this.toHttpParams(query as unknown as Record<string, unknown>),
       },
     );
   }

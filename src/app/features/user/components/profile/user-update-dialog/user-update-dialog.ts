@@ -2,13 +2,36 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../../../shared/services/user.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UpdateUserDTO } from '../../../../../shared/dtos/user.dtos';
+import { UpdateUserDTO, UserDTO } from '../../../../../shared/dtos/user.dtos';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputText } from 'primeng/inputtext';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+
+interface UserUpdateDialogData {
+  user: UserDTO;
+}
+
+interface UserUpdateFormValue {
+  id: string;
+  name: string;
+  surname: string;
+  phone: string;
+  iban: string;
+  same_address: boolean | unknown[];
+  home_address_street: string;
+  home_address_number: string;
+  home_address_postcode: string;
+  home_address_supplement: string;
+  home_address_city: string;
+  billing_address_street?: string;
+  billing_address_number?: string;
+  billing_address_postcode?: string;
+  billing_address_supplement?: string;
+  billing_address_city?: string;
+}
 
 @Component({
   selector: 'app-user-update-dialog',
@@ -25,8 +48,9 @@ export class UserUpdateDialog implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    if (this.config.data && this.config.data.user) {
-      this.user = this.config.data.user as UpdateUserDTO;
+    const data = this.config.data as UserUpdateDialogData;
+    if (data && data.user) {
+      this.user = data.user as unknown as UpdateUserDTO;
       this.patchValue();
     }
   }
@@ -83,7 +107,13 @@ export class UserUpdateDialog implements OnInit {
   }
 
   toggleSameAddress(_event: CheckboxChangeEvent): void {
-    if (this.formData.value.same_address[0]) {
+    const formValue = this.formData.getRawValue() as UserUpdateFormValue;
+    const sameAddressValue = formValue.same_address;
+    const isSameAddress = Array.isArray(sameAddressValue)
+      ? sameAddressValue[0]
+      : !!sameAddressValue;
+
+    if (isSameAddress) {
       // Remove billing address from form
       this.formData.removeControl('billing_address_street');
       this.formData.removeControl('billing_address_number');
@@ -103,37 +133,39 @@ export class UserUpdateDialog implements OnInit {
     if (this.formData.invalid) {
       return;
     }
-    this.user.nrn = this.formData.value.id;
-    this.user.first_name = this.formData.value.name;
-    this.user.last_name = this.formData.value.surname;
-    this.user.phone_number = this.formData.value.phone;
-    this.user.iban = this.formData.value.iban;
+    const formValue = this.formData.getRawValue() as UserUpdateFormValue;
+
+    this.user.nrn = formValue.id;
+    this.user.first_name = formValue.name;
+    this.user.last_name = formValue.surname;
+    this.user.phone_number = formValue.phone;
+    this.user.iban = formValue.iban;
     if (
-      this.formData.value.home_address_street &&
-      this.formData.value.home_address_number &&
-      this.formData.value.home_address_postcode &&
-      this.formData.value.home_address_city
+      formValue.home_address_street &&
+      formValue.home_address_number &&
+      formValue.home_address_postcode &&
+      formValue.home_address_city
     ) {
       this.user.home_address = {
-        street: this.formData.value.home_address_street,
-        number: this.formData.value.home_address_number,
-        postcode: this.formData.value.home_address_postcode,
-        supplement: this.formData.value.home_address_supplement,
-        city: this.formData.value.home_address_city,
+        street: formValue.home_address_street,
+        number: +formValue.home_address_number,
+        postcode: formValue.home_address_postcode,
+        supplement: formValue.home_address_supplement,
+        city: formValue.home_address_city,
       };
     }
     if (
-      this.formData.value.billing_address_street &&
-      this.formData.value.billing_address_number &&
-      this.formData.value.billing_address_postcode &&
-      this.formData.value.billing_address_city
+      formValue.billing_address_street &&
+      formValue.billing_address_number &&
+      formValue.billing_address_postcode &&
+      formValue.billing_address_city
     ) {
       this.user.billing_address = {
-        street: this.formData.value.billing_address_street,
-        number: this.formData.value.billing_address_number,
-        postcode: this.formData.value.billing_address_postcode,
-        supplement: this.formData.value.billing_address_supplement,
-        city: this.formData.value.billing_address_city,
+        street: formValue.billing_address_street,
+        number: +formValue.billing_address_number,
+        postcode: formValue.billing_address_postcode,
+        supplement: formValue.billing_address_supplement,
+        city: formValue.billing_address_city,
       };
     }
     console.log(this.user);

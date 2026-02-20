@@ -36,7 +36,7 @@ export class NewMemberAddress {
     this.backClicked.emit();
   }
 
-  submit(): void{
+  submit(): void {
     if (this.addressForm.valid) {
       this.formSubmitted.emit();
     }

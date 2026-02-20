@@ -23,7 +23,7 @@ export class Profile implements OnInit, OnDestroy {
   private userService = inject(UserService);
   protected isLoading = signal<boolean>(false);
   protected user = signal<UserDTO | null>(null);
-  ref?: DynamicDialogRef<any> | null;
+  ref?: DynamicDialogRef | null;
   ngOnInit(): void {
     this.loadUser();
   }
@@ -57,7 +57,7 @@ export class Profile implements OnInit, OnDestroy {
         user: this.user(),
       },
     });
-    this.ref?.onClose.subscribe((response) => {
+    this.ref?.onClose.subscribe((response: boolean) => {
       if (response) {
         this.loadUser();
       }

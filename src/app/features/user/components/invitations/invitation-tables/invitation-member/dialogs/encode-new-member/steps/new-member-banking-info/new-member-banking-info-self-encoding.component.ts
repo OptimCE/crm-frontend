@@ -33,11 +33,13 @@ export class NewMemberBankingInfoSelfEncoding implements OnInit {
   }
 
   setupErrorTranslation(): void {
-    this.translate.get(['MEMBER.ADD.BANK.ERROR.IBAN']).subscribe((translation: Record<string, string>) => {
-      this.ibanErrorAdded = {
-        invalidIban: () => translation['MEMBER.ADD.BANK.ERROR.IBAN'],
-      };
-    });
+    this.translate
+      .get(['MEMBER.ADD.BANK.ERROR.IBAN'])
+      .subscribe((translation: Record<string, string>) => {
+        this.ibanErrorAdded = {
+          invalidIban: () => translation['MEMBER.ADD.BANK.ERROR.IBAN'],
+        };
+      });
   }
 
   goBack(): void {

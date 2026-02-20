@@ -6,6 +6,7 @@ import {
   InjectionStatus,
   MeterDataStatus,
   MeterRate,
+  PhaseCategory,
   ProductionChain,
   ReadingFrequency,
   TarifGroup,
@@ -79,7 +80,7 @@ export interface MetersDTO {
   address: AddressDTO;
   holder?: MembersPartialDTO;
   tarif_group: TarifGroup;
-  phases_number: number;
+  phases_number: PhaseCategory;
   reading_frequency: ReadingFrequency;
   meter_data?: MetersDataDTO;
   meter_data_history?: MetersDataDTO[];
@@ -173,7 +174,7 @@ export interface CreateMeterDTO {
   meter_number: string;
   address: CreateAddressDTO;
   tarif_group: TarifGroup;
-  phases_number: number;
+  phases_number: PhaseCategory;
   reading_frequency: ReadingFrequency;
   initial_data: CreateMeterDataDTO;
 }
@@ -190,12 +191,11 @@ export interface UpdateMeterDTO {
   meter_number: string;
   address: CreateAddressDTO;
   tarif_group: TarifGroup;
-  phases_number: number;
+  phases_number: PhaseCategory;
   reading_frequency: ReadingFrequency;
 }
 
-
-export interface DeleteFutureMeterDataDTO{
+export interface DeleteFutureMeterDataDTO {
   id_meter_data: number;
   active_previous_meter_data?: boolean;
 }

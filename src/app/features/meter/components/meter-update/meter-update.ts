@@ -15,6 +15,28 @@ import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 
+interface MeterUpdateDialogData {
+  meter: MetersDTO;
+}
+
+interface MeterCategory<T> {
+  id: T;
+  name: string;
+}
+
+interface MeterUpdateFormValue {
+  address_street: string;
+  address_number: string;
+  address_postcode: string;
+  address_supplement: string;
+  address_city: string;
+  EAN: string;
+  meterNumber: string;
+  tarifGroup: MeterCategory<TarifGroup>;
+  phasesNumber: MeterCategory<PhaseCategory>;
+  readingFrequency: MeterCategory<ReadingFrequency>;
+}
+
 @Component({
   selector: 'app-meter-update',
   standalone: true,
@@ -41,20 +63,21 @@ export class MeterUpdate implements OnInit {
   @Input()
   meter!: MetersDTO;
   metersForm!: FormGroup;
-  tarifGroupCategory: any[] = [
+  tarifGroupCategory: MeterCategory<TarifGroup>[] = [
     { id: TarifGroup.LOW_TENSION, name: '' },
     { id: TarifGroup.HIGH_TENSION, name: '' },
   ];
-  phaseCategory: any[] = [
+  phaseCategory: MeterCategory<PhaseCategory>[] = [
     { id: PhaseCategory.SINGLE, name: '' },
     { id: PhaseCategory.THREE, name: '' },
   ];
-  readingFrequencyCategory: any[] = [
+  readingFrequencyCategory: MeterCategory<ReadingFrequency>[] = [
     { id: ReadingFrequency.MONTHLY, name: '' },
     { id: ReadingFrequency.YEARLY, name: '' },
   ];
   constructor() {
-    this.meter = this.config.data.meter;
+    const data = this.config.data as MeterUpdateDialogData;
+    this.meter = data.meter;
   }
 
   ngOnInit(): void {
@@ -88,13 +111,13 @@ export class MeterUpdate implements OnInit {
     });
     this.setupTranslationCategory();
   }
-  setupTranslationCategory(): void{
+  setupTranslationCategory(): void {
     this.setupReadingFrequencyCategory();
     this.setupPhaseCategory();
     this.setupTarifGroupCategory();
   }
 
-  setupReadingFrequencyCategory(): void{
+  setupReadingFrequencyCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
@@ -111,7 +134,7 @@ export class MeterUpdate implements OnInit {
       });
   }
 
-  setupPhaseCategory(): void{
+  setupPhaseCategory(): void {
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
       .subscribe((translation: Record<string, string>) => {
@@ -125,7 +148,7 @@ export class MeterUpdate implements OnInit {
       });
   }
 
-  setupTarifGroupCategory(): void{
+  setupTarifGroupCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
@@ -142,26 +165,28 @@ export class MeterUpdate implements OnInit {
       });
   }
 
-  onSubmit(): void{
+  onSubmit(): void {
     if (!this.metersForm.valid) {
       return;
     }
 
+    const formValue = this.metersForm.getRawValue() as MeterUpdateFormValue;
+
     const newAddress: CreateAddressDTO = {
-      street: this.metersForm.value.address_street,
-      number: this.metersForm.value.address_number,
-      postcode: this.metersForm.value.address_postcode,
-      city: this.metersForm.value.address_city,
-      supplement: this.metersForm.value.address_supplement,
+      street: formValue.address_street,
+      number: +formValue.address_number,
+      postcode: formValue.address_postcode,
+      city: formValue.address_city,
+      supplement: formValue.address_supplement,
     };
 
     const updated_meter: UpdateMeterDTO = {
-      EAN: this.metersForm.value.EAN,
+      EAN: formValue.EAN,
       address: newAddress,
-      meter_number: this.metersForm.value.meterNumber,
-      phases_number: this.metersForm.value.phasesNumber.id,
-      reading_frequency: this.metersForm.value.readingFrequency.id,
-      tarif_group: this.metersForm.value.tarifGroup.id,
+      meter_number: formValue.meterNumber,
+      phases_number: formValue.phasesNumber.id,
+      reading_frequency: formValue.readingFrequency.id,
+      tarif_group: formValue.tarifGroup.id,
     };
 
     this.meterService.updateMeter(updated_meter).subscribe({

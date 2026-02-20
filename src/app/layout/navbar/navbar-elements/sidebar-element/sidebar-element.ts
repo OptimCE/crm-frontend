@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Ripple } from 'primeng/ripple';
 import { RouterLink } from '@angular/router';
-
 @Component({
   selector: 'li[appSidebarItem]',
   imports: [Ripple, RouterLink],

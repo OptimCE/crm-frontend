@@ -3,7 +3,6 @@ import { Links } from '../dtos';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-
 @Component({
   selector: 'li[appSidebarMultiItems]',
   imports: [RouterLink, NgClass, TranslatePipe],

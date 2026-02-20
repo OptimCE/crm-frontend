@@ -41,11 +41,11 @@ export class NewMemberInformations implements OnInit {
     this.setupErrorTranslation();
   }
 
-  goBack(): void{
+  goBack(): void {
     this.backClicked.emit();
   }
 
-  setupErrorTranslation(): void{
+  setupErrorTranslation(): void {
     this.translate
       .get(['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'])
       .subscribe((translation: Record<string, string>) => {
@@ -60,12 +60,12 @@ export class NewMemberInformations implements OnInit {
   }
 
   submit(): void {
-    console.log(this.form)
-    console.log(this.form.valid)
+    console.log(this.form);
+    console.log(this.form.valid);
     if (this.form.valid) {
       this.formSubmitted.emit();
-    }else{
-      this.form.markAsTouched()
+    } else {
+      this.form.markAsTouched();
     }
   }
 

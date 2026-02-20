@@ -29,9 +29,7 @@ export class TaskSSEServie {
       },
       error: (err: unknown) => {
         const message: string =
-          err instanceof ApiResponse
-            ? String((err as ApiResponse<string>).data)
-            : 'Error';
+          err instanceof ApiResponse ? String((err as ApiResponse<string>).data) : 'Error';
         this.eventBus.emit('snack-notification', { message, type: ERROR_TYPE });
       },
     });

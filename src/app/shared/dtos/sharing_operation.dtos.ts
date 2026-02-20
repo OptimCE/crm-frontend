@@ -12,10 +12,10 @@ export interface SharingOperationPartialQuery extends PaginationQuery {
   sort_type?: Sort;
 }
 
-export enum SharingOperationMetersQueryType{
+export enum SharingOperationMetersQueryType {
   PAST = 1,
   NOW = 2,
-  FUTURE = 3
+  FUTURE = 3,
 }
 
 export interface SharingOperationMetersQuery extends PaginationQuery {
@@ -140,4 +140,3 @@ export interface RemoveMeterFromSharingOperationDTO {
   id_sharing: number;
   date: Date;
 }
-

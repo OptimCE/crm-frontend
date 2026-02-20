@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { KeyDTO } from '../../../../shared/dtos/key.dtos';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { KeyService } from '../../../../shared/services/key.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -13,9 +13,9 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import { ColDef } from 'ag-grid-community';
-import {KeyTableRow} from '../../../../shared/types/key.types';
-import {ApiResponse} from '../../../../core/dtos/api.response';
+import { CellClassParams, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { KeyTableRow } from '../../../../shared/types/key.types';
+import { ApiResponse } from '../../../../core/dtos/api.response';
 @Component({
   selector: 'app-key-view',
   standalone: true,
@@ -37,15 +37,15 @@ export class KeyView implements OnInit, OnDestroy {
   public isLoaded: boolean;
   displayAllDescription: boolean = false;
   rowData: KeyTableRow[] = [];
-  colDefs!: ColDef<any>[];
+  colDefs!: ColDef<KeyTableRow>[];
   public defaultColDef = {
     width: 250,
     flex: 1,
     minWidth: 140,
   };
-  gridApi: any;
+  gridApi!: GridApi;
   ref?: DynamicDialogRef | null;
-  frameworkComponents: any;
+  frameworkComponents: Record<string, unknown>;
   constructor() {
     this.isLoaded = false;
     this.frameworkComponents = {
@@ -73,8 +73,13 @@ export class KeyView implements OnInit, OnDestroy {
     },
   ];
 
-  cellStyleNumber(params: any): {backgroundColor: string, visibility: string, 'border-bottom': string} {
+  cellStyleNumber(params: CellClassParams<KeyTableRow>): {
+    backgroundColor: string;
+    visibility: string;
+    'border-bottom': string;
+  } {
     if (
+      params.node.data &&
       params.node.data.number !== undefined &&
       params.node.data.number != KeyView.lastNumberCellStyleNumber
     ) {
@@ -136,7 +141,7 @@ export class KeyView implements OnInit, OnDestroy {
       },
       error: (error: unknown) => {
         const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData)
+        this.errorHandler.handleError(errorData);
         void this.routing.navigate(['/keys']);
       },
     });
@@ -213,7 +218,7 @@ export class KeyView implements OnInit, OnDestroy {
       });
   }
 
-  onGridReady(event: any): void {
+  onGridReady(event: GridReadyEvent): void {
     this.rowData = this.formatData();
     this.gridApi = event.api;
 
@@ -226,57 +231,66 @@ export class KeyView implements OnInit, OnDestroy {
   }
 
   deleteKey(): void {
-    this.keyService.deleteKey(this.key!.id).subscribe({
-      next: (response) => {
-        if (response) {
-          this.snackbarNotification.openSnackBar(
-            this.translate.instant('KEY.SUCCESS.KEY_DELETED') as string,
-            VALIDATION_TYPE,
-          );
-        } else {
-          this.errorHandler.handleError();
-        }
-        void this.routing.navigate(['/keys']);
-      },
-      error: (error: unknown) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData)
-        void this.routing.navigate(['/keys']);
-      },
-    });
+    if (this.key) {
+      this.keyService.deleteKey(this.key.id).subscribe({
+        next: (response) => {
+          if (response) {
+            this.snackbarNotification.openSnackBar(
+              this.translate.instant('KEY.SUCCESS.KEY_DELETED') as string,
+              VALIDATION_TYPE,
+            );
+          } else {
+            this.errorHandler.handleError();
+          }
+          void this.routing.navigate(['/keys']);
+        },
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
+          void this.routing.navigate(['/keys']);
+        },
+      });
+    }
   }
 
   exportExcel(): void {
-    this.keyService.downloadKey(this.key!.id).subscribe({
-      next: (response) => {
-        if (response) {
-          // Check if the response contains the blob/filename object
-          if ('blob' in response) {
-            this.snackbarNotification.openSnackBar(
-              this.translate.instant('KEY.SUCCESS.KEY_EXPORTED') as string,
-              VALIDATION_TYPE
-            );
+    if (this.key) {
+      this.keyService.downloadKey(this.key.id).subscribe({
+        next: (response) => {
+          if (response) {
+            // Check if the response contains the blob/filename object
+            if ('blob' in response) {
+              this.snackbarNotification.openSnackBar(
+                this.translate.instant('KEY.SUCCESS.KEY_EXPORTED') as string,
+                VALIDATION_TYPE,
+              );
 
-            const url = window.URL.createObjectURL(response.blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = response.filename; // Use the dynamic filename!
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-          } else {
-            // This is the ApiResponse error case
-            this.errorHandler.handleError(response.data ? response.data : null);
+              const url = window.URL.createObjectURL(response.blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = response.filename; // Use the dynamic filename!
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            } else {
+              // This is the ApiResponse error case
+              this.errorHandler.handleError(response.data ? response.data : null);
+            }
           }
-        }
-      },
-      error: (error) => this.errorHandler.handleError(error)
-    });
+        },
+        error: (error) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
+        },
+      });
+    }
   }
 
   updateKey(): void {
-    void this.routing.navigate(['/keys/add'], { queryParams: { id: this.key!.id } });
+    if (this.key) {
+      void this.routing.navigate(['/keys/add'], { queryParams: { id: this.key.id } });
+    }
   }
 
   openHelper(displayText: string): void {

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SummaryErrorHandlerComponent } from './summary-error.handler.component';
+import { FormErrorSummaryComponent } from './summary-error.handler.component';
 
-describe('SummaryErrorHandlerComponent', () => {
-  let component: SummaryErrorHandlerComponent;
-  let fixture: ComponentFixture<SummaryErrorHandlerComponent>;
+describe('FormErrorSummaryComponent', () => {
+  let component: FormErrorSummaryComponent;
+  let fixture: ComponentFixture<FormErrorSummaryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SummaryErrorHandlerComponent],
+      imports: [FormErrorSummaryComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SummaryErrorHandlerComponent);
+    fixture = TestBed.createComponent(FormErrorSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

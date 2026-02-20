@@ -3,21 +3,25 @@ import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
-import { PrimeTemplate } from 'primeng/api';
-import { TableModule } from 'primeng/table';
+import { FilterMetadata, PrimeTemplate } from 'primeng/api';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
-import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { AddMeterToSharingOperationDTO } from '../../../../shared/dtos/sharing_operation.dtos';
+
+interface SharingOperationAddMeterDialogData {
+  id: number;
+}
 
 @Component({
   selector: 'app-sharing-operation-add-meter',
@@ -54,14 +58,15 @@ export class SharingOperationAddMeter implements OnInit {
     cityName: '',
   };
   paginationMetersInfo: Pagination = new Pagination(1, 10, 0, 1);
-  statutCategory: any[] = [];
+  statutCategory: { value: MeterDataStatus; label: string }[] = [];
   selectedMeters?: PartialMeterDTO[];
   minDate: Date = new Date();
-  dateSelected: any;
+  dateSelected: Date | null = null;
   currentPageReportTemplate: string = '';
 
   constructor() {
-    this.id = this.config.data.id;
+    const data = this.config.data as SharingOperationAddMeterDialogData;
+    this.id = data.id;
   }
 
   ngOnInit(): void {
@@ -115,67 +120,70 @@ export class SharingOperationAddMeter implements OnInit {
       });
   }
 
-  loadMeters(filter?: any, page?: number): void {
-    try {
-      const params: any = {
-        not_sharing_operation_id: this.id,
-      };
-      // Check for address
-      if (
-        !(
-          this.addressFilter.streetName == '' &&
-          this.addressFilter.postcode == '' &&
-          this.addressFilter.cityName == ''
-        )
-      ) {
-        // Il y a un filtre d'adresse
-        if (this.addressFilter.streetName != '') {
-          params['streetname'] = this.addressFilter.streetName;
-        }
-        if (this.addressFilter.postcode != '') {
-          params['postcode'] = this.addressFilter.postcode;
-        }
-        if (this.addressFilter.cityName != '') {
-          params['cityname'] = this.addressFilter.cityName;
-        }
+  loadMeters(
+    filter?: Record<string, FilterMetadata | FilterMetadata[] | undefined>,
+    _page?: number,
+  ): void {
+    const params: MeterPartialQuery = {
+      page: 1,
+      limit: 10,
+      not_sharing_operation_id: this.id,
+    };
+    // Check for address
+    if (
+      !(
+        this.addressFilter.streetName === '' &&
+        this.addressFilter.postcode === '' &&
+        this.addressFilter.cityName === ''
+      )
+    ) {
+      // Il y a un filtre d'adresse
+      if (this.addressFilter.streetName !== '') {
+        params.street = this.addressFilter.streetName;
       }
-      if (filter) {
-        for (const key in filter) {
-          if (key == 'statut') {
-            if (filter[key][0].value != null) {
-              params[key] = filter[key][0].value;
-            }
-          } else {
-            if (filter[key][0].value != null && filter[key][0].value != '') {
-              if (key == 'holder') {
-                params[key] = filter[key][0].value.id;
-              } else {
-                params[key] = filter[key][0].value;
-              }
-            }
-          }
-        }
+      if (this.addressFilter.postcode !== '') {
+        params.postcode = parseInt(this.addressFilter.postcode);
       }
-      this.metersService.getMetersList({ page: page, limit: 10, ...params }).subscribe({
-        next: (response) => {
-          if (response) {
-            this.metersPartialList = response.data as PartialMeterDTO[];
-            this.paginationMetersInfo = response.pagination;
-            this.updatePaginationTranslation();
-          } else {
-            console.error('Error fetching meters partial list');
-          }
-        },
-        error: (_error) => {
-          console.error('Error fetching meters partial list');
-        },
-      });
-    } catch (e) {
-      console.error('Error fetching meters partial list ' + e);
+      if (this.addressFilter.cityName !== '') {
+        params.city = this.addressFilter.cityName;
+      }
     }
+    if (filter) {
+      Object.entries(filter).forEach(([key, meta]) => {
+        const filterMeta = Array.isArray(meta) ? meta[0] : meta;
+        if (
+          filterMeta &&
+          filterMeta.value !== undefined &&
+          filterMeta.value !== null &&
+          filterMeta.value !== ''
+        ) {
+          if (key === 'statut') {
+            params.status = filterMeta.value as MeterDataStatus;
+          } else if (key === 'EAN') {
+            params.EAN = filterMeta.value as string;
+          } else if (key === 'meter_number') {
+            params.meter_number = filterMeta.value as string;
+          }
+        }
+      });
+    }
+    this.metersService.getMetersList({ ...params }).subscribe({
+      next: (response) => {
+        if (response) {
+          this.metersPartialList = response.data as PartialMeterDTO[];
+          this.paginationMetersInfo = response.pagination;
+          this.updatePaginationTranslation();
+        } else {
+          console.error('Error fetching meters partial list');
+        }
+      },
+      error: (_error) => {
+        console.error('Error fetching meters partial list');
+      },
+    });
   }
 
-  lazyLoadMeters($event: any): void {
+  lazyLoadMeters($event: TableLazyLoadEvent): void {
     let page = 0;
     if ($event.first && $event.rows) {
       page = $event.first / $event.rows + 1;
@@ -183,7 +191,7 @@ export class SharingOperationAddMeter implements OnInit {
     this.loadMeters($event.filters, page >= 1 ? page : 1);
   }
 
-  clear(table: any): void{
+  clear(table: Table<PartialMeterDTO>): void {
     table.clear();
     this.addressFilter = {
       streetName: '',
@@ -192,8 +200,9 @@ export class SharingOperationAddMeter implements OnInit {
     };
   }
 
-  pageChange(_$event: any): void {
-    console.log('TO IMPLEMENT');
+  pageChange($event: TablePageEvent): void {
+    const page = $event.first / $event.rows + 1;
+    this.loadMeters(undefined, page);
   }
 
   onValidate(): void {

@@ -6,7 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DocumentService } from '../../../../shared/services/document.service';
-import {ApiResponse} from '../../../../core/dtos/api.response';
+import { ApiResponse } from '../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-member-add-document',
@@ -18,7 +18,7 @@ import {ApiResponse} from '../../../../core/dtos/api.response';
 })
 export class MemberAddDocument implements OnInit {
   private documentService = inject(DocumentService);
-  private config = inject(DynamicDialogConfig);
+  private config = inject<DynamicDialogConfig<{ idMember: string }>>(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   formGroup!: FormGroup;
@@ -27,8 +27,9 @@ export class MemberAddDocument implements OnInit {
   private idMember!: string;
 
   ngOnInit(): void {
-    if (this.config.data && this.config.data.idMember) {
-      this.idMember = this.config.data.idMember;
+    const data = this.config.data;
+    if (data && data.idMember) {
+      this.idMember = data.idMember;
     } else {
       console.error('No member id provided');
       this.ref.close(false);
@@ -38,8 +39,9 @@ export class MemberAddDocument implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    const selectedFile = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const selectedFile = input?.files?.[0] ?? null;
     if (selectedFile) {
       this.fileToUpload = selectedFile;
       this.formGroup.patchValue({ fileToUpload: this.fileToUpload });
@@ -88,7 +90,7 @@ export class MemberAddDocument implements OnInit {
       },
       error: (error: unknown) => {
         const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData)
+        this.errorHandler.handleError(errorData);
       },
     });
   }

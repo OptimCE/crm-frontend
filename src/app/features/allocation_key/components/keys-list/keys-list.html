@@ -68,7 +68,11 @@
       </tr>
     </ng-template>
     <ng-template #body let-key>
-      <tr routerLink="/keys/{{ key.id }}" class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer" style="cursor: pointer">
+      <tr
+        routerLink="/keys/{{ key.id }}"
+        class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer"
+        style="cursor: pointer"
+      >
         <td class="text-sm px-3 py-2">{{ key.name }}</td>
         <td class="text-sm px-3 py-2">{{ key.description }}</td>
       </tr>

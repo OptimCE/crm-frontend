@@ -88,7 +88,9 @@
                   (sidebarClose)="closeSideBar()"
                   [activeSublist]="activeSublist === 'members'"
                   [links]="memberLinks"
+                  tabindex="0"
                   (click)="toggleSublist('members')"
+                  (keydown.enter)="toggleSublist('members')"
                 ></li>
                 <li
                   appSidebarItem
@@ -121,7 +123,7 @@
           }
 
           <div class="sidebar-footer align-self-center">
-            <a (click)="logout()" class="cursor-pointer">
+            <a (click)="logout()" (keydown.enter)="logout()" class="cursor-pointer" tabindex="0">
               <i class="pi pi-sign-out" [class.mr-1]="sidebarOpen"></i>
               @if (sidebarOpen) {
                 <span>{{ 'NAVBAR.DISCONNECT' | translate }}</span>
@@ -133,7 +135,14 @@
     </p-drawer>
     <!-- Mobile -->
     <div class="p-3">
-      <i class="pi pi-bars" (click)="openSideBar()"></i>
+      <i
+        class="pi pi-bars"
+        (click)="openSideBar()"
+        (keydown.enter)="openSideBar()"
+        tabindex="0"
+        role="button"
+        aria-label="Open sidebar"
+      ></i>
     </div>
   </div>
 </div>

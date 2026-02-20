@@ -39,15 +39,14 @@ export class InvitationMember implements OnDestroy {
     this.loading.set(true);
     this.invitations.set([]);
     this.invitationService.getOwnMembersPendingInviation(this.filterMemberInvitation()).subscribe({
-      next: (response: ApiResponse<any>) => {
+      next: (response: ApiResponse<UserMemberInvitationDTO[] | string>) => {
         if (response && response.data) {
           this.invitations.set(response.data as UserMemberInvitationDTO[]);
         }
         this.loading.set(false);
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error(error);
-        //TODO: Handle error
         this.loading.set(false);
       },
     });
@@ -67,12 +66,10 @@ export class InvitationMember implements OnDestroy {
     this.invitationService.acceptInvitationMember({ invitation_id: invitation.id }).subscribe({
       next: (response) => {
         if (response) {
-          // TODO: Display snackbar
           this.loadMemberInvitation();
         }
       },
-      error: (error) => {
-        // TODO: Handle error snackbar
+      error: (error: unknown) => {
         console.error(error);
       },
     });
@@ -82,12 +79,10 @@ export class InvitationMember implements OnDestroy {
     this.invitationService.refuseMemberInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {
-          // TODO: Display snackbar
           this.loadMemberInvitation();
         }
       },
-      error: (error) => {
-        // TODO: Handle error snackbar
+      error: (error: unknown) => {
         console.error(error);
       },
     });
@@ -96,16 +91,17 @@ export class InvitationMember implements OnDestroy {
   fetchDetail(invitation: UserMemberInvitationDTO): void {
     this.invitationService
       .getOwnMemberPendingInvitationById(invitation.id)
-      .subscribe((response) => {
-        if (response) {
+      .subscribe((response: ApiResponse<IndividualDTO | CompanyDTO | string>) => {
+        if (response && response.data) {
+          const data = response.data as IndividualDTO | CompanyDTO;
           this.ref = this.dialogService.open(InvitationDetailComponent, {
             header: this.translate.instant('INVITATION.SEE_DETAIL.TITLE') as string,
             modal: true,
             closable: true,
             closeOnEscape: true,
             data: {
-              member: response.data,
-              member_type: (response.data as IndividualDTO | CompanyDTO).member_type,
+              member: data,
+              member_type: data.member_type,
             },
           });
         }
@@ -123,7 +119,7 @@ export class InvitationMember implements OnDestroy {
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((result) => {
+      this.ref.onClose.subscribe((result: boolean) => {
         if (result) {
           this.loadMemberInvitation();
         }

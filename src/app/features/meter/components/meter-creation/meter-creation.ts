@@ -37,10 +37,35 @@ import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { Button } from 'primeng/button';
+import { ApiResponse } from '../../../../core/dtos/api.response';
 interface ListRadio {
   id: number;
   name: string;
 }
+interface MeterFormValue {
+  address_street: string;
+  address_number: string;
+  address_postcode: string;
+  address_supplement: string;
+  address_city: string;
+  EAN: string;
+  grd: string;
+  meterNumber: string;
+  tarifGroup: ListRadio;
+  phasesNumber: ListRadio;
+  readingFrequency: ListRadio;
+  description: string;
+  samplingPower: number;
+  totalGeneratingCapacity: number;
+  amperage: number;
+  rate: ListRadio;
+  productionChain: ListRadio;
+  clientType: ListRadio;
+  member: MembersPartialDTO;
+  dateStart: Date;
+  injectionStatus: ListRadio;
+}
+
 @Component({
   selector: 'app-meter-creation',
   standalone: true,
@@ -64,7 +89,7 @@ interface ListRadio {
 })
 export class MeterCreation implements OnInit {
   private memberService = inject(MemberService);
-  private config = inject(DynamicDialogConfig);
+  private config = inject<DynamicDialogConfig<{ holder_id?: number }>>(DynamicDialogConfig);
   private meterService = inject(MeterService);
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
@@ -105,7 +130,8 @@ export class MeterCreation implements OnInit {
       address_postcode: new FormControl('', [Validators.required]),
       address_supplement: new FormControl('', []),
       address_city: new FormControl('', [Validators.required]),
-      EAN: new FormControl('', [Validators.required,
+      EAN: new FormControl('', [
+        Validators.required,
         // eanValidator
       ]),
       grd: new FormControl('', [Validators.required]),
@@ -123,7 +149,8 @@ export class MeterCreation implements OnInit {
         [Validators.required],
       ),
       clientType: new FormControl('', [Validators.required]),
-      member: new FormControl('', [Validators.required,
+      member: new FormControl('', [
+        Validators.required,
         // this.validMemberValidator()
       ]),
       dateStart: new FormControl('', [Validators.required]),
@@ -135,7 +162,7 @@ export class MeterCreation implements OnInit {
         [Validators.required],
       ),
     });
-    console.log('TEST : ', this.metersForm.value.productionChain);
+    console.log('TEST : ', (this.metersForm.getRawValue() as MeterFormValue).productionChain);
     this.memberService.getMembersList({ page: 1, limit: 100 }).subscribe({
       next: (response) => {
         if (response && response.data) {
@@ -157,18 +184,20 @@ export class MeterCreation implements OnInit {
     this.setupTranslationCategory();
   }
 
-  setupTranslationError(): void{
-    this.translate.get(['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT']).subscribe((translation: Record<string, string>) => {
-      this.errorMemberAdd = {
-        errorMember: () => translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
-      };
-      this.errorsSummaryAdded = {
-        errorMember: (_: unknown, _controlName: string) =>
-          translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
-      };
-    });
+  setupTranslationError(): void {
+    this.translate
+      .get(['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'])
+      .subscribe((translation: Record<string, string>) => {
+        this.errorMemberAdd = {
+          errorMember: () => translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
+        };
+        this.errorsSummaryAdded = {
+          errorMember: (_: unknown, _controlName: string) =>
+            translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
+        };
+      });
   }
-  setupTranslationCategory(): void{
+  setupTranslationCategory(): void {
     this.setupProductionChainCategory();
     this.setupRateCategory();
     this.setupClientCategory();
@@ -178,7 +207,7 @@ export class MeterCreation implements OnInit {
     this.setupTarifGroupCategory();
   }
 
-  setupProductionChainCategory(): void{
+  setupProductionChainCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC',
@@ -222,7 +251,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupRateCategory(): void{
+  setupRateCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.RATE.SIMPLE',
@@ -241,7 +270,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupClientCategory(): void{
+  setupClientCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.CLIENT.RESIDENTIAL',
@@ -260,7 +289,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupInjectionStatusCategory(): void{
+  setupInjectionStatusCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.INJECTION_STATUS.NONE',
@@ -292,7 +321,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupReadingFrequencyCategory(): void{
+  setupReadingFrequencyCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
@@ -312,7 +341,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupPhaseCategory(): void{
+  setupPhaseCategory(): void {
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
       .subscribe((translation: Record<string, string>) => {
@@ -323,7 +352,7 @@ export class MeterCreation implements OnInit {
       });
   }
 
-  setupTarifGroupCategory(): void{
+  setupTarifGroupCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
@@ -345,7 +374,7 @@ export class MeterCreation implements OnInit {
 
   validMemberValidator(): ValidatorFn {
     return (control: AbstractControl) => {
-      const value = control.value;
+      const value = control.value as MembersPartialDTO | null;
 
       // Allow empty values (handled by required validator)
       if (!value) {
@@ -354,47 +383,46 @@ export class MeterCreation implements OnInit {
 
       // Check if value is a valid member
       const isValid =
-        typeof value === 'object' &&
-        true &&
-        this.membersList.some((member) => member.id === value.id);
+        typeof value === 'object' && this.membersList.some((member) => member.id === value.id);
       return isValid ? null : { invalidMember: true };
     };
   }
 
-  onSubmit(): void{
+  onSubmit(): void {
     if (!this.metersForm.valid) {
       console.error('Form not valid');
       return;
     }
+    const formValue = this.metersForm.getRawValue() as MeterFormValue;
     const newMeterData: CreateMeterDataDTO = {
-      description: this.metersForm.get('description')?.value,
-      sampling_power: this.metersForm.get('samplingPower')?.value,
+      description: formValue.description,
+      sampling_power: formValue.samplingPower,
       status: MeterDataStatus.INACTIVE,
-      amperage: this.metersForm.get('amperage')?.value,
-      rate: this.metersForm.get('rate')?.value.id,
-      client_type: this.metersForm.get('clientType')?.value.id,
-      start_date: this.metersForm.get('dateStart')?.value,
-      injection_status: this.metersForm.get('injectionStatus')?.value.id,
-      production_chain: this.metersForm.get('productionChain')?.value.id,
-      total_generating_capacity: this.metersForm.get('totalGeneratingCapacity')?.value,
-      grd: this.metersForm.get('grd')?.value,
-      member_id: this.metersForm.get('member')?.value.id,
+      amperage: formValue.amperage,
+      rate: formValue.rate.id,
+      client_type: formValue.clientType.id,
+      start_date: formValue.dateStart,
+      injection_status: formValue.injectionStatus.id,
+      production_chain: formValue.productionChain.id,
+      total_generating_capacity: formValue.totalGeneratingCapacity,
+      grd: formValue.grd,
+      member_id: formValue.member.id,
       end_date: undefined,
     };
     const newAddress: CreateAddressDTO = {
-      street: this.metersForm.value.address_street,
-      number: this.metersForm.value.address_number,
-      postcode: this.metersForm.value.address_postcode,
-      city: this.metersForm.value.address_city,
+      street: formValue.address_street,
+      number: +formValue.address_number,
+      postcode: formValue.address_postcode,
+      city: formValue.address_city,
     };
     const newMeter: CreateMeterDTO = {
-      EAN: this.metersForm.value.EAN,
+      EAN: formValue.EAN,
       address: newAddress,
       initial_data: newMeterData,
-      meter_number: this.metersForm.value.meterNumber,
-      phases_number: this.metersForm.value.phasesNumber.id,
-      reading_frequency: this.metersForm.value.readingFrequency.id,
-      tarif_group: this.metersForm.value.tarifGroup.id,
+      meter_number: formValue.meterNumber,
+      phases_number: formValue.phasesNumber.id,
+      reading_frequency: formValue.readingFrequency.id,
+      tarif_group: formValue.tarifGroup.id,
     };
     this.meterService.addMeter(newMeter).subscribe({
       next: (response) => {
@@ -404,16 +432,18 @@ export class MeterCreation implements OnInit {
           this.errorHandler.handleError();
         }
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ?? null);
+      error: (error: unknown) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData);
       },
     });
   }
 
-  onChangeProductionChain(): void{
-    if (this.metersForm.value.productionChain.id == 8) {
+  onChangeProductionChain(): void {
+    const formValue = this.metersForm.getRawValue() as MeterFormValue;
+    if (formValue.productionChain.id === (ProductionChain.NONE as number)) {
       if (
-        this.metersForm.value.injectionStatus.id !=
+        formValue.injectionStatus.id !=
         this.injectionStatusCategory[this.injectionStatusCategory.length - 1].id
       ) {
         this.metersForm

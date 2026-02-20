@@ -26,7 +26,43 @@ import { MemberService } from '../../../../shared/services/member.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
-import {MeterDataStatus} from '../../../../shared/types/meter.types';
+import {
+  MeterDataStatus,
+  ClientType,
+  InjectionStatus,
+  MeterRate,
+  ProductionChain,
+} from '../../../../shared/types/meter.types';
+
+interface MeterDataUpdateDialogData {
+  meterData: MetersDataDTO;
+  id: string;
+}
+
+interface MeterDataCategory<T = number> {
+  id: T;
+  name: string;
+}
+
+interface MeterDataStatusOption {
+  value: MeterDataStatus;
+  label: string;
+}
+
+interface MeterDataFormValue {
+  description: string;
+  samplingPower: number;
+  totalGeneratingCapacity: number;
+  amperage: number;
+  rate: MeterDataCategory<MeterRate>;
+  productionChain: MeterDataCategory<ProductionChain>;
+  clientType: MeterDataCategory<ClientType>;
+  member: MembersPartialDTO;
+  dateStart: string | Date;
+  status: MeterDataStatus;
+  injectionStatus: MeterDataCategory<InjectionStatus>;
+  grd: MeterDataCategory;
+}
 
 @Component({
   selector: 'app-meter-data-update',
@@ -63,55 +99,55 @@ export class MeterDataUpdate implements OnInit {
   @Input()
   id: string;
   metersForm!: FormGroup;
-  statusOptions = [
+  statusOptions: MeterDataStatusOption[] = [
     { value: MeterDataStatus.ACTIVE, label: 'METER.STATUS.ACTIVE_LABEL' },
-    { value: MeterDataStatus.INACTIVE, label: 'METER.STATUS.INACTIVE_LABEL'},
-    { value: MeterDataStatus.WAITING_GRD, label: 'METER.STATUS.WAITING_GRD_LABEL'},
-    { value: MeterDataStatus.WAITING_MANAGER, label: 'METER.STATUS.WAITING_MANAGER_LABEL'},
-  ]
-  productionChainCategory = [
-    { id: 1, name: '' },
-    { id: 2, name: '' },
-    { id: 3, name: '' },
-    { id: 4, name: '' },
-    { id: 5, name: '' },
-    { id: 6, name: '' },
-    { id: 7, name: '' },
-    { id: 8, name: '' },
+    { value: MeterDataStatus.INACTIVE, label: 'METER.STATUS.INACTIVE_LABEL' },
+    { value: MeterDataStatus.WAITING_GRD, label: 'METER.STATUS.WAITING_GRD_LABEL' },
+    { value: MeterDataStatus.WAITING_MANAGER, label: 'METER.STATUS.WAITING_MANAGER_LABEL' },
   ];
-  rateCategory: any[] = [
-    { id: 1, name: '' },
-    { id: 2, name: '' },
-    { id: 3, name: '' },
+  productionChainCategory: MeterDataCategory<ProductionChain>[] = [
+    { id: ProductionChain.PHOTOVOLTAIC, name: '' },
+    { id: ProductionChain.WIND, name: '' },
+    { id: ProductionChain.HYDRO, name: '' },
+    { id: ProductionChain.BIOMASS, name: '' },
+    { id: ProductionChain.BIOGAS, name: '' },
+    { id: ProductionChain.COGEN_FOSSIL, name: '' },
+    { id: ProductionChain.OTHER, name: '' },
+    { id: ProductionChain.NONE, name: '' },
   ];
-  clientCategory: any[] = [
-    { id: 1, name: '' },
-    { id: 2, name: '' },
-    { id: 3, name: '' },
+  rateCategory: MeterDataCategory<MeterRate>[] = [
+    { id: MeterRate.SIMPLE, name: '' },
+    { id: MeterRate.BI_HOURLY, name: '' },
+    { id: MeterRate.EXCLUSIVE_NIGHT, name: '' },
   ];
-  injectionStatusCategory: any[] = [
+  clientCategory: MeterDataCategory<ClientType>[] = [
+    { id: ClientType.RESIDENTIAL, name: '' },
+    { id: ClientType.PROFESSIONAL, name: '' },
+    { id: ClientType.INDUSTRIAL, name: '' },
+  ];
+  injectionStatusCategory: MeterDataCategory<InjectionStatus>[] = [
     {
-      id: 1,
+      id: InjectionStatus.AUTOPROD_OWNER,
       name: '',
     },
     {
-      id: 2,
+      id: InjectionStatus.AUTOPROD_RIGHTS,
       name: '',
     },
     {
-      id: 3,
+      id: InjectionStatus.INJECTION_OWNER,
       name: '',
     },
     {
-      id: 4,
+      id: InjectionStatus.INJECTION_RIGHTS,
       name: '',
     },
     {
-      id: 5,
+      id: InjectionStatus.NONE,
       name: '',
     },
   ];
-  grdAvailable: any[] = [
+  grdAvailable: MeterDataCategory[] = [
     { id: 1, name: 'RESA' },
     { id: 2, name: 'ORES' },
     { id: 3, name: 'AIEG' },
@@ -121,8 +157,9 @@ export class MeterDataUpdate implements OnInit {
   ];
   membersList!: MembersPartialDTO[];
   constructor() {
-    this.meterData = this.config.data.meterData;
-    this.id = this.config.data.id;
+    const data = this.config.data as MeterDataUpdateDialogData;
+    this.meterData = data.meterData;
+    this.id = data.id;
   }
 
   ngOnInit(): void {
@@ -152,8 +189,7 @@ export class MeterDataUpdate implements OnInit {
       rate: new FormControl('', [Validators.required]),
       productionChain: new FormControl('', [Validators.required]),
       clientType: new FormControl('', [Validators.required]),
-      member: new FormControl('', [Validators.required,
-        this.validMemberValidator()]),
+      member: new FormControl('', [Validators.required, this.validMemberValidator()]),
       dateStart: new FormControl('', [Validators.required]),
       status: new FormControl('', [Validators.required]),
       injectionStatus: new FormControl('', [Validators.required]),
@@ -167,7 +203,7 @@ export class MeterDataUpdate implements OnInit {
       console.log(this.productionChainCategory);
       console.log(this.meterData?.production_chain);
       console.log(
-        this.productionChainCategory.find((p) => p.id == this.meterData?.production_chain),
+        this.productionChainCategory.find((p) => p.id === this.meterData?.production_chain),
       );
       this.metersForm.patchValue({
         description: this.meterData.description,
@@ -175,19 +211,19 @@ export class MeterDataUpdate implements OnInit {
         totalGeneratingCapacity: this.meterData.totalGenerating_capacity,
         amperage: this.meterData.amperage,
         productionChain: this.productionChainCategory.find(
-          (p) => p.id == this.meterData?.production_chain,
+          (p) => p.id === this.meterData?.production_chain,
         ),
         injectionStatus: this.injectionStatusCategory.find(
-          (p) => p.id == this.meterData?.injection_status,
+          (p) => p.id === this.meterData?.injection_status,
         ),
-        rate: this.rateCategory.find((p) => p.id == this.meterData?.rate),
-        clientType: this.clientCategory.find((p) => p.id == this.meterData?.client_type),
-        grd: this.grdAvailable.find((p) => p.name == this.meterData?.grd),
+        rate: this.rateCategory.find((p) => p.id === this.meterData?.rate),
+        clientType: this.clientCategory.find((p) => p.id === this.meterData?.client_type),
+        grd: this.grdAvailable.find((p) => p.name === this.meterData?.grd),
         status: this.meterData.status,
       });
     }
   }
-  setupErrorTranslation(): void{
+  setupErrorTranslation(): void {
     this.translate
       .get(['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'])
       .subscribe((translation: Record<string, string>) => {
@@ -201,14 +237,14 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupTranslationCategory(): void{
+  setupTranslationCategory(): void {
     this.setupProductionChainCategory();
     this.setupRateCategory();
     this.setupClientCategory();
     this.setupInjectionStatusCategory();
   }
 
-  setupProductionChainCategory(): void{
+  setupProductionChainCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC',
@@ -237,7 +273,7 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupRateCategory(): void{
+  setupRateCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.RATE.SIMPLE',
@@ -256,7 +292,7 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupClientCategory(): void{
+  setupClientCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.CLIENT.RESIDENTIAL',
@@ -276,7 +312,7 @@ export class MeterDataUpdate implements OnInit {
       });
   }
 
-  setupInjectionStatusCategory(): void{
+  setupInjectionStatusCategory(): void {
     this.translate
       .get([
         'METER.CATEGORIES.INJECTION_STATUS.NONE',
@@ -302,7 +338,7 @@ export class MeterDataUpdate implements OnInit {
 
   validMemberValidator(): ValidatorFn {
     return (control: AbstractControl) => {
-      const value = control.value;
+      const value = control.value as MembersPartialDTO | null;
 
       // Allow empty values (handled by required validator)
       if (!value) {
@@ -313,33 +349,38 @@ export class MeterDataUpdate implements OnInit {
       const isValid =
         typeof value === 'object' &&
         true &&
+        'id' in value &&
         this.membersList.some((member) => member.id === value.id);
       return isValid ? null : { invalidMember: true };
     };
   }
 
-  onSubmit(): void{
+  onSubmit(): void {
     if (!this.metersForm.valid) {
       console.error('Form not valid');
       console.log('Form validation errors:', this.metersForm.errors);
       return;
     }
+
+    const formValue = this.metersForm.getRawValue() as MeterDataFormValue;
+
     const updateMeterData: PatchMeterDataDTO = {
       EAN: this.id,
-      amperage: this.metersForm.get('amperage')?.value,
-      client_type: this.metersForm.get('clientType')?.value.id,
-      description: this.metersForm.get('description')?.value,
+      amperage: formValue.amperage,
+      client_type: formValue.clientType.id,
+      description: formValue.description,
       end_date: undefined,
-      grd: this.metersForm.get('grd')?.value.name,
-      injection_status: this.metersForm.get('injectionStatus')?.value.id,
-      member_id: this.metersForm.get('member')?.value.id,
-      production_chain: this.metersForm.get('productionChain')?.value.id,
-      rate: this.metersForm.get('rate')?.value.id,
-      sampling_power: this.metersForm.get('samplingPower')?.value,
+      grd: formValue.grd.name,
+      injection_status: formValue.injectionStatus.id,
+      member_id: formValue.member.id,
+      production_chain: formValue.productionChain.id,
+      rate: formValue.rate.id,
+      sampling_power: formValue.samplingPower,
       sharing_operation_id: undefined,
-      start_date: this.metersForm.get('dateStart')?.value,
-      status: this.metersForm.get('status')?.value,
-      total_generating_capacity: this.metersForm.get('totalGeneratingCapacity')?.value,
+      start_date:
+        formValue.dateStart instanceof Date ? formValue.dateStart : new Date(formValue.dateStart),
+      status: formValue.status,
+      total_generating_capacity: formValue.totalGeneratingCapacity,
     };
 
     this.meterService.patchMeterData(updateMeterData).subscribe({
@@ -350,7 +391,7 @@ export class MeterDataUpdate implements OnInit {
           this.errorHandler.handleError();
         }
       },
-      error: (error) => {
+      error: (error: { data?: unknown }) => {
         this.errorHandler.handleError(error.data ?? null);
       },
     });

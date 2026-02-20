@@ -6,7 +6,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { TableModule } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { MemberPartialQuery, MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
 import { MemberType, MemberStatus } from '../../../../shared/types/member.types';
@@ -65,7 +65,7 @@ export class MembersList implements OnInit, OnDestroy {
     this.updatePaginationTranslation();
   }
 
-  updatePaginationTranslation(): void{
+  updatePaginationTranslation(): void {
     this.translate
       .get('MEMBER.LIST.PAGE_REPORT_TEMPLATE_MEMBER_LABEL', {
         page: this.paginationInfo.page,
@@ -76,7 +76,7 @@ export class MembersList implements OnInit, OnDestroy {
         this.currentPageReportTemplate = translatedText;
       });
   }
-  loadMembers(): void{
+  loadMembers(): void {
     this.membersService.getMembersList(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -95,7 +95,7 @@ export class MembersList implements OnInit, OnDestroy {
       },
     });
   }
-  onInviteMember(): void{
+  onInviteMember(): void {
     this.ref = this.dialogService.open(MemberInvite, {
       modal: true,
       closable: true,
@@ -103,8 +103,8 @@ export class MembersList implements OnInit, OnDestroy {
       header: this.translate.instant('MEMBER.LIST.INVITE_MEMBER_HEADER') as string,
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((email) => {
-        if (email) {
+      this.ref.onClose.subscribe((email: unknown) => {
+        if (typeof email === 'string' && email) {
           this.invitationService.inviteUserToBecomeMember({ user_email: email }).subscribe({
             next: (response) => {
               if (response) {
@@ -121,7 +121,7 @@ export class MembersList implements OnInit, OnDestroy {
       });
     }
   }
-  onAddMember(event: Event): void{
+  onAddMember(event: Event): void {
     this.ref = this.dialogService.open(MemberCreationUpdate, {
       modal: true,
       closable: true,
@@ -129,12 +129,14 @@ export class MembersList implements OnInit, OnDestroy {
       header: this.translate.instant('MEMBER.LIST.ADD_MEMBER_HEADER') as string,
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((result) => {
-        if (result === 1) {
+      this.ref.onClose.subscribe((result: unknown) => {
+        if (typeof result === 'number' && result > 0) {
           // Show "Do you want to add meter associated"
           this.confirmationService.confirm({
             target: event.target as EventTarget,
-            message: this.translate.instant('MEMBER.LIST.ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL') as string,
+            message: this.translate.instant(
+              'MEMBER.LIST.ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL',
+            ) as string,
             header: this.translate.instant('MEMBER.LIST.CONFIRMATION_HEADER') as string,
             icon: 'pi pi-exclamation-triangle',
             acceptIcon: 'none',
@@ -154,7 +156,7 @@ export class MembersList implements OnInit, OnDestroy {
     }
   }
 
-  addMeter(member_id: number): void{
+  addMeter(member_id: number): void {
     this.ref = this.dialogService.open(MeterCreation, {
       modal: true,
       closable: true,
@@ -177,7 +179,7 @@ export class MembersList implements OnInit, OnDestroy {
     }
   }
 
-  addMemberSuccess(): void{
+  addMemberSuccess(): void {
     this.snackbarNotification.openSnackBar(
       this.translate.instant('MEMBER.LIST.MEMBER_ADDED_SUCCESSFULLY_LABEL') as string,
       VALIDATION_TYPE,
@@ -185,8 +187,8 @@ export class MembersList implements OnInit, OnDestroy {
     this.loadMembers();
   }
 
-  lazyLoadMembers($event: any): void{
-    const current: any = { ...this.filter() };
+  lazyLoadMembers($event: TableLazyLoadEvent): void {
+    const current: MemberPartialQuery = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;
@@ -217,33 +219,49 @@ export class MembersList implements OnInit, OnDestroy {
       }
     }
     if ($event.filters) {
-      Object.entries($event.filters).forEach(([field, meta]) => {
-        if ((meta as any).value) {
-          current[field] = (meta as any).value;
-        } else {
-          delete current[field];
-        }
-      });
-    }
-    this.loadMembers();
-  }
+      const typeFilter = $event.filters['type'];
+      if (typeFilter && !Array.isArray(typeFilter) && typeFilter.value !== undefined) {
+        current.member_type = typeFilter.value as MemberType;
+      } else {
+        delete current.member_type;
+      }
 
-  pageChange($event: any): void{
-    const current: any = { ...this.filter() };
-    current.page = $event.first / $event.rows + 1;
+      const nameFilter = $event.filters['name'];
+      if (nameFilter && !Array.isArray(nameFilter) && nameFilter.value) {
+        current.name = nameFilter.value as string;
+      } else {
+        delete current.name;
+      }
+
+      const statusFilter = $event.filters['status'];
+      if (statusFilter && !Array.isArray(statusFilter) && statusFilter.value !== undefined) {
+        current.status = statusFilter.value as MemberStatus;
+      } else {
+        delete current.status;
+      }
+    }
     this.filter.set(current);
     this.loadMembers();
   }
 
-  clear(table: any): void{
-    table.clear();
+  pageChange($event: TablePageEvent): void {
+    const current: MemberPartialQuery = { ...this.filter() };
+    current.page = ($event.first ?? 0) / ($event.rows ?? 10) + 1;
+    this.filter.set(current);
+    this.loadMembers();
   }
 
-  onRowClick(member: any): void{
+  clear(table: Table): void {
+    table.clear();
+    this.filter.set({ page: 1, limit: 10 });
+    this.loadMembers();
+  }
+
+  onRowClick(member: MembersPartialDTO): void {
     void this.router.navigate(['/members/', member.id]);
   }
 
-  seePendingInvite(): void{
+  seePendingInvite(): void {
     this.ref = this.dialogService.open(MemberPendingInvite, {
       modal: true,
       closable: true,

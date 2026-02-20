@@ -14,14 +14,22 @@ export class HeaderWithHelper implements IHeaderAngularComp {
     return true;
   }
 
-  @Input() params: any;
+  @Input() params!: IHeaderParams & {
+    tooltip?: string;
+    label?: string;
+    click?: (tooltip: string) => void;
+  };
 
-  agInit(params: any): void {
+  agInit(
+    params: IHeaderParams & { tooltip?: string; label?: string; click?: (tooltip: string) => void },
+  ): void {
     this.params = params;
   }
 
   onClick(): void {
     const tooltip = this.params?.tooltip;
-    this.params?.click?.(tooltip);
+    if (tooltip) {
+      this.params?.click?.(tooltip);
+    }
   }
 }

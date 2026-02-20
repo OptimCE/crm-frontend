@@ -8,7 +8,7 @@
       [value]="MemberType.INDIVIDUAL"
       [(ngModel)]="typeClient"
       (ngModelChange)="typeClientChange.emit($event)"
-      [ngModelOptions]="{standalone: true}"
+      [ngModelOptions]="{ standalone: true }"
       inputId="particulier"
     ></p-radioButton>
     <label for="particulier">{{
@@ -21,7 +21,7 @@
       [value]="MemberType.COMPANY"
       (ngModelChange)="typeClientChange.emit($event)"
       [(ngModel)]="typeClient"
-      [ngModelOptions]="{standalone: true}"
+      [ngModelOptions]="{ standalone: true }"
       inputId="entreprise"
     ></p-radioButton>
     <label for="entreprise">{{ 'MEMBER.ADD.STATUS.COMPANY_RADIOBUTTON_LABEL' | translate }}</label>

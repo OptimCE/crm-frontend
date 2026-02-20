@@ -11,6 +11,11 @@ import { CompanyDTO, IndividualDTO } from '../../../../../../../../shared/dtos/m
 import { MemberStatus, MemberType } from '../../../../../../../../shared/types/member.types';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
+interface InvitationDetailDialogData {
+  member: IndividualDTO | CompanyDTO;
+  member_type: MemberType;
+}
+
 @Component({
   selector: 'app-invitation-detail',
   imports: [
@@ -35,12 +40,13 @@ export class InvitationDetailComponent implements OnInit {
   membersType!: MemberType;
 
   ngOnInit(): void {
-    if (this.config.data && this.config.data.member && this.config.data.member_type) {
-      this.membersType = this.config.data.member_type;
-      if (this.membersType == MemberType.INDIVIDUAL) {
-        this.individual = this.config.data.member;
+    const data = this.config.data as InvitationDetailDialogData;
+    if (data && data.member && data.member_type) {
+      this.membersType = data.member_type;
+      if (this.membersType === MemberType.INDIVIDUAL) {
+        this.individual = data.member as IndividualDTO;
       } else {
-        this.legalEntity = this.config.data.member;
+        this.legalEntity = data.member as CompanyDTO;
       }
       this.isLoading = false;
     }

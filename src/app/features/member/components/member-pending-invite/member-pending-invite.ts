@@ -40,7 +40,7 @@ export class MemberPendingInvite {
     });
   }
   lazyLoadPendingMemberInvitation($event: TableLazyLoadEvent): void {
-    const current: any = { ...this.filter() };
+    const current: UserMemberInvitationQuery = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_email;
@@ -56,6 +56,7 @@ export class MemberPendingInvite {
         }
       }
     }
+    this.filter.set(current);
     this.loadPendingMemberInvitation();
   }
 

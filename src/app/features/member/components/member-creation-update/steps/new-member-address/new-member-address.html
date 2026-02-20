@@ -1,4 +1,9 @@
-<div (click)="goBack()" class="cursor-pointer hover:text-green-700">
+<div
+  (click)="goBack()"
+  (keydown.enter)="goBack()"
+  tabindex="0"
+  class="cursor-pointer hover:text-green-700"
+>
   <i class="pi pi-arrow-left flex-wrap-left mr-2 !text-xs"></i>
   <span class="!text-sm">{{ 'MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS' | translate }}</span>
 </div>
@@ -6,7 +11,8 @@
   <div class="flex flex-wrap pb-1">
     <div class="flex items-center">
       <h3 class="font-medium text-lg">
-        {{ 'MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE' | translate }}</h3>
+        {{ 'MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE' | translate }}
+      </h3>
     </div>
   </div>
   <div class="flex flex-wrap pb-3 gap-2">

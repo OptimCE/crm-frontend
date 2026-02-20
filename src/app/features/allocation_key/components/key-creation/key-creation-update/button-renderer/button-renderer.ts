@@ -17,7 +17,7 @@ interface ButtonRendererParams extends ICellRendererParams {
 })
 export class ButtonRenderer implements ICellRendererAngularComp {
   params!: ButtonRendererParams;
-  label!: string|null;
+  label!: string | null;
 
   agInit(params: ButtonRendererParams): void {
     this.params = params;

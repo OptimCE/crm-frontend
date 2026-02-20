@@ -9,12 +9,12 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
   styleUrl: './helper-dialog.css',
 })
 export class HelperDialog implements OnInit {
-  private config = inject(DynamicDialogConfig);
+  private config = inject<DynamicDialogConfig<{ displayText: string }>>(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   displayedText!: string;
 
   ngOnInit(): void {
-    const text = this.config.data.displayText;
+    const text = this.config.data?.displayText;
     if (text) {
       this.displayedText = text;
     } else {

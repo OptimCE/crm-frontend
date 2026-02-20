@@ -6,7 +6,7 @@ import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/
 import { KeyService } from '../../../../shared/services/key.service';
 import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import {ApiResponse, Pagination} from '../../../../core/dtos/api.response';
+import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Button } from 'primeng/button';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -59,14 +59,14 @@ export class KeysList implements OnInit {
       },
       error: (error: unknown) => {
         const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData)
+        this.errorHandler.handleError(errorData);
         this.loading.set(false);
       },
     });
   }
 
   lazyLoadKeys($event: TableLazyLoadEvent): void {
-    const current: any = { ...this.filter() };
+    const current: KeyPartialQuery = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;
@@ -74,7 +74,7 @@ export class KeysList implements OnInit {
         current.page = 1;
       }
     }
-    if(current.page < 1){
+    if (current.page < 1) {
       current.page = 1;
     }
 
@@ -94,13 +94,19 @@ export class KeysList implements OnInit {
       }
     }
     if ($event.filters) {
-      Object.entries($event.filters).forEach(([field, meta]) => {
-        if ((meta as any).value) {
-          current[field] = (meta as any).value;
-        } else {
-          delete current[field];
-        }
-      });
+      const nomFilter = $event.filters['nom'];
+      if (nomFilter && !Array.isArray(nomFilter) && nomFilter.value) {
+        current.name = nomFilter.value as string;
+      } else {
+        delete current.name;
+      }
+
+      const descFilter = $event.filters['description'];
+      if (descFilter && !Array.isArray(descFilter) && descFilter.value) {
+        current.description = descFilter.value as string;
+      } else {
+        delete current.description;
+      }
     }
     this.filter.set(current);
     this.loadKeys();
@@ -127,7 +133,7 @@ export class KeysList implements OnInit {
   }
 
   pageChange($event: TablePageEvent): void {
-    const current: any = { ...this.filter() };
+    const current: KeyPartialQuery = { ...this.filter() };
     current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadKeys();
