@@ -12,7 +12,10 @@
     "lint-quiet": "ng lint --quiet",
     "lint-fix": "ng lint --fix",
     "format": "prettier --write .",
-    "format-check": "prettier --check ."
+    "format-check": "prettier --check .",
+    "audit": "npm audit",
+    "audit-prod": "npm audit --omit=dev",
+    "audit-fix": "npm audit fix"
   },
   "prettier": {
     "printWidth": 100,

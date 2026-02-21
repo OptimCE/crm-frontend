@@ -11,7 +11,6 @@ import {
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { KeyService } from '../../../../../shared/services/key.service';
-import { EventBusService } from '../../../../../core/services/event_bus/eventbus.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ButtonRenderer } from './button-renderer/button-renderer';
 import { HeaderWithHelper } from '../../key-view/header-with-helper/header-with-helper';
@@ -70,7 +69,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   private keyService = inject(KeyService);
   private routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
-  private eventBus = inject(EventBusService);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
