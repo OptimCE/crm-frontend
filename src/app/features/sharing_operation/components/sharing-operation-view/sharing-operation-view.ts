@@ -339,7 +339,6 @@ export class SharingOperationView implements OnInit {
             ) as string,
             VALIDATION_TYPE,
           );
-          // TODO: throw event for the child component
           this.meterEventService.notifyMeterAdded();
         }
       });

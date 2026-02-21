@@ -106,9 +106,6 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
         delete current.file_type;
       }
 
-      // TODO: fileSize and uploadDate are not present in DocumentQueryDTO
-      // const fileSize = extractValue('fileSize');
-      // const uploadDate = extractValue('uploadDate');
     }
     this.filter.set(current);
     this.loadDocument();
