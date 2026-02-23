@@ -1,0 +1,180 @@
+<div class="flex flex-col gap-3">
+  <!-- TABS NOW / FUTURE -->
+  <p-tabs [value]="activeTab">
+    <p-tablist>
+      <p-tab [value]="0">
+        {{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.NOW' | translate }}
+        @if (countSelected(QueryType.NOW)) {
+          <p-badge [value]="countSelected(QueryType.NOW)" severity="info" class="ml-2" />
+        }
+      </p-tab>
+      <p-tab [value]="1">
+        {{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.FUTURE' | translate }}
+        @if (countSelected(QueryType.FUTURE)) {
+          <p-badge [value]="countSelected(QueryType.FUTURE)" severity="info" class="ml-2" />
+        }
+      </p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <p-tabpanel [value]="0">
+        <ng-container *ngTemplateOutlet="metersTable; context: { type: QueryType.NOW }" />
+      </p-tabpanel>
+      <p-tabpanel [value]="1">
+        <ng-container *ngTemplateOutlet="metersTable; context: { type: QueryType.FUTURE }" />
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+
+  <!-- SELECTED METERS SUMMARY -->
+  @if (selectedMeters.size) {
+    <div class="border-t pt-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-semibold text-sm">
+          {{
+            'SHARING_OPERATION.SELECT_METER_NEW_KEY.METERS_SELECTED'
+              | translate: { count: selectedMeters.size }
+          }}
+        </span>
+        <p-button
+          label="{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.CLEAR_ALL' | translate }}"
+          size="small"
+          [text]="true"
+          severity="danger"
+          (onClick)="selectedMeters.clear()"
+        />
+      </div>
+
+      <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+        @for (entry of selectedMetersArray(); track $index) {
+          <div class="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 text-sm">
+            <p-badge
+              [value]="
+                entry.type === QueryType.NOW
+                  ? 'SHARING_OPERATION.SELECT_METER_NEW_KEY.NOW'
+                  : 'SHARING_OPERATION.SELECT_METER_NEW_KEY.FUTURE'
+              "
+              [severity]="entry.type === QueryType.NOW ? 'success' : 'info'"
+            />
+            <span class="font-mono text-xs">{{ entry.meter.EAN }}</span>
+            <span class="text-gray-400 text-xs" [innerHTML]="entry.meter.address | address"></span>
+            <i
+              class="pi pi-times text-xs text-gray-400 cursor-pointer hover:text-red-400"
+              tabindex="0"
+              (click)="toggleMeter(entry.meter, entry.type)"
+              (keydown.enter)="toggleMeter(entry.meter, entry.type)"
+            ></i>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- FOOTER -->
+  <div class="flex justify-end gap-2 border-t pt-3">
+    <p-button label="Cancel" [outlined]="true" (onClick)="cancel()" />
+    <p-button
+      label="Confirm ({{ selectedMeters.size }})"
+      [disabled]="!selectedMeters.size"
+      (onClick)="confirm()"
+    />
+  </div>
+</div>
+
+<!-- REUSABLE TABLE TEMPLATE -->
+<ng-template #metersTable let-type="type">
+  <p-table
+    #dt
+    [value]="getList(type)()"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoad($event, type)"
+    [loading]="getLoading(type)()"
+    [rows]="getPagination(type)().limit"
+    [totalRecords]="getPagination(type)().total"
+    [first]="(getPagination(type)().page - 1) * getPagination(type)().limit"
+    [paginator]="getPagination(type)().total_pages > 1"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template #caption>
+      <div class="flex gap-2">
+        <p-button
+          size="small"
+          [outlined]="true"
+          icon="pi pi-check-square"
+          label="{{
+            type === QueryType.NOW
+              ? 'SHARING_OPERATION.SELECT_METER_NEW_KEY.SELECT_ALL_NOW'
+              : 'SHARING_OPERATION.SELECT_METER_NEW_KEY.SELECT_ALL_FUTURE'
+          }}"
+          (onClick)="selectAllInTab(type)"
+        />
+        <p-button
+          size="small"
+          [outlined]="true"
+          severity="danger"
+          icon="pi pi-filter-slash"
+          label="{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.CLEAN_FILTERS' | translate }}"
+          (onClick)="dt.clear()"
+        />
+      </div>
+    </ng-template>
+
+    <ng-template #header>
+      <tr>
+        <!-- Checkbox header -->
+        <th style="width: 3rem">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="isPageFullySelected(type)"
+            (ngModelChange)="togglePage(type, $event)"
+          />
+        </th>
+        <th>{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.ADDRESS' | translate }}</th>
+        <th>
+          {{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.EAN' | translate }}
+          <p-columnFilter
+            type="text"
+            field="EAN"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          />
+        </th>
+        <th>{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.METER_NUMBER' | translate }}</th>
+        <th>{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.STATUS' | translate }}</th>
+        <th>{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.HOLDER' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-meter>
+      <tr
+        [class.bg-blue-50]="isSelected(meter.EAN)"
+        class="cursor-pointer hover:bg-gray-50"
+        (click)="toggleMeter(meter, type)"
+      >
+        <td (click)="$event.stopPropagation()">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="isSelected(meter.EAN)"
+            (ngModelChange)="toggleMeter(meter, type)"
+          />
+        </td>
+        <td class="text-sm" [innerHTML]="meter.address | address"></td>
+        <td class="text-sm font-mono">{{ meter.EAN }}</td>
+        <td class="text-sm">{{ meter.meter_number }}</td>
+        <td>
+          <p-tag [value]="meter.status" [severity]="getStatusSeverity(meter.status)" />
+        </td>
+        <td class="text-sm">{{ meter.holder?.name ?? '—' }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6" class="text-center">
+          {{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.NO_METERS_FOUND' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</ng-template>

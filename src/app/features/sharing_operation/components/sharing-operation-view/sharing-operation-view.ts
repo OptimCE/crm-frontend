@@ -39,7 +39,6 @@ import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
-import { EventBusService } from '../../../../core/services/event_bus/eventbus.service';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { SharingOperationAddMeter } from '../sharing-operation-add-meter/sharing-operation-add-meter';
 import { SharingOperationAddKey } from '../sharing-operation-add-key/sharing-operation-add-key';
@@ -50,6 +49,7 @@ import { KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { SharingOperationMetersList } from './sharing-operation-meters-list/sharing-operation-meters-list';
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
+import { SelectMeterNewKeyDialog } from './dialogs/select-meter-new-key-dialog/select-meter-new-key-dialog';
 
 interface ChartFormValue {
   dateDeb: string;
@@ -101,7 +101,6 @@ export class SharingOperationView implements OnInit {
   private dialogService = inject(DialogService);
   private confirmationService = inject(ConfirmationService);
   private snackbar = inject(SnackbarNotification);
-  private eventBus = inject(EventBusService);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private meterEventService = inject(SharingOperationMeterEventService);
@@ -117,7 +116,6 @@ export class SharingOperationView implements OnInit {
     limit: 0,
   });
   filterSharingOperationKey = signal<KeyPartialQuery>({ page: 1, limit: 10 });
-  metersPartialList = signal<PartialMeterDTO[]>([]);
   paginationMetersInfo: Pagination = new Pagination(1, 10, 0, 1);
   statutCategory: { value: MeterDataStatus; label: string }[] = [];
   ref?: DynamicDialogRef | null;
@@ -441,10 +439,19 @@ export class SharingOperationView implements OnInit {
   }
 
   newKey(): void {
-    // Get all meters EAN
-    const metersEAN = this.metersPartialList().map((a) => a.EAN);
-    this.eventBus.emit('setConsumers', metersEAN);
-    void this.routing.navigate(['/key/add']);
+    // Get all futurs meters EAN
+    this.ref = this.dialogService.open(SelectMeterNewKeyDialog, {
+      header: 'Select meters for new key',
+      width: '800px',
+      data: { idSharing: this.id },
+    });
+
+    this.ref?.onClose.subscribe((selectedEANs: string[] | null) => {
+      if (!selectedEANs?.length) return;
+      void this.routing.navigate(['/keys/add'], {
+        state: { consumers: selectedEANs },
+      });
+    });
   }
 
   loadChart(): void {

@@ -105,7 +105,6 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
       } else {
         delete current.file_type;
       }
-
     }
     this.filter.set(current);
     this.loadDocument();

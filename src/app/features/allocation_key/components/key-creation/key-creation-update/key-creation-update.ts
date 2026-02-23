@@ -72,6 +72,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
+  private hasPendingConsumers = false;
 
   key!: KeyDTO;
   @Input()
@@ -156,15 +157,53 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         // 2. If no ID, check if we received data via Router State (history.state)
         // We check this HERE so it doesn't conflict with the empty default below
         const state = history.state as { keyData?: KeyDTO; consumers?: string[] };
+        console.log('State');
+        console.log(state);
         const transferredKey = state.keyData;
         const transferredConsumers = state.consumers;
         if (transferredKey) {
           this.initializeWithData(structuredClone(transferredKey));
           this.keyInput = transferredKey;
         } else if (transferredConsumers && transferredConsumers.length > 0) {
+          console.log('Transferred consumers');
+          this.key = {
+            id: -1,
+            name: '',
+            description: '',
+            iterations: [],
+          };
           const [first, ...rest] = transferredConsumers;
-          this.newIteration();
+          console.log(first);
+          console.log(rest);
+          const [number, initialConsumers] = this.newIterationCheck();
+          let consumers = initialConsumers;
+          if (number === -1 || !consumers) {
+            return;
+          }
+          if (number > 1) {
+            consumers = this.key.iterations[this.key.iterations.length - 1].consumers.map(
+              (consumer) => {
+                return {
+                  id: -1,
+                  name: consumer.name,
+                  energy_allocated_percentage: 0,
+                };
+              },
+            );
+          }
+          const newIteration: IterationDTO = {
+            id: -1,
+            number: number,
+            energy_allocated_percentage: 1,
+            consumers: consumers,
+          };
+          this.key.iterations.push(newIteration);
+          this.rowData = this.formatData();
+          console.log('KEY BEFORE');
+          console.log(this.key);
           this.key.iterations[0].consumers[0].name = first;
+          console.log('KEY AFTER');
+          console.log(this.key);
           for (const ean of rest) {
             this.key.iterations[0].consumers.push({
               id: -1,
@@ -172,6 +211,10 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               energy_allocated_percentage: 0,
             });
           }
+          console.log('KEY');
+          console.log(this.key);
+          this.hasPendingConsumers = true;
+          this.isLoaded = true;
           this.rowData = this.formatData();
           this.refreshGrid();
         } else {
@@ -515,13 +558,17 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
 
   gridApi!: GridApi;
   onGridReady(event: GridReadyEvent): void {
-    this.rowData = [];
-    if (this.keyInput) {
+    this.gridApi = event.api;
+    KeyCreationUpdate.displayedNumbers.clear();
+
+    if (this.keyInput || this.hasPendingConsumers) {
       this.rowData = this.formatData();
     }
 
-    this.gridApi = event.api;
-    KeyCreationUpdate.displayedNumbers.clear();
+    if (this.hasPendingConsumers) {
+      this.hasPendingConsumers = false;
+      this.refreshGrid();
+    }
   }
 
   formatData(): KeyTableRow[] {
