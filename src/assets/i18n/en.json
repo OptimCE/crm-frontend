@@ -1,0 +1,1123 @@
+{
+  "TITLE": "OptimCE",
+  "COMMON": {
+    "LANGUAGE_SELECTOR": "Language selector",
+    "ADDRESS": "Address",
+    "ACTIONS": {
+      "YES": "Yes",
+      "NO": "No",
+      "VALIDATE": "Validate",
+      "CANCEL": "Cancel"
+    },
+    "ROLE": {
+      "ADMIN": "Administrator",
+      "MEMBER": "Member",
+      "MANAGER": "Manager"
+    },
+    "ERRORS": {
+      "EXCEPTION": "An unexpected error occurred. Please try again later",
+      "TIMEOUT": "The request timed out. Please try again",
+      "DECORATOR": "Decorator execution error. Please contact the administrator",
+      "UNAUTHORIZED": "You are not authorized to perform this action",
+      "PAGE_INCORRECT": "The page number must be positive",
+      "DATE_FORMAT_ISO8601": "The date must be in ISO 8601 format",
+      "BODY_ID_INCORRECT": "The identifier in the body is missing or incorrect",
+      "PARAM_IS_STRING": "The parameter must be a string",
+      "QUERY_IS_STRING": "The query value must be a string",
+      "QUERY_IS_NUMERIC": "The query value must be numeric",
+      "QUERY_IS_BOOLEAN": "The query value must be a boolean"
+    }
+  },
+  "LOGIN": {
+    "LOGIN": "Log in"
+  },
+  "NAVBAR": {
+    "PROFILE": "Profile",
+    "INVITATIONS": "Invitations",
+    "KEY_HANDLER": "Key manager",
+    "HANDLE_KEY": "Manage keys",
+    "GENERATE_KEY": "Generate key",
+    "MEMBRE_HANDLER": "Member manager",
+    "HANDLE_MEMBRE": "Manage members",
+    "HANDLE_METER": "Manage meters",
+    "HANDLE_SHARING_OP": "Sharing operations",
+    "COMMUNITIES": "Communities",
+    "MY_COMMUNITIES": "My communities",
+    "COMMUNITY_USERS": "Users",
+    "USER_GUIDE": "User guide",
+    "REPORT_BUG": "Report a bug",
+    "DISCONNECT": "Log out",
+    "APP_TITLE": "OptimCE",
+    "ERROR_AUTH_UPDATE": "Error updating authorization",
+    "ERROR_LOGOUT": "Error logging out",
+    "DELETE": "Delete",
+    "COPY_TO_CLIPBOARD": "Copy to clipboard"
+  },
+  "PROFILE": {
+    "MY_PROFILE": "My profile",
+    "UPDATE": "Update",
+    "ACCOUNT_INFORMATION": "Account information",
+    "UPDATE_PASSWORD": "Change password",
+    "DOCUMENTS": "Documents",
+    "MY_REPRESENTATIONS": "My representations",
+    "DISPLAY_NAME": "Name",
+    "DISPLAY_TYPE": "Type",
+    "DISPLAY_SIZE": "Size",
+    "PERSONAL_INFORMATION": {
+      "TITLE": "Personal information",
+      "SOCIAL_NUMBER": "National register number",
+      "LAST_NAME": "Last name",
+      "FIRST_NAME": "First name",
+      "PHONE_NUMBER": "Phone number",
+      "HOUSE_ADDRESS": "Home address",
+      "BILLING_ADDRESS": "Billing address",
+      "EMAIL": "Email address"
+    },
+    "TABS": {
+      "HEADERS": {
+        "METERS": "Meters",
+        "BANKING_INFORMATIONS": "Banking information",
+        "DOCUMENTS": "Documents",
+        "REPRESENTATIONS": "Representations"
+      },
+      "BANKING_INFORMATION": {
+        "IBAN": "IBAN"
+      }
+    },
+    "UPDATE_PROFILE": {
+      "TITLE": "Update profile",
+      "SOCIAL_NUMBER": "National register number",
+      "SOCIAL_NUMBER_PLACEHOLDER": "123456789",
+      "SURNAME": "Last name",
+      "SURNAME_PLACEHOLDER": "Smith",
+      "FIRST_NAME": "First name",
+      "FIRST_NAME_PLACEHOLDER": "John",
+      "PHONE_NUMBER": "Phone number",
+      "PHONE_NUMBER_PLACEHOLDER": "04 99 44 11 33",
+      "IBAN": "IBAN",
+      "IBAN_PLACEHOLDER": "BE76 30003 03000 000000000000000",
+      "HOUSE_ADDRESS": "Home address",
+      "BILLING_ADDRESS": "Billing address",
+      "STREET_NAME": "Street name",
+      "STREET_NAME_PLACEHOLDER": "Main Street",
+      "NUMBER": "Number",
+      "NUMBER_PLACEHOLDER": "123",
+      "BOX": "Box",
+      "BOX_PLACEHOLDER": "B123",
+      "POSTAL_CODE": "Postal code",
+      "POSTAL_CODE_PLACEHOLDER": "12345",
+      "CITY": "City",
+      "CITY_PLACEHOLDER": "Brussels",
+      "SAME_ADDRESS": "Same as home address",
+      "VALIDATE": "Validate"
+    }
+  },
+  "INVITATION": {
+    "TITLE": "My invitations",
+    "MEMBER": {
+      "TITLE": "Members",
+      "HEADERS": {
+        "NAME": "Name",
+        "COMMUNITY": "Community",
+        "STATE": "Status",
+        "CREATED_AT": "Created at",
+        "ACTIONS": "Actions"
+      },
+      "TO_BE_ENCODED": "To be encoded",
+      "ENCODED": "Encoded",
+      "ENCODE_AND_ACCEPT": "Encode and accept",
+      "REFUSE": "Decline",
+      "ACCEPT": "Accept",
+      "SEE": "View",
+      "NO_INVITATIONS_AVAILABLE": "No member invitations found",
+      "ENCODE_NEW_MEMBER_TITLE": "Encoding a new member",
+      "SEE_DETAIL": {
+        "TITLE": "Invitation details",
+        "MEMBER_TITLE": "Member details",
+        "GENERAL_INFORMATIONS": "General information",
+        "VAT_NUMBER": "VAT number",
+        "SOCIAL_NUMBER": "National register number",
+        "SURNAME": "Last name",
+        "FIRST_NAME": "First name",
+        "EMAIL_ADDRESS": "Email address",
+        "PHONE_NUMBER": "Phone number",
+        "GUARDIANSHIP": "Legal guardian",
+        "SOCIAL": "Social",
+        "SOCIAL_TARIF": "Social tariff",
+        "ADDRESSES": "Addresses",
+        "HOUSE_ADDRESS": "Home address",
+        "BILLING_ADDRESS": "Billing address"
+      }
+    },
+    "MANAGER": {
+      "TITLE": "Manager",
+      "HEADERS": {
+        "EMAIL_ADDRESS": "Email address",
+        "COMMUNITY": "Community",
+        "ACTIONS": "Actions"
+      },
+      "ACCEPT": "Accept",
+      "REFUSE": "Decline",
+      "NO_INVITATIONS_AVAILABLE": "No manager invitations found"
+    }
+  },
+  "COMMUNITY": {
+    "LIST": {
+      "CREATE_COMMUNITY": "Create a community",
+      "TITLE": "My communities",
+      "HEADERS": {
+        "NAME": "Name",
+        "ROLE": "Role",
+        "ACTIVATE": "Activate",
+        "ACTIONS": "Actions"
+      },
+      "ACTIVATED": "Activate",
+      "NON_ACTIVATED": "Deactivate",
+      "UPDATE_COMMUNITY": "Update",
+      "ACTIVATE_BUTTON": "Activate",
+      "ACTIVATE_BUTTON_TOOLTIP": "Switch community",
+      "LEAVE_BUTTON": "Leave",
+      "LEAVE_BUTTON_TOOLTIP": "Leave the community",
+      "NO_COMMUNITY_FOUND": "No community found"
+    },
+    "CREATE": {
+      "TITLE": "Create a community",
+      "EDIT_TITLE": "Update a community",
+      "NAME": "Name",
+      "NAME_PLACEHOLDER": "My local community",
+      "VALIDATE": "Validate"
+    }
+  },
+  "COMMUNITY_INVITATION": {
+    "TITLE": "Manager invitation",
+    "INPUT_EMAIL_ADDRESS_LABEL": "Enter the email address of the manager to invite",
+    "EMAIL_PLACEHOLDER": "example@outlook.com"
+  },
+  "COMMUNITY_PENDING_INVITATION": {
+    "TITLE": "Pending invitation",
+    "MEMBERS": {
+      "TITLE": "Members",
+      "HEADERS": {
+        "EMAIL": "Email",
+        "MEMBER_NAME": "Member name",
+        "STATUS": "Status",
+        "ACTIONS": "Action"
+      },
+      "TO_ENCODE_LABEL": "To encode",
+      "ENCODED_LABEL": "Encoded",
+      "CANCEL_BUTTON_LABEL": "Cancel",
+      "NO_INVITATION_FOUND": "No pending member invitations"
+    },
+    "MANAGERS": {
+      "TITLE": "Manager",
+      "HEADERS": {
+        "EMAIL": "Email",
+        "ACTIONS": "Action"
+      },
+      "CANCEL_BUTTON_LABEL": "Cancel",
+      "NO_INVITATION_FOUND": "No pending manager invitations"
+    }
+  },
+  "MANAGERS_COMMUNITY_LIST": {
+    "TITLE": "Community managers",
+    "HEADERS": {
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone number",
+      "ROLE": "Role"
+    }
+  },
+  "USERS_COMMUNITY_LIST": {
+    "TITLE": "Community users",
+    "SEE_PENDING_INVITE_BUTTON_LABEL": "View pending invitations",
+    "INVITE_MANAGER_BUTTON_LABEL": "Invite a manager",
+    "HEADERS": {
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone number",
+      "ROLE": "Role",
+      "ACTIONS": "Actions"
+    },
+    "EDIT_ROLE_BUTTON_LABEL": "Edit role",
+    "EDIT_ROLE_BUTTON_TOOLTIP": "Edit this user's role",
+    "DELETE_BUTTON_LABEL": "Delete",
+    "UPDATE_ROLE_DIALOG": {
+      "TITLE": "Update user role",
+      "NEW_ROLE_FOR_USER_LABEL": "New user role",
+      "SELECT_ROLE_PLACEHOLDER": "Select a role",
+      "CANCEL_BUTTON_LABEL": "Cancel",
+      "SAVE_BUTTON_LABEL": "Save"
+    }
+  },
+  "KEY": {
+    "SHARED": {
+      "BACK": "Back",
+      "HELP_LABEL": "Help"
+    },
+    "VIEW": {
+      "UPDATE": "Update",
+      "DELETE": "Delete",
+      "DOWNLOAD": "Download",
+      "BACK_TO_LIST": "Back to key list"
+    },
+    "CREATE": {
+      "KEY_TITLE": "Create an allocation key",
+      "FORM": {
+        "KEY_NAME_LABEL": "Key name",
+        "KEY_NAME_PLACEHOLDER": "Key name",
+        "KEY_DESCRIPTION_LABEL": "Description",
+        "KEY_DESCRIPTION_PLACEHOLDER": "My community's key",
+        "KEY_ADD_ITERATION_BUTTON_LABEL": "Add an iteration",
+        "KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL": "Add a pro rata iteration",
+        "KEY_ADD_CONSUMER_BUTTON_LABEL": "Add a consumer",
+        "KEY_DATAS_LABEL": "Data",
+        "KEY_CREATE_BUTTON_LABEL": "Create",
+        "ERROR": {
+          "KEY_NAME_LABEL": "key name",
+          "DESCRIPTION_LABEL": "description"
+        }
+      },
+      "ERROR": {
+        "NO_ITERATION": "There must be at least one iteration",
+        "NO_CONSUMERS": "There must be at least one consumer",
+        "SUM_ITERATIONS_ERROR": "The sum of the iterations must equal 1",
+        "SUM_CONSUMERS": "The sum of the consumers must equal 1",
+        "CONSUMER_NAME_REQUIRED": "The consumer name is required",
+        "NO_CHANGE": "No changes detected"
+      },
+      "HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL": "How many consumers should your key contain?",
+      "VALIDATE_BUTTON_LABEL": "Validate",
+      "CONSUMER_NAME_LABEL": "Consumer name",
+      "KEY_TYPE_LABEL": "Key type",
+      "PRORATA_LABEL": "Pro rata",
+      "EGALITARIAN_LABEL": "Equal",
+      "INJECTION_PERCENTAGE_LABEL": "Injection percentage",
+      "SUM_MUST_BE_100_LABEL": "The sum of the percentages must equal 100!",
+      "FINALISATION": "Finalization"
+    },
+    "TABLE": {
+      "COLUMNS": {
+        "ITERATION_NUMBER_LABEL": "Iteration no.",
+        "ITERATION_TOOLTIP": "Number of the iteration in the sequence",
+        "VA_PERCENTAGE_LABEL": "VA Percentage",
+        "VA_PERCENTAGE_SHORT_LABEL": "% VA",
+        "VA_PERCENTAGE_TOOLTIP": "Injection value allocated to this iteration (in %)",
+        "CONSUMER_LABEL": "Consumers",
+        "CONSUMER_NAME_LABEL": "Name",
+        "CONSUMER_VAP_LABEL": "VAP",
+        "CONSUMER_VAP_TOOLTIP": "Value allocated to a consumer (in %)",
+        "ALLOCONSUMPTION_LABEL": "Alloconsumption",
+        "SURPLUS_LABEL": "Surplus",
+        "SHARED_PERCENTAGE_LABEL": "% Shared",
+        "SELF_SUFFICIENCY_PERCENTAGE_LABEL": "% Self-sufficiency",
+        "TOTAL_CONSUMPTION_LABEL": "Total consumption",
+        "VP_TOTAL_LABEL": "Total VP",
+        "VPC_TOTAL_LABEL": "Total VPC",
+        "SURPLUS_TOTAL_LABEL": "Total surplus",
+        "ALLOCONSUMPTION_TOTAL_LABEL": "Total alloconsumption",
+        "TIME_LABEL": "Time",
+        "VPC_LABEL": "VPC",
+        "CONSUMPTION_LABEL": "Consumption",
+        "VP_LABEL": "VP"
+      },
+      "DELETE_ITERATION_BUTTON_LABEL": "Delete iteration",
+      "DELETE_CONSUMER_BUTTON_LABEL": "Delete consumer"
+    },
+    "LIST": {
+      "TITLE": "Allocation keys",
+      "ERASE_FILTERS_BUTTON_LABEL": "Clear filters",
+      "ADD_BUTTON_LABEL": "Add",
+      "ADD_STANDARD_KEY_BUTTON_LABEL": "Add a standard key",
+      "NAME_LABEL": "Name",
+      "DESCRIPTION_LABEL": "Description",
+      "PAGINATED_TEMPLATE_LIST": "Page {{ page }} of {{ total_pages }} ({{ total }} keys)",
+      "EMPTY": "No key found"
+    },
+    "GENERATION": {
+      "TITLE": "Key generation",
+      "SELECT_ALGORITHM_TITLE": "Select algorithm",
+      "SELECT_ALGORITHME_LABEL": "Select algorithm",
+      "SELECT_ALGORITHME_PLACEHOLDER": "Choose an algorithm",
+      "PARAMETERS_LABELS": "Generation parameters",
+      "PRODUCTION_COLUMN_LABEL": "Production column",
+      "REQUIRED_PARAMETERS_LABEL": "Required parameters",
+      "OPTIONAL_PARAMETERS_LABEL": "Additional parameters",
+      "FILE_UPLOAD_LABEL": "Simulation file",
+      "FILE_UPLOAD_SELECTED_LABEL": "Selected file",
+      "START_GENERATION_BUTTON_LABEL": "Start generation",
+      "ALGORITHM_RESULTS_TITLE": "Results",
+      "NO_GENERATED_KEY": "No key generated",
+      "SAVE_RESULT_BUTTON_LABEL": "Save"
+    },
+    "SIMULATION": {
+      "SUMMARY_KEY_TITLE": "Summary key",
+      "EXPORT_EXCEL_BUTTON_LABEL": "Export as Excel",
+      "CHART_TITLE": "Chart",
+      "NO_DATA_TO_DISPLAY_LABEL": "No data to display",
+      "DETAILED_KEY_TITLE": "Detailed key",
+      "SIMULATIONS_TITLE": "Simulations",
+      "NO_SIMULATION_FOUND": "No simulation found",
+      "SEARCH_LABEL": "Search a simulation",
+      "ADD_TEST_BUTTON_LABEL": "Add a test",
+      "DRAG_OR_CLICK_TO_UPLOAD_FILE_LABEL": "Drag and drop a file here or click to select",
+      "SELECTED_FILE_LABEL": "Selected file",
+      "INJECTION_PLACEHOLDER": "Injection",
+      "PRODUCTION_PLACEHOLDER": "Production",
+      "INPUT_INJECTION_COLUMN_LABEL": "Name of the column containing injection",
+      "SIMULATION_START_BUTTON_LABEL": "Start simulation"
+    },
+    "SUCCESS": {
+      "KEY_UPDATED": "Key successfully updated",
+      "KEY_ADDED": "Key successfully added",
+      "KEY_DELETED": "Key successfully deleted",
+      "KEY_EXPORTED": "Key successfully exported",
+      "SIMULATION_DONE": "Simulation completed successfully",
+      "SIMULATION_EXPORTED": "Simulation successfully exported",
+      "GENERATION_REQUEST_SENT": "Generation request sent successfully",
+      "GENERATED_KEY_SAVED": "Generated key saved successfully"
+    },
+    "ERRORS": {
+      "FILL_REQUIRED_FIELDS": "Please fill in all required fields",
+      "FIRST_STEP_ERROR": "An error occurred during the first step",
+      "SECOND_STEP_ERROR": "An error occurred during the second step",
+      "PAGE_INCORRECT": "The page number must be positive",
+      "LIMIT_INCORRECT": "The limit must be between 1 and 100",
+      "ID_INCORRECT": "The identifier must be a positive integer",
+      "NAME_REQUIRED": "Name is required",
+      "DESCRIPTION_REQUIRED": "Description is required",
+      "ITERATIONS_REQUIRED": "At least one iteration is required",
+      "ITERATION_ENERGY_ALLOCATION": "The allocation percentage for each iteration cannot be negative",
+      "CONSUMERS_REQUIRED": "At least one consumer is required",
+      "ITERATION_NUMBER_FAILED": "The iteration number must be strictly positive",
+      "CONSUMER_ENERGY_ALLOCATION": "The allocation percentage for each consumer is required",
+      "ENERGY_ALLOCATION_NEGATIVE": "The allocation percentage for each consumer must be strictly positive",
+      "SUM_ENERGY_ALLOCATION": "The sum of the energies allocated to all iterations must equal 100%",
+      "CONSUMERS_NAME_REQUIRED": "Each consumer must be identified by a name (or a meter no.)",
+      "CONSUMERS_SUM_ENERGY_ALLOCATION": "The sum of the allocations to each consumer during an iteration must equal 100%",
+      "ALGORITHME_NAME_ERROR": "An error occurred with the exception name",
+      "INJECTION_NAME_ERROR": "The injection name is incorrect",
+      "FILE_MISSING": "Please include a file",
+      "FILE_FORMAT_INCORRECT": "The file format is incorrect (only .xls/.xlsx and .csv are supported)",
+      "ERROR_EXCEPTION": "An unexpected error occurred. Please try again later",
+      "TIMEOUT": "Timeout...",
+      "ERROR_GET_PARTIAL_KEY_LIST": "An error occurred while fetching the allocation key",
+      "ERROR_GET_PARTIAL_KEY_LIST_BY_ID": "An error occurred while fetching allocation keys by their identifiers",
+      "ERROR_GET_COMPLETE_KEY": "An error occurred while fetching the allocation key",
+      "ERROR_ADD_KEY": "An error occurred while adding the allocation key. Please try again later",
+      "ERROR_UPDATE_KEY": "An error occurred while updating the key. Please try again later",
+      "ERROR_DELETE_KEY": "An error occurred while deleting the key. Please try again later",
+      "ERROR_LOCAL_SIMULATE_KEY": "An error occurred while simulating the key. Please try again later.",
+      "ERROR_GET_PARTIAL_KEY_SIMULATION_LIST": "An error occurred while fetching simulations for the key.",
+      "ERROR_GET_COMPLETE_KEY_SIMULATION": "An error occurred while fetching the simulation",
+      "ERROR_MISSING_PARAMETERS_ADD_KEY_GENERATORS": "A mandatory parameter is missing for the generation request.",
+      "ERROR_GET_PARTIAL_GENERATED_KEY_LIST": "An error occurred while fetching generated keys.",
+      "ERROR_SAVE_GENERATED_KEY": "An error occurred while saving the generated key",
+      "ERROR_GENERATE_KEY": "An error occurred while generating the key. Please try again later",
+      "ERROR_NO_GENERATOR_AVAILABLE": "No generator is currently available",
+      "ERROR_DOWNLOAD_SIMULATION": "An error occurred while downloading the simulation. Please try again later",
+      "ERROR_DOWNLOAD_KEY": "An error occurred while downloading the key. Please try again later",
+      "ERROR_ACTIVATE_KEY": "An error occurred while activating the key.",
+      "ERROR_GET_AVAILABLE_GENERATOR": "An error occurred while fetching available generators. Please try again later",
+      "ERROR_DECORATOR": "DECORATOR ERROR. Please contact the administrator",
+      "ERROR_USER_NOT_FOUND": "You are not authenticated.",
+      "ERROR_USER_NOT_AUTHORIZED": "You are not authorized to perform this action."
+    }
+  },
+  "MEMBER": {
+    "VIEW": {
+      "MEMBER_TITLE": "Member",
+      "BACK_TO_LIST": "Back to member list",
+      "STATUS_ACTION": {
+        "ACTIVATE_BUTTON_LABEL": "Activate",
+        "DEACTIVATE_BUTTON_LABEL": "Deactivate",
+        "PUT_TO_PENDING_LIST_BUTTON_LABEL": "Put on hold",
+        "MODIFY_BUTTON_LABEL": "Modify"
+      },
+      "ERROR_DEACTIVATING_MEMBER": {
+        "HEADER_LABEL": "Action unavailable",
+        "MEMBER_CANT_DEACTIVATE_MEMBER_WITH_ACTIVATED_METER_LABEL": "You cannot deactivate a member if they still have active meters.",
+        "CLOSE_BUTTON_LABEL": "Close"
+      },
+      "INFORMATION_TITLE": "General information",
+      "INVITATIONS": {
+        "NO_INVITE_LABEL": "No invitation",
+        "PENDING_LABEL": "Pending",
+        "ACCEPTED_LABEL": "Accepted"
+      },
+      "MEMBER_GUARDIANSHIP_TITLE": "Guardian",
+      "MANAGER_TITLE": "Manager",
+      "SOCIAL_LABEL": "Social",
+      "BANK_TITLE": "Banking information",
+      "TAB_HEADER": {
+        "METER_LABEL": "Meters",
+        "BANKING_INFO_LABEL": "Banking information",
+        "DOCUMENTS_LABEL": "Documents",
+        "MANAGER_LABEL": "Manager"
+      },
+      "INFORMATIONS": {
+        "COMPANY_VAT_NUMBER_LABEL": "VAT no.",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "National register no.",
+        "NAME_LABEL": "Last name",
+        "FIRST_NAME_LABEL": "First name",
+        "EMAIL_LABEL": "Email address",
+        "PHONE_LABEL": "Phone no.",
+        "SOCIAL_RATE_LABEL": "Social tariff",
+        "ADDRESSES_LABEL": "Addresses",
+        "ADDRESS": {
+          "HOUSE": "Home address",
+          "BILLING": "Billing address"
+        }
+      },
+      "STATUS_LABEL": "Status",
+      "STATUS": {
+        "ACTIVE_LABEL": "Activated",
+        "INACTIVE_LABEL": "Deactivated",
+        "PENDING_LABEL": "Pending"
+      },
+      "UPDATE_A_MEMBER_HEADER": "Update a member",
+      "MEMBER_UPDATE_SUCCESSFULLY_LABEL": "Member successfully updated",
+      "MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL": "Status successfully updated",
+      "METERS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+        "ADDRESS_LABEL": "Address",
+        "ADDRESS": {
+          "STREET_NAME_LABEL": "Street",
+          "POSTAL_CODE_LABEL": "Postal code",
+          "CITY_LABEL": "City",
+          "PLACEHOLDER": {
+            "STREET_NAME_LABEL": "Main Street",
+            "POSTAL_CODE_LABEL": "1000",
+            "CITY_LABEL": "Brussels"
+          }
+        },
+        "EAN_LABEL": "EAN",
+        "METER_NUMBER_LABEL": "Meter no.",
+        "STATUS_LABEL": "Status",
+        "FILTER_BY_STATUS_LABEL": "Filter by status",
+        "SELECT_A_STATUS_PLACEHOLDER": "Select a status",
+        "SHARING_OPERATION_TITLE": "Sharing operation",
+        "FILTER_BY_SHARING_OPERATION_LABEL": "Filter by sharing operation",
+        "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Select a sharing operation",
+        "NO_METER_FOUND_LABEL": "No meter found",
+        "ADD_METER_BUTTON_LABEL": "Add a meter",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} meters)",
+        "ADD_A_METER_HEADER": "Add a meter",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Meter successfully added"
+      },
+      "DOCUMENTS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+        "NAME_LABEL": "Name",
+        "TYPE_LABEL": "Type",
+        "SIZE_LABEL": "Size",
+        "UPLOAD_DATE_LABEL": "Upload date",
+        "NO_DOCUMENT_FOUND_LABEL": "No document found",
+        "ADD_DOCUMENT_LABEL": "Add a document",
+        "PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} documents)",
+        "ADD_DOCUMENT_HEADER": "Add a document",
+        "SUCCESS_ADDING_DOCUMENT_LABEL": "Document successfully added"
+      },
+      "MANAGER": {
+        "SOCIAL_SECURITY_NUMBER_LABEL": "National register no.",
+        "SURNAME_LABEL": "Last name",
+        "FIRST_NAME_LABEL": "First name",
+        "EMAIL_LABEL": "Email address",
+        "PHONE_NUMBER_LABEL": "Phone no."
+      }
+    },
+    "LIST": {
+      "MEMBER_TITLE": "Members",
+      "ADD_BUTTON_LABEL": "Add",
+      "INVITE_NEW_MEMBER_BUTTON_LABEL": "Invite a new member",
+      "SEE_PENDING_INVITATION_BUTTON_LABEL": "View pending invitations",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "FILTER_BY_TYPE_LABEL": "Filter by type",
+      "SELECT_A_TYPE_PLACEHOLDER": "Select a type",
+      "STATUS_LABEL": "Status",
+      "FILTER_BY_STATUS_LABEL": "Filter by status",
+      "SELECT_A_STATUS_PLACEHOLDER": "Select a status",
+      "NO_MEMBER_FOUND_LABEL": "No member found",
+      "PAGE_REPORT_TEMPLATE_MEMBER_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} members)",
+      "INVITE_MEMBER_HEADER": "Invite a member",
+      "ADD_MEMBER_HEADER": "Add a member",
+      "ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL": "Would you like to add a new meter for this member?",
+      "CONFIRMATION_HEADER": "Confirmation",
+      "ADD_METER_HEADER": "Add a meter",
+      "METER_MEMBER_ADDED_SUCCESSFULLY_LABEL": "Member and meter successfully added",
+      "MEMBER_ADDED_SUCCESSFULLY_LABEL": "Member successfully added",
+      "PENDING_INVITATION_HEADER": "Pending invitations",
+      "TYPE": {
+        "INDIVIDUAL_LABEL": "Natural person",
+        "COMPANY_LABEL": "Legal entity"
+      }
+    },
+    "INVITE": {
+      "EMAIL_OF_MEMBER_TO_INVITE_LABEL": "Email of the member to invite",
+      "INVITE_BUTTON_LABEL": "Invite"
+    },
+    "PENDING_INVITE": {
+      "EMAIL_LABEL": "Email",
+      "MEMBER_NAME_LABEL": "Member name",
+      "MEMBER_STATE_LABEL": "State",
+      "ACTION_LABEL": "Action",
+      "CANCEL_BUTTON_LABEL": "Cancel",
+      "NO_PENDING_INVITATIONS_LABEL": "No pending invitations",
+      "TO_ENCODE_TAG_LABEL": "To encode",
+      "ENCODED_TAG_LABEL": "Encoded"
+    },
+    "ADD_DOCUMENT": {
+      "SELECT_FILE_DRAG_N_DROP_LABEL": "Drag and drop a file here or click to select a file",
+      "SELECTED_FILE_LABEL": "Selected file",
+      "UPLOAD_DOCUMENT_BUTTON_LABEL": "Upload this document"
+    },
+    "ADD": {
+      "ADDRESS": {
+        "BACK_TO_PERSONAL_INFORMATIONS": "Back to personal information",
+        "HOUSE_ADDRESS_TITLE": "Home address",
+        "SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL": "Same address for billing",
+        "BILLING_ADDRESS_TITLE": "Billing address",
+        "VALIDATE_ADDRESS_FORM_BUTTON": "Validate",
+        "FORM_ERROR": {
+          "HOME_ADDRESS_STREET": "home address street",
+          "HOME_ADDRESS_NUMBER": "home address number",
+          "HOME_ADDRESS_SUPPLEMENT": "home address supplement",
+          "HOME_ADDRESS_POSTCODE": "home address postal code",
+          "HOME_ADDRESS_CITY": "home address city",
+          "BILLING_ADDRESS_STREET": "billing address street",
+          "BILLING_ADDRESS_NUMBER": "billing address number",
+          "BILLING_ADDRESS_SUPPLEMENT": "billing address supplement",
+          "BILLING_ADDRESS_POSTCODE": "billing address postal code",
+          "BILLING_ADDRESS_CITY": "billing address city"
+        }
+      },
+      "BANK": {
+        "BACK_TO_ADDRESS": "Back to addresses",
+        "BANKING_INFO_TITLE": "Banking information",
+        "IBAN_LABEL": "IBAN",
+        "VALIDATE_BANKING_INFO_FORM_BUTTON": "Validate",
+        "ERROR": {
+          "IBAN": "The IBAN number is invalid"
+        }
+      },
+      "INFORMATIONS": {
+        "BACK_TO_STATUS": "Back to status",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "National register number",
+        "SURNAME_LABEL": "Last name",
+        "FIRST_NAME_LABEL": "First name",
+        "EMAIL_LABEL": "Email address",
+        "PHONE_NUMBER_LABEL": "Phone no.",
+        "SOCIAL_RATE_CHECKBOX_LABEL": "Social tariff",
+        "GUARDIAN_CHECKBOX_LABEL": "Guardianship",
+        "COMPANY_NUMBER_LABEL": "Company no.",
+        "COMPANY_NAME_LABEL": "Name",
+        "VAT_NUMBER_LABEL": "VAT no.",
+        "GUARDIAN_TITLE": "Guardian information",
+        "VALIDATE_INFORMATION_FORM_BUTTON": "Validate",
+        "ERROR": {
+          "SOCIAL_SECURITY_NUMBER": "The National register number is invalid"
+        },
+        "FORM_ERROR": {
+          "ID": "national register number",
+          "SURNAME": "last name",
+          "NAME": "first name",
+          "EMAIL": "email address",
+          "PHONE": "phone number",
+          "SOCIALRATE": "social tariff",
+          "VATNUMBER": "VAT number",
+          "NRN_MANAGER": "guardian national register number",
+          "SURNAME_MANAGER": "guardian last name",
+          "NAME_MANAGER": "guardian first name",
+          "EMAIL_MANAGER": "guardian email address",
+          "PHONE_MANAGER": "guardian phone number"
+        }
+      },
+      "STATUS": {
+        "STATUS_TITLE": "Member status",
+        "INDIVIDUAL_RADIOBUTTON_LABEL": "Individual",
+        "COMPANY_RADIOBUTTON_LABEL": "Company",
+        "VALIDATE_STATUS_FORM_BUTTON": "Validate"
+      },
+      "TAB_HEADER": {
+        "STATUS_LABEL": "Status",
+        "PERSONAL_INFORMATIONS_LABEL": "Personal information",
+        "ADDRESS_LABEL": "Addresses",
+        "BANKING_INFO": "Banking information"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_MEMBER_LIST": "Error fetching partial members",
+      "GET_FULL_MEMBER": "Error fetching full member details",
+      "ADD_MEMBER": "Error adding member",
+      "UPDATE_MEMBER": "Error updating member",
+      "UPDATE_STATUS_MEMBER": "Error updating member status",
+      "UPLOAD_DOCUMENT_UNDEFINED": "No file was provided",
+      "UPLOAD_DOCUMENT": "Error uploading document",
+      "GET_DOCUMENT": "Error fetching documents",
+      "GET_DOCUMENT_FULL": "Error fetching full document details",
+      "DELETE_DOCUMENT": "Error deleting document"
+    }
+  },
+
+  "METER": {
+    "METER_LABEL": "Meter",
+    "ADDRESS": {
+      "STREET_NAME_LABEL": "Street",
+      "NUMBER_LABEL": "Number",
+      "BOX_LABEL": "Box",
+      "POSTAL_CODE_LABEL": "Postal code",
+      "CITY_LABEL": "City",
+      "PLACEHOLDER": {
+        "STREET_NAME_LABEL": "Main Street",
+        "NUMBER_LABEL": "12",
+        "BOX_LABEL": "1",
+        "POSTAL_CODE_LABEL": "1000",
+        "CITY_LABEL": "Brussels"
+      }
+    },
+    "INFORMATIONS": {
+      "EAN_LABEL": "EAN",
+      "METER_NUMBER_LABEL": "Meter no.",
+      "STATUS_LABEL": "Status",
+      "PHASE_NUMBER_LABEL": "Number of phases",
+      "READING_FREQUENCY_LABEL": "Reading frequency",
+      "TARIF_GROUP_LABEL": "Tariff group",
+      "DESCRIPTION_LABEL": "Description",
+      "WITHDRAWAL_POWER_LABEL": "Withdrawal power (kVA)",
+      "TOTAL_GENERATING_CAPACITY_LABEL": "Total generating capacity (kVA)",
+      "AMPERAGE_LABEL": "Amperage (A)",
+      "PRODUCTION_CHAIN_LABEL": "Generation type",
+      "INJECTION_STATUS_LABEL": "Injection status",
+      "GRD_LABEL": "DSO",
+      "RATE_LABEL": "Tariff",
+      "USAGE_LABEL": "Usage",
+      "OWNER_LABEL": "Holder",
+      "PLACEHOLDER": {
+        "EAN_LABEL": "1234567890123",
+        "METER_NUMBER_LABEL": "1234567890123"
+      }
+    },
+    "CATEGORIES": {
+      "PRODUCTION_CHAIN": {
+        "PHOTOVOLTAIC": "Photovoltaic",
+        "WIND": "Wind",
+        "HYDROELECTRIC": "Hydroelectric",
+        "SOLID_BIOMASS": "Solid biomass",
+        "BIOGAS": "Biogas",
+        "FOSSIL_FIRE_COGENERATION": "Fossil-fired cogeneration",
+        "OTHER": "Other",
+        "NONE": "None"
+      },
+      "RATE": {
+        "SIMPLE": "Single-rate",
+        "BI_HOURLY": "Dual-hourly",
+        "EXCLUSIVE_NIGHT": "Exclusive night"
+      },
+      "CLIENT": {
+        "RESIDENTIAL": "Residential",
+        "PROFESSIONAL": "Professional",
+        "INDUSTRIAL": "Industrial"
+      },
+      "INJECTION_STATUS": {
+        "AUTOPRODUCER_OWNER": "Self-producer owner",
+        "SELF_PRODUCTION_RIGHT_OF_USER": "Self-producer right of use",
+        "OWNER_PURE_INJECTION": "Owner pure injection",
+        "PURE_INJECTION_RIGHT_OF_USE": "Pure injection right of use",
+        "NONE": "None"
+      },
+      "READING_FREQUENCY": {
+        "MONTHLY": "Monthly",
+        "ANNUAL": "Annual"
+      },
+      "PHASE": {
+        "SINGLE_PHASE": "Single-phase",
+        "THREE_PHASES": "Three-phase"
+      },
+      "TARIF_GROUP": {
+        "LOW_VOLTAGE": "Low voltage",
+        "HIGH_VOLTAGE": "High voltage"
+      }
+    },
+    "ADD": {
+      "INFORMATION_HEADER": "Meter information",
+      "ENERGY_CHARACTERISTIC_HEADER": "Energy characteristics",
+      "FINANCIAL_CHARACTERISTIC_HEADER": "Financial characteristics",
+      "RATE_LABEL": "Tariff",
+      "USAGE_LABEL": "Usage",
+      "OWNER_LABEL": "Holder",
+      "START_DATE_METER_LABEL": "Start date",
+      "VALIDATE_BUTTON_FORM_LABEL": "Validate",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Select a holder"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "The selected member is incorrect"
+      },
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "street",
+        "ADDRESS_NUMBER": "number",
+        "ADDRESS_SUPPLEMENT": "supplement",
+        "ADDRESS_POSTCODE": "postal code",
+        "ADDRESS_CITY": "city",
+        "EAN": "EAN",
+        "METERNUMBER": "meter number",
+        "PHASESNUMBER": "number of phases",
+        "READINGFREQUENCY": "reading frequency",
+        "TARIFGROUP": "tariff group",
+        "DESCRIPTION": "description",
+        "SAMPLINGPOWER": "withdrawal power",
+        "TOTALGENERATINGCAPACITY": "total capacity",
+        "AMPERAGE": "amperage",
+        "PRODUCTIONCHAIN": "generation type",
+        "INJECTIONSTATUS": "injection status",
+        "GRD": "DSO",
+        "RATE": "tariff",
+        "CLIENTTYPE": "client type",
+        "MEMBER": "member",
+        "DATESTART": "start date"
+      }
+    },
+    "UPDATE_DATA": {
+      "SELECT_STATUS": "Select a status",
+      "ENERGY_CHARACTERISTIC_TITLE": "Energy characteristics",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Financial characteristics",
+      "START_DATE_METER_LABEL": "Start date",
+      "VALIDATE_BUTTON_FORM_LABEL": "Validate",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Select a holder"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "The selected member is incorrect"
+      },
+      "FORM_ERROR": {
+        "DESCRIPTION": "description",
+        "SAMPLINGPOWER": "withdrawal power",
+        "TOTALGENERATINGCAPACITY": "total capacity",
+        "AMPERAGE": "amperage",
+        "PRODUCTIONCHAIN": "generation type",
+        "INJECTIONSTATUS": "injection status",
+        "GRD": "DSO",
+        "RATE": "tariff",
+        "CLIENTTYPE": "client type",
+        "MEMBER": "member",
+        "DATESTART": "start date"
+      }
+    },
+    "DEACTIVATE": {
+      "END_DATE_METER_LABEL": "Deactivation date",
+      "DELETE_BUTTON_LABEL": "Delete"
+    },
+    "DATA": {
+      "ENERGY_CHARACTERISTIC_TITLE": "Energy characteristics",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Financial characteristics",
+      "SHARING_OPERATION_TITLE": "Sharing operation",
+      "NO_SHARING_OPERATION_FOUND": "No sharing operation",
+      "NO_OWNER_FOUND_LABEL": "No assigned holder"
+    },
+    "FULL": {
+      "MODIFY_BUTTON_LABEL": "Modify",
+      "METER_INFORMATION_TITLE": "Meter information",
+      "TABS": {
+        "ACTUAL_DATA_HEADER": "Current data",
+        "HISTORICAL_DATA_HEADER": "Historical data",
+        "FUTUR_DATA_HEADER": "Future data",
+        "CONSUMPTION_HEADER": "Consumption monitoring",
+        "UPDATE_BUTTON_LABEL": "Update"
+      },
+      "NO_DATA_FOUND_LABEL": "No data currently available",
+      "PLACEHOLDER": {
+        "SELECT_PERIOD_LABEL": "Select a period"
+      },
+      "NO_HISTORY_DATA_FOUND_LABEL": "No historical data available",
+      "NO_FUTURE_DATA_FOUND_LABEL": "No future data available",
+      "BEGINNING_DATE_LABEL": "Start date",
+      "END_DATE_LABEL": "End date",
+      "SEARCH_BUTTON_LABEL": "Search",
+      "DOWNLOAD_BUTTON_LABEL": "Download",
+      "METER_MODIFICATION_HEADER": "Meter modification",
+      "METER_MODIFIED_SUCCESS_LABEL": "Meter successfully modified",
+      "METER_DATA_UPDATE_HEADER": "Meter data update",
+      "METER_DATA_UPDATE_SUCCESS_LABEL": "Meter data successfully updated",
+      "METER_DEACTIVATE_HEADER": "Meter deactivation",
+      "METER_DEACTIVATED_SUCCESS_LABEL": "Meter successfully deactivated",
+      "CONSUMPTION_FILE_PREFIX": "consumption_",
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Consumption (kWh)",
+        "X_TITLE_DATE": "Date",
+        "CONSUMPTION_SHARED_LABEL": "Consumption - Shared",
+        "CONSUMPTION_NET_LABEL": "Consumption - Net",
+        "INJECTION_NET_LABEL": "Injection - Net",
+        "INJECTION_SHARED_LABEL": "Injection - Shared"
+      }
+    },
+    "LIST": {
+      "METERS_TITLE": "Meters",
+      "ADD_BUTTON_LABEL": "Add",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "FILTER_BY_OWNER_LABEL": "Filter by holder",
+      "SELECT_AN_OWNER_PLACEHOLDER": "Select a holder",
+      "FILTER_BY_STATUS_LABEL": "Filter by status",
+      "SELECT_A_STATUS_PLACEHOLDER": "Select a status",
+      "SHARING_OPERATION_TITLE": "Sharing operation",
+      "FILTER_BY_SHARING_OPERATION_LABEL": "Filter by sharing operation",
+      "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Select a sharing operation",
+      "NO_METERS_FOUND_LABEL": "No meter found",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} meters)",
+      "ADD_METER_HEADER": "Add a meter",
+      "METER_ADDED_SUCCESSFULLY_LABEL": "Meter successfully added"
+    },
+    "UPDATE": {
+      "METER_INFORMATION_TITLE": "Meter information",
+      "VALIDATE_BUTTON_LABEL": "Validate",
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "street",
+        "ADDRESS_NUMBER": "number",
+        "ADDRESS_SUPPLEMENT": "supplement",
+        "ADDRESS_POSTCODE": "postal code",
+        "ADDRESS_CITY": "city",
+        "EAN": "EAN",
+        "METERNUMBER": "meter number",
+        "PHASESNUMBER": "number of phases",
+        "READINGFREQUENCY": "reading frequency",
+        "TARIFGROUP": "tariff group"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_METERS_LIST": "Error fetching partial meters",
+      "GET_FULL_METER": "Error fetching full meter details",
+      "ADD_METER": "Error adding meter",
+      "UPDATE_METER_DATA": "Error updating meter data",
+      "UPDATE_METER": "Error updating meter",
+      "DELETE_METER": "Error deleting meter",
+      "DEACTIVATE_METER": "Error deactivating meter",
+      "CHANGE_STATUS_METER": "Error changing meter status",
+      "EAN_MISSING": "The EAN code is missing",
+      "METER_NUMBER_MISSING": "The meter number is missing",
+      "TARIF_GROUP_MISSING": "The tariff group is missing",
+      "PHASE_NUMBER_MISSING": "The number of phases is missing",
+      "READING_FREQUENCY_MISSING": "The reading frequency is missing",
+      "READING_FREQUENCY_INCORRECT": "The reading frequency is incorrect",
+      "SAMPLING_POWER_MISSING": "The withdrawal power is missing",
+      "AMPERAGE_MISSING": "The amperage is missing",
+      "RATE_MISSING": "The tariff is missing",
+      "CLIENT_TYPE_MISSING": "The client type is missing",
+      "CLIENT_TYPE_INCORRECT": "The client type is incorrect",
+      "START_DATE_MISSING": "The start date is missing",
+      "INJECTION_STATUS_MISSING": "The injection status is missing",
+      "INJECTION_STATUS_INCORRECT": "The injection status is incorrect",
+      "PRODUCTION_CHAIN_MISSING": "The generation type is missing",
+      "PRODUCTION_CHAIN_INCORRECT": "The generation type is incorrect",
+      "TOTAL_GENERATING_CAPACITY_INCORRECT": "The total installed capacity is missing or incorrect",
+      "STATUS_MISSING": "The meter status is missing",
+      "STATUS_INCORRECT": "The meter status is incorrect",
+      "RATE_INCORRECT": "The tariff is incorrect",
+      "TARIF_GROUP_INCORRECT": "The tariff group is incorrect",
+      "PHASE_NUMBER_INCORRECT": "The number of phases is incorrect"
+    },
+    "STATUS": {
+      "ACTIVE_LABEL": "Activated",
+      "INACTIVE_LABEL": "Deactivated",
+      "WAITING_GRD_LABEL": "Pending DSO approval",
+      "WAITING_MANAGER_LABEL": "Pending manager approval"
+    }
+  },
+
+  "SHARING_OPERATION": {
+    "TYPE": {
+      "INSIDE_BUILDING": "Within a building",
+      "CER": "REC",
+      "CEC": "CEC"
+    },
+    "ADD": {
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "ADD_BUTTON_LABEL": "Add"
+    },
+    "ADD_KEY": {
+      "ALLOCATION_KEYS_TITLE": "Allocation keys",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NAME_LABEL": "Name",
+      "DESCRIPTION_LABEL": "Description",
+      "NO_ALLOCATION_KEYS_FOUND_LABEL": "No key found",
+      "ADD_BUTTON_LABEL": "Add",
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} keys)"
+    },
+    "ADD_METER": {
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "FILTER_BY_STATUS_LABEL": "Filter by status",
+      "SELECT_A_STATUS_PLACEHOLDER": "Select a status",
+      "NO_METERS_FOUND_LABEL": "No meter found",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} meters)",
+      "START_DATE_METERS_LABEL": "Start date",
+      "VALIDATE_BUTTON_LABEL": "Validate",
+      "ADDRESS_LABEL": "Address",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Street",
+        "POSTAL_CODE_LABEL": "Postal code",
+        "CITY_LABEL": "City",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Main Street",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Brussels"
+        }
+      },
+      "METER": {
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "Meter no."
+        },
+        "STATUS_LABEL": "Status",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Activated",
+          "DEACTIVATED_LABEL": "Deactivated",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Pending DSO approval",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Pending manager approval"
+        }
+      }
+    },
+    "VIEW": {
+      "SHARING_OPERATION_TITLE": "Sharing operation",
+      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Export as Excel (CWaPE format)",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "ADDRESS_LABEL": "Address",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Street",
+        "POSTAL_CODE_LABEL": "Postal code",
+        "CITY_LABEL": "City",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Main Street",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Brussels"
+        }
+      },
+      "KEY": {
+        "ACTUAL_KEY_LABEL": "Current key",
+        "CHOOSE_KEY_BUTTON_LABEL": "Choose a key",
+        "CREATE_KEY_BUTTON_LABEL": "Create a key",
+        "NO_ACTUAL_KEY_LABEL": "No current key",
+        "MODIFY_KEY_HEADER": "Modify key",
+        "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Key successfully modified",
+        "WAITING_APPROVAL_KEY_LABEL": "Key pending approval",
+        "APPROVE_KEY": "Approve",
+        "REJECT_KEY": "Reject"
+      },
+      "METER": {
+        "HEADERS": {
+          "PAST": "Past",
+          "NOW": "Current",
+          "FUTURE": "Future"
+        },
+        "METERS_TITLE": "Meters",
+        "ADD_METER_BUTTON_LABEL": "Add a meter",
+        "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+        "FILTER_BY_STATUS_LABEL": "Filter by status",
+        "SELECT_A_STATUS_PLACEHOLDER": "Select a status",
+        "PUT_TO_WAITING_LIST_BUTTON_LABEL": "Put on hold",
+        "APPROVE_BUTTON_LABEL": "Approve",
+        "DELETE_BUTTON_LABEL": "Delete",
+        "NO_METERS_FOUND_LABEL": "No meter found",
+        "CHANGE_STATUS_METER_STARTING_LABEL": "Meter activity start date",
+        "CHANGE_STATUS_METER_ENDING_LABEL": "Meter presence end date",
+        "CHANGE_STATUS_METER_WAITING_LABEL": "Start date for pending DSO approval",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} meters)",
+        "ADD_METERS_HEADER": "Add meters",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Meter(s) successfully added",
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "Meter no."
+        },
+        "STATUS_LABEL": "Status",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Activated",
+          "DEACTIVATED_LABEL": "Deactivated",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Pending DSO approval",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Pending manager approval"
+        }
+      },
+      "CONSUMPTION_MONITORING": {
+        "CONSUMPTION_MONITORING_TITLE": "Consumption monitoring",
+        "START_DATE_LABEL": "Start date",
+        "END_DATE_LABEL": "End date",
+        "SEARCH_BUTTON_LABEL": "Search",
+        "DOWNLOAD_BUTTON_LABEL": "Download",
+        "SELECT_FILE_DRAG_N_DROP_LABEL": "Drag and drop a file here or click to select a file",
+        "SELECTED_FILE_LABEL": "Selected file",
+        "UPLOAD_BUTTON_LABEL": "Upload",
+        "UPLOAD_SUCCESS_LABEL": "File successfully received",
+        "CONSUMPTION_FILE_PREFIX": "consumption_"
+      },
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Consumption (kWh)",
+        "X_TITLE_DATE": "Date",
+        "CONSUMPTION_SHARED_LABEL": "Consumption - Shared",
+        "CONSUMPTION_NET_LABEL": "Consumption - Net",
+        "INJECTION_NET_LABEL": "Injection - Net",
+        "INJECTION_SHARED_LABEL": "Injection - Shared"
+      },
+      "HISTORY_KEY": {
+        "KEY_HISTORY_TITLE": "Key history",
+        "START_DATE_LABEL": "Start date",
+        "END_DATE_LABEL": "End date",
+        "KEY_LABEL": "Key",
+        "STATUS_LABEL": "Status",
+        "APPROVED_LABEL": "Approved",
+        "DENIED_LABEL": "Rejected",
+        "NO_HISTORY_KEY_FOUND_LABEL": "No key history found",
+        "NO_HISTORY_KEY_AVAILABLE_LABEL": "No key history available"
+      }
+    },
+    "LIST": {
+      "SHARING_OPERATION_TITLE": "Sharing operation",
+      "ADD_BUTTON_LABEL": "Add",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "NO_SHARING_OPERATION_FOUND_LABEL": "No sharing operation found",
+      "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} sharing operations)",
+      "ADD_SHARING_OP_HEADER": "Add a sharing operation",
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Sharing operation successfully added"
+    },
+    "SELECT_METER_NEW_KEY": {
+      "NOW": "Now",
+      "FUTURE": "Upcoming",
+      "METERS_SELECTED": "{{ count }} meter{{ count > 1 ? 's' : '' }} selected",
+      "CLEAR_ALL": "Clear all",
+      "SELECT_ALL_NOW": "Select all current meters",
+      "SELECT_ALL_FUTURE": "Select all upcoming meters",
+      "CLEAN_FILTERS": "Clear filters",
+      "TABLE": {
+        "ADDRESS": "Address",
+        "EAN": "EAN",
+        "METER_NUMBER": "Meter number",
+        "STATUS": "Status",
+        "HOLDER": "Owner",
+        "NO_METERS_FOUND": "No meter found"
+      }
+    },
+    "ERRORS": {
+      "GET_SHARING_OPERATION_PARTIAL_LIST": "Error fetching partial sharing operations",
+      "GET_FULL_SHARING_OPERATION": "Error fetching full sharing operation details",
+      "ADD_SHARING_OPERATION": "Error adding sharing operation",
+      "ADD_METER_TO_SHARING_OPERATION": "Error adding meter to sharing operation",
+      "ADD_KEY_TO_WAITING": "Error adding pending key",
+      "CHANGE_STATUS_KEY": "Error changing key status",
+      "GET_SHARING_CONSUMPTION_METERS": "Error fetching meter consumption",
+      "GET_SHARING_CONSUMPTION": "Error fetching shared consumption",
+      "UPLOAD_CONSUMPTION_DATA": "Error uploading consumption data",
+      "GET_METER_CONSUMPTION": "Error fetching meter consumption",
+      "DOWNLOAD_METER_CONSUMPTION": "Error downloading meter consumption",
+      "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Error downloading shared meter consumption"
+    }
+  },
+  "FORM_ERROR": {
+    "REQUIRED_FIELD": "This field is required",
+    "INVALID_EMAIL": "Invalid email address",
+    "MIN_LENGTH": "This field must contain at least {{ requiredLength }} characters (currently {{ actualLength }}).",
+    "FIX_THE_FOLLOWING_ERROR": "Please correct the following errors",
+    "FIELD_REQUIRED": "The \"{{ controlName }}\" field is required.",
+    "FIELD_INVALID_EMAIL": "The \"{{ controlName }}\" field contains an invalid email address.",
+    "FIELD_MIN_LENGTH": "The \"{{ controlName }}\" field must contain at least {{ requiredLength }} characters (currently {{ actualLength }}).",
+    "UNKNOWN_ERROR": "Unknown error on \"{{ controlName }}\""
+  }
+}
