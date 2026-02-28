@@ -47,7 +47,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
       this.documentService.getDocuments(this.id, this.filter()).subscribe({
         next: (response) => {
           if (response) {
-            this.documentsPartialList.set(response.data);
+            this.documentsPartialList.set(response.data as DocumentExposedDTO[]);
             this.paginationDocumentsInfo = response.pagination;
           } else {
             console.error('Error fetching documents partial list');
@@ -143,7 +143,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
             document.body.removeChild(a);
           } else {
             // This is the ApiResponse error case
-            this.errorHandler.handleError(response.data ? response.data : null);
+            // this.errorHandler.handleError(response.data ? response.data : null);
           }
         }
       },

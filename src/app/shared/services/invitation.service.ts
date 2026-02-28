@@ -1,5 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
 import {
@@ -12,16 +11,17 @@ import {
   UserMemberInvitationQuery,
 } from '../dtos/invitation.dtos';
 import { CompanyDTO, IndividualDTO } from '../dtos/member.dtos';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { ServiceBase } from './service.base';
 
 @Injectable({
   providedIn: 'root',
 })
-export class InvitationService {
-  private http = inject(HttpClient);
-  private apiAddress: string;
+export class InvitationService extends ServiceBase {
+  private readonly apiAddress: string;
 
   constructor() {
+    super();
     this.apiAddress = environments.apiUrl + '/invitations';
   }
 
@@ -38,94 +38,163 @@ export class InvitationService {
   getMembersPendingInviation(
     query: UserMemberInvitationQuery,
   ): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
-    return this.http.get<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
+    return this.cachedGet<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
+      `members-invitation:${JSON.stringify(query)}`,
       this.apiAddress + '/',
-      {
-        params: this.toHttpParams(query as unknown as Record<string, unknown>),
-      },
+      query,
     );
+    // return this.http.get<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
+    //   this.apiAddress + '/',
+    //   {
+    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
+    //   },
+    // );
   }
 
   getManagerPendingInvitation(
     query: UserManagerInvitationQuery,
   ): Observable<ApiResponsePaginated<UserManagerInvitationDTO[] | string>> {
-    return this.http.get<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
+    return this.cachedGet<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
+      `managers-invitation:${JSON.stringify(query)}`,
       this.apiAddress + '/managers',
-      {
-        params: this.toHttpParams(query as unknown as Record<string, unknown>),
-      },
+      query,
     );
+    // return this.http.get<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
+    //   this.apiAddress + '/managers',
+    //   {
+    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
+    //   },
+    // );
   }
 
   getOwnMembersPendingInviation(
     query: UserMemberInvitationQuery,
   ): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
-    return this.http.get<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
+    return this.cachedGet<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
+      `own-members-invitation:${JSON.stringify(query)}`,
       this.apiAddress + '/own',
-      {
-        params: this.toHttpParams(query as unknown as Record<string, unknown>),
-      },
+      query,
     );
+    // return this.http.get<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
+    //   this.apiAddress + '/own',
+    //   {
+    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
+    //   },
+    // );
   }
 
   getOwnMemberPendingInvitationById(
     id: number,
   ): Observable<ApiResponse<IndividualDTO | CompanyDTO | string>> {
-    return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
-      this.apiAddress + '/own/members/' + id,
+    return this.cachedGet<ApiResponse<IndividualDTO | CompanyDTO | string>>(
+      `own-members-invitation-id:${id}`,
+      this.apiAddress + `/own/members/${id}`,
     );
+    // return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
+    //   this.apiAddress + '/own/members/' + id,
+    // );
   }
 
   getOwnManagerPendingInvitation(
     query: UserManagerInvitationQuery,
   ): Observable<ApiResponsePaginated<UserManagerInvitationDTO[] | string>> {
-    return this.http.get<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
+    return this.cachedGet<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
+      `own-managers-invitation:${JSON.stringify(query)}`,
       this.apiAddress + '/own/managers',
-      {
-        params: this.toHttpParams(query as unknown as Record<string, unknown>),
-      },
+      query,
     );
+    // return this.http.get<ApiResponsePaginated<UserManagerInvitationDTO[] | string>>(
+    //   this.apiAddress + '/own/managers',
+    //   {
+    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
+    //   },
+    // );
   }
 
   inviteUserToBecomeMember(invitation: InviteUser): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(this.apiAddress + '/member', invitation);
+    return this.http.post<ApiResponse<string>>(this.apiAddress + '/member', invitation).pipe(
+      tap(() => {
+        this.cache.invalidate('members-invitation');
+      }),
+    );
   }
 
   inviteUserToBecomeManager(invitation: InviteUser): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(this.apiAddress + '/manager', invitation);
+    return this.http.post<ApiResponse<string>>(this.apiAddress + '/manager', invitation).pipe(
+      tap(() => {
+        this.cache.invalidate('managers-invitation');
+      }),
+    );
   }
 
   acceptInvitationMember(accept_invitation: AcceptInvitationDTO): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(this.apiAddress + '/accept', accept_invitation);
+    return this.http.post<ApiResponse<string>>(this.apiAddress + '/accept', accept_invitation).pipe(
+      tap(() => {
+        this.cache.invalidate('own-members-invitation');
+        this.cache.invalidate('members-invitation');
+      }),
+    );
   }
 
   acceptInvitationMemberEncoded(
     accept_invitation: AcceptInvitationWEncodedDTO,
   ): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(
-      this.apiAddress + '/accept/encoded',
-      accept_invitation,
-    );
+    return this.http
+      .post<ApiResponse<string>>(this.apiAddress + '/accept/encoded', accept_invitation)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('own-members-invitation');
+          this.cache.invalidate('members-invitation');
+        }),
+      );
   }
 
   acceptInvitationManager(accept_invitation: AcceptInvitationDTO): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(
-      this.apiAddress + '/accept/manager',
-      accept_invitation,
-    );
+    return this.http
+      .post<ApiResponse<string>>(this.apiAddress + '/accept/manager', accept_invitation)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('own-managers-invitation');
+          this.cache.invalidate('managers-invitation');
+        }),
+      );
   }
 
   cancelMemberInvitation(id_invitation: number): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/member`);
+    return this.http.delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/member`).pipe(
+      tap(() => {
+        this.cache.invalidate('own-members-invitation');
+        this.cache.invalidate('members-invitation');
+      }),
+    );
   }
   cancelManagerInvitation(id_invitation: number): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/manager`);
+    return this.http
+      .delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/manager`)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('own-managers-invitation');
+          this.cache.invalidate('managers-invitation');
+        }),
+      );
   }
 
   refuseMemberInvitation(id_invitation: number): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/own/member`);
+    return this.http
+      .delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/own/member`)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('own-members-invitation');
+        }),
+      );
   }
   refuseManagerInvitation(id_invitation: number): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/own/manager`);
+    return this.http
+      .delete<ApiResponse<string>>(this.apiAddress + `/${id_invitation}/own/manager`)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('own-managers-invitation');
+        }),
+      );
   }
 }

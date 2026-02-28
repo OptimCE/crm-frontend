@@ -275,7 +275,7 @@ export class KeyView implements OnInit, OnDestroy {
               document.body.removeChild(a);
             } else {
               // This is the ApiResponse error case
-              this.errorHandler.handleError(response.data ? response.data : null);
+              // this.errorHandler.handleError(response.data ? response.data : null);
             }
           }
         },

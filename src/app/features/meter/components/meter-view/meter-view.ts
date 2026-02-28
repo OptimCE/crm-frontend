@@ -415,15 +415,16 @@ export class MeterView implements OnInit {
       })
       .subscribe((response) => {
         if (response) {
-          // const blob = new Blob([response], { type: 'xlsx' });
-          // const url = window.URL.createObjectURL(blob);
-          // const a = document.createElement('a');
-          // a.href = url;
-          // a.download = this.translate.instant('meters.full.consumption_file_prefix') + this.meter.EAN + '.xlsx';
-          // document.body.appendChild(a);
-          // a.click();
-          // window.URL.revokeObjectURL(url);
-          // document.body.removeChild(a);
+          if ('blob' in response) {
+            const url = window.URL.createObjectURL(response.blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = response.filename; // Use the dynamic filename!
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          }
         }
       });
   }
