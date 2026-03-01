@@ -12,15 +12,16 @@
       <p-step-panel [value]="0">
         <ng-template #content let-activateCallback="activateCallback">
           <app-new-member-type-self-encoding
-            [(typeClient)]="typeClient"
-            (formSubmitted)="submitForm1(activateCallback(1))"
+            [typeClient]="typeClient"
+            (typeClientChange)="onTypeClientChange($event)"
+            (formSubmitted)="submitForm1(activateCallback)"
           ></app-new-member-type-self-encoding>
         </ng-template>
       </p-step-panel>
       <p-step-panel [value]="1">
         <ng-template #content let-activateCallback="activateCallback">
           <app-new-member-informations-self-encoding
-            (formSubmitted)="submitForm2(activateCallback(2))"
+            (formSubmitted)="submitForm2(activateCallback)"
             (backClicked)="activateCallback(0)"
             (gestionnaireChangeEvent)="gestionnaireChange($event)"
             [form]="formData"
@@ -33,7 +34,7 @@
         <ng-template #content let-activateCallback="activateCallback">
           <app-new-member-address-self-encoding
             (backClicked)="activateCallback(1)"
-            (formSubmitted)="submitForm3(activateCallback(3))"
+            (formSubmitted)="submitForm3(activateCallback)"
             (toggleSameAddressEvent)="toggleSameAddress($event)"
             [addressForm]="addressForm"
           ></app-new-member-address-self-encoding>

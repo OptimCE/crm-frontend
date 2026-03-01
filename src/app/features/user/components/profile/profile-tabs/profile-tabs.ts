@@ -25,5 +25,5 @@ import { RepresentationsComponent } from './tabs/representations/representations
   styleUrl: './profile-tabs.css',
 })
 export class ProfileTabs {
-  @Input() user?: UserDTO;
+  @Input() user?: UserDTO | null;
 }

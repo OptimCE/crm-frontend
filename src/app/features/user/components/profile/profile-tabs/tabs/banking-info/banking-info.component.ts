@@ -9,5 +9,5 @@ import { UserDTO } from '../../../../../../../shared/dtos/user.dtos';
   styleUrl: './banking-info.component.css',
 })
 export class BankingInfoComponent {
-  @Input() user?: UserDTO;
+  @Input() user?: UserDTO | null;
 }

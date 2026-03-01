@@ -11,7 +11,7 @@ import {
   UserMemberInvitationQuery,
 } from '../../../../../../shared/dtos/invitation.dtos';
 import { InvitationService } from '../../../../../../shared/services/invitation.service';
-import { EncodeNewMemberComponent } from './dialogs/encode-new-member/encode-new-member.component';
+import { EncodeNewMemberSelfComponent } from './dialogs/encode-new-member/encode-new-member-self.component';
 import { CompanyDTO, IndividualDTO } from '../../../../../../shared/dtos/member.dtos';
 import { InvitationDetailComponent } from './dialogs/invitation-detail/invitation-detail.component';
 
@@ -95,7 +95,7 @@ export class InvitationMember implements OnDestroy {
         if (response && response.data) {
           const data = response.data as IndividualDTO | CompanyDTO;
           this.ref = this.dialogService.open(InvitationDetailComponent, {
-            header: this.translate.instant('INVITATION.SEE_DETAIL.TITLE') as string,
+            header: this.translate.instant('INVITATION.MEMBER.SEE_DETAIL.TITLE') as string,
             modal: true,
             closable: true,
             closeOnEscape: true,
@@ -109,7 +109,7 @@ export class InvitationMember implements OnDestroy {
   }
 
   encodeNewMember(invitation: UserMemberInvitationDTO): void {
-    this.ref = this.dialogService.open(EncodeNewMemberComponent, {
+    this.ref = this.dialogService.open(EncodeNewMemberSelfComponent, {
       header: this.translate.instant('INVITATION.ENCODE_NEW_MEMBER_TITLE') as string,
       modal: true,
       closable: true,

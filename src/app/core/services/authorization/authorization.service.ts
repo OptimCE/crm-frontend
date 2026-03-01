@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import Keycloak, { KeycloakTokenParsed } from 'keycloak-js';
 import { Role } from '../../dtos/role';
+import { CacheService } from '../cache/cache.service';
 
 // The structure for our parsed data
 interface CommunityContext {
@@ -46,6 +47,7 @@ export const ROLE_HIERARCHY: Record<Role, number> = {
 @Injectable({ providedIn: 'root' })
 export class UserContextService {
   private readonly keycloak = inject(Keycloak);
+  protected cache = inject(CacheService);
 
   readonly communitiesById = signal<Record<string, CommunityContext>>({});
 
@@ -92,6 +94,11 @@ export class UserContextService {
     if (all[orgId]) {
       this.activeCommunityId.set(orgId);
       this.storeCommunityId(orgId);
+      this.cache.invalidate('communities');
+      this.cache.invalidate('members');
+      this.cache.invalidate('meters');
+      this.cache.invalidate('keys');
+      this.cache.invalidate('sharing-operations');
     }
   }
 

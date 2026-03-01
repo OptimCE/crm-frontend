@@ -88,7 +88,7 @@ export class InvitationService extends ServiceBase {
   ): Observable<ApiResponse<IndividualDTO | CompanyDTO | string>> {
     return this.cachedGet<ApiResponse<IndividualDTO | CompanyDTO | string>>(
       `own-members-invitation-id:${id}`,
-      this.apiAddress + `/own/members/${id}`,
+      this.apiAddress + `/own/member/${id}`,
     );
     // return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
     //   this.apiAddress + '/own/members/' + id,

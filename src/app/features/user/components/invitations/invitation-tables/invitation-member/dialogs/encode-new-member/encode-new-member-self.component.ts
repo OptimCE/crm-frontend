@@ -21,10 +21,6 @@ interface EncodeNewMemberDialogData {
   invitationID: number;
 }
 
-interface StepCallback {
-  emit: () => void;
-}
-
 interface EncodeMemberFormValue {
   id: string;
   name: string;
@@ -68,11 +64,11 @@ interface EncodeMemberAddressFormValue {
     Stepper,
     TranslatePipe,
   ],
-  templateUrl: './encode-new-member.component.html',
-  styleUrl: './encode-new-member.component.css',
+  templateUrl: './encode-new-member-self.component.html',
+  styleUrl: './encode-new-member-self.component.css',
   providers: [ErrorMessageHandler],
 })
-export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
+export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
   private invitationService = inject(InvitationService);
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
@@ -108,6 +104,7 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
     this.ibanForm = new FormGroup({
       iban: new FormControl('', [Validators.required, ibanValidator]),
     });
+    this.formData = new FormGroup({});
   }
 
   ngAfterViewInit(): void {
@@ -115,42 +112,73 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
   }
 
   buildFormGroup(): void {
-    this.formData = new FormGroup({
-      id: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-    });
+    console.log('BUILD FORM GROUP');
     if (this.typeClient === MemberType.INDIVIDUAL) {
-      this.formData.controls['id'].addValidators([numRegistreBeValidator]);
-      // Build form group for individuals
-      this.formData.addControl('surname', new FormControl('', [Validators.required]));
-      this.formData.addControl(
-        'email',
-        new FormControl('', [Validators.required, Validators.email]),
-      );
-      this.formData.addControl('phone', new FormControl('', [Validators.required]));
-      this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
+      this.formData = new FormGroup({
+        id: new FormControl('', [
+          Validators.required,
+          // numRegistreBeValidator
+        ]),
+        name: new FormControl('', [Validators.required]),
+        surname: new FormControl('', [Validators.required]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        phone: new FormControl('', [Validators.required]),
+        socialRate: new FormControl(false, [Validators.required]),
+      });
     } else if (this.typeClient === MemberType.COMPANY) {
-      this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
+      this.formData = new FormGroup({
+        id: new FormControl('', [Validators.required]),
+        name: new FormControl('', [Validators.required]),
+        vatNumber: new FormControl('', [Validators.required]),
+      });
     }
     this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
+    // this.formData = new FormGroup({
+    //   id: new FormControl('', [Validators.required]),
+    //   name: new FormControl('', [Validators.required]),
+    // });
+    // if (this.typeClient === MemberType.INDIVIDUAL) {
+    //   // this.formData.controls['id'].addValidators([
+    //   //   numRegistreBeValidator
+    //   // ]);
+    //   // Build form group for individuals
+    //   this.formData.addControl('surname', new FormControl('', [Validators.required]));
+    //   this.formData.addControl(
+    //     'email',
+    //     new FormControl('', [Validators.required, Validators.email]),
+    //   );
+    //   this.formData.addControl('phone', new FormControl('', [Validators.required]));
+    //   this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
+    // } else if (this.typeClient === MemberType.COMPANY) {
+    //   this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
+    // }
+    // this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
   }
 
-  submitForm1(nextCallback: StepCallback): void {
-    if (this.typeClient != -1) {
+  onTypeClientChange(type: MemberType | -1): void {
+    this.typeClient = type;
+    if (type !== -1) {
       this.buildFormGroup();
-      nextCallback.emit();
     }
   }
 
-  submitForm2(nextCallback: StepCallback): void {
+  submitForm1(activateCallback: (step: number) => void): void {
+    if (this.typeClient !== -1) {
+      activateCallback(1);
+    }
+  }
+
+  submitForm2(activateCallback: (step: number) => void): void {
     if (this.formData.valid) {
-      nextCallback.emit();
+      // nextCallback.emit();
+      activateCallback(2);
     }
   }
 
-  submitForm3(nextCallback: StepCallback): void {
+  submitForm3(activateCallback: (step: number) => void): void {
     if (this.addressForm.valid) {
-      nextCallback.emit();
+      // nextCallback.emit();
+      activateCallback(3);
     }
   }
 

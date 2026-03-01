@@ -267,7 +267,7 @@ export class MemberView implements OnInit {
     const id = this.individual ? this.individual.id : this.legalEntity?.id;
     const memberLinkId = memberLink.id;
     if (id && email && memberLinkId) {
-      this.memberService.deleteMemberLink(memberLinkId).subscribe((response) => {
+      this.memberService.deleteMemberLink(id).subscribe((response) => {
         if (response) {
           if (manager) {
             this.loadInvitationStatusManager(id, email);

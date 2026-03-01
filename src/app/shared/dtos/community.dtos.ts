@@ -32,6 +32,9 @@ export interface UsersCommunityDTO {
   id_community: number;
   email: string;
   role: Role;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
 }
 
 export interface CreateCommunityDTO {

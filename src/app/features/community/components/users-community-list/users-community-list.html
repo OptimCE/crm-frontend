@@ -53,12 +53,12 @@
       <tr>
         <td class="text-small px-3 py-2">
           {{
-            user.name
-              ? user.firstName
-                ? user.firstName + ' ' + user.name
-                : user.name
-              : user.firstName
-                ? user.firstName
+            user.last_name
+              ? user.first_name
+                ? user.first_name + ' ' + user.last_name
+                : user.last_name
+              : user.first_name
+                ? user.first_name
                 : '/'
           }}
         </td>

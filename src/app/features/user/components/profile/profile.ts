@@ -9,9 +9,19 @@ import { UserService } from '../../../../shared/services/user.service';
 import { UserDTO } from '../../../../shared/dtos/user.dtos';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { UserUpdateDialog } from './user-update-dialog/user-update-dialog';
+import { ProfileTabs } from './profile-tabs/profile-tabs';
 @Component({
   selector: 'app-profile',
-  imports: [ProgressSpinner, Button, TranslatePipe, Ripple, Card, AddressPipe, TranslateModule],
+  imports: [
+    ProgressSpinner,
+    Button,
+    TranslatePipe,
+    Ripple,
+    Card,
+    AddressPipe,
+    TranslateModule,
+    ProfileTabs,
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
   standalone: true,

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EncodeNewMemberComponent } from './encode-new-member.component';
+import { EncodeNewMemberSelfComponent } from './encode-new-member-self.component';
 
 describe('EncodeNewMember', () => {
-  let component: EncodeNewMemberComponent;
-  let fixture: ComponentFixture<EncodeNewMemberComponent>;
+  let component: EncodeNewMemberSelfComponent;
+  let fixture: ComponentFixture<EncodeNewMemberSelfComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EncodeNewMemberComponent],
+      imports: [EncodeNewMemberSelfComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EncodeNewMemberComponent);
+    fixture = TestBed.createComponent(EncodeNewMemberSelfComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

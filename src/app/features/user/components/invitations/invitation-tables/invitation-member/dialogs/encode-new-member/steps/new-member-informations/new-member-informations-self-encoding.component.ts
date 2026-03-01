@@ -63,7 +63,10 @@ export class NewMemberInformationsSelfEncoding implements OnInit {
   }
 
   submit(): void {
+    console.log('Form submit');
+    console.log(this.form.errors);
     if (this.form.valid) {
+      console.log('Form submitted successfully');
       this.formSubmitted.emit();
     }
   }
