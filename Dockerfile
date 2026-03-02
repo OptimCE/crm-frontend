@@ -5,13 +5,7 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Set environment to development for installing dev dependencies and building the application
-ENV NODE_ENV=development
-
-ARG FRONTEND_API_URL=http://localhost:8080
-ARG FRONTEND_BASE_PATH=http://localhost:4200
-ARG FRONTEND_KEYCLOAK_REALM=optimce-realm
-ARG FRONTEND_KEYCLOAK_URL=http://localhost:8081
-ARG FRONTEND_KEYCLOAK_CLIENT_ID=optimce-frontend
+ENV NODE_ENV=developement
 
 # Copy package files
 COPY package*.json ./
@@ -25,22 +19,6 @@ RUN npm cache clean --force
 
 # Copy the entire application
 COPY . .
-
-# Inject environment variables at build stage (static in built assets)
-RUN cat > src/environments/environments.ts <<EOF
-const apiUrl = '${FRONTEND_API_URL}';
-
-export const environments = {
-	apiUrl,
-	basePath: '${FRONTEND_BASE_PATH}',
-	keycloak: {
-		realm: '${FRONTEND_KEYCLOAK_REALM}',
-		url: '${FRONTEND_KEYCLOAK_URL}',
-		clientId: '${FRONTEND_KEYCLOAK_CLIENT_ID}',
-		urlPattern: new RegExp('^(' + apiUrl + ')(/.*)?$', 'i')
-	}
-};
-EOF
 
 # Build the Angular application
 RUN npm run build
