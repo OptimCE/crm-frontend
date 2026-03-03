@@ -27,54 +27,74 @@ export function initializeLanguage(_languageService: LanguageService) {
     return Promise.resolve();
   };
 }
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideKeycloakAngular(),
-    provideHttpClient(
-      withInterceptors([includeBearerTokenInterceptor, communityContextInterceptor]),
-    ),
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(
-      routes,
-      withInMemoryScrolling({
-        scrollPositionRestoration: 'enabled',
-        anchorScrolling: 'enabled',
+export async function loadRuntimeConfig(): Promise<void> {
+  try {
+    const response = await fetch('/assets/config/config.json', {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Unable to load runtime config: ${response.status}`);
+    }
+
+    const config = await response.json();
+    const { setRuntimeConfig } = await import('../environments/environments');
+    setRuntimeConfig(config);
+  } catch (error) {
+    console.error('Runtime config loading failed, fallback to defaults.', error);
+  }
+}
+
+export function getAppConfig(): ApplicationConfig {
+  return {
+    providers: [
+      provideKeycloakAngular(),
+      provideHttpClient(
+        withInterceptors([includeBearerTokenInterceptor, communityContextInterceptor]),
+      ),
+      provideBrowserGlobalErrorListeners(),
+      provideRouter(
+        routes,
+        withInMemoryScrolling({
+          scrollPositionRestoration: 'enabled',
+          anchorScrolling: 'enabled',
+        }),
+        withComponentInputBinding(),
+      ),
+      provideTranslateService({
+        loader: provideTranslateHttpLoader({
+          prefix: './assets/i18n/',
+          suffix: '.json',
+        }),
       }),
-      withComponentInputBinding(),
-    ),
-    provideTranslateService({
-      loader: provideTranslateHttpLoader({
-        prefix: './assets/i18n/',
-        suffix: '.json',
-      }),
-    }),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    providePrimeNG({
-      theme: {
-        preset: Aura,
-        options: {
-          darkMode: false,
-          darkModeSelector: 'none',
+      provideZoneChangeDetection({ eventCoalescing: true }),
+      providePrimeNG({
+        theme: {
+          preset: Aura,
+          options: {
+            darkMode: false,
+            darkModeSelector: 'none',
+          },
         },
+      }),
+      {
+        provide: APP_INITIALIZER,
+        useFactory: initializeLanguage,
+        deps: [LanguageService],
+        multi: true,
       },
-    }),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeLanguage,
-      deps: [LanguageService],
-      multi: true,
-    },
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: initUserContextAfterKeycloak,
-    //   deps: [UserContextService, Keycloak],
-    //   multi: true,
-    // },
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: registerKeycloakHooks,
-    //   deps: [UserContextService, Keycloak],
-    //   multi: true,
-    // }
-  ],
-};
+      // {
+      //   provide: APP_INITIALIZER,
+      //   useFactory: initUserContextAfterKeycloak,
+      //   deps: [UserContextService, Keycloak],
+      //   multi: true,
+      // },
+      // {
+      //   provide: APP_INITIALIZER,
+      //   useFactory: registerKeycloakHooks,
+      //   deps: [UserContextService, Keycloak],
+      //   multi: true,
+      // }
+    ],
+  };
+}
