@@ -1,0 +1,1123 @@
+{
+  "TITLE": "OptimCE",
+  "COMMON": {
+    "LANGUAGE_SELECTOR": "Sprachauswahl",
+    "ADDRESS": "Adresse",
+    "ACTIONS": {
+      "YES": "Ja",
+      "NO": "Nein",
+      "VALIDATE": "Bestätigen",
+      "CANCEL": "Abbrechen"
+    },
+    "ROLE": {
+      "ADMIN": "Administrator",
+      "MEMBER": "Mitglied",
+      "MANAGER": "Manager"
+    },
+    "ERRORS": {
+      "EXCEPTION": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut",
+      "TIMEOUT": "Die Anfrage ist abgelaufen. Bitte versuchen Sie es erneut",
+      "DECORATOR": "Fehler bei der Ausführung des Dekorators. Bitte kontaktieren Sie den Administrator",
+      "UNAUTHORIZED": "Sie sind nicht berechtigt, diese Aktion auszuführen",
+      "PAGE_INCORRECT": "Die Seitenzahl muss positiv sein",
+      "DATE_FORMAT_ISO8601": "Das Datum muss im ISO 8601-Format vorliegen",
+      "BODY_ID_INCORRECT": "Der Bezeichner im Body fehlt oder ist falsch",
+      "PARAM_IS_STRING": "Der Parameter muss eine Zeichenkette sein",
+      "QUERY_IS_STRING": "Der Abfragewert muss eine Zeichenkette sein",
+      "QUERY_IS_NUMERIC": "Der Abfragewert muss numerisch sein",
+      "QUERY_IS_BOOLEAN": "Der Abfragewert muss ein boolescher Wert sein"
+    }
+  },
+  "LOGIN": {
+    "LOGIN": "Anmelden"
+  },
+  "NAVBAR": {
+    "PROFILE": "Profil",
+    "INVITATIONS": "Einladungen",
+    "KEY_HANDLER": "Verteilungsschlüsselverwaltung",
+    "HANDLE_KEY": "Schlüssel verwalten",
+    "GENERATE_KEY": "Schlüssel generieren",
+    "MEMBRE_HANDLER": "Mitgliederverwaltung",
+    "HANDLE_MEMBRE": "Mitglieder verwalten",
+    "HANDLE_METER": "Zähler verwalten",
+    "HANDLE_SHARING_OP": "Teilungsoperationen",
+    "COMMUNITIES": "Gemeinschaften",
+    "MY_COMMUNITIES": "Meine Gemeinschaften",
+    "COMMUNITY_USERS": "Benutzer",
+    "USER_GUIDE": "Benutzerhandbuch",
+    "REPORT_BUG": "Fehler melden",
+    "DISCONNECT": "Abmelden",
+    "APP_TITLE": "OptimCE",
+    "ERROR_AUTH_UPDATE": "Fehler beim Aktualisieren der Autorisierung",
+    "ERROR_LOGOUT": "Fehler beim Abmelden",
+    "DELETE": "Löschen",
+    "COPY_TO_CLIPBOARD": "In die Zwischenablage kopieren"
+  },
+  "PROFILE": {
+    "MY_PROFILE": "Mein Profil",
+    "UPDATE": "Aktualisieren",
+    "ACCOUNT_INFORMATION": "Kontoinformationen",
+    "UPDATE_PASSWORD": "Passwort ändern",
+    "DOCUMENTS": "Dokumente",
+    "MY_REPRESENTATIONS": "Meine Vertretungen",
+    "DISPLAY_NAME": "Name",
+    "DISPLAY_TYPE": "Typ",
+    "DISPLAY_SIZE": "Größe",
+    "PERSONAL_INFORMATION": {
+      "TITLE": "Persönliche Informationen",
+      "SOCIAL_NUMBER": "Nationalregisternummer",
+      "LAST_NAME": "Name",
+      "FIRST_NAME": "Vorname",
+      "PHONE_NUMBER": "Telefonnummer",
+      "HOUSE_ADDRESS": "Heimatadresse",
+      "BILLING_ADDRESS": "Rechnungsadresse",
+      "EMAIL": "E-Mail-Adresse"
+    },
+    "TABS": {
+      "HEADERS": {
+        "METERS": "Zähler",
+        "BANKING_INFORMATIONS": "Bankdaten",
+        "DOCUMENTS": "Dokumente",
+        "REPRESENTATIONS": "Vertretungen"
+      },
+      "BANKING_INFORMATION": {
+        "IBAN": "IBAN"
+      }
+    },
+    "UPDATE_PROFILE": {
+      "TITLE": "Profil aktualisieren",
+      "SOCIAL_NUMBER": "Nationalregisternummer",
+      "SOCIAL_NUMBER_PLACEHOLDER": "123456789",
+      "SURNAME": "Name",
+      "SURNAME_PLACEHOLDER": "Müller",
+      "FIRST_NAME": "Vorname",
+      "FIRST_NAME_PLACEHOLDER": "Hans",
+      "PHONE_NUMBER": "Telefonnummer",
+      "PHONE_NUMBER_PLACEHOLDER": "04 99 44 11 33",
+      "IBAN": "IBAN",
+      "IBAN_PLACEHOLDER": "BE76 30003 03000 000000000000000",
+      "HOUSE_ADDRESS": "Heimatadresse",
+      "BILLING_ADDRESS": "Rechnungsadresse",
+      "STREET_NAME": "Straßenname",
+      "STREET_NAME_PLACEHOLDER": "Friedensstraße",
+      "NUMBER": "Nummer",
+      "NUMBER_PLACEHOLDER": "123",
+      "BOX": "Box",
+      "BOX_PLACEHOLDER": "B123",
+      "POSTAL_CODE": "Postleitzahl",
+      "POSTAL_CODE_PLACEHOLDER": "12345",
+      "CITY": "Stadt",
+      "CITY_PLACEHOLDER": "Brüssel",
+      "SAME_ADDRESS": "Gleiche Adresse wie die Heimatadresse",
+      "VALIDATE": "Bestätigen"
+    }
+  },
+  "INVITATION": {
+    "TITLE": "Meine Einladungen",
+    "MEMBER": {
+      "TITLE": "Mitglieder",
+      "HEADERS": {
+        "NAME": "Name",
+        "COMMUNITY": "Gemeinschaft",
+        "STATE": "Status",
+        "CREATED_AT": "Erstellt am",
+        "ACTIONS": "Aktionen"
+      },
+      "TO_BE_ENCODED": "Zu kodieren",
+      "ENCODED": "Kodiert",
+      "ENCODE_AND_ACCEPT": "Kodieren und akzeptieren",
+      "REFUSE": "Ablehnen",
+      "ACCEPT": "Akzeptieren",
+      "SEE": "Anzeigen",
+      "NO_INVITATIONS_AVAILABLE": "Keine Mitgliedereinladungen gefunden",
+      "ENCODE_NEW_MEMBER_TITLE": "Kodierung eines neuen Mitglieds",
+      "SEE_DETAIL": {
+        "TITLE": "Details der Einladung",
+        "MEMBER_TITLE": "Mitgliederdetails",
+        "GENERAL_INFORMATIONS": "Allgemeine Informationen",
+        "VAT_NUMBER": "MwSt-Nummer",
+        "SOCIAL_NUMBER": "Nationalregisternummer",
+        "SURNAME": "Name",
+        "FIRST_NAME": "Vorname",
+        "EMAIL_ADDRESS": "E-Mail-Adresse",
+        "PHONE_NUMBER": "Telefonnummer",
+        "GUARDIANSHIP": "Gesetzlicher Vertreter",
+        "SOCIAL": "Sozial",
+        "SOCIAL_TARIF": "Sozialtarif",
+        "ADDRESSES": "Adressen",
+        "HOUSE_ADDRESS": "Wohnadresse",
+        "BILLING_ADDRESS": "Rechnungsadresse"
+      }
+    },
+    "MANAGER": {
+      "TITLE": "Manager",
+      "HEADERS": {
+        "EMAIL_ADDRESS": "E-Mail-Adresse",
+        "COMMUNITY": "Gemeinschaft",
+        "ACTIONS": "Aktionen"
+      },
+      "ACCEPT": "Akzeptieren",
+      "REFUSE": "Ablehnen",
+      "NO_INVITATIONS_AVAILABLE": "Keine Managereinladungen gefunden"
+    }
+  },
+  "COMMUNITY": {
+    "LIST": {
+      "CREATE_COMMUNITY": "Gemeinschaft erstellen",
+      "TITLE": "Meine Gemeinschaften",
+      "HEADERS": {
+        "NAME": "Name",
+        "ROLE": "Rolle",
+        "ACTIVATE": "Aktivieren",
+        "ACTIONS": "Aktionen"
+      },
+      "ACTIVATED": "Aktivieren",
+      "NON_ACTIVATED": "Deaktivieren",
+      "UPDATE_COMMUNITY": "Aktualisieren",
+      "ACTIVATE_BUTTON": "Aktivieren",
+      "ACTIVATE_BUTTON_TOOLTIP": "Gemeinschaft wechseln",
+      "LEAVE_BUTTON": "Verlassen",
+      "LEAVE_BUTTON_TOOLTIP": "Gemeinschaft verlassen",
+      "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden"
+    },
+    "CREATE": {
+      "TITLE": "Gemeinschaft erstellen",
+      "EDIT_TITLE": "Gemeinschaft aktualisieren",
+      "NAME": "Name",
+      "NAME_PLACEHOLDER": "Meine lokale Gemeinschaft",
+      "VALIDATE": "Bestätigen"
+    }
+  },
+  "COMMUNITY_INVITATION": {
+    "TITLE": "Einladung eines Managers",
+    "INPUT_EMAIL_ADDRESS_LABEL": "E-Mail-Adresse des einzuladenden Managers eingeben",
+    "EMAIL_PLACEHOLDER": "beispiel@outlook.be"
+  },
+  "COMMUNITY_PENDING_INVITATION": {
+    "TITLE": "Ausstehende Einladung",
+    "MEMBERS": {
+      "TITLE": "Mitglieder",
+      "HEADERS": {
+        "EMAIL": "E-Mail",
+        "MEMBER_NAME": "Name des Mitglieds",
+        "STATUS": "Status",
+        "ACTIONS": "Aktion"
+      },
+      "TO_ENCODE_LABEL": "Zu kodieren",
+      "ENCODED_LABEL": "Kodiert",
+      "CANCEL_BUTTON_LABEL": "Abbrechen",
+      "NO_INVITATION_FOUND": "Keine ausstehenden Mitgliedereinladungen"
+    },
+    "MANAGERS": {
+      "TITLE": "Manager",
+      "HEADERS": {
+        "EMAIL": "E-Mail",
+        "ACTIONS": "Aktion"
+      },
+      "CANCEL_BUTTON_LABEL": "Abbrechen",
+      "NO_INVITATION_FOUND": "Keine ausstehenden Managereinladungen"
+    }
+  },
+  "MANAGERS_COMMUNITY_LIST": {
+    "TITLE": "Manager der Gemeinschaft",
+    "HEADERS": {
+      "NAME": "Name",
+      "EMAIL": "E-Mail",
+      "PHONE": "Telefonnummer",
+      "ROLE": "Rolle"
+    }
+  },
+  "USERS_COMMUNITY_LIST": {
+    "TITLE": "Benutzer der Gemeinschaft",
+    "SEE_PENDING_INVITE_BUTTON_LABEL": "Ausstehende Einladungen anzeigen",
+    "INVITE_MANAGER_BUTTON_LABEL": "Einen Manager einladen",
+    "HEADERS": {
+      "NAME": "Name",
+      "EMAIL": "E-Mail",
+      "PHONE": "Telefonnummer",
+      "ROLE": "Rolle",
+      "ACTIONS": "Aktionen"
+    },
+    "EDIT_ROLE_BUTTON_LABEL": "Rolle ändern",
+    "EDIT_ROLE_BUTTON_TOOLTIP": "Die Rolle dieses Benutzers ändern",
+    "DELETE_BUTTON_LABEL": "Löschen",
+    "UPDATE_ROLE_DIALOG": {
+      "TITLE": "Benutzerrolle aktualisieren",
+      "NEW_ROLE_FOR_USER_LABEL": "Neue Rolle des Benutzers",
+      "SELECT_ROLE_PLACEHOLDER": "Eine Rolle wählen",
+      "CANCEL_BUTTON_LABEL": "Abbrechen",
+      "SAVE_BUTTON_LABEL": "Speichern"
+    }
+  },
+  "KEY": {
+    "SHARED": {
+      "BACK": "Zurück",
+      "HELP_LABEL": "Hilfe"
+    },
+    "VIEW": {
+      "UPDATE": "Aktualisieren",
+      "DELETE": "Löschen",
+      "DOWNLOAD": "Herunterladen",
+      "BACK_TO_LIST": "Zurück zur Schlüsselliste"
+    },
+    "CREATE": {
+      "KEY_TITLE": "Verteilungsschlüssel erstellen",
+      "FORM": {
+        "KEY_NAME_LABEL": "Name des Schlüssels",
+        "KEY_NAME_PLACEHOLDER": "Name des Schlüssels",
+        "KEY_DESCRIPTION_LABEL": "Beschreibung",
+        "KEY_DESCRIPTION_PLACEHOLDER": "Schlüssel meiner Gemeinschaft",
+        "KEY_ADD_ITERATION_BUTTON_LABEL": "Iteration hinzufügen",
+        "KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL": "Pro-rata-Iteration hinzufügen",
+        "KEY_ADD_CONSUMER_BUTTON_LABEL": "Verbraucher hinzufügen",
+        "KEY_DATAS_LABEL": "Daten",
+        "KEY_CREATE_BUTTON_LABEL": "Erstellen",
+        "ERROR": {
+          "KEY_NAME_LABEL": "Name des Schlüssels",
+          "DESCRIPTION_LABEL": "Beschreibung"
+        }
+      },
+      "ERROR": {
+        "NO_ITERATION": "Es muss mindestens eine Iteration vorhanden sein",
+        "NO_CONSUMERS": "Es muss mindestens ein Verbraucher vorhanden sein",
+        "SUM_ITERATIONS_ERROR": "Die Summe der Iterationen muss gleich 1 sein",
+        "SUM_CONSUMERS": "Die Summe der Verbraucher muss gleich 1 sein",
+        "CONSUMER_NAME_REQUIRED": "Der Name des Verbrauchers ist erforderlich",
+        "NO_CHANGE": "Keine Änderungen erkannt"
+      },
+      "HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL": "Wie viele Verbraucher soll Ihr Schlüssel enthalten",
+      "VALIDATE_BUTTON_LABEL": "Bestätigen",
+      "CONSUMER_NAME_LABEL": "Name des Verbrauchers",
+      "KEY_TYPE_LABEL": "Schlüsseltyp",
+      "PRORATA_LABEL": "Pro-rata",
+      "EGALITARIAN_LABEL": "Egalitär",
+      "INJECTION_PERCENTAGE_LABEL": "Einspeisequote",
+      "SUM_MUST_BE_100_LABEL": "Die Summe der Prozentsätze muss 100 ergeben!",
+      "FINALISATION": "Abschluss"
+    },
+    "TABLE": {
+      "COLUMNS": {
+        "ITERATION_NUMBER_LABEL": "Iteration Nr.",
+        "ITERATION_TOOLTIP": "Nummer der Iteration in der Sequenz",
+        "VA_PERCENTAGE_LABEL": "VA-Prozentsatz",
+        "VA_PERCENTAGE_SHORT_LABEL": "% VA",
+        "VA_PERCENTAGE_TOOLTIP": "Wert der dieser Iteration zugewiesenen Einspeisung (in %)",
+        "CONSUMER_LABEL": "Verbraucher",
+        "CONSUMER_NAME_LABEL": "Name",
+        "CONSUMER_VAP_LABEL": "VAP",
+        "CONSUMER_VAP_TOOLTIP": "Einem Verbraucher zugewiesener Wert (in %)",
+        "ALLOCONSUMPTION_LABEL": "Allozierter Verbrauch",
+        "SURPLUS_LABEL": "Überschuss",
+        "SHARED_PERCENTAGE_LABEL": "% Teilung",
+        "SELF_SUFFICIENCY_PERCENTAGE_LABEL": "% Selbstversorgung",
+        "TOTAL_CONSUMPTION_LABEL": "Gesamtverbrauch",
+        "VP_TOTAL_LABEL": "VP gesamt",
+        "VPC_TOTAL_LABEL": "VPC gesamt",
+        "SURPLUS_TOTAL_LABEL": "Gesamtüberschuss",
+        "ALLOCONSUMPTION_TOTAL_LABEL": "Gesamter allozierter Verbrauch",
+        "TIME_LABEL": "Zeit",
+        "VPC_LABEL": "VPC",
+        "CONSUMPTION_LABEL": "Verbrauch",
+        "VP_LABEL": "VP"
+      },
+      "DELETE_ITERATION_BUTTON_LABEL": "Iteration löschen",
+      "DELETE_CONSUMER_BUTTON_LABEL": "Verbraucher löschen"
+    },
+    "LIST": {
+      "TITLE": "Verteilungsschlüssel",
+      "ERASE_FILTERS_BUTTON_LABEL": "Filter löschen",
+      "ADD_BUTTON_LABEL": "Hinzufügen",
+      "ADD_STANDARD_KEY_BUTTON_LABEL": "Standardschlüssel hinzufügen",
+      "NAME_LABEL": "Name",
+      "DESCRIPTION_LABEL": "Beschreibung",
+      "PAGINATED_TEMPLATE_LIST": "Seite {{ page }} von {{ total_pages }} ({{ total }} Schlüssel)",
+      "EMPTY": "Kein Schlüssel gefunden"
+    },
+    "GENERATION": {
+      "TITLE": "Schlüssel generieren",
+      "SELECT_ALGORITHM_TITLE": "Algorithmus auswählen",
+      "SELECT_ALGORITHME_LABEL": "Algorithmus auswählen",
+      "SELECT_ALGORITHME_PLACEHOLDER": "Einen Algorithmus wählen",
+      "PARAMETERS_LABELS": "Generierungsparameter",
+      "PRODUCTION_COLUMN_LABEL": "Produktionsspalte",
+      "REQUIRED_PARAMETERS_LABEL": "Pflichtparameter",
+      "OPTIONAL_PARAMETERS_LABEL": "Zusätzliche Parameter",
+      "FILE_UPLOAD_LABEL": "Simulationsdatei",
+      "FILE_UPLOAD_SELECTED_LABEL": "Ausgewählte Datei",
+      "START_GENERATION_BUTTON_LABEL": "Generierung starten",
+      "ALGORITHM_RESULTS_TITLE": "Ergebnisse",
+      "NO_GENERATED_KEY": "Kein Schlüssel generiert",
+      "SAVE_RESULT_BUTTON_LABEL": "Speichern"
+    },
+    "SIMULATION": {
+      "SUMMARY_KEY_TITLE": "Zusammenfassungsschlüssel",
+      "EXPORT_EXCEL_BUTTON_LABEL": "Als Excel exportieren",
+      "CHART_TITLE": "Diagramm",
+      "NO_DATA_TO_DISPLAY_LABEL": "Keine Daten zum Anzeigen",
+      "DETAILED_KEY_TITLE": "Detaillierter Schlüssel",
+      "SIMULATIONS_TITLE": "Simulationen",
+      "NO_SIMULATION_FOUND": "Keine Simulation gefunden",
+      "SEARCH_LABEL": "Simulation suchen",
+      "ADD_TEST_BUTTON_LABEL": "Test hinzufügen",
+      "DRAG_OR_CLICK_TO_UPLOAD_FILE_LABEL": "Datei hierher ziehen oder klicken zum Auswählen",
+      "SELECTED_FILE_LABEL": "Ausgewählte Datei",
+      "INJECTION_PLACEHOLDER": "Einspeisung",
+      "PRODUCTION_PLACEHOLDER": "Produktion",
+      "INPUT_INJECTION_COLUMN_LABEL": "Name der Spalte mit der Einspeisung",
+      "SIMULATION_START_BUTTON_LABEL": "Simulation starten"
+    },
+    "SUCCESS": {
+      "KEY_UPDATED": "Schlüssel erfolgreich aktualisiert",
+      "KEY_ADDED": "Schlüssel erfolgreich hinzugefügt",
+      "KEY_DELETED": "Schlüssel erfolgreich gelöscht",
+      "KEY_EXPORTED": "Schlüssel erfolgreich exportiert",
+      "SIMULATION_DONE": "Simulation erfolgreich durchgeführt",
+      "SIMULATION_EXPORTED": "Simulation erfolgreich exportiert",
+      "GENERATION_REQUEST_SENT": "Generierungsanfrage erfolgreich gesendet",
+      "GENERATED_KEY_SAVED": "Generierter Schlüssel erfolgreich gespeichert"
+    },
+    "ERRORS": {
+      "FILL_REQUIRED_FIELDS": "Bitte füllen Sie alle Pflichtfelder aus",
+      "FIRST_STEP_ERROR": "Ein Fehler ist im ersten Schritt aufgetreten",
+      "SECOND_STEP_ERROR": "Ein Fehler ist im zweiten Schritt aufgetreten",
+      "PAGE_INCORRECT": "Die Seitenzahl muss positiv sein",
+      "LIMIT_INCORRECT": "Das Limit muss zwischen 1 und 100 liegen",
+      "ID_INCORRECT": "Der Bezeichner muss eine positive ganze Zahl sein",
+      "NAME_REQUIRED": "Der Name ist erforderlich",
+      "DESCRIPTION_REQUIRED": "Die Beschreibung ist erforderlich",
+      "ITERATIONS_REQUIRED": "Mindestens eine Iteration ist erforderlich",
+      "ITERATION_ENERGY_ALLOCATION": "Der Zuteilungsprozentsatz pro Iteration darf nicht negativ sein",
+      "CONSUMERS_REQUIRED": "Mindestens ein Verbraucher ist erforderlich",
+      "ITERATION_NUMBER_FAILED": "Die Iterationsnummer muss strikt positiv sein",
+      "CONSUMER_ENERGY_ALLOCATION": "Der Zuteilungsprozentsatz pro Verbraucher ist erforderlich",
+      "ENERGY_ALLOCATION_NEGATIVE": "Der Zuteilungsprozentsatz pro Verbraucher muss strikt positiv sein",
+      "SUM_ENERGY_ALLOCATION": "Die Summe der allen Iterationen zugewiesenen Energie muss 100% betragen",
+      "CONSUMERS_NAME_REQUIRED": "Jeder Verbraucher muss durch einen Namen (oder eine Zählernummer) identifiziert werden",
+      "CONSUMERS_SUM_ENERGY_ALLOCATION": "Die Summe der Zuteilungen pro Verbraucher in einer Iteration muss 100% betragen",
+      "ALGORITHME_NAME_ERROR": "Ein Fehler ist mit dem Namen der Ausnahme aufgetreten",
+      "INJECTION_NAME_ERROR": "Der Name der Einspeisung ist falsch",
+      "FILE_MISSING": "Bitte fügen Sie eine Datei hinzu",
+      "FILE_FORMAT_INCORRECT": "Das Dateiformat ist falsch (nur .xls/xlsx und .csv)",
+      "ERROR_EXCEPTION": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut",
+      "TIMEOUT": "Zeitüberschreitung...",
+      "ERROR_GET_PARTIAL_KEY_LIST": "Fehler beim Abrufen des Verteilungsschlüssels",
+      "ERROR_GET_PARTIAL_KEY_LIST_BY_ID": "Fehler beim Abrufen der Verteilungsschlüssel nach ID",
+      "ERROR_GET_COMPLETE_KEY": "Fehler beim Abrufen des vollständigen Verteilungsschlüssels",
+      "ERROR_ADD_KEY": "Fehler beim Hinzufügen des Verteilungsschlüssels. Bitte versuchen Sie es später erneut",
+      "ERROR_UPDATE_KEY": "Fehler beim Aktualisieren des Schlüssels. Bitte versuchen Sie es später erneut",
+      "ERROR_DELETE_KEY": "Fehler beim Löschen des Schlüssels. Bitte versuchen Sie es später erneut",
+      "ERROR_LOCAL_SIMULATE_KEY": "Fehler bei der Simulation des Schlüssels. Bitte versuchen Sie es später erneut.",
+      "ERROR_GET_PARTIAL_KEY_SIMULATION_LIST": "Fehler beim Abrufen der Simulationen des Schlüssels.",
+      "ERROR_GET_COMPLETE_KEY_SIMULATION": "Fehler beim Abrufen der Simulation",
+      "ERROR_MISSING_PARAMETERS_ADD_KEY_GENERATORS": "Ein Pflichtparameter fehlt für die Generierungsanfrage.",
+      "ERROR_GET_PARTIAL_GENERATED_KEY_LIST": "Fehler beim Abrufen der generierten Schlüssel.",
+      "ERROR_SAVE_GENERATED_KEY": "Fehler beim Speichern des generierten Schlüssels",
+      "ERROR_GENERATE_KEY": "Fehler beim Generieren des Schlüssels. Bitte versuchen Sie es später erneut",
+      "ERROR_NO_GENERATOR_AVAILABLE": "Derzeit ist kein Generator verfügbar",
+      "ERROR_DOWNLOAD_SIMULATION": "Fehler beim Herunterladen der Simulation. Bitte versuchen Sie es später erneut",
+      "ERROR_DOWNLOAD_KEY": "Fehler beim Herunterladen des Schlüssels. Bitte versuchen Sie es später erneut",
+      "ERROR_ACTIVATE_KEY": "Fehler beim Aktivieren des Schlüssels.",
+      "ERROR_GET_AVAILABLE_GENERATOR": "Fehler beim Abrufen der verfügbaren Generatoren. Bitte versuchen Sie es später erneut",
+      "ERROR_DECORATOR": "DEKORATOR-FEHLER. Bitte kontaktieren Sie den Administrator",
+      "ERROR_USER_NOT_FOUND": "Sie sind nicht authentifiziert.",
+      "ERROR_USER_NOT_AUTHORIZED": "Sie sind nicht berechtigt, diese Aktion auszuführen."
+    }
+  },
+  "MEMBER": {
+    "VIEW": {
+      "MEMBER_TITLE": "Mitglied",
+      "BACK_TO_LIST": "Zurück zur Mitgliederliste",
+      "STATUS_ACTION": {
+        "ACTIVATE_BUTTON_LABEL": "Aktivieren",
+        "DEACTIVATE_BUTTON_LABEL": "Deaktivieren",
+        "PUT_TO_PENDING_LIST_BUTTON_LABEL": "In die Warteliste setzen",
+        "MODIFY_BUTTON_LABEL": "Bearbeiten"
+      },
+      "ERROR_DEACTIVATING_MEMBER": {
+        "HEADER_LABEL": "Aktion nicht möglich",
+        "MEMBER_CANT_DEACTIVATE_MEMBER_WITH_ACTIVATED_METER_LABEL": "Sie können ein Mitglied nicht deaktivieren, wenn es noch aktive Zähler hat.",
+        "CLOSE_BUTTON_LABEL": "Schließen"
+      },
+      "INFORMATION_TITLE": "Allgemeine Informationen",
+      "INVITATIONS": {
+        "NO_INVITE_LABEL": "Keine Einladung",
+        "PENDING_LABEL": "Ausstehend",
+        "ACCEPTED_LABEL": "Akzeptiert"
+      },
+      "MEMBER_GUARDIANSHIP_TITLE": "Vormund",
+      "MANAGER_TITLE": "Manager",
+      "SOCIAL_LABEL": "Sozial",
+      "BANK_TITLE": "Bankdaten",
+      "TAB_HEADER": {
+        "METER_LABEL": "Zähler",
+        "BANKING_INFO_LABEL": "Bankdaten",
+        "DOCUMENTS_LABEL": "Dokumente",
+        "MANAGER_LABEL": "Manager"
+      },
+      "INFORMATIONS": {
+        "COMPANY_VAT_NUMBER_LABEL": "MwSt-Nummer",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Nationalregisternummer",
+        "NAME_LABEL": "Name",
+        "FIRST_NAME_LABEL": "Vorname",
+        "EMAIL_LABEL": "E-Mail-Adresse",
+        "PHONE_LABEL": "Telefonnummer",
+        "SOCIAL_RATE_LABEL": "Sozialtarif",
+        "ADDRESSES_LABEL": "Adressen",
+        "ADDRESS": {
+          "HOUSE": "Heimatadresse",
+          "BILLING": "Rechnungsadresse"
+        }
+      },
+      "STATUS_LABEL": "Status",
+      "STATUS": {
+        "ACTIVE_LABEL": "Aktiviert",
+        "INACTIVE_LABEL": "Deaktiviert",
+        "PENDING_LABEL": "Ausstehend"
+      },
+      "UPDATE_A_MEMBER_HEADER": "Mitglied aktualisieren",
+      "MEMBER_UPDATE_SUCCESSFULLY_LABEL": "Mitglied erfolgreich aktualisiert",
+      "MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL": "Status erfolgreich aktualisiert",
+      "METERS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+        "ADDRESS_LABEL": "Adresse",
+        "ADDRESS": {
+          "STREET_NAME_LABEL": "Straße",
+          "POSTAL_CODE_LABEL": "Postleitzahl",
+          "CITY_LABEL": "Stadt",
+          "PLACEHOLDER": {
+            "STREET_NAME_LABEL": "Jacquemin Straße",
+            "POSTAL_CODE_LABEL": "1000",
+            "CITY_LABEL": "Brüssel"
+          }
+        },
+        "EAN_LABEL": "EAN",
+        "METER_NUMBER_LABEL": "Zählernummer",
+        "STATUS_LABEL": "Status",
+        "FILTER_BY_STATUS_LABEL": "Nach Status filtern",
+        "SELECT_A_STATUS_PLACEHOLDER": "Einen Status auswählen",
+        "SHARING_OPERATION_TITLE": "Teilungsoperation",
+        "FILTER_BY_SHARING_OPERATION_LABEL": "Nach Teilungsoperation filtern",
+        "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Eine Teilungsoperation auswählen",
+        "NO_METER_FOUND_LABEL": "Kein Zähler gefunden",
+        "ADD_METER_BUTTON_LABEL": "Zähler hinzufügen",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Zähler)",
+        "ADD_A_METER_HEADER": "Zähler hinzufügen",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Zähler erfolgreich hinzugefügt"
+      },
+      "DOCUMENTS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+        "NAME_LABEL": "Name",
+        "TYPE_LABEL": "Typ",
+        "SIZE_LABEL": "Größe",
+        "UPLOAD_DATE_LABEL": "Hochladedatum",
+        "NO_DOCUMENT_FOUND_LABEL": "Kein Dokument gefunden",
+        "ADD_DOCUMENT_LABEL": "Dokument hinzufügen",
+        "PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Dokumente)",
+        "ADD_DOCUMENT_HEADER": "Dokument hinzufügen",
+        "SUCCESS_ADDING_DOCUMENT_LABEL": "Dokument erfolgreich hinzugefügt"
+      },
+      "MANAGER": {
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Nationalregisternummer",
+        "SURNAME_LABEL": "Name",
+        "FIRST_NAME_LABEL": "Vorname",
+        "EMAIL_LABEL": "E-Mail-Adresse",
+        "PHONE_NUMBER_LABEL": "Telefonnummer"
+      }
+    },
+    "LIST": {
+      "MEMBER_TITLE": "Mitglieder",
+      "ADD_BUTTON_LABEL": "Hinzufügen",
+      "INVITE_NEW_MEMBER_BUTTON_LABEL": "Neues Mitglied einladen",
+      "SEE_PENDING_INVITATION_BUTTON_LABEL": "Ausstehende Einladungen anzeigen",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Typ",
+      "FILTER_BY_TYPE_LABEL": "Nach Typ filtern",
+      "SELECT_A_TYPE_PLACEHOLDER": "Einen Typ auswählen",
+      "STATUS_LABEL": "Status",
+      "FILTER_BY_STATUS_LABEL": "Nach Status filtern",
+      "SELECT_A_STATUS_PLACEHOLDER": "Einen Status auswählen",
+      "NO_MEMBER_FOUND_LABEL": "Kein Mitglied gefunden",
+      "PAGE_REPORT_TEMPLATE_MEMBER_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Mitglieder)",
+      "INVITE_MEMBER_HEADER": "Mitglied einladen",
+      "ADD_MEMBER_HEADER": "Mitglied hinzufügen",
+      "ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL": "Möchten Sie einen neuen Zähler für dieses Mitglied hinzufügen?",
+      "CONFIRMATION_HEADER": "Bestätigung",
+      "ADD_METER_HEADER": "Zähler hinzufügen",
+      "METER_MEMBER_ADDED_SUCCESSFULLY_LABEL": "Mitglied und Zähler erfolgreich hinzugefügt",
+      "MEMBER_ADDED_SUCCESSFULLY_LABEL": "Mitglied erfolgreich hinzugefügt",
+      "PENDING_INVITATION_HEADER": "Ausstehende Einladungen",
+      "TYPE": {
+        "INDIVIDUAL_LABEL": "Natürliche Person",
+        "COMPANY_LABEL": "Juristische Person"
+      }
+    },
+    "INVITE": {
+      "EMAIL_OF_MEMBER_TO_INVITE_LABEL": "E-Mail des einzuladenden Mitglieds",
+      "INVITE_BUTTON_LABEL": "Einladen"
+    },
+    "PENDING_INVITE": {
+      "EMAIL_LABEL": "E-Mail",
+      "MEMBER_NAME_LABEL": "Name des Mitglieds",
+      "MEMBER_STATE_LABEL": "Status",
+      "ACTION_LABEL": "Aktion",
+      "CANCEL_BUTTON_LABEL": "Abbrechen",
+      "NO_PENDING_INVITATIONS_LABEL": "Keine ausstehenden Einladungen",
+      "TO_ENCODE_TAG_LABEL": "Zu kodieren",
+      "ENCODED_TAG_LABEL": "Kodiert"
+    },
+    "ADD_DOCUMENT": {
+      "SELECT_FILE_DRAG_N_DROP_LABEL": "Datei hierher ziehen oder klicken, um eine Datei auszuwählen",
+      "SELECTED_FILE_LABEL": "Ausgewählte Datei",
+      "UPLOAD_DOCUMENT_BUTTON_LABEL": "Dieses Dokument hochladen"
+    },
+    "ADD": {
+      "ADDRESS": {
+        "BACK_TO_PERSONAL_INFORMATIONS": "Zurück zu den persönlichen Informationen",
+        "HOUSE_ADDRESS_TITLE": "Heimatadresse",
+        "SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL": "Gleiche Adresse für die Rechnungsstellung",
+        "BILLING_ADDRESS_TITLE": "Rechnungsadresse",
+        "VALIDATE_ADDRESS_FORM_BUTTON": "Bestätigen",
+        "FORM_ERROR": {
+          "HOME_ADDRESS_STREET": "Straße der Heimatadresse",
+          "HOME_ADDRESS_NUMBER": "Hausnummer der Heimatadresse",
+          "HOME_ADDRESS_SUPPLEMENT": "Zusatz der Heimatadresse",
+          "HOME_ADDRESS_POSTCODE": "Postleitzahl der Heimatadresse",
+          "HOME_ADDRESS_CITY": "Stadt der Heimatadresse",
+          "BILLING_ADDRESS_STREET": "Straße der Rechnungsadresse",
+          "BILLING_ADDRESS_NUMBER": "Hausnummer der Rechnungsadresse",
+          "BILLING_ADDRESS_SUPPLEMENT": "Zusatz der Rechnungsadresse",
+          "BILLING_ADDRESS_POSTCODE": "Postleitzahl der Rechnungsadresse",
+          "BILLING_ADDRESS_CITY": "Stadt der Rechnungsadresse"
+        }
+      },
+      "BANK": {
+        "BACK_TO_ADDRESS": "Zurück zu den Adressen",
+        "BANKING_INFO_TITLE": "Bankdaten",
+        "IBAN_LABEL": "IBAN",
+        "VALIDATE_BANKING_INFO_FORM_BUTTON": "Bestätigen",
+        "ERROR": {
+          "IBAN": "Die IBAN-Nummer ist ungültig"
+        }
+      },
+      "INFORMATIONS": {
+        "BACK_TO_STATUS": "Zurück zum Status",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Nationalregisternummer",
+        "SURNAME_LABEL": "Name",
+        "FIRST_NAME_LABEL": "Vorname",
+        "EMAIL_LABEL": "E-Mail-Adresse",
+        "PHONE_NUMBER_LABEL": "Telefonnummer",
+        "SOCIAL_RATE_CHECKBOX_LABEL": "Sozialtarif",
+        "GUARDIAN_CHECKBOX_LABEL": "Vormundschaft",
+        "COMPANY_NUMBER_LABEL": "Unternehmensnummer",
+        "COMPANY_NAME_LABEL": "Name",
+        "VAT_NUMBER_LABEL": "MwSt-Nummer",
+        "GUARDIAN_TITLE": "Informationen zum Manager",
+        "VALIDATE_INFORMATION_FORM_BUTTON": "Bestätigen",
+        "ERROR": {
+          "SOCIAL_SECURITY_NUMBER": "Die IBAN-Nummer ist ungültig"
+        },
+        "FORM_ERROR": {
+          "ID": "Nationalregisternummer",
+          "SURNAME": "Nachname",
+          "NAME": "Name",
+          "EMAIL": "E-Mail-Adresse",
+          "PHONE": "Telefonnummer",
+          "SOCIALRATE": "Sozialtarif",
+          "VATNUMBER": "MwSt-Nummer",
+          "NRN_MANAGER": "Nationalregisternummer des Vormunds",
+          "SURNAME_MANAGER": "Nachname des Vormunds",
+          "NAME_MANAGER": "Name des Vormunds",
+          "EMAIL_MANAGER": "Adresse des Vormunds",
+          "PHONE_MANAGER": "Telefonnummer des Vormunds"
+        }
+      },
+      "STATUS": {
+        "STATUS_TITLE": "Status des Mitglieds",
+        "INDIVIDUAL_RADIOBUTTON_LABEL": "Privatperson",
+        "COMPANY_RADIOBUTTON_LABEL": "Unternehmen",
+        "VALIDATE_STATUS_FORM_BUTTON": "Bestätigen"
+      },
+      "TAB_HEADER": {
+        "STATUS_LABEL": "Status",
+        "PERSONAL_INFORMATIONS_LABEL": "Persönliche Informationen",
+        "ADDRESS_LABEL": "Adressen",
+        "BANKING_INFO": "Bankdaten"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_MEMBER_LIST": "Fehler beim Abrufen der Teilliste der Mitglieder",
+      "GET_FULL_MEMBER": "Fehler beim vollständigen Abrufen des Mitglieds",
+      "ADD_MEMBER": "Fehler beim Hinzufügen des Mitglieds",
+      "UPDATE_MEMBER": "Fehler beim Aktualisieren des Mitglieds",
+      "UPDATE_STATUS_MEMBER": "Fehler beim Aktualisieren des Mitgliedsstatus",
+      "UPLOAD_DOCUMENT_UNDEFINED": "Es wurde keine Datei angegeben",
+      "UPLOAD_DOCUMENT": "Fehler beim Hochladen des Dokuments",
+      "GET_DOCUMENT": "Fehler beim Abrufen der Dokumente",
+      "GET_DOCUMENT_FULL": "Fehler beim vollständigen Abrufen des Dokuments",
+      "DELETE_DOCUMENT": "Fehler beim Löschen des Dokuments"
+    }
+  },
+
+  "METER": {
+    "METER_LABEL": "Zähler",
+    "ADDRESS": {
+      "STREET_NAME_LABEL": "Straße",
+      "NUMBER_LABEL": "Nummer",
+      "BOX_LABEL": "Box",
+      "POSTAL_CODE_LABEL": "Postleitzahl",
+      "CITY_LABEL": "Stadt",
+      "PLACEHOLDER": {
+        "STREET_NAME_LABEL": "Jacquemin Straße",
+        "NUMBER_LABEL": "12",
+        "BOX_LABEL": "1",
+        "POSTAL_CODE_LABEL": "1000",
+        "CITY_LABEL": "Brüssel"
+      }
+    },
+    "INFORMATIONS": {
+      "EAN_LABEL": "EAN",
+      "METER_NUMBER_LABEL": "Zählernummer",
+      "STATUS_LABEL": "Status",
+      "PHASE_NUMBER_LABEL": "Anzahl der Phasen",
+      "READING_FREQUENCY_LABEL": "Ablesefrequenz",
+      "TARIF_GROUP_LABEL": "Tarifgruppe",
+      "DESCRIPTION_LABEL": "Beschreibung",
+      "WITHDRAWAL_POWER_LABEL": "Entnahmeleistung (kVA)",
+      "TOTAL_GENERATING_CAPACITY_LABEL": "Gesamte Erzeugungskapazität (kVA)",
+      "AMPERAGE_LABEL": "Stromstärke (A)",
+      "PRODUCTION_CHAIN_LABEL": "Produktionskette",
+      "INJECTION_STATUS_LABEL": "Einspeisestatus",
+      "GRD_LABEL": "GRD",
+      "RATE_LABEL": "Tarif",
+      "USAGE_LABEL": "Nutzung",
+      "OWNER_LABEL": "Inhaber",
+      "PLACEHOLDER": {
+        "EAN_LABEL": "1234567890123",
+        "METER_NUMBER_LABEL": "1234567890123"
+      }
+    },
+    "CATEGORIES": {
+      "PRODUCTION_CHAIN": {
+        "PHOTOVOLTAIC": "Photovoltaik",
+        "WIND": "Wind",
+        "HYDROELECTRIC": "Wasserkraft",
+        "SOLID_BIOMASS": "Feste Biomasse",
+        "BIOGAS": "Biogas",
+        "FOSSIL_FIRE_COGENERATION": "Fossile Kraft-Wärme-Kopplung",
+        "OTHER": "Sonstige",
+        "NONE": "Keine"
+      },
+      "RATE": {
+        "SIMPLE": "Einfachtarif",
+        "BI_HOURLY": "Zweitarif",
+        "EXCLUSIVE_NIGHT": "Nur Nachttarif"
+      },
+      "CLIENT": {
+        "RESIDENTIAL": "Wohnbereich",
+        "PROFESSIONAL": "Gewerblich",
+        "INDUSTRIAL": "Industriell"
+      },
+      "INJECTION_STATUS": {
+        "AUTOPRODUCER_OWNER": "Eigenerzeuger Eigentümer",
+        "SELF_PRODUCTION_RIGHT_OF_USER": "Eigenerzeuger Nutzungsrecht",
+        "OWNER_PURE_INJECTION": "Reine Einspeisung Eigentümer",
+        "PURE_INJECTION_RIGHT_OF_USE": "Reine Einspeisung Nutzungsrecht",
+        "NONE": "Keine"
+      },
+      "READING_FREQUENCY": {
+        "MONTHLY": "Monatlich",
+        "ANNUAL": "Jährlich"
+      },
+      "PHASE": {
+        "SINGLE_PHASE": "Einphasig",
+        "THREE_PHASES": "Dreiphasig"
+      },
+      "TARIF_GROUP": {
+        "LOW_VOLTAGE": "Niederspannung",
+        "HIGH_VOLTAGE": "Hochspannung"
+      }
+    },
+    "ADD": {
+      "INFORMATION_HEADER": "Zählerinformationen",
+      "ENERGY_CHARACTERISTIC_HEADER": "Energetische Merkmale",
+      "FINANCIAL_CHARACTERISTIC_HEADER": "Finanzielle Merkmale",
+      "RATE_LABEL": "Tarif",
+      "USAGE_LABEL": "Nutzung",
+      "OWNER_LABEL": "Inhaber",
+      "START_DATE_METER_LABEL": "Inbetriebnahmedatum",
+      "VALIDATE_BUTTON_FORM_LABEL": "Bestätigen",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Einen Inhaber auswählen"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "Das ausgewählte Mitglied ist falsch"
+      },
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "Straße",
+        "ADDRESS_NUMBER": "Nummer",
+        "ADDRESS_SUPPLEMENT": "Zusatz",
+        "ADDRESS_POSTCODE": "Postleitzahl",
+        "ADDRESS_CITY": "Stadt",
+        "EAN": "EAN",
+        "METERNUMBER": "Zählernummer",
+        "PHASESNUMBER": "Anzahl der Phasen",
+        "READINGFREQUENCY": "Ablesefrequenz",
+        "TARIFGROUP": "Tarifgruppe",
+        "DESCRIPTION": "Beschreibung",
+        "SAMPLINGPOWER": "Entnahmeleistung",
+        "TOTALGENERATINGCAPACITY": "Gesamtleistung",
+        "AMPERAGE": "Stromstärke",
+        "PRODUCTIONCHAIN": "Produktionskette",
+        "INJECTIONSTATUS": "Einspeisestatus",
+        "GRD": "GRD",
+        "RATE": "Tarif",
+        "CLIENTTYPE": "Kundentyp",
+        "MEMBER": "Mitglied",
+        "DATESTART": "Startdatum"
+      }
+    },
+    "UPDATE_DATA": {
+      "SELECT_STATUS": "Einen Status auswählen",
+      "ENERGY_CHARACTERISTIC_TITLE": "Energetische Merkmale",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Finanzielle Merkmale",
+      "START_DATE_METER_LABEL": "Inbetriebnahmedatum",
+      "VALIDATE_BUTTON_FORM_LABEL": "Bestätigen",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Einen Inhaber auswählen"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "Das ausgewählte Mitglied ist falsch"
+      },
+      "FORM_ERROR": {
+        "DESCRIPTION": "Beschreibung",
+        "SAMPLINGPOWER": "Entnahmeleistung",
+        "TOTALGENERATINGCAPACITY": "Gesamtleistung",
+        "AMPERAGE": "Stromstärke",
+        "PRODUCTIONCHAIN": "Produktionskette",
+        "INJECTIONSTATUS": "Einspeisestatus",
+        "GRD": "GRD",
+        "RATE": "Tarif",
+        "CLIENTTYPE": "Kundentyp",
+        "MEMBER": "Mitglied",
+        "DATESTART": "Startdatum"
+      }
+    },
+    "DEACTIVATE": {
+      "END_DATE_METER_LABEL": "Deaktivierungsdatum",
+      "DELETE_BUTTON_LABEL": "Löschen"
+    },
+    "DATA": {
+      "ENERGY_CHARACTERISTIC_TITLE": "Energetische Merkmale",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Finanzielle Merkmale",
+      "SHARING_OPERATION_TITLE": "Teilungsoperation",
+      "NO_SHARING_OPERATION_FOUND": "Keine Teilungsoperation gefunden",
+      "NO_OWNER_FOUND_LABEL": "Kein Inhaber zugewiesen"
+    },
+    "FULL": {
+      "MODIFY_BUTTON_LABEL": "Bearbeiten",
+      "METER_INFORMATION_TITLE": "Zählerinformationen",
+      "TABS": {
+        "ACTUAL_DATA_HEADER": "Aktuelle Daten",
+        "HISTORICAL_DATA_HEADER": "Historische Daten",
+        "FUTUR_DATA_HEADER": "Zukünftige Daten",
+        "CONSUMPTION_HEADER": "Verbrauchsverfolgung",
+        "UPDATE_BUTTON_LABEL": "Aktualisieren"
+      },
+      "NO_DATA_FOUND_LABEL": "Derzeit keine Daten verfügbar",
+      "PLACEHOLDER": {
+        "SELECT_PERIOD_LABEL": "Einen Zeitraum auswählen"
+      },
+      "NO_HISTORY_DATA_FOUND_LABEL": "Keine historischen Daten verfügbar",
+      "NO_FUTURE_DATA_FOUND_LABEL": "Keine zukünftigen Daten verfügbar",
+      "BEGINNING_DATE_LABEL": "Startdatum",
+      "END_DATE_LABEL": "Enddatum",
+      "SEARCH_BUTTON_LABEL": "Suchen",
+      "DOWNLOAD_BUTTON_LABEL": "Herunterladen",
+      "METER_MODIFICATION_HEADER": "Zähler bearbeiten",
+      "METER_MODIFIED_SUCCESS_LABEL": "Zähler erfolgreich bearbeitet",
+      "METER_DATA_UPDATE_HEADER": "Zählerdaten aktualisieren",
+      "METER_DATA_UPDATE_SUCCESS_LABEL": "Zählerdaten erfolgreich aktualisiert",
+      "METER_DEACTIVATE_HEADER": "Zähler deaktivieren",
+      "METER_DEACTIVATED_SUCCESS_LABEL": "Zähler erfolgreich deaktiviert",
+      "CONSUMPTION_FILE_PREFIX": "verbrauch_",
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Verbrauch (kWh)",
+        "X_TITLE_DATE": "Datum",
+        "CONSUMPTION_SHARED_LABEL": "Verbrauch - Geteilt",
+        "CONSUMPTION_NET_LABEL": "Verbrauch - Netto",
+        "INJECTION_NET_LABEL": "Einspeisung - Netto",
+        "INJECTION_SHARED_LABEL": "Einspeisung - Geteilt"
+      }
+    },
+    "LIST": {
+      "METERS_TITLE": "Zähler",
+      "ADD_BUTTON_LABEL": "Hinzufügen",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "FILTER_BY_OWNER_LABEL": "Nach Inhaber filtern",
+      "SELECT_AN_OWNER_PLACEHOLDER": "Einen Inhaber auswählen",
+      "FILTER_BY_STATUS_LABEL": "Nach Status filtern",
+      "SELECT_A_STATUS_PLACEHOLDER": "Einen Status auswählen",
+      "SHARING_OPERATION_TITLE": "Teilungsoperation",
+      "FILTER_BY_SHARING_OPERATION_LABEL": "Nach Teilungsoperation filtern",
+      "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Eine Teilungsoperation auswählen",
+      "NO_METERS_FOUND_LABEL": "Kein Zähler gefunden",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Zähler)",
+      "ADD_METER_HEADER": "Zähler hinzufügen",
+      "METER_ADDED_SUCCESSFULLY_LABEL": "Zähler erfolgreich hinzugefügt"
+    },
+    "UPDATE": {
+      "METER_INFORMATION_TITLE": "Zählerinformationen",
+      "VALIDATE_BUTTON_LABEL": "Bestätigen",
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "Straße",
+        "ADDRESS_NUMBER": "Nummer",
+        "ADDRESS_SUPPLEMENT": "Zusatz",
+        "ADDRESS_POSTCODE": "Postleitzahl",
+        "ADDRESS_CITY": "Stadt",
+        "EAN": "EAN",
+        "METERNUMBER": "Zählernummer",
+        "PHASESNUMBER": "Anzahl der Phasen",
+        "READINGFREQUENCY": "Ablesefrequenz",
+        "TARIFGROUP": "Tarifgruppe"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_METERS_LIST": "Fehler beim Abrufen der Teilliste der Zähler",
+      "GET_FULL_METER": "Fehler beim vollständigen Abrufen des Zählers",
+      "ADD_METER": "Fehler beim Hinzufügen des Zählers",
+      "UPDATE_METER_DATA": "Fehler beim Aktualisieren der Zählerdaten",
+      "UPDATE_METER": "Fehler beim Aktualisieren des Zählers",
+      "DELETE_METER": "Fehler beim Löschen des Zählers",
+      "DEACTIVATE_METER": "Fehler beim Deaktivieren des Zählers",
+      "CHANGE_STATUS_METER": "Fehler beim Ändern des Zählerstatus",
+      "EAN_MISSING": "Der EAN-Code fehlt",
+      "METER_NUMBER_MISSING": "Die Zählernummer fehlt",
+      "TARIF_GROUP_MISSING": "Die Tarifgruppe fehlt",
+      "PHASE_NUMBER_MISSING": "Die Anzahl der Phasen fehlt",
+      "READING_FREQUENCY_MISSING": "Die Ablesefrequenz fehlt",
+      "READING_FREQUENCY_INCORRECT": "Die Ablesefrequenz ist falsch",
+      "SAMPLING_POWER_MISSING": "Die Entnahmeleistung fehlt",
+      "AMPERAGE_MISSING": "Die Stromstärke fehlt",
+      "RATE_MISSING": "Der Tarif fehlt",
+      "CLIENT_TYPE_MISSING": "Der Kundentyp fehlt",
+      "CLIENT_TYPE_INCORRECT": "Der Kundentyp ist falsch",
+      "START_DATE_MISSING": "Das Startdatum fehlt",
+      "INJECTION_STATUS_MISSING": "Der Einspeisestatus fehlt",
+      "INJECTION_STATUS_INCORRECT": "Der Einspeisestatus ist falsch",
+      "PRODUCTION_CHAIN_MISSING": "Die Produktionskette fehlt",
+      "PRODUCTION_CHAIN_INCORRECT": "Die Produktionskette ist falsch",
+      "TOTAL_GENERATING_CAPACITY_INCORRECT": "Die gesamte installierte Leistung fehlt oder ist falsch",
+      "STATUS_MISSING": "Der Zählerstatus fehlt",
+      "STATUS_INCORRECT": "Der Zählerstatus ist falsch",
+      "RATE_INCORRECT": "Der Tarif ist falsch",
+      "TARIF_GROUP_INCORRECT": "Die Tarifgruppe ist falsch",
+      "PHASE_NUMBER_INCORRECT": "Die Anzahl der Phasen ist falsch"
+    },
+    "STATUS": {
+      "ACTIVE_LABEL": "Aktiviert",
+      "INACTIVE_LABEL": "Deaktiviert",
+      "WAITING_GRD_LABEL": "Ausstehende GRD-Genehmigung",
+      "WAITING_MANAGER_LABEL": "Ausstehende Managergenehmigung"
+    }
+  },
+
+  "SHARING_OPERATION": {
+    "TYPE": {
+      "INSIDE_BUILDING": "Innerhalb eines Gebäudes",
+      "CER": "CER",
+      "CEC": "CEC"
+    },
+    "ADD": {
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Typ",
+      "ADD_BUTTON_LABEL": "Hinzufügen"
+    },
+    "ADD_KEY": {
+      "ALLOCATION_KEYS_TITLE": "Verteilungsschlüssel",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "NAME_LABEL": "Name",
+      "DESCRIPTION_LABEL": "Beschreibung",
+      "NO_ALLOCATION_KEYS_FOUND_LABEL": "Kein Schlüssel gefunden",
+      "ADD_BUTTON_LABEL": "Hinzufügen",
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Schlüssel)"
+    },
+    "ADD_METER": {
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "FILTER_BY_STATUS_LABEL": "Nach Status filtern",
+      "SELECT_A_STATUS_PLACEHOLDER": "Einen Status auswählen",
+      "NO_METERS_FOUND_LABEL": "Kein Zähler gefunden",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Zähler)",
+      "START_DATE_METERS_LABEL": "Inbetriebnahmedatum",
+      "VALIDATE_BUTTON_LABEL": "Bestätigen",
+      "ADDRESS_LABEL": "Adresse",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Straße",
+        "POSTAL_CODE_LABEL": "Postleitzahl",
+        "CITY_LABEL": "Stadt",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Jacquemin Straße",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Brüssel"
+        }
+      },
+      "METER": {
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "Zählernummer"
+        },
+        "STATUS_LABEL": "Status",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Aktiviert",
+          "DEACTIVATED_LABEL": "Deaktiviert",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Ausstehende GRD-Genehmigung",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Ausstehende Managergenehmigung"
+        }
+      }
+    },
+    "VIEW": {
+      "SHARING_OPERATION_TITLE": "Teilungsoperation",
+      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Als Excel exportieren (CWAPE)",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Typ",
+      "ADDRESS_LABEL": "Adresse",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Straße",
+        "POSTAL_CODE_LABEL": "Postleitzahl",
+        "CITY_LABEL": "Stadt",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Jacquemin Straße",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Brüssel"
+        }
+      },
+      "KEY": {
+        "ACTUAL_KEY_LABEL": "Aktueller Schlüssel",
+        "CHOOSE_KEY_BUTTON_LABEL": "Einen Schlüssel wählen",
+        "CREATE_KEY_BUTTON_LABEL": "Einen Schlüssel erstellen",
+        "NO_ACTUAL_KEY_LABEL": "Derzeit kein Schlüssel",
+        "MODIFY_KEY_HEADER": "Schlüssel bearbeiten",
+        "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Schlüssel erfolgreich bearbeitet",
+        "WAITING_APPROVAL_KEY_LABEL": "Schlüssel wartet auf Genehmigung",
+        "APPROVE_KEY": "Genehmigen",
+        "REJECT_KEY": "Ablehnen"
+      },
+      "METER": {
+        "HEADERS": {
+          "PAST": "Vergangen",
+          "NOW": "Aktuell",
+          "FUTURE": "Zukünftig"
+        },
+        "METERS_TITLE": "Zähler",
+        "ADD_METER_BUTTON_LABEL": "Zähler hinzufügen",
+        "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+        "FILTER_BY_STATUS_LABEL": "Nach Status filtern",
+        "SELECT_A_STATUS_PLACEHOLDER": "Einen Status auswählen",
+        "PUT_TO_WAITING_LIST_BUTTON_LABEL": "Auf die Warteliste setzen",
+        "APPROVE_BUTTON_LABEL": "Genehmigen",
+        "DELETE_BUTTON_LABEL": "Löschen",
+        "NO_METERS_FOUND_LABEL": "Kein Zähler gefunden",
+        "CHANGE_STATUS_METER_STARTING_LABEL": "Aktivitätsstartdatum des Zählers",
+        "CHANGE_STATUS_METER_ENDING_LABEL": "Enddatum des Zählers",
+        "CHANGE_STATUS_METER_WAITING_LABEL": "Startdatum der GRD-Genehmigungswartezeit",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Zähler)",
+        "ADD_METERS_HEADER": "Zähler hinzufügen",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Zähler erfolgreich hinzugefügt",
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "Zählernummer"
+        },
+        "STATUS_LABEL": "Status",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Aktiviert",
+          "DEACTIVATED_LABEL": "Deaktiviert",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Ausstehende GRD-Genehmigung",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Ausstehende Managergenehmigung"
+        }
+      },
+      "CONSUMPTION_MONITORING": {
+        "CONSUMPTION_MONITORING_TITLE": "Verbrauchsverfolgung",
+        "START_DATE_LABEL": "Startdatum",
+        "END_DATE_LABEL": "Enddatum",
+        "SEARCH_BUTTON_LABEL": "Suchen",
+        "DOWNLOAD_BUTTON_LABEL": "Herunterladen",
+        "SELECT_FILE_DRAG_N_DROP_LABEL": "Datei hierher ziehen oder klicken, um eine Datei auszuwählen",
+        "SELECTED_FILE_LABEL": "Ausgewählte Datei",
+        "UPLOAD_BUTTON_LABEL": "Hochladen",
+        "UPLOAD_SUCCESS_LABEL": "Die Datei wurde erfolgreich empfangen",
+        "CONSUMPTION_FILE_PREFIX": "verbrauch_"
+      },
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Verbrauch (kWh)",
+        "X_TITLE_DATE": "Datum",
+        "CONSUMPTION_SHARED_LABEL": "Verbrauch - Geteilt",
+        "CONSUMPTION_NET_LABEL": "Verbrauch - Netto",
+        "INJECTION_NET_LABEL": "Einspeisung - Netto",
+        "INJECTION_SHARED_LABEL": "Einspeisung - Geteilt"
+      },
+      "HISTORY_KEY": {
+        "KEY_HISTORY_TITLE": "Schlüsselverlauf",
+        "START_DATE_LABEL": "Startdatum",
+        "END_DATE_LABEL": "Enddatum",
+        "KEY_LABEL": "Schlüssel",
+        "STATUS_LABEL": "Status",
+        "APPROVED_LABEL": "Genehmigt",
+        "DENIED_LABEL": "Abgelehnt",
+        "NO_HISTORY_KEY_FOUND_LABEL": "Kein Schlüsselverlauf gefunden",
+        "NO_HISTORY_KEY_AVAILABLE_LABEL": "Kein Schlüsselverlauf verfügbar"
+      }
+    },
+    "LIST": {
+      "SHARING_OPERATION_TITLE": "Teilungsoperation",
+      "ADD_BUTTON_LABEL": "Hinzufügen",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Typ",
+      "NO_SHARING_OPERATION_FOUND_LABEL": "Keine Teilungsoperation gefunden",
+      "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Teilungsoperationen)",
+      "ADD_SHARING_OP_HEADER": "Teilungsoperation hinzufügen",
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Teilungsoperation erfolgreich hinzugefügt"
+    },
+    "SELECT_METER_NEW_KEY": {
+      "NOW": "Jetzt",
+      "FUTURE": "Zukünftig",
+      "METERS_SELECTED": "{{ count }} Zähler ausgewählt",
+      "CLEAR_ALL": "Alle löschen",
+      "SELECT_ALL_NOW": "Alle aktuellen Zähler auswählen",
+      "SELECT_ALL_FUTURE": "Alle zukünftigen Zähler auswählen",
+      "CLEAN_FILTERS": "Filter löschen",
+      "TABLE": {
+        "ADDRESS": "Adresse",
+        "EAN": "EAN",
+        "METER_NUMBER": "Zählernummer",
+        "STATUS": "Status",
+        "HOLDER": "Inhaber",
+        "NO_METERS_FOUND": "Kein Zähler gefunden"
+      }
+    },
+    "ERRORS": {
+      "GET_SHARING_OPERATION_PARTIAL_LIST": "Fehler beim Abrufen der Teilliste der Teilungen",
+      "GET_FULL_SHARING_OPERATION": "Fehler beim vollständigen Abrufen der Teilung",
+      "ADD_SHARING_OPERATION": "Fehler beim Hinzufügen einer Teilungsoperation",
+      "ADD_METER_TO_SHARING_OPERATION": "Fehler beim Hinzufügen des Zählers zur Teilungsoperation",
+      "ADD_KEY_TO_WAITING": "Fehler beim Hinzufügen des ausstehenden Schlüssels",
+      "CHANGE_STATUS_KEY": "Fehler beim Ändern des Schlüsselstatus",
+      "GET_SHARING_CONSUMPTION_METERS": "Fehler beim Abrufen des Zählerverbrauchs",
+      "GET_SHARING_CONSUMPTION": "Fehler beim Abrufen des geteilten Verbrauchs",
+      "UPLOAD_CONSUMPTION_DATA": "Fehler beim Importieren der Verbrauchsdaten",
+      "GET_METER_CONSUMPTION": "Fehler beim Abrufen des Zählerverbrauchs",
+      "DOWNLOAD_METER_CONSUMPTION": "Fehler beim Herunterladen des Zählerverbrauchs",
+      "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Fehler beim Herunterladen des Verbrauchs der geteilten Zähler"
+    }
+  },
+  "FORM_ERROR": {
+    "REQUIRED_FIELD": "Dieses Feld ist Pflichtfeld",
+    "INVALID_EMAIL": "Ungültige E-Mail-Adresse",
+    "MIN_LENGTH": "Dieses Feld muss mindestens {{ requiredLength }} Zeichen enthalten (aktuell {{ actualLength }}).",
+    "FIX_THE_FOLLOWING_ERROR": "Bitte korrigieren Sie die folgenden Fehler",
+    "FIELD_REQUIRED": "Das Feld \"{{ controlName }}\" ist ein Pflichtfeld.",
+    "FIELD_INVALID_EMAIL": "Das Feld \"{{ controlName }}\" enthält eine ungültige E-Mail-Adresse.",
+    "FIELD_MIN_LENGTH": "Das Feld \"{{ controlName }}\" muss mindestens {{ requiredLength }} Zeichen enthalten (aktuell {{ actualLength }}).",
+    "UNKNOWN_ERROR": "Unbekannter Fehler in \"{{ controlName }}\""
+  }
+}

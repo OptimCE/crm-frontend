@@ -12,6 +12,7 @@ export interface CommunityUsersQueryDTO extends PaginationQuery {
   role?: Role;
   sort_email?: Sort;
   sort_id?: Sort;
+  sort_name?: Sort;
   sort_role?: Sort;
 }
 
@@ -31,6 +32,9 @@ export interface UsersCommunityDTO {
   id_community: number;
   email: string;
   role: Role;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
 }
 
 export interface CreateCommunityDTO {

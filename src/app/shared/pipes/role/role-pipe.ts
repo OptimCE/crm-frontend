@@ -10,11 +10,11 @@ export class RolePipe implements PipeTransform {
   transform(value: Role): string {
     switch (value) {
       case Role.ADMIN:
-        return this.translateService.instant('COMMON.ROLE.ADMIN');
+        return this.translateService.instant('COMMON.ROLE.ADMIN') as string;
       case Role.GESTIONNAIRE:
-        return this.translateService.instant('COMMON.ROLE.MANAGER');
+        return this.translateService.instant('COMMON.ROLE.MANAGER') as string;
       case Role.MEMBER:
-        return this.translateService.instant('COMMON.ROLE.MEMBER');
+        return this.translateService.instant('COMMON.ROLE.MEMBER') as string;
       default:
         return '/';
     }

@@ -14,6 +14,16 @@ import { LanguageSelector } from '../../shared/components/language-selector/lang
 import Keycloak from 'keycloak-js';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
 
+interface RouteActiveState {
+  key: boolean;
+  members: boolean;
+  communities: boolean;
+  communities_users: boolean;
+  user_invitations: boolean;
+  user: boolean;
+  [key: string]: boolean;
+}
+
 @Component({
   selector: 'app-navbar',
   imports: [
@@ -42,7 +52,7 @@ export class Navbar implements OnInit {
   sidebarOpen: boolean = false;
   activeSublist: string | null = null;
   previousSublist: string | null = null;
-  isRouteActive = {
+  isRouteActive: RouteActiveState = {
     key: false,
     members: false,
     communities: false,
@@ -50,8 +60,8 @@ export class Navbar implements OnInit {
     user_invitations: false,
     user: false,
   };
-  mobile: any;
-  isAuth: any = true;
+  mobile: boolean = false;
+  isAuth: boolean = true;
   visibleSideBar: boolean = true;
 
   memberLinks: Links[] = [
@@ -79,7 +89,7 @@ export class Navbar implements OnInit {
     this.sidebarOpen = false;
     this.setSidebarWidth();
   }
-  ngOnInit() {
+  ngOnInit(): void {
     // Set the page title based on the current language
     this.updatePageTitle();
 
@@ -88,54 +98,56 @@ export class Navbar implements OnInit {
       this.updatePageTitle();
     });
 
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      const new_state: any = {
-        key: false,
-        members: false,
-        communities: false,
-        communities_users: false,
-        user_invitations: false,
-        user: false,
-      };
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => {
+        const new_state: RouteActiveState = {
+          key: false,
+          members: false,
+          communities: false,
+          communities_users: false,
+          user_invitations: false,
+          user: false,
+        };
 
-      this.isAuth = !this.router.url.includes('auth');
-      // Sort keys to prioritize more specific paths
-      const keys = Object.keys(new_state).sort((a, b) => b.length - a.length);
-      console.log(keys);
-      for (const key of keys) {
-        const tmpKey = key.replace('_', '/');
-        if (this.router.url.startsWith(`/${tmpKey}`)) {
-          new_state[key] = true;
-          break;
+        this.isAuth = !this.router.url.includes('auth');
+        // Sort keys to prioritize more specific paths
+        const keys = Object.keys(new_state).sort((a, b) => b.length - a.length);
+        console.log(keys);
+        for (const key of keys) {
+          const tmpKey = key.replace('_', '/');
+          if (this.router.url.startsWith(`/${tmpKey}`)) {
+            new_state[key] = true;
+            break;
+          }
         }
-      }
-      this.isRouteActive = new_state;
-      console.log(this.isRouteActive);
-    });
+        this.isRouteActive = new_state;
+        console.log(this.isRouteActive);
+      });
   }
 
-  openSubmenu(index: number) {
+  openSubmenu(index: number): void {
     this.showSubmenu[index] = !this.showSubmenu[index];
     this.isExpanded[index] = !this.isExpanded[index];
   }
 
-  logout() {
+  logout(): void {
     this.userContextService.logout();
-    this.keycloak.logout({
+    void this.keycloak.logout({
       redirectUri: window.location.origin + '/auth',
     });
   }
-  onMouseEnter(_$event: MouseEvent) {
+  onMouseEnter(_$event: MouseEvent): void {
     this.sidebarOpen = true;
     this.setSidebarWidth();
   }
 
-  onMouseLeave(_$event: MouseEvent) {
+  onMouseLeave(_$event: MouseEvent): void {
     this.sidebarOpen = false;
     this.setSidebarWidth();
   }
 
-  setSidebarWidth() {
+  setSidebarWidth(): void {
     this.sidebarWidth = this.sidebarOpen ? '300px' : '70px';
   }
   toggleSublist(sublist: string): void {
@@ -149,12 +161,12 @@ export class Navbar implements OnInit {
     this.cdr.detectChanges();
   }
 
-  openSideBar() {
+  openSideBar(): void {
     this.visibleSideBar = true;
     this.sidebarOpen = true;
   }
 
-  closeSideBar() {
+  closeSideBar(): void {
     if (this.mobile) {
       this.visibleSideBar = false;
       this.sidebarOpen = false;

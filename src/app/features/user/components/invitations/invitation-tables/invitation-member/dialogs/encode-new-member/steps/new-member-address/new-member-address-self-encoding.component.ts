@@ -32,16 +32,16 @@ export class NewMemberAddressSelfEncoding {
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() toggleSameAddressEvent = new EventEmitter<CheckboxChangeEvent>();
 
-  goBack() {
+  goBack(): void {
     this.backClicked.emit();
   }
 
-  submit() {
+  submit(): void {
     if (this.addressForm.valid) {
       this.formSubmitted.emit();
     }
   }
-  toggleSameAddress($event: CheckboxChangeEvent) {
+  toggleSameAddress($event: CheckboxChangeEvent): void {
     this.toggleSameAddressEvent.emit($event);
   }
 }

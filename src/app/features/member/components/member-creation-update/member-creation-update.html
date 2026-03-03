@@ -19,7 +19,7 @@
       </p-step-panel>
       <p-step-panel [value]="1">
         <ng-template #content let-activateCallback="activateCallback">
-          @if(step() > 0){
+          @if (step() > 0) {
             <app-new-member-informations
               (formSubmitted)="submitForm2(activateCallback(2))"
               (backClicked)="activateCallback(0)"
@@ -29,7 +29,6 @@
               [typeClient]="typeClient"
             ></app-new-member-informations>
           }
-
         </ng-template>
       </p-step-panel>
       <p-step-panel [value]="2">

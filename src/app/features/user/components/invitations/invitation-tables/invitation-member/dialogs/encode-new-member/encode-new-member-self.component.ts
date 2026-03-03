@@ -17,6 +17,39 @@ import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { InvitationService } from '../../../../../../../../shared/services/invitation.service';
 
+interface EncodeNewMemberDialogData {
+  invitationID: number;
+}
+
+interface EncodeMemberFormValue {
+  id: string;
+  name: string;
+  surname?: string;
+  email?: string;
+  phone?: string;
+  socialRate?: boolean | unknown[];
+  vatNumber?: string;
+  NRN_manager?: string;
+  name_manager?: string;
+  surname_manager?: string;
+  email_manager?: string;
+  phone_manager?: string;
+}
+
+interface EncodeMemberAddressFormValue {
+  same_address: boolean | unknown[];
+  home_address_street: string;
+  home_address_number: string;
+  home_address_postcode: string;
+  home_address_supplement: string;
+  home_address_city: string;
+  billing_address_street?: string;
+  billing_address_number?: string;
+  billing_address_postcode?: string;
+  billing_address_supplement?: string;
+  billing_address_city?: string;
+}
+
 @Component({
   selector: 'app-encode-new-member',
   imports: [
@@ -31,17 +64,17 @@ import { InvitationService } from '../../../../../../../../shared/services/invit
     Stepper,
     TranslatePipe,
   ],
-  templateUrl: './encode-new-member.component.html',
-  styleUrl: './encode-new-member.component.css',
+  templateUrl: './encode-new-member-self.component.html',
+  styleUrl: './encode-new-member-self.component.css',
   providers: [ErrorMessageHandler],
 })
-export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
+export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
   private invitationService = inject(InvitationService);
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   private cdr = inject(ChangeDetectorRef);
-  typeClient: number = -1;
+  typeClient: MemberType | -1 = -1;
   formData!: FormGroup;
   addressForm!: FormGroup;
   ibanForm!: FormGroup;
@@ -49,10 +82,12 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
   invitationID!: number;
 
   ngOnInit(): void {
-    if (!this.config.data || !this.config.data.invitationID) {
+    const data = this.config.data as EncodeNewMemberDialogData;
+    if (!data || !data.invitationID) {
       this.ref.close(false);
+      return;
     }
-    this.invitationID = this.config.data.invitationID;
+    this.invitationID = data.invitationID;
     this.addressForm = new FormGroup({
       same_address: new FormControl(false),
       home_address_street: new FormControl('', [Validators.required]),
@@ -69,101 +104,150 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
     this.ibanForm = new FormGroup({
       iban: new FormControl('', [Validators.required, ibanValidator]),
     });
+    this.formData = new FormGroup({});
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.cdr.markForCheck(); // Force change detection once content is rendered
   }
 
-  buildFormGroup() {
-    this.formData = new FormGroup({
-      id: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-    });
-    if (this.typeClient == 1) {
-      this.formData.controls['id'].addValidators([numRegistreBeValidator]);
-      // Build form group for individuals
-      this.formData.addControl('surname', new FormControl('', [Validators.required]));
-      this.formData.addControl(
-        'email',
-        new FormControl('', [Validators.required, Validators.email]),
-      );
-      this.formData.addControl('phone', new FormControl('', [Validators.required]));
-      this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
-    } else if (this.typeClient == 2) {
-      this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
+  buildFormGroup(): void {
+    console.log('BUILD FORM GROUP');
+    if (this.typeClient === MemberType.INDIVIDUAL) {
+      this.formData = new FormGroup({
+        id: new FormControl('', [
+          Validators.required,
+          // numRegistreBeValidator
+        ]),
+        name: new FormControl('', [Validators.required]),
+        surname: new FormControl('', [Validators.required]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        phone: new FormControl('', [Validators.required]),
+        socialRate: new FormControl(false, [Validators.required]),
+      });
+    } else if (this.typeClient === MemberType.COMPANY) {
+      this.formData = new FormGroup({
+        id: new FormControl('', [Validators.required]),
+        name: new FormControl('', [Validators.required]),
+        vatNumber: new FormControl('', [Validators.required]),
+      });
     }
-    this.updateGestionnaire(this.typeClient == 2);
+    this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
+    // this.formData = new FormGroup({
+    //   id: new FormControl('', [Validators.required]),
+    //   name: new FormControl('', [Validators.required]),
+    // });
+    // if (this.typeClient === MemberType.INDIVIDUAL) {
+    //   // this.formData.controls['id'].addValidators([
+    //   //   numRegistreBeValidator
+    //   // ]);
+    //   // Build form group for individuals
+    //   this.formData.addControl('surname', new FormControl('', [Validators.required]));
+    //   this.formData.addControl(
+    //     'email',
+    //     new FormControl('', [Validators.required, Validators.email]),
+    //   );
+    //   this.formData.addControl('phone', new FormControl('', [Validators.required]));
+    //   this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
+    // } else if (this.typeClient === MemberType.COMPANY) {
+    //   this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
+    // }
+    // this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
   }
 
-  submitForm1(nextCallback: any) {
-    if (this.typeClient != -1) {
+  onTypeClientChange(type: MemberType | -1): void {
+    this.typeClient = type;
+    if (type !== -1) {
       this.buildFormGroup();
-      nextCallback.emit();
     }
   }
 
-  submitForm2(nextCallback: any) {
+  submitForm1(activateCallback: (step: number) => void): void {
+    if (this.typeClient !== -1) {
+      activateCallback(1);
+    }
+  }
+
+  submitForm2(activateCallback: (step: number) => void): void {
     if (this.formData.valid) {
-      nextCallback.emit();
+      // nextCallback.emit();
+      activateCallback(2);
     }
   }
 
-  submitForm3(nextCallback: any) {
+  submitForm3(activateCallback: (step: number) => void): void {
     if (this.addressForm.valid) {
-      nextCallback.emit();
+      // nextCallback.emit();
+      activateCallback(3);
     }
   }
 
-  onSubmitEnd() {
+  onSubmitEnd(): void {
     if (this.ibanForm.invalid) {
       return;
     }
+
+    const addressFormValue = this.addressForm.getRawValue() as EncodeMemberAddressFormValue;
+    const formDataValue = this.formData.getRawValue() as EncodeMemberFormValue;
+    const ibanFormValue = this.ibanForm.getRawValue() as { iban: string };
+
     const homeAddress: AddressDTO = {
       id: -1,
-      street: this.addressForm.value.home_address_street,
-      number: this.addressForm.value.home_address_number,
-      postcode: this.addressForm.value.home_address_postcode,
-      supplement: this.addressForm.value.home_address_supplement,
-      city: this.addressForm.value.home_address_city,
+      street: addressFormValue.home_address_street,
+      number: +addressFormValue.home_address_number,
+      postcode: addressFormValue.home_address_postcode,
+      supplement: addressFormValue.home_address_supplement,
+      city: addressFormValue.home_address_city,
     };
 
     let billingAddress: AddressDTO = homeAddress;
-    if (this.addressForm.value.same_address.length == 0) {
+    const sameAddress = Array.isArray(addressFormValue.same_address)
+      ? addressFormValue.same_address.length > 0
+      : !!addressFormValue.same_address;
+
+    if (!sameAddress) {
       billingAddress = {
         id: -1,
-        street: this.addressForm.value.billing_address_street,
-        number: this.addressForm.value.billing_address_number,
-        postcode: this.addressForm.value.billing_address_postcode,
-        supplement: this.addressForm.value.billing_address_supplement,
-        city: this.addressForm.value.billing_address.city,
+        street: addressFormValue.billing_address_street ?? '',
+        number: addressFormValue.billing_address_number
+          ? +addressFormValue.billing_address_number
+          : 1,
+        postcode: addressFormValue.billing_address_postcode ?? '',
+        supplement: addressFormValue.billing_address_supplement ?? '',
+        city: addressFormValue.billing_address_city ?? '',
       };
     }
-    let status = 1;
+    const status = 1;
     let manager: CreateManagerDTO | undefined = undefined;
     if (this.gestionnaire) {
       manager = {
-        NRN: this.formData.value.NRN_manager,
-        name: this.formData.value.name_manager,
-        surname: this.formData.value.surname_manager,
-        email: this.formData.value.email_manager,
-        phone_number: this.formData.value.phone_manager,
+        NRN: formDataValue.NRN_manager ?? '',
+        name: formDataValue.name_manager ?? '',
+        surname: formDataValue.surname_manager ?? '',
+        email: formDataValue.email_manager ?? '',
+        phone_number: formDataValue.phone_manager ?? '',
       };
     }
-    // let memberToAdd: IndividualDTO | CompanyDTO;
+
+    const socialRate = Array.isArray(formDataValue.socialRate)
+      ? formDataValue.socialRate.length > 0
+      : !!formDataValue.socialRate;
+    if (this.typeClient === -1) {
+      return;
+    }
     const memberToAdd: CreateMemberDTO = {
-      NRN: this.formData.value.id,
+      NRN: formDataValue.id,
       billing_address: billingAddress,
-      email: this.formData.value.email,
-      first_name: this.formData.value.name,
+      email: formDataValue.email ?? '',
+      first_name: formDataValue.name,
       home_address: homeAddress,
-      iban: this.ibanForm.value.iban,
+      iban: ibanFormValue.iban,
       member_type: this.typeClient,
-      phone_number: this.formData.value.phone,
-      social_rate: this.formData.value.socialRate && this.formData.value.socialRate.length > 0,
+      phone_number: formDataValue.phone ?? '',
+      social_rate: socialRate,
       status: status,
-      vat_number: this.formData.value.vatNumber,
-      name: this.formData.value.surname,
+      vat_number: formDataValue.vatNumber ?? '',
+      name: formDataValue.surname ?? '',
       manager: manager,
     };
     if (this.typeClient === MemberType.COMPANY) {
@@ -182,13 +266,13 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: { data?: unknown }) => {
+          this.errorHandler.handleError(error.data ?? null);
         },
       });
   }
 
-  updateGestionnaire(value: boolean) {
+  updateGestionnaire(value: boolean): void {
     this.gestionnaire = value;
     if (this.gestionnaire) {
       this.formData.addControl(
@@ -214,15 +298,19 @@ export class EncodeNewMemberComponent implements OnInit, AfterViewInit {
     }
   }
 
-  gestionnaireChange($event: CheckboxChangeEvent) {
-    const value = $event.checked.length > 0;
+  gestionnaireChange($event: CheckboxChangeEvent): void {
+    const value = Array.isArray($event.checked) ? $event.checked.length > 0 : !!$event.checked;
     this.updateGestionnaire(value);
   }
 
-  toggleSameAddress(event: CheckboxChangeEvent) {
+  toggleSameAddress(event: CheckboxChangeEvent): void {
     console.log('THIS EVENT : ', event);
-    console.log(this.addressForm.value.same_address);
-    if (this.addressForm.value.same_address[0]) {
+    const addressFormValue = this.addressForm.getRawValue() as EncodeMemberAddressFormValue;
+    const isSameAddress = Array.isArray(addressFormValue.same_address)
+      ? addressFormValue.same_address[0]
+      : !!addressFormValue.same_address;
+
+    if (isSameAddress) {
       // Remove billing address from form
       this.addressForm.removeControl('billing_address_street');
       this.addressForm.removeControl('billing_address_number');

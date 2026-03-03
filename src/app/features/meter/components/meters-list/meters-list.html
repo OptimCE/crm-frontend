@@ -66,7 +66,9 @@
                     />
                   </div>
                   <div class="p-col">
-                    <label for="postcode">{{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }}</label>
+                    <label for="postcode">{{
+                      'METER.ADDRESS.POSTAL_CODE_LABEL' | translate
+                    }}</label>
                     <input
                       pInputText
                       id="postcode"
@@ -125,7 +127,9 @@
               [showAddButton]="false"
             >
               <ng-template pTemplate="header">
-                <span class="text-sm px-3">{{ 'METER.LIST.FILTER_BY_OWNER_LABEL' | translate }}</span>
+                <span class="text-sm px-3">{{
+                  'METER.LIST.FILTER_BY_OWNER_LABEL' | translate
+                }}</span>
               </ng-template>
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-select
@@ -260,7 +264,9 @@
                   [ngModel]="value"
                   [options]="sharingOperations"
                   (onChange)="filter($event.value)"
-                  placeholder="{{ 'METER.LIST.SELECT_A_SHARING_OPERATION_PLACEHOLDER' | translate }}"
+                  placeholder="{{
+                    'METER.LIST.SELECT_A_SHARING_OPERATION_PLACEHOLDER' | translate
+                  }}"
                   [showClear]="true"
                 >
                   <ng-template let-option pTemplate="item">

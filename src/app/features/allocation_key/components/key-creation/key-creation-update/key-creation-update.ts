@@ -11,7 +11,6 @@ import {
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { KeyService } from '../../../../../shared/services/key.service';
-import { EventBusService } from '../../../../../core/services/event_bus/eventbus.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ButtonRenderer } from './button-renderer/button-renderer';
 import { HeaderWithHelper } from '../../key-view/header-with-helper/header-with-helper';
@@ -26,7 +25,26 @@ import { FormErrorSummaryComponent } from '../../../../../shared/components/summ
 import { SnackbarNotification } from '../../../../../shared/services-ui/snackbar.notifcation.service';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
 import { VALIDATION_TYPE } from '../../../../../core/dtos/notification';
+import {
+  CellClassParams,
+  ColDef,
+  ColGroupDef,
+  GridApi,
+  GridReadyEvent,
+  NewValueParams,
+} from 'ag-grid-community';
+import { KeyTableRow } from '../../../../../shared/types/key.types';
+import { ApiResponse } from '../../../../../core/dtos/api.response';
+import { ErrorAdded, ErrorSummaryAdded } from '../../../../../shared/types/error.types';
 
+interface ButtonClickParams {
+  event: MouseEvent;
+  rowData: KeyTableRow;
+}
+interface KeyForm {
+  name: string;
+  description: string;
+}
 @Component({
   selector: 'app-key-creation-update',
   standalone: true,
@@ -51,32 +69,31 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   private keyService = inject(KeyService);
   private routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
-  private eventBus = inject(EventBusService);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
+  private hasPendingConsumers = false;
 
   key!: KeyDTO;
   @Input()
   keyInput?: KeyDTO | null;
   isLoaded: boolean;
   isSubmitted: boolean = false;
-  rowData: any[] = [];
+  rowData: KeyTableRow[] = [];
   public themeClass: string = 'ag-theme-quartz';
-  public defaultColDef: any = {
+  public defaultColDef: ColDef = {
     width: 250,
     editable: true,
   };
-  frameworkComponents: any;
-
-  colDefs: any = [];
+  frameworkComponents: Record<string, unknown>;
+  colDefs: (ColDef<KeyTableRow> | ColGroupDef<KeyTableRow>)[] = [];
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     key_data: new FormControl('', [this.keyValidator.bind(this)]),
   });
-  errorsAdded: Record<string, () => string> = {};
-  errorsSummaryAdded: Record<string, (params: any, controlName: string) => string> = {};
+  errorsAdded: ErrorAdded = {};
+  errorsSummaryAdded: ErrorSummaryAdded = {};
   ref?: DynamicDialogRef | null;
   gridOptions = {
     suppressCellFocus: false, // just to reduce masking
@@ -90,23 +107,17 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       headerHelperRenderer: HeaderWithHelper,
     };
   }
-  refreshGrid() {
-    try {
-      this.formGroup.updateValueAndValidity();
-      this.gridApi.refreshCells({ force: true });
-    } catch (error) {
-    }
+  refreshGrid(): void {
+    this.formGroup.updateValueAndValidity();
+    this.gridApi.refreshCells({ force: true });
   }
 
-  initializeWithData(key: KeyDTO) {
-    console.log(`Initialize with data : ${key}`)
-    console.log(key)
+  initializeWithData(key: KeyDTO): void {
     this.key = key;
     this.formGroup.get('name')?.setValue(key.name);
     this.formGroup.get('description')?.setValue(key.description);
     this.rowData = this.formatData();
     this.isLoaded = true;
-
   }
 
   ngOnInit(): void {
@@ -121,34 +132,91 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       key_data: new FormControl('', [this.keyValidator.bind(this)]),
     });
 
-    this.route.queryParams.subscribe((params) => {
-      const id = params['id'];
+    this.route.queryParamMap.subscribe((params) => {
+      const idParam = params.get('id');
+      const id = idParam ? +idParam : 0;
 
       if (id) {
         // 1. If ID exists in URL, fetch from API
-        this.keyService.getKey(parseInt(id)).subscribe({
+        this.keyService.getKey(id).subscribe({
           next: (response) => {
             if (response) {
-              const key = response.data;
-              this.keyInput = JSON.parse(JSON.stringify(key));
-              this.initializeWithData(key as KeyDTO);
+              const key = response.data as KeyDTO;
+              this.keyInput = structuredClone(key);
+              this.initializeWithData(key);
             } else {
               this.errorHandler.handleError();
             }
           },
           error: (error) => {
-            this.errorHandler.handleError(error.data ? error.data : null);
+            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+            this.errorHandler.handleError(errorData);
           },
         });
       } else {
         // 2. If no ID, check if we received data via Router State (history.state)
         // We check this HERE so it doesn't conflict with the empty default below
-        const transferredKey = history.state['keyData'];
-
+        const state = history.state as { keyData?: KeyDTO; consumers?: string[] };
+        console.log('State');
+        console.log(state);
+        const transferredKey = state.keyData;
+        const transferredConsumers = state.consumers;
         if (transferredKey) {
-          console.log("Found key in history.state:", transferredKey);
-          this.initializeWithData(JSON.parse(JSON.stringify(transferredKey)));
+          this.initializeWithData(structuredClone(transferredKey));
           this.keyInput = transferredKey;
+        } else if (transferredConsumers && transferredConsumers.length > 0) {
+          console.log('Transferred consumers');
+          this.key = {
+            id: -1,
+            name: '',
+            description: '',
+            iterations: [],
+          };
+          const [first, ...rest] = transferredConsumers;
+          console.log(first);
+          console.log(rest);
+          const [number, initialConsumers] = this.newIterationCheck();
+          let consumers = initialConsumers;
+          if (number === -1 || !consumers) {
+            return;
+          }
+          if (number > 1) {
+            consumers = this.key.iterations[this.key.iterations.length - 1].consumers.map(
+              (consumer) => {
+                return {
+                  id: -1,
+                  name: consumer.name,
+                  energy_allocated_percentage: 0,
+                };
+              },
+            );
+          }
+          const newIteration: IterationDTO = {
+            id: -1,
+            number: number,
+            energy_allocated_percentage: 1,
+            consumers: consumers,
+          };
+          this.key.iterations.push(newIteration);
+          this.rowData = this.formatData();
+          console.log('KEY BEFORE');
+          console.log(this.key);
+          this.key.iterations[0].consumers[0].name = first;
+          console.log('KEY AFTER');
+          console.log(this.key);
+          for (const ean of rest) {
+            this.key.iterations[0].consumers.push({
+              id: -1,
+              name: ean,
+              energy_allocated_percentage: 0,
+            });
+          }
+          console.log('KEY');
+          console.log(this.key);
+          this.hasPendingConsumers = true;
+          this.isLoaded = true;
+          this.rowData = this.formatData();
+          this.refreshGrid();
         } else {
           // 3. Fallback: Initialize as completely new empty key
           this.key = {
@@ -168,7 +236,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     };
   }
 
-  loadColumnDefinitions() {
+  loadColumnDefinitions(): void {
     this.translate
       .get([
         'KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL',
@@ -184,12 +252,12 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         'VAP_HEADER',
       ])
       .subscribe({
-        next: (translations) => {
+        next: (translations: Record<string, string>) => {
           this.colDefs = [
             {
               headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               field: 'number',
-              flex:1,
+              flex: 1,
               editable: false,
               cellStyle: this.cellStyleNumber.bind(this),
               cellClassRules: {
@@ -205,7 +273,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.DELETE_ITERATION_BUTTON_LABEL'],
-              flex:1,
+              flex: 1,
               field: 'delete1',
               cellRenderer: 'buttonRenderer',
               cellRendererParams: {
@@ -215,7 +283,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
-              flex:1,
+              flex: 1,
               field: 'va_percentage',
               onCellValueChanged: this.onCellValueChanged.bind(this),
               headerComponent: 'headerHelperRenderer', // ✅ class, not string
@@ -228,18 +296,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_LABEL'],
-              flex:2,
+              flex: 2,
               field: 'consumers',
               cellStyle: { 'text-align': 'center' },
               children: [
                 {
                   headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_NAME_LABEL'],
-                  flex:1,
+                  flex: 1,
                   field: 'name',
                 },
                 {
                   headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
-                  flex:1,
+                  flex: 1,
                   field: 'vp_percentage',
                   onCellValueChanged: this.onCellValueChanged.bind(this),
                   cellStyle: { 'text-align': 'center' },
@@ -255,7 +323,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             },
             {
               headerName: translations['KEY.TABLE.DELETE_CONSUMER_BUTTON_LABEL'],
-              flex:1,
+              flex: 1,
               field: 'delete',
               cellRenderer: 'buttonRenderer',
               cellRendererParams: {
@@ -271,7 +339,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       });
   }
 
-  loadErrorMessages() {
+  loadErrorMessages(): void {
     this.translate
       .get([
         'KEY.CREATE.ERROR.NO_ITERATION',
@@ -282,7 +350,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         'KEY.CREATE.ERROR.NO_CHANGE',
       ])
       .subscribe({
-        next: (translations) => {
+        next: (translations: Record<string, string>) => {
           this.errorsAdded = {
             NoIteration: () => translations['KEY.CREATE.ERROR.NO_ITERATION'],
             NoConsumers: () => translations['KEY.CREATE.ERROR.NO_CONSUMERS'],
@@ -293,17 +361,17 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
           };
 
           this.errorsSummaryAdded = {
-            NoIteration: (_: any, _controlName: string) =>
+            NoIteration: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.NO_ITERATION'],
-            NoConsumers: (_: any, _controlName: string) =>
+            NoConsumers: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.NO_CONSUMERS'],
-            SumIterations: (_: any, _controlName: string) =>
+            SumIterations: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.SUM_ITERATIONS_ERROR'],
-            SumConsumers: (_: any, _controlName: string) =>
+            SumConsumers: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.SUM_CONSUMERS'],
-            ConsumerName: (_: any, _controlName: string) =>
+            ConsumerName: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.CONSUMER_NAME_REQUIRED'],
-            NoChange: (_: any, _controlName: string) =>
+            NoChange: (_: unknown, _controlName: string) =>
               translations['CREATE_ALLOCATION_KEY_NO_CHANGE'],
           };
         },
@@ -316,7 +384,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   private keyValidator(control: AbstractControl): ValidationErrors | null {
     try {
       const invalid = false;
-      const errors: any = {};
+      const errors: ValidationErrors = {};
       if (this.key !== undefined) {
         if (this.key.iterations.length === 0) {
           errors['NoIteration'] = true;
@@ -344,6 +412,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                 errors['ConsumerName'] = true;
                 return errors;
               }
+              return;
             });
             if (sum >= 0.999 && sum <= 1.001) {
               sum = 1;
@@ -361,12 +430,13 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                 return errors;
               }
             }
+            return;
           });
         }
       }
       if (this.keyInput !== null && this.keyInput !== undefined) {
-        const name: string | null = control.get('name')?.value;
-        const description: string | null = control.get('description')?.value;
+        const name = control.get('name')?.value as string | undefined;
+        const description = control.get('description')?.value as string | undefined;
         let count = 0;
         if (this.keyInput.name === name) {
           count++;
@@ -420,12 +490,12 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         }
       }
       return errors;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }
 
-  openHelper(displayText: string) {
+  openHelper(displayText: string): void {
     this.ref = this.dialogService.open(HelperDialog, {
       modal: true,
       closable: true,
@@ -436,7 +506,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.isSubmitted = true;
     this.formGroup.get('key_data')?.updateValueAndValidity();
 
@@ -444,23 +514,25 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     if (this.formGroup.invalid) {
       return;
     }
-    this.key.name = this.formGroup.get('name')?.value;
-    this.key.description = this.formGroup.get('description')?.value;
+    const formValue = this.formGroup.getRawValue() as KeyForm;
+    this.key.name = formValue.name;
+    this.key.description = formValue.description;
     if (this.keyInput) {
       this.keyService.updateKey(this.key).subscribe({
         next: (response) => {
           if (response) {
             this.snackbarNotification.openSnackBar(
-              this.translate.instant('KEY.SUCCESS.KEY_UPDATED'),
+              this.translate.instant('KEY.SUCCESS.KEY_UPDATED') as string,
               VALIDATION_TYPE,
             );
-            this.routing.navigate(['/keys']);
+            void this.routing.navigate(['/keys']);
           } else {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
         },
       });
     } else {
@@ -468,64 +540,46 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         next: (response) => {
           if (response) {
             this.snackbarNotification.openSnackBar(
-              this.translate.instant('KEY.SUCCESS.KEY_ADDED'),
+              this.translate.instant('KEY.SUCCESS.KEY_ADDED') as string,
               VALIDATION_TYPE,
             );
-            this.routing.navigate(['/keys']);
+            void this.routing.navigate(['/keys']);
           } else {
             this.errorHandler.handleError();
           }
         },
-        error: (error) => {
-          this.errorHandler.handleError(error.data ? error.data : null);
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
         },
       });
     }
   }
 
-  gridApi: any;
-  onGridReady(event: any) {
-    console.log("On grid ready")
-    this.rowData = [];
-    if (this.keyInput) {
-      this.rowData = this.formatData();
-    }
-
+  gridApi!: GridApi;
+  onGridReady(event: GridReadyEvent): void {
     this.gridApi = event.api;
     KeyCreationUpdate.displayedNumbers.clear();
 
-    this.eventBus.on('setConsumers', (data: any) => {
-      const listEAN = data.detail;
-      this.newIteration();
-      this.key.iterations[0].consumers[0].name = listEAN.shift();
-
-      for (const ean of listEAN) {
-        this.key.iterations[0].consumers.push({
-          id: -1,
-          name: ean,
-          energy_allocated_percentage: 0,
-        });
-      }
+    if (this.keyInput || this.hasPendingConsumers) {
       this.rowData = this.formatData();
-      this.refreshGrid();
-    });
+    }
 
-    // this.eventBus.on('keyStepByStep', (data: any) => {
-    //   console.log("Event Bus Key Step By Step : ", data)
-    //   const key = data.detail;
-    //   this.initializeWithData(key);
-    // });
+    if (this.hasPendingConsumers) {
+      this.hasPendingConsumers = false;
+      this.refreshGrid();
+    }
   }
 
-  formatData() {
-    const formattedData: any[] = [];
+  formatData(): KeyTableRow[] {
+    const formattedData: KeyTableRow[] = [];
 
     if (this.key && this.key.iterations) {
       this.key.iterations.forEach((iteration) => {
         iteration.consumers.forEach((consumer) => {
           let vp_percentage = consumer.energy_allocated_percentage * 100 + '%';
           if (consumer.energy_allocated_percentage === -1) {
-            vp_percentage = this.translate.instant('KEY.CREATE.PRORATA_LABEL');
+            vp_percentage = this.translate.instant('KEY.CREATE.PRORATA_LABEL') as string;
           }
           formattedData.push({
             number: iteration.number,
@@ -536,11 +590,9 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         });
       });
     }
-    console.log("FORMATTED DATA");
-    console.log(formattedData);
     return formattedData;
   }
-  newConsumer() {
+  newConsumer(): void {
     const newConsumer: ConsumerDTO = {
       id: -1,
       name: '',
@@ -548,7 +600,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     };
     for (const iteration of this.key.iterations) {
       if (iteration.consumers[0].energy_allocated_percentage === -1) {
-        iteration.consumers.push({ id: -1, name: '', energy_allocated_percentage:-1 });
+        iteration.consumers.push({ id: -1, name: '', energy_allocated_percentage: -1 });
       } else {
         iteration.consumers.push(newConsumer);
       }
@@ -569,7 +621,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     return [number, consumers];
   }
 
-  newIteration() {
+  newIteration(): void {
     try {
       const [number, initialConsumers] = this.newIterationCheck();
       let consumers = initialConsumers;
@@ -602,7 +654,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       console.error(error);
     }
   }
-  newIterationProrata() {
+  newIterationProrata(): void {
     const [number, initialConsumer] = this.newIterationCheck();
     let consumers = initialConsumer;
     if (number === -1 || !consumers) {
@@ -631,10 +683,14 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     // this.grid
   }
   static lastNumberCellStyleNumber = 0;
-  static lastParams: any = null;
-  cellStyleNumber(params: any) {
+  static lastParams: CellClassParams<KeyTableRow> | null = null;
+  cellStyleNumber(params: CellClassParams<KeyTableRow>): { height: string } {
     KeyCreationUpdate.lastParams = params;
-    if (params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber) {
+    if (
+      params.node.data &&
+      params.node.data.number !== undefined &&
+      params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber
+    ) {
       KeyCreationUpdate.lastNumberCellStyleNumber = params.node.data.number;
       return { height: '100%' };
     } else {
@@ -644,14 +700,18 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   }
   static displayedNumbers = new Set<number>();
 
-  onCellValueChanged(event: any) {
+  onCellValueChanged(event: NewValueParams<KeyTableRow, string>): void {
     const colId = event.colDef.field;
     const data = event.data;
+    if (!data || !colId) return;
+    const iterationNumber = data.number;
+    if (iterationNumber === undefined) return;
+
     const iterationIndex = this.key.iterations.findIndex(
-      (iteration) => iteration.number === data.number,
+      (iteration) => iteration.number === iterationNumber,
     );
     if (iterationIndex !== -1) {
-      if (colId === 'va_percentage') {
+      if (colId === 'va_percentage' && data.va_percentage !== undefined) {
         this.key.iterations[iterationIndex].energy_allocated_percentage =
           parseFloat(data.va_percentage) / 100;
         if (data.va_percentage.includes('%')) {
@@ -661,15 +721,10 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
           //this.rowData[event.node.rowIndex].va_percentage = data.va_percentage + "%";
           data.va_percentage = data.va_percentage + '%';
           for (const rData of this.rowData) {
-            if (rData.number === data.number) {
+            if (rData.number === iterationNumber) {
               rData.va_percentage = data.va_percentage;
             }
           }
-          // for (let i = 0; i < this.rowData.length; i++) {
-          //   if (this.rowData[i].number === data.number) {
-          //     this.rowData[i].va_percentage = data.va_percentage;
-          //   }
-          // }
           this.refreshGrid();
         } else {
           data.va_percentage = '';
@@ -677,33 +732,32 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         }
       } else {
         //const consumerIndex = this.key.iterations[iterationIndex].consumers.findIndex(consumer => consumer.name === data.name);
-        const consumerIndex = event.node.rowIndex % this.key.iterations[0].consumers.length;
-        if (consumerIndex !== -1) {
-          if (colId === 'vp_percentage') {
-            if (data.vp_percentage.includes('%')) {
-              data.vp_percentage = data.vp_percentage.replace('%', '');
-            }
-            this.key.iterations[iterationIndex].consumers[
-              consumerIndex
-            ].energy_allocated_percentage = parseFloat(data.vp_percentage) / 100;
-            if (data.vp_percentage.match('^\\d+(\\.\\d+)*$')) {
-              this.rowData[event.node.rowIndex].vp_percentage = data.vp_percentage + '%';
+        const firstIteration = this.key.iterations[0];
+        const rowIndex = event.node?.rowIndex;
+        if (firstIteration && rowIndex !== null && rowIndex !== undefined) {
+          const consumerIndex = rowIndex % firstIteration.consumers.length;
+          if (consumerIndex !== -1) {
+            if (colId === 'vp_percentage' && data.vp_percentage !== undefined) {
+              if (data.vp_percentage.includes('%')) {
+                data.vp_percentage = data.vp_percentage.replace('%', '');
+              }
+              this.key.iterations[iterationIndex].consumers[
+                consumerIndex
+              ].energy_allocated_percentage = parseFloat(data.vp_percentage) / 100;
+              if (data.vp_percentage.match('^\\d+(\\.\\d+)*$')) {
+                this.rowData[rowIndex].vp_percentage = data.vp_percentage + '%';
+                this.refreshGrid();
+              } else {
+                data.vp_percentage = '';
+                this.refreshGrid();
+              }
+            } else if (colId === 'name' && data.name !== undefined) {
+              for (const iteration of this.key.iterations) {
+                iteration.consumers[consumerIndex].name = data.name;
+              }
+              this.rowData = this.formatData(); // A changer
               this.refreshGrid();
-            } else {
-              data.vp_percentage = '';
-              this.refreshGrid();
             }
-          } else if (colId === 'name') {
-            for (const iteration of this.key.iterations) {
-              iteration.consumers[consumerIndex].name = data.name;
-            }
-            // for (let i = 0; i < this.key.iterations.length; i++) {
-            //   this.key.iterations[i].consumers[consumerIndex].name = data.name;
-            // }
-            this.rowData = this.formatData(); // A changer
-            this.refreshGrid();
-
-            //this.key.iterations[iterationIndex].consumers[consumerIndex].name = data.name;
           }
         }
       }
@@ -711,7 +765,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.formGroup.updateValueAndValidity();
   }
 
-  deleteIteration(params: any) {
+  deleteIteration(params: ButtonClickParams): void {
     const number = params.rowData.number;
     const index = this.key.iterations.findIndex((iteration) => iteration.number === number);
     if (index !== -1) {
@@ -727,7 +781,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.rowData = this.formatData();
     this.refreshGrid();
   }
-  deleteConsumer(params: any) {
+  deleteConsumer(params: ButtonClickParams): void {
     const name = params.rowData.name;
     for (const iteration of this.key.iterations) {
       const index = iteration.consumers.findIndex((consumer) => consumer.name === name);
@@ -748,7 +802,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.refreshGrid();
   }
 
-  getContext() {
+  getContext(): { form: FormGroup } {
     return {
       form: this.formGroup,
     };

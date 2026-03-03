@@ -2,18 +2,19 @@ import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/co
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SnackbarNotification } from '../../../../../../../shared/services-ui/snackbar.notifcation.service';
 import {
   DocumentExposedDTO,
   DocumentQueryDTO,
 } from '../../../../../../../shared/dtos/document.dtos';
-import { Pagination } from '../../../../../../../core/dtos/api.response';
+import { ApiResponse, Pagination } from '../../../../../../../core/dtos/api.response';
 import { DocumentService } from '../../../../../../../shared/services/document.service';
 import { MemberAddDocument } from '../../../../member-add-document/member-add-document';
 import { VALIDATION_TYPE } from '../../../../../../../core/dtos/notification';
 import { FilterMetadata } from 'primeng/api';
+import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 
 @Component({
   selector: 'app-member-view-documents-tab',
@@ -27,6 +28,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   private translate = inject(TranslateService);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
+  private errorHandler = inject(ErrorMessageHandler);
   @Input() id!: number;
   filter = signal<DocumentQueryDTO>({ page: 1, limit: 10 });
 
@@ -35,11 +37,11 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   currentPageReportTemplateDocuments: string = '';
   ref?: DynamicDialogRef | null;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateDocumentPaginationTranslation();
   }
 
-  loadDocument() {
+  loadDocument(): void {
     try {
       this.documentsPartialList.set([]);
       this.documentService.getDocuments(this.id, this.filter()).subscribe({
@@ -51,17 +53,17 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
             console.error('Error fetching documents partial list');
           }
         },
-        error: (error) => {
+        error: (error: unknown) => {
           console.error('Error fetching documents partial list : ', error);
         },
       });
     } catch (e) {
-      console.error('Error fetching partials documents ' + e);
+      console.error('Error fetching partials documents ' + String(e));
     }
   }
 
-  lazyLoadDocuments($event: TableLazyLoadEvent) {
-    const current: any = { ...this.filter() };
+  lazyLoadDocuments($event: TableLazyLoadEvent): void {
+    const current: DocumentQueryDTO = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;
@@ -71,40 +73,44 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     }
     if ($event.filters) {
       // Helper to safely extract value from PrimeNG filter structure
-      const extractValue = (field: string) => {
-        const filterMeta = $event.filters![field];
+      const extractValue = (field: string): string | number | null => {
+        const filterMeta = $event.filters?.[field];
 
         if (!filterMeta) return null;
 
         // Menu mode filters return an array of FilterMetadata
         if (Array.isArray(filterMeta)) {
           // We take the first constraint's value (since you hid operators)
-          return filterMeta[0].value;
+          const firstConstraint = filterMeta[0] as FilterMetadata | undefined;
+          return (firstConstraint?.value as string | number | null) ?? null;
         }
         // Row mode filters (if you ever switch) return a single object
         else {
-          return (filterMeta as FilterMetadata).value;
+          const meta = filterMeta as FilterMetadata | undefined;
+          return (meta?.value as string | number | null) ?? null;
         }
       };
 
       // Map the specific fields from your HTML to your backend payload
       const fileName = extractValue('fileName');
-      if (fileName) current.fileName = fileName;
+      if (fileName) {
+        current.file_name = fileName as string;
+      } else {
+        delete current.file_name;
+      }
 
       const fileType = extractValue('fileType');
-      if (fileType) current.fileType = fileType;
-
-      const fileSize = extractValue('fileSize');
-      if (fileSize) current.fileSize = fileSize;
-
-      const uploadDate = extractValue('uploadDate');
-      if (uploadDate) current.uploadDate = uploadDate;
+      if (fileType) {
+        current.file_type = fileType as string;
+      } else {
+        delete current.file_type;
+      }
     }
     this.filter.set(current);
     this.loadDocument();
   }
 
-  updateDocumentPaginationTranslation() {
+  updateDocumentPaginationTranslation(): void {
     this.translate
       .get('MEMBER.VIEW.DOCUMENTS.PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL', {
         page: this.paginationDocumentsInfo.page,
@@ -116,28 +122,39 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
       });
   }
 
-  clear(table: any) {
+  clear(table: Table): void {
     table.clear();
     this.filter.set({ page: 1, limit: 10 });
   }
 
-  onDownloadDocument(doc: any) {
-    this.documentService.downloadDocument(this.id, doc.id).subscribe((response) => {
-      if (response) {
-        const blob = new Blob([response], { type: doc.fileType });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = doc.fileName;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      }
+  onDownloadDocument(doc: DocumentExposedDTO): void {
+    this.documentService.downloadDocument(this.id, doc.id).subscribe({
+      next: (response) => {
+        if (response) {
+          // Check if the response contains the blob/filename object
+          if ('blob' in response) {
+            const url = window.URL.createObjectURL(response.blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = response.filename; // Use the dynamic filename!
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          } else {
+            // This is the ApiResponse error case
+            // this.errorHandler.handleError(response.data ? response.data : null);
+          }
+        }
+      },
+      error: (error) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData);
+      },
     });
   }
 
-  deleteDocument(id: number) {
+  deleteDocument(id: number): void {
     this.documentService.deleteDocument(id).subscribe((response) => {
       if (response) {
         this.loadDocument();
@@ -145,12 +162,12 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     });
   }
 
-  toAddDocument() {
+  toAddDocument(): void {
     this.ref = this.dialogService.open(MemberAddDocument, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.VIEW.DOCUMENTS.ADD_DOCUMENT_HEADER'),
+      header: this.translate.instant('MEMBER.VIEW.DOCUMENTS.ADD_DOCUMENT_HEADER') as string,
       data: {
         idMember: this.id,
       },
@@ -169,7 +186,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.ref) {
       this.ref.destroy();
     }

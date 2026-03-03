@@ -40,35 +40,38 @@ export class NewMemberInformationsSelfEncoding implements OnInit {
   idErrorAdded: ErrorAdded = {};
   errorsSummaryAdded: ErrorSummaryAdded = {};
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setupErrorTranslation();
   }
 
-  goBack() {
+  goBack(): void {
     this.backClicked.emit();
   }
 
-  setupErrorTranslation() {
+  setupErrorTranslation(): void {
     this.translate
       .get(['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.idErrorAdded = {
           invalidNumReg: () => translation['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'],
         };
         this.errorsSummaryAdded = {
-          invalidNumReg: (_: any, _controlName: string) =>
+          invalidNumReg: (_: unknown, _controlName: string) =>
             translation['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'],
         };
       });
   }
 
-  submit() {
+  submit(): void {
+    console.log('Form submit');
+    console.log(this.form.errors);
     if (this.form.valid) {
+      console.log('Form submitted successfully');
       this.formSubmitted.emit();
     }
   }
 
-  gestionnaireChange($event: CheckboxChangeEvent) {
+  gestionnaireChange($event: CheckboxChangeEvent): void {
     this.gestionnaireChangeEvent.emit($event);
   }
 

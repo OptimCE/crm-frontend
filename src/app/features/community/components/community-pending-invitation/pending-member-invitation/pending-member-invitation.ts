@@ -4,6 +4,7 @@ import { PrimeTemplate } from 'primeng/api';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ApiResponse } from '../../../../../core/dtos/api.response';
 import {
   UserMemberInvitationDTO,
   UserMemberInvitationQuery,
@@ -24,7 +25,7 @@ export class PendingMemberInvitation {
   loadingMembers = true;
   filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
 
-  loadPendingMemberInvitation() {
+  loadPendingMemberInvitation(): void {
     this.loadingMembers = true;
     this.invitationService.getMembersPendingInviation(this.filter()).subscribe({
       next: (response) => {
@@ -41,8 +42,8 @@ export class PendingMemberInvitation {
       },
     });
   }
-  lazyLoadPendingMemberInvitation($event: TableLazyLoadEvent) {
-    const current: any = { ...this.filter() };
+  lazyLoadPendingMemberInvitation($event: TableLazyLoadEvent): void {
+    const current: UserMemberInvitationQuery = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_email;
@@ -62,7 +63,7 @@ export class PendingMemberInvitation {
     this.loadPendingMemberInvitation();
   }
 
-  cancelMemberInvitation(invitation: UserMemberInvitationDTO) {
+  cancelMemberInvitation(invitation: UserMemberInvitationDTO): void {
     this.invitationService.cancelMemberInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {
@@ -71,8 +72,9 @@ export class PendingMemberInvitation {
           this.errorHandler.handleError();
         }
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ?? null);
+      error: (error: unknown) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData);
       },
     });
   }

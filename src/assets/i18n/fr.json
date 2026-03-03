@@ -1078,6 +1078,23 @@
       "ADD_SHARING_OP_HEADER": "Ajout d'une opération de partage",
       "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès"
     },
+    "SELECT_METER_NEW_KEY": {
+      "NOW": "Maintenant",
+      "FUTURE": "A venir",
+      "METERS_SELECTED": "{{ count }} compteur{{ count > 1 ? 's' : '' }} sélectionné{{ count > 1 ? 's' : '' }}",
+      "CLEAR_ALL": "Tout effacer",
+      "SELECT_ALL_NOW": "Séelctionner tous les compteurs présent",
+      "SELECT_ALL_FUTURE": "Sélectionner tous les compteurs à venir",
+      "CLEAN_FILTERS": "Effacer les filtres",
+      "TABLE": {
+        "ADDRESS": "Adresse",
+        "EAN": "EAN",
+        "METER_NUMBER": "Numéro de compteur",
+        "STATUS": "Statut",
+        "HOLDER": "Propriétaire",
+        "NO_METERS_FOUND": "Aucun compteur trouvé"
+      }
+    },
     "ERRORS": {
       "GET_SHARING_OPERATION_PARTIAL_LIST": "Erreur lors de la récupération des partages partiels",
       "GET_FULL_SHARING_OPERATION": "Erreur lors de la récupération complète du partage",

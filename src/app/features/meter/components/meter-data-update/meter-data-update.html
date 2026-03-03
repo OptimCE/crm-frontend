@@ -68,7 +68,12 @@
         <span class="text-base">{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}</span>
         @for (grd of grdAvailable; track $index) {
           <div>
-            <p-radioButton [inputId]="'grd_' + grd.id" [value]="grd" formControlName="grd" name="grd"/>
+            <p-radioButton
+              [inputId]="'grd_' + grd.id"
+              [value]="grd"
+              formControlName="grd"
+              name="grd"
+            />
             <label [for]="'grd_' + grd.id" class="text-small">
               {{ grd.name }}
             </label>
@@ -88,7 +93,12 @@
         <span class="text-base">{{ 'METER.INFORMATIONS.RATE_LABEL' | translate }}</span>
         @for (rate of rateCategory; track $index) {
           <div>
-            <p-radioButton [inputId]="'rate_' + rate.id" [value]="rate" formControlName="rate" name="rate" />
+            <p-radioButton
+              [inputId]="'rate_' + rate.id"
+              [value]="rate"
+              formControlName="rate"
+              name="rate"
+            />
             <label [for]="'rate_' + rate.id" class="text-small">
               {{ rate.name }}
             </label>
@@ -130,11 +140,11 @@
         <app-error-handler controlName="member" [errorsAdd]="errorMemberAdded" />
       </div>
     </div>
-    <div class="flex flex-wrap pb-1 w-full ">
+    <div class="flex flex-wrap pb-1 w-full">
       <div class="flex flex-col flex-1 items-center">
         <label for="status" class="text-base">{{
-            'METER.UPDATE_DATA.SELECT_STATUS' | translate
-          }}</label>
+          'METER.UPDATE_DATA.SELECT_STATUS' | translate
+        }}</label>
         <p-select
           id="status"
           formControlName="status"
@@ -143,7 +153,7 @@
           [options]="statusOptions"
         >
           <ng-template #selectedItem let-selectedOption>
-            @if(selectedOption){
+            @if (selectedOption) {
               <div class="flex items-center gap-2">
                 <div>{{ selectedOption.label | translate }}</div>
               </div>
@@ -151,7 +161,7 @@
           </ng-template>
           <ng-template let-option #item>
             <div class="flex items-center gap-2">
-              <div>{{ option.label | translate}}</div>
+              <div>{{ option.label | translate }}</div>
             </div>
           </ng-template>
         </p-select>
@@ -159,8 +169,8 @@
       </div>
       <div class="flex flex-col flex-1 items-center">
         <label for="dateStart" class="text-base">{{
-            'METER.UPDATE_DATA.START_DATE_METER_LABEL' | translate
-          }}</label>
+          'METER.UPDATE_DATA.START_DATE_METER_LABEL' | translate
+        }}</label>
         <p-date-picker
           id="dateStart"
           formControlName="dateStart"
@@ -171,7 +181,6 @@
         </p-date-picker>
         <app-error-handler controlName="dateStart" />
       </div>
-
     </div>
     <div class="flex flex-wrap text-center flex-col w-full justify-center">
       <app-summary-error

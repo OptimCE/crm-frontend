@@ -35,11 +35,11 @@ export class UserCommunities implements OnInit, OnDestroy {
     this.fetchCurrentCommunityId();
   }
 
-  fetchCurrentCommunityId() {
+  fetchCurrentCommunityId(): void {
     // this.activeGroup.set(this.userContextService.activeCommunityId())
   }
 
-  loadCommunities() {
+  loadCommunities(): void {
     this.communityService.getMyCommunities(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -54,8 +54,8 @@ export class UserCommunities implements OnInit, OnDestroy {
     });
   }
 
-  lazyLoadCommunities($event: TableLazyLoadEvent) {
-    const current: any = { ...this.filter() };
+  lazyLoadCommunities($event: TableLazyLoadEvent): void {
+    const current: CommunityQueryDTO = { ...this.filter() };
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_name;
@@ -67,15 +67,15 @@ export class UserCommunities implements OnInit, OnDestroy {
       }
     }
 
+    this.filter.set(current);
     this.loadCommunities();
   }
 
-  joinCommunity(community: MyCommunityDTO) {
+  joinCommunity(community: MyCommunityDTO): void {
     this.userContextService.switchCommunity(community.auth_community_id);
-
   }
 
-  updateNameCommunity(_community: MyCommunityDTO) {
+  updateNameCommunity(_community: MyCommunityDTO): void {
     // this.ref = this.dialogService.open(CommunityUpdateComponent, {
     //   modal: true,
     //   closable: true,
@@ -103,21 +103,21 @@ export class UserCommunities implements OnInit, OnDestroy {
     // });
   }
 
-  createCommunity() {
+  createCommunity(): void {
     this.ref = this.dialogService.open(CommunityDialog, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('COMMUNITY.CREATE.TITLE'),
+      header: this.translate.instant('COMMUNITY.CREATE.TITLE') as string,
     });
-    this.ref?.onClose.subscribe((result) => {
+    this.ref?.onClose.subscribe((result: boolean) => {
       if (result) {
         this.loadCommunities();
       }
     });
   }
 
-  leaveCommunity(_event: Event, _community: any) {
+  leaveCommunity(_event: Event, _community: MyCommunityDTO): void {
     // this.communityService.leaveCommunity(new LeaveCommunity(community.id_community, false)).subscribe(
     //   {
     //     next: (response)=>

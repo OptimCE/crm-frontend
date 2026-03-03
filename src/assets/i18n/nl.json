@@ -1,0 +1,1123 @@
+{
+  "TITLE": "OptimCE",
+  "COMMON": {
+    "LANGUAGE_SELECTOR": "Taalselector",
+    "ADDRESS": "Adres",
+    "ACTIONS": {
+      "YES": "Ja",
+      "NO": "Nee",
+      "VALIDATE": "Bevestigen",
+      "CANCEL": "Annuleren"
+    },
+    "ROLE": {
+      "ADMIN": "Beheerder",
+      "MEMBER": "Lid",
+      "MANAGER": "Manager"
+    },
+    "ERRORS": {
+      "EXCEPTION": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw",
+      "TIMEOUT": "Het verzoek is verlopen. Probeer het opnieuw",
+      "DECORATOR": "Fout bij uitvoering van decorator. Neem contact op met de beheerder",
+      "UNAUTHORIZED": "U bent niet gemachtigd om deze actie uit te voeren",
+      "PAGE_INCORRECT": "Het paginanummer moet positief zijn",
+      "DATE_FORMAT_ISO8601": "De datum moet in ISO 8601-formaat zijn",
+      "BODY_ID_INCORRECT": "De identifier in de body ontbreekt of is onjuist",
+      "PARAM_IS_STRING": "De parameter moet een tekenreeks zijn",
+      "QUERY_IS_STRING": "De querywaarde moet een tekenreeks zijn",
+      "QUERY_IS_NUMERIC": "De querywaarde moet numeriek zijn",
+      "QUERY_IS_BOOLEAN": "De querywaarde moet een booleaanse waarde zijn"
+    }
+  },
+  "LOGIN": {
+    "LOGIN": "Aanmelden"
+  },
+  "NAVBAR": {
+    "PROFILE": "Profiel",
+    "INVITATIONS": "Uitnodigingen",
+    "KEY_HANDLER": "Verdeelsleutelbeheer",
+    "HANDLE_KEY": "Sleutels beheren",
+    "GENERATE_KEY": "Sleutel genereren",
+    "MEMBRE_HANDLER": "Ledenbeheer",
+    "HANDLE_MEMBRE": "Leden beheren",
+    "HANDLE_METER": "Meters beheren",
+    "HANDLE_SHARING_OP": "Deeloperaties",
+    "COMMUNITIES": "Gemeenschappen",
+    "MY_COMMUNITIES": "Mijn gemeenschappen",
+    "COMMUNITY_USERS": "Gebruikers",
+    "USER_GUIDE": "Gebruikershandleiding",
+    "REPORT_BUG": "Bug melden",
+    "DISCONNECT": "Afmelden",
+    "APP_TITLE": "OptimCE",
+    "ERROR_AUTH_UPDATE": "Fout bij het bijwerken van de autorisatie",
+    "ERROR_LOGOUT": "Fout bij het afmelden",
+    "DELETE": "Verwijderen",
+    "COPY_TO_CLIPBOARD": "Kopiëren naar klembord"
+  },
+  "PROFILE": {
+    "MY_PROFILE": "Mijn profiel",
+    "UPDATE": "Bijwerken",
+    "ACCOUNT_INFORMATION": "Accountinformatie",
+    "UPDATE_PASSWORD": "Wachtwoord wijzigen",
+    "DOCUMENTS": "Documenten",
+    "MY_REPRESENTATIONS": "Mijn vertegenwoordigingen",
+    "DISPLAY_NAME": "Naam",
+    "DISPLAY_TYPE": "Type",
+    "DISPLAY_SIZE": "Grootte",
+    "PERSONAL_INFORMATION": {
+      "TITLE": "Persoonlijke informatie",
+      "SOCIAL_NUMBER": "Rijksregisternummer",
+      "LAST_NAME": "Naam",
+      "FIRST_NAME": "Voornaam",
+      "PHONE_NUMBER": "Telefoonnummer",
+      "HOUSE_ADDRESS": "Thuisadres",
+      "BILLING_ADDRESS": "Factuuradres",
+      "EMAIL": "E-mailadres"
+    },
+    "TABS": {
+      "HEADERS": {
+        "METERS": "Meters",
+        "BANKING_INFORMATIONS": "Bankgegevens",
+        "DOCUMENTS": "Documenten",
+        "REPRESENTATIONS": "Vertegenwoordigingen"
+      },
+      "BANKING_INFORMATION": {
+        "IBAN": "IBAN"
+      }
+    },
+    "UPDATE_PROFILE": {
+      "TITLE": "Profiel bijwerken",
+      "SOCIAL_NUMBER": "Rijksregisternummer",
+      "SOCIAL_NUMBER_PLACEHOLDER": "123456789",
+      "SURNAME": "Naam",
+      "SURNAME_PLACEHOLDER": "Janssen",
+      "FIRST_NAME": "Voornaam",
+      "FIRST_NAME_PLACEHOLDER": "Jan",
+      "PHONE_NUMBER": "Telefoonnummer",
+      "PHONE_NUMBER_PLACEHOLDER": "04 99 44 11 33",
+      "IBAN": "IBAN",
+      "IBAN_PLACEHOLDER": "BE76 30003 03000 000000000000000",
+      "HOUSE_ADDRESS": "Thuisadres",
+      "BILLING_ADDRESS": "Factuuradres",
+      "STREET_NAME": "Straatnaam",
+      "STREET_NAME_PLACEHOLDER": "Vredestraat",
+      "NUMBER": "Nummer",
+      "NUMBER_PLACEHOLDER": "123",
+      "BOX": "Bus",
+      "BOX_PLACEHOLDER": "B123",
+      "POSTAL_CODE": "Postcode",
+      "POSTAL_CODE_PLACEHOLDER": "12345",
+      "CITY": "Stad",
+      "CITY_PLACEHOLDER": "Brussel",
+      "SAME_ADDRESS": "Zelfde adres als het thuisadres",
+      "VALIDATE": "Bevestigen"
+    }
+  },
+  "INVITATION": {
+    "TITLE": "Mijn uitnodigingen",
+    "MEMBER": {
+      "TITLE": "Leden",
+      "HEADERS": {
+        "NAME": "Naam",
+        "COMMUNITY": "Gemeenschap",
+        "STATE": "Status",
+        "CREATED_AT": "Aangemaakt op",
+        "ACTIONS": "Acties"
+      },
+      "TO_BE_ENCODED": "Te encoderen",
+      "ENCODED": "Gecodeerd",
+      "ENCODE_AND_ACCEPT": "Encoderen en accepteren",
+      "REFUSE": "Weigeren",
+      "ACCEPT": "Accepteren",
+      "SEE": "Bekijken",
+      "NO_INVITATIONS_AVAILABLE": "Geen liduitnodigingen gevonden",
+      "ENCODE_NEW_MEMBER_TITLE": "Encodering van een nieuw lid",
+      "SEE_DETAIL": {
+        "TITLE": "Details van de uitnodiging",
+        "MEMBER_TITLE": "Details van het lid",
+        "GENERAL_INFORMATIONS": "Algemene informatie",
+        "VAT_NUMBER": "BTW-nummer",
+        "SOCIAL_NUMBER": "Rijksregisternummer",
+        "SURNAME": "Naam",
+        "FIRST_NAME": "Voornaam",
+        "EMAIL_ADDRESS": "E-mailadres",
+        "PHONE_NUMBER": "Telefoonnummer",
+        "GUARDIANSHIP": "Wettelijke vertegenwoordiger",
+        "SOCIAL": "Sociaal",
+        "SOCIAL_TARIF": "Sociaal tarief",
+        "ADDRESSES": "Adressen",
+        "HOUSE_ADDRESS": "Woonadres",
+        "BILLING_ADDRESS": "Factuuradres"
+      }
+    },
+    "MANAGER": {
+      "TITLE": "Manager",
+      "HEADERS": {
+        "EMAIL_ADDRESS": "E-mailadres",
+        "COMMUNITY": "Gemeenschap",
+        "ACTIONS": "Acties"
+      },
+      "ACCEPT": "Accepteren",
+      "REFUSE": "Weigeren",
+      "NO_INVITATIONS_AVAILABLE": "Geen manageruitnodigingen gevonden"
+    }
+  },
+  "COMMUNITY": {
+    "LIST": {
+      "CREATE_COMMUNITY": "Gemeenschap aanmaken",
+      "TITLE": "Mijn gemeenschappen",
+      "HEADERS": {
+        "NAME": "Naam",
+        "ROLE": "Rol",
+        "ACTIVATE": "Activeren",
+        "ACTIONS": "Acties"
+      },
+      "ACTIVATED": "Activeren",
+      "NON_ACTIVATED": "Deactiveren",
+      "UPDATE_COMMUNITY": "Bijwerken",
+      "ACTIVATE_BUTTON": "Activeren",
+      "ACTIVATE_BUTTON_TOOLTIP": "Van gemeenschap wisselen",
+      "LEAVE_BUTTON": "Verlaten",
+      "LEAVE_BUTTON_TOOLTIP": "Gemeenschap verlaten",
+      "NO_COMMUNITY_FOUND": "Geen gemeenschap gevonden"
+    },
+    "CREATE": {
+      "TITLE": "Gemeenschap aanmaken",
+      "EDIT_TITLE": "Gemeenschap bijwerken",
+      "NAME": "Naam",
+      "NAME_PLACEHOLDER": "Mijn lokale gemeenschap",
+      "VALIDATE": "Bevestigen"
+    }
+  },
+  "COMMUNITY_INVITATION": {
+    "TITLE": "Uitnodiging van een manager",
+    "INPUT_EMAIL_ADDRESS_LABEL": "Voer het e-mailadres in van de uit te nodigen manager",
+    "EMAIL_PLACEHOLDER": "voorbeeld@outlook.be"
+  },
+  "COMMUNITY_PENDING_INVITATION": {
+    "TITLE": "Uitnodiging in behandeling",
+    "MEMBERS": {
+      "TITLE": "Leden",
+      "HEADERS": {
+        "EMAIL": "E-mail",
+        "MEMBER_NAME": "Naam van het lid",
+        "STATUS": "Status",
+        "ACTIONS": "Actie"
+      },
+      "TO_ENCODE_LABEL": "Te encoderen",
+      "ENCODED_LABEL": "Gecodeerd",
+      "CANCEL_BUTTON_LABEL": "Annuleren",
+      "NO_INVITATION_FOUND": "Geen uitnodigingen voor leden in behandeling"
+    },
+    "MANAGERS": {
+      "TITLE": "Manager",
+      "HEADERS": {
+        "EMAIL": "E-mail",
+        "ACTIONS": "Actie"
+      },
+      "CANCEL_BUTTON_LABEL": "Annuleren",
+      "NO_INVITATION_FOUND": "Geen uitnodigingen voor managers in behandeling"
+    }
+  },
+  "MANAGERS_COMMUNITY_LIST": {
+    "TITLE": "Managers van de gemeenschap",
+    "HEADERS": {
+      "NAME": "Naam",
+      "EMAIL": "E-mail",
+      "PHONE": "Telefoonnummer",
+      "ROLE": "Rol"
+    }
+  },
+  "USERS_COMMUNITY_LIST": {
+    "TITLE": "Gebruiker van de gemeenschap",
+    "SEE_PENDING_INVITE_BUTTON_LABEL": "Uitnodigingen in behandeling bekijken",
+    "INVITE_MANAGER_BUTTON_LABEL": "Een manager uitnodigen",
+    "HEADERS": {
+      "NAME": "Naam",
+      "EMAIL": "E-mail",
+      "PHONE": "Telefoonnummer",
+      "ROLE": "Rol",
+      "ACTIONS": "Acties"
+    },
+    "EDIT_ROLE_BUTTON_LABEL": "Rol wijzigen",
+    "EDIT_ROLE_BUTTON_TOOLTIP": "De rol van deze gebruiker wijzigen",
+    "DELETE_BUTTON_LABEL": "Verwijderen",
+    "UPDATE_ROLE_DIALOG": {
+      "TITLE": "Gebruikersrol bijwerken",
+      "NEW_ROLE_FOR_USER_LABEL": "Nieuwe rol van de gebruiker",
+      "SELECT_ROLE_PLACEHOLDER": "Kies een rol",
+      "CANCEL_BUTTON_LABEL": "Annuleren",
+      "SAVE_BUTTON_LABEL": "Opslaan"
+    }
+  },
+  "KEY": {
+    "SHARED": {
+      "BACK": "Terug",
+      "HELP_LABEL": "Hulp"
+    },
+    "VIEW": {
+      "UPDATE": "Bijwerken",
+      "DELETE": "Verwijderen",
+      "DOWNLOAD": "Downloaden",
+      "BACK_TO_LIST": "Terug naar de sleutellijst"
+    },
+    "CREATE": {
+      "KEY_TITLE": "Aanmaken van een verdeelsleutel",
+      "FORM": {
+        "KEY_NAME_LABEL": "Naam van de sleutel",
+        "KEY_NAME_PLACEHOLDER": "Naam van de sleutel",
+        "KEY_DESCRIPTION_LABEL": "Beschrijving",
+        "KEY_DESCRIPTION_PLACEHOLDER": "Sleutel van mijn gemeenschap",
+        "KEY_ADD_ITERATION_BUTTON_LABEL": "Iteratie toevoegen",
+        "KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL": "Pro-rata iteratie toevoegen",
+        "KEY_ADD_CONSUMER_BUTTON_LABEL": "Verbruiker toevoegen",
+        "KEY_DATAS_LABEL": "Gegevens",
+        "KEY_CREATE_BUTTON_LABEL": "Aanmaken",
+        "ERROR": {
+          "KEY_NAME_LABEL": "naam van de sleutel",
+          "DESCRIPTION_LABEL": "beschrijving"
+        }
+      },
+      "ERROR": {
+        "NO_ITERATION": "Er moet minimaal één iteratie zijn",
+        "NO_CONSUMERS": "Er moet minimaal één verbruiker zijn",
+        "SUM_ITERATIONS_ERROR": "De som van de iteraties moet gelijk zijn aan 1",
+        "SUM_CONSUMERS": "De som van de verbruikers moet gelijk zijn aan 1",
+        "CONSUMER_NAME_REQUIRED": "De naam van de verbruiker is verplicht",
+        "NO_CHANGE": "Geen wijzigingen gedetecteerd"
+      },
+      "HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL": "Hoeveel verbruikers moet uw sleutel bevatten",
+      "VALIDATE_BUTTON_LABEL": "Bevestigen",
+      "CONSUMER_NAME_LABEL": "Naam van de verbruiker",
+      "KEY_TYPE_LABEL": "Type sleutel",
+      "PRORATA_LABEL": "Pro-rata",
+      "EGALITARIAN_LABEL": "Egalitair",
+      "INJECTION_PERCENTAGE_LABEL": "Injectiepercentage",
+      "SUM_MUST_BE_100_LABEL": "De som van de percentages moet gelijk zijn aan 100!",
+      "FINALISATION": "Afsluiting"
+    },
+    "TABLE": {
+      "COLUMNS": {
+        "ITERATION_NUMBER_LABEL": "Iteratie nr.",
+        "ITERATION_TOOLTIP": "Nummer van de iteratie in de reeks",
+        "VA_PERCENTAGE_LABEL": "VA-percentage",
+        "VA_PERCENTAGE_SHORT_LABEL": "% VA",
+        "VA_PERCENTAGE_TOOLTIP": "Waarde van de injectie toegewezen aan deze iteratie (in %)",
+        "CONSUMER_LABEL": "Verbruikers",
+        "CONSUMER_NAME_LABEL": "Naam",
+        "CONSUMER_VAP_LABEL": "VAP",
+        "CONSUMER_VAP_TOOLTIP": "Waarde toegewezen aan een verbruiker (in %)",
+        "ALLOCONSUMPTION_LABEL": "Alloconsumptie",
+        "SURPLUS_LABEL": "Surplus",
+        "SHARED_PERCENTAGE_LABEL": "% Deling",
+        "SELF_SUFFICIENCY_PERCENTAGE_LABEL": "% Zelfvoorzienendheid",
+        "TOTAL_CONSUMPTION_LABEL": "Totaal verbruik",
+        "VP_TOTAL_LABEL": "VP totaal",
+        "VPC_TOTAL_LABEL": "VPC totaal",
+        "SURPLUS_TOTAL_LABEL": "Totaal surplus",
+        "ALLOCONSUMPTION_TOTAL_LABEL": "Totale alloconsumptie",
+        "TIME_LABEL": "Tijd",
+        "VPC_LABEL": "VPC",
+        "CONSUMPTION_LABEL": "Verbruik",
+        "VP_LABEL": "VP"
+      },
+      "DELETE_ITERATION_BUTTON_LABEL": "Iteratie verwijderen",
+      "DELETE_CONSUMER_BUTTON_LABEL": "Verbruiker verwijderen"
+    },
+    "LIST": {
+      "TITLE": "Verdeelsleutels",
+      "ERASE_FILTERS_BUTTON_LABEL": "Filters wissen",
+      "ADD_BUTTON_LABEL": "Toevoegen",
+      "ADD_STANDARD_KEY_BUTTON_LABEL": "Standaardsleutel toevoegen",
+      "NAME_LABEL": "Naam",
+      "DESCRIPTION_LABEL": "Beschrijving",
+      "PAGINATED_TEMPLATE_LIST": "Pagina {{ page }} van {{ total_pages }} ({{ total }} sleutels)",
+      "EMPTY": "Geen sleutel gevonden"
+    },
+    "GENERATION": {
+      "TITLE": "Sleutels genereren",
+      "SELECT_ALGORITHM_TITLE": "Algoritme selecteren",
+      "SELECT_ALGORITHME_LABEL": "Algoritme selecteren",
+      "SELECT_ALGORITHME_PLACEHOLDER": "Kies een algoritme",
+      "PARAMETERS_LABELS": "Generatieparameters",
+      "PRODUCTION_COLUMN_LABEL": "Productiekolom",
+      "REQUIRED_PARAMETERS_LABEL": "Verplichte parameters",
+      "OPTIONAL_PARAMETERS_LABEL": "Aanvullende parameters",
+      "FILE_UPLOAD_LABEL": "Simulatiebestand",
+      "FILE_UPLOAD_SELECTED_LABEL": "Geselecteerd bestand",
+      "START_GENERATION_BUTTON_LABEL": "Generatie starten",
+      "ALGORITHM_RESULTS_TITLE": "Resultaten",
+      "NO_GENERATED_KEY": "Geen sleutel gegenereerd",
+      "SAVE_RESULT_BUTTON_LABEL": "Opslaan"
+    },
+    "SIMULATION": {
+      "SUMMARY_KEY_TITLE": "Samenvatting sleutel",
+      "EXPORT_EXCEL_BUTTON_LABEL": "Exporteren als Excel",
+      "CHART_TITLE": "Grafiek",
+      "NO_DATA_TO_DISPLAY_LABEL": "Geen gegevens om weer te geven",
+      "DETAILED_KEY_TITLE": "Gedetailleerde sleutel",
+      "SIMULATIONS_TITLE": "Simulaties",
+      "NO_SIMULATION_FOUND": "Geen simulatie gevonden",
+      "SEARCH_LABEL": "Simulatie zoeken",
+      "ADD_TEST_BUTTON_LABEL": "Test toevoegen",
+      "DRAG_OR_CLICK_TO_UPLOAD_FILE_LABEL": "Sleep een bestand hierheen of klik om te selecteren",
+      "SELECTED_FILE_LABEL": "Geselecteerd bestand",
+      "INJECTION_PLACEHOLDER": "Injectie",
+      "PRODUCTION_PLACEHOLDER": "Productie",
+      "INPUT_INJECTION_COLUMN_LABEL": "Naam van de kolom met de injectie",
+      "SIMULATION_START_BUTTON_LABEL": "Simulatie starten"
+    },
+    "SUCCESS": {
+      "KEY_UPDATED": "Sleutel succesvol bijgewerkt",
+      "KEY_ADDED": "Sleutel succesvol toegevoegd",
+      "KEY_DELETED": "Sleutel succesvol verwijderd",
+      "KEY_EXPORTED": "Sleutel succesvol geëxporteerd",
+      "SIMULATION_DONE": "Simulatie succesvol uitgevoerd",
+      "SIMULATION_EXPORTED": "Simulatie succesvol geëxporteerd",
+      "GENERATION_REQUEST_SENT": "Generatieverzoek succesvol verzonden",
+      "GENERATED_KEY_SAVED": "Gegenereerde sleutel succesvol opgeslagen"
+    },
+    "ERRORS": {
+      "FILL_REQUIRED_FIELDS": "Vul alle verplichte velden in",
+      "FIRST_STEP_ERROR": "Er is een fout opgetreden bij de eerste stap",
+      "SECOND_STEP_ERROR": "Er is een fout opgetreden bij de tweede stap",
+      "PAGE_INCORRECT": "Het paginanummer moet positief zijn",
+      "LIMIT_INCORRECT": "De limiet moet tussen 1 en 100 liggen",
+      "ID_INCORRECT": "De identifier moet een positief geheel getal zijn",
+      "NAME_REQUIRED": "De naam is verplicht",
+      "DESCRIPTION_REQUIRED": "De beschrijving is verplicht",
+      "ITERATIONS_REQUIRED": "Minimaal één iteratie is vereist",
+      "ITERATION_ENERGY_ALLOCATION": "Het toewijzingspercentage per iteratie mag niet negatief zijn",
+      "CONSUMERS_REQUIRED": "Minimaal één verbruiker is vereist",
+      "ITERATION_NUMBER_FAILED": "Het iteratienummer moet strikt positief zijn",
+      "CONSUMER_ENERGY_ALLOCATION": "Het toewijzingspercentage per verbruiker is verplicht",
+      "ENERGY_ALLOCATION_NEGATIVE": "Het toewijzingspercentage per verbruiker moet strikt positief zijn",
+      "SUM_ENERGY_ALLOCATION": "De som van de energie toegewezen aan alle iteraties moet gelijk zijn aan 100%",
+      "CONSUMERS_NAME_REQUIRED": "Elke verbruiker moet worden geïdentificeerd door een naam (of een meternummer)",
+      "CONSUMERS_SUM_ENERGY_ALLOCATION": "De som van de toewijzingen per verbruiker in een iteratie moet gelijk zijn aan 100%",
+      "ALGORITHME_NAME_ERROR": "Er is een fout opgetreden met de naam van de uitzondering",
+      "INJECTION_NAME_ERROR": "De naam van de injectie is onjuist",
+      "FILE_MISSING": "Voeg een bestand toe",
+      "FILE_FORMAT_INCORRECT": "Het bestandsformaat is onjuist (alleen .xls/xlsx en .csv)",
+      "ERROR_EXCEPTION": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw",
+      "TIMEOUT": "Time-out...",
+      "ERROR_GET_PARTIAL_KEY_LIST": "Er is een fout opgetreden bij het ophalen van de verdeelsleutel",
+      "ERROR_GET_PARTIAL_KEY_LIST_BY_ID": "Er is een fout opgetreden bij het ophalen van de verdeelsleutels op ID",
+      "ERROR_GET_COMPLETE_KEY": "Er is een fout opgetreden bij het ophalen van de volledige verdeelsleutel",
+      "ERROR_ADD_KEY": "Er is een fout opgetreden bij het toevoegen van de verdeelsleutel. Probeer het later opnieuw",
+      "ERROR_UPDATE_KEY": "Er is een fout opgetreden bij het bijwerken van de sleutel. Probeer het later opnieuw",
+      "ERROR_DELETE_KEY": "Er is een fout opgetreden bij het verwijderen van de sleutel. Probeer het later opnieuw",
+      "ERROR_LOCAL_SIMULATE_KEY": "Er is een fout opgetreden bij de simulatie van de sleutel. Probeer het later opnieuw.",
+      "ERROR_GET_PARTIAL_KEY_SIMULATION_LIST": "Er is een fout opgetreden bij het ophalen van de simulaties van de sleutel.",
+      "ERROR_GET_COMPLETE_KEY_SIMULATION": "Er is een fout opgetreden bij het ophalen van de simulatie",
+      "ERROR_MISSING_PARAMETERS_ADD_KEY_GENERATORS": "Een verplichte parameter ontbreekt voor het generatieverzoek.",
+      "ERROR_GET_PARTIAL_GENERATED_KEY_LIST": "Er is een fout opgetreden bij het ophalen van de gegenereerde sleutels.",
+      "ERROR_SAVE_GENERATED_KEY": "Er is een fout opgetreden bij het opslaan van de gegenereerde sleutel",
+      "ERROR_GENERATE_KEY": "Er is een fout opgetreden bij het genereren van de sleutel. Probeer het later opnieuw",
+      "ERROR_NO_GENERATOR_AVAILABLE": "Er is momenteel geen generator beschikbaar",
+      "ERROR_DOWNLOAD_SIMULATION": "Er is een fout opgetreden bij het downloaden van de simulatie. Probeer het later opnieuw",
+      "ERROR_DOWNLOAD_KEY": "Er is een fout opgetreden bij het downloaden van de sleutel. Probeer het later opnieuw",
+      "ERROR_ACTIVATE_KEY": "Er is een fout opgetreden bij het activeren van de sleutel.",
+      "ERROR_GET_AVAILABLE_GENERATOR": "Er is een fout opgetreden bij het ophalen van de beschikbare generators. Probeer het later opnieuw",
+      "ERROR_DECORATOR": "DECORATOR FOUT. Neem contact op met de beheerder",
+      "ERROR_USER_NOT_FOUND": "U bent niet geauthenticeerd.",
+      "ERROR_USER_NOT_AUTHORIZED": "U bent niet gemachtigd om deze actie uit te voeren."
+    }
+  },
+  "MEMBER": {
+    "VIEW": {
+      "MEMBER_TITLE": "Lid",
+      "BACK_TO_LIST": "Terug naar de ledenlijst",
+      "STATUS_ACTION": {
+        "ACTIVATE_BUTTON_LABEL": "Activeren",
+        "DEACTIVATE_BUTTON_LABEL": "Deactiveren",
+        "PUT_TO_PENDING_LIST_BUTTON_LABEL": "In behandeling plaatsen",
+        "MODIFY_BUTTON_LABEL": "Wijzigen"
+      },
+      "ERROR_DEACTIVATING_MEMBER": {
+        "HEADER_LABEL": "Actie niet mogelijk",
+        "MEMBER_CANT_DEACTIVATE_MEMBER_WITH_ACTIVATED_METER_LABEL": "U kunt een lid niet deactiveren als het nog actieve meters heeft.",
+        "CLOSE_BUTTON_LABEL": "Sluiten"
+      },
+      "INFORMATION_TITLE": "Algemene informatie",
+      "INVITATIONS": {
+        "NO_INVITE_LABEL": "Geen uitnodiging",
+        "PENDING_LABEL": "In behandeling",
+        "ACCEPTED_LABEL": "Geaccepteerd"
+      },
+      "MEMBER_GUARDIANSHIP_TITLE": "Voogd",
+      "MANAGER_TITLE": "Manager",
+      "SOCIAL_LABEL": "Sociaal",
+      "BANK_TITLE": "Bankgegevens",
+      "TAB_HEADER": {
+        "METER_LABEL": "Meters",
+        "BANKING_INFO_LABEL": "Bankgegevens",
+        "DOCUMENTS_LABEL": "Documenten",
+        "MANAGER_LABEL": "Manager"
+      },
+      "INFORMATIONS": {
+        "COMPANY_VAT_NUMBER_LABEL": "BTW-nummer",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Rijksregisternummer",
+        "NAME_LABEL": "Naam",
+        "FIRST_NAME_LABEL": "Voornaam",
+        "EMAIL_LABEL": "E-mailadres",
+        "PHONE_LABEL": "Telefoonnummer",
+        "SOCIAL_RATE_LABEL": "Sociaal tarief",
+        "ADDRESSES_LABEL": "Adressen",
+        "ADDRESS": {
+          "HOUSE": "Thuisadres",
+          "BILLING": "Factuuradres"
+        }
+      },
+      "STATUS_LABEL": "Status",
+      "STATUS": {
+        "ACTIVE_LABEL": "Geactiveerd",
+        "INACTIVE_LABEL": "Gedeactiveerd",
+        "PENDING_LABEL": "In behandeling"
+      },
+      "UPDATE_A_MEMBER_HEADER": "Lid bijwerken",
+      "MEMBER_UPDATE_SUCCESSFULLY_LABEL": "Lid succesvol bijgewerkt",
+      "MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL": "Status succesvol bijgewerkt",
+      "METERS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+        "ADDRESS_LABEL": "Adres",
+        "ADDRESS": {
+          "STREET_NAME_LABEL": "Straat",
+          "POSTAL_CODE_LABEL": "Postcode",
+          "CITY_LABEL": "Stad",
+          "PLACEHOLDER": {
+            "STREET_NAME_LABEL": "Jacquemin straat",
+            "POSTAL_CODE_LABEL": "1000",
+            "CITY_LABEL": "Brussel"
+          }
+        },
+        "EAN_LABEL": "EAN",
+        "METER_NUMBER_LABEL": "Meternummer",
+        "STATUS_LABEL": "Status",
+        "FILTER_BY_STATUS_LABEL": "Filteren op status",
+        "SELECT_A_STATUS_PLACEHOLDER": "Een status selecteren",
+        "SHARING_OPERATION_TITLE": "Deeloperatie",
+        "FILTER_BY_SHARING_OPERATION_LABEL": "Filteren op deeloperatie",
+        "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Een deeloperatie selecteren",
+        "NO_METER_FOUND_LABEL": "Geen meter gevonden",
+        "ADD_METER_BUTTON_LABEL": "Meter toevoegen",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} meters)",
+        "ADD_A_METER_HEADER": "Meter toevoegen",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Meter succesvol toegevoegd"
+      },
+      "DOCUMENTS": {
+        "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+        "NAME_LABEL": "Naam",
+        "TYPE_LABEL": "Type",
+        "SIZE_LABEL": "Grootte",
+        "UPLOAD_DATE_LABEL": "Uploaddatum",
+        "NO_DOCUMENT_FOUND_LABEL": "Geen document gevonden",
+        "ADD_DOCUMENT_LABEL": "Document toevoegen",
+        "PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} documenten)",
+        "ADD_DOCUMENT_HEADER": "Document toevoegen",
+        "SUCCESS_ADDING_DOCUMENT_LABEL": "Document succesvol toegevoegd"
+      },
+      "MANAGER": {
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Rijksregisternummer",
+        "SURNAME_LABEL": "Naam",
+        "FIRST_NAME_LABEL": "Voornaam",
+        "EMAIL_LABEL": "E-mailadres",
+        "PHONE_NUMBER_LABEL": "Telefoonnummer"
+      }
+    },
+    "LIST": {
+      "MEMBER_TITLE": "Leden",
+      "ADD_BUTTON_LABEL": "Toevoegen",
+      "INVITE_NEW_MEMBER_BUTTON_LABEL": "Nieuw lid uitnodigen",
+      "SEE_PENDING_INVITATION_BUTTON_LABEL": "Uitnodigingen in behandeling bekijken",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NAME_LABEL": "Naam",
+      "TYPE_LABEL": "Type",
+      "FILTER_BY_TYPE_LABEL": "Filteren op type",
+      "SELECT_A_TYPE_PLACEHOLDER": "Een type selecteren",
+      "STATUS_LABEL": "Status",
+      "FILTER_BY_STATUS_LABEL": "Filteren op status",
+      "SELECT_A_STATUS_PLACEHOLDER": "Een status selecteren",
+      "NO_MEMBER_FOUND_LABEL": "Geen lid gevonden",
+      "PAGE_REPORT_TEMPLATE_MEMBER_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} leden)",
+      "INVITE_MEMBER_HEADER": "Lid uitnodigen",
+      "ADD_MEMBER_HEADER": "Lid toevoegen",
+      "ADD_METER_FOR_MEMBER_CONFIRMATION_LABEL": "Wilt u een nieuwe meter toevoegen voor dit lid?",
+      "CONFIRMATION_HEADER": "Bevestiging",
+      "ADD_METER_HEADER": "Meter toevoegen",
+      "METER_MEMBER_ADDED_SUCCESSFULLY_LABEL": "Lid en meter succesvol toegevoegd",
+      "MEMBER_ADDED_SUCCESSFULLY_LABEL": "Lid succesvol toegevoegd",
+      "PENDING_INVITATION_HEADER": "Uitnodigingen in behandeling",
+      "TYPE": {
+        "INDIVIDUAL_LABEL": "Natuurlijke persoon",
+        "COMPANY_LABEL": "Rechtspersoon"
+      }
+    },
+    "INVITE": {
+      "EMAIL_OF_MEMBER_TO_INVITE_LABEL": "E-mail van het uit te nodigen lid",
+      "INVITE_BUTTON_LABEL": "Uitnodigen"
+    },
+    "PENDING_INVITE": {
+      "EMAIL_LABEL": "E-mail",
+      "MEMBER_NAME_LABEL": "Naam van het lid",
+      "MEMBER_STATE_LABEL": "Status",
+      "ACTION_LABEL": "Actie",
+      "CANCEL_BUTTON_LABEL": "Annuleren",
+      "NO_PENDING_INVITATIONS_LABEL": "Geen uitnodigingen in behandeling",
+      "TO_ENCODE_TAG_LABEL": "Te encoderen",
+      "ENCODED_TAG_LABEL": "Gecodeerd"
+    },
+    "ADD_DOCUMENT": {
+      "SELECT_FILE_DRAG_N_DROP_LABEL": "Sleep een bestand hierheen of klik om een bestand te selecteren",
+      "SELECTED_FILE_LABEL": "Geselecteerd bestand",
+      "UPLOAD_DOCUMENT_BUTTON_LABEL": "Dit document uploaden"
+    },
+    "ADD": {
+      "ADDRESS": {
+        "BACK_TO_PERSONAL_INFORMATIONS": "Terug naar persoonlijke informatie",
+        "HOUSE_ADDRESS_TITLE": "Thuisadres",
+        "SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL": "Zelfde adres voor facturering",
+        "BILLING_ADDRESS_TITLE": "Factuuradres",
+        "VALIDATE_ADDRESS_FORM_BUTTON": "Bevestigen",
+        "FORM_ERROR": {
+          "HOME_ADDRESS_STREET": "straat van het thuisadres",
+          "HOME_ADDRESS_NUMBER": "nummer van het thuisadres",
+          "HOME_ADDRESS_SUPPLEMENT": "toevoeging van het thuisadres",
+          "HOME_ADDRESS_POSTCODE": "postcode van het thuisadres",
+          "HOME_ADDRESS_CITY": "stad van het thuisadres",
+          "BILLING_ADDRESS_STREET": "straat van het factuuradres",
+          "BILLING_ADDRESS_NUMBER": "nummer van het factuuradres",
+          "BILLING_ADDRESS_SUPPLEMENT": "toevoeging van het factuuradres",
+          "BILLING_ADDRESS_POSTCODE": "postcode van het factuuradres",
+          "BILLING_ADDRESS_CITY": "stad van het factuuradres"
+        }
+      },
+      "BANK": {
+        "BACK_TO_ADDRESS": "Terug naar adressen",
+        "BANKING_INFO_TITLE": "Bankgegevens",
+        "IBAN_LABEL": "IBAN",
+        "VALIDATE_BANKING_INFO_FORM_BUTTON": "Bevestigen",
+        "ERROR": {
+          "IBAN": "Het IBAN-nummer is ongeldig"
+        }
+      },
+      "INFORMATIONS": {
+        "BACK_TO_STATUS": "Terug naar status",
+        "SOCIAL_SECURITY_NUMBER_LABEL": "Rijksregisternummer",
+        "SURNAME_LABEL": "Naam",
+        "FIRST_NAME_LABEL": "Voornaam",
+        "EMAIL_LABEL": "E-mailadres",
+        "PHONE_NUMBER_LABEL": "Telefoonnummer",
+        "SOCIAL_RATE_CHECKBOX_LABEL": "Sociaal tarief",
+        "GUARDIAN_CHECKBOX_LABEL": "Voogdij",
+        "COMPANY_NUMBER_LABEL": "Ondernemingsnummer",
+        "COMPANY_NAME_LABEL": "Naam",
+        "VAT_NUMBER_LABEL": "BTW-nummer",
+        "GUARDIAN_TITLE": "Informatie over de manager",
+        "VALIDATE_INFORMATION_FORM_BUTTON": "Bevestigen",
+        "ERROR": {
+          "SOCIAL_SECURITY_NUMBER": "Het IBAN-nummer is ongeldig"
+        },
+        "FORM_ERROR": {
+          "ID": "rijksregisternummer",
+          "SURNAME": "achternaam",
+          "NAME": "naam",
+          "EMAIL": "e-mailadres",
+          "PHONE": "telefoonnummer",
+          "SOCIALRATE": "sociaal tarief",
+          "VATNUMBER": "btw-nummer",
+          "NRN_MANAGER": "rijksregisternummer van de voogd",
+          "SURNAME_MANAGER": "achternaam van de voogd",
+          "NAME_MANAGER": "naam van de voogd",
+          "EMAIL_MANAGER": "adres van de voogd",
+          "PHONE_MANAGER": "telefoonnummer van de voogd"
+        }
+      },
+      "STATUS": {
+        "STATUS_TITLE": "Status van het lid",
+        "INDIVIDUAL_RADIOBUTTON_LABEL": "Particulier",
+        "COMPANY_RADIOBUTTON_LABEL": "Bedrijf",
+        "VALIDATE_STATUS_FORM_BUTTON": "Bevestigen"
+      },
+      "TAB_HEADER": {
+        "STATUS_LABEL": "Status",
+        "PERSONAL_INFORMATIONS_LABEL": "Persoonlijke informatie",
+        "ADDRESS_LABEL": "Adressen",
+        "BANKING_INFO": "Bankgegevens"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_MEMBER_LIST": "Fout bij het ophalen van de gedeeltelijke ledenlijst",
+      "GET_FULL_MEMBER": "Fout bij het ophalen van de volledige ledengegevens",
+      "ADD_MEMBER": "Fout bij het toevoegen van het lid",
+      "UPDATE_MEMBER": "Fout bij het bijwerken van het lid",
+      "UPDATE_STATUS_MEMBER": "Fout bij het bijwerken van de status van het lid",
+      "UPLOAD_DOCUMENT_UNDEFINED": "Er is geen bestand opgegeven",
+      "UPLOAD_DOCUMENT": "Fout bij het uploaden van het document",
+      "GET_DOCUMENT": "Fout bij het ophalen van de documenten",
+      "GET_DOCUMENT_FULL": "Fout bij het ophalen van het volledige document",
+      "DELETE_DOCUMENT": "Fout bij het verwijderen van het document"
+    }
+  },
+
+  "METER": {
+    "METER_LABEL": "Meter",
+    "ADDRESS": {
+      "STREET_NAME_LABEL": "Straat",
+      "NUMBER_LABEL": "Nummer",
+      "BOX_LABEL": "Bus",
+      "POSTAL_CODE_LABEL": "Postcode",
+      "CITY_LABEL": "Stad",
+      "PLACEHOLDER": {
+        "STREET_NAME_LABEL": "Jacquemin straat",
+        "NUMBER_LABEL": "12",
+        "BOX_LABEL": "1",
+        "POSTAL_CODE_LABEL": "1000",
+        "CITY_LABEL": "Brussel"
+      }
+    },
+    "INFORMATIONS": {
+      "EAN_LABEL": "EAN",
+      "METER_NUMBER_LABEL": "Meternummer",
+      "STATUS_LABEL": "Status",
+      "PHASE_NUMBER_LABEL": "Aantal fasen",
+      "READING_FREQUENCY_LABEL": "Leesfrequentie",
+      "TARIF_GROUP_LABEL": "Tariefgroep",
+      "DESCRIPTION_LABEL": "Beschrijving",
+      "WITHDRAWAL_POWER_LABEL": "Afnamevermogen (kVA)",
+      "TOTAL_GENERATING_CAPACITY_LABEL": "Totaal productievermogen (kVA)",
+      "AMPERAGE_LABEL": "Amperage (A)",
+      "PRODUCTION_CHAIN_LABEL": "Productieketen",
+      "INJECTION_STATUS_LABEL": "Injectiestatus",
+      "GRD_LABEL": "GRD",
+      "RATE_LABEL": "Tarief",
+      "USAGE_LABEL": "Gebruik",
+      "OWNER_LABEL": "Houder",
+      "PLACEHOLDER": {
+        "EAN_LABEL": "1234567890123",
+        "METER_NUMBER_LABEL": "1234567890123"
+      }
+    },
+    "CATEGORIES": {
+      "PRODUCTION_CHAIN": {
+        "PHOTOVOLTAIC": "Fotovoltaïsch",
+        "WIND": "Wind",
+        "HYDROELECTRIC": "Waterkracht",
+        "SOLID_BIOMASS": "Vaste biomassa",
+        "BIOGAS": "Biogas",
+        "FOSSIL_FIRE_COGENERATION": "Fossiele warmtekrachtkoppeling",
+        "OTHER": "Overige",
+        "NONE": "Geen"
+      },
+      "RATE": {
+        "SIMPLE": "Enkelvoudig",
+        "BI_HOURLY": "Tweeuurtarief",
+        "EXCLUSIVE_NIGHT": "Uitsluitend nacht"
+      },
+      "CLIENT": {
+        "RESIDENTIAL": "Residentieel",
+        "PROFESSIONAL": "Professioneel",
+        "INDUSTRIAL": "Industrieel"
+      },
+      "INJECTION_STATUS": {
+        "AUTOPRODUCER_OWNER": "Autoproducent eigenaar",
+        "SELF_PRODUCTION_RIGHT_OF_USER": "Autoproducent gebruiksrecht",
+        "OWNER_PURE_INJECTION": "Pure injectie eigenaar",
+        "PURE_INJECTION_RIGHT_OF_USE": "Pure injectie gebruiksrecht",
+        "NONE": "Geen"
+      },
+      "READING_FREQUENCY": {
+        "MONTHLY": "Maandelijks",
+        "ANNUAL": "Jaarlijks"
+      },
+      "PHASE": {
+        "SINGLE_PHASE": "Eenfasig",
+        "THREE_PHASES": "Driefasig"
+      },
+      "TARIF_GROUP": {
+        "LOW_VOLTAGE": "Laagspanning",
+        "HIGH_VOLTAGE": "Hoogspanning"
+      }
+    },
+    "ADD": {
+      "INFORMATION_HEADER": "Meterinformatie",
+      "ENERGY_CHARACTERISTIC_HEADER": "Energiekenmerken",
+      "FINANCIAL_CHARACTERISTIC_HEADER": "Financiële kenmerken",
+      "RATE_LABEL": "Tarief",
+      "USAGE_LABEL": "Gebruik",
+      "OWNER_LABEL": "Houder",
+      "START_DATE_METER_LABEL": "Datum van ingebruikname",
+      "VALIDATE_BUTTON_FORM_LABEL": "Bevestigen",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Een houder selecteren"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "Het geselecteerde lid is onjuist"
+      },
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "straat",
+        "ADDRESS_NUMBER": "nummer",
+        "ADDRESS_SUPPLEMENT": "toevoeging",
+        "ADDRESS_POSTCODE": "postcode",
+        "ADDRESS_CITY": "stad",
+        "EAN": "EAN",
+        "METERNUMBER": "meternummer",
+        "PHASESNUMBER": "aantal fasen",
+        "READINGFREQUENCY": "leesfrequentie",
+        "TARIFGROUP": "tariefgroep",
+        "DESCRIPTION": "beschrijving",
+        "SAMPLINGPOWER": "afnamevermogen",
+        "TOTALGENERATINGCAPACITY": "totaal vermogen",
+        "AMPERAGE": "amperage",
+        "PRODUCTIONCHAIN": "productieketen",
+        "INJECTIONSTATUS": "injectiestatus",
+        "GRD": "grd",
+        "RATE": "tarief",
+        "CLIENTTYPE": "clienttype",
+        "MEMBER": "lid",
+        "DATESTART": "startdatum"
+      }
+    },
+    "UPDATE_DATA": {
+      "SELECT_STATUS": "Een status selecteren",
+      "ENERGY_CHARACTERISTIC_TITLE": "Energiekenmerken",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Financiële kenmerken",
+      "START_DATE_METER_LABEL": "Datum van ingebruikname",
+      "VALIDATE_BUTTON_FORM_LABEL": "Bevestigen",
+      "PLACEHOLDER": {
+        "SELECT_OWNER_LABEL": "Een houder selecteren"
+      },
+      "ERRORS": {
+        "SELECTED_MEMBER_INCORRECT": "Het geselecteerde lid is onjuist"
+      },
+      "FORM_ERROR": {
+        "DESCRIPTION": "beschrijving",
+        "SAMPLINGPOWER": "afnamevermogen",
+        "TOTALGENERATINGCAPACITY": "totaal vermogen",
+        "AMPERAGE": "amperage",
+        "PRODUCTIONCHAIN": "productieketen",
+        "INJECTIONSTATUS": "injectiestatus",
+        "GRD": "grd",
+        "RATE": "tarief",
+        "CLIENTTYPE": "clienttype",
+        "MEMBER": "lid",
+        "DATESTART": "startdatum"
+      }
+    },
+    "DEACTIVATE": {
+      "END_DATE_METER_LABEL": "Deactiveringsdatum",
+      "DELETE_BUTTON_LABEL": "Verwijderen"
+    },
+    "DATA": {
+      "ENERGY_CHARACTERISTIC_TITLE": "Energiekenmerken",
+      "FINANCIAL_CHARACTERISTIC_TITLE": "Financiële kenmerken",
+      "SHARING_OPERATION_TITLE": "Deeloperatie",
+      "NO_SHARING_OPERATION_FOUND": "Geen deeloperatie gevonden",
+      "NO_OWNER_FOUND_LABEL": "Geen houder toegewezen"
+    },
+    "FULL": {
+      "MODIFY_BUTTON_LABEL": "Wijzigen",
+      "METER_INFORMATION_TITLE": "Meterinformatie",
+      "TABS": {
+        "ACTUAL_DATA_HEADER": "Actuele gegevens",
+        "HISTORICAL_DATA_HEADER": "Historische gegevens",
+        "FUTUR_DATA_HEADER": "Toekomstige gegevens",
+        "CONSUMPTION_HEADER": "Verbruiksopvolging",
+        "UPDATE_BUTTON_LABEL": "Bijwerken"
+      },
+      "NO_DATA_FOUND_LABEL": "Momenteel geen gegevens beschikbaar",
+      "PLACEHOLDER": {
+        "SELECT_PERIOD_LABEL": "Een periode selecteren"
+      },
+      "NO_HISTORY_DATA_FOUND_LABEL": "Geen historische gegevens beschikbaar",
+      "NO_FUTURE_DATA_FOUND_LABEL": "Geen toekomstige gegevens beschikbaar",
+      "BEGINNING_DATE_LABEL": "Startdatum",
+      "END_DATE_LABEL": "Einddatum",
+      "SEARCH_BUTTON_LABEL": "Zoeken",
+      "DOWNLOAD_BUTTON_LABEL": "Downloaden",
+      "METER_MODIFICATION_HEADER": "Meter wijzigen",
+      "METER_MODIFIED_SUCCESS_LABEL": "Meter succesvol gewijzigd",
+      "METER_DATA_UPDATE_HEADER": "Metergegevens bijwerken",
+      "METER_DATA_UPDATE_SUCCESS_LABEL": "Metergegevens succesvol bijgewerkt",
+      "METER_DEACTIVATE_HEADER": "Meter deactiveren",
+      "METER_DEACTIVATED_SUCCESS_LABEL": "Meter succesvol gedeactiveerd",
+      "CONSUMPTION_FILE_PREFIX": "verbruik_",
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Verbruik (kWh)",
+        "X_TITLE_DATE": "Datum",
+        "CONSUMPTION_SHARED_LABEL": "Verbruik - Gedeeld",
+        "CONSUMPTION_NET_LABEL": "Verbruik - Netto",
+        "INJECTION_NET_LABEL": "Injectie - Netto",
+        "INJECTION_SHARED_LABEL": "Injectie - Gedeeld"
+      }
+    },
+    "LIST": {
+      "METERS_TITLE": "Meters",
+      "ADD_BUTTON_LABEL": "Toevoegen",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "FILTER_BY_OWNER_LABEL": "Filteren op houder",
+      "SELECT_AN_OWNER_PLACEHOLDER": "Een houder selecteren",
+      "FILTER_BY_STATUS_LABEL": "Filteren op status",
+      "SELECT_A_STATUS_PLACEHOLDER": "Een status selecteren",
+      "SHARING_OPERATION_TITLE": "Deeloperatie",
+      "FILTER_BY_SHARING_OPERATION_LABEL": "Filteren op deeloperatie",
+      "SELECT_A_SHARING_OPERATION_PLACEHOLDER": "Een deeloperatie selecteren",
+      "NO_METERS_FOUND_LABEL": "Geen meter gevonden",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} meters)",
+      "ADD_METER_HEADER": "Meter toevoegen",
+      "METER_ADDED_SUCCESSFULLY_LABEL": "Meter succesvol toegevoegd"
+    },
+    "UPDATE": {
+      "METER_INFORMATION_TITLE": "Meterinformatie",
+      "VALIDATE_BUTTON_LABEL": "Bevestigen",
+      "FORM_ERROR": {
+        "ADDRESS_STREET": "straat",
+        "ADDRESS_NUMBER": "nummer",
+        "ADDRESS_SUPPLEMENT": "toevoeging",
+        "ADDRESS_POSTCODE": "postcode",
+        "ADDRESS_CITY": "stad",
+        "EAN": "EAN",
+        "METERNUMBER": "meternummer",
+        "PHASESNUMBER": "aantal fasen",
+        "READINGFREQUENCY": "leesfrequentie",
+        "TARIFGROUP": "tariefgroep"
+      }
+    },
+    "ERRORS": {
+      "GET_PARTIAL_METERS_LIST": "Fout bij het ophalen van de gedeeltelijke meterlijst",
+      "GET_FULL_METER": "Fout bij het ophalen van de volledige metergegevens",
+      "ADD_METER": "Fout bij het toevoegen van de meter",
+      "UPDATE_METER_DATA": "Fout bij het bijwerken van de metergegevens",
+      "UPDATE_METER": "Fout bij het bijwerken van de meter",
+      "DELETE_METER": "Fout bij het verwijderen van de meter",
+      "DEACTIVATE_METER": "Fout bij het deactiveren van de meter",
+      "CHANGE_STATUS_METER": "Fout bij het wijzigen van de meterstatus",
+      "EAN_MISSING": "De EAN-code ontbreekt",
+      "METER_NUMBER_MISSING": "Het meternummer ontbreekt",
+      "TARIF_GROUP_MISSING": "De tariefgroep ontbreekt",
+      "PHASE_NUMBER_MISSING": "Het aantal fasen ontbreekt",
+      "READING_FREQUENCY_MISSING": "De leesfrequentie ontbreekt",
+      "READING_FREQUENCY_INCORRECT": "De leesfrequentie is onjuist",
+      "SAMPLING_POWER_MISSING": "Het afnamevermogen ontbreekt",
+      "AMPERAGE_MISSING": "Het amperage ontbreekt",
+      "RATE_MISSING": "Het tarief ontbreekt",
+      "CLIENT_TYPE_MISSING": "Het clienttype ontbreekt",
+      "CLIENT_TYPE_INCORRECT": "Het clienttype is onjuist",
+      "START_DATE_MISSING": "De startdatum ontbreekt",
+      "INJECTION_STATUS_MISSING": "De injectiestatus ontbreekt",
+      "INJECTION_STATUS_INCORRECT": "De injectiestatus is onjuist",
+      "PRODUCTION_CHAIN_MISSING": "De productieketen ontbreekt",
+      "PRODUCTION_CHAIN_INCORRECT": "De productieketen is onjuist",
+      "TOTAL_GENERATING_CAPACITY_INCORRECT": "Het totale geïnstalleerde vermogen ontbreekt of is onjuist",
+      "STATUS_MISSING": "De meterstatus ontbreekt",
+      "STATUS_INCORRECT": "De meterstatus is onjuist",
+      "RATE_INCORRECT": "Het tarief is onjuist",
+      "TARIF_GROUP_INCORRECT": "De tariefgroep is onjuist",
+      "PHASE_NUMBER_INCORRECT": "Het aantal fasen is onjuist"
+    },
+    "STATUS": {
+      "ACTIVE_LABEL": "Geactiveerd",
+      "INACTIVE_LABEL": "Gedeactiveerd",
+      "WAITING_GRD_LABEL": "In afwachting van GRD-goedkeuring",
+      "WAITING_MANAGER_LABEL": "In afwachting van goedkeuring van de manager"
+    }
+  },
+
+  "SHARING_OPERATION": {
+    "TYPE": {
+      "INSIDE_BUILDING": "Binnen een gebouw",
+      "CER": "CER",
+      "CEC": "CEC"
+    },
+    "ADD": {
+      "NAME_LABEL": "Naam",
+      "TYPE_LABEL": "Type",
+      "ADD_BUTTON_LABEL": "Toevoegen"
+    },
+    "ADD_KEY": {
+      "ALLOCATION_KEYS_TITLE": "Verdeelsleutels",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NAME_LABEL": "Naam",
+      "DESCRIPTION_LABEL": "Beschrijving",
+      "NO_ALLOCATION_KEYS_FOUND_LABEL": "Geen sleutel gevonden",
+      "ADD_BUTTON_LABEL": "Toevoegen",
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} sleutels)"
+    },
+    "ADD_METER": {
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "FILTER_BY_STATUS_LABEL": "Filteren op status",
+      "SELECT_A_STATUS_PLACEHOLDER": "Een status selecteren",
+      "NO_METERS_FOUND_LABEL": "Geen meter gevonden",
+      "PAGE_REPORT_TEMPLATE_METER_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} meters)",
+      "START_DATE_METERS_LABEL": "Datum van ingebruikname",
+      "VALIDATE_BUTTON_LABEL": "Bevestigen",
+      "ADDRESS_LABEL": "Adres",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Straat",
+        "POSTAL_CODE_LABEL": "Postcode",
+        "CITY_LABEL": "Stad",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Jacquemin straat",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Brussel"
+        }
+      },
+      "METER": {
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "Meternummer"
+        },
+        "STATUS_LABEL": "Status",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Geactiveerd",
+          "DEACTIVATED_LABEL": "Gedeactiveerd",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "In afwachting van GRD-goedkeuring",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "In afwachting van goedkeuring van de manager"
+        }
+      }
+    },
+    "VIEW": {
+      "SHARING_OPERATION_TITLE": "Deeloperatie",
+      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporteren als Excel (CWAPE)",
+      "NAME_LABEL": "Naam",
+      "TYPE_LABEL": "Type",
+      "ADDRESS_LABEL": "Adres",
+      "ADDRESS": {
+        "STREET_NAME_LABEL": "Straat",
+        "POSTAL_CODE_LABEL": "Postcode",
+        "CITY_LABEL": "Stad",
+        "PLACEHOLDER": {
+          "STREET_NAME_LABEL": "Jacquemin straat",
+          "POSTAL_CODE_LABEL": "1000",
+          "CITY_LABEL": "Brussel"
+        }
+      },
+      "KEY": {
+        "ACTUAL_KEY_LABEL": "Huidige sleutel",
+        "CHOOSE_KEY_BUTTON_LABEL": "Een sleutel kiezen",
+        "CREATE_KEY_BUTTON_LABEL": "Een sleutel aanmaken",
+        "NO_ACTUAL_KEY_LABEL": "Momenteel geen sleutel",
+        "MODIFY_KEY_HEADER": "Sleutel wijzigen",
+        "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Sleutel succesvol gewijzigd",
+        "WAITING_APPROVAL_KEY_LABEL": "Sleutel in afwachting van goedkeuring",
+        "APPROVE_KEY": "Goedkeuren",
+        "REJECT_KEY": "Afwijzen"
+      },
+      "METER": {
+        "HEADERS": {
+          "PAST": "Verleden",
+          "NOW": "Huidig",
+          "FUTURE": "Toekomst"
+        },
+        "METERS_TITLE": "Meters",
+        "ADD_METER_BUTTON_LABEL": "Meter toevoegen",
+        "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+        "FILTER_BY_STATUS_LABEL": "Filteren op status",
+        "SELECT_A_STATUS_PLACEHOLDER": "Een status selecteren",
+        "PUT_TO_WAITING_LIST_BUTTON_LABEL": "In behandeling plaatsen",
+        "APPROVE_BUTTON_LABEL": "Goedkeuren",
+        "DELETE_BUTTON_LABEL": "Verwijderen",
+        "NO_METERS_FOUND_LABEL": "Geen meter gevonden",
+        "CHANGE_STATUS_METER_STARTING_LABEL": "Startdatum van de meter",
+        "CHANGE_STATUS_METER_ENDING_LABEL": "Einddatum van de meter",
+        "CHANGE_STATUS_METER_WAITING_LABEL": "Startdatum van de wachtstatus voor GRD-goedkeuring",
+        "PAGE_REPORT_TEMPLATE_METER_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} meters)",
+        "ADD_METERS_HEADER": "Meters toevoegen",
+        "METER_ADDED_SUCCESSFULLY_LABEL": "Meter(s) succesvol toegevoegd",
+        "INFORMATIONS": {
+          "EAN_LABEL": "EAN",
+          "METER_NUMBER_LABEL": "Meternummer"
+        },
+        "STATUS_LABEL": "Status",
+        "STATUS": {
+          "ACTIVATED_LABEL": "Geactiveerd",
+          "DEACTIVATED_LABEL": "Gedeactiveerd",
+          "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "In afwachting van GRD-goedkeuring",
+          "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "In afwachting van goedkeuring van de manager"
+        }
+      },
+      "CONSUMPTION_MONITORING": {
+        "CONSUMPTION_MONITORING_TITLE": "Verbruiksopvolging",
+        "START_DATE_LABEL": "Startdatum",
+        "END_DATE_LABEL": "Einddatum",
+        "SEARCH_BUTTON_LABEL": "Zoeken",
+        "DOWNLOAD_BUTTON_LABEL": "Downloaden",
+        "SELECT_FILE_DRAG_N_DROP_LABEL": "Sleep een bestand hierheen of klik om een bestand te selecteren",
+        "SELECTED_FILE_LABEL": "Geselecteerd bestand",
+        "UPLOAD_BUTTON_LABEL": "Uploaden",
+        "UPLOAD_SUCCESS_LABEL": "Het bestand is succesvol ontvangen",
+        "CONSUMPTION_FILE_PREFIX": "verbruik_"
+      },
+      "CHART": {
+        "Y_TITLE_CONSUMPTION": "Verbruik (kWh)",
+        "X_TITLE_DATE": "Datum",
+        "CONSUMPTION_SHARED_LABEL": "Verbruik - Gedeeld",
+        "CONSUMPTION_NET_LABEL": "Verbruik - Netto",
+        "INJECTION_NET_LABEL": "Injectie - Netto",
+        "INJECTION_SHARED_LABEL": "Injectie - Gedeeld"
+      },
+      "HISTORY_KEY": {
+        "KEY_HISTORY_TITLE": "Sleutelgeschiedenis",
+        "START_DATE_LABEL": "Startdatum",
+        "END_DATE_LABEL": "Einddatum",
+        "KEY_LABEL": "Sleutel",
+        "STATUS_LABEL": "Status",
+        "APPROVED_LABEL": "Goedgekeurd",
+        "DENIED_LABEL": "Geweigerd",
+        "NO_HISTORY_KEY_FOUND_LABEL": "Geen sleutelgeschiedenis gevonden",
+        "NO_HISTORY_KEY_AVAILABLE_LABEL": "Geen sleutelgeschiedenis beschikbaar"
+      }
+    },
+    "LIST": {
+      "SHARING_OPERATION_TITLE": "Deeloperatie",
+      "ADD_BUTTON_LABEL": "Toevoegen",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NAME_LABEL": "Naam",
+      "TYPE_LABEL": "Type",
+      "NO_SHARING_OPERATION_FOUND_LABEL": "Geen deeloperatie gevonden",
+      "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} deeloperaties)",
+      "ADD_SHARING_OP_HEADER": "Deeloperatie toevoegen",
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Deeloperatie succesvol toegevoegd"
+    },
+    "SELECT_METER_NEW_KEY": {
+      "NOW": "Nu",
+      "FUTURE": "Toekomstig",
+      "METERS_SELECTED": "{{ count }} meter{{ count > 1 ? 's' : '' }} geselecteerd",
+      "CLEAR_ALL": "Alles wissen",
+      "SELECT_ALL_NOW": "Alle huidige meters selecteren",
+      "SELECT_ALL_FUTURE": "Alle toekomstige meters selecteren",
+      "CLEAN_FILTERS": "Filters wissen",
+      "TABLE": {
+        "ADDRESS": "Adres",
+        "EAN": "EAN",
+        "METER_NUMBER": "Meternummer",
+        "STATUS": "Status",
+        "HOLDER": "Houder",
+        "NO_METERS_FOUND": "Geen meter gevonden"
+      }
+    },
+    "ERRORS": {
+      "GET_SHARING_OPERATION_PARTIAL_LIST": "Fout bij het ophalen van de gedeeltelijke deellijst",
+      "GET_FULL_SHARING_OPERATION": "Fout bij het ophalen van de volledige deelgegevens",
+      "ADD_SHARING_OPERATION": "Fout bij het toevoegen van een deeloperatie",
+      "ADD_METER_TO_SHARING_OPERATION": "Fout bij het toevoegen van de meter aan de deeloperatie",
+      "ADD_KEY_TO_WAITING": "Fout bij het toevoegen van de sleutel in behandeling",
+      "CHANGE_STATUS_KEY": "Fout bij het wijzigen van de sleutelstatus",
+      "GET_SHARING_CONSUMPTION_METERS": "Fout bij het ophalen van het verbruik van de meters",
+      "GET_SHARING_CONSUMPTION": "Fout bij het ophalen van het gedeelde verbruik",
+      "UPLOAD_CONSUMPTION_DATA": "Fout bij het importeren van de verbruiksgegevens",
+      "GET_METER_CONSUMPTION": "Fout bij het ophalen van het meterverbruik",
+      "DOWNLOAD_METER_CONSUMPTION": "Fout bij het downloaden van het meterverbruik",
+      "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Fout bij het downloaden van het verbruik van de gedeelde meters"
+    }
+  },
+  "FORM_ERROR": {
+    "REQUIRED_FIELD": "Dit veld is verplicht",
+    "INVALID_EMAIL": "Ongeldig e-mailadres",
+    "MIN_LENGTH": "Dit veld moet minimaal {{ requiredLength }} tekens bevatten (momenteel {{ actualLength }}).",
+    "FIX_THE_FOLLOWING_ERROR": "Corrigeer de volgende fouten",
+    "FIELD_REQUIRED": "Het veld \"{{ controlName }}\" is verplicht.",
+    "FIELD_INVALID_EMAIL": "Het veld \"{{ controlName }}\" bevat een ongeldig e-mailadres.",
+    "FIELD_MIN_LENGTH": "Het veld \"{{ controlName }}\" moet minimaal {{ requiredLength }} tekens bevatten (momenteel {{ actualLength }}).",
+    "UNKNOWN_ERROR": "Onbekende fout in \"{{ controlName }}\""
+  }
+}

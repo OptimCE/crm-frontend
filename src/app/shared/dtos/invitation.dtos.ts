@@ -7,6 +7,7 @@ export interface UserMemberInvitationQuery extends PaginationQuery {
   to_be_encoded?: boolean;
   sort_name?: Sort;
   sort_date?: Sort;
+  sort_email?: Sort;
 }
 
 /**

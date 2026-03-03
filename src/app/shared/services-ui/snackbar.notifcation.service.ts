@@ -7,7 +7,7 @@ import { EventBusService } from '../../core/services/event_bus/eventbus.service'
 export class SnackbarNotification {
   private eventBus = inject(EventBusService);
 
-  openSnackBar(message: string, type: number) {
+  openSnackBar(message: string, type: number): void {
     this.eventBus.emit('snack-notification', { message: message, type: type });
   }
 }

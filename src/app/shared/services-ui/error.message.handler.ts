@@ -10,12 +10,12 @@ export class ErrorMessageHandler {
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
 
-  handleError(message: any = undefined) {
-    if (message) {
+  handleError(message: unknown = undefined): void {
+    if (typeof message === 'string') {
       this.snackbarNotification.openSnackBar(message, ERROR_TYPE);
     } else {
       this.snackbarNotification.openSnackBar(
-        this.translate.instant('COMMON.ERRORS.EXCEPTION'),
+        this.translate.instant('COMMON.ERRORS.EXCEPTION') as string,
         ERROR_TYPE,
       );
     }

@@ -1,6 +1,11 @@
-<div (click)="goBack()" class="cursor-pointer hover:text-green-700">
-  <i class="pi pi-arrow-left flex-wrap-left mr-2 !text-xs"></i>
-  <span class="!text-sm">{{ 'MEMBER.ADD.BANK.BACK_TO_ADDRESS' | translate }}</span>
+<div
+  (click)="goBack()"
+  (keydown.enter)="goBack()"
+  tabindex="0"
+  class="cursor-pointer hover:text-green-700"
+>
+  <i class="pi pi-arrow-left flex-wrap-left mr-2 text-xs!"></i>
+  <span class="text-sm!">{{ 'MEMBER.ADD.BANK.BACK_TO_ADDRESS' | translate }}</span>
 </div>
 <div class="flex flex-wrap pb-1">
   <div class="flex items-center">

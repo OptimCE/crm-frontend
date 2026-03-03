@@ -5,6 +5,10 @@ import { InputText } from 'primeng/inputtext';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
+interface MemberInviteForm {
+  email: string;
+}
+
 @Component({
   selector: 'app-member-invite',
   imports: [Button, TranslatePipe, InputText, ReactiveFormsModule],
@@ -15,16 +19,17 @@ export class MemberInvite implements OnInit {
   private ref = inject(DynamicDialogRef);
   form!: FormGroup;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required]),
     });
   }
 
-  inviteMember() {
+  inviteMember(): void {
     if (this.form.invalid) {
       return;
     }
-    this.ref.close(this.form.value.email);
+    const formValue = this.form.getRawValue() as MemberInviteForm;
+    this.ref.close(formValue.email);
   }
 }

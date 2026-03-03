@@ -11,7 +11,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { MeterCreation } from '../meter-creation/meter-creation';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import { TableModule } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
 import { MemberPartialPipe } from '../../../../shared/pipes/member-partial/member-partial-pipe';
+import { SharingOperationPartialDTO } from '../../../../shared/dtos/sharing_operation.dtos';
 
 @Component({
   selector: 'app-meters-list',
@@ -59,22 +60,22 @@ export class MetersList implements OnInit {
     cityName: '',
   };
   holders: MembersPartialDTO[] = [];
-  sharingOperations = [];
-  statutCategory: any[] = [];
-  filters: any = {};
+  sharingOperations: SharingOperationPartialDTO[] = [];
+  statutCategory: { value: MeterDataStatus; label: string }[] = [];
+  filters: Record<string, unknown> = {};
 
   paginationInfo: Pagination = new Pagination(1, 10, 0, 1);
   currentPageReportTemplate: string = '';
   constructor() {
     this.isLoaded = false;
   }
-  ngOnInit() {
+  ngOnInit(): void {
     this.isLoaded = false;
     this.loadHolders();
     this.setupStatusCategory();
   }
 
-  updatePaginationTranslation() {
+  updatePaginationTranslation(): void {
     this.translate
       .get('METER.LIST.PAGE_REPORT_TEMPLATE_METER_LABEL', {
         page: this.paginationInfo.page,
@@ -86,7 +87,7 @@ export class MetersList implements OnInit {
       });
   }
 
-  setupStatusCategory() {
+  setupStatusCategory(): void {
     this.translate
       .get([
         'METER.STATUS.ACTIVE_LABEL',
@@ -94,7 +95,7 @@ export class MetersList implements OnInit {
         'METER.STATUS.WAITING_GRD_LABEL',
         'METER.STATUS.WAITING_MANAGER_LABEL',
       ])
-      .subscribe((translation) => {
+      .subscribe((translation: Record<string, string>) => {
         this.statutCategory = [
           { value: MeterDataStatus.ACTIVE, label: translation['METER.STATUS.ACTIVE_LABEL'] },
           { value: MeterDataStatus.INACTIVE, label: translation['METER.STATUS.INACTIVE_LABEL'] },
@@ -109,7 +110,7 @@ export class MetersList implements OnInit {
         ];
       });
   }
-  loadHolders() {
+  loadHolders(): void {
     this.memberService.getMembersList({ page: 1, limit: 10 }).subscribe((response) => {
       if (response) {
         this.holders = response.data as MembersPartialDTO[];
@@ -117,7 +118,7 @@ export class MetersList implements OnInit {
     });
   }
 
-  loadMeters() {
+  loadMeters(): void {
     this.metersService.getMetersList(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -136,22 +137,22 @@ export class MetersList implements OnInit {
     });
   }
 
-  onRowClick(meter: PartialMeterDTO) {
-    this.routing.navigate(['/meters/' + meter.EAN]);
+  onRowClick(meter: PartialMeterDTO): void {
+    void this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
-  onAddMeter() {
+  onAddMeter(): void {
     this.ref = this.dialogService.open(MeterCreation, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('METER.LIST.ADD_METER_HEADER'),
+      header: this.translate.instant('METER.LIST.ADD_METER_HEADER') as string,
     });
     if (this.ref) {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('METER.LIST.METER_ADDED_SUCCESSFULLY_LABEL'),
+            this.translate.instant('METER.LIST.METER_ADDED_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMeters();
@@ -160,8 +161,8 @@ export class MetersList implements OnInit {
     }
   }
 
-  lazyLoadMeters($event: any) {
-    const current: any = { ...this.filter() };
+  lazyLoadMeters($event: TableLazyLoadEvent): void {
+    const current: MeterPartialQuery = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;
@@ -172,17 +173,36 @@ export class MetersList implements OnInit {
 
     if ($event.filters) {
       Object.entries($event.filters).forEach(([field, meta]) => {
-        if ((meta as any).value) {
-          current[field] = (meta as any).value;
+        const filterMeta = Array.isArray(meta) ? meta[0] : meta;
+        if (
+          filterMeta &&
+          filterMeta.value !== undefined &&
+          filterMeta.value !== null &&
+          filterMeta.value !== ''
+        ) {
+          if (field === 'EAN') {
+            current.EAN = filterMeta.value as string;
+          } else if (field === 'meter_number') {
+            current.meter_number = filterMeta.value as string;
+          } else if (field === 'statut') {
+            current.status = filterMeta.value as MeterDataStatus;
+          }
         } else {
-          delete current[field];
+          if (field === 'EAN') {
+            delete current.EAN;
+          } else if (field === 'meter_number') {
+            delete current.meter_number;
+          } else if (field === 'statut') {
+            delete current.status;
+          }
         }
       });
     }
+    this.filter.set(current);
     this.loadMeters();
   }
 
-  clear(table: any) {
+  clear(table: Table): void {
     table.clear();
     this.addressFilter = {
       streetName: '',
@@ -191,15 +211,17 @@ export class MetersList implements OnInit {
     };
   }
 
-  applyAddressFilter(dt: any) {
+  applyAddressFilter(dt: Table<PartialMeterDTO>): void {
     dt.filter(this.addressFilter.streetName, 'streetName', 'contains');
     dt.filter(this.addressFilter.postcode, 'postcode', 'contains');
     dt.filter(this.addressFilter.cityName, 'cityName', 'contains');
   }
 
-  pageChange($event: any) {
-    const current: any = { ...this.filter() };
-    current.page = $event.first / $event.rows + 1;
+  pageChange($event: TablePageEvent): void {
+    const current: MeterPartialQuery = { ...this.filter() };
+    if ($event.rows) {
+      current.page = $event.first / $event.rows + 1;
+    }
     this.filter.set(current);
     this.loadMeters();
   }

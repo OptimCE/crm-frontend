@@ -12,7 +12,11 @@
     "lint-quiet": "ng lint --quiet",
     "lint-fix": "ng lint --fix",
     "format": "prettier --write .",
-    "format-check": "prettier --check ."
+    "format-check": "prettier --check .",
+    "audit": "npm audit",
+    "audit-prod": "npm audit --omit=dev",
+    "audit-fix": "npm audit fix",
+    "prepare": "npx husky"
   },
   "prettier": {
     "printWidth": 100,
@@ -58,6 +62,7 @@
     "angular-eslint": "21.2.0",
     "autoprefixer": "^10.4.23",
     "eslint": "^9.39.2",
+    "husky": "^9.1.7",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.6",
     "prettier": "^3.8.0",
@@ -66,5 +71,14 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "8.50.1",
     "vitest": "^4.0.8"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,html}": [
+      "npx eslint --fix",
+      "npx prettier --write"
+    ],
+    "*.{css,scss,md,json}": [
+      "npx prettier --write"
+    ]
   }
 }

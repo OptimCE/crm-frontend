@@ -29,9 +29,10 @@ export class CommunityDialog implements OnInit {
       new_name: new FormControl('', [Validators.required]),
     });
   }
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.valid) {
-      this.communityService.createCommunity({ name: this.form.value.new_name }).subscribe({
+      const formValue = this.form.getRawValue() as { new_name: string };
+      this.communityService.createCommunity({ name: formValue.new_name }).subscribe({
         next: (_response) => {
           this.ref.close(true);
         },

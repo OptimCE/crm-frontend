@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DocumentService } from '../../../../shared/services/document.service';
+import { ApiResponse } from '../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-member-add-document',
@@ -17,7 +18,7 @@ import { DocumentService } from '../../../../shared/services/document.service';
 })
 export class MemberAddDocument implements OnInit {
   private documentService = inject(DocumentService);
-  private config = inject(DynamicDialogConfig);
+  private config = inject<DynamicDialogConfig<{ idMember: string }>>(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   formGroup!: FormGroup;
@@ -25,9 +26,10 @@ export class MemberAddDocument implements OnInit {
   public fileToUpload: File | null = null;
   private idMember!: string;
 
-  ngOnInit() {
-    if (this.config.data && this.config.data.idMember) {
-      this.idMember = this.config.data.idMember;
+  ngOnInit(): void {
+    const data = this.config.data;
+    if (data && data.idMember) {
+      this.idMember = data.idMember;
     } else {
       console.error('No member id provided');
       this.ref.close(false);
@@ -37,8 +39,9 @@ export class MemberAddDocument implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    const selectedFile = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const selectedFile = input?.files?.[0] ?? null;
     if (selectedFile) {
       this.fileToUpload = selectedFile;
       this.formGroup.patchValue({ fileToUpload: this.fileToUpload });
@@ -70,7 +73,7 @@ export class MemberAddDocument implements OnInit {
     }
   }
 
-  uploadDocument() {
+  uploadDocument(): void {
     if (this.formGroup.invalid) {
       return;
     }
@@ -85,8 +88,9 @@ export class MemberAddDocument implements OnInit {
           this.errorHandler.handleError();
         }
       },
-      error: (error) => {
-        this.errorHandler.handleError(error.data ? error.data : null);
+      error: (error: unknown) => {
+        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+        this.errorHandler.handleError(errorData);
       },
     });
   }

@@ -10,12 +10,12 @@ export class LanguageService {
     this.init();
   }
 
-  setTranslate(lang: string) {
+  setTranslate(lang: string): void {
     this.translate.setFallbackLang(lang);
     this.translate.use(lang);
   }
 
-  init() {
+  init(): void {
     this.setlanguage();
   }
 
@@ -23,7 +23,7 @@ export class LanguageService {
     return localStorage.getItem('language');
   }
 
-  setlanguage() {
+  setlanguage(): void {
     console.log('SET LANGUAGE');
     const savedLang = localStorage.getItem('language');
     if (savedLang) {
@@ -57,7 +57,7 @@ export class LanguageService {
     return undefined;
   }
 
-  changeLanguage(lang: string) {
+  changeLanguage(lang: string): void {
     localStorage.setItem('language', lang);
     this.setTranslate(lang);
   }

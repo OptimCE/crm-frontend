@@ -18,9 +18,9 @@
           <div class="flex flex-wrap gap-2 flex-col w-full">
             @for (category of categories; track $index) {
               <div class="flex flex-col items-center">
-                <label [for]="category.key" class="text-sm">{{ category.value }}</label>
+                <label [for]="'{{category.key}}'" class="text-sm">{{ category.value }}</label>
                 <p-radioButton
-                  [inputId]="category.key"
+                  [inputId]="'{{category.key}}'"
                   [value]="category.key"
                   formControlName="type"
                   class="flex text-sm"

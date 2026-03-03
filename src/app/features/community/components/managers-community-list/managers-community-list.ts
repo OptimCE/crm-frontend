@@ -8,6 +8,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import { Role } from '../../../../core/dtos/role';
 
 @Component({
   selector: 'app-managers-community-list',
@@ -29,8 +30,8 @@ export class ManagersCommunityList implements OnInit {
   users = signal<UsersCommunityDTO[]>([]);
   filter = signal<CommunityUsersQueryDTO>({ page: 1, limit: 10 });
   dialogVisible: boolean = false;
-  userSelected: any;
-  roleSelected: any;
+  userSelected: UsersCommunityDTO | null = null;
+  roleSelected: Role | -1 = -1;
 
   ngOnInit(): void {
     this.dialogVisible = false;
@@ -38,15 +39,15 @@ export class ManagersCommunityList implements OnInit {
     this.userSelected = null;
   }
 
-  loadUsers() {
+  loadUsers(): void {
     this.communityService.getAdmins(this.filter()).subscribe((response) => {
       if (response) {
         this.users.set(response.data as UsersCommunityDTO[]);
       }
     });
   }
-  lazyLoadUsers($event: TableLazyLoadEvent) {
-    const current: any = { ...this.filter() };
+  lazyLoadUsers($event: TableLazyLoadEvent): void {
+    const current: CommunityUsersQueryDTO = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;

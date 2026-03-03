@@ -52,7 +52,7 @@ export class UsersCommunityList implements OnInit, OnDestroy {
   ownId: number = -1;
   dialogVisible: boolean = false;
   userSelected?: UsersCommunityDTO;
-  roleSelected: any;
+  roleSelected: Role | -1 = -1;
   roles = [
     { name: '', value: Role.MEMBER },
     { name: '', value: Role.GESTIONNAIRE },
@@ -67,7 +67,7 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     // Initialize role names with translations
     this.translateService
       .get(['COMMON.ROLE.MEMBER', 'COMMON.ROLE.MANAGER', 'COMMON.ROLE.ADMIN'])
-      .subscribe((translations) => {
+      .subscribe((translations: Record<string, string>) => {
         this.roles = [
           { name: translations['COMMON.ROLE.MEMBER'], value: Role.MEMBER },
           { name: translations['COMMON.ROLE.MANAGER'], value: Role.GESTIONNAIRE },
@@ -76,15 +76,15 @@ export class UsersCommunityList implements OnInit, OnDestroy {
       });
   }
 
-  loadUsers() {
+  loadUsers(): void {
     this.communityService.getUsers(this.filter()).subscribe((response) => {
       if (response) {
         this.users.set(response.data as UsersCommunityDTO[]);
       }
     });
   }
-  lazyLoadUsers($event: TableLazyLoadEvent) {
-    const current: any = { ...this.filter() };
+  lazyLoadUsers($event: TableLazyLoadEvent): void {
+    const current: CommunityUsersQueryDTO = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       if ($event.rows) {
         current.page = $event.first / $event.rows + 1;
@@ -116,19 +116,20 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     this.loadUsers();
   }
 
-  openDialogEditRole(user: UsersCommunityDTO) {
+  openDialogEditRole(user: UsersCommunityDTO): void {
     this.dialogVisible = true;
     this.userSelected = user;
     this.roleSelected = -1;
   }
-  updateRole() {
+  updateRole(): void {
     if (this.roleSelected === -1 || !this.userSelected) {
       return;
     }
-    this.userSelected.role = this.roleSelected;
+    const newRole: Role = this.roleSelected;
+    this.userSelected.role = newRole;
 
     this.communityService
-      .patchRoleUser({ id_user: this.userSelected.id_user, new_role: this.roleSelected })
+      .patchRoleUser({ id_user: this.userSelected.id_user, new_role: newRole })
       .subscribe({
         next: (response) => {
           if (response) {
@@ -143,7 +144,7 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     this.roleSelected = -1;
     this.userSelected = undefined;
   }
-  deleteUser(user: UsersCommunityDTO) {
+  deleteUser(user: UsersCommunityDTO): void {
     this.communityService.kick(user.id_user).subscribe((response) => {
       if (response) {
         this.loadUsers();
@@ -153,27 +154,29 @@ export class UsersCommunityList implements OnInit, OnDestroy {
 
   protected readonly ADMIN = Role.ADMIN;
 
-  seePendingInvite() {
-    this.translateService.get('COMMUNITY_PENDING_INVITATION.TITLE').subscribe((translation) => {
-      this.ref = this.dialogService.open(CommunityPendingInvitation, {
-        modal: true,
-        closable: true,
-        closeOnEscape: true,
-        header: translation,
+  seePendingInvite(): void {
+    this.translateService
+      .get('COMMUNITY_PENDING_INVITATION.TITLE')
+      .subscribe((translation: string) => {
+        this.ref = this.dialogService.open(CommunityPendingInvitation, {
+          modal: true,
+          closable: true,
+          closeOnEscape: true,
+          header: translation,
+        });
       });
-    });
   }
 
-  inviteGestionnaire() {
-    this.translateService.get('COMMUNITY_INVITATION.TITLE').subscribe((translation) => {
+  inviteGestionnaire(): void {
+    this.translateService.get('COMMUNITY_INVITATION.TITLE').subscribe((translation: string) => {
       this.ref = this.dialogService.open(CommunityInvitation, {
         modal: true,
         closable: true,
         closeOnEscape: true,
         header: translation,
       });
-      this.ref?.onClose.subscribe((email) => {
-        if (email) {
+      this.ref?.onClose.subscribe((email: unknown) => {
+        if (typeof email === 'string' && email) {
           this.invitationService.inviteUserToBecomeManager({ user_email: email }).subscribe({
             next: (response) => {
               if (response) {

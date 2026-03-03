@@ -40,43 +40,41 @@
               <div class="grid">
                 <div class="flex">
                   <label for="streetName">{{
-                      'SHARING_OPERATION.VIEW.ADDRESS.STREET_NAME_LABEL' | translate
-                    }}</label>
+                    'SHARING_OPERATION.VIEW.ADDRESS.STREET_NAME_LABEL' | translate
+                  }}</label>
                   <input
                     pInputText
                     id="streetName"
                     [(ngModel)]="addressFilter.streetName"
                     placeholder="{{
-                            'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL'
-                              | translate
-                          }}"
+                      'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate
+                    }}"
                   />
                 </div>
                 <div class="flex">
                   <label for="postcode">{{
-                      'SHARING_OPERATION.VIEW.ADDRESS.POSTAL_CODE_LABEL' | translate
-                    }}</label>
+                    'SHARING_OPERATION.VIEW.ADDRESS.POSTAL_CODE_LABEL' | translate
+                  }}</label>
                   <input
                     pInputText
                     id="postcode"
                     [(ngModel)]="addressFilter.postcode"
                     placeholder="{{
-                            'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL'
-                              | translate
-                          }}"
+                      'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate
+                    }}"
                   />
                 </div>
                 <div class="flex">
                   <label for="city">{{
-                      'SHARING_OPERATION.VIEW.ADDRESS.CITY_LABEL' | translate
-                    }}</label>
+                    'SHARING_OPERATION.VIEW.ADDRESS.CITY_LABEL' | translate
+                  }}</label>
                   <input
                     pInputText
                     id="city"
                     [(ngModel)]="addressFilter.cityName"
                     placeholder="{{
-                            'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate
-                          }}"
+                      'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate
+                    }}"
                   />
                 </div>
               </div>
@@ -105,8 +103,8 @@
             type="text"
             field="meter_number"
             display="{{
-                    'SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
-                  }}"
+              'SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
+            }}"
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
@@ -124,9 +122,9 @@
             [showAddButton]="false"
           >
             <ng-template pTemplate="header">
-                    <span class="text-sm px-3">{{
-                        'SHARING_OPERATION.VIEW.METER.FILTER_BY_STATUS_LABEL' | translate
-                      }}</span>
+              <span class="text-sm px-3">{{
+                'SHARING_OPERATION.VIEW.METER.FILTER_BY_STATUS_LABEL' | translate
+              }}</span>
             </ng-template>
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-select
@@ -134,8 +132,8 @@
                 [options]="statutCategory"
                 (onChange)="filter($event.value)"
                 placeholder="{{
-                        'SHARING_OPERATION.VIEW.METER.SELECT_A_STATUS_PLACEHOLDER' | translate
-                      }}"
+                  'SHARING_OPERATION.VIEW.METER.SELECT_A_STATUS_PLACEHOLDER' | translate
+                }}"
                 [showClear]="true"
               >
                 <ng-template let-option pTemplate="item">
@@ -145,8 +143,8 @@
                         class="text-sm"
                         severity="success"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate
+                        }}"
                       ></p-tag>
                     }
                     @case (MeterStatus.INACTIVE) {
@@ -154,8 +152,8 @@
                         class="text-sm"
                         severity="danger"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate
+                        }}"
                       ></p-tag>
                     }
                     @case (MeterStatus.WAITING_GRD) {
@@ -163,9 +161,9 @@
                         class="text-sm"
                         severity="danger"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
-                                  | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
+                            | translate
+                        }}"
                       ></p-tag>
                     }
                     @case (MeterStatus.WAITING_MANAGER) {
@@ -173,9 +171,9 @@
                         class="text-sm"
                         severity="danger"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
-                                  | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+                            | translate
+                        }}"
                       ></p-tag>
                     }
                   }
@@ -187,8 +185,8 @@
                         class="text-sm"
                         severity="success"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate
+                        }}"
                       ></p-tag>
                     }
                     @case (MeterStatus.INACTIVE) {
@@ -196,8 +194,8 @@
                         class="text-sm"
                         severity="danger"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate
+                        }}"
                       ></p-tag>
                     }
                     @case (MeterStatus.WAITING_GRD) {
@@ -205,9 +203,9 @@
                         class="text-sm"
                         severity="danger"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
-                                  | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
+                            | translate
+                        }}"
                       ></p-tag>
                     }
                     @case (MeterStatus.WAITING_MANAGER) {
@@ -215,9 +213,9 @@
                         class="text-sm"
                         severity="danger"
                         value="{{
-                                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
-                                  | translate
-                              }}"
+                          'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+                            | translate
+                        }}"
                       ></p-tag>
                     }
                   }
@@ -251,9 +249,7 @@
             <p-tag
               class="text-sm px-3 py-2"
               severity="danger"
-              value="{{
-                      'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate
-                    }}"
+              value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"
             ></p-tag>
           }
           @case (MeterStatus.WAITING_GRD) {
@@ -261,9 +257,8 @@
               class="text-sm px-3 py-2"
               severity="danger"
               value="{{
-                      'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
-                        | translate
-                    }}"
+                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate
+              }}"
             ></p-tag>
           }
           @case (MeterStatus.WAITING_MANAGER) {
@@ -271,9 +266,9 @@
               class="text-sm px-3 py-2"
               severity="danger"
               value="{{
-                      'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
-                        | translate
-                    }}"
+                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+                  | translate
+              }}"
             ></p-tag>
           }
         }
@@ -306,8 +301,8 @@
               <p-button
                 pRipple
                 label="{{
-                        'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
-                      }}"
+                  'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
+                }}"
                 severity="warn"
                 (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
                 icon="pi pi-clock"

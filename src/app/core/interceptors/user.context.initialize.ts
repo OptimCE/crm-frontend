@@ -2,7 +2,7 @@ import Keycloak from 'keycloak-js';
 import { UserContextService } from '../services/authorization/authorization.service';
 
 export function initUserContextAfterKeycloak(userContext: UserContextService, keycloak: Keycloak) {
-  return () => {
+  return (): Promise<void> => {
     // Keycloak is initialized by provideKeycloakAngular at this point.
     if (keycloak.authenticated) {
       userContext.refreshUserContext();
@@ -11,7 +11,7 @@ export function initUserContextAfterKeycloak(userContext: UserContextService, ke
   };
 }
 export function registerKeycloakHooks(userContext: UserContextService, keycloak: Keycloak) {
-  return () => {
+  return (): Promise<void> => {
     keycloak.onAuthSuccess = () => userContext.refreshUserContext();
     keycloak.onAuthRefreshSuccess = () => userContext.refreshUserContext();
     keycloak.onAuthLogout = () => {

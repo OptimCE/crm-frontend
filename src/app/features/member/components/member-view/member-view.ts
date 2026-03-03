@@ -7,13 +7,14 @@ import { Ripple } from 'primeng/ripple';
 import { CompanyDTO, IndividualDTO, MemberLinkDTO } from '../../../../shared/dtos/member.dtos';
 import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MemberService } from '../../../../shared/services/member.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { InvitationService } from '../../../../shared/services/invitation.service';
 import { MemberStatus, MemberType } from '../../../../shared/types/member.types';
+import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { Tag } from 'primeng/tag';
 import { Divider } from 'primeng/divider';
 import { Checkbox } from 'primeng/checkbox';
@@ -76,7 +77,7 @@ export class MemberView implements OnInit {
     this.isLoading.set(true);
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     if (id === '') {
-      this.routing.navigate(['//members/member/']);
+      void this.routing.navigate(['//members/member/']);
       return;
     }
     this.id = +id;
@@ -85,22 +86,23 @@ export class MemberView implements OnInit {
     }
   }
 
-  loadMember() {
+  loadMember(): void {
     this.memberService.getMember(this.id).subscribe((response) => {
       if (response) {
-        if ((response.data as IndividualDTO | CompanyDTO).member_type === 1) {
-          this.individual = response.data as IndividualDTO;
-          this.member = response.data as IndividualDTO;
-          this.membersType = 1;
+        const memberData = response.data as IndividualDTO | CompanyDTO;
+        if (memberData.member_type === MemberType.INDIVIDUAL) {
+          this.individual = memberData as IndividualDTO;
+          this.member = memberData as IndividualDTO;
+          this.membersType = MemberType.INDIVIDUAL;
           this.status = this.individual.status;
           this.loadInvitationStatusIndividual(this.individual.id, this.individual.email);
           if (this.individual.manager) {
             this.loadInvitationStatusManager(this.individual.id, this.individual.manager.email);
           }
-        } else if ((response.data as IndividualDTO | CompanyDTO).member_type === 2) {
-          this.legalEntity = response.data as CompanyDTO;
-          this.member = response.data as CompanyDTO;
-          this.membersType = 2;
+        } else if (memberData.member_type === MemberType.COMPANY) {
+          this.legalEntity = memberData as CompanyDTO;
+          this.member = memberData as CompanyDTO;
+          this.membersType = MemberType.COMPANY;
           this.status = this.legalEntity.status;
           this.loadInvitationStatusManager(this.legalEntity.id, this.legalEntity.manager.email);
         }
@@ -109,7 +111,7 @@ export class MemberView implements OnInit {
     });
   }
 
-  loadInvitationStatusIndividual(id: number, email: string) {
+  loadInvitationStatusIndividual(id: number, email: string): void {
     this.individualInvitationStatus = InvitationStatus.LOADING;
     this.memberService.getMemberLink(id, { email: email }).subscribe(
       (response) => {
@@ -134,7 +136,7 @@ export class MemberView implements OnInit {
     );
   }
 
-  loadInvitationStatusManager(id: number, email: string) {
+  loadInvitationStatusManager(id: number, email: string): void {
     this.managerInvitationStatus = InvitationStatus.LOADING;
     this.memberService.getMemberLink(id, { email }).subscribe(
       (response) => {
@@ -159,12 +161,12 @@ export class MemberView implements OnInit {
     );
   }
 
-  toModify() {
+  toModify(): void {
     this.ref = this.dialogService.open(MemberCreationUpdate, {
       modal: true,
       closable: true,
       closeOnEscape: true,
-      header: this.translate.instant('MEMBER.VIEW.UPDATE_A_MEMBER_HEADER'),
+      header: this.translate.instant('MEMBER.VIEW.UPDATE_A_MEMBER_HEADER') as string,
       data: {
         member: this.individual || this.legalEntity,
       },
@@ -173,7 +175,7 @@ export class MemberView implements OnInit {
       this.ref.onClose.subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('MEMBER.VIEW.MEMBER_UPDATE_SUCCESSFULLY_LABEL'),
+            this.translate.instant('MEMBER.VIEW.MEMBER_UPDATE_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMember();
@@ -182,13 +184,13 @@ export class MemberView implements OnInit {
     }
   }
 
-  setStatus(status: number) {
-    if (this.status === 1) {
+  setStatus(status: number): void {
+    if (this.status === MemberStatus.ACTIVE) {
       let found = false;
       if (this.metersPartialList && this.metersPartialList.length > 0) {
         // Check if there is something else than inactif
         for (const meter of this.metersPartialList) {
-          if (meter.status !== 2) {
+          if (meter.status !== MeterDataStatus.INACTIVE) {
             found = true;
             break;
           }
@@ -204,7 +206,7 @@ export class MemberView implements OnInit {
       .subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
-            this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL'),
+            this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL') as string,
             VALIDATION_TYPE,
           );
           this.loadMember();
@@ -212,28 +214,30 @@ export class MemberView implements OnInit {
       });
   }
 
-  invite(manager = false) {
-    let email;
+  invite(manager = false): void {
+    let email: string | undefined;
     if (manager) {
       email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
     } else {
       email = this.individual?.email;
     }
     const id = this.individual ? this.individual.id : this.legalEntity?.id;
-    this.memberService
-      .patchMemberLink({ id_member: id!, user_email: email as string })
-      .subscribe((response) => {
-        if (response) {
-          if (manager) {
-            this.loadInvitationStatusManager(id as number, email as string);
-          } else {
-            this.loadInvitationStatusIndividual(id as number, email as string);
+    if (id && email) {
+      this.memberService
+        .patchMemberLink({ id_member: id, user_email: email })
+        .subscribe((response) => {
+          if (response) {
+            if (manager) {
+              this.loadInvitationStatusManager(id, email);
+            } else {
+              this.loadInvitationStatusIndividual(id, email);
+            }
           }
-        }
-      });
+        });
+    }
   }
 
-  cancel(memberLink: MemberLinkDTO, manager = false) {
+  cancel(memberLink: MemberLinkDTO, manager = false): void {
     let email;
     if (manager) {
       email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
@@ -253,23 +257,26 @@ export class MemberView implements OnInit {
       });
     }
   }
-  delete(memberLink: MemberLinkDTO, manager = false) {
-    let email;
+  delete(memberLink: MemberLinkDTO, manager = false): void {
+    let email: string | undefined;
     if (manager) {
       email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
     } else {
       email = this.individual?.email;
     }
     const id = this.individual ? this.individual.id : this.legalEntity?.id;
-    this.memberService.deleteMemberLink(memberLink.id!).subscribe((response) => {
-      if (response) {
-        if (manager) {
-          this.loadInvitationStatusManager(id as number, email as string);
-        } else {
-          this.loadInvitationStatusIndividual(id as number, email as string);
+    const memberLinkId = memberLink.id;
+    if (id && email && memberLinkId) {
+      this.memberService.deleteMemberLink(id).subscribe((response) => {
+        if (response) {
+          if (manager) {
+            this.loadInvitationStatusManager(id, email);
+          } else {
+            this.loadInvitationStatusIndividual(id, email);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   protected readonly MemberType = MemberType;
