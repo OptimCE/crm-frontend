@@ -1,16 +1,16 @@
-type RuntimeKeycloakConfig = {
+interface RuntimeKeycloakConfig {
   realm: string;
   url: string;
   clientId: string;
   urlPattern: string;
   urlPatternFlags?: string;
-};
+}
 
-type RuntimeConfig = {
+interface RuntimeConfig {
   apiUrl: string;
   basePath: string;
   keycloak: RuntimeKeycloakConfig;
-};
+}
 
 // These default values are for local development, need to be overridden using config.json in production (see assets/config/config.json)
 const DEFAULT_CONFIG: RuntimeConfig = {
@@ -27,7 +27,7 @@ const DEFAULT_CONFIG: RuntimeConfig = {
 
 let currentConfig: RuntimeConfig = DEFAULT_CONFIG;
 // Apply given config then default values for missing properties
-export function setRuntimeConfig(config: Partial<RuntimeConfig>) {
+export function setRuntimeConfig(config: Partial<RuntimeConfig>): void {
   const mergedConfig: RuntimeConfig = {
     ...DEFAULT_CONFIG,
     ...config,
@@ -47,7 +47,12 @@ export const environments = {
   get basePath(): string {
     return currentConfig.basePath;
   },
-  get keycloak() {
+  get keycloak(): {
+    realm: string;
+    url: string;
+    clientId: string;
+    urlPattern: RegExp;
+  } {
     return {
       realm: currentConfig.keycloak.realm,
       url: currentConfig.keycloak.url,
