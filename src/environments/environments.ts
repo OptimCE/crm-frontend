@@ -12,7 +12,7 @@ type RuntimeConfig = {
   keycloak: RuntimeKeycloakConfig;
 };
 
-// These default values are for local development, need to be overriden using config.json in production (see assets/config.json)
+// These default values are for local development, need to be overridden using config.json in production (see assets/config/config.json)
 const DEFAULT_CONFIG: RuntimeConfig = {
   apiUrl: 'http://localhost:8080',
   basePath: 'http://localhost:4200',
