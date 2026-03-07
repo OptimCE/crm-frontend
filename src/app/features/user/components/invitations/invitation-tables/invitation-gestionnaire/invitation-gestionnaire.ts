@@ -9,6 +9,7 @@ import {
 } from '../../../../../../shared/dtos/invitation.dtos';
 import { InvitationService } from '../../../../../../shared/services/invitation.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { MeService } from '../../../../../../shared/services/me.service';
 
 @Component({
   selector: 'app-invitation-gestionnaire',
@@ -19,6 +20,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 })
 export class InvitationGestionnaire {
   private invitationService = inject(InvitationService);
+  private meService = inject(MeService);
   pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
   gestionnaireInvitation = signal<UserManagerInvitationDTO[] | []>([]);
   currentPageReportTemplateDocuments!: string;
@@ -29,21 +31,19 @@ export class InvitationGestionnaire {
   loadGestionnaireInvitation(): void {
     this.loadingGestionnaire.set(true);
     this.gestionnaireInvitation.set([]);
-    this.invitationService
-      .getOwnManagerPendingInvitation(this.filterManagerInvitation())
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.gestionnaireInvitation.set(response.data as UserManagerInvitationDTO[]);
-          }
-          this.loadingGestionnaire.set(false);
-        },
-        error: (error) => {
-          console.error(error);
-          //TODO: Handle error
-          this.loadingGestionnaire.set(false);
-        },
-      });
+    this.meService.getOwnManagerPendingInvitation(this.filterManagerInvitation()).subscribe({
+      next: (response) => {
+        if (response) {
+          this.gestionnaireInvitation.set(response.data as UserManagerInvitationDTO[]);
+        }
+        this.loadingGestionnaire.set(false);
+      },
+      error: (error) => {
+        console.error(error);
+        //TODO: Handle error
+        this.loadingGestionnaire.set(false);
+      },
+    });
   }
   lazyLoadGestionnaireInvitation(_$event?: TableLazyLoadEvent): void {
     // Set filters here
@@ -56,7 +56,7 @@ export class InvitationGestionnaire {
   }
 
   acceptGestionnaireInvitation(invitation: UserManagerInvitationDTO): void {
-    this.invitationService.acceptInvitationManager({ invitation_id: invitation.id }).subscribe({
+    this.meService.acceptInvitationManager({ invitation_id: invitation.id }).subscribe({
       next: (response) => {
         if (response) {
           // TODO: Display snackbar
@@ -71,7 +71,7 @@ export class InvitationGestionnaire {
   }
 
   refuseGestionnaireInvitation(invitation: UserManagerInvitationDTO): void {
-    this.invitationService.refuseManagerInvitation(invitation.id).subscribe({
+    this.meService.refuseManagerInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {
           // TODO: Display snackbar

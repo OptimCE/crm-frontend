@@ -84,6 +84,28 @@
         "IBAN": "IBAN"
       }
     },
+    "REPRESENTATIONS": {
+      "COMMUNITY_LABEL": "Gemeenschap",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NO_REPRESENTATION_FOUND_LABEL": "Geen vertegenwoordiging gevonden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} vertegenwoordigingen)"
+    },
+    "METERS": {
+      "COMMUNITY_LABEL": "Gemeenschap",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NO_METERS_FOUND_LABEL": "Geen meters gevonden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} meters)"
+    },
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Gemeenschap",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NAME_LABEL": "Naam",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Grootte",
+      "UPLOAD_DATE_LABEL": "Uploaddatum",
+      "NO_DOCUMENT_FOUND_LABEL": "Geen document gevonden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} documenten)"
+    },
     "UPDATE_PROFILE": {
       "TITLE": "Profiel bijwerken",
       "SOCIAL_NUMBER": "Rijksregisternummer",

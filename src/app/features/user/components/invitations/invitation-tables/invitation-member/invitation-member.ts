@@ -14,6 +14,7 @@ import { InvitationService } from '../../../../../../shared/services/invitation.
 import { EncodeNewMemberSelfComponent } from './dialogs/encode-new-member/encode-new-member-self.component';
 import { CompanyDTO, IndividualDTO } from '../../../../../../shared/dtos/member.dtos';
 import { InvitationDetailComponent } from './dialogs/invitation-detail/invitation-detail.component';
+import { MeService } from '../../../../../../shared/services/me.service';
 
 @Component({
   selector: 'app-invitation-member',
@@ -24,6 +25,7 @@ import { InvitationDetailComponent } from './dialogs/invitation-detail/invitatio
 })
 export class InvitationMember implements OnDestroy {
   private invitationService = inject(InvitationService);
+  private meService = inject(MeService);
   private dialogService = inject(DialogService);
   private translate = inject(TranslateService);
   pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
@@ -38,7 +40,7 @@ export class InvitationMember implements OnDestroy {
   loadMemberInvitation(): void {
     this.loading.set(true);
     this.invitations.set([]);
-    this.invitationService.getOwnMembersPendingInviation(this.filterMemberInvitation()).subscribe({
+    this.meService.getOwnMembersPendingInviation(this.filterMemberInvitation()).subscribe({
       next: (response: ApiResponse<UserMemberInvitationDTO[] | string>) => {
         if (response && response.data) {
           this.invitations.set(response.data as UserMemberInvitationDTO[]);
@@ -63,7 +65,7 @@ export class InvitationMember implements OnDestroy {
   }
 
   acceptInvitation(invitation: UserMemberInvitationDTO): void {
-    this.invitationService.acceptInvitationMember({ invitation_id: invitation.id }).subscribe({
+    this.meService.acceptInvitationMember({ invitation_id: invitation.id }).subscribe({
       next: (response) => {
         if (response) {
           this.loadMemberInvitation();
@@ -76,7 +78,7 @@ export class InvitationMember implements OnDestroy {
   }
 
   refuseInvitation(invitation: UserMemberInvitationDTO): void {
-    this.invitationService.refuseMemberInvitation(invitation.id).subscribe({
+    this.meService.refuseMemberInvitation(invitation.id).subscribe({
       next: (response) => {
         if (response) {
           this.loadMemberInvitation();
@@ -89,7 +91,7 @@ export class InvitationMember implements OnDestroy {
   }
 
   fetchDetail(invitation: UserMemberInvitationDTO): void {
-    this.invitationService
+    this.meService
       .getOwnMemberPendingInvitationById(invitation.id)
       .subscribe((response: ApiResponse<IndividualDTO | CompanyDTO | string>) => {
         if (response && response.data) {

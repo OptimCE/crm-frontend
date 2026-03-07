@@ -26,12 +26,6 @@ export class DocumentService extends ServiceBase {
       this.apiAddress + '/' + memberId,
       query,
     );
-    // return this.http.get<ApiResponsePaginated<DocumentExposedDTO[]>>(
-    //   this.apiAddress + '/' + memberId,
-    //   {
-    //     params: { ...query },
-    //   },
-    // );
   }
 
   downloadDocument(

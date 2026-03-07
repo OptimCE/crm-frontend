@@ -84,6 +84,28 @@
         "IBAN": "IBAN"
       }
     },
+    "REPRESENTATIONS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NO_REPRESENTATION_FOUND_LABEL": "No representation found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} representations)"
+    },
+    "METERS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NO_METERS_FOUND_LABEL": "No meters found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} meters)"
+    },
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Size",
+      "UPLOAD_DATE_LABEL": "Upload date",
+      "NO_DOCUMENT_FOUND_LABEL": "No document found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} documents)"
+    },
     "UPDATE_PROFILE": {
       "TITLE": "Update profile",
       "SOCIAL_NUMBER": "National register number",

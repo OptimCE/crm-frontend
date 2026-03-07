@@ -1,1 +1,94 @@
-<p>TO IMPLEMENT</p>
+<p-table
+  #docT
+  [value]="documentsPartialList()"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [lazy]="true"
+  (onLazyLoad)="lazyLoadDocuments($event)"
+  [rows]="paginationInfo.limit"
+  [totalRecords]="paginationInfo.total"
+  [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+  [showCurrentPageReport]="true"
+  [currentPageReportTemplate]="currentPageReportTemplate"
+  [paginator]="paginationInfo.total_pages > 1"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex justify-between">
+      <p-button
+        [outlined]="true"
+        icon="pi pi-filter-slash"
+        label="{{ 'PROFILE.DOCUMENTS.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+        (onClick)="clear(docT)"
+      ></p-button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <div class="flex items-center text-base px-3">
+          {{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}
+        </div>
+      </th>
+      <th>
+        <div class="flex items-center text-base px-3">
+          {{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}<br />
+          <p-columnFilter
+            type="text"
+            field="fileName"
+            display="{{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th>
+        <div class="flex items-center text-base px-3">
+          {{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}<br />
+          <p-columnFilter
+            type="text"
+            field="fileType"
+            display="{{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th>
+        <div class="flex items-center text-base px-3">
+          {{ 'PROFILE.DOCUMENTS.SIZE_LABEL' | translate }}
+        </div>
+      </th>
+      <th>
+        <div class="flex items-center text-base px-3">
+          {{ 'PROFILE.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}
+        </div>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-document>
+    <tr style="cursor: pointer" class="hover-flex flex-wrap -mx-2">
+      <td class="text-sm px-3 py-2">{{ document.community.name }}</td>
+      <td class="text-sm px-3 py-2">{{ document.file_name }}</td>
+      <td class="text-sm px-3 py-2">{{ document.file_type }}</td>
+      <td class="text-sm px-3 py-2">{{ document.file_size }}</td>
+      <td class="text-sm px-3 py-2">{{ document.upload_date }}</td>
+      <td>
+        <p-button
+          icon="pi pi-download"
+          [rounded]="true"
+          [text]="true"
+          (click)="onDownloadDocument(document)"
+        ></p-button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="6" class="text-base">
+        {{ 'PROFILE.DOCUMENTS.NO_DOCUMENT_FOUND_LABEL' | translate }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

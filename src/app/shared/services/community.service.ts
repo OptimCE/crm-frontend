@@ -23,16 +23,6 @@ export class CommunityService extends ServiceBase {
     this.apiAddress = environments.apiUrl + '/communities';
   }
 
-  // private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
-  //   const params: Record<string, string | number | boolean> = {};
-  //   for (const [key, value] of Object.entries(obj)) {
-  //     if (value !== undefined && value !== null) {
-  //       params[key] = value as string | number | boolean;
-  //     }
-  //   }
-  //   return params;
-  // }
-
   getMyCommunities(
     query: CommunityQueryDTO,
   ): Observable<ApiResponsePaginated<MyCommunityDTO[] | string>> {
@@ -41,12 +31,6 @@ export class CommunityService extends ServiceBase {
       this.apiAddress + '/my-communities',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<MyCommunityDTO[] | string>>(
-    //   this.apiAddress + '/my-communities',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   getUsers(
@@ -57,12 +41,6 @@ export class CommunityService extends ServiceBase {
       this.apiAddress + '/users',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<UsersCommunityDTO[] | string>>(
-    //   this.apiAddress + '/users',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
   getAdmins(
     query: CommunityUsersQueryDTO,
@@ -72,12 +50,6 @@ export class CommunityService extends ServiceBase {
       this.apiAddress + '/admins',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<UsersCommunityDTO[] | string>>(
-    //   this.apiAddress + '/admins',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   createCommunity(created_community: CreateCommunityDTO): Observable<ApiResponse<string>> {

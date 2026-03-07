@@ -16,6 +16,7 @@ import { AddressDTO } from '../../../../../../../../shared/dtos/address.dtos';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { InvitationService } from '../../../../../../../../shared/services/invitation.service';
+import { MeService } from '../../../../../../../../shared/services/me.service';
 
 interface EncodeNewMemberDialogData {
   invitationID: number;
@@ -70,6 +71,7 @@ interface EncodeMemberAddressFormValue {
 })
 export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
   private invitationService = inject(InvitationService);
+  private meService = inject(MeService);
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
@@ -256,7 +258,7 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
         return;
       }
     }
-    this.invitationService
+    this.meService
       .acceptInvitationMemberEncoded({ invitation_id: this.invitationID, member: memberToAdd })
       .subscribe({
         next: (response) => {

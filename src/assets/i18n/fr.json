@@ -84,6 +84,28 @@
         "IBAN": "Iban"
       }
     },
+    "REPRESENTATIONS": {
+      "COMMUNITY_LABEL": "Communauté",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NO_REPRESENTATION_FOUND_LABEL": "Aucune représentation trouvée",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} représentations)"
+    },
+    "METERS": {
+      "COMMUNITY_LABEL": "Communauté",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NO_METERS_FOUND_LABEL": "Aucun compteur trouvé",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} compteurs)"
+    },
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Communauté",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NAME_LABEL": "Nom",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Taille",
+      "UPLOAD_DATE_LABEL": "Date de téléversement",
+      "NO_DOCUMENT_FOUND_LABEL": "Aucun document trouvé",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} documents)"
+    },
     "UPDATE_PROFILE": {
       "TITLE": "Mise à jour du profil",
       "SOCIAL_NUMBER": "Numéro de registre national",
