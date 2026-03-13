@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, model, output } from '@angular/core';
 import { RadioButton } from 'primeng/radiobutton';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -12,12 +12,11 @@ import { MemberType } from '../../../../../../../../../../shared/types/member.ty
   styleUrl: './new-member-type-self-encoding.component.css',
 })
 export class NewMemberTypeSelfEncoding {
-  @Input() typeClient: number = -1;
-  @Output() typeClientChange = new EventEmitter<number>();
-  @Output() formSubmitted = new EventEmitter<void>();
+  readonly typeClient = model<number>(-1);
+  readonly formSubmitted = output<void>();
 
   submit(): void {
-    if (this.typeClient != -1) {
+    if (this.typeClient() != -1) {
       this.formSubmitted.emit();
     }
   }

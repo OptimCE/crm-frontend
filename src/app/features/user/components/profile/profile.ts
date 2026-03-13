@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -10,6 +11,7 @@ import { UserDTO } from '../../../../shared/dtos/user.dtos';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { UserUpdateDialog } from './user-update-dialog/user-update-dialog';
 import { ProfileTabs } from './profile-tabs/profile-tabs';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 @Component({
   selector: 'app-profile',
   imports: [
@@ -21,40 +23,43 @@ import { ProfileTabs } from './profile-tabs/profile-tabs';
     AddressPipe,
     TranslateModule,
     ProfileTabs,
+    HeaderPage,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
   standalone: true,
   providers: [DialogService],
 })
-export class Profile implements OnInit, OnDestroy {
+export class Profile {
   private dialogService = inject(DialogService);
   private translateService = inject(TranslateService);
   private userService = inject(UserService);
-  protected isLoading = signal<boolean>(false);
-  protected user = signal<UserDTO | null>(null);
-  ref?: DynamicDialogRef | null;
-  ngOnInit(): void {
+  private destroyRef = inject(DestroyRef);
+  protected readonly isLoading = signal<boolean>(false);
+  protected readonly user = signal<UserDTO | null>(null);
+  private ref?: DynamicDialogRef | null;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
     this.loadUser();
   }
 
   private loadUser(): void {
     this.isLoading.set(true);
-    this.userService.getUserInfo().subscribe({
-      next: (response) => {
-        if (response && response.data) {
-          this.user.set(response.data as UserDTO);
+    this.userService
+      .getUserInfo()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response && response.data) {
+            this.user.set(response.data as UserDTO);
+            this.isLoading.set(false);
+          }
+        },
+        error: (_error) => {
           this.isLoading.set(false);
-        }
-      },
-      error: (_error) => {
-        this.isLoading.set(false);
-      },
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.ref?.destroy();
+        },
+      });
   }
 
   updateMember(): void {
@@ -67,7 +72,7 @@ export class Profile implements OnInit, OnDestroy {
         user: this.user(),
       },
     });
-    this.ref?.onClose.subscribe((response: boolean) => {
+    this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: boolean) => {
       if (response) {
         this.loadUser();
       }

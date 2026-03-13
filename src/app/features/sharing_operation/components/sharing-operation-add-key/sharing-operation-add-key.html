@@ -4,19 +4,20 @@
 </div>
 <p-table
   #dt
-  [value]="keysList"
-  [loading]="loading"
+  [value]="keysList()"
+  [loading]="loading()"
   [tableStyle]="{ 'min-width': '50rem' }"
   [lazy]="true"
   (onLazyLoad)="loadKeys($event)"
-  [rows]="paginated.limit"
-  [totalRecords]="paginated.total"
-  [first]="(paginated.page - 1) * paginated.limit"
+  [rows]="paginated().limit"
+  [totalRecords]="paginated().total"
+  [first]="firstRow()"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplate"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
   (onPage)="pageChange($event)"
-  [paginator]="paginated.total_pages > 1"
-  [(selection)]="selectedKey"
+  [paginator]="showPaginator()"
+  [selection]="selectedKey()"
+  (selectionChange)="selectedKey.set($event)"
 >
   <ng-template pTemplate="caption">
     <div class="flex content-between">

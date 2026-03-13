@@ -1,16 +1,32 @@
-<div class="menu-link" [class.menu-link-opened]="sidebarOpen" [class.active-class]="isRouteActive">
-  <i class="{{ icon }}" [class.mr-2]="sidebarOpen"></i>
-  @if (sidebarOpen) {
-    <span>{{ name }}</span>
-    <i class="pi pi-chevron-down ms-auto" [ngClass]="{ 'rotate-180': activeSublist }"></i>
+<div
+  class="sidebar-item"
+  [class.sidebar-item--active]="isRouteActive()"
+  [class.sidebar-item--collapsed]="!sidebarOpen()"
+  [pTooltip]="sidebarOpen() ? '' : name()"
+  tooltipPosition="right"
+>
+  <div
+    class="sidebar-item__icon-wrapper"
+    [class.sidebar-item__icon-wrapper--active]="isRouteActive()"
+  >
+    <i class="{{ icon() }}"></i>
+  </div>
+  @if (sidebarOpen()) {
+    <span class="sidebar-item__label">{{ name() }}</span>
+    <i
+      class="pi pi-chevron-down sidebar-item__chevron"
+      [class.sidebar-item__chevron--open]="activeSublist()"
+    ></i>
   }
 </div>
-@if (sidebarOpen && activeSublist) {
-  <ul class="submenu">
-    @for (link of links; let idx = $index; track idx) {
+
+@if (sidebarOpen() && activeSublist()) {
+  <ul class="sidebar-submenu">
+    @for (link of links(); let idx = $index; track idx) {
       <li>
-        <a routerLink="{{ link.url }}" (click)="closeSideBar()">
-          <i class="{{ link.icon }}"></i>{{ link.name | translate }}
+        <a routerLink="{{ link.url }}" (click)="closeSideBar()" class="sidebar-submenu__item">
+          <i class="{{ link.icon }} sidebar-submenu__icon"></i>
+          <span>{{ link.name | translate }}</span>
         </a>
       </li>
     }

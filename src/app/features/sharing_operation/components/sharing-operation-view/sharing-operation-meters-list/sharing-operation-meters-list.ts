@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { PartialMeterDTO } from '../../../../../shared/dtos/meter.dtos';
 import { Pagination } from '../../../../../core/dtos/api.response';
@@ -25,7 +26,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
 import { Router } from '@angular/router';
 import { SharingOperationMeterEventService } from '../sharing-operation.meter.subjet';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-sharing-operation-meters-list',
@@ -47,44 +47,44 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './sharing-operation-meters-list.css',
   providers: [DialogService, ConfirmationService, MessageService, ErrorMessageHandler],
 })
-export class SharingOperationMetersList implements OnInit, OnDestroy {
-  @Input() id_sharing!: number;
-  @Input() type!: SharingOperationMetersQueryType;
-  private destroy$ = new Subject<void>();
+export class SharingOperationMetersList implements OnInit {
+  readonly id_sharing = input.required<number>();
+  readonly type = input.required<SharingOperationMetersQueryType>();
+  private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   private sharingOperationService = inject(SharingOperationService);
   private errorHandler = inject(ErrorMessageHandler);
   private confirmationService = inject(ConfirmationService);
   private routing = inject(Router);
   private meterEventService = inject(SharingOperationMeterEventService);
-  metersPartialList = signal<PartialMeterDTO[]>([]);
-  loading = signal<boolean>(true);
-  pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
-  filter = signal<SharingOperationMetersQuery>({
+  readonly metersPartialList = signal<PartialMeterDTO[]>([]);
+  readonly loading = signal<boolean>(true);
+  readonly pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
+  readonly filter = signal<SharingOperationMetersQuery>({
     page: 1,
     limit: 10,
     type: SharingOperationMetersQueryType.NOW,
   });
-  currentPageReportTemplate: string = '';
-  addressFilter = {
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly addressFilter = signal({
     streetName: '',
     postcode: '',
     cityName: '',
-  };
-  textChangeStatusMeter!: string;
-  dateStartMeter: Date | string | null = null;
-  minDate = new Date();
-  statutCategory: { value: MeterDataStatus; label: string }[] = [];
+  });
+  readonly textChangeStatusMeter = signal<string>('');
+  readonly dateStartMeter = signal<Date | string | null>(null);
+  readonly minDate = signal<Date>(new Date());
+  readonly statutCategory = signal<{ value: MeterDataStatus; label: string }[]>([]);
 
   ngOnInit(): void {
     this.setupStatusCategory();
     this.filter.set({
       page: 1,
       limit: 10,
-      type: this.type,
+      type: this.type(),
     });
     this.meterEventService.meterAdded$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((): void => this.loadMetersSharingOperation());
   }
 
@@ -110,8 +110,9 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
         'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.statutCategory = [
+        this.statutCategory.set([
           {
             value: MeterDataStatus.ACTIVE,
             label: translation['SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL'],
@@ -132,14 +133,14 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
                 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
               ],
           },
-        ];
+        ]);
       });
   }
 
   private loadMetersSharingOperation(): void {
     this.loading.set(true);
     this.sharingOperationService
-      .getSharingOperationMetersList(this.id_sharing, this.filter())
+      .getSharingOperationMetersList(this.id_sharing(), this.filter())
       .subscribe({
         next: (response) => {
           if (response) {
@@ -190,18 +191,19 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
     }
 
     // Address filters from custom template
-    if (this.addressFilter.streetName !== '') {
-      current.street = this.addressFilter.streetName;
+    const addr = this.addressFilter();
+    if (addr.streetName !== '') {
+      current.street = addr.streetName;
     } else {
       delete current.street;
     }
-    if (this.addressFilter.postcode !== '') {
-      current.postcode = parseInt(this.addressFilter.postcode);
+    if (addr.postcode !== '') {
+      current.postcode = parseInt(addr.postcode);
     } else {
       delete current.postcode;
     }
-    if (this.addressFilter.cityName !== '') {
-      current.city = this.addressFilter.cityName;
+    if (addr.cityName !== '') {
+      current.city = addr.cityName;
     } else {
       delete current.city;
     }
@@ -217,8 +219,9 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
         total_pages: this.pagination().total_pages,
         total: this.pagination().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
@@ -231,17 +234,21 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
     this.loadMetersSharingOperation();
   }
 
+  updateAddressFilter(field: 'streetName' | 'postcode' | 'cityName', value: string): void {
+    this.addressFilter.update((current) => ({ ...current, [field]: value }));
+  }
+
   clear(table: Table): void {
     table.clear();
-    this.addressFilter = {
+    this.addressFilter.set({
       streetName: '',
       postcode: '',
       cityName: '',
-    };
+    });
     this.filter.set({
       page: 1,
       limit: 10,
-      type: this.type,
+      type: this.type(),
     });
     this.loadMetersSharingOperation();
   }
@@ -249,17 +256,23 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
   openMeterChangeStatusPopup(event: Event, meter: PartialMeterDTO, action: number): void {
     event.stopPropagation();
     if (action == 1) {
-      this.textChangeStatusMeter = this.translate.instant(
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
-      ) as string;
+      this.textChangeStatusMeter.set(
+        this.translate.instant(
+          'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
+        ) as string,
+      );
     } else if (action == 2) {
-      this.textChangeStatusMeter = this.translate.instant(
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
-      ) as string;
+      this.textChangeStatusMeter.set(
+        this.translate.instant(
+          'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
+        ) as string,
+      );
     } else if (action == 3) {
-      this.textChangeStatusMeter = this.translate.instant(
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
-      ) as string;
+      this.textChangeStatusMeter.set(
+        this.translate.instant(
+          'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
+        ) as string,
+      );
     }
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -280,75 +293,83 @@ export class SharingOperationMetersList implements OnInit, OnDestroy {
   }
 
   approveMeter(meter: PartialMeterDTO): void {
+    const dateVal = this.dateStartMeter();
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter ? new Date(this.dateStartMeter) : new Date(),
+      date: dateVal ? new Date(dateVal) : new Date(),
       id_meter: meter.EAN,
-      id_sharing: this.id_sharing,
+      id_sharing: this.id_sharing(),
       status: MeterDataStatus.ACTIVE,
     };
 
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMetersSharingOperation();
-        }
-      },
-      error: (error: { data?: unknown }) => {
-        this.errorHandler.handleError(error.data ?? null);
-      },
-    });
+    this.sharingOperationService
+      .patchMeterStatus(patchedMeterStatus)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadMetersSharingOperation();
+          }
+        },
+        error: (error: { data?: unknown }) => {
+          this.errorHandler.handleError(error.data ?? null);
+        },
+      });
 
-    this.dateStartMeter = null;
+    this.dateStartMeter.set(null);
   }
 
   removeMeter(meter: PartialMeterDTO): void {
+    const dateVal = this.dateStartMeter();
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter ? new Date(this.dateStartMeter) : new Date(),
+      date: dateVal ? new Date(dateVal) : new Date(),
       id_meter: meter.EAN,
-      id_sharing: this.id_sharing,
+      id_sharing: this.id_sharing(),
       status: MeterDataStatus.INACTIVE,
     };
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMetersSharingOperation();
-        }
-      },
-      error: (error: { data?: unknown }) => {
-        this.errorHandler.handleError(error.data ?? null);
-      },
-    });
+    this.sharingOperationService
+      .patchMeterStatus(patchedMeterStatus)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadMetersSharingOperation();
+          }
+        },
+        error: (error: { data?: unknown }) => {
+          this.errorHandler.handleError(error.data ?? null);
+        },
+      });
 
-    this.dateStartMeter = null;
+    this.dateStartMeter.set(null);
   }
 
   putMeterToWaiting(meter: PartialMeterDTO): void {
+    const dateVal = this.dateStartMeter();
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.dateStartMeter ? new Date(this.dateStartMeter) : new Date(),
+      date: dateVal ? new Date(dateVal) : new Date(),
       id_meter: meter.EAN,
-      id_sharing: this.id_sharing,
+      id_sharing: this.id_sharing(),
       status: MeterDataStatus.WAITING_GRD,
     };
-    this.sharingOperationService.patchMeterStatus(patchedMeterStatus).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMetersSharingOperation();
-        }
-      },
-      error: (error: { data?: unknown }) => {
-        this.errorHandler.handleError(error.data ?? null);
-      },
-    });
+    this.sharingOperationService
+      .patchMeterStatus(patchedMeterStatus)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadMetersSharingOperation();
+          }
+        },
+        error: (error: { data?: unknown }) => {
+          this.errorHandler.handleError(error.data ?? null);
+        },
+      });
 
-    this.dateStartMeter = null;
+    this.dateStartMeter.set(null);
   }
   onRowClick(meter: PartialMeterDTO): void {
-    void this.routing.navigate(['/members/meter/' + meter.EAN]);
+    void this.routing.navigate(['/meters/' + meter.EAN]);
   }
 
   public MeterStatus = MeterDataStatus;
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 }

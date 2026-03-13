@@ -1,27 +1,25 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, merge, Subscription } from 'rxjs';
+import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { distinctUntilChanged, merge } from 'rxjs';
 import { FormGroupDirective, ValidationErrors } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ErrorAdded, ErrorHandlerParams } from '../../types/error.types';
 
 @Component({
   selector: 'app-error-handler',
-  standalone: true,
-  imports: [AsyncPipe],
   templateUrl: './error.handler.component.html',
   styleUrl: './error.handler.component.css',
 })
-export class ErrorHandlerComponent implements OnInit, OnDestroy {
-  private subscription = new Subscription();
+export class ErrorHandlerComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private formGroupDirective = inject(FormGroupDirective);
   private translate = inject(TranslateService);
 
-  @Input() controlName!: string;
-  @Input() customErrors?: ValidationErrors;
-  @Input() errorsAdd: ErrorAdded = {};
+  readonly controlName = input.required<string>();
+  readonly customErrors = input<ValidationErrors>();
+  readonly errorsAdd = input<ErrorAdded>({});
 
-  message$ = new BehaviorSubject<string>('');
+  readonly message = signal<string>('');
 
   errors: ErrorAdded = {};
 
@@ -29,21 +27,21 @@ export class ErrorHandlerComponent implements OnInit, OnDestroy {
     this.loadDefaultErrorMessages();
 
     if (this.formGroupDirective) {
-      const control = this.formGroupDirective.control.get(this.controlName);
+      const control = this.formGroupDirective.control.get(this.controlName());
       if (control) {
-        this.subscription = merge(control.valueChanges, this.formGroupDirective.ngSubmit)
-          .pipe(distinctUntilChanged())
+        merge(control.valueChanges, this.formGroupDirective.ngSubmit)
+          .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
           .subscribe(() => {
             const controlErrors = control.errors;
 
             if (controlErrors) {
-              this.errors = { ...this.errors, ...this.errorsAdd }; // Merge default & additional errors
+              this.errors = { ...this.errors, ...this.errorsAdd() }; // Merge default & additional errors
 
               const firstKey = Object.keys(controlErrors)[0];
               const getError = this.errors[firstKey];
               const errorParams = (controlErrors[firstKey] || {}) as ErrorHandlerParams;
               const text =
-                (this.customErrors?.[firstKey] as string | undefined) || getError(errorParams);
+                (this.customErrors()?.[firstKey] as string | undefined) || getError(errorParams);
 
               this.setError(text);
             } else {
@@ -51,7 +49,7 @@ export class ErrorHandlerComponent implements OnInit, OnDestroy {
             }
           });
       } else {
-        console.error(`Control "${this.controlName}" not found in the form group.`);
+        console.error(`Control "${this.controlName()}" not found in the form group.`);
       }
     } else {
       console.error(`ErrorHandlerComponent must be used within a FormGroupDirective.`);
@@ -80,10 +78,6 @@ export class ErrorHandlerComponent implements OnInit, OnDestroy {
   }
 
   private setError(text: string) {
-    this.message$.next(text);
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.message.set(text);
   }
 }

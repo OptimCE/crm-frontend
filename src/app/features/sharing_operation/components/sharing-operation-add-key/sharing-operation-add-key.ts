@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Button } from 'primeng/button';
@@ -29,24 +30,22 @@ export class SharingOperationAddKey implements OnInit {
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
-  keysList: KeyPartialDTO[] = [];
-  loading: boolean = true;
-  page: number = 1;
-  paginated: Pagination = new Pagination(0, 5, 0, 0);
-  selectedKey?: KeyPartialDTO;
-  id: number;
-  currentPageReportTemplate: string = '';
+  private destroyRef = inject(DestroyRef);
 
-  constructor() {
-    const data = this.config.data as SharingOperationAddKeyDialogData;
-    this.loading = true;
-    this.page = 1;
-    this.id = data.id;
-  }
+  readonly keysList = signal<KeyPartialDTO[]>([]);
+  readonly loading = signal<boolean>(true);
+  readonly page = signal<number>(1);
+  readonly paginated = signal<Pagination>(new Pagination(0, 5, 0, 0));
+  readonly selectedKey = signal<KeyPartialDTO | undefined>(undefined);
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly id = (this.config.data as SharingOperationAddKeyDialogData).id;
+
+  readonly firstRow = computed(() => (this.paginated().page - 1) * this.paginated().limit);
+  readonly showPaginator = computed(() => this.paginated().total_pages > 1);
 
   loadKeys($event?: TableLazyLoadEvent, changeIsLoaded: boolean = true): void {
     if (changeIsLoaded) {
-      this.loading = true;
+      this.loading.set(true);
     }
     try {
       const params: KeyPartialQuery = { page: 1, limit: 10 };
@@ -69,23 +68,26 @@ export class SharingOperationAddKey implements OnInit {
           }
         }
       }
-      this.keysService.getKeysList({ ...params }).subscribe({
-        next: (response) => {
-          if (response) {
-            this.keysList = response.data as KeyPartialDTO[];
-            this.paginated = response.pagination;
-            if (changeIsLoaded) {
-              this.loading = false;
+      this.keysService
+        .getKeysList({ ...params })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.keysList.set(response.data as KeyPartialDTO[]);
+              this.paginated.set(response.pagination);
+              if (changeIsLoaded) {
+                this.loading.set(false);
+              }
+              this.updatePaginationTranslation();
+            } else {
+              this.errorHandler.handleError(response);
             }
-            this.updatePaginationTranslation();
-          } else {
-            this.errorHandler.handleError(response);
-          }
-        },
-        error: (error) => {
-          this.errorHandler.handleError(error);
-        },
-      });
+          },
+          error: (error) => {
+            this.errorHandler.handleError(error);
+          },
+        });
     } catch (e) {
       this.errorHandler.handleError(e);
     }
@@ -96,19 +98,19 @@ export class SharingOperationAddKey implements OnInit {
   }
 
   updatePaginationTranslation(): void {
-    console.log('THIS PAGINATED : ', this.paginated);
     this.translate
       .get('SHARING_OPERATION.ADD_KEY.PAGE_REPORT_TEMPLATE_KEYS_LABEL', {
-        page: this.paginated.page,
-        total_pages: this.paginated.total_pages,
-        total: this.paginated.total,
+        page: this.paginated().page,
+        total_pages: this.paginated().total_pages,
+        total: this.paginated().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
   pageChange($event: TablePageEvent): void {
-    this.page = $event.first / $event.rows + 1;
+    this.page.set($event.first / $event.rows + 1);
     this.loadKeys();
   }
 
@@ -117,9 +119,11 @@ export class SharingOperationAddKey implements OnInit {
   }
 
   addKey(): void {
-    if (!this.selectedKey) return;
+    const key = this.selectedKey();
+    if (!key) return;
     this.sharingOpService
-      .addKeyToSharing({ id_sharing: this.id, id_key: this.selectedKey.id })
+      .addKeyToSharing({ id_sharing: this.id, id_key: key.id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           if (response) {

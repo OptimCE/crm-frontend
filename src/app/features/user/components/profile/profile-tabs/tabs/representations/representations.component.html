@@ -1,16 +1,15 @@
 <p-table
   #dt
   [value]="membersPartialList()"
-  [tableStyle]="{ 'min-width': '60rem' }"
   [lazy]="true"
   (onLazyLoad)="lazyLoadMembers($event)"
-  [rows]="paginationInfo.limit"
-  [totalRecords]="paginationInfo.total"
-  [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+  [rows]="paginationInfo().limit"
+  [totalRecords]="paginationInfo().total"
+  [first]="firstRow()"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplate"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
   (onPage)="pageChange($event)"
-  [paginator]="paginationInfo.total_pages > 1"
+  [paginator]="showPaginator()"
 >
   <ng-template pTemplate="caption">
     <div class="justify-between">
@@ -23,7 +22,7 @@
     </div>
   </ng-template>
   <ng-template pTemplate="header">
-    <tr>
+    <tr class="max-lg:hidden">
       <th class="text-base px-3">
         <div class="items-center">
           {{ 'PROFILE.REPRESENTATIONS.COMMUNITY_LABEL' | translate }}
@@ -138,21 +137,21 @@
                       <p-tag
                         severity="success"
                         value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
-                        class="text-small"
+                        class="text-sm"
                       ></p-tag>
                     }
                     @case (MemberStatus.INACTIVE) {
                       <p-tag
                         severity="danger"
                         value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
-                        class="text-small"
+                        class="text-sm"
                       ></p-tag>
                     }
                     @case (MemberStatus.PENDING) {
                       <p-tag
                         severity="warn"
                         value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
-                        class="text-small"
+                        class="text-sm"
                       ></p-tag>
                     }
                   }
@@ -163,21 +162,21 @@
                       <p-tag
                         severity="success"
                         value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
-                        class="text-small"
+                        class="text-sm"
                       ></p-tag>
                     }
                     @case (MemberStatus.INACTIVE) {
                       <p-tag
                         severity="danger"
                         value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
-                        class="text-small"
+                        class="text-sm"
                       ></p-tag>
                     }
                     @case (MemberStatus.PENDING) {
                       <p-tag
                         severity="warn"
                         value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
-                        class="text-small"
+                        class="text-sm"
                       ></p-tag>
                     }
                   }
@@ -190,48 +189,71 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-member>
-    <tr (click)="onRowClick(member)" class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer">
-      <td class="text-small px-3 py-2">{{ member.community.name }}</td>
+    <tr
+      (click)="onRowClick(member)"
+      class="grid grid-cols-2 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! cursor-pointer"
+    >
       <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'PROFILE.REPRESENTATIONS.COMMUNITY_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ member.community.name }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.LIST.TYPE_LABEL' | translate }}
+          </span>
+        </div>
         @if (member.member_type === MemberType.INDIVIDUAL) {
           <div>
             <i class="pi pi-user mr-2 text-base"></i>
-            <span class="text-small px-3 py-2">{{
-              'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL' | translate
-            }}</span>
+            <span class="text-sm">{{ 'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL' | translate }}</span>
           </div>
         }
         @if (member.member_type === MemberType.COMPANY) {
           <div>
             <i class="pi pi-building mr-2 text-base"></i>
-            <span class="text-small px-3 py-2">{{
-              'MEMBER.LIST.TYPE.COMPANY_LABEL' | translate
-            }}</span>
+            <span class="text-sm">{{ 'MEMBER.LIST.TYPE.COMPANY_LABEL' | translate }}</span>
           </div>
         }
       </td>
-      <td class="text-small px-3 py-2">{{ member.name }}</td>
       <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.LIST.NAME_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ member.name }}</span>
+      </td>
+      <td class="col-span-2 md:col-span-3 lg:table-cell text-center! lg:text-start!">
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.LIST.STATUS_LABEL' | translate }}
+          </span>
+        </div>
         @switch (member.status) {
           @case (MemberStatus.ACTIVE) {
             <p-tag
               severity="success"
               value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
-              class="text-small px-3 py-2"
+              class="text-sm px-3 py-2"
             ></p-tag>
           }
           @case (MemberStatus.INACTIVE) {
             <p-tag
               severity="danger"
               value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
-              class="text-small px-3 py-2"
+              class="text-sm px-3 py-2"
             ></p-tag>
           }
           @case (MemberStatus.PENDING) {
             <p-tag
               severity="warn"
               value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
-              class="text-small px-3 py-2"
+              class="text-sm px-3 py-2"
             ></p-tag>
           }
         }

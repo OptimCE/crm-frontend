@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PrimeTemplate } from 'primeng/api';
@@ -19,6 +20,7 @@ import { Router } from '@angular/router';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { SharingOperationCreationUpdate } from '../sharing-operation-creation-update/sharing-operation-creation-update';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 @Component({
   selector: 'app-sharing-operations-list',
@@ -32,6 +34,7 @@ import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
     TagModule,
     SharingOperationTypePipe,
     TranslatePipe,
+    HeaderPage,
   ],
   templateUrl: './sharing-operations-list.html',
   styleUrl: './sharing-operations-list.css',
@@ -43,11 +46,18 @@ export class SharingOperationsList implements OnInit {
   private dialogService = inject(DialogService);
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
-  sharingOperationList = signal<SharingOperationPartialDTO[]>([]);
-  paginationInfo: Pagination = new Pagination(1, 10, 0, 1);
+  private destroyRef = inject(DestroyRef);
+
+  readonly sharingOperationList = signal<SharingOperationPartialDTO[]>([]);
+  readonly paginationInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
+  readonly filter = signal<SharingOperationPartialQuery>({ page: 1, limit: 10 });
+  readonly currentPageReportTemplate = signal<string>('');
   ref?: DynamicDialogRef | null;
-  filter = signal<SharingOperationPartialQuery>({ page: 1, limit: 10 });
-  currentPageReportTemplate: string = '';
+
+  readonly firstRow = computed(
+    () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
+  );
+  readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
   ngOnInit(): void {
     this.updatePaginationTranslation();
@@ -56,12 +66,13 @@ export class SharingOperationsList implements OnInit {
   updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.LIST.PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL', {
-        page: this.paginationInfo.page,
-        total_pages: this.paginationInfo.total_pages,
-        total: this.paginationInfo.total,
+        page: this.paginationInfo().page,
+        total_pages: this.paginationInfo().total_pages,
+        total: this.paginationInfo().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
@@ -74,7 +85,7 @@ export class SharingOperationsList implements OnInit {
       baseZIndex: 1500,
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((result) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
         if (result) {
           this.snackbarNotification.openSnackBar(
             this.translate.instant(
@@ -89,19 +100,22 @@ export class SharingOperationsList implements OnInit {
   }
 
   loadSharingOperation(): void {
-    this.sharingOperationsService.getSharingOperationList(this.filter()).subscribe({
-      next: (response) => {
-        if (response) {
-          this.sharingOperationList.set(response.data as SharingOperationPartialDTO[]);
-          this.paginationInfo = response.pagination;
-        } else {
+    this.sharingOperationsService
+      .getSharingOperationList(this.filter())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.sharingOperationList.set(response.data as SharingOperationPartialDTO[]);
+            this.paginationInfo.set(response.pagination);
+          } else {
+            console.error('Error fetching meters partial list');
+          }
+        },
+        error: (_error) => {
           console.error('Error fetching meters partial list');
-        }
-      },
-      error: (_error) => {
-        console.error('Error fetching meters partial list');
-      },
-    });
+        },
+      });
   }
 
   lazyLoadSharingOperation($event: TableLazyLoadEvent): void {

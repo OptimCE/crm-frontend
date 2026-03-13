@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
@@ -50,6 +51,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { SharingOperationMetersList } from './sharing-operation-meters-list/sharing-operation-meters-list';
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
 import { SelectMeterNewKeyDialog } from './dialogs/select-meter-new-key-dialog/select-meter-new-key-dialog';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 interface ChartFormValue {
   dateDeb: string;
@@ -88,6 +90,7 @@ interface ChartFormValue {
     SharingOperationMetersList,
     TabPanel,
     TabPanels,
+    HeaderPage,
   ],
   templateUrl: './sharing-operation-view.html',
   styleUrl: './sharing-operation-view.css',
@@ -104,25 +107,27 @@ export class SharingOperationView implements OnInit {
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private meterEventService = inject(SharingOperationMeterEventService);
-  isLoading: boolean = true;
-  id!: number;
-  sharingOperation!: SharingOperationDTO;
-  sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
-  loadingSharingOperationKeys = signal<boolean>(true);
-  paginationSharingOperationKey = signal<Pagination>({
+  private destroyRef = inject(DestroyRef);
+
+  readonly isLoading = signal<boolean>(true);
+  readonly id = signal<number>(0);
+  readonly sharingOperation = signal<SharingOperationDTO | undefined>(undefined);
+  readonly sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
+  readonly loadingSharingOperationKeys = signal<boolean>(true);
+  readonly paginationSharingOperationKey = signal<Pagination>({
     total: 0,
     total_pages: 0,
     page: 0,
     limit: 0,
   });
-  filterSharingOperationKey = signal<KeyPartialQuery>({ page: 1, limit: 10 });
-  paginationMetersInfo: Pagination = new Pagination(1, 10, 0, 1);
-  statutCategory: { value: MeterDataStatus; label: string }[] = [];
+  readonly filterSharingOperationKey = signal<KeyPartialQuery>({ page: 1, limit: 10 });
+  readonly paginationMetersInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
+  readonly statutCategory = signal<{ value: MeterDataStatus; label: string }[]>([]);
   ref?: DynamicDialogRef | null;
-  sidebarHistoryKey: boolean = false;
-  dateStartApproved: Date | null = null;
-  currentPageReportTemplate: string = '';
-  data: {
+  readonly sidebarHistoryKey = signal<boolean>(false);
+  readonly dateStartApproved = signal<Date | null>(null);
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly data = signal<{
     labels: string[];
     datasets: {
       type: string;
@@ -130,7 +135,7 @@ export class SharingOperationView implements OnInit {
       stack: string;
       data: number[];
     }[];
-  } | null = null;
+  } | null>(null);
 
   options = {
     maintainAspectRatio: false,
@@ -157,8 +162,7 @@ export class SharingOperationView implements OnInit {
         },
         ticks: {
           callback: (_value: unknown, index: number): string => {
-            // Make sure 'this' refers to the component context
-            const label = this.data?.labels?.[index];
+            const label = this.data()?.labels?.[index];
             if (!label) return '';
 
             const date = new Date(label);
@@ -187,23 +191,26 @@ export class SharingOperationView implements OnInit {
     },
   };
   formChart!: FormGroup;
-  displayDownloadButton: boolean = false;
-  metersCharts: PartialMeterDTO[] = [];
-  selectedMeterCharts: boolean[] = [];
+  readonly displayDownloadButton = signal<boolean>(false);
+  readonly metersCharts = signal<PartialMeterDTO[]>([]);
+  readonly selectedMeterCharts = signal<boolean[]>([]);
 
-  public dragging: boolean = false;
-  public fileConsumption: File | null = null;
+  readonly dragging = signal<boolean>(false);
+  readonly fileConsumption = signal<File | null>(null);
   formGroup!: FormGroup;
 
+  readonly hasKey = computed(() => !!this.sharingOperation()?.key?.key);
+  readonly hasWaitingKey = computed(() => !!this.sharingOperation()?.key_waiting_approval);
+
   ngOnInit(): void {
-    this.isLoading = true;
-    const id = this.route.snapshot.paramMap.get('id') ?? '';
-    if (id === '') {
+    this.isLoading.set(true);
+    const idParam = this.route.snapshot.paramMap.get('id') ?? '';
+    if (idParam === '') {
       void this.routing.navigate(['//members/sharing/']);
       return;
     }
-    this.id = +id;
-    if (this.id) {
+    this.id.set(+idParam);
+    if (this.id()) {
       this.loadOperationSharing();
       this.setupStatusCategory();
       this.updatePaginationTranslation();
@@ -226,12 +233,13 @@ export class SharingOperationView implements OnInit {
   updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.VIEW.METER.PAGE_REPORT_TEMPLATE_METER_LABEL', {
-        page: this.paginationMetersInfo.page,
-        total_pages: this.paginationMetersInfo.total_pages,
-        total: this.paginationMetersInfo.total,
+        page: this.paginationMetersInfo().page,
+        total_pages: this.paginationMetersInfo().total_pages,
+        total: this.paginationMetersInfo().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
   setupStatusCategory(): void {
@@ -256,8 +264,9 @@ export class SharingOperationView implements OnInit {
         'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
         'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.statutCategory = [
+        this.statutCategory.set([
           {
             value: MeterDataStatus.ACTIVE,
             label: translation['SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL'],
@@ -278,17 +287,20 @@ export class SharingOperationView implements OnInit {
                 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
               ],
           },
-        ];
+        ]);
       });
   }
 
   loadOperationSharing(): void {
-    this.sharingOperationService.getSharingOperation(this.id).subscribe((response) => {
-      if (response) {
-        this.sharingOperation = response.data as SharingOperationDTO;
-      }
-      this.isLoading = false;
-    });
+    this.sharingOperationService
+      .getSharingOperation(this.id())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response) {
+          this.sharingOperation.set(response.data as SharingOperationDTO);
+        }
+        this.isLoading.set(false);
+      });
   }
   exportExcelCWAPe(): void {
     console.log('TO IMPLEMENT');
@@ -296,23 +308,26 @@ export class SharingOperationView implements OnInit {
   loadAllMeters(): void {
     try {
       const params: MeterPartialQuery = {
-        sharing_operation_id: this.id,
+        sharing_operation_id: this.id(),
         page: 1,
         limit: 100,
       };
-      this.metersService.getMetersList(params).subscribe({
-        next: (response) => {
-          if (response) {
-            this.metersCharts = response.data as PartialMeterDTO[];
-            this.selectedMeterCharts = this.metersCharts.map((_) => false);
-          } else {
+      this.metersService
+        .getMetersList(params)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.metersCharts.set(response.data as PartialMeterDTO[]);
+              this.selectedMeterCharts.set(this.metersCharts().map((_) => false));
+            } else {
+              console.error('Error fetching meters partial list');
+            }
+          },
+          error: (_error) => {
             console.error('Error fetching meters partial list');
-          }
-        },
-        error: (_error) => {
-          console.error('Error fetching meters partial list');
-        },
-      });
+          },
+        });
     } catch (e) {
       console.error('Error fetching meters partial list ' + String(e));
     }
@@ -325,11 +340,11 @@ export class SharingOperationView implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('SHARING_OPERATION.VIEW.METER.ADD_METERS_HEADER') as string,
       data: {
-        id: this.id,
+        id: this.id(),
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant(
@@ -350,11 +365,11 @@ export class SharingOperationView implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('SHARING_OPERATION.VIEW.KEY.MODIFY_KEY_HEADER') as string,
       data: {
-        id: this.id,
+        id: this.id(),
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant(
@@ -369,22 +384,20 @@ export class SharingOperationView implements OnInit {
   }
 
   revokeWaitingKey(): void {
-    console.log('Revoke ');
-    const waitingKey = this.sharingOperation?.key_waiting_approval;
+    const waitingKey = this.sharingOperation()?.key_waiting_approval;
     if (waitingKey) {
       this.sharingOperationService
         .patchKeyStatus({
           id_key: waitingKey.key.id,
-          id_sharing: this.id,
+          id_sharing: this.id(),
           date: new Date(),
           status: SharingKeyStatus.REJECTED,
         })
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
             if (response) {
               this.loadOperationSharing();
-
-              // this.ref.close(true);
             } else {
               this.errorHandler.handleError();
             }
@@ -398,15 +411,17 @@ export class SharingOperationView implements OnInit {
   }
 
   approveWaitingKey(): void {
-    const waitingKey = this.sharingOperation?.key_waiting_approval;
-    if (waitingKey && this.dateStartApproved) {
+    const waitingKey = this.sharingOperation()?.key_waiting_approval;
+    const dateApproved = this.dateStartApproved();
+    if (waitingKey && dateApproved) {
       this.sharingOperationService
         .patchKeyStatus({
           id_key: waitingKey.key.id,
-          id_sharing: this.id,
-          date: this.dateStartApproved,
+          id_sharing: this.id(),
+          date: dateApproved,
           status: SharingKeyStatus.APPROVED,
         })
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
             if (response) {
@@ -439,36 +454,38 @@ export class SharingOperationView implements OnInit {
   }
 
   newKey(): void {
-    // Get all futurs meters EAN
     this.ref = this.dialogService.open(SelectMeterNewKeyDialog, {
       header: 'Select meters for new key',
       width: '800px',
-      data: { idSharing: this.id },
+      data: { idSharing: this.id() },
     });
 
-    this.ref?.onClose.subscribe((selectedEANs: string[] | null) => {
-      if (!selectedEANs?.length) return;
-      void this.routing.navigate(['/keys/add'], {
-        state: { consumers: selectedEANs },
+    this.ref?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((selectedEANs: string[] | null) => {
+        if (!selectedEANs?.length) return;
+        void this.routing.navigate(['/keys/add'], {
+          state: { consumers: selectedEANs },
+        });
       });
-    });
   }
 
   loadChart(): void {
-    this.displayDownloadButton = false;
+    this.displayDownloadButton.set(false);
     if (this.formChart.invalid) {
       return;
     }
     const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.sharingOperationService
-      .getSharingOperationConsumptions(this.id, {
+      .getSharingOperationConsumptions(this.id(), {
         date_start: formValue.dateDeb,
         date_end: formValue.dateFin,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {
           const tmpData = response.data as SharingOpConsumptionDTO;
-          this.data = {
+          this.data.set({
             labels: tmpData.timestamps,
             datasets: [
               {
@@ -504,35 +521,35 @@ export class SharingOperationView implements OnInit {
                 data: tmpData.inj_shared,
               },
             ],
-          };
-          this.displayDownloadButton = true;
+          });
+          this.displayDownloadButton.set(true);
         }
       });
   }
 
   downloadTotalConsumption(): void {
     const formValue = this.formChart.getRawValue() as ChartFormValue;
-    if (this.sharingOperation) {
+    const op = this.sharingOperation();
+    if (op) {
       this.sharingOperationService
-        .downloadSharingOperationConsumptions(this.sharingOperation.id, {
+        .downloadSharingOperationConsumptions(op.id, {
           date_start: formValue.dateDeb,
           date_end: formValue.dateFin,
         })
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
             if (response) {
-              // Check if the response contains the blob/filename object
               if ('blob' in response) {
                 const url = window.URL.createObjectURL(response.blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = response.filename; // Use the dynamic filename!
+                a.download = response.filename;
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
               } else {
-                // This is the ApiResponse error case
                 this.errorHandler.handleError(response.data ? response.data : null);
               }
             }
@@ -549,8 +566,8 @@ export class SharingOperationView implements OnInit {
     const input = event.target as HTMLInputElement;
     const selectedFile = input.files?.[0];
     if (selectedFile) {
-      this.fileConsumption = selectedFile;
-      this.formGroup.patchValue({ fileConsumption: this.fileConsumption });
+      this.fileConsumption.set(selectedFile);
+      this.formGroup.patchValue({ fileConsumption: this.fileConsumption() });
       this.formGroup.get('fileConsumption')?.updateValueAndValidity();
     }
   }
@@ -558,40 +575,42 @@ export class SharingOperationView implements OnInit {
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.dragging = true;
+    this.dragging.set(true);
   }
 
   onDragLeave(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.dragging = false;
+    this.dragging.set(false);
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.dragging = false;
+    this.dragging.set(false);
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
-      this.fileConsumption = files[0];
-      this.formGroup.patchValue({ fileConsumption: this.fileConsumption });
+      this.fileConsumption.set(files[0]);
+      this.formGroup.patchValue({ fileConsumption: this.fileConsumption() });
       this.formGroup.get('fileConsumption')?.updateValueAndValidity();
     }
   }
 
   addConsumptionInformations(): void {
-    if (this.formGroup.invalid || !this.sharingOperation) {
+    const op = this.sharingOperation();
+    if (this.formGroup.invalid || !op) {
       return;
     }
     const formData = new FormData();
-    formData.append('file', this.fileConsumption as File);
-    formData.append('idSharing', this.sharingOperation.id.toString());
+    formData.append('file', this.fileConsumption() as File);
+    formData.append('idSharing', op.id.toString());
     const addConsumption: AddConsumptionDataDTO = {
-      id_sharing_operation: this.sharingOperation.id,
+      id_sharing_operation: op.id,
     };
-    this.sharingOperationService.addConsumptionDataToSharing(addConsumption).subscribe(
-      // TODO: To fix
-      {
+    this.sharingOperationService
+      .addConsumptionDataToSharing(addConsumption)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
         next: (response) => {
           if (response) {
             this.snackbar.openSnackBar(
@@ -607,8 +626,7 @@ export class SharingOperationView implements OnInit {
         error: (error) => {
           this.errorHandler.handleError(error);
         },
-      },
-    );
+      });
   }
 
   protected readonly KeyStatus = SharingKeyStatus;
@@ -616,7 +634,8 @@ export class SharingOperationView implements OnInit {
   loadSharingOperationKey(): void {
     this.loadingSharingOperationKeys.set(true);
     this.sharingOperationService
-      .getSharingOperationKeysList(this.id, this.filterSharingOperationKey())
+      .getSharingOperationKeysList(this.id(), this.filterSharingOperationKey())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           if (response) {

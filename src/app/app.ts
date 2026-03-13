@@ -21,6 +21,7 @@ import { Toast } from 'primeng/toast';
 })
 export class App implements OnInit, OnDestroy {
   showNavbar = true;
+  sidebarPinned = false;
   private router = inject(Router);
   private keycloak = inject(Keycloak);
   private ctx = inject(UserContextService);
@@ -45,7 +46,6 @@ export class App implements OnInit, OnDestroy {
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
         this.showNavbar = !event.urlAfterRedirects.includes('/auth');
-        console.log(this.showNavbar);
       });
     if (this.keycloak.authenticated) this.ctx.refreshUserContext();
     this.eventBus.on<SnackNotificationEvent<string>>(

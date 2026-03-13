@@ -1,34 +1,29 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-building text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">
-        {{ 'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate }}
-      </h2>
-    </div>
-    <div class="w-6/12 text-end">
-      <p-button
-        type="button"
-        icon="pi pi-plus"
-        label="{{ 'SHARING_OPERATION.LIST.ADD_BUTTON_LABEL' | translate }}"
-        (click)="onAddSharingOperation()"
-      ></p-button>
-    </div>
+  <div class="flex flex-wrap -mx-2 justify-center md:justify-between">
+    <app-header-page
+      icon="pi pi-building"
+      [text]="'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate"
+    ></app-header-page>
+    <p-button
+      type="button"
+      icon="pi pi-plus"
+      label="{{ 'SHARING_OPERATION.LIST.ADD_BUTTON_LABEL' | translate }}"
+      (click)="onAddSharingOperation()"
+    ></p-button>
   </div>
 
   <p-table
     #dt
     [value]="sharingOperationList()"
-    [tableStyle]="{ 'min-width': '50rem' }"
     [lazy]="true"
     (onLazyLoad)="lazyLoadSharingOperation($event)"
-    [rows]="paginationInfo.limit"
-    [totalRecords]="paginationInfo.total"
-    [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+    [rows]="paginationInfo().limit"
+    [totalRecords]="paginationInfo().total"
+    [first]="firstRow()"
     [showCurrentPageReport]="true"
-    [currentPageReportTemplate]="currentPageReportTemplate"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
     (onPage)="pageChange($event)"
-    [paginator]="paginationInfo.total_pages > 1"
+    [paginator]="showPaginator()"
   >
     <ng-template pTemplate="caption">
       <div class="flex content-between">
@@ -41,7 +36,7 @@
       </div>
     </ng-template>
     <ng-template pTemplate="header">
-      <tr>
+      <tr class="max-lg:hidden">
         <th [pSortableColumn]="'name'" class="text-base px-3">
           <div class="flex items-center">
             {{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}
@@ -75,9 +70,26 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-sharingOp>
-      <tr (click)="onRowClick(sharingOp)" class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer">
-        <td class="text-sm px-3 py-2">{{ sharingOp.name }}</td>
-        <td class="text-sm px-3 py-2">{{ sharingOp.type | sharingOperationType }}</td>
+      <tr
+        (click)="onRowClick(sharingOp)"
+        class="grid grid-cols-1 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! border-b-2 cursor-pointer"
+      >
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ sharingOp.name }}</span>
+        </td>
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ sharingOp.type | sharingOperationType }}</span>
+        </td>
       </tr>
     </ng-template>
     <ng-template #emptyMessage pTemplate="emptymessage">

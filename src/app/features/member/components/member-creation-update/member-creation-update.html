@@ -25,8 +25,8 @@
               (backClicked)="activateCallback(0)"
               (gestionnaireChangeEvent)="gestionnaireChange($event)"
               [form]="formData"
-              [gestionnaire]="gestionnaire"
-              [typeClient]="typeClient"
+              [gestionnaire]="gestionnaire()"
+              [typeClient]="typeClient()"
             ></app-new-member-informations>
           }
         </ng-template>

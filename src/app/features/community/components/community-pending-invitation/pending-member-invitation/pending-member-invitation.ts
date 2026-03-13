@@ -22,11 +22,11 @@ export class PendingMemberInvitation {
   private invitationService = inject(InvitationService);
   private errorHandler = inject(ErrorMessageHandler);
   pendingMembresInvitation = signal<UserMemberInvitationDTO[]>([]);
-  loadingMembers = true;
+  loadingMembers = signal(true);
   filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
 
   loadPendingMemberInvitation(): void {
-    this.loadingMembers = true;
+    this.loadingMembers.set(true);
     this.invitationService.getMembersPendingInviation(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -34,11 +34,11 @@ export class PendingMemberInvitation {
         } else {
           this.errorHandler.handleError(response);
         }
-        this.loadingMembers = false;
+        this.loadingMembers.set(false);
       },
       error: (error) => {
         this.errorHandler.handleError(error);
-        this.loadingMembers = false;
+        this.loadingMembers.set(false);
       },
     });
   }

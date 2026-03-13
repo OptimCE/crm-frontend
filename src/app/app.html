@@ -1,7 +1,7 @@
 <div class="app-layout-wrapper">
   @if (showNavbar) {
-    <app-navbar></app-navbar>
-    <main class="app-content">
+    <app-navbar (sidebarPinChanged)="sidebarPinned = $event"></app-navbar>
+    <main class="app-content" [class.app-content--sidebar-pinned]="sidebarPinned">
       <router-outlet></router-outlet>
     </main>
   } @else {

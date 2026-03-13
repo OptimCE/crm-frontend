@@ -7,10 +7,10 @@
     <div class="space-y-4">
       <!-- Header -->
       <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <i class="pi pi-user text-green-500! text-2xl!"></i>
-          <h2 class="text-xl font-medium">{{ 'PROFILE.MY_PROFILE' | translate }}</h2>
-        </div>
+        <app-header-page
+          icon="pi pi-user"
+          [text]="'PROFILE.MY_PROFILE' | translate"
+        ></app-header-page>
         <p-button
           pRipple
           icon="pi pi-pencil"
@@ -71,7 +71,7 @@
             </div>
           </ng-template>
           @if (user()) {
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-2">
               <div>
                 <h6 class="text-muted text-md font-medium">
                   {{ 'PROFILE.PERSONAL_INFORMATION.HOUSE_ADDRESS' | translate }}
@@ -111,7 +111,7 @@
             </div>
           </ng-template>
           @if (user()) {
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-2">
               <div>
                 <h6 class="text-muted text-md font-medium">
                   {{ 'PROFILE.PERSONAL_INFORMATION.EMAIL' | translate }}

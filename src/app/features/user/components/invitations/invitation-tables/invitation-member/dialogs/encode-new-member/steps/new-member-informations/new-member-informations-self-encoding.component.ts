@@ -1,4 +1,5 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InputText } from 'primeng/inputtext';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -28,19 +29,20 @@ import { MemberType } from '../../../../../../../../../../shared/types/member.ty
   templateUrl: './new-member-informations-self-encoding.component.html',
   styleUrl: './new-member-informations-self-encoding.component.css',
 })
-export class NewMemberInformationsSelfEncoding implements OnInit {
+export class NewMemberInformationsSelfEncoding {
   private translate = inject(TranslateService);
-  @Input() form!: FormGroup;
-  @Input() typeClient!: number;
-  @Input() gestionnaire: boolean = false;
+  private destroyRef = inject(DestroyRef);
+  readonly form = input.required<FormGroup>();
+  readonly typeClient = input.required<number>();
+  readonly gestionnaire = input<boolean>(false);
 
-  @Output() backClicked = new EventEmitter<void>();
-  @Output() formSubmitted = new EventEmitter<void>();
-  @Output() gestionnaireChangeEvent = new EventEmitter<CheckboxChangeEvent>();
-  idErrorAdded: ErrorAdded = {};
-  errorsSummaryAdded: ErrorSummaryAdded = {};
+  readonly backClicked = output<void>();
+  readonly formSubmitted = output<void>();
+  readonly gestionnaireChangeEvent = output<CheckboxChangeEvent>();
+  readonly idErrorAdded = signal<ErrorAdded>({});
+  readonly errorsSummaryAdded = signal<ErrorSummaryAdded>({});
 
-  ngOnInit(): void {
+  constructor() {
     this.setupErrorTranslation();
   }
 
@@ -51,21 +53,22 @@ export class NewMemberInformationsSelfEncoding implements OnInit {
   setupErrorTranslation(): void {
     this.translate
       .get(['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.idErrorAdded = {
+        this.idErrorAdded.set({
           invalidNumReg: () => translation['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'],
-        };
-        this.errorsSummaryAdded = {
+        });
+        this.errorsSummaryAdded.set({
           invalidNumReg: (_: unknown, _controlName: string) =>
             translation['MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER'],
-        };
+        });
       });
   }
 
   submit(): void {
     console.log('Form submit');
-    console.log(this.form.errors);
-    if (this.form.valid) {
+    console.log(this.form().errors);
+    if (this.form().valid) {
       console.log('Form submitted successfully');
       this.formSubmitted.emit();
     }

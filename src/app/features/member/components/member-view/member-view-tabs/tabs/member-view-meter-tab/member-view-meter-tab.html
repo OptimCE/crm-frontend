@@ -1,15 +1,14 @@
 <p-table
   #dt
   [value]="metersPartialList()"
-  [tableStyle]="{ 'min-width': '50rem' }"
   [lazy]="true"
   (onLazyLoad)="lazyLoadMeters($event)"
-  [rows]="paginationMetersInfo.limit"
-  [totalRecords]="paginationMetersInfo.total"
-  [first]="(paginationMetersInfo.page - 1) * paginationMetersInfo.limit"
+  [rows]="paginationMetersInfo().limit"
+  [totalRecords]="paginationMetersInfo().total"
+  [first]="(paginationMetersInfo().page - 1) * paginationMetersInfo().limit"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplate"
-  [paginator]="paginationMetersInfo.total_pages > 1"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
+  [paginator]="paginationMetersInfo().total_pages > 1"
 >
   <ng-template pTemplate="caption">
     <div class="flex justify-between">
@@ -22,7 +21,7 @@
     </div>
   </ng-template>
   <ng-template pTemplate="header">
-    <tr>
+    <tr class="max-lg:hidden">
       <th>
         <div class="flex items-center">
           {{ 'MEMBER.VIEW.METERS.ADDRESS_LABEL' | translate }}
@@ -125,7 +124,7 @@
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-select
                 [ngModel]="value"
-                [options]="statutCategory"
+                [options]="statutCategory()"
                 (onChange)="filter($event.value)"
                 placeholder="{{ 'MEMBER.VIEW.METERS.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
                 [showClear]="true"
@@ -238,11 +237,40 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-meter>
-    <tr (click)="onRowClick(meter)" style="cursor: pointer" class="hover-flex flex-wrap -mx-2">
-      <td [innerHTML]="meter.address | address" class="text-sm"></td>
-      <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
-      <td class="text-sm px-3 py-2">{{ meter.meter_number }}</td>
+    <tr
+      (click)="onRowClick(meter)"
+      class="grid grid-cols-2 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! cursor-pointer"
+    >
       <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.VIEW.METERS.ADDRESS_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm" [innerHTML]="meter.address | address"></span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.VIEW.METERS.EAN_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ meter.EAN }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.VIEW.METERS.METER_NUMBER_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ meter.meter_number }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.VIEW.METERS.STATUS_LABEL' | translate }}
+          </span>
+        </div>
         @switch (meter.status) {
           @case (MeterDataStatus.ACTIVE) {
             <p-tag
@@ -275,10 +303,15 @@
         }
       </td>
       <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'MEMBER.VIEW.METERS.SHARING_OPERATION_TITLE' | translate }}
+          </span>
+        </div>
         @if (meter.sharingOperation) {
-          <span class="text-sm px-3 py-2">{{ meter.sharingOperation.name }}</span>
+          <span class="text-sm">{{ meter.sharingOperation.name }}</span>
         } @else {
-          <span class="text-sm px-3 py-2"> / </span>
+          <span class="text-sm"> / </span>
         }
       </td>
     </tr>

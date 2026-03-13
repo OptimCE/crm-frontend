@@ -13,6 +13,11 @@ describe('SidebarElement', () => {
 
     fixture = TestBed.createComponent(SidebarElement);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('sidebarOpen', false);
+    fixture.componentRef.setInput('isRouteActive', false);
+    fixture.componentRef.setInput('name', 'Test');
+    fixture.componentRef.setInput('icon', 'pi pi-home');
+    fixture.componentRef.setInput('routerLinkUrl', '/test');
     fixture.detectChanges();
   });
 

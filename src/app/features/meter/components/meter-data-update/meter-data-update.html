@@ -32,7 +32,7 @@
     <div class="flex flex-wrap">
       <div class="flex flex-col w-4/12">
         <span class="text-base">{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}</span>
-        @for (production of productionChainCategory; track $index) {
+        @for (production of productionChainCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'production_' + production.id"
@@ -40,7 +40,7 @@
               formControlName="productionChain"
               name="productionChain"
             />
-            <label [for]="'production_' + production.id" class="text-small">
+            <label [for]="'production_' + production.id" class="text-sm">
               {{ production.name }}
             </label>
           </div>
@@ -49,7 +49,7 @@
       </div>
       <div class="flex flex-col w-4/12 ps-2">
         <span class="text-base">{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}</span>
-        @for (inj of injectionStatusCategory; track $index) {
+        @for (inj of injectionStatusCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'injection_' + inj.id"
@@ -57,7 +57,7 @@
               formControlName="injectionStatus"
               name="injectionStatus"
             />
-            <label [for]="'injection_' + inj.id" class="text-small">
+            <label [for]="'injection_' + inj.id" class="text-sm">
               {{ inj.name }}
             </label>
           </div>
@@ -74,7 +74,7 @@
               formControlName="grd"
               name="grd"
             />
-            <label [for]="'grd_' + grd.id" class="text-small">
+            <label [for]="'grd_' + grd.id" class="text-sm">
               {{ grd.name }}
             </label>
           </div>
@@ -91,7 +91,7 @@
     <div class="flex flex-wrap pb-3">
       <div class="flex flex-col w-4/12">
         <span class="text-base">{{ 'METER.INFORMATIONS.RATE_LABEL' | translate }}</span>
-        @for (rate of rateCategory; track $index) {
+        @for (rate of rateCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'rate_' + rate.id"
@@ -99,7 +99,7 @@
               formControlName="rate"
               name="rate"
             />
-            <label [for]="'rate_' + rate.id" class="text-small">
+            <label [for]="'rate_' + rate.id" class="text-sm">
               {{ rate.name }}
             </label>
           </div>
@@ -108,7 +108,7 @@
       </div>
       <div class="flex flex-col w-4/12 ps-2">
         <span class="text-base">{{ 'METER.INFORMATIONS.USAGE_LABEL' | translate }}</span>
-        @for (client of clientCategory; track $index) {
+        @for (client of clientCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'client_' + client.id"
@@ -116,7 +116,7 @@
               formControlName="clientType"
               name="clientType"
             />
-            <label [for]="'client_' + client.id" class="text-small">
+            <label [for]="'client_' + client.id" class="text-sm">
               {{ client.name }}
             </label>
           </div>
@@ -129,7 +129,7 @@
           <h4 class="ml-3 p text-base">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</h4>
         </div>
         <p-select
-          [options]="membersList"
+          [options]="membersList()"
           formControlName="member"
           optionLabel="name"
           [showClear]="true"
@@ -137,7 +137,7 @@
           placeholder="{{ 'METER.UPDATE_DATA.PLACEHOLDER.SELECT_OWNER_LABEL' | translate }}"
         >
         </p-select>
-        <app-error-handler controlName="member" [errorsAdd]="errorMemberAdded" />
+        <app-error-handler controlName="member" [errorsAdd]="errorMemberAdded()" />
       </div>
     </div>
     <div class="flex flex-wrap pb-1 w-full">

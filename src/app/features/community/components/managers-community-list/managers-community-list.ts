@@ -1,14 +1,16 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { PrimeTemplate } from 'primeng/api';
 import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { Role } from '../../../../core/dtos/role';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 @Component({
   selector: 'app-managers-community-list',
@@ -21,40 +23,30 @@ import { Role } from '../../../../core/dtos/role';
     TableModule,
     TranslatePipe,
     FormsModule,
+    HeaderPage,
   ],
   templateUrl: './managers-community-list.html',
   styleUrl: './managers-community-list.css',
 })
-export class ManagersCommunityList implements OnInit {
+export class ManagersCommunityList {
   private communityService = inject(CommunityService);
   users = signal<UsersCommunityDTO[]>([]);
+  pagination = signal<Pagination>({ page: 0, limit: 0, total: 0, total_pages: 0 });
   filter = signal<CommunityUsersQueryDTO>({ page: 1, limit: 10 });
-  dialogVisible: boolean = false;
-  userSelected: UsersCommunityDTO | null = null;
-  roleSelected: Role | -1 = -1;
-
-  ngOnInit(): void {
-    this.dialogVisible = false;
-    this.roleSelected = -1;
-    this.userSelected = null;
-  }
+  dialogVisible = signal(false);
+  userSelected = signal<UsersCommunityDTO | null>(null);
+  roleSelected = signal<Role | -1>(-1);
 
   loadUsers(): void {
-    this.communityService.getAdmins(this.filter()).subscribe((response) => {
-      if (response) {
+    this.communityService.getAdmins(this.filter()).subscribe({
+      next: (response) => {
         this.users.set(response.data as UsersCommunityDTO[]);
-      }
+        this.pagination.set(response.pagination);
+      },
     });
   }
   lazyLoadUsers($event: TableLazyLoadEvent): void {
     const current: CommunityUsersQueryDTO = { ...this.filter() };
-    if ($event.first !== undefined && $event.rows !== undefined) {
-      if ($event.rows) {
-        current.page = $event.first / $event.rows + 1;
-      } else {
-        current.page = 1;
-      }
-    }
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_name;
@@ -70,6 +62,13 @@ export class ManagersCommunityList implements OnInit {
         }
       }
     }
+    this.filter.set(current);
+    this.loadUsers();
+  }
+
+  pageChange($event: TablePageEvent): void {
+    const current: CommunityUsersQueryDTO = { ...this.filter() };
+    current.page = $event.first / $event.rows + 1;
     this.filter.set(current);
     this.loadUsers();
   }

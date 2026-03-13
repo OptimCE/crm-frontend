@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventBusService } from '../../../../../core/services/event_bus/eventbus.service';
@@ -49,18 +49,17 @@ export class KeyCreationStepByStep implements OnInit {
   private translate = inject(TranslateService);
   private snackbar = inject(SnackbarNotification);
   formFirstStep!: FormGroup;
-  secondStep = false;
+  readonly secondStep = signal(false);
   nbConsumers = -1;
 
   formSecondStep!: FormGroup;
   consumers: ConsumerDTO[] = [];
-  displayIterations = [false, false, false];
-  displayEnd = false;
-  formIterations: FormGroup[] = [];
+  readonly displayEnd = signal(false);
+  readonly formIterations = signal<FormGroup[]>([]);
   iterations: IterationDTO[] = [];
   lastIteration = -1;
   numberIterations: number[] = [];
-  displayErrorInj = false;
+  readonly displayErrorInj = signal(false);
   lastForm!: FormGroup;
 
   ngOnInit(): void {
@@ -76,7 +75,7 @@ export class KeyCreationStepByStep implements OnInit {
   submitFirstForm(): void {
     if (this.formFirstStep.valid) {
       const firstStepValue = this.formFirstStep.getRawValue() as FirstStepValue;
-      if (!this.secondStep) {
+      if (!this.secondStep()) {
         this.nbConsumers = firstStepValue.nb_consumers;
         this.formSecondStep = new FormGroup({});
         for (let i = 0; i < this.nbConsumers; i++) {
@@ -85,7 +84,7 @@ export class KeyCreationStepByStep implements OnInit {
             new FormControl('', [Validators.required]),
           );
         }
-        this.secondStep = true;
+        this.secondStep.set(true);
       } else {
         if (this.nbConsumers != firstStepValue.nb_consumers) {
           if (this.nbConsumers < firstStepValue.nb_consumers) {
@@ -106,7 +105,7 @@ export class KeyCreationStepByStep implements OnInit {
               const difference = this.nbConsumers - firstStepValue.nb_consumers;
 
               this.consumers.splice(this.consumers.length - difference - 1, difference);
-              const iterationValues = this.formIterations.map(
+              const iterationValues = this.formIterations().map(
                 (form) => form.getRawValue() as IterationFormValue,
               );
               for (let i = 0; i < this.iterations.length; i++) {
@@ -150,18 +149,18 @@ export class KeyCreationStepByStep implements OnInit {
           energy_allocated_percentage: -1,
         });
       }
-      if (this.formIterations.length == 0) {
-        this.formIterations.push(
+      if (this.formIterations().length === 0) {
+        this.formIterations.update((arr) => [
+          ...arr,
           new FormGroup({
             type: new FormControl('', [Validators.required]),
             inj_percentage: new FormControl('', [Validators.required]),
           }),
-        );
+        ]);
         this.numberIterations.push(this.lastIteration++);
-        this.displayIterations[0] = true;
       } else {
         // Update the iterations with the new consumers set
-        const iterationValues = this.formIterations.map(
+        const iterationValues = this.formIterations().map(
           (form) => form.getRawValue() as IterationFormValue,
         );
         for (let i = 0; i < this.iterations.length; i++) {
@@ -208,15 +207,15 @@ export class KeyCreationStepByStep implements OnInit {
     };
   }
 
-  addIteration(index: number): void {
-    if (this.formIterations.length < 3) {
-      this.formIterations.push(
+  addIteration(_index: number): void {
+    if (this.formIterations().length < 3) {
+      this.formIterations.update((arr) => [
+        ...arr,
         new FormGroup({
           type: new FormControl('', [Validators.required]),
           inj_percentage: new FormControl('', [Validators.required]),
         }),
-      );
-      this.displayIterations[index] = true;
+      ]);
     }
   }
 
@@ -240,40 +239,44 @@ export class KeyCreationStepByStep implements OnInit {
       return;
     }
     this.submitSecondForm();
-    for (const fIteration of this.formIterations) {
+    const currentFormIterations = this.formIterations();
+    for (const fIteration of currentFormIterations) {
       if (fIteration.invalid) {
         return;
       }
     }
-    const iterationValues = this.formIterations.map(
+    const iterationValues = currentFormIterations.map(
       (form) => form.getRawValue() as IterationFormValue,
     );
-    for (let i = 0; i < this.formIterations.length; i++) {
+    for (let i = 0; i < currentFormIterations.length; i++) {
       const type = +iterationValues[i].type;
       this.iterations[i] = this.computeIteration(type, +iterationValues[i].inj_percentage, i + 1);
     }
 
     const sumInj = this.getSumOfIter();
-    this.displayErrorInj = false;
+    this.displayErrorInj.set(false);
     if (sumInj >= 0.99 && sumInj <= 1.01) {
-      this.displayEnd = true;
+      this.displayEnd.set(true);
     } else if (sumInj > 1.01) {
-      this.displayErrorInj = true;
-    } else if (this.formIterations.length < 3) {
-      this.addIteration(this.formIterations.length);
+      this.displayErrorInj.set(true);
+    } else if (currentFormIterations.length < 3) {
+      this.addIteration(currentFormIterations.length);
     } else {
-      this.displayErrorInj = true;
+      this.displayErrorInj.set(true);
     }
   }
   recalculateIterationDisplay(): void {
-    this.displayEnd = this.getSumOfIter() >= 99 && this.getSumOfIter() <= 101;
+    this.displayEnd.set(this.getSumOfIter() >= 99 && this.getSumOfIter() <= 101);
   }
   deleteIteration(index: number): void {
-    if (this.formIterations.length > 1) {
-      this.displayErrorInj = false;
-      this.formIterations.splice(index, 1);
+    if (this.formIterations().length > 1) {
+      this.displayErrorInj.set(false);
+      this.formIterations.update((arr) => {
+        const n = [...arr];
+        n.splice(index, 1);
+        return n;
+      });
       this.iterations.splice(index, 1);
-      this.displayIterations.splice(index, 1);
       this.recalculateIterationDisplay();
     }
   }
@@ -298,7 +301,7 @@ export class KeyCreationStepByStep implements OnInit {
       return;
     }
     this.submitSecondForm();
-    for (const fIteration of this.formIterations) {
+    for (const fIteration of this.formIterations()) {
       if (fIteration.invalid) {
         fIteration.markAllAsTouched();
         return;

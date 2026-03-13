@@ -1,29 +1,23 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-key text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">{{ 'KEY.LIST.TITLE' | translate }}</h2>
-    </div>
-    <div class="w-6/12 text-end">
-      <p-toast />
-      <p-split-button
-        label="{{ 'KEY.LIST.ADD_BUTTON_LABEL' | translate }}"
-        icon="pi pi-plus"
-        (onClick)="addKey()"
-        [model]="optionsSplitButton"
-      >
-      </p-split-button>
-    </div>
+  <div class="flex flex-wrap -mx-2 mb-3 flex-col lg:flex-row items-center lg:justify-between">
+    <app-header-page icon="pi pi-key" [text]="'KEY.LIST.TITLE' | translate"></app-header-page>
+    <p-toast />
+    <p-split-button
+      label="{{ 'KEY.LIST.ADD_BUTTON_LABEL' | translate }}"
+      icon="pi pi-plus"
+      (onClick)="addKey()"
+      [model]="optionsSplitButton"
+    >
+    </p-split-button>
   </div>
   <p-table
     #dt
     [value]="keysList()"
-    [tableStyle]="{ 'min-width': '50rem' }"
     (onLazyLoad)="lazyLoadKeys($event)"
-    [rows]="paginated.limit"
-    [totalRecords]="paginated.total"
-    [first]="(paginated.page - 1) * paginated.limit"
-    [currentPageReportTemplate]="currentPageReportTemplate"
+    [rows]="paginated().limit"
+    [totalRecords]="paginated().total"
+    [first]="(paginated().page - 1) * paginated().limit"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
     (onPage)="pageChange($event)"
     [lazy]="lazy"
   >
@@ -38,7 +32,7 @@
       </div>
     </ng-template>
     <ng-template #header>
-      <tr>
+      <tr class="max-lg:hidden">
         <th [pSortableColumn]="'nom'" class="text-base px-3">
           {{ 'KEY.LIST.NAME_LABEL' | translate }}
           <p-sortIcon [field]="'nom'"></p-sortIcon>
@@ -70,11 +64,24 @@
     <ng-template #body let-key>
       <tr
         routerLink="/keys/{{ key.id }}"
-        class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer"
-        style="cursor: pointer"
+        class="grid grid-cols-2 lg:table-row flex-wrap hover:bg-green-50! cursor-pointer"
       >
-        <td class="text-sm px-3 py-2">{{ key.name }}</td>
-        <td class="text-sm px-3 py-2">{{ key.description }}</td>
+        <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'KEY.LIST.NAME_LABEL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ key.name }}</span>
+        </td>
+        <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'KEY.LIST.DESCRIPTION_LABEL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ key.description }}</span>
+        </td>
       </tr>
     </ng-template>
     <ng-template #emptymessage>

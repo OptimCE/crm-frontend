@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
@@ -15,48 +16,56 @@ import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/err
   styleUrl: './documents.component.css',
   providers: [ErrorMessageHandler],
 })
-export class DocumentsComponent implements OnInit {
+export class DocumentsComponent {
   private meService = inject(MeService);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
 
-  documentsPartialList = signal<MeDocumentDTO[]>([]);
-  filter = signal<MeDocumentPartialQuery>({ page: 1, limit: 10 });
+  readonly documentsPartialList = signal<MeDocumentDTO[]>([]);
+  readonly filter = signal<MeDocumentPartialQuery>({ page: 1, limit: 10 });
+  readonly paginationInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly firstRow = computed(
+    () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
+  );
+  readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  paginationInfo: Pagination = new Pagination(1, 10, 0, 1);
-  currentPageReportTemplate: string = '';
-
-  ngOnInit(): void {
+  constructor() {
     this.updatePaginationTranslation();
   }
 
   updatePaginationTranslation(): void {
     this.translate
       .get('PROFILE.DOCUMENTS.PAGE_REPORT_TEMPLATE_LABEL', {
-        page: this.paginationInfo.page,
-        total_pages: this.paginationInfo.total_pages,
-        total: this.paginationInfo.total,
+        page: this.paginationInfo().page,
+        total_pages: this.paginationInfo().total_pages,
+        total: this.paginationInfo().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
   loadDocuments(): void {
-    this.meService.getDocuments(this.filter()).subscribe({
-      next: (response) => {
-        if (response) {
-          this.documentsPartialList.set(response.data as MeDocumentDTO[]);
-          this.paginationInfo = response.pagination;
-          this.updatePaginationTranslation();
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
+    this.meService
+      .getDocuments(this.filter())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.documentsPartialList.set(response.data as MeDocumentDTO[]);
+            this.paginationInfo.set(response.pagination);
+            this.updatePaginationTranslation();
+          } else {
+            this.errorHandler.handleError(response);
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error);
+        },
+      });
   }
 
   lazyLoadDocuments($event: TableLazyLoadEvent): void {
@@ -107,23 +116,26 @@ export class DocumentsComponent implements OnInit {
   }
 
   onDownloadDocument(doc: MeDocumentDTO): void {
-    this.meService.getDocumentById(doc.id).subscribe({
-      next: (response) => {
-        if (response && 'blob' in response) {
-          const url = window.URL.createObjectURL(response.blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = response.filename;
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-        }
-      },
-      error: (error) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData);
-      },
-    });
+    this.meService
+      .getDocumentById(doc.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response && 'blob' in response) {
+            const url = window.URL.createObjectURL(response.blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = response.filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          }
+        },
+        error: (error) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
+        },
+      });
   }
 }

@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -60,21 +61,21 @@ export class MeterUpdate implements OnInit {
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
-  @Input()
-  meter!: MetersDTO;
+  private destroyRef = inject(DestroyRef);
+  readonly meter: MetersDTO;
   metersForm!: FormGroup;
-  tarifGroupCategory: MeterCategory<TarifGroup>[] = [
+  readonly tarifGroupCategory = signal<MeterCategory<TarifGroup>[]>([
     { id: TarifGroup.LOW_TENSION, name: '' },
     { id: TarifGroup.HIGH_TENSION, name: '' },
-  ];
-  phaseCategory: MeterCategory<PhaseCategory>[] = [
+  ]);
+  readonly phaseCategory = signal<MeterCategory<PhaseCategory>[]>([
     { id: PhaseCategory.SINGLE, name: '' },
     { id: PhaseCategory.THREE, name: '' },
-  ];
-  readingFrequencyCategory: MeterCategory<ReadingFrequency>[] = [
+  ]);
+  readonly readingFrequencyCategory = signal<MeterCategory<ReadingFrequency>[]>([
     { id: ReadingFrequency.MONTHLY, name: '' },
     { id: ReadingFrequency.YEARLY, name: '' },
-  ];
+  ]);
   constructor() {
     const data = this.config.data as MeterUpdateDialogData;
     this.meter = data.meter;
@@ -101,11 +102,11 @@ export class MeterUpdate implements OnInit {
       address_city: this.meter.address.city,
       EAN: this.meter.EAN,
       meterNumber: this.meter.meter_number,
-      tarifGroup: this.tarifGroupCategory.find(
+      tarifGroup: this.tarifGroupCategory().find(
         (tarifGroup) => tarifGroup.id === this.meter.tarif_group,
       ),
-      phasesNumber: this.phaseCategory.find((phase) => phase.id === this.meter.phases_number),
-      readingFrequency: this.readingFrequencyCategory.find(
+      phasesNumber: this.phaseCategory().find((phase) => phase.id === this.meter.phases_number),
+      readingFrequency: this.readingFrequencyCategory().find(
         (readingFrequency) => readingFrequency.id === this.meter.reading_frequency,
       ),
     });
@@ -123,28 +124,34 @@ export class MeterUpdate implements OnInit {
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
         'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        const translations = [
-          translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
-          translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
-        ];
-        this.readingFrequencyCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.readingFrequencyCategory.update((items) =>
+          items.map((item, index) => ({
+            ...item,
+            name: [
+              translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
+              translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
+            ][index],
+          })),
+        );
       });
   }
 
   setupPhaseCategory(): void {
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        const translations = [
-          translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
-          translation['METER.CATEGORIES.PHASE.THREE_PHASES'],
-        ];
-        this.phaseCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.phaseCategory.update((items) =>
+          items.map((item, index) => ({
+            ...item,
+            name: [
+              translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
+              translation['METER.CATEGORIES.PHASE.THREE_PHASES'],
+            ][index],
+          })),
+        );
       });
   }
 
@@ -154,14 +161,17 @@ export class MeterUpdate implements OnInit {
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
         'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        const translations = [
-          translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
-          translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
-        ];
-        this.tarifGroupCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.tarifGroupCategory.update((items) =>
+          items.map((item, index) => ({
+            ...item,
+            name: [
+              translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
+              translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
+            ][index],
+          })),
+        );
       });
   }
 
@@ -189,17 +199,20 @@ export class MeterUpdate implements OnInit {
       tarif_group: formValue.tarifGroup.id,
     };
 
-    this.meterService.updateMeter(updated_meter).subscribe({
-      next: (response) => {
-        if (response) {
-          this.ref.close(true);
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
+    this.meterService
+      .updateMeter(updated_meter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.ref.close(true);
+          } else {
+            this.errorHandler.handleError(response);
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error);
+        },
+      });
   }
 }

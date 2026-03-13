@@ -7,7 +7,7 @@
   <i class="pi pi-arrow-left flex-wrap-left mr-2 text-xs!"></i>
   <span class="text-sm!">{{ 'MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS' | translate }}</span>
 </div>
-<form [formGroup]="addressForm" (submit)="submit()">
+<form [formGroup]="addressForm()" (submit)="submit()">
   <div class="flex flex-wrap pb-1">
     <div class="flex items-center">
       <h3 class="text-primary">{{ 'MEMBER.ADD.ADDRESS.HOUSE_ADDRESS_TITLE' | translate }}</h3>
@@ -101,7 +101,7 @@
       'MEMBER.ADD.ADDRESS.SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL' | translate
     }}</label>
   </div>
-  @if (addressForm.get('billing_address_street')) {
+  @if (addressForm().get('billing_address_street')) {
     <div class="mt-3">
       <div class="flex items-center">
         <h3 class="font-medium text-lg">

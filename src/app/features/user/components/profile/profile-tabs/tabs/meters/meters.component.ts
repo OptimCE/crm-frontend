@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -10,6 +11,7 @@ import { MeMetersPartialQuery, MePartialMeterDTO } from '../../../../../../../sh
 import { MeterDataStatus } from '../../../../../../../shared/types/meter.types';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { AddressPipe } from '../../../../../../../shared/pipes/address/address-pipe';
+import { Pagination } from '../../../../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-meters-user',
@@ -18,12 +20,13 @@ import { AddressPipe } from '../../../../../../../shared/pipes/address/address-p
   styleUrl: './meters.component.css',
   providers: [ErrorMessageHandler],
 })
-export class MetersComponent implements OnInit {
+export class MetersComponent {
   private meService = inject(MeService);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
 
-  metersPartialList = signal<MePartialMeterDTO[]>([]);
+  readonly metersPartialList = signal<MePartialMeterDTO[]>([]);
 
   statusCategory = [
     MeterDataStatus.ACTIVE,
@@ -32,46 +35,49 @@ export class MetersComponent implements OnInit {
     MeterDataStatus.WAITING_MANAGER,
   ];
 
-  paginationInfo = {
-    page: 1,
-    limit: 10,
-    total: 0,
-    total_pages: 1,
-  };
-  filter = signal<MeMetersPartialQuery>({ page: 1, limit: 10 });
-  currentPageReportTemplate: string = '';
+  readonly paginationInfo = signal<Pagination>({ page: 1, limit: 10, total: 0, total_pages: 1 });
+  readonly filter = signal<MeMetersPartialQuery>({ page: 1, limit: 10 });
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly firstRow = computed(
+    () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
+  );
+  readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  ngOnInit(): void {
+  constructor() {
     this.updatePaginationTranslation();
   }
 
   updatePaginationTranslation(): void {
     this.translate
       .get('PROFILE.METERS.PAGE_REPORT_TEMPLATE_LABEL', {
-        page: this.paginationInfo.page,
-        total_pages: this.paginationInfo.total_pages,
-        total: this.paginationInfo.total,
+        page: this.paginationInfo().page,
+        total_pages: this.paginationInfo().total_pages,
+        total: this.paginationInfo().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
   loadMeters(): void {
-    this.meService.getMeters(this.filter()).subscribe({
-      next: (response) => {
-        if (response) {
-          this.metersPartialList.set(response.data as MePartialMeterDTO[]);
-          this.paginationInfo = response.pagination;
-          this.updatePaginationTranslation();
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
+    this.meService
+      .getMeters(this.filter())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.metersPartialList.set(response.data as MePartialMeterDTO[]);
+            this.paginationInfo.set(response.pagination);
+            this.updatePaginationTranslation();
+          } else {
+            this.errorHandler.handleError(response);
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error);
+        },
+      });
   }
 
   lazyLoadMeters($event: TableLazyLoadEvent): void {

@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -42,23 +43,24 @@ export class SelectMeterNewKeyDialog implements OnInit {
   private sharingOperationService = inject(SharingOperationService);
   private ref = inject(DynamicDialogRef);
   private config = inject(DynamicDialogConfig);
+  private destroyRef = inject(DestroyRef);
 
   QueryType = SharingOperationMetersQueryType;
-  activeTab = 0;
+  readonly activeTab = signal(0);
 
   // Per-tab state
-  listNow = signal<PartialMeterDTO[]>([]);
-  listFuture = signal<PartialMeterDTO[]>([]);
-  loadingNow = signal(true);
-  loadingFuture = signal(true);
-  paginationNow = signal<Pagination>({ total: 0, total_pages: 0, page: 1, limit: 10 });
-  paginationFuture = signal<Pagination>({ total: 0, total_pages: 0, page: 1, limit: 10 });
-  filterNow = signal<SharingOperationMetersQuery>({
+  readonly listNow = signal<PartialMeterDTO[]>([]);
+  readonly listFuture = signal<PartialMeterDTO[]>([]);
+  readonly loadingNow = signal(true);
+  readonly loadingFuture = signal(true);
+  readonly paginationNow = signal<Pagination>({ total: 0, total_pages: 0, page: 1, limit: 10 });
+  readonly paginationFuture = signal<Pagination>({ total: 0, total_pages: 0, page: 1, limit: 10 });
+  readonly filterNow = signal<SharingOperationMetersQuery>({
     page: 1,
     limit: 10,
     type: SharingOperationMetersQueryType.NOW,
   });
-  filterFuture = signal<SharingOperationMetersQuery>({
+  readonly filterFuture = signal<SharingOperationMetersQuery>({
     page: 1,
     limit: 10,
     type: SharingOperationMetersQueryType.FUTURE,
@@ -66,11 +68,9 @@ export class SelectMeterNewKeyDialog implements OnInit {
 
   selectedMeters = new Map<string, SharingOperationMetersQueryType>();
 
-  private idSharing!: number;
+  private readonly idSharing = (this.config.data as SelectMeterNewKeySharing).idSharing;
 
   ngOnInit(): void {
-    const data = this.config.data as SelectMeterNewKeySharing;
-    this.idSharing = data.idSharing;
     this.loadMeters(SharingOperationMetersQueryType.NOW);
     this.loadMeters(SharingOperationMetersQueryType.FUTURE);
   }
@@ -92,6 +92,7 @@ export class SelectMeterNewKeyDialog implements OnInit {
     this.getLoading(type).set(true);
     this.sharingOperationService
       .getSharingOperationMetersList(this.idSharing, this.getFilter(type)())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           if (response) {
@@ -146,6 +147,7 @@ export class SelectMeterNewKeyDialog implements OnInit {
     const allFilter = { ...this.getFilter(type)(), page: 1, limit: 9999 };
     this.sharingOperationService
       .getSharingOperationMetersList(this.idSharing, allFilter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         (response.data as PartialMeterDTO[]).forEach((m) => this.selectedMeters.set(m.EAN, type));
       });

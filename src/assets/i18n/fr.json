@@ -29,7 +29,17 @@
     }
   },
   "LOGIN": {
-    "LOGIN": "Connectez-vous"
+    "LOGIN": "Connectez-vous",
+    "SLIDES": {
+      "MEMBERS_TITLE": "Gérez vos membres facilement",
+      "MEMBERS_DESC": "Ajoutez, modifiez et suivez tous les membres de votre communauté depuis un seul tableau de bord.",
+      "METERS_TITLE": "Surveillez vos compteurs",
+      "METERS_DESC": "Suivez la production et la consommation d'énergie.",
+      "SHARING_TITLE": "Opérations de partage",
+      "SHARING_DESC": "Configurez et gérez les opérations de partage d'énergie au sein de votre communauté.",
+      "KEYS_TITLE": "Clés de répartition",
+      "KEYS_DESC": "Créez et gérez les clés de répartition pour distribuer l'énergie équitablement."
+    }
   },
   "NAVBAR": {
     "PROFILE": "Profil",
@@ -51,7 +61,8 @@
     "ERROR_AUTH_UPDATE": "Erreur lors de la mise à jour de l'autorisation",
     "ERROR_LOGOUT": "Erreur lors de la déconnexion",
     "DELETE": "Supprimer",
-    "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier"
+    "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier",
+    "MANAGEMENT": "Gestion"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
@@ -837,6 +848,7 @@
       "NO_OWNER_FOUND_LABEL": "Aucun titulaire attribué"
     },
     "FULL": {
+      "BACK_TO_LIST": "Retour à la liste",
       "MODIFY_BUTTON_LABEL": "Modifier",
       "METER_INFORMATION_TITLE": "Information compteur",
       "TABS": {

@@ -1,2 +1,163 @@
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
+/* ============================================================
+   THEME — Green palette from logo
+   Tailwind v4 + PrimeNG (Aura-based)
+   ============================================================
+
+   Logo colors:
+     #1B5E20  — darkest forest green
+     #2E7D32  — dark green
+     #43A047  — mid green (primary)
+     #66BB6A  — light green
+     #81C784  — lightest sage green
+   ============================================================ */
+
+/* ------------------------------------------------------------------
+   1. TAILWIND V4 — @theme tokens
+   ------------------------------------------------------------------ */
+@theme {
+  --color-primary-50: #e8f5e9;
+  --color-primary-100: #c8e6c9;
+  --color-primary-200: #a5d6a7;
+  --color-primary-300: #81c784; /* logo lightest */
+  --color-primary-400: #66bb6a; /* logo light */
+  --color-primary-500: #43a047; /* logo mid — main primary */
+  --color-primary-600: #2e7d32; /* logo dark */
+  --color-primary-700: #1b5e20; /* logo darkest */
+  --color-primary-800: #145218;
+  --color-primary-900: #0d3b11;
+  --color-primary-950: #072508;
+
+  --color-surface-0: #ffffff;
+  --color-surface-50: #f8faf8;
+  --color-surface-100: #f0f4f0;
+  --color-surface-200: #e2e8e3;
+  --color-surface-300: #c9d3ca;
+  --color-surface-400: #9ba89d;
+  --color-surface-500: #6e7e70;
+  --color-surface-600: #4a5a4c;
+  --color-surface-700: #374038;
+  --color-surface-800: #252d26;
+  --color-surface-900: #181e18;
+  --color-surface-950: #0e120e;
+}
+
+:root {
+  --p-primary-50: #e8f5e9;
+  --p-primary-100: #c8e6c9;
+  --p-primary-200: #a5d6a7;
+  --p-primary-300: #81c784;
+  --p-primary-400: #66bb6a;
+  --p-primary-500: #43a047;
+  --p-primary-600: #2e7d32;
+  --p-primary-700: #1b5e20;
+  --p-primary-800: #145218;
+  --p-primary-900: #0d3b11;
+  --p-primary-950: #072508;
+
+  --p-primary-color: #43a047;
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: #2e7d32;
+  --p-primary-active-color: #1b5e20;
+
+  --p-primary-color-text: #43a047;
+
+  --p-surface-0: #ffffff;
+  --p-surface-50: #f8faf8;
+  --p-surface-100: #f0f4f0;
+  --p-surface-200: #e2e8e3;
+  --p-surface-300: #c9d3ca;
+  --p-surface-400: #9ba89d;
+  --p-surface-500: #6e7e70;
+  --p-surface-600: #4a5a4c;
+  --p-surface-700: #374038;
+  --p-surface-800: #252d26;
+  --p-surface-900: #181e18;
+  --p-surface-950: #0e120e;
+
+  --p-highlight-background: #e8f5e9;
+  --p-highlight-color: #1b5e20;
+  --p-highlight-focus-background: #c8e6c9;
+  --p-highlight-focus-color: #1b5e20;
+
+  --p-focus-ring-color: #66bb6a;
+
+  --p-green-50: #e8f5e9;
+  --p-green-100: #c8e6c9;
+  --p-green-200: #a5d6a7;
+  --p-green-300: #81c784;
+  --p-green-400: #66bb6a;
+  --p-green-500: #43a047;
+  --p-green-600: #2e7d32;
+  --p-green-700: #1b5e20;
+  --p-green-800: #145218;
+  --p-green-900: #0d3b11;
+
+  --p-text-color: #181e18;
+  --p-text-muted-color: #6e7e70;
+}
+
+.dark,
+[data-theme='dark'] {
+  --p-primary-color: #66bb6a;
+  --p-primary-contrast-color: #0e120e;
+  --p-primary-hover-color: #81c784;
+  --p-primary-active-color: #a5d6a7;
+  --p-primary-color-text: #66bb6a;
+
+  --p-highlight-background: rgba(67, 160, 71, 0.16);
+  --p-highlight-color: #81c784;
+  --p-highlight-focus-background: rgba(67, 160, 71, 0.24);
+  --p-highlight-focus-color: #a5d6a7;
+
+  --p-focus-ring-color: #43a047;
+
+  --p-text-color: #f0f4f0;
+  --p-text-muted-color: #9ba89d;
+}
+
+:root {
+  --chart-1: #1b5e20;
+  --chart-2: #2e7d32;
+  --chart-3: #43a047;
+  --chart-4: #66bb6a;
+  --chart-5: #81c784;
+
+  --chart-6: #a5d6a7;
+  --chart-7: #c8e6c9;
+  --chart-8: #e8f5e9;
+}
+
+.dark [data-theme='dark'] {
+  --chart-1: #81c784;
+  --chart-2: #66bb6a;
+  --chart-3: #43a047;
+  --chart-4: #2e7d32;
+  --chart-5: #1b5e20;
+  --chart-6: #a5d6a7;
+  --chart-7: #c8e6c9;
+  --chart-8: #e8f5e9;
+}
+
+.bg-brand {
+  background-color: #43a047;
+}
+.bg-brand-dark {
+  background-color: #1b5e20;
+}
+.bg-brand-light {
+  background-color: #81c784;
+}
+.text-brand {
+  color: #43a047;
+}
+.text-brand-dark {
+  color: #1b5e20;
+}
+.text-brand-light {
+  color: #81c784;
+}
+.border-brand {
+  border-color: #43a047;
+}

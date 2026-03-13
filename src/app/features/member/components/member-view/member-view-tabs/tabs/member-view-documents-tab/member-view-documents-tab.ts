@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -23,19 +24,24 @@ import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/err
   styleUrl: './member-view-documents-tab.css',
   providers: [DialogService],
 })
-export class MemberViewDocumentsTab implements OnInit, OnDestroy {
+export class MemberViewDocumentsTab implements OnInit {
   private documentService = inject(DocumentService);
   private translate = inject(TranslateService);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
   private errorHandler = inject(ErrorMessageHandler);
-  @Input() id!: number;
-  filter = signal<DocumentQueryDTO>({ page: 1, limit: 10 });
+  private destroyRef = inject(DestroyRef);
+  readonly id = input.required<number>();
+  readonly filter = signal<DocumentQueryDTO>({ page: 1, limit: 10 });
 
-  documentsPartialList = signal<DocumentExposedDTO[]>([]);
-  paginationDocumentsInfo: Pagination = new Pagination(1, 10, 0, 1);
-  currentPageReportTemplateDocuments: string = '';
+  readonly documentsPartialList = signal<DocumentExposedDTO[]>([]);
+  readonly paginationDocumentsInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
+  readonly currentPageReportTemplateDocuments = signal<string>('');
   ref?: DynamicDialogRef | null;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
+  }
 
   ngOnInit(): void {
     this.updateDocumentPaginationTranslation();
@@ -44,11 +50,11 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   loadDocument(): void {
     try {
       this.documentsPartialList.set([]);
-      this.documentService.getDocuments(this.id, this.filter()).subscribe({
+      this.documentService.getDocuments(this.id(), this.filter()).subscribe({
         next: (response) => {
           if (response) {
             this.documentsPartialList.set(response.data as DocumentExposedDTO[]);
-            this.paginationDocumentsInfo = response.pagination;
+            this.paginationDocumentsInfo.set(response.pagination);
           } else {
             console.error('Error fetching documents partial list');
           }
@@ -113,12 +119,12 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   updateDocumentPaginationTranslation(): void {
     this.translate
       .get('MEMBER.VIEW.DOCUMENTS.PAGE_REPORT_TEMPLATE_DOCUMENTS_LABEL', {
-        page: this.paginationDocumentsInfo.page,
-        total_pages: this.paginationDocumentsInfo.total_pages,
-        total: this.paginationDocumentsInfo.total,
+        page: this.paginationDocumentsInfo().page,
+        total_pages: this.paginationDocumentsInfo().total_pages,
+        total: this.paginationDocumentsInfo().total,
       })
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplateDocuments = translatedText;
+        this.currentPageReportTemplateDocuments.set(translatedText);
       });
   }
 
@@ -128,7 +134,7 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
   }
 
   onDownloadDocument(doc: DocumentExposedDTO): void {
-    this.documentService.downloadDocument(this.id, doc.id).subscribe({
+    this.documentService.downloadDocument(this.id(), doc.id).subscribe({
       next: (response) => {
         if (response) {
           // Check if the response contains the blob/filename object
@@ -169,11 +175,11 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
       closeOnEscape: true,
       header: this.translate.instant('MEMBER.VIEW.DOCUMENTS.ADD_DOCUMENT_HEADER') as string,
       data: {
-        idMember: this.id,
+        idMember: this.id(),
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.translate
             .get('MEMBER.VIEW.DOCUMENTS.SUCCESS_ADDING_DOCUMENT_LABEL')
@@ -183,12 +189,6 @@ export class MemberViewDocumentsTab implements OnInit, OnDestroy {
           this.loadDocument();
         }
       });
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
     }
   }
 }

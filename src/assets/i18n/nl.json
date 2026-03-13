@@ -29,7 +29,17 @@
     }
   },
   "LOGIN": {
-    "LOGIN": "Aanmelden"
+    "LOGIN": "Aanmelden",
+    "SLIDES": {
+      "MEMBERS_TITLE": "Beheer uw leden eenvoudig",
+      "MEMBERS_DESC": "Voeg toe, bewerk en volg al uw gemeenschapsleden vanuit één dashboard.",
+      "METERS_TITLE": "Monitor uw meters",
+      "METERS_DESC": "Volg de energieproductie en het verbruik.",
+      "SHARING_TITLE": "Deeloperaties",
+      "SHARING_DESC": "Configureer en beheer energiedelingsoperaties binnen uw gemeenschap.",
+      "KEYS_TITLE": "Verdeelsleutels",
+      "KEYS_DESC": "Maak en beheer verdeelsleutels om energie eerlijk te verdelen."
+    }
   },
   "NAVBAR": {
     "PROFILE": "Profiel",
@@ -51,7 +61,8 @@
     "ERROR_AUTH_UPDATE": "Fout bij het bijwerken van de autorisatie",
     "ERROR_LOGOUT": "Fout bij het afmelden",
     "DELETE": "Verwijderen",
-    "COPY_TO_CLIPBOARD": "Kopiëren naar klembord"
+    "COPY_TO_CLIPBOARD": "Kopiëren naar klembord",
+    "MANAGEMENT": "Beheer"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -837,6 +848,7 @@
       "NO_OWNER_FOUND_LABEL": "Geen houder toegewezen"
     },
     "FULL": {
+      "BACK_TO_LIST": "Terug naar lijst",
       "MODIFY_BUTTON_LABEL": "Wijzigen",
       "METER_INFORMATION_TITLE": "Meterinformatie",
       "TABS": {

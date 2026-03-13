@@ -26,7 +26,7 @@
   </form>
 
   <!-- Second Step -->
-  @if (secondStep) {
+  @if (secondStep()) {
     <div>
       <form
         [formGroup]="formSecondStep"
@@ -61,7 +61,7 @@
       </form>
     </div>
   }
-  @for (iterForm of formIterations; let i = $index; track i) {
+  @for (iterForm of formIterations(); let i = $index; track i) {
     <div>
       <form
         [formGroup]="iterForm"
@@ -112,14 +112,14 @@
         </div>
 
         <div class="flex justify-between mt-3">
-          @if (iterations.length === 0 || i === formIterations.length - 1) {
+          @if (iterations.length === 0 || i === formIterations().length - 1) {
             <p-button
               type="submit"
               label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
               class="p-button-lg"
             ></p-button>
           }
-          @if (formIterations.length > 1 && i !== formIterations.length - 1) {
+          @if (formIterations().length > 1 && i !== formIterations().length - 1) {
             <p-button
               class="w-full text-end"
               icon="pi pi-trash"
@@ -127,7 +127,7 @@
               (click)="deleteIteration(i)"
             ></p-button>
           } @else {
-            @if (formIterations.length > 1) {
+            @if (formIterations().length > 1) {
               <p-button
                 icon="pi pi-trash"
                 severity="danger"
@@ -140,12 +140,12 @@
     </div>
   }
   <!-- Iteration Forms -->
-  @if (displayErrorInj) {
+  @if (displayErrorInj()) {
     <div class="alert alert-danger text-center">
       {{ 'KEY.CREATE.SUM_MUST_BE_100_LABEL' | translate }}
     </div>
   }
-  @if (displayEnd) {
+  @if (displayEnd()) {
     <div class="container shadow-sm p-4 rounded bg-white mt-4">
       <form [formGroup]="lastForm" (ngSubmit)="submitKey()">
         <h5 class="font-medium text-center mb-3">{{ 'KEY.CREATE.FINALISATION' | translate }}</h5>

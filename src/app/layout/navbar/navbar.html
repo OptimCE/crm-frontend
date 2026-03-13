@@ -1,148 +1,198 @@
-<div class="app-container" [ngStyle]="{ height: mobile ? '100%' : '' }">
-  <div class="app-sidebar">
-    <p-drawer
-      [fullScreen]="mobile"
-      [modal]="false"
-      position="left"
-      [(visible)]="visibleSideBar"
-      [style]="{ width: mobile ? '100%' : !sidebarOpen ? '70px' : '320px' }"
-      [closable]="mobile"
-      [dismissible]="mobile"
-      [closeOnEscape]="mobile"
-    >
-      <!-- Logo header-->
-      <ng-template #headless>
-        <div
-          class="flex flex-col h-full"
-          (mouseenter)="onMouseEnter($event)"
-          (mouseleave)="onMouseLeave($event)"
-        >
-          <div class="flex pt-3 sidebar-header justify-center">
-            <div class="flex flex-col">
-              <div class="flex justify-center">
-                <img src="assets/images/logo_no_bg.png" class="logo" alt="logo" />
-              </div>
-            </div>
-            @if (mobile) {
-              <div class="close-icon">
-                <button
-                  type="button"
-                  (click)="closeSideBar()"
-                  class="flex items-center justify-center p-2 bg-transparent border-none cursor-pointer text-inherit hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 rounded-md"
-                  aria-label="Close sidebar"
-                >
-                  <i class="pi pi-times" aria-hidden="true"></i>
-                </button>
-              </div>
-            }
-          </div>
-          <p-divider></p-divider>
-          <div class="menu-container grow overflow-auto">
-            <ul
-              class="list-none mb-0 p-0! grid user-section"
-              [style.place-items]="!sidebarOpen ? 'center' : 'unset'"
-            >
-              <li
-                appSidebarItem
-                (sidebarClose)="closeSideBar()"
-                [icon]="'pi pi-user'"
-                [isRouteActive]="isRouteActive.user"
-                [name]="'NAVBAR.PROFILE' | translate"
-                [routerLinkUrl]="'/users'"
-                [sidebarOpen]="sidebarOpen"
-              ></li>
-              <li
-                appSidebarItem
-                (sidebarClose)="closeSideBar()"
-                [icon]="'pi pi-envelope'"
-                [isRouteActive]="isRouteActive.user_invitations"
-                [name]="'NAVBAR.INVITATIONS' | translate"
-                [routerLinkUrl]="'/users/invitations'"
-                [sidebarOpen]="sidebarOpen"
-              ></li>
-              <li
-                appSidebarItem
-                (sidebarClose)="closeSideBar()"
-                [icon]="'pi pi-briefcase'"
-                [isRouteActive]="isRouteActive.communities"
-                [name]="'NAVBAR.MY_COMMUNITIES' | translate"
-                [routerLinkUrl]="'/users/communities'"
-                [sidebarOpen]="sidebarOpen"
-              ></li>
-              @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
-                <li
-                  appSidebarItem
-                  [name]="'NAVBAR.KEY_HANDLER' | translate"
-                  [icon]="'pi pi-key'"
-                  [sidebarOpen]="sidebarOpen"
-                  [isRouteActive]="isRouteActive.key"
-                  (sidebarClose)="closeSideBar()"
-                  [routerLinkUrl]="'/keys'"
-                ></li>
-                <li
-                  appSidebarMultiItems
-                  [name]="'NAVBAR.MEMBRE_HANDLER' | translate"
-                  [icon]="'pi pi-users'"
-                  [sidebarOpen]="sidebarOpen"
-                  [isRouteActive]="isRouteActive.members"
-                  (sidebarClose)="closeSideBar()"
-                  [activeSublist]="activeSublist === 'members'"
-                  [links]="memberLinks"
-                  tabindex="0"
-                  (click)="toggleSublist('members')"
-                  (keydown.enter)="toggleSublist('members')"
-                ></li>
-                <li
-                  appSidebarItem
-                  (sidebarClose)="closeSideBar()"
-                  [icon]="'pi pi-users'"
-                  [isRouteActive]="isRouteActive.communities"
-                  name="{{ 'NAVBAR.COMMUNITY_USERS' | translate }}"
-                  [routerLinkUrl]="'/communities/users'"
-                  [sidebarOpen]="sidebarOpen"
-                ></li>
-              }
-              @if (userContextService.isActiveRole(Role.MEMBER)) {
-                <li
-                  appSidebarItem
-                  (sidebarClose)="closeSideBar()"
-                  [icon]="'pi pi-users'"
-                  [isRouteActive]="isRouteActive.communities"
-                  name="{{ 'NAVBAR.COMMUNITY_USERS' | translate }}"
-                  [routerLinkUrl]="'/communities/managers'"
-                  [sidebarOpen]="sidebarOpen"
-                ></li>
-              }
-            </ul>
-          </div>
-          <p-divider></p-divider>
-          @if (sidebarOpen) {
-            <div class="self-center">
-              <app-language-selector></app-language-selector>
-            </div>
-          }
+<!-- Mobile hamburger trigger -->
+@if (mobile()) {
+  <button
+    type="button"
+    class="sidebar-hamburger"
+    (click)="openSideBar()"
+    aria-label="Open navigation"
+  >
+    <i class="pi pi-bars"></i>
+  </button>
+}
 
-          <div class="sidebar-footer align-self-center">
-            <a (click)="logout()" (keydown.enter)="logout()" class="cursor-pointer" tabindex="0">
-              <i class="pi pi-sign-out" [class.mr-1]="sidebarOpen"></i>
-              @if (sidebarOpen) {
-                <span>{{ 'NAVBAR.DISCONNECT' | translate }}</span>
-              }
-            </a>
-          </div>
-        </div>
-      </ng-template>
-    </p-drawer>
-    <!-- Mobile -->
-    <div class="p-3">
-      <i
-        class="pi pi-bars"
-        (click)="openSideBar()"
-        (keydown.enter)="openSideBar()"
-        tabindex="0"
-        role="button"
-        aria-label="Open sidebar"
-      ></i>
+<!-- Mobile backdrop -->
+@if (mobile() && visibleSideBar()) {
+  <div
+    class="sidebar-backdrop"
+    role="button"
+    tabindex="0"
+    (click)="closeSideBar()"
+    (keydown.enter)="closeSideBar()"
+  ></div>
+}
+
+<!-- Sidebar -->
+<aside
+  class="sidebar"
+  [class.sidebar--expanded]="sidebarOpen()"
+  [class.sidebar--mobile]="mobile()"
+  [class.sidebar--mobile-open]="mobile() && visibleSideBar()"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  role="navigation"
+  aria-label="Main navigation"
+>
+  <!-- Header: Logo + Pin/Close -->
+  <div class="sidebar__header">
+    <div class="sidebar__logo-wrapper">
+      <img src="assets/images/logo.svg" class="sidebar__logo" alt="OptimCE logo" />
+      @if (sidebarOpen()) {
+        <span class="sidebar__brand-name">OptimCE</span>
+      }
     </div>
+    @if (sidebarOpen() && !mobile()) {
+      <button
+        type="button"
+        class="sidebar__pin-btn"
+        [class.sidebar__pin-btn--active]="pinned()"
+        (click)="togglePin()"
+        [attr.aria-label]="pinned() ? 'Unpin sidebar' : 'Pin sidebar'"
+      >
+        <i class="pi" [ngClass]="pinned() ? 'pi-lock' : 'pi-lock-open'"></i>
+      </button>
+    }
+    @if (mobile()) {
+      <button
+        type="button"
+        class="sidebar__close-btn"
+        (click)="closeSideBar()"
+        aria-label="Close navigation"
+      >
+        <i class="pi pi-times"></i>
+      </button>
+    }
   </div>
-</div>
+
+  <!-- Navigation -->
+  <nav class="sidebar__nav">
+    <!-- Section: User -->
+    @if (sidebarOpen()) {
+      <div class="sidebar__section-label">
+        {{ 'NAVBAR.PROFILE' | translate }}
+      </div>
+    } @else {
+      <div class="sidebar__section-divider"></div>
+    }
+
+    <ul class="sidebar__menu">
+      <li
+        appSidebarItem
+        (sidebarClose)="closeSideBar()"
+        [icon]="'pi pi-user'"
+        [isRouteActive]="isRouteActive().users"
+        [name]="'NAVBAR.PROFILE' | translate"
+        [routerLinkUrl]="'/users'"
+        [sidebarOpen]="sidebarOpen()"
+      ></li>
+      <li
+        appSidebarItem
+        (sidebarClose)="closeSideBar()"
+        [icon]="'pi pi-envelope'"
+        [isRouteActive]="isRouteActive().users_invitations"
+        [name]="'NAVBAR.INVITATIONS' | translate"
+        [routerLinkUrl]="'/users/invitations'"
+        [sidebarOpen]="sidebarOpen()"
+      ></li>
+      <li
+        appSidebarItem
+        (sidebarClose)="closeSideBar()"
+        [icon]="'pi pi-briefcase'"
+        [isRouteActive]="isRouteActive().users_communities"
+        [name]="'NAVBAR.MY_COMMUNITIES' | translate"
+        [routerLinkUrl]="'/users/communities'"
+        [sidebarOpen]="sidebarOpen()"
+      ></li>
+    </ul>
+
+    <!-- Section: Gestionnaire -->
+    @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
+      @if (sidebarOpen()) {
+        <div class="sidebar__section-label">
+          {{ 'NAVBAR.MANAGEMENT' | translate }}
+        </div>
+      } @else {
+        <div class="sidebar__section-divider"></div>
+      }
+
+      <ul class="sidebar__menu">
+        <li
+          appSidebarItem
+          [name]="'NAVBAR.KEY_HANDLER' | translate"
+          [icon]="'pi pi-key'"
+          [sidebarOpen]="sidebarOpen()"
+          [isRouteActive]="isRouteActive().keys"
+          (sidebarClose)="closeSideBar()"
+          [routerLinkUrl]="'/keys'"
+        ></li>
+        <li
+          appSidebarMultiItems
+          [name]="'NAVBAR.MEMBRE_HANDLER' | translate"
+          [icon]="'pi pi-users'"
+          [sidebarOpen]="sidebarOpen()"
+          [isRouteActive]="
+            isRouteActive().members || isRouteActive().meters || isRouteActive().sharing_operations
+          "
+          (sidebarClose)="closeSideBar()"
+          [activeSublist]="activeSublist() === 'members'"
+          [links]="memberLinks"
+          tabindex="0"
+          (click)="toggleSublist('members')"
+          (keydown.enter)="toggleSublist('members')"
+        ></li>
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-users'"
+          [isRouteActive]="isRouteActive().communities_users"
+          [name]="'NAVBAR.COMMUNITY_USERS' | translate"
+          [routerLinkUrl]="'/communities/users'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
+      </ul>
+    }
+
+    <!-- Section: Member -->
+    @if (userContextService.isActiveRole(Role.MEMBER)) {
+      @if (sidebarOpen()) {
+        <div class="sidebar__section-label">
+          {{ 'NAVBAR.COMMUNITY_USERS' | translate }}
+        </div>
+      } @else {
+        <div class="sidebar__section-divider"></div>
+      }
+
+      <ul class="sidebar__menu">
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-users'"
+          [isRouteActive]="isRouteActive().communities_managers"
+          [name]="'NAVBAR.COMMUNITY_USERS' | translate"
+          [routerLinkUrl]="'/communities/managers'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
+      </ul>
+    }
+  </nav>
+
+  <!-- Footer: Language + Logout -->
+  <div class="sidebar__footer">
+    @if (sidebarOpen()) {
+      <div class="sidebar__footer-lang">
+        <app-language-selector></app-language-selector>
+      </div>
+    }
+    <button
+      type="button"
+      class="sidebar__logout-btn"
+      (click)="logout()"
+      [pTooltip]="sidebarOpen() ? null : ('NAVBAR.DISCONNECT' | translate)"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-sign-out"></i>
+      @if (sidebarOpen()) {
+        <span>{{ 'NAVBAR.DISCONNECT' | translate }}</span>
+      }
+    </button>
+  </div>
+</aside>

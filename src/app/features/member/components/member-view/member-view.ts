@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Dialog } from 'primeng/dialog';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -7,7 +7,7 @@ import { Ripple } from 'primeng/ripple';
 import { CompanyDTO, IndividualDTO, MemberLinkDTO } from '../../../../shared/dtos/member.dtos';
 import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MemberService } from '../../../../shared/services/member.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
@@ -21,6 +21,8 @@ import { Checkbox } from 'primeng/checkbox';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { MemberViewTabs } from './member-view-tabs/member-view-tabs';
 import { FormsModule } from '@angular/forms';
+import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 enum InvitationStatus {
   LOADING = 0,
@@ -43,7 +45,8 @@ enum InvitationStatus {
     AddressPipe,
     MemberViewTabs,
     FormsModule,
-    RouterLink,
+    BackArrow,
+    HeaderPage,
   ],
   templateUrl: './member-view.html',
   styleUrl: './member-view.css',
@@ -57,21 +60,21 @@ export class MemberView implements OnInit {
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
   private translate = inject(TranslateService);
-  isLoading = signal<boolean>(true);
-  id!: number;
-  individual?: IndividualDTO;
-  legalEntity?: CompanyDTO;
-  member?: IndividualDTO | CompanyDTO;
-  status?: number;
-  membersType?: number;
-  metersPartialList?: PartialMeterDTO[];
-  individualInvitationLink?: MemberLinkDTO;
-  managerInvitationLink?: MemberLinkDTO;
-  individualInvitationStatus: InvitationStatus = InvitationStatus.LOADING;
-  managerInvitationStatus: InvitationStatus = InvitationStatus.LOADING;
+  readonly isLoading = signal<boolean>(true);
+  readonly id = signal<number>(0);
+  readonly individual = signal<IndividualDTO | undefined>(undefined);
+  readonly legalEntity = signal<CompanyDTO | undefined>(undefined);
+  readonly member = computed(() => this.individual() ?? this.legalEntity());
+  readonly status = computed(() => this.member()?.status);
+  readonly membersType = computed(() => this.member()?.member_type);
+  readonly metersPartialList = signal<PartialMeterDTO[] | undefined>(undefined);
+  readonly individualInvitationLink = signal<MemberLinkDTO | undefined>(undefined);
+  readonly managerInvitationLink = signal<MemberLinkDTO | undefined>(undefined);
+  readonly individualInvitationStatus = signal<InvitationStatus>(InvitationStatus.LOADING);
+  readonly managerInvitationStatus = signal<InvitationStatus>(InvitationStatus.LOADING);
   ref?: DynamicDialogRef | null;
-  alertPopupVisible: boolean = false;
-  currentPageReportTemplate: string = '';
+  readonly alertPopupVisible = signal<boolean>(false);
+  readonly currentPageReportTemplate = signal<string>('');
 
   ngOnInit(): void {
     this.isLoading.set(true);
@@ -80,31 +83,29 @@ export class MemberView implements OnInit {
       void this.routing.navigate(['//members/member/']);
       return;
     }
-    this.id = +id;
-    if (this.id) {
+    this.id.set(+id);
+    if (this.id()) {
       this.loadMember();
     }
   }
 
   loadMember(): void {
-    this.memberService.getMember(this.id).subscribe((response) => {
+    this.memberService.getMember(this.id()).subscribe((response) => {
       if (response) {
         const memberData = response.data as IndividualDTO | CompanyDTO;
         if (memberData.member_type === MemberType.INDIVIDUAL) {
-          this.individual = memberData as IndividualDTO;
-          this.member = memberData as IndividualDTO;
-          this.membersType = MemberType.INDIVIDUAL;
-          this.status = this.individual.status;
-          this.loadInvitationStatusIndividual(this.individual.id, this.individual.email);
-          if (this.individual.manager) {
-            this.loadInvitationStatusManager(this.individual.id, this.individual.manager.email);
+          const ind = memberData as IndividualDTO;
+          this.individual.set(ind);
+          this.legalEntity.set(undefined);
+          this.loadInvitationStatusIndividual(ind.id, ind.email);
+          if (ind.manager) {
+            this.loadInvitationStatusManager(ind.id, ind.manager.email);
           }
         } else if (memberData.member_type === MemberType.COMPANY) {
-          this.legalEntity = memberData as CompanyDTO;
-          this.member = memberData as CompanyDTO;
-          this.membersType = MemberType.COMPANY;
-          this.status = this.legalEntity.status;
-          this.loadInvitationStatusManager(this.legalEntity.id, this.legalEntity.manager.email);
+          const le = memberData as CompanyDTO;
+          this.legalEntity.set(le);
+          this.individual.set(undefined);
+          this.loadInvitationStatusManager(le.id, le.manager.email);
         }
       }
       this.isLoading.set(false);
@@ -112,51 +113,53 @@ export class MemberView implements OnInit {
   }
 
   loadInvitationStatusIndividual(id: number, email: string): void {
-    this.individualInvitationStatus = InvitationStatus.LOADING;
+    this.individualInvitationStatus.set(InvitationStatus.LOADING);
     this.memberService.getMemberLink(id, { email: email }).subscribe(
       (response) => {
         if (response) {
-          this.individualInvitationLink = response.data as MemberLinkDTO;
-          switch (this.individualInvitationLink.status) {
+          const link = response.data as MemberLinkDTO;
+          this.individualInvitationLink.set(link);
+          switch (link.status) {
             case MemberStatus.ACTIVE:
-              this.individualInvitationStatus = InvitationStatus.ACCEPTED;
+              this.individualInvitationStatus.set(InvitationStatus.ACCEPTED);
               break;
             case MemberStatus.PENDING:
-              this.individualInvitationStatus = InvitationStatus.PENDING;
+              this.individualInvitationStatus.set(InvitationStatus.PENDING);
               break;
             case MemberStatus.INACTIVE:
-              this.individualInvitationStatus = InvitationStatus.NO_INVITE;
+              this.individualInvitationStatus.set(InvitationStatus.NO_INVITE);
               break;
           }
         }
       },
       (_error) => {
-        this.individualInvitationStatus = InvitationStatus.NO_INVITE;
+        this.individualInvitationStatus.set(InvitationStatus.NO_INVITE);
       },
     );
   }
 
   loadInvitationStatusManager(id: number, email: string): void {
-    this.managerInvitationStatus = InvitationStatus.LOADING;
+    this.managerInvitationStatus.set(InvitationStatus.LOADING);
     this.memberService.getMemberLink(id, { email }).subscribe(
       (response) => {
         if (response) {
-          this.managerInvitationLink = response.data as MemberLinkDTO;
-          switch (this.managerInvitationLink.status) {
+          const link = response.data as MemberLinkDTO;
+          this.managerInvitationLink.set(link);
+          switch (link.status) {
             case MemberStatus.ACTIVE:
-              this.managerInvitationStatus = InvitationStatus.ACCEPTED;
+              this.managerInvitationStatus.set(InvitationStatus.ACCEPTED);
               break;
             case MemberStatus.PENDING:
-              this.managerInvitationStatus = InvitationStatus.PENDING;
+              this.managerInvitationStatus.set(InvitationStatus.PENDING);
               break;
             case MemberStatus.INACTIVE:
-              this.managerInvitationStatus = InvitationStatus.NO_INVITE;
+              this.managerInvitationStatus.set(InvitationStatus.NO_INVITE);
               break;
           }
         }
       },
       (_error) => {
-        this.managerInvitationStatus = InvitationStatus.NO_INVITE;
+        this.managerInvitationStatus.set(InvitationStatus.NO_INVITE);
       },
     );
   }
@@ -168,7 +171,7 @@ export class MemberView implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('MEMBER.VIEW.UPDATE_A_MEMBER_HEADER') as string,
       data: {
-        member: this.individual || this.legalEntity,
+        member: this.individual() || this.legalEntity(),
       },
     });
     if (this.ref) {
@@ -185,24 +188,25 @@ export class MemberView implements OnInit {
   }
 
   setStatus(status: number): void {
-    if (this.status === MemberStatus.ACTIVE) {
+    if (this.status() === MemberStatus.ACTIVE) {
       let found = false;
-      if (this.metersPartialList && this.metersPartialList.length > 0) {
+      const meters = this.metersPartialList();
+      if (meters && meters.length > 0) {
         // Check if there is something else than inactif
-        for (const meter of this.metersPartialList) {
+        for (const meter of meters) {
           if (meter.status !== MeterDataStatus.INACTIVE) {
             found = true;
             break;
           }
         }
         if (found) {
-          this.alertPopupVisible = true;
+          this.alertPopupVisible.set(true);
           return;
         }
       }
     }
     this.memberService
-      .patchMemberStatus({ status: status, id_member: this.id })
+      .patchMemberStatus({ status: status, id_member: this.id() })
       .subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
@@ -217,11 +221,13 @@ export class MemberView implements OnInit {
   invite(manager = false): void {
     let email: string | undefined;
     if (manager) {
-      email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
+      email = this.individual()
+        ? this.individual()?.manager?.email
+        : this.legalEntity()?.manager.email;
     } else {
-      email = this.individual?.email;
+      email = this.individual()?.email;
     }
-    const id = this.individual ? this.individual.id : this.legalEntity?.id;
+    const id = this.individual()?.id ?? this.legalEntity()?.id;
     if (id && email) {
       this.memberService
         .patchMemberLink({ id_member: id, user_email: email })
@@ -240,11 +246,13 @@ export class MemberView implements OnInit {
   cancel(memberLink: MemberLinkDTO, manager = false): void {
     let email;
     if (manager) {
-      email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
+      email = this.individual()
+        ? this.individual()?.manager?.email
+        : this.legalEntity()?.manager.email;
     } else {
-      email = this.individual?.email;
+      email = this.individual()?.email;
     }
-    const id = this.individual ? this.individual.id : this.legalEntity?.id;
+    const id = this.individual()?.id ?? this.legalEntity()?.id;
     if (memberLink.id) {
       this.invitationService.cancelMemberInvitation(memberLink.id).subscribe((response) => {
         if (response) {
@@ -260,11 +268,13 @@ export class MemberView implements OnInit {
   delete(memberLink: MemberLinkDTO, manager = false): void {
     let email: string | undefined;
     if (manager) {
-      email = this.individual ? this.individual?.manager?.email : this.legalEntity?.manager.email;
+      email = this.individual()
+        ? this.individual()?.manager?.email
+        : this.legalEntity()?.manager.email;
     } else {
-      email = this.individual?.email;
+      email = this.individual()?.email;
     }
-    const id = this.individual ? this.individual.id : this.legalEntity?.id;
+    const id = this.individual()?.id ?? this.legalEntity()?.id;
     const memberLinkId = memberLink.id;
     if (id && email && memberLinkId) {
       this.memberService.deleteMemberLink(id).subscribe((response) => {

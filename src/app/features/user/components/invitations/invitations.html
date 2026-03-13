@@ -1,8 +1,5 @@
 <div class="container mx-auto my-auto">
-  <div class="w-6/12 flex items-center space-x-2">
-    <span class="pi pi-envelope text-2xl! text-green-500!"></span>
-    <h2 class="text-xl! font-medium">{{ 'INVITATION.TITLE' | translate }}</h2>
-  </div>
+  <app-header-page icon="pi pi-envelope" [text]="'INVITATION.TITLE' | translate"></app-header-page>
   <p-tabs value="0">
     <p-tablist>
       <p-tab value="0">

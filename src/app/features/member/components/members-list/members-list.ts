@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Button } from 'primeng/button';
@@ -21,6 +22,7 @@ import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { MemberPendingInvite } from '../member-pending-invite/member-pending-invite';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 @Component({
   selector: 'app-members-list',
@@ -33,12 +35,13 @@ import { FormsModule } from '@angular/forms';
     TagModule,
     Select,
     FormsModule,
+    HeaderPage,
   ],
   templateUrl: './members-list.html',
   styleUrl: './members-list.css',
   providers: [DialogService, ErrorMessageHandler, ConfirmationService, MessageService],
 })
-export class MembersList implements OnInit, OnDestroy {
+export class MembersList implements OnInit {
   private membersService = inject(MemberService);
   private invitationService = inject(InvitationService);
   private router = inject(Router);
@@ -47,19 +50,24 @@ export class MembersList implements OnInit, OnDestroy {
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private confirmationService = inject(ConfirmationService);
-  membersPartialList = signal<MembersPartialDTO[]>([]);
+  private destroyRef = inject(DestroyRef);
+  readonly membersPartialList = signal<MembersPartialDTO[]>([]);
   ref?: DynamicDialogRef | null;
 
   membreTypeCategory = [MemberType.INDIVIDUAL, MemberType.COMPANY];
   status = [MemberStatus.ACTIVE, MemberStatus.INACTIVE, MemberStatus.PENDING];
-  paginationInfo = {
+  readonly paginationInfo = signal({
     page: 1,
     limit: 10,
     total: 0,
     total_pages: 1,
-  };
-  filter = signal<MemberPartialQuery>({ page: 1, limit: 10 });
-  currentPageReportTemplate: string = '';
+  });
+  readonly filter = signal<MemberPartialQuery>({ page: 1, limit: 10 });
+  readonly currentPageReportTemplate = signal<string>('');
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
+  }
 
   ngOnInit(): void {
     this.updatePaginationTranslation();
@@ -68,12 +76,12 @@ export class MembersList implements OnInit, OnDestroy {
   updatePaginationTranslation(): void {
     this.translate
       .get('MEMBER.LIST.PAGE_REPORT_TEMPLATE_MEMBER_LABEL', {
-        page: this.paginationInfo.page,
-        total_pages: this.paginationInfo.total_pages,
-        total: this.paginationInfo.total,
+        page: this.paginationInfo().page,
+        total_pages: this.paginationInfo().total_pages,
+        total: this.paginationInfo().total,
       })
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
   loadMembers(): void {
@@ -81,7 +89,7 @@ export class MembersList implements OnInit, OnDestroy {
       next: (response) => {
         if (response) {
           this.membersPartialList.set(response.data as MembersPartialDTO[]);
-          this.paginationInfo = response.pagination;
+          this.paginationInfo.set(response.pagination);
 
           this.updatePaginationTranslation();
         } else {
@@ -103,7 +111,7 @@ export class MembersList implements OnInit, OnDestroy {
       header: this.translate.instant('MEMBER.LIST.INVITE_MEMBER_HEADER') as string,
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((email: unknown) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((email: unknown) => {
         if (typeof email === 'string' && email) {
           this.invitationService.inviteUserToBecomeMember({ user_email: email }).subscribe({
             next: (response) => {
@@ -129,7 +137,7 @@ export class MembersList implements OnInit, OnDestroy {
       header: this.translate.instant('MEMBER.LIST.ADD_MEMBER_HEADER') as string,
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((result: unknown) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: unknown) => {
         if (typeof result === 'number' && result > 0) {
           // Show "Do you want to add meter associated"
           this.confirmationService.confirm({
@@ -167,7 +175,7 @@ export class MembersList implements OnInit, OnDestroy {
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbarNotification.openSnackBar(
             this.translate.instant('MEMBER.LIST.METER_MEMBER_ADDED_SUCCESSFULLY_LABEL') as string,
@@ -268,12 +276,6 @@ export class MembersList implements OnInit, OnDestroy {
       closeOnEscape: true,
       header: this.translate.instant('MEMBER.LIST.PENDING_INVITATION_HEADER') as string,
     });
-  }
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
-    }
   }
 
   protected readonly MemberType = MemberType;

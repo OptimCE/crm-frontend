@@ -1,15 +1,6 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  ElementRef,
-  inject,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, input, OnInit, signal } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { merge, Subscription } from 'rxjs';
+import { merge } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ErrorHandlerParams, ErrorSummaryAdded } from '../../types/error.types';
@@ -21,20 +12,18 @@ import { ErrorHandlerParams, ErrorSummaryAdded } from '../../types/error.types';
   templateUrl: './summary-error.handler.component.html',
   styleUrl: './summary-error.handler.component.css',
 })
-export class FormErrorSummaryComponent implements OnInit, OnDestroy {
+export class FormErrorSummaryComponent implements OnInit {
   private formGroupDirective = inject(FormGroupDirective);
   private translate = inject(TranslateService);
-  private destroyRef = inject(DestroyRef); // <— add this
-  private subscription = new Subscription();
-  private cdr = inject(ChangeDetectorRef); // only needed if OnPush
+  private destroyRef = inject(DestroyRef);
   private host = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  errorMessages: string[] = [];
+  readonly errorMessages = signal<string[]>([]);
 
-  @Input() errorsAdd: ErrorSummaryAdded = {};
-  @Input() controlLabels: Record<string, string> = {};
-  @Input() showBeforeSubmit = false;
-  public hasSubmitted = false;
+  readonly errorsAdd = input<ErrorSummaryAdded>({});
+  readonly controlLabels = input<Record<string, string>>({});
+  readonly showBeforeSubmit = input<boolean>(false);
+  readonly hasSubmitted = signal<boolean>(false);
 
   defaultErrors: ErrorSummaryAdded = {};
 
@@ -42,21 +31,17 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
     this.loadDefaultErrorMessages();
     const form = this.formGroupDirective?.control;
     if (!form) return;
-    this.subscription.add(
-      this.formGroupDirective.ngSubmit.subscribe(() => {
-        this.hasSubmitted = true;
-        this.collectErrors();
-        this.cdr.markForCheck();
-      }),
-    );
-    this.subscription.add(
-      merge(form.valueChanges, form.statusChanges).subscribe(() => {
-        if (this.hasSubmitted || this.showBeforeSubmit) {
+    this.formGroupDirective.ngSubmit.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.hasSubmitted.set(true);
+      this.collectErrors();
+    });
+    merge(form.valueChanges, form.statusChanges)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        if (this.hasSubmitted() || this.showBeforeSubmit()) {
           this.collectErrors();
-          this.cdr.markForCheck();
         }
-      }),
-    );
+      });
   }
 
   private loadDefaultErrorMessages(): void {
@@ -89,7 +74,6 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
         };
 
         this.collectErrors();
-        this.cdr.markForCheck();
       });
   }
 
@@ -97,8 +81,8 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
     const errors: string[] = [];
     const form = this.formGroupDirective.control;
 
-    if (!this.hasSubmitted && !this.showBeforeSubmit) {
-      this.errorMessages = [];
+    if (!this.hasSubmitted() && !this.showBeforeSubmit()) {
+      this.errorMessages.set([]);
       return;
     }
 
@@ -110,7 +94,7 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
 
       if (control?.errors) {
         Object.keys(control.errors).forEach((errorKey) => {
-          const builders = { ...this.defaultErrors, ...this.errorsAdd };
+          const builders = { ...this.defaultErrors, ...this.errorsAdd() };
           const build = builders[errorKey];
 
           if (build) {
@@ -123,11 +107,11 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
         });
       }
     });
-    this.errorMessages = errors;
+    this.errorMessages.set(errors);
   }
   private getDisplayName(controlName: string): string {
-    // 1) If provided via @Input and exists as a translate key, translate it.
-    const fromInput = this.controlLabels[controlName];
+    // 1) If provided via input and exists as a translate key, translate it.
+    const fromInput = this.controlLabels()[controlName];
     if (fromInput) {
       // If it looks like a i18n key, translate; otherwise treat as literal label.
       const translated = this.translate.instant(fromInput) as string;
@@ -175,9 +159,5 @@ export class FormErrorSummaryComponent implements OnInit, OnDestroy {
         controlName: displayName,
       }) as string) || `Erreur inconnue sur "${displayName}".`
     );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }

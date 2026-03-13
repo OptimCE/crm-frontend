@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { Ripple } from 'primeng/ripple';
@@ -16,12 +16,12 @@ interface ButtonRendererParams extends ICellRendererParams {
   styleUrl: './button-renderer.css',
 })
 export class ButtonRenderer implements ICellRendererAngularComp {
-  params!: ButtonRendererParams;
-  label!: string | null;
+  readonly params = signal<ButtonRendererParams | undefined>(undefined);
+  readonly label = signal<string | null>(null);
 
   agInit(params: ButtonRendererParams): void {
-    this.params = params;
-    this.label = this.params.label || null;
+    this.params.set(params);
+    this.label.set(params.label || null);
   }
 
   refresh(_params: unknown): boolean {
@@ -29,10 +29,8 @@ export class ButtonRenderer implements ICellRendererAngularComp {
   }
 
   onClick($event: MouseEvent): void {
-    const params = {
-      event: $event,
-      rowData: this.params.node.data as unknown,
-    };
-    this.params.onClick(params);
+    const p = this.params();
+    if (!p) return;
+    p.onClick({ event: $event, rowData: p.node.data as unknown });
   }
 }

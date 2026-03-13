@@ -1,11 +1,9 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-user text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">
-        {{ 'USERS_COMMUNITY_LIST.TITLE' | translate }}
-      </h2>
-    </div>
+  <div class="flex flex-wrap -mx-2 mb-3 flex-col lg:flex-row items-center lg:justify-between">
+    <app-header-page
+      icon="pi pi-user"
+      [text]="'USERS_COMMUNITY_LIST.TITLE' | translate"
+    ></app-header-page>
     @if (userContextService.isActiveRole(Role.ADMIN)) {
       <div class="w-6/12 flex justify-end gap-3">
         <p-button
@@ -29,12 +27,15 @@
   <p-table
     #dt
     [value]="users()"
-    [tableStyle]="{ 'min-width': '50rem' }"
     [lazy]="true"
     (onLazyLoad)="lazyLoadUsers($event)"
+    [rows]="pagination().limit"
+    [totalRecords]="pagination().total"
+    [first]="firstRow()"
+    (onPage)="pageChange($event)"
   >
     <ng-template pTemplate="header">
-      <tr>
+      <tr class="max-lg:hidden">
         <th [pSortableColumn]="'name'" class="text-base px-3">
           {{ 'USERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}
         </th>
@@ -50,23 +51,53 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-user>
-      <tr>
-        <td class="text-small px-3 py-2">
-          {{
-            user.last_name
-              ? user.first_name
-                ? user.first_name + ' ' + user.last_name
-                : user.last_name
-              : user.first_name
+      <tr
+        class="grid grid-cols-1 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! border-b-2 cursor-pointer"
+      >
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'USERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">
+            {{
+              user.last_name
                 ? user.first_name
-                : '/'
-          }}
+                  ? user.first_name + ' ' + user.last_name
+                  : user.last_name
+                : user.first_name
+                  ? user.first_name
+                  : '/'
+            }}
+          </span>
         </td>
-        <td class="text-small px-3 py-2">{{ user.email }}</td>
-        <td class="text-small px-3 py-2">{{ user.role | role }}</td>
-        <td>
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'USERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ user.email }}</span>
+        </td>
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'USERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ user.role | role }}</span>
+        </td>
+        <td
+          class="border-none! col-span-1 md:col-span-3 lg:table-cell place-items-center lg:place-items-start"
+        >
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'USERS_COMMUNITY_LIST.HEADERS.ACTIONS' | translate }}
+            </span>
+          </div>
           @if (ownId !== user.id_user) {
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap flex-row lg:flex-col gap-2">
               @if (userContextService.isActiveRole(Role.ADMIN) && user.role !== Role.ADMIN) {
                 <p-button
                   label="{{ 'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_LABEL' | translate }}"
@@ -95,7 +126,8 @@
   <p-dialog
     header="{{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.TITLE' | translate }}"
     [modal]="true"
-    [(visible)]="dialogVisible"
+    [visible]="dialogVisible()"
+    (visibleChange)="dialogVisible.set($event)"
     [style]="{ width: '25rem' }"
     id="dialog"
   >
@@ -104,23 +136,24 @@
     }}</span>
     <div class="flex align-items-center gap-3 mb-5">
       <p-select
-        [options]="roles"
+        [options]="roles()"
         optionLabel="name"
         optionValue="value"
-        [(ngModel)]="roleSelected"
+        [ngModel]="roleSelected()"
+        (ngModelChange)="roleSelected.set($event)"
         appendTo="body"
         placeholder="{{
           'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.SELECT_ROLE_PLACEHOLDER' | translate
         }}"
       >
-        class="text-small"
+        class="text-sm"
       </p-select>
     </div>
     <div class="flex justify-content-end gap-2">
       <p-button
         label="{{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.CANCEL_BUTTON_LABEL' | translate }}"
         severity="danger"
-        (onClick)="dialogVisible = false"
+        (onClick)="dialogVisible.set(false)"
       />
       <p-button
         label="{{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.SAVE_BUTTON_LABEL' | translate }}"

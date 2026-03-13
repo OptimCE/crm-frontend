@@ -6,8 +6,8 @@
     <p-radioButton
       name="type"
       [value]="MemberType.INDIVIDUAL"
-      [(ngModel)]="typeClient"
-      (ngModelChange)="typeClientChange.emit($event)"
+      [ngModel]="typeClient()"
+      (ngModelChange)="typeClient.set($event)"
       [ngModelOptions]="{ standalone: true }"
       inputId="particulier"
     ></p-radioButton>
@@ -19,8 +19,8 @@
     <p-radioButton
       name="type"
       [value]="MemberType.COMPANY"
-      (ngModelChange)="typeClientChange.emit($event)"
-      [(ngModel)]="typeClient"
+      (ngModelChange)="typeClient.set($event)"
+      [ngModel]="typeClient()"
       [ngModelOptions]="{ standalone: true }"
       inputId="entreprise"
     ></p-radioButton>

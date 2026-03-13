@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { UserDTO } from '../../../../../../../shared/dtos/user.dtos';
 
@@ -9,5 +9,5 @@ import { UserDTO } from '../../../../../../../shared/dtos/user.dtos';
   styleUrl: './banking-info.component.css',
 })
 export class BankingInfoComponent {
-  @Input() user?: UserDTO | null;
+  readonly user = input<UserDTO | null>();
 }

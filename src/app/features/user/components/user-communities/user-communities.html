@@ -1,27 +1,31 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-briefcase text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">{{ 'COMMUNITY.LIST.TITLE' | translate }}</h2>
-    </div>
-    <div class="w-6/12 text-end">
-      <p-button
-        type="button"
-        label="{{ 'COMMUNITY.LIST.CREATE_COMMUNITY' | translate }}"
-        (click)="createCommunity()"
-      >
-      </p-button>
-    </div>
+  <div class="flex flex-wrap -mx-2 justify-center md:justify-between">
+    <app-header-page
+      icon="pi pi-briefcase"
+      [text]="'COMMUNITY.LIST.TITLE' | translate"
+    ></app-header-page>
+    <p-button
+      type="button"
+      label="{{ 'COMMUNITY.LIST.CREATE_COMMUNITY' | translate }}"
+      (click)="createCommunity()"
+    >
+    </p-button>
   </div>
   <p-table
     #dt
     [value]="communities()"
-    [tableStyle]="{ 'min-width': '50rem', 'min-height': '50px' }"
     [lazy]="true"
     (onLazyLoad)="lazyLoadCommunities($event)"
+    [rows]="pagination().limit"
+    [totalRecords]="pagination().total"
+    [first]="firstRow()"
+    [showCurrentPageReport]="true"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
   >
     <ng-template #header>
-      <tr>
+      <tr class="max-lg:hidden">
         <th [pSortableColumn]="'name'" class="text-base px-3">
           {{ 'COMMUNITY.LIST.HEADERS.NAME' | translate }}
           <p-sortIcon [field]="'name'"></p-sortIcon>
@@ -38,10 +42,31 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-community>
-      <tr class="hover-flex flex-wrap -mx-2" style="{}">
-        <td class="text-sm px-3 py-2">{{ community.name }}</td>
-        <td class="text-sm px-3 py-2">{{ community.role }}</td>
-        <td class="text-sm px-3 py-2 text-center">
+      <tr
+        class="grid grid-cols-1 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! border-b-2 cursor-pointer"
+      >
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'COMMUNITY.LIST.HEADERS.NAME' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ community.name }}</span>
+        </td>
+        <td class="border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'COMMUNITY.LIST.HEADERS.ROLE' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ community.role }}</span>
+        </td>
+        <td class="text-center border-none!">
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'COMMUNITY.LIST.HEADERS.ACTIVATE' | translate }}
+            </span>
+          </div>
           @if (userContextService.activeCommunityId() === community.auth_community_id) {
             <p-tag value="{{ 'COMMUNITY.LIST.ACTIVATED' | translate }}" severity="success"></p-tag>
           } @else {
@@ -52,20 +77,27 @@
           }
         </td>
         <!-- Join Button -->
-        <td class="text-sm px-3 py-2 text-center">
-          @if (
-            userContextService.activeCommunityId() === community.auth_community_id &&
-            community.role >= 1
-          ) {
-            <p-button
-              type="button"
-              icon="pi pi-check"
-              label="{{ 'COMMUNITY.LIST.UPDATE_COMMUNITY' | translate }}"
-              (click)="updateNameCommunity(community)"
-            >
-            </p-button>
-          } @else {
-            <div class="flex flex-wrap -mx-2 gap-2">
+        <td
+          class="text-center! justify-items-center! col-span-1 md:col-span-3 lg:table-cell lg:text-start lg:justify-items-start"
+        >
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'COMMUNITY.LIST.HEADERS.ACTIONS' | translate }}
+            </span>
+          </div>
+          <div class="flex flex-col md:flex-row gap-2">
+            @if (
+              userContextService.activeCommunityId() === community.auth_community_id &&
+              community.role >= 1
+            ) {
+              <p-button
+                type="button"
+                icon="pi pi-check"
+                label="{{ 'COMMUNITY.LIST.UPDATE_COMMUNITY' | translate }}"
+                (click)="updateNameCommunity(community)"
+              >
+              </p-button>
+            } @else {
               @if (userContextService.activeCommunityId() !== community.auth_community_id) {
                 <p-button
                   type="button"
@@ -85,10 +117,10 @@
                 [pTooltip]="'COMMUNITY.LIST.LEAVE_BUTTON_TOOLTIP' | translate"
               >
               </p-button>
-            </div>
-            <p-toast />
-            <p-confirmDialog />
-          }
+              <p-toast />
+              <p-confirmDialog />
+            }
+          </div>
         </td>
       </tr>
     </ng-template>

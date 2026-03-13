@@ -122,14 +122,14 @@
     <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
       <div class="flex flex-col flex-1">
         <span class="text-base">{{ 'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate }}</span>
-        @for (phase of phaseCategory; track $index) {
+        @for (phase of phaseCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'phase_' + phase.id"
               [value]="phase"
               formControlName="phasesNumber"
             />
-            <label [for]="'phase_' + phase.id" class="text-small">
+            <label [for]="'phase_' + phase.id" class="text-sm">
               {{ phase.name }}
             </label>
           </div>
@@ -141,14 +141,14 @@
         <span class="text-base">{{
           'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
         }}</span>
-        @for (readingFreq of readingFrequencyCategory; track $index) {
+        @for (readingFreq of readingFrequencyCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'readingFreq_' + readingFreq.id"
               [value]="readingFreq"
               formControlName="readingFrequency"
             />
-            <label [for]="'readingFreq_' + readingFreq.id" class="text-small">
+            <label [for]="'readingFreq_' + readingFreq.id" class="text-sm">
               {{ readingFreq.name }}
             </label>
           </div>
@@ -157,14 +157,14 @@
       </div>
       <div class="flex flex-col flex-1">
         <span class="text-base">{{ 'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate }}</span>
-        @for (tarifGroup of tarifGroupCategory; track $index) {
+        @for (tarifGroup of tarifGroupCategory(); track $index) {
           <div>
             <p-radioButton
               [inputId]="'tarifGroup_' + tarifGroup.id"
               [value]="tarifGroup"
               formControlName="tarifGroup"
             />
-            <label [for]="'tarifGroup_' + tarifGroup.id" class="text-small">
+            <label [for]="'tarifGroup_' + tarifGroup.id" class="text-sm">
               {{ tarifGroup.name }}
             </label>
           </div>

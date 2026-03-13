@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { UserDTO } from '../../../../../shared/dtos/user.dtos';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
@@ -25,5 +25,5 @@ import { RepresentationsComponent } from './tabs/representations/representations
   styleUrl: './profile-tabs.css',
 })
 export class ProfileTabs {
-  @Input() user?: UserDTO | null;
+  readonly user = input<UserDTO | null>();
 }

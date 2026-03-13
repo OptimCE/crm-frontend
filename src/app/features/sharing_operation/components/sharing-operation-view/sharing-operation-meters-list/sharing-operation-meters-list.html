@@ -1,7 +1,6 @@
 <p-table
   #dt
   [value]="metersPartialList()"
-  [tableStyle]="{ 'min-width': '50rem' }"
   [loading]="loading()"
   [lazy]="true"
   (onLazyLoad)="lazyLoadMeter($event)"
@@ -9,7 +8,7 @@
   [totalRecords]="pagination().total"
   [first]="(pagination().page - 1) * pagination().limit"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplate"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
   (onPage)="pageChange($event)"
   [paginator]="pagination().total_pages > 1"
 >
@@ -24,7 +23,7 @@
     </div>
   </ng-template>
   <ng-template #header>
-    <tr>
+    <tr class="max-lg:hidden">
       <th>
         <div class="flex items-center text-base px-3">
           {{ 'SHARING_OPERATION.VIEW.ADDRESS_LABEL' | translate }} <br />
@@ -45,7 +44,8 @@
                   <input
                     pInputText
                     id="streetName"
-                    [(ngModel)]="addressFilter.streetName"
+                    [ngModel]="addressFilter().streetName"
+                    (ngModelChange)="updateAddressFilter('streetName', $event)"
                     placeholder="{{
                       'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate
                     }}"
@@ -58,7 +58,8 @@
                   <input
                     pInputText
                     id="postcode"
-                    [(ngModel)]="addressFilter.postcode"
+                    [ngModel]="addressFilter().postcode"
+                    (ngModelChange)="updateAddressFilter('postcode', $event)"
                     placeholder="{{
                       'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate
                     }}"
@@ -71,7 +72,8 @@
                   <input
                     pInputText
                     id="city"
-                    [(ngModel)]="addressFilter.cityName"
+                    [ngModel]="addressFilter().cityName"
+                    (ngModelChange)="updateAddressFilter('cityName', $event)"
                     placeholder="{{
                       'SHARING_OPERATION.VIEW.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate
                     }}"
@@ -129,7 +131,7 @@
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-select
                 [ngModel]="value"
-                [options]="statutCategory"
+                [options]="statutCategory()"
                 (onChange)="filter($event.value)"
                 placeholder="{{
                   'SHARING_OPERATION.VIEW.METER.SELECT_A_STATUS_PLACEHOLDER' | translate
@@ -225,18 +227,44 @@
           </p-columnFilter>
         </div>
       </th>
-      <th class="flex items-center text-base px-3">
-        Actions <br />
-        <wbr />
-      </th>
+      <th class="flex items-center text-base px-3"></th>
     </tr>
   </ng-template>
   <ng-template #body let-meter>
-    <tr (click)="onRowClick(meter)" style="cursor: pointer" class="hover-flex flex-wrap">
-      <td class="text-sm px-3 py-2" [innerHTML]="meter.address | address"></td>
-      <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
-      <td class="text-sm px-3 py-2">{{ meter.meterNumber }}</td>
-      <td class="text-sm px-3 py-2">
+    <tr
+      (click)="onRowClick(meter)"
+      class="grid grid-cols-1 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! border-b-2 cursor-pointer"
+    >
+      <td class="border-none!">
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'SHARING_OPERATION.VIEW.ADDRESS_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm" [innerHTML]="meter.address | address"></span>
+      </td>
+      <td class="border-none!">
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'SHARING_OPERATION.VIEW.METER.INFORMATIONS.EAN_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ meter.EAN }}</span>
+      </td>
+      <td class="border-none!">
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ meter.meter_number }}</span>
+      </td>
+      <td class="border-none!">
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'SHARING_OPERATION.VIEW.METER.STATUS_LABEL' | translate }}
+          </span>
+        </div>
         @switch (meter.status) {
           @case (MeterStatus.ACTIVE) {
             <p-tag
@@ -273,20 +301,21 @@
           }
         }
       </td>
-      <td>
+      <td class="border-none!">
         <p-toast />
         <p-confirmpopup>
           <ng-template pTemplate="content" let-message>
             <div
               class="flex flex-column items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3"
             >
-              <h3 class="font-medium text-lg">{{ textChangeStatusMeter }}</h3>
+              <h3 class="font-medium text-lg">{{ textChangeStatusMeter() }}</h3>
               <p-date-picker
                 id="dateStartMeter"
-                [(ngModel)]="dateStartMeter"
+                [ngModel]="dateStartMeter()"
+                (ngModelChange)="dateStartMeter.set($event)"
                 [showIcon]="true"
                 [showOnFocus]="true"
-                [minDate]="minDate"
+                [minDate]="minDate()"
                 [inline]="false"
                 dateFormat="dd/mm/yy"
                 appendTo="body"

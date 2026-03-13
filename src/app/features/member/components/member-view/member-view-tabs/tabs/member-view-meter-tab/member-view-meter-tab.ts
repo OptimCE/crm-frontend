@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -35,30 +36,35 @@ import { InputText } from 'primeng/inputtext';
   styleUrl: './member-view-meter-tab.css',
   providers: [DialogService],
 })
-export class MemberViewMeterTab implements OnInit, OnDestroy {
+export class MemberViewMeterTab implements OnInit {
   private meterService = inject(MeterService);
   private translate = inject(TranslateService);
   private routing = inject(Router);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
-  @Input() id!: number;
+  private destroyRef = inject(DestroyRef);
+  readonly id = input.required<number>();
 
-  filter = signal<MeterPartialQuery>({ page: 1, limit: 10 });
+  readonly filter = signal<MeterPartialQuery>({ page: 1, limit: 10 });
 
-  paginationMetersInfo: Pagination = new Pagination(1, 10, 0, 1);
-  metersPartialList = signal<PartialMeterDTO[]>([]);
+  readonly paginationMetersInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
+  readonly metersPartialList = signal<PartialMeterDTO[]>([]);
   addressFilter = {
     streetName: '',
     postcode: '',
     cityName: '',
   };
-  currentPageReportTemplate: string = '';
-  statutCategory: { value: MeterDataStatus; label: string }[] = [];
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly statutCategory = signal<{ value: MeterDataStatus; label: string }[]>([]);
   sharingOperations = [];
   ref?: DynamicDialogRef | null;
 
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
+  }
+
   ngOnInit(): void {
-    this.filter.set({ page: 1, limit: 10, holder_id: this.id });
+    this.filter.set({ page: 1, limit: 10, holder_id: this.id() });
     this.updateMeterPaginationTranslation();
     this.setupStatusCategory();
   }
@@ -68,7 +74,7 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
       next: (response) => {
         if (response) {
           this.metersPartialList.set(response.data as PartialMeterDTO[]);
-          this.paginationMetersInfo = response.pagination;
+          this.paginationMetersInfo.set(response.pagination);
           this.updateMeterPaginationTranslation();
         } else {
           console.error('Error fetching meters partial list');
@@ -118,12 +124,12 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
   updateMeterPaginationTranslation(): void {
     this.translate
       .get('MEMBER.VIEW.METERS.PAGE_REPORT_TEMPLATE_METER_LABEL', {
-        page: this.paginationMetersInfo.page,
-        total_pages: this.paginationMetersInfo.total_pages,
-        total: this.paginationMetersInfo.total,
+        page: this.paginationMetersInfo().page,
+        total_pages: this.paginationMetersInfo().total_pages,
+        total: this.paginationMetersInfo().total,
       })
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
@@ -136,7 +142,7 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
         'METER.STATUS.WAITING_MANAGER_LABEL',
       ])
       .subscribe((translation: Record<string, string>) => {
-        this.statutCategory = [
+        this.statutCategory.set([
           { value: MeterDataStatus.ACTIVE, label: translation['METER.STATUS.ACTIVE_LABEL'] },
           { value: MeterDataStatus.INACTIVE, label: translation['METER.STATUS.INACTIVE_LABEL'] },
           {
@@ -147,7 +153,7 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
             value: MeterDataStatus.WAITING_MANAGER,
             label: translation['METER.STATUS.WAITING_MANAGER_LABEL'],
           },
-        ];
+        ]);
       });
   }
 
@@ -158,7 +164,7 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
       postcode: '',
       cityName: '',
     };
-    this.filter.set({ page: 1, limit: 10, holder_id: this.id });
+    this.filter.set({ page: 1, limit: 10, holder_id: this.id() });
   }
 
   onRowClick(meter: PartialMeterDTO): void {
@@ -172,11 +178,11 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
       closeOnEscape: true,
       header: this.translate.instant('MEMBER.VIEW.METERS.ADD_A_METER_HEADER') as string,
       data: {
-        holder_id: this.id,
+        holder_id: this.id(),
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant('MEMBER.VIEW.METERS.METER_ADDED_SUCCESSFULLY_LABEL') as string,
@@ -185,12 +191,6 @@ export class MemberViewMeterTab implements OnInit, OnDestroy {
           this.loadMeters();
         }
       });
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
     }
   }
 

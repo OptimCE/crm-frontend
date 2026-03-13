@@ -1,21 +1,17 @@
 <!-- Header Section -->
 <div class="container mx-auto my-auto">
+  @if (key && key.id && key.id > 0) {
+    <app-back-arrow
+      url="/keys/{{ key.id }}"
+      [text]="'KEY.VIEW.BACK_TO_LIST' | translate"
+    ></app-back-arrow>
+  } @else {
+    <app-back-arrow url="/keys" [text]="'KEY.VIEW.BACK_TO_LIST' | translate"></app-back-arrow>
+  }
   <div class="flex flex-wrap -mx-2 items-center pb-3">
-    <div class="lg:w-8/12 px-2 flex items-center">
-      <i class="pi pi-key text-xl text-primary mr-2"></i>
-      <h2 class="mt-0 mb-0 text-lg font-medium">{{ 'KEY.CREATE.KEY_TITLE' | translate }}</h2>
-    </div>
-    <div class="lg:w-4/12 text-end">
-      <p-button
-        pRipple
-        label="{{ 'KEY.SHARED.BACK' | translate }}"
-        class="p-button-outlined"
-        icon="pi pi-arrow-left"
-        routerLink="/key"
-      ></p-button>
-    </div>
+    <app-header-page icon="pi pi-key" [text]="'KEY.CREATE.KEY_TITLE' | translate"></app-header-page>
   </div>
-  @if (isLoaded) {
+  @if (isLoaded()) {
     <div>
       <div class="container">
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
@@ -32,7 +28,7 @@
               id="name"
               placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
             />
-            <app-error-handler controlName="name" [errorsAdd]="errorsAdded"></app-error-handler>
+            <app-error-handler controlName="name" [errorsAdd]="errorsAdded()"></app-error-handler>
           </div>
 
           <!-- Description -->
@@ -51,7 +47,7 @@
             ></textarea>
             <app-error-handler
               controlName="description"
-              [errorsAdd]="errorsAdded"
+              [errorsAdd]="errorsAdded()"
             ></app-error-handler>
           </div>
 
@@ -88,8 +84,8 @@
             </h4>
             <ag-grid-angular
               style="width: 100%; height: 500px; overflow-x: hidden"
-              [rowData]="rowData"
-              [columnDefs]="colDefs"
+              [rowData]="rowData()"
+              [columnDefs]="colDefs()"
               [class]="themeClass"
               (gridReady)="onGridReady($event)"
               [defaultColDef]="defaultColDef"
@@ -101,12 +97,12 @@
             >
             </ag-grid-angular>
           </div>
-          <app-error-handler controlName="key_data" [errorsAdd]="errorsAdded"></app-error-handler>
+          <app-error-handler controlName="key_data" [errorsAdd]="errorsAdded()"></app-error-handler>
 
           <!-- Submit Button -->
           <div class="form-field text-center">
             <app-summary-error
-              [errorsAdd]="errorsSummaryAdded"
+              [errorsAdd]="errorsSummaryAdded()"
               [controlLabels]="{
                 name: 'KEY.CREATE.FORM.ERROR.KEY_NAME_LABEL',
                 description: 'KEY.CREATE.FORM.ERROR.DESCRIPTION_LABEL',

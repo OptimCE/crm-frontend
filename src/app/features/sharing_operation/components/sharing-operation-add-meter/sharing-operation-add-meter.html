@@ -2,18 +2,19 @@
   <div class="flex flex-wrap -mx-2 pb-3">
     <p-table
       #dt
-      [value]="metersPartialList"
+      [value]="metersPartialList()"
       [tableStyle]="{ 'min-width': '50rem' }"
       [lazy]="true"
       (onLazyLoad)="lazyLoadMeters($event)"
-      [rows]="paginationMetersInfo.limit"
-      [totalRecords]="paginationMetersInfo.total"
-      [first]="(paginationMetersInfo.page - 1) * paginationMetersInfo.limit"
+      [rows]="paginationMetersInfo().limit"
+      [totalRecords]="paginationMetersInfo().total"
+      [first]="firstRow()"
       [showCurrentPageReport]="true"
-      [currentPageReportTemplate]="currentPageReportTemplate"
+      [currentPageReportTemplate]="currentPageReportTemplate()"
       (onPage)="pageChange($event)"
-      [paginator]="paginationMetersInfo.total_pages > 1"
-      [(selection)]="selectedMeters"
+      [paginator]="showPaginator()"
+      [selection]="selectedMeters()"
+      (selectionChange)="selectedMeters.set($event)"
     >
       <ng-template pTemplate="caption">
         <div class="flex content-between">
@@ -48,7 +49,8 @@
                       <input
                         pInputText
                         id="streetName"
-                        [(ngModel)]="addressFilter.streetName"
+                        [ngModel]="addressFilter().streetName"
+                        (ngModelChange)="updateAddressFilter('streetName', $event)"
                         placeholder="{{
                           'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL'
                             | translate
@@ -62,7 +64,8 @@
                       <input
                         pInputText
                         id="postcode"
-                        [(ngModel)]="addressFilter.postcode"
+                        [ngModel]="addressFilter().postcode"
+                        (ngModelChange)="updateAddressFilter('postcode', $event)"
                         placeholder="{{
                           'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL'
                             | translate
@@ -76,7 +79,8 @@
                       <input
                         pInputText
                         id="city"
-                        [(ngModel)]="addressFilter.cityName"
+                        [ngModel]="addressFilter().cityName"
+                        (ngModelChange)="updateAddressFilter('cityName', $event)"
                         placeholder="{{
                           'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate
                         }}"
@@ -136,7 +140,7 @@
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-select
                     [ngModel]="value"
-                    [options]="statutCategory"
+                    [options]="statutCategory()"
                     (onChange)="filter($event.value)"
                     placeholder="{{
                       'SHARING_OPERATION.ADD_METER.SELECT_A_STATUS_PLACEHOLDER' | translate
@@ -305,10 +309,11 @@
   <div class="flex flex-wrap -mx-2 pb-3 text-center">
     <p-date-picker
       id="dateStart"
-      [(ngModel)]="dateSelected"
+      [ngModel]="dateSelected()"
+      (ngModelChange)="dateSelected.set($event)"
       [showIcon]="true"
       [showOnFocus]="true"
-      [minDate]="minDate"
+      [minDate]="minDate()"
       dateFormat="dd/mm/yy"
       appendTo="body"
     ></p-date-picker>

@@ -7,7 +7,7 @@
   [totalRecords]="pagination().total"
   [first]="(pagination().page - 1) * pagination().limit"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplateDocuments"
+  [currentPageReportTemplate]="currentPageReportTemplateDocuments()"
   (onPage)="pageChangeGestionnaire($event)"
   [paginator]="pagination().total_pages > 1"
   [loading]="loadingGestionnaire()"

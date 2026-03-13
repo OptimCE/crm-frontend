@@ -1,4 +1,5 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InputText } from 'primeng/inputtext';
 import { Button, ButtonLabel } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -21,24 +22,26 @@ import { ErrorAdded } from '../../../../../../../../../../shared/types/error.typ
   templateUrl: './new-member-banking-info-self-encoding.component.html',
   styleUrl: './new-member-banking-info-self-encoding.component.css',
 })
-export class NewMemberBankingInfoSelfEncoding implements OnInit {
+export class NewMemberBankingInfoSelfEncoding {
   private translate = inject(TranslateService);
-  @Input() ibanForm!: FormGroup;
-  @Output() backClicked = new EventEmitter<void>();
-  @Output() formSubmitted = new EventEmitter<void>();
-  ibanErrorAdded: ErrorAdded = {};
+  private destroyRef = inject(DestroyRef);
+  readonly ibanForm = input.required<FormGroup>();
+  readonly backClicked = output<void>();
+  readonly formSubmitted = output<void>();
+  readonly ibanErrorAdded = signal<ErrorAdded>({});
 
-  ngOnInit(): void {
+  constructor() {
     this.setupErrorTranslation();
   }
 
   setupErrorTranslation(): void {
     this.translate
       .get(['MEMBER.ADD.BANK.ERROR.IBAN'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.ibanErrorAdded = {
+        this.ibanErrorAdded.set({
           invalidIban: () => translation['MEMBER.ADD.BANK.ERROR.IBAN'],
-        };
+        });
       });
   }
 
@@ -47,7 +50,7 @@ export class NewMemberBankingInfoSelfEncoding implements OnInit {
   }
 
   submit(): void {
-    if (this.ibanForm.valid) {
+    if (this.ibanForm().valid) {
       this.formSubmitted.emit();
     }
   }

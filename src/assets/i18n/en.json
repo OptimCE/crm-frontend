@@ -29,7 +29,17 @@
     }
   },
   "LOGIN": {
-    "LOGIN": "Log in"
+    "LOGIN": "Log in",
+    "SLIDES": {
+      "MEMBERS_TITLE": "Manage your members easily",
+      "MEMBERS_DESC": "Add, edit and track all your community members from a single dashboard.",
+      "METERS_TITLE": "Monitor your meters",
+      "METERS_DESC": "Keep track of energy production and consumption.",
+      "SHARING_TITLE": "Sharing operations",
+      "SHARING_DESC": "Configure and manage energy sharing operations across your community.",
+      "KEYS_TITLE": "Allocation keys",
+      "KEYS_DESC": "Create and manage allocation keys to distribute energy fairly."
+    }
   },
   "NAVBAR": {
     "PROFILE": "Profile",
@@ -51,7 +61,8 @@
     "ERROR_AUTH_UPDATE": "Error updating authorization",
     "ERROR_LOGOUT": "Error logging out",
     "DELETE": "Delete",
-    "COPY_TO_CLIPBOARD": "Copy to clipboard"
+    "COPY_TO_CLIPBOARD": "Copy to clipboard",
+    "MANAGEMENT": "Management"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -837,6 +848,7 @@
       "NO_OWNER_FOUND_LABEL": "No assigned holder"
     },
     "FULL": {
+      "BACK_TO_LIST": "Back to list",
       "MODIFY_BUTTON_LABEL": "Modify",
       "METER_INFORMATION_TITLE": "Meter information",
       "TABS": {

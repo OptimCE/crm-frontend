@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { MemberViewMeterTab } from './tabs/member-view-meter-tab/member-view-meter-tab';
 import { MemberViewBankingInfoTab } from './tabs/member-view-banking-info-tab/member-view-banking-info-tab';
@@ -25,6 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './member-view-tabs.css',
 })
 export class MemberViewTabs {
-  @Input() id!: number;
-  @Input() member!: IndividualDTO | CompanyDTO;
+  readonly id = input.required<number>();
+  readonly member = input.required<IndividualDTO | CompanyDTO>();
 }

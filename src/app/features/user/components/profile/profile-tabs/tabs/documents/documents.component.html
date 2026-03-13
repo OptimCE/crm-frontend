@@ -1,15 +1,14 @@
 <p-table
   #docT
   [value]="documentsPartialList()"
-  [tableStyle]="{ 'min-width': '50rem' }"
   [lazy]="true"
   (onLazyLoad)="lazyLoadDocuments($event)"
-  [rows]="paginationInfo.limit"
-  [totalRecords]="paginationInfo.total"
-  [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+  [rows]="paginationInfo().limit"
+  [totalRecords]="paginationInfo().total"
+  [first]="firstRow()"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplate"
-  [paginator]="paginationInfo.total_pages > 1"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
+  [paginator]="showPaginator()"
 >
   <ng-template pTemplate="caption">
     <div class="flex justify-between">
@@ -22,7 +21,7 @@
     </div>
   </ng-template>
   <ng-template pTemplate="header">
-    <tr>
+    <tr class="max-lg:hidden">
       <th>
         <div class="flex items-center text-base px-3">
           {{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}
@@ -68,12 +67,49 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-document>
-    <tr style="cursor: pointer" class="hover-flex flex-wrap -mx-2">
-      <td class="text-sm px-3 py-2">{{ document.community.name }}</td>
-      <td class="text-sm px-3 py-2">{{ document.file_name }}</td>
-      <td class="text-sm px-3 py-2">{{ document.file_type }}</td>
-      <td class="text-sm px-3 py-2">{{ document.file_size }}</td>
-      <td class="text-sm px-3 py-2">{{ document.upload_date }}</td>
+    <tr
+      class="grid grid-cols-2 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! cursor-pointer"
+    >
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ document.community.name }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ document.file_name }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ document.file_type }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'PROFILE.DOCUMENTS.SIZE_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ document.file_size }}</span>
+      </td>
+      <td>
+        <div class="flex flex-col lg:flex-row">
+          <span class="visible lg:hidden font-medium">
+            {{ 'PROFILE.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}
+          </span>
+        </div>
+        <span class="text-sm">{{ document.upload_date }}</span>
+      </td>
       <td>
         <p-button
           icon="pi pi-download"

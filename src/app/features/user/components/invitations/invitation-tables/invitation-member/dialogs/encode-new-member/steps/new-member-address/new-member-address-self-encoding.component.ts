@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputText } from 'primeng/inputtext';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -27,17 +27,17 @@ import { ErrorHandlerComponent } from '../../../../../../../../../../shared/comp
   styleUrl: './new-member-address-self-encoding.component.css',
 })
 export class NewMemberAddressSelfEncoding {
-  @Input() addressForm!: FormGroup;
-  @Output() backClicked = new EventEmitter<void>();
-  @Output() formSubmitted = new EventEmitter<void>();
-  @Output() toggleSameAddressEvent = new EventEmitter<CheckboxChangeEvent>();
+  readonly addressForm = input.required<FormGroup>();
+  readonly backClicked = output<void>();
+  readonly formSubmitted = output<void>();
+  readonly toggleSameAddressEvent = output<CheckboxChangeEvent>();
 
   goBack(): void {
     this.backClicked.emit();
   }
 
   submit(): void {
-    if (this.addressForm.valid) {
+    if (this.addressForm().valid) {
       this.formSubmitted.emit();
     }
   }

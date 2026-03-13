@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { PrimeTemplate } from 'primeng/api';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,6 +19,8 @@ import { InvitationService } from '../../../../shared/services/invitation.servic
 import { CommunityPendingInvitation } from '../community-pending-invitation/community-pending-invitation';
 import { CommunityInvitation } from '../community-invitation/community-invitation';
 import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
+import { Pagination } from '../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-users-community-list',
@@ -35,6 +37,7 @@ import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
     Select,
     Tooltip,
     RolePipe,
+    HeaderPage,
   ],
   templateUrl: './users-community-list.html',
   styleUrl: './users-community-list.css',
@@ -48,50 +51,43 @@ export class UsersCommunityList implements OnInit, OnDestroy {
   private dialogService = inject(DialogService);
   private translateService = inject(TranslateService);
   users = signal<UsersCommunityDTO[]>([]);
+  pagination = signal<Pagination>({ page: 0, limit: 0, total: 0, total_pages: 0 });
   filter = signal<CommunityUsersQueryDTO>({ page: 1, limit: 10 });
+  readonly firstRow = computed(() => (this.pagination().page - 1) * this.pagination().limit);
   ownId: number = -1;
-  dialogVisible: boolean = false;
-  userSelected?: UsersCommunityDTO;
-  roleSelected: Role | -1 = -1;
-  roles = [
+  dialogVisible = signal(false);
+  userSelected = signal<UsersCommunityDTO | undefined>(undefined);
+  roleSelected = signal<Role | -1>(-1);
+  roles = signal([
     { name: '', value: Role.MEMBER },
     { name: '', value: Role.GESTIONNAIRE },
     { name: '', value: Role.ADMIN },
-  ];
+  ]);
   ref?: DynamicDialogRef | null;
 
   ngOnInit(): void {
-    this.dialogVisible = false;
-    this.roleSelected = -1;
-
     // Initialize role names with translations
     this.translateService
       .get(['COMMON.ROLE.MEMBER', 'COMMON.ROLE.MANAGER', 'COMMON.ROLE.ADMIN'])
       .subscribe((translations: Record<string, string>) => {
-        this.roles = [
+        this.roles.set([
           { name: translations['COMMON.ROLE.MEMBER'], value: Role.MEMBER },
           { name: translations['COMMON.ROLE.MANAGER'], value: Role.GESTIONNAIRE },
           { name: translations['COMMON.ROLE.ADMIN'], value: Role.ADMIN },
-        ];
+        ]);
       });
   }
 
   loadUsers(): void {
-    this.communityService.getUsers(this.filter()).subscribe((response) => {
-      if (response) {
+    this.communityService.getUsers(this.filter()).subscribe({
+      next: (response) => {
         this.users.set(response.data as UsersCommunityDTO[]);
-      }
+        this.pagination.set(response.pagination);
+      },
     });
   }
   lazyLoadUsers($event: TableLazyLoadEvent): void {
     const current: CommunityUsersQueryDTO = { ...this.filter() };
-    if ($event.first !== undefined && $event.rows !== undefined) {
-      if ($event.rows) {
-        current.page = $event.first / $event.rows + 1;
-      } else {
-        current.page = 1;
-      }
-    }
     if ($event.sortField) {
       const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
       delete current.sort_email;
@@ -117,32 +113,31 @@ export class UsersCommunityList implements OnInit, OnDestroy {
   }
 
   openDialogEditRole(user: UsersCommunityDTO): void {
-    this.dialogVisible = true;
-    this.userSelected = user;
-    this.roleSelected = -1;
+    this.dialogVisible.set(true);
+    this.userSelected.set(user);
+    this.roleSelected.set(-1);
   }
   updateRole(): void {
-    if (this.roleSelected === -1 || !this.userSelected) {
+    const user = this.userSelected();
+    if (this.roleSelected() === -1 || !user) {
       return;
     }
-    const newRole: Role = this.roleSelected;
-    this.userSelected.role = newRole;
+    const newRole: Role = this.roleSelected() as Role;
+    user.role = newRole;
 
-    this.communityService
-      .patchRoleUser({ id_user: this.userSelected.id_user, new_role: newRole })
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.loadUsers();
-          }
-        },
-        error: (error) => {
-          this.errorHandler.handleError(error);
-        },
-      });
-    this.dialogVisible = false;
-    this.roleSelected = -1;
-    this.userSelected = undefined;
+    this.communityService.patchRoleUser({ id_user: user.id_user, new_role: newRole }).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadUsers();
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error);
+      },
+    });
+    this.dialogVisible.set(false);
+    this.roleSelected.set(-1);
+    this.userSelected.set(undefined);
   }
   deleteUser(user: UsersCommunityDTO): void {
     this.communityService.kick(user.id_user).subscribe((response) => {
@@ -204,4 +199,11 @@ export class UsersCommunityList implements OnInit, OnDestroy {
   }
 
   protected readonly Role = Role;
+
+  pageChange($event: TablePageEvent): void {
+    const current: CommunityUsersQueryDTO = { ...this.filter() };
+    current.page = $event.first / $event.rows + 1;
+    this.filter.set(current);
+    this.loadUsers();
+  }
 }

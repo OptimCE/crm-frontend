@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Tag } from 'primeng/tag';
@@ -23,35 +24,43 @@ import { MeService } from '../../../../../../shared/services/me.service';
   styleUrl: './invitation-member.css',
   providers: [DialogService],
 })
-export class InvitationMember implements OnDestroy {
+export class InvitationMember {
   private invitationService = inject(InvitationService);
   private meService = inject(MeService);
   private dialogService = inject(DialogService);
   private translate = inject(TranslateService);
-  pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
-  invitations = signal<UserMemberInvitationDTO[] | []>([]);
-  currentPageReportTemplateDocuments!: string;
-  loading = signal<boolean>(false);
-  page: number = 1;
-  pageInvitation: number = 1;
-  ref: DynamicDialogRef | null = null;
-  filterMemberInvitation = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
+  private destroyRef = inject(DestroyRef);
+  readonly pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
+  readonly invitations = signal<UserMemberInvitationDTO[] | []>([]);
+  readonly currentPageReportTemplateDocuments = signal<string>('');
+  readonly loading = signal<boolean>(false);
+  readonly page = signal<number>(1);
+  readonly pageInvitation = signal<number>(1);
+  private ref: DynamicDialogRef | null = null;
+  readonly filterMemberInvitation = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
+  }
 
   loadMemberInvitation(): void {
     this.loading.set(true);
     this.invitations.set([]);
-    this.meService.getOwnMembersPendingInviation(this.filterMemberInvitation()).subscribe({
-      next: (response: ApiResponse<UserMemberInvitationDTO[] | string>) => {
-        if (response && response.data) {
-          this.invitations.set(response.data as UserMemberInvitationDTO[]);
-        }
-        this.loading.set(false);
-      },
-      error: (error: unknown) => {
-        console.error(error);
-        this.loading.set(false);
-      },
-    });
+    this.meService
+      .getOwnMembersPendingInviation(this.filterMemberInvitation())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: ApiResponse<UserMemberInvitationDTO[] | string>) => {
+          if (response && response.data) {
+            this.invitations.set(response.data as UserMemberInvitationDTO[]);
+          }
+          this.loading.set(false);
+        },
+        error: (error: unknown) => {
+          console.error(error);
+          this.loading.set(false);
+        },
+      });
   }
 
   lazyLoadMemberInvitation(_$event?: TableLazyLoadEvent): void {
@@ -60,39 +69,46 @@ export class InvitationMember implements OnDestroy {
   }
 
   pageChangeInvitation($event: TablePageEvent): void {
-    this.pageInvitation = $event.first / $event.rows + 1;
+    this.pageInvitation.set($event.first / $event.rows + 1);
     this.loadMemberInvitation();
   }
 
   acceptInvitation(invitation: UserMemberInvitationDTO): void {
-    this.meService.acceptInvitationMember({ invitation_id: invitation.id }).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMemberInvitation();
-        }
-      },
-      error: (error: unknown) => {
-        console.error(error);
-      },
-    });
+    this.meService
+      .acceptInvitationMember({ invitation_id: invitation.id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadMemberInvitation();
+          }
+        },
+        error: (error: unknown) => {
+          console.error(error);
+        },
+      });
   }
 
   refuseInvitation(invitation: UserMemberInvitationDTO): void {
-    this.meService.refuseMemberInvitation(invitation.id).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadMemberInvitation();
-        }
-      },
-      error: (error: unknown) => {
-        console.error(error);
-      },
-    });
+    this.meService
+      .refuseMemberInvitation(invitation.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadMemberInvitation();
+          }
+        },
+        error: (error: unknown) => {
+          console.error(error);
+        },
+      });
   }
 
   fetchDetail(invitation: UserMemberInvitationDTO): void {
     this.meService
       .getOwnMemberPendingInvitationById(invitation.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: ApiResponse<IndividualDTO | CompanyDTO | string>) => {
         if (response && response.data) {
           const data = response.data as IndividualDTO | CompanyDTO;
@@ -120,17 +136,10 @@ export class InvitationMember implements OnDestroy {
         invitationID: invitation.id,
       },
     });
-    if (this.ref) {
-      this.ref.onClose.subscribe((result: boolean) => {
-        if (result) {
-          this.loadMemberInvitation();
-        }
-      });
-    }
-  }
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
-    }
+    this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: boolean) => {
+      if (result) {
+        this.loadMemberInvitation();
+      }
+    });
   }
 }

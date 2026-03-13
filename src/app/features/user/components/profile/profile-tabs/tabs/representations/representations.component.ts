@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -12,6 +13,7 @@ import {
 } from '../../../../../../../shared/dtos/me.dtos';
 import { MemberType, MemberStatus } from '../../../../../../../shared/types/member.types';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
+import { Pagination } from '../../../../../../../core/dtos/api.response';
 
 @Component({
   selector: 'app-representations-user',
@@ -20,56 +22,60 @@ import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/err
   styleUrl: './representations.component.css',
   providers: [ErrorMessageHandler],
 })
-export class RepresentationsComponent implements OnInit {
+export class RepresentationsComponent {
   private meService = inject(MeService);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
 
-  membersPartialList = signal<MeMembersPartialDTO[]>([]);
+  readonly membersPartialList = signal<MeMembersPartialDTO[]>([]);
 
   memberTypeCategory = [MemberType.INDIVIDUAL, MemberType.COMPANY];
   status = [MemberStatus.ACTIVE, MemberStatus.INACTIVE, MemberStatus.PENDING];
 
-  paginationInfo = {
-    page: 1,
-    limit: 10,
-    total: 0,
-    total_pages: 1,
-  };
-  filter = signal<MeMemberPartialQuery>({ page: 1, limit: 10 });
-  currentPageReportTemplate: string = '';
+  readonly paginationInfo = signal<Pagination>({ page: 1, limit: 10, total: 0, total_pages: 1 });
+  readonly filter = signal<MeMemberPartialQuery>({ page: 1, limit: 10 });
+  readonly currentPageReportTemplate = signal<string>('');
+  readonly firstRow = computed(
+    () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
+  );
+  readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  ngOnInit(): void {
+  constructor() {
     this.updatePaginationTranslation();
   }
 
   updatePaginationTranslation(): void {
     this.translate
       .get('PROFILE.REPRESENTATIONS.PAGE_REPORT_TEMPLATE_LABEL', {
-        page: this.paginationInfo.page,
-        total_pages: this.paginationInfo.total_pages,
-        total: this.paginationInfo.total,
+        page: this.paginationInfo().page,
+        total_pages: this.paginationInfo().total_pages,
+        total: this.paginationInfo().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
   loadMembers(): void {
-    this.meService.getMembers(this.filter()).subscribe({
-      next: (response) => {
-        if (response) {
-          this.membersPartialList.set(response.data as MeMembersPartialDTO[]);
-          this.paginationInfo = response.pagination;
-          this.updatePaginationTranslation();
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
+    this.meService
+      .getMembers(this.filter())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.membersPartialList.set(response.data as MeMembersPartialDTO[]);
+            this.paginationInfo.set(response.pagination);
+            this.updatePaginationTranslation();
+          } else {
+            this.errorHandler.handleError(response);
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error);
+        },
+      });
   }
 
   lazyLoadMembers($event: TableLazyLoadEvent): void {

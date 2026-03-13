@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -21,29 +22,33 @@ import { MeService } from '../../../../../../shared/services/me.service';
 export class InvitationGestionnaire {
   private invitationService = inject(InvitationService);
   private meService = inject(MeService);
-  pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
-  gestionnaireInvitation = signal<UserManagerInvitationDTO[] | []>([]);
-  currentPageReportTemplateDocuments!: string;
-  loadingGestionnaire = signal<boolean>(false);
-  filterManagerInvitation = signal<UserManagerInvitationQuery>({ page: 1, limit: 10 });
-  page: number = 1;
+  private destroyRef = inject(DestroyRef);
+  readonly pagination = signal<Pagination>({ page: -1, total: -1, total_pages: -1, limit: -1 });
+  readonly gestionnaireInvitation = signal<UserManagerInvitationDTO[] | []>([]);
+  readonly currentPageReportTemplateDocuments = signal<string>('');
+  readonly loadingGestionnaire = signal<boolean>(false);
+  readonly filterManagerInvitation = signal<UserManagerInvitationQuery>({ page: 1, limit: 10 });
+  readonly page = signal<number>(1);
 
   loadGestionnaireInvitation(): void {
     this.loadingGestionnaire.set(true);
     this.gestionnaireInvitation.set([]);
-    this.meService.getOwnManagerPendingInvitation(this.filterManagerInvitation()).subscribe({
-      next: (response) => {
-        if (response) {
-          this.gestionnaireInvitation.set(response.data as UserManagerInvitationDTO[]);
-        }
-        this.loadingGestionnaire.set(false);
-      },
-      error: (error) => {
-        console.error(error);
-        //TODO: Handle error
-        this.loadingGestionnaire.set(false);
-      },
-    });
+    this.meService
+      .getOwnManagerPendingInvitation(this.filterManagerInvitation())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.gestionnaireInvitation.set(response.data as UserManagerInvitationDTO[]);
+          }
+          this.loadingGestionnaire.set(false);
+        },
+        error: (error) => {
+          console.error(error);
+          //TODO: Handle error
+          this.loadingGestionnaire.set(false);
+        },
+      });
   }
   lazyLoadGestionnaireInvitation(_$event?: TableLazyLoadEvent): void {
     // Set filters here
@@ -51,37 +56,43 @@ export class InvitationGestionnaire {
   }
 
   pageChangeGestionnaire($event: TablePageEvent): void {
-    this.page = $event.first / $event.rows + 1;
+    this.page.set($event.first / $event.rows + 1);
     this.lazyLoadGestionnaireInvitation($event);
   }
 
   acceptGestionnaireInvitation(invitation: UserManagerInvitationDTO): void {
-    this.meService.acceptInvitationManager({ invitation_id: invitation.id }).subscribe({
-      next: (response) => {
-        if (response) {
-          // TODO: Display snackbar
-          this.loadGestionnaireInvitation();
-        }
-      },
-      error: (error) => {
-        // TODO: Handle error
-        console.error(error);
-      },
-    });
+    this.meService
+      .acceptInvitationManager({ invitation_id: invitation.id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            // TODO: Display snackbar
+            this.loadGestionnaireInvitation();
+          }
+        },
+        error: (error) => {
+          // TODO: Handle error
+          console.error(error);
+        },
+      });
   }
 
   refuseGestionnaireInvitation(invitation: UserManagerInvitationDTO): void {
-    this.meService.refuseManagerInvitation(invitation.id).subscribe({
-      next: (response) => {
-        if (response) {
-          // TODO: Display snackbar
-          this.loadGestionnaireInvitation();
-        }
-      },
-      error: (error) => {
-        // TODO: Handle error
-        console.error(error);
-      },
-    });
+    this.meService
+      .refuseManagerInvitation(invitation.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            // TODO: Display snackbar
+            this.loadGestionnaireInvitation();
+          }
+        },
+        error: (error) => {
+          // TODO: Handle error
+          console.error(error);
+        },
+      });
   }
 }

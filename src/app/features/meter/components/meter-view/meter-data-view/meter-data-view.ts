@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { InputText } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Tag } from 'primeng/tag';
@@ -24,11 +24,11 @@ import { MapNumberStringPipe } from '../../../../../shared/pipes/map-number-stri
   styleUrl: './meter-data-view.css',
 })
 export class MeterDataView {
-  @Input() meterData!: MetersDataDTO;
-  @Input() productionChainMap!: string[];
-  @Input() injectionStatusMap!: string[];
-  @Input() rateMap!: string[];
-  @Input() clientTypeMap!: string[];
+  readonly meterData = input.required<MetersDataDTO>();
+  readonly productionChainMap = input.required<string[]>();
+  readonly injectionStatusMap = input.required<string[]>();
+  readonly rateMap = input.required<string[]>();
+  readonly clientTypeMap = input.required<string[]>();
   protected readonly MeterStatus = MeterDataStatus;
   protected readonly MemberType = MemberType;
 }

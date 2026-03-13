@@ -1,32 +1,29 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-gauge text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">{{ 'METER.LIST.METERS_TITLE' | translate }}</h2>
-    </div>
-    <div class="w-6/12 text-end">
-      <p-button
-        type="button"
-        label="{{ 'METER.LIST.ADD_BUTTON_LABEL' | translate }}"
-        icon="pi pi-plus"
-        (click)="onAddMeter()"
-      ></p-button>
-    </div>
+  <div class="flex flex-wrap -mx-2 mb-3 flex-col lg:flex-row items-center lg:justify-between">
+    <app-header-page
+      icon="pi pi-gauge"
+      [text]="'METER.LIST.METERS_TITLE' | translate"
+    ></app-header-page>
+    <p-button
+      type="button"
+      label="{{ 'METER.LIST.ADD_BUTTON_LABEL' | translate }}"
+      icon="pi pi-plus"
+      (click)="onAddMeter()"
+    ></p-button>
   </div>
 
   <p-table
     #dt
     [value]="metersPartialList()"
-    [tableStyle]="{ 'min-width': '50rem' }"
     [lazy]="true"
     (onLazyLoad)="lazyLoadMeters($event)"
-    [rows]="paginationInfo.limit"
-    [totalRecords]="paginationInfo.total"
-    [first]="(paginationInfo.page - 1) * paginationInfo.limit"
+    [rows]="paginationInfo().limit"
+    [totalRecords]="paginationInfo().total"
+    [first]="firstRow()"
     [showCurrentPageReport]="true"
-    [currentPageReportTemplate]="currentPageReportTemplate"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
     (onPage)="pageChange($event)"
-    [paginator]="paginationInfo.total_pages > 1"
+    [paginator]="showPaginator()"
   >
     <ng-template pTemplate="caption">
       <div class="flex justify-content-between">
@@ -39,7 +36,7 @@
       </div>
     </ng-template>
     <ng-template pTemplate="header">
-      <tr>
+      <tr class="max-lg:hidden">
         <th class="text-base px-3">
           <div class="items-center">
             {{ 'COMMON.ADDRESS' | translate }}
@@ -134,7 +131,7 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-select
                   [ngModel]="value"
-                  [options]="holders"
+                  [options]="holders()"
                   (onChange)="filter($event.value)"
                   placeholder="{{ 'METER.LIST.SELECT_AN_OWNER_PLACEHOLDER' | translate }}"
                   [showClear]="true"
@@ -167,7 +164,7 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-select
                   [ngModel]="value"
-                  [options]="statutCategory"
+                  [options]="statutCategory()"
                   optionLabel="label"
                   optionValue="value"
                   (onChange)="filter($event.value)"
@@ -262,7 +259,7 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-select
                   [ngModel]="value"
-                  [options]="sharingOperations"
+                  [options]="sharingOperations()"
                   (onChange)="filter($event.value)"
                   placeholder="{{
                     'METER.LIST.SELECT_A_SHARING_OPERATION_PLACEHOLDER' | translate
@@ -285,17 +282,49 @@
     <ng-template pTemplate="body" let-meter>
       <tr
         (click)="onRowClick(meter)"
-        style="cursor: pointer"
-        class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer"
+        class="grid grid-cols-1 md:grid-cols-2 lg:table-row flex-wrap hover:bg-green-50! cursor-pointer"
       >
-        <td [innerHTML]="meter.address | address" class="text-sm px-3 py-2"></td>
-        <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
-        <td class="text-sm px-3 py-2">{{ meter.meter_number }}</td>
-        <td
-          [innerHTML]="meter.holder ? (meter.holder | memberPartial) : '/'"
-          class="text-sm px-3 py-2"
-        ></td>
         <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'COMMON.ADDRESS' | translate }}
+            </span>
+          </div>
+          <span [innerHTML]="meter.address | address" class="text-sm"></span>
+        </td>
+        <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ meter.EAN }}</span>
+        </td>
+        <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}
+            </span>
+          </div>
+          <span class="text-sm">{{ meter.meter_number }}</span>
+        </td>
+        <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}
+            </span>
+          </div>
+          <span
+            [innerHTML]="meter.holder ? (meter.holder | memberPartial) : '/'"
+            class="text-sm"
+          ></span>
+        </td>
+        <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'METER.INFORMATIONS.STATUS_LABEL' | translate }}
+            </span>
+          </div>
           @if (!meter.status) {
             <p-tag severity="danger" value="/" class="text-sm px-3 py-2"></p-tag>
           } @else {
@@ -332,8 +361,13 @@
           }
         </td>
         <td>
+          <div class="flex flex-col lg:flex-row">
+            <span class="visible lg:hidden font-medium">
+              {{ 'METER.LIST.SHARING_OPERATION_TITLE' | translate }}
+            </span>
+          </div>
           @if (meter.sharingOperation) {
-            <span class="text-sm px-3 py-2">{{ meter.sharingOperation.name }}</span>
+            <span class="text-sm">{{ meter.sharingOperation.name }}</span>
           } @else {
             <span> / </span>
           }

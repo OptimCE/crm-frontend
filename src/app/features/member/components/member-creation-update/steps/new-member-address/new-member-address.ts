@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputText } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
@@ -27,17 +27,17 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './new-member-address.css',
 })
 export class NewMemberAddress {
-  @Input() addressForm!: FormGroup;
-  @Output() backClicked = new EventEmitter<void>();
-  @Output() formSubmitted = new EventEmitter<void>();
-  @Output() toggleSameAddressEvent = new EventEmitter<CheckboxChangeEvent>();
+  readonly addressForm = input.required<FormGroup>();
+  readonly backClicked = output<void>();
+  readonly formSubmitted = output<void>();
+  readonly toggleSameAddressEvent = output<CheckboxChangeEvent>();
 
   goBack(): void {
     this.backClicked.emit();
   }
 
   submit(): void {
-    if (this.addressForm.valid) {
+    if (this.addressForm().valid) {
       this.formSubmitted.emit();
     }
   }

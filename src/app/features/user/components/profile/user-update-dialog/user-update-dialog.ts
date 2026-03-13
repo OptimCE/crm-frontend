@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../../../shared/services/user.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -43,6 +44,7 @@ export class UserUpdateDialog implements OnInit {
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private userService = inject(UserService);
+  private destroyRef = inject(DestroyRef);
   formData!: FormGroup;
   user!: UpdateUserDTO;
 
@@ -169,10 +171,13 @@ export class UserUpdateDialog implements OnInit {
       };
     }
     console.log(this.user);
-    this.userService.updateUserInfo(this.user).subscribe((response) => {
-      if (response) {
-        this.ref.close(true);
-      }
-    });
+    this.userService
+      .updateUserInfo(this.user)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response) {
+          this.ref.close(true);
+        }
+      });
   }
 }

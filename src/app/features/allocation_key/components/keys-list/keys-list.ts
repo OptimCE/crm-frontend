@@ -10,11 +10,12 @@ import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Button } from 'primeng/button';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 @Component({
   selector: 'app-keys-list',
   standalone: true,
-  imports: [Toast, SplitButton, TranslatePipe, TableModule, Button, RouterLink],
+  imports: [Toast, SplitButton, TranslatePipe, TableModule, Button, RouterLink, HeaderPage],
   templateUrl: './keys-list.html',
   styleUrl: './keys-list.css',
 })
@@ -23,14 +24,11 @@ export class KeysList implements OnInit {
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private router = inject(Router);
-  // keysList: KeyPartialDTO[];
-  keysList = signal<KeyPartialDTO[]>([]);
-  loading = signal<boolean>(true);
-  page: number = 1;
-  paginated: Pagination = new Pagination(0, 5, 0, 0);
-  filter = signal<KeyPartialQuery>({ page: 1, limit: 10 });
-
-  currentPageReportTemplate: string = '';
+  readonly keysList = signal<KeyPartialDTO[]>([]);
+  readonly loading = signal<boolean>(true);
+  readonly paginated = signal<Pagination>(new Pagination(0, 5, 0, 0));
+  readonly filter = signal<KeyPartialQuery>({ page: 1, limit: 10 });
+  readonly currentPageReportTemplate = signal<string>('');
   optionsSplitButton: MenuItem[] = [
     {
       label: '',
@@ -50,7 +48,7 @@ export class KeysList implements OnInit {
       next: (response) => {
         if (response && response.data) {
           this.keysList.set(response.data as KeyPartialDTO[]);
-          this.paginated = response.pagination;
+          this.paginated.set(response.pagination);
           this.updatePaginationTranslation();
         } else {
           this.errorHandler.handleError();
@@ -121,14 +119,15 @@ export class KeysList implements OnInit {
   }
 
   updatePaginationTranslation(): void {
+    const p = this.paginated();
     this.translate
       .get('KEY.LIST.PAGINATED_TEMPLATE_LIST', {
-        page: this.paginated.page,
-        total_pages: this.paginated.total_pages,
-        total: this.paginated.total,
+        page: p.page,
+        total_pages: p.total_pages,
+        total: p.total,
       })
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 

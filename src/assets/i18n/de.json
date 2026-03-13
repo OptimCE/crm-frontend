@@ -29,7 +29,17 @@
     }
   },
   "LOGIN": {
-    "LOGIN": "Anmelden"
+    "LOGIN": "Anmelden",
+    "SLIDES": {
+      "MEMBERS_TITLE": "Verwalten Sie Ihre Mitglieder einfach",
+      "MEMBERS_DESC": "Fügen Sie alle Mitglieder Ihrer Gemeinschaft über ein einziges Dashboard hinzu, bearbeiten und verfolgen Sie sie.",
+      "METERS_TITLE": "Überwachen Sie Ihre Zähler",
+      "METERS_DESC": "Verfolgen Sie die Energieproduktion und den Verbrauch.",
+      "SHARING_TITLE": "Teilungsoperationen",
+      "SHARING_DESC": "Konfigurieren und verwalten Sie Energieteilungsoperationen in Ihrer Gemeinschaft.",
+      "KEYS_TITLE": "Verteilungsschlüssel",
+      "KEYS_DESC": "Erstellen und verwalten Sie Verteilungsschlüssel, um Energie gerecht zu verteilen."
+    }
   },
   "NAVBAR": {
     "PROFILE": "Profil",
@@ -51,7 +61,8 @@
     "ERROR_AUTH_UPDATE": "Fehler beim Aktualisieren der Autorisierung",
     "ERROR_LOGOUT": "Fehler beim Abmelden",
     "DELETE": "Löschen",
-    "COPY_TO_CLIPBOARD": "In die Zwischenablage kopieren"
+    "COPY_TO_CLIPBOARD": "In die Zwischenablage kopieren",
+    "MANAGEMENT": "Verwaltung"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -837,6 +848,7 @@
       "NO_OWNER_FOUND_LABEL": "Kein Inhaber zugewiesen"
     },
     "FULL": {
+      "BACK_TO_LIST": "Zurück zur Liste",
       "MODIFY_BUTTON_LABEL": "Bearbeiten",
       "METER_INFORMATION_TITLE": "Zählerinformationen",
       "TABS": {
