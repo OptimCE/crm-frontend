@@ -3,6 +3,7 @@
   "COMMON": {
     "LANGUAGE_SELECTOR": "Taalselector",
     "ADDRESS": "Adres",
+    "SEARCH": "Zoeken",
     "ACTIONS": {
       "YES": "Ja",
       "NO": "Nee",
@@ -62,13 +63,17 @@
     "ERROR_LOGOUT": "Fout bij het afmelden",
     "DELETE": "Verwijderen",
     "COPY_TO_CLIPBOARD": "Kopiëren naar klembord",
-    "MANAGEMENT": "Beheer"
+    "MANAGEMENT": "Beheer",
+    "ERROR_LOADING": "Er is een fout opgetreden bij het laden van de gegevens",
+    "RETRY": "Opnieuw proberen"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
     "UPDATE": "Bijwerken",
     "ACCOUNT_INFORMATION": "Accountinformatie",
     "UPDATE_PASSWORD": "Wachtwoord wijzigen",
+    "EMAIL_READONLY_HINT": "Beheerd door uw identiteitsprovider",
+    "COPY_IBAN": "IBAN kopiëren",
     "DOCUMENTS": "Documenten",
     "MY_REPRESENTATIONS": "Mijn vertegenwoordigingen",
     "DISPLAY_NAME": "Naam",
@@ -142,11 +147,14 @@
       "CITY": "Stad",
       "CITY_PLACEHOLDER": "Brussel",
       "SAME_ADDRESS": "Zelfde adres als het thuisadres",
-      "VALIDATE": "Bevestigen"
+      "VALIDATE": "Bevestigen",
+      "CANCEL": "Annuleren"
     }
   },
   "INVITATION": {
     "TITLE": "Mijn uitnodigingen",
+    "SUBTITLE": "Beheer uw openstaande uitnodigingen",
+    "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
     "MEMBER": {
       "TITLE": "Leden",
       "HEADERS": {
@@ -211,7 +219,9 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Van gemeenschap wisselen",
       "LEAVE_BUTTON": "Verlaten",
       "LEAVE_BUTTON_TOOLTIP": "Gemeenschap verlaten",
-      "NO_COMMUNITY_FOUND": "Geen gemeenschap gevonden"
+      "NO_COMMUNITY_FOUND": "Geen gemeenschap gevonden",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)"
     },
     "CREATE": {
       "TITLE": "Gemeenschap aanmaken",

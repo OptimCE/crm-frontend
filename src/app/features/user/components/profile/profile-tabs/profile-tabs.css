@@ -1,0 +1,12 @@
+:host ::ng-deep .profile-tabs .p-tablist-tab-list {
+  border-bottom: 2px solid var(--p-surface-200);
+}
+
+:host ::ng-deep .profile-tabs .p-tab.p-tab-active {
+  border-color: var(--p-primary-color);
+  color: var(--p-primary-color);
+}
+
+:host ::ng-deep .profile-tabs .p-tabpanel {
+  padding-top: 1.5rem;
+}

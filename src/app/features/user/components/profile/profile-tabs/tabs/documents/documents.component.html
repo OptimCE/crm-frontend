@@ -1,3 +1,49 @@
+<!-- Filter toolbar -->
+<div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
+    <!-- Search field selector + input -->
+    <div class="sm:col-span-2 lg:flex-1">
+      <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+      <p-input-group class="gap-2">
+        <p-select
+          [options]="searchFieldOptions"
+          [ngModel]="searchField()"
+          (ngModelChange)="searchField.set($event)"
+          (onChange)="onSearchFieldChange()"
+          optionLabel="label"
+          optionValue="value"
+          class="search-field-select"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <span class="text-sm">{{ option.label | translate }}</span>
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <span class="text-sm">{{ option.label | translate }}</span>
+          </ng-template>
+        </p-select>
+        <app-debounced-p-input
+          [placeholder]="'COMMON.SEARCH' | translate"
+          [value]="searchText()"
+          (searchEvent)="onSearchTextChange($event)"
+          inputClass="w-full!"
+        />
+      </p-input-group>
+    </div>
+
+    <!-- Clear filters -->
+    <div class="flex items-end">
+      <p-button
+        icon="pi pi-filter-slash"
+        label="{{ 'PROFILE.DOCUMENTS.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+        (onClick)="clear(docT)"
+        [outlined]="!hasActiveFilters()"
+        severity="primary"
+      />
+    </div>
+  </div>
+</div>
+
+<!-- Data table -->
 <p-table
   #docT
   [value]="documentsPartialList()"
@@ -8,108 +54,29 @@
   [first]="firstRow()"
   [showCurrentPageReport]="true"
   [currentPageReportTemplate]="currentPageReportTemplate()"
+  (onPage)="pageChange($event)"
   [paginator]="showPaginator()"
 >
-  <ng-template pTemplate="caption">
-    <div class="flex justify-between">
-      <p-button
-        [outlined]="true"
-        icon="pi pi-filter-slash"
-        label="{{ 'PROFILE.DOCUMENTS.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
-        (onClick)="clear(docT)"
-      ></p-button>
-    </div>
-  </ng-template>
+  <!-- Desktop header -->
   <ng-template pTemplate="header">
     <tr class="max-lg:hidden">
-      <th>
-        <div class="flex items-center text-base px-3">
-          {{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}
-        </div>
-      </th>
-      <th>
-        <div class="flex items-center text-base px-3">
-          {{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}<br />
-          <p-columnFilter
-            type="text"
-            field="fileName"
-            display="{{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}"
-            [showMatchModes]="false"
-            [showOperator]="false"
-            [showAddButton]="false"
-          ></p-columnFilter>
-        </div>
-      </th>
-      <th>
-        <div class="flex items-center text-base px-3">
-          {{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}<br />
-          <p-columnFilter
-            type="text"
-            field="fileType"
-            display="{{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}"
-            [showMatchModes]="false"
-            [showOperator]="false"
-            [showAddButton]="false"
-          ></p-columnFilter>
-        </div>
-      </th>
-      <th>
-        <div class="flex items-center text-base px-3">
-          {{ 'PROFILE.DOCUMENTS.SIZE_LABEL' | translate }}
-        </div>
-      </th>
-      <th>
-        <div class="flex items-center text-base px-3">
-          {{ 'PROFILE.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}
-        </div>
-      </th>
+      <th class="text-base px-3">{{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}</th>
+      <th class="text-base px-3">{{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}</th>
+      <th class="text-base px-3">{{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}</th>
+      <th class="text-base px-3">{{ 'PROFILE.DOCUMENTS.SIZE_LABEL' | translate }}</th>
+      <th class="text-base px-3">{{ 'PROFILE.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}</th>
       <th></th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-document>
-    <tr
-      class="grid grid-cols-2 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! cursor-pointer"
-    >
-      <td>
-        <div class="flex flex-col lg:flex-row">
-          <span class="visible lg:hidden font-medium">
-            {{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}
-          </span>
-        </div>
-        <span class="text-sm">{{ document.community.name }}</span>
-      </td>
-      <td>
-        <div class="flex flex-col lg:flex-row">
-          <span class="visible lg:hidden font-medium">
-            {{ 'PROFILE.DOCUMENTS.NAME_LABEL' | translate }}
-          </span>
-        </div>
-        <span class="text-sm">{{ document.file_name }}</span>
-      </td>
-      <td>
-        <div class="flex flex-col lg:flex-row">
-          <span class="visible lg:hidden font-medium">
-            {{ 'PROFILE.DOCUMENTS.TYPE_LABEL' | translate }}
-          </span>
-        </div>
-        <span class="text-sm">{{ document.file_type }}</span>
-      </td>
-      <td>
-        <div class="flex flex-col lg:flex-row">
-          <span class="visible lg:hidden font-medium">
-            {{ 'PROFILE.DOCUMENTS.SIZE_LABEL' | translate }}
-          </span>
-        </div>
-        <span class="text-sm">{{ document.file_size }}</span>
-      </td>
-      <td>
-        <div class="flex flex-col lg:flex-row">
-          <span class="visible lg:hidden font-medium">
-            {{ 'PROFILE.DOCUMENTS.UPLOAD_DATE_LABEL' | translate }}
-          </span>
-        </div>
-        <span class="text-sm">{{ document.upload_date }}</span>
-      </td>
+    <!-- Desktop row -->
+    <tr class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <td class="text-sm">{{ document.community.name }}</td>
+      <td class="text-sm">{{ document.file_name }}</td>
+      <td class="text-sm">{{ document.file_type }}</td>
+      <td class="text-sm">{{ document.file_size }}</td>
+      <td class="text-sm">{{ document.upload_date }}</td>
       <td>
         <p-button
           icon="pi pi-download"
@@ -119,11 +86,60 @@
         ></p-button>
       </td>
     </tr>
+
+    <!-- Mobile card -->
+    <tr class="lg:hidden !border-0 !bg-transparent">
+      <td colspan="6" class="!p-0 !pb-3">
+        <div
+          class="document-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+        >
+          <!-- Card header: file name + type -->
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+            <span class="font-semibold text-sm text-primary-700 truncate mr-2">{{
+              document.file_name
+            }}</span>
+            <span class="text-xs text-surface-500 whitespace-nowrap">{{ document.file_type }}</span>
+          </div>
+
+          <!-- Card body: field grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <span class="field-label">{{ 'PROFILE.DOCUMENTS.COMMUNITY_LABEL' | translate }}</span>
+              <span class="field-value">{{ document.community.name }}</span>
+            </div>
+            <div>
+              <span class="field-label">{{ 'PROFILE.DOCUMENTS.SIZE_LABEL' | translate }}</span>
+              <span class="field-value">{{ document.file_size }}</span>
+            </div>
+            <div>
+              <span class="field-label">{{
+                'PROFILE.DOCUMENTS.UPLOAD_DATE_LABEL' | translate
+              }}</span>
+              <span class="field-value">{{ document.upload_date }}</span>
+            </div>
+            <div class="flex items-end justify-end">
+              <p-button
+                icon="pi pi-download"
+                [rounded]="true"
+                [text]="true"
+                (click)="onDownloadDocument(document)"
+              ></p-button>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
   </ng-template>
-  <ng-template #emptymessage>
+
+  <ng-template #emptymessage pTemplate="emptymessage">
     <tr>
-      <td colspan="6" class="text-base">
-        {{ 'PROFILE.DOCUMENTS.NO_DOCUMENT_FOUND_LABEL' | translate }}
+      <td colspan="6">
+        <div class="py-8 text-center">
+          <i class="pi pi-inbox text-3xl text-surface-300 mb-2"></i>
+          <p class="text-surface-400 m-0">
+            {{ 'PROFILE.DOCUMENTS.NO_DOCUMENT_FOUND_LABEL' | translate }}
+          </p>
+        </div>
       </td>
     </tr>
   </ng-template>

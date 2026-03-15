@@ -6,6 +6,8 @@ import { TagModule } from 'primeng/tag';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MeService } from '../../../../../../../shared/services/me.service';
 import {
   MeMemberPartialQuery,
@@ -14,10 +16,21 @@ import {
 import { MemberType, MemberStatus } from '../../../../../../../shared/types/member.types';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { Pagination } from '../../../../../../../core/dtos/api.response';
+import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-representations-user',
-  imports: [TranslatePipe, TableModule, TagModule, Select, FormsModule, Button],
+  imports: [
+    TranslatePipe,
+    TableModule,
+    TagModule,
+    Select,
+    FormsModule,
+    Button,
+    InputGroup,
+    InputGroupAddonModule,
+    DebouncedPInputComponent,
+  ],
   templateUrl: './representations.component.html',
   styleUrl: './representations.component.css',
   providers: [ErrorMessageHandler],
@@ -31,7 +44,21 @@ export class RepresentationsComponent {
   readonly membersPartialList = signal<MeMembersPartialDTO[]>([]);
 
   memberTypeCategory = [MemberType.INDIVIDUAL, MemberType.COMPANY];
-  status = [MemberStatus.ACTIVE, MemberStatus.INACTIVE, MemberStatus.PENDING];
+  statusCategory = [MemberStatus.ACTIVE, MemberStatus.INACTIVE, MemberStatus.PENDING];
+
+  readonly searchField = signal<string>('community_name');
+  readonly searchText = signal<string>('');
+  readonly typeFilter = signal<MemberType | null>(null);
+  readonly statusFilter = signal<MemberStatus | null>(null);
+
+  searchFieldOptions = [
+    { label: 'PROFILE.REPRESENTATIONS.COMMUNITY_LABEL', value: 'community_name' },
+    { label: 'MEMBER.LIST.NAME_LABEL', value: 'name' },
+  ];
+
+  readonly hasActiveFilters = computed(
+    () => !!this.searchText() || this.typeFilter() !== null || this.statusFilter() !== null,
+  );
 
   readonly paginationInfo = signal<Pagination>({ page: 1, limit: 10, total: 0, total_pages: 1 });
   readonly filter = signal<MeMemberPartialQuery>({ page: 1, limit: 10 });
@@ -56,6 +83,51 @@ export class RepresentationsComponent {
       .subscribe((translatedText: string) => {
         this.currentPageReportTemplate.set(translatedText);
       });
+  }
+
+  applyFilters(): void {
+    const current: MeMemberPartialQuery = { page: 1, limit: this.filter().limit };
+
+    const text = this.searchText();
+    if (text) {
+      const field = this.searchField();
+      if (field === 'community_name') current.community_name = text;
+      else if (field === 'name') current.name = text;
+    }
+
+    const type = this.typeFilter();
+    if (type !== null) {
+      current.member_type = type;
+    }
+
+    const status = this.statusFilter();
+    if (status !== null) {
+      current.status = status;
+    }
+
+    this.filter.set(current);
+    this.loadMembers();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  onSearchFieldChange(): void {
+    if (this.searchText()) {
+      this.applyFilters();
+    }
+  }
+
+  onTypeFilterChange(type: MemberType | null): void {
+    this.typeFilter.set(type);
+    this.applyFilters();
+  }
+
+  onStatusFilterChange(status: MemberStatus | null): void {
+    this.statusFilter.set(status);
+    this.applyFilters();
   }
 
   loadMembers(): void {
@@ -89,58 +161,6 @@ export class RepresentationsComponent {
       }
     }
 
-    if ($event.sortField) {
-      const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
-      delete current.sort_type;
-      delete current.sort_name;
-      delete current.sort_status;
-
-      switch ($event.sortField) {
-        case 'type': {
-          current.sort_type = sortDirection;
-          break;
-        }
-        case 'name': {
-          current.sort_name = sortDirection;
-          break;
-        }
-        case 'status': {
-          current.sort_status = sortDirection;
-          break;
-        }
-      }
-    }
-
-    if ($event.filters) {
-      const communityFilter = $event.filters['community'];
-      if (communityFilter && !Array.isArray(communityFilter) && communityFilter.value) {
-        current.community_name = communityFilter.value as string;
-      } else {
-        delete current.community_name;
-      }
-
-      const typeFilter = $event.filters['type'];
-      if (typeFilter && !Array.isArray(typeFilter) && typeFilter.value !== undefined) {
-        current.member_type = typeFilter.value as MemberType;
-      } else {
-        delete current.member_type;
-      }
-
-      const nameFilter = $event.filters['name'];
-      if (nameFilter && !Array.isArray(nameFilter) && nameFilter.value) {
-        current.name = nameFilter.value as string;
-      } else {
-        delete current.name;
-      }
-
-      const statusFilter = $event.filters['status'];
-      if (statusFilter && !Array.isArray(statusFilter) && statusFilter.value !== undefined) {
-        current.status = statusFilter.value as MemberStatus;
-      } else {
-        delete current.status;
-      }
-    }
-
     this.filter.set(current);
     this.loadMembers();
   }
@@ -154,6 +174,10 @@ export class RepresentationsComponent {
 
   clear(table: Table): void {
     table.clear();
+    this.searchText.set('');
+    this.searchField.set('community_name');
+    this.typeFilter.set(null);
+    this.statusFilter.set(null);
     this.filter.set({ page: 1, limit: 10 });
     this.loadMembers();
   }

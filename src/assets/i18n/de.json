@@ -3,6 +3,7 @@
   "COMMON": {
     "LANGUAGE_SELECTOR": "Sprachauswahl",
     "ADDRESS": "Adresse",
+    "SEARCH": "Suchen",
     "ACTIONS": {
       "YES": "Ja",
       "NO": "Nein",
@@ -62,13 +63,17 @@
     "ERROR_LOGOUT": "Fehler beim Abmelden",
     "DELETE": "Löschen",
     "COPY_TO_CLIPBOARD": "In die Zwischenablage kopieren",
-    "MANAGEMENT": "Verwaltung"
+    "MANAGEMENT": "Verwaltung",
+    "ERROR_LOADING": "Beim Laden der Daten ist ein Fehler aufgetreten",
+    "RETRY": "Erneut versuchen"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
     "UPDATE": "Aktualisieren",
     "ACCOUNT_INFORMATION": "Kontoinformationen",
     "UPDATE_PASSWORD": "Passwort ändern",
+    "EMAIL_READONLY_HINT": "Verwaltet durch Ihren Identitätsanbieter",
+    "COPY_IBAN": "IBAN kopieren",
     "DOCUMENTS": "Dokumente",
     "MY_REPRESENTATIONS": "Meine Vertretungen",
     "DISPLAY_NAME": "Name",
@@ -142,11 +147,14 @@
       "CITY": "Stadt",
       "CITY_PLACEHOLDER": "Brüssel",
       "SAME_ADDRESS": "Gleiche Adresse wie die Heimatadresse",
-      "VALIDATE": "Bestätigen"
+      "VALIDATE": "Bestätigen",
+      "CANCEL": "Abbrechen"
     }
   },
   "INVITATION": {
     "TITLE": "Meine Einladungen",
+    "SUBTITLE": "Verwalten Sie Ihre ausstehenden Einladungen",
+    "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
     "MEMBER": {
       "TITLE": "Mitglieder",
       "HEADERS": {
@@ -211,7 +219,9 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Gemeinschaft wechseln",
       "LEAVE_BUTTON": "Verlassen",
       "LEAVE_BUTTON_TOOLTIP": "Gemeinschaft verlassen",
-      "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden"
+      "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",

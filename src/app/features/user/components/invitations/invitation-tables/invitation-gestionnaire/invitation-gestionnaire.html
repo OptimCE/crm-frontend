@@ -1,52 +1,131 @@
+<!-- Filter toolbar -->
+<div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+  <div class="grid grid-cols-1 sm:flex sm:items-end gap-3">
+    <!-- Search input -->
+    <div class="flex-1">
+      <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+      <app-debounced-p-input
+        [placeholder]="'COMMON.SEARCH' | translate"
+        [value]="searchText()"
+        (searchEvent)="onSearchTextChange($event)"
+        inputClass="w-full!"
+      />
+    </div>
+
+    <!-- Clear filters -->
+    <div class="flex items-end">
+      <p-button
+        icon="pi pi-filter-slash"
+        label="{{ 'INVITATION.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+        (onClick)="clear(dt)"
+        [outlined]="!hasActiveFilters()"
+        severity="primary"
+      />
+    </div>
+  </div>
+</div>
+
+<!-- Data table -->
 <p-table
+  #dt
   [value]="gestionnaireInvitation()"
-  [tableStyle]="{ 'min-width': '50rem' }"
   [lazy]="true"
   (onLazyLoad)="lazyLoadGestionnaireInvitation($event)"
   [rows]="pagination().limit"
   [totalRecords]="pagination().total"
-  [first]="(pagination().page - 1) * pagination().limit"
+  [first]="firstRow()"
   [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplateDocuments()"
-  (onPage)="pageChangeGestionnaire($event)"
-  [paginator]="pagination().total_pages > 1"
-  [loading]="loadingGestionnaire()"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
+  (onPage)="pageChange($event)"
+  [paginator]="showPaginator()"
+  [loading]="loading()"
 >
+  <!-- Desktop header -->
   <ng-template pTemplate="header">
-    <tr>
-      <th>
-        {{ 'INVITATION.MANAGER.HEADERS.EMAIL_ADDRESS' | translate }}
-      </th>
-      <th>
-        {{ 'INVITATION.MANAGER.HEADERS.COMMUNITY' | translate }}
-      </th>
-      <th>
-        {{ 'INVITATION.MANAGER.HEADERS.ACTIONS' | translate }}
-      </th>
+    <tr class="max-lg:hidden">
+      <th class="text-base px-3">{{ 'INVITATION.MANAGER.HEADERS.EMAIL_ADDRESS' | translate }}</th>
+      <th class="text-base px-3">{{ 'INVITATION.MANAGER.HEADERS.COMMUNITY' | translate }}</th>
+      <th class="text-base px-3">{{ 'INVITATION.MANAGER.HEADERS.ACTIONS' | translate }}</th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-invitation>
-    <tr>
-      <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
-      <td class="text-sm px-3 py-2">{{ invitation.communityName }}</td>
-      <td>
-        <p-button
-          label="{{ 'INVITATION.MANAGER.ACCEPT' | translate }}"
-          severity="success"
-          (click)="acceptGestionnaireInvitation(invitation)"
-        ></p-button>
-        <p-button
-          label="{{ 'INVITATION.MANAGER.REFUSE' | translate }}"
-          severity="danger"
-          (click)="refuseGestionnaireInvitation(invitation)"
-        ></p-button>
+    <!-- Desktop row -->
+    <tr class="max-lg:hidden hover:bg-primary-50">
+      <td class="text-sm px-3">{{ invitation.userEmail }}</td>
+      <td class="text-sm px-3">{{ invitation.communityName }}</td>
+      <td class="px-3">
+        <div class="flex gap-2">
+          <p-button
+            icon="pi pi-check"
+            label="{{ 'INVITATION.MANAGER.ACCEPT' | translate }}"
+            severity="success"
+            size="small"
+            (click)="acceptGestionnaireInvitation(invitation)"
+          ></p-button>
+          <p-button
+            icon="pi pi-times"
+            label="{{ 'INVITATION.MANAGER.REFUSE' | translate }}"
+            severity="danger"
+            size="small"
+            [outlined]="true"
+            (click)="refuseGestionnaireInvitation(invitation)"
+          ></p-button>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Mobile card -->
+    <tr class="lg:hidden !border-0 !bg-transparent">
+      <td colspan="3" class="!p-0 !pb-3">
+        <div
+          class="invitation-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm"
+        >
+          <!-- Card header: email -->
+          <div class="flex items-center mb-3 pb-2 border-b border-primary-100">
+            <span class="font-semibold text-sm text-primary-700">{{ invitation.userEmail }}</span>
+          </div>
+
+          <!-- Card body -->
+          <div class="mb-3">
+            <span class="field-label">{{
+              'INVITATION.MANAGER.HEADERS.COMMUNITY' | translate
+            }}</span>
+            <span class="field-value">{{ invitation.communityName }}</span>
+          </div>
+
+          <!-- Card footer: actions -->
+          <div class="flex flex-wrap gap-2 pt-2 border-t border-primary-100">
+            <p-button
+              icon="pi pi-check"
+              label="{{ 'INVITATION.MANAGER.ACCEPT' | translate }}"
+              severity="success"
+              size="small"
+              (click)="acceptGestionnaireInvitation(invitation)"
+            ></p-button>
+            <p-button
+              icon="pi pi-times"
+              label="{{ 'INVITATION.MANAGER.REFUSE' | translate }}"
+              severity="danger"
+              size="small"
+              [outlined]="true"
+              (click)="refuseGestionnaireInvitation(invitation)"
+            ></p-button>
+          </div>
+        </div>
       </td>
     </tr>
   </ng-template>
+
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
-      <td colspan="6" style="text-align: center" class="text-base">
-        {{ 'INVITATION.MANAGER.NO_INVITATIONS_AVAILABLE' | translate }}
+      <td colspan="3">
+        <div class="py-8 text-center">
+          <i class="pi pi-briefcase text-3xl text-surface-300 mb-2"></i>
+          <p class="text-surface-400 m-0">
+            {{ 'INVITATION.MANAGER.NO_INVITATIONS_AVAILABLE' | translate }}
+          </p>
+        </div>
       </td>
     </tr>
   </ng-template>

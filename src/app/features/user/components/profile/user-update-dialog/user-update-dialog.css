@@ -1,0 +1,9 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+}
+
+:host ::ng-deep .ng-invalid.ng-dirty .p-inputtext {
+  border-color: var(--p-red-400);
+}

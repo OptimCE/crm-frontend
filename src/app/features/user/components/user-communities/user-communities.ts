@@ -4,9 +4,8 @@ import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Button } from 'primeng/button';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
-import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CommunityQueryDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { CommunityService } from '../../../../shared/services/community.service';
@@ -15,10 +14,20 @@ import { UserContextService } from '../../../../core/services/authorization/auth
 import { CommunityDialog } from './community-dialog/community-dialog';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { Pagination } from '../../../../core/dtos/api.response';
+import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-user-communities',
-  imports: [Toast, ConfirmDialog, Button, TranslatePipe, Tooltip, Tag, TableModule, HeaderPage],
+  imports: [
+    Toast,
+    ConfirmDialog,
+    Button,
+    TranslatePipe,
+    Tag,
+    TableModule,
+    HeaderPage,
+    DebouncedPInputComponent,
+  ],
   templateUrl: './user-communities.html',
   styleUrl: './user-communities.css',
   providers: [DialogService, ConfirmationService, MessageService],
@@ -37,6 +46,9 @@ export class UserCommunities {
   readonly showPaginator = computed(() => this.pagination().total_pages > 1);
   private ref?: DynamicDialogRef | null;
 
+  readonly searchText = signal<string>('');
+  readonly hasActiveFilters = computed(() => !!this.searchText());
+
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
     this.updatePaginationTranslation();
@@ -44,7 +56,7 @@ export class UserCommunities {
 
   updatePaginationTranslation(): void {
     this.translate
-      .get('PROFILE.METERS.PAGE_REPORT_TEMPLATE_LABEL', {
+      .get('COMMUNITY.LIST.PAGE_REPORT_TEMPLATE_LABEL', {
         page: this.pagination().page,
         total_pages: this.pagination().total_pages,
         total: this.pagination().total,
@@ -53,6 +65,28 @@ export class UserCommunities {
       .subscribe((translatedText: string) => {
         this.currentPageReportTemplate.set(translatedText);
       });
+  }
+
+  applyFilters(): void {
+    const current: CommunityQueryDTO = { page: 1, limit: this.filter().limit };
+    const text = this.searchText();
+    if (text) {
+      current.name = text;
+    }
+    this.filter.set(current);
+    this.loadCommunities();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  clear(table: Table): void {
+    table.clear();
+    this.searchText.set('');
+    this.filter.set({ page: 1, limit: 10 });
+    this.loadCommunities();
   }
 
   loadCommunities(): void {
@@ -64,6 +98,7 @@ export class UserCommunities {
           if (response) {
             this.communities.set(response.data as MyCommunityDTO[]);
             this.pagination.set(response.pagination);
+            this.updatePaginationTranslation();
           }
         },
         error: (_error) => {
@@ -74,17 +109,9 @@ export class UserCommunities {
 
   lazyLoadCommunities($event: TableLazyLoadEvent): void {
     const current: CommunityQueryDTO = { ...this.filter() };
-    if ($event.sortField) {
-      const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
-      delete current.sort_name;
-      switch ($event.sortField) {
-        case 'name': {
-          current.sort_name = sortDirection;
-          break;
-        }
-      }
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
     }
-
     this.filter.set(current);
     this.loadCommunities();
   }

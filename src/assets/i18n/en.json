@@ -3,6 +3,7 @@
   "COMMON": {
     "LANGUAGE_SELECTOR": "Language selector",
     "ADDRESS": "Address",
+    "SEARCH": "Search",
     "ACTIONS": {
       "YES": "Yes",
       "NO": "No",
@@ -62,13 +63,17 @@
     "ERROR_LOGOUT": "Error logging out",
     "DELETE": "Delete",
     "COPY_TO_CLIPBOARD": "Copy to clipboard",
-    "MANAGEMENT": "Management"
+    "MANAGEMENT": "Management",
+    "ERROR_LOADING": "An error occurred while loading data",
+    "RETRY": "Retry"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
     "UPDATE": "Update",
     "ACCOUNT_INFORMATION": "Account information",
     "UPDATE_PASSWORD": "Change password",
+    "EMAIL_READONLY_HINT": "Managed by your identity provider",
+    "COPY_IBAN": "Copy IBAN",
     "DOCUMENTS": "Documents",
     "MY_REPRESENTATIONS": "My representations",
     "DISPLAY_NAME": "Name",
@@ -142,11 +147,14 @@
       "CITY": "City",
       "CITY_PLACEHOLDER": "Brussels",
       "SAME_ADDRESS": "Same as home address",
-      "VALIDATE": "Validate"
+      "VALIDATE": "Validate",
+      "CANCEL": "Cancel"
     }
   },
   "INVITATION": {
     "TITLE": "My invitations",
+    "SUBTITLE": "Manage your pending invitations",
+    "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
     "MEMBER": {
       "TITLE": "Members",
       "HEADERS": {
@@ -211,7 +219,9 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Switch community",
       "LEAVE_BUTTON": "Leave",
       "LEAVE_BUTTON_TOOLTIP": "Leave the community",
-      "NO_COMMUNITY_FOUND": "No community found"
+      "NO_COMMUNITY_FOUND": "No community found",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
     },
     "CREATE": {
       "TITLE": "Create a community",

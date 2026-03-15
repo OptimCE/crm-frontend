@@ -3,6 +3,7 @@
   "COMMON": {
     "LANGUAGE_SELECTOR": "Sélecteur de langue",
     "ADDRESS": "Adresse",
+    "SEARCH": "Rechercher",
     "ACTIONS": {
       "YES": "Oui",
       "NO": "Non",
@@ -62,13 +63,17 @@
     "ERROR_LOGOUT": "Erreur lors de la déconnexion",
     "DELETE": "Supprimer",
     "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier",
-    "MANAGEMENT": "Gestion"
+    "MANAGEMENT": "Gestion",
+    "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
+    "RETRY": "Réessayer"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
     "UPDATE": "Mettre à jour",
     "ACCOUNT_INFORMATION": "Informations du compte",
     "UPDATE_PASSWORD": "Changer de mot de passe",
+    "EMAIL_READONLY_HINT": "Géré par votre fournisseur d'identité",
+    "COPY_IBAN": "Copier l'IBAN",
     "DOCUMENTS": "Documents",
     "MY_REPRESENTATIONS": "Mes représentations",
     "DISPLAY_NAME": "Nom",
@@ -142,11 +147,14 @@
       "CITY": "Ville",
       "CITY_PLACEHOLDER": "Bruxelles",
       "SAME_ADDRESS": "Même adresse que l'adresse du domicile",
-      "VALIDATE": "Valider"
+      "VALIDATE": "Valider",
+      "CANCEL": "Annuler"
     }
   },
   "INVITATION": {
     "TITLE": "Mes invitations",
+    "SUBTITLE": "Gérez vos invitations en attente",
+    "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
     "MEMBER": {
       "TITLE": "Membres",
       "HEADERS": {
@@ -211,7 +219,9 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Changer de communauté",
       "LEAVE_BUTTON": "Quitter",
       "LEAVE_BUTTON_TOOLTIP": "Quitter la communauté",
-      "NO_COMMUNITY_FOUND": "Aucune communauté trouvée"
+      "NO_COMMUNITY_FOUND": "Aucune communauté trouvée",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
     },
     "CREATE": {
       "TITLE": "Créer une communauté",

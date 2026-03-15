@@ -161,3 +161,28 @@
 .border-brand {
   border-color: #43a047;
 }
+
+/* ------------------------------------------------------------------
+   Field display patterns
+   ------------------------------------------------------------------ */
+.field-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--p-text-muted-color);
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.field-value {
+  font-size: 0.875rem;
+  color: var(--p-text-color);
+  display: block;
+}
+
+.field-empty {
+  font-size: 0.875rem;
+  color: var(--p-surface-300);
+  font-style: italic;
+}

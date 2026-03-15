@@ -1,17 +1,30 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { Button } from 'primeng/button';
-import { FilterMetadata } from 'primeng/api';
+import { Select } from 'primeng/select';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MeService } from '../../../../../../../shared/services/me.service';
 import { MeDocumentDTO, MeDocumentPartialQuery } from '../../../../../../../shared/dtos/me.dtos';
 import { ApiResponse, Pagination } from '../../../../../../../core/dtos/api.response';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
+import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-documents-user',
-  imports: [TranslatePipe, TableModule, Button],
+  imports: [
+    TranslatePipe,
+    TableModule,
+    Button,
+    Select,
+    FormsModule,
+    InputGroup,
+    InputGroupAddonModule,
+    DebouncedPInputComponent,
+  ],
   templateUrl: './documents.component.html',
   styleUrl: './documents.component.css',
   providers: [ErrorMessageHandler],
@@ -31,6 +44,16 @@ export class DocumentsComponent {
   );
   readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
+  readonly searchField = signal<string>('community_name');
+  readonly searchText = signal<string>('');
+  readonly hasActiveFilters = computed(() => !!this.searchText());
+
+  searchFieldOptions = [
+    { label: 'PROFILE.DOCUMENTS.COMMUNITY_LABEL', value: 'community_name' },
+    { label: 'PROFILE.DOCUMENTS.NAME_LABEL', value: 'file_name' },
+    { label: 'PROFILE.DOCUMENTS.TYPE_LABEL', value: 'file_type' },
+  ];
+
   constructor() {
     this.updatePaginationTranslation();
   }
@@ -46,6 +69,32 @@ export class DocumentsComponent {
       .subscribe((translatedText: string) => {
         this.currentPageReportTemplate.set(translatedText);
       });
+  }
+
+  applyFilters(): void {
+    const current: MeDocumentPartialQuery = { page: 1, limit: this.filter().limit };
+
+    const text = this.searchText();
+    if (text) {
+      const field = this.searchField();
+      if (field === 'community_name') current.community_name = text;
+      else if (field === 'file_name') current.file_name = text;
+      else if (field === 'file_type') current.file_type = text;
+    }
+
+    this.filter.set(current);
+    this.loadDocuments();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  onSearchFieldChange(): void {
+    if (this.searchText()) {
+      this.applyFilters();
+    }
   }
 
   loadDocuments(): void {
@@ -79,40 +128,23 @@ export class DocumentsComponent {
       }
     }
 
-    if ($event.filters) {
-      const extractValue = (field: string): string | null => {
-        const filterMeta = $event.filters?.[field];
-        if (!filterMeta) return null;
-        if (Array.isArray(filterMeta)) {
-          const firstConstraint = filterMeta[0] as FilterMetadata | undefined;
-          return (firstConstraint?.value as string | null) ?? null;
-        } else {
-          return (filterMeta?.value as string | null) ?? null;
-        }
-      };
+    this.filter.set(current);
+    this.loadDocuments();
+  }
 
-      const fileName = extractValue('fileName');
-      if (fileName) {
-        current.file_name = fileName;
-      } else {
-        delete current.file_name;
-      }
-
-      const fileType = extractValue('fileType');
-      if (fileType) {
-        current.file_type = fileType;
-      } else {
-        delete current.file_type;
-      }
-    }
-
+  pageChange($event: TablePageEvent): void {
+    const current: MeDocumentPartialQuery = { ...this.filter() };
+    current.page = ($event.first ?? 0) / ($event.rows ?? 10) + 1;
     this.filter.set(current);
     this.loadDocuments();
   }
 
   clear(table: Table): void {
     table.clear();
+    this.searchText.set('');
+    this.searchField.set('community_name');
     this.filter.set({ page: 1, limit: 10 });
+    this.loadDocuments();
   }
 
   onDownloadDocument(doc: MeDocumentDTO): void {
