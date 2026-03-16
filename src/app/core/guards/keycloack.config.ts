@@ -10,12 +10,13 @@ import {
 import { environments } from '../../../environments/environments';
 import { EnvironmentProviders } from '@angular/core';
 
-const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: environments.keycloak.urlPattern,
-});
-
 export const provideKeycloakAngular = (): EnvironmentProviders =>
-  provideKeycloak({
+{
+  const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+    urlPattern: environments.keycloak.urlPattern,
+  });
+
+  return provideKeycloak({
     config: {
       realm: environments.keycloak.realm,
       url: environments.keycloak.url,
@@ -41,3 +42,4 @@ export const provideKeycloakAngular = (): EnvironmentProviders =>
       },
     ],
   });
+};
