@@ -15,6 +15,8 @@
       "MEMBER": "Lid",
       "MANAGER": "Manager"
     },
+    "ERROR_LOADING": "De pagina kan niet worden geladen. Probeer het later opnieuw",
+    "RETRY": "Opnieuw proberen",
     "ERRORS": {
       "EXCEPTION": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw",
       "TIMEOUT": "Het verzoek is verlopen. Probeer het opnieuw",
@@ -301,7 +303,13 @@
       "UPDATE": "Bijwerken",
       "DELETE": "Verwijderen",
       "DOWNLOAD": "Downloaden",
-      "BACK_TO_LIST": "Terug naar de sleutellijst"
+      "BACK_TO_LIST": "Terug naar de sleutellijst",
+      "ITERATIONS_LABEL": "iteraties",
+      "CONSUMERS_LABEL": "consumenten",
+      "DESCRIPTION_TITLE": "Beschrijving",
+      "DATA_TABLE_TITLE": "Gegevens",
+      "SHOW_MORE": "Meer tonen",
+      "SHOW_LESS": "Minder tonen"
     },
     "CREATE": {
       "KEY_TITLE": "Aanmaken van een verdeelsleutel",
@@ -336,7 +344,10 @@
       "EGALITARIAN_LABEL": "Egalitair",
       "INJECTION_PERCENTAGE_LABEL": "Injectiepercentage",
       "SUM_MUST_BE_100_LABEL": "De som van de percentages moet gelijk zijn aan 100!",
-      "FINALISATION": "Afsluiting"
+      "FINALISATION": "Afsluiting",
+      "STEP_CONSUMERS_COUNT": "Verbruikers",
+      "STEP_CONSUMER_NAMES": "Namen",
+      "STEP_ITERATIONS": "Iteraties"
     },
     "TABLE": {
       "COLUMNS": {
@@ -482,10 +493,15 @@
         "CLOSE_BUTTON_LABEL": "Sluiten"
       },
       "INFORMATION_TITLE": "Algemene informatie",
+      "IDENTIFICATION_TITLE": "Identificatie",
+      "CONTACT_TITLE": "Contact",
       "INVITATIONS": {
         "NO_INVITE_LABEL": "Geen uitnodiging",
         "PENDING_LABEL": "In behandeling",
-        "ACCEPTED_LABEL": "Geaccepteerd"
+        "ACCEPTED_LABEL": "Geaccepteerd",
+        "INVITE_BUTTON_LABEL": "Uitnodigen",
+        "CANCEL_BUTTON_LABEL": "Annuleren",
+        "DELETE_BUTTON_LABEL": "Verwijderen"
       },
       "MEMBER_GUARDIANSHIP_TITLE": "Voogd",
       "MANAGER_TITLE": "Manager",
@@ -1120,7 +1136,8 @@
       "NO_SHARING_OPERATION_FOUND_LABEL": "Geen deeloperatie gevonden",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} deeloperaties)",
       "ADD_SHARING_OP_HEADER": "Deeloperatie toevoegen",
-      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Deeloperatie succesvol toegevoegd"
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Deeloperatie succesvol toegevoegd",
+      "SELECT_A_TYPE_PLACEHOLDER": "Selecteer een type"
     },
     "SELECT_METER_NEW_KEY": {
       "NOW": "Nu",

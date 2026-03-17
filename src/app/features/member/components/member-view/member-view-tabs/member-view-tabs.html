@@ -1,4 +1,4 @@
-<p-tabs [value]="0">
+<p-tabs [value]="0" styleClass="member-tabs">
   <p-tablist>
     @if (member().status === 1) {
       <p-tab [value]="0">{{ 'MEMBER.VIEW.TAB_HEADER.METER_LABEL' | translate }}</p-tab>

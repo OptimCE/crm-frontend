@@ -13,6 +13,9 @@ import { Textarea } from 'primeng/textarea';
 import { SnackbarNotification } from '../../../../../shared/services-ui/snackbar.notifcation.service';
 import { ERROR_TYPE } from '../../../../../core/dtos/notification';
 import { DialogService } from 'primeng/dynamicdialog';
+import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
+import { Card } from 'primeng/card';
+import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
 interface FirstStepValue {
   nb_consumers: number;
 }
@@ -38,6 +41,13 @@ interface IterationFormValue {
     RadioButton,
     ErrorHandlerComponent,
     Textarea,
+    Stepper,
+    Step,
+    StepList,
+    StepPanel,
+    StepPanels,
+    Card,
+    BackArrow,
   ],
   templateUrl: './key-creation-step-by-step.html',
   styleUrl: './key-creation-step-by-step.css',

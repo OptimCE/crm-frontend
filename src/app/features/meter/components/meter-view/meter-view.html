@@ -1,99 +1,266 @@
 <div class="container mx-auto my-auto">
-  @if (isLoaded()) {
-    <div>
-      <app-back-arrow url="/meters" [text]="'METER.FULL.BACK_TO_LIST' | translate"></app-back-arrow>
-      <div
-        class="flex flex-wrap -mx-2 pb-3 pt-3 items-center justify-between flex-col lg:flex-row gap-2"
-      >
-        <app-header-page
-          icon="pi pi-gauge"
-          [text]="'METER.METER_LABEL' | translate"
-        ></app-header-page>
-        <p-button
-          type="button"
-          label="{{ 'METER.FULL.MODIFY_BUTTON_LABEL' | translate }}"
-          severity="warn"
-          icon="pi pi-pencil"
-          (click)="toModify()"
-        ></p-button>
-      </div>
-      <div class="flex flex-wrap pb-3">
-        <div class="flex items-center">
-          <h4 class="text-md font-medium">
-            {{ 'METER.FULL.METER_INFORMATION_TITLE' | translate }}
-          </h4>
+  @if (isLoading()) {
+    <!-- Skeleton Loading State -->
+    <div class="space-y-4">
+      <!-- Hero Skeleton -->
+      <div class="meter-hero rounded-xl border border-primary-100 p-6 flex items-center gap-5">
+        <p-skeleton shape="circle" size="4rem" />
+        <div class="flex flex-col gap-2 flex-1">
+          <p-skeleton width="14rem" height="1.5rem" />
+          <p-skeleton width="9rem" height="1rem" />
         </div>
+        <p-skeleton width="6rem" height="2.5rem" borderRadius="8px" />
       </div>
-      <p-card class="m-5 shadow-lg/30!">
-        <div class="grid grid-cols-1 lg:grid-cols-3 pb-3 w-full">
-          <div class="flex flex-wrap flex-col text-center">
-            <div class="flex flex-col">
-              <div class="flex flex-wrap place-content-center">
-                <h4 class="text-md font-medium">{{ 'COMMON.ADDRESS' | translate }}</h4>
-              </div>
-              <p class="text-sm" [innerHTML]="meter()?.address! | address"></p>
+      <!-- Card Skeletons -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        @for (_ of [1, 2, 3]; track $index) {
+          <div class="bg-white border border-surface-200 rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-4">
+              <p-skeleton shape="circle" size="1.5rem" />
+              <p-skeleton width="8rem" height="1rem" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              @for (_ of [1, 2, 3, 4]; track $index) {
+                <div>
+                  <p-skeleton width="5rem" height="0.75rem" styleClass="mb-2" />
+                  <p-skeleton width="7rem" height="1rem" />
+                </div>
+              }
             </div>
           </div>
-          <div class="flex flex-wrap flex-col text-center">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.EAN_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{ meter()?.EAN }}</span>
-          </div>
-          <div class="flex flex-wrap flex-col text-center">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{ meter()?.meter_number }}</span>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 pb-3 w-full">
-          <div class="flex flex-wrap flex-col text-center pb-1">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{
-              meter()?.tarif_group! | mapNumberString: tarifGroupMap()
-            }}</span>
-          </div>
-          <div class="flex flex-wrap flex-col text-center pb-1">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{
-              meter()?.phases_number! | mapNumberString: phasesNumberMap()
-            }}</span>
-          </div>
-          <div class="flex flex-wrap flex-col text-center pb-1">
-            <span class="text-md font-medium">{{
-              'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
-            }}</span>
-            <span class="text-sm">{{
-              meter()?.reading_frequency! | mapNumberString: readingFrequencyMap()
-            }}</span>
-          </div>
-        </div>
-      </p-card>
+        }
+      </div>
+    </div>
+  } @else if (hasError()) {
+    <!-- Error State -->
+    <div class="flex flex-col items-center justify-center py-16 gap-4">
+      <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
+      <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <p-button
+        [outlined]="true"
+        icon="pi pi-refresh"
+        label="{{ 'COMMON.RETRY' | translate }}"
+        (click)="getFullMeter()"
+      />
+    </div>
+  } @else if (meter()) {
+    <app-back-arrow url="/meters" [text]="'METER.FULL.BACK_TO_LIST' | translate"></app-back-arrow>
 
-      <p-tabs [value]="0">
+    <div class="space-y-4 mt-3">
+      <!-- Hero Section -->
+      <div
+        class="meter-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+      >
+        <p-avatar
+          icon="pi pi-gauge"
+          size="xlarge"
+          shape="circle"
+          styleClass="bg-primary-100 text-primary-700 text-xl"
+        />
+        <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
+              {{ meter()!.EAN }}
+            </h1>
+            @switch (currentStatus()) {
+              @case (MeterStatus.ACTIVE) {
+                <p-tag severity="success" value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}" />
+              }
+              @case (MeterStatus.INACTIVE) {
+                <p-tag severity="danger" value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}" />
+              }
+              @case (MeterStatus.WAITING_GRD) {
+                <p-tag severity="info" value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}" />
+              }
+              @case (MeterStatus.WAITING_MANAGER) {
+                <p-tag
+                  severity="info"
+                  value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                />
+              }
+            }
+          </div>
+          <p class="text-sm text-surface-500 m-0 truncate">
+            {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}: {{ meter()!.meter_number }}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          @if (currentStatus() === MeterStatus.ACTIVE) {
+            <p-button
+              [outlined]="true"
+              label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
+              icon="pi pi-sync"
+              severity="warn"
+              (click)="toUpdate()"
+            />
+            <p-button
+              [outlined]="true"
+              label="{{ 'METER.FULL.METER_DEACTIVATE_HEADER' | translate }}"
+              icon="pi pi-circle-off"
+              severity="danger"
+              (click)="toDeactivate()"
+            />
+          }
+          <p-button
+            pRipple
+            [outlined]="true"
+            icon="pi pi-pencil"
+            label="{{ 'METER.FULL.MODIFY_BUTTON_LABEL' | translate }}"
+            severity="primary"
+            (click)="toModify()"
+          />
+        </div>
+      </div>
+
+      <!-- Information Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Card 1: Location -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-map-marker text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'COMMON.ADDRESS' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div>
+              <span class="field-label">{{ 'COMMON.ADDRESS' | translate }}</span>
+              @if (meter()!.address) {
+                <div class="bg-surface-50 border border-surface-200 rounded-lg p-3 mt-1">
+                  <p
+                    class="m-0 text-sm text-surface-800"
+                    [innerHTML]="meter()!.address! | address"
+                  ></p>
+                </div>
+              } @else {
+                <div class="flex items-center gap-2 mt-1">
+                  <i class="pi pi-map-marker text-sm text-surface-300"></i>
+                  <span class="field-empty">--</span>
+                </div>
+              }
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <span class="field-label">{{
+                  'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate
+                }}</span>
+                @if (meter()!.tarif_group) {
+                  <span class="field-value">{{
+                    meter()!.tarif_group! | mapNumberString: tarifGroupMap()
+                  }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+              <div>
+                <span class="field-label">{{
+                  'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate
+                }}</span>
+                @if (meter()!.phases_number) {
+                  <span class="field-value">{{
+                    meter()!.phases_number! | mapNumberString: phasesNumberMap()
+                  }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Card 2: Technical -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-cog text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'METER.FULL.METER_INFORMATION_TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span class="field-label">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</span>
+              @if (meter()!.EAN) {
+                <span class="field-value">{{ meter()!.EAN }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+            <div>
+              <span class="field-label">{{
+                'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
+              }}</span>
+              @if (meter()!.meter_number) {
+                <span class="field-value">{{ meter()!.meter_number }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+            <div class="md:col-span-2">
+              <span class="field-label">{{
+                'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
+              }}</span>
+              @if (meter()!.reading_frequency) {
+                <span class="field-value">{{
+                  meter()!.reading_frequency! | mapNumberString: readingFrequencyMap()
+                }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Card 3: Holder -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-user text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            @if (meter()!.holder) {
+              <div>
+                <span class="field-label">{{
+                  'MEMBER.VIEW.INFORMATIONS.NAME_LABEL' | translate
+                }}</span>
+                <div class="flex items-center gap-2 mt-1">
+                  @switch (meter()!.holder!.member_type) {
+                    @case (1) {
+                      <i class="pi pi-user text-sm text-primary-500"></i>
+                    }
+                    @case (2) {
+                      <i class="pi pi-building text-sm text-primary-500"></i>
+                    }
+                  }
+                  <a
+                    href="/members/{{ meter()!.holder!.id }}"
+                    class="text-primary-500 hover:text-primary-700 text-sm font-medium underline"
+                  >
+                    {{ meter()!.holder!.name }}
+                  </a>
+                </div>
+              </div>
+            } @else {
+              <div class="flex flex-col items-center justify-center py-4 gap-2">
+                <i class="pi pi-user text-2xl text-surface-300"></i>
+                <span class="field-empty">{{ 'METER.DATA.NO_OWNER_FOUND_LABEL' | translate }}</span>
+              </div>
+            }
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Tabs -->
+      <p-tabs [value]="0" class="meter-tabs">
         <p-tablist>
           <p-tab [value]="0">{{ 'METER.FULL.TABS.ACTUAL_DATA_HEADER' | translate }}</p-tab>
           <p-tab [value]="1">{{ 'METER.FULL.TABS.HISTORICAL_DATA_HEADER' | translate }}</p-tab>
           <p-tab [value]="2">{{ 'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate }}</p-tab>
           <p-tab [value]="3">{{ 'METER.FULL.TABS.CONSUMPTION_HEADER' | translate }}</p-tab>
-          <p-tab [value]="-1">
-            <div class="p-0 w-full justify-end" id="testaaaa">
-              <p-button
-                type="button"
-                label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
-                class="p-button-raised p-button-rounded m-1"
-                severity="warn"
-                (click)="toUpdate($event)"
-              ></p-button>
-            </div>
-          </p-tab>
         </p-tablist>
         <p-tabpanels>
+          <!-- Actual Data Tab -->
           <p-tabpanel [value]="0">
             @if (hasMeterData()) {
               <app-meter-data-view
@@ -104,22 +271,34 @@
                 [clientTypeMap]="clientTypeMap()"
               ></app-meter-data-view>
             } @else {
-              <p class="text-base">{{ 'METER.FULL.NO_DATA_FOUND_LABEL' | translate }}</p>
+              <div class="flex flex-col items-center justify-center py-12 gap-3">
+                <i class="pi pi-gauge text-3xl text-surface-300"></i>
+                <p class="text-surface-500 m-0">
+                  {{ 'METER.FULL.NO_DATA_FOUND_LABEL' | translate }}
+                </p>
+              </div>
             }
           </p-tabpanel>
+
+          <!-- Historical Data Tab -->
           <p-tabpanel [value]="1">
             @if (hasHistory()) {
-              <div>
-                <div class="flex flex-wrap -mx-2 pb-3">
+              <div class="space-y-4">
+                <div>
+                  <span class="field-label mb-1">{{
+                    'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate
+                  }}</span>
                   <p-select
                     [options]="meter()!.meter_data_history"
                     [ngModel]="historySelected()"
                     (ngModelChange)="historySelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
+                    styleClass="w-full sm:w-80"
                   >
                     <ng-template pTemplate="selectedItem">
                       @if (historySelected()) {
                         <div class="flex items-center gap-2">
+                          <i class="pi pi-calendar text-xs text-primary-500"></i>
                           <span class="text-sm">
                             {{ historySelected()?.start_date | date: 'dd/MM/yyyy' }} -
                             {{ historySelected()?.end_date | date: 'dd/MM/yyyy' }}
@@ -129,10 +308,11 @@
                     </ng-template>
                     <ng-template let-history pTemplate="item">
                       <div class="flex items-center gap-2">
-                        <span class="text-sm"
-                          >{{ history.start_date | date: 'dd/MM/yyyy' }} -
-                          {{ history.end_date | date: 'dd/MM/yyyy' }}</span
-                        >
+                        <i class="pi pi-calendar text-xs text-surface-400"></i>
+                        <span class="text-sm">
+                          {{ history.start_date | date: 'dd/MM/yyyy' }} -
+                          {{ history.end_date | date: 'dd/MM/yyyy' }}
+                        </span>
                       </div>
                     </ng-template>
                   </p-select>
@@ -148,26 +328,34 @@
                 }
               </div>
             } @else {
-              <div>
-                <p class="text-base">
+              <div class="flex flex-col items-center justify-center py-12 gap-3">
+                <i class="pi pi-history text-3xl text-surface-300"></i>
+                <p class="text-surface-500 m-0">
                   {{ 'METER.FULL.NO_HISTORY_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
             }
           </p-tabpanel>
+
+          <!-- Future Data Tab -->
           <p-tabpanel [value]="2">
             @if (hasFutureData()) {
-              <div>
-                <div class="flex flex-wrap -mx-2 pb-3">
+              <div class="space-y-4">
+                <div>
+                  <span class="field-label mb-1">{{
+                    'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate
+                  }}</span>
                   <p-select
                     [options]="meter()!.futur_meter_data"
                     [ngModel]="futureSelected()"
                     (ngModelChange)="futureSelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
+                    styleClass="w-full sm:w-80"
                   >
                     <ng-template pTemplate="selectedItem">
                       @if (futureSelected()) {
                         <div class="flex items-center gap-2">
+                          <i class="pi pi-calendar text-xs text-primary-500"></i>
                           <span class="text-sm">
                             {{ futureSelected()?.start_date | date: 'dd/MM/yyyy' }} -
                             {{ futureSelected()?.end_date | date: 'dd/MM/yyyy' }}
@@ -177,10 +365,11 @@
                     </ng-template>
                     <ng-template let-futur pTemplate="item">
                       <div class="flex items-center gap-2">
-                        <span class="text-sm"
-                          >{{ futur.start_date | date: 'dd/MM/yyyy' }} -
-                          {{ futur.end_date | date: 'dd/MM/yyyy' }}</span
-                        >
+                        <i class="pi pi-calendar text-xs text-surface-400"></i>
+                        <span class="text-sm">
+                          {{ futur.start_date | date: 'dd/MM/yyyy' }} -
+                          {{ futur.end_date | date: 'dd/MM/yyyy' }}
+                        </span>
                       </div>
                     </ng-template>
                   </p-select>
@@ -196,48 +385,64 @@
                 }
               </div>
             } @else {
-              <div>
-                <p class="text-base">{{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}</p>
+              <div class="flex flex-col items-center justify-center py-12 gap-3">
+                <i class="pi pi-calendar-plus text-3xl text-surface-300"></i>
+                <p class="text-surface-500 m-0">
+                  {{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}
+                </p>
               </div>
             }
           </p-tabpanel>
+
+          <!-- Consumption Tab -->
           <p-tabpanel [value]="3">
-            <form [formGroup]="formChart" class="flex mb-4" (submit)="loadChart()">
-              <div class="grid me-2">
-                <label for="dateDeb">{{ 'METER.FULL.BEGINNING_DATE_LABEL' | translate }}</label>
+            <form
+              [formGroup]="formChart"
+              class="flex flex-col sm:flex-row gap-3 items-end mb-4"
+              (submit)="loadChart()"
+            >
+              <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+                <label for="dateDeb" class="field-label">{{
+                  'METER.FULL.BEGINNING_DATE_LABEL' | translate
+                }}</label>
                 <p-date-picker
                   id="dateDeb"
                   formControlName="dateDeb"
                   dateFormat="dd/mm/yy"
                   [firstDayOfWeek]="1"
+                  styleClass="w-full"
                 ></p-date-picker>
                 <app-error-handler controlName="dateDeb"></app-error-handler>
               </div>
-              <div class="grid me-2">
-                <label for="dateFin">{{ 'METER.FULL.END_DATE_LABEL' | translate }}</label>
+              <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+                <label for="dateFin" class="field-label">{{
+                  'METER.FULL.END_DATE_LABEL' | translate
+                }}</label>
                 <p-date-picker
                   id="dateFin"
                   formControlName="dateFin"
                   dateFormat="dd/mm/yy"
                   [firstDayOfWeek]="1"
+                  styleClass="w-full"
                 ></p-date-picker>
                 <app-error-handler controlName="dateFin"></app-error-handler>
               </div>
-              <div class="content-center">
-                <p-button
-                  pRipple
-                  label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
-                  type="submit"
-                ></p-button>
-              </div>
+              <p-button
+                pRipple
+                label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
+                icon="pi pi-search"
+                type="submit"
+              ></p-button>
             </form>
-            <div class="card">
+            <p-card styleClass="mb-4">
               <p-chart type="bar" [data]="data()" [options]="options" />
-            </div>
+            </p-card>
             @if (displayDownloadButton()) {
-              <div class="flex flex-wrap -mx-2 text-center mt-4">
+              <div class="flex justify-center">
                 <p-button
                   pRipple
+                  [outlined]="true"
+                  icon="pi pi-download"
                   label="{{ 'METER.FULL.DOWNLOAD_BUTTON_LABEL' | translate }}"
                   (click)="downloadTotalConsumption()"
                 ></p-button>

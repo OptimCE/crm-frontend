@@ -15,6 +15,8 @@
       "MEMBER": "Mitglied",
       "MANAGER": "Manager"
     },
+    "ERROR_LOADING": "Die Seite konnte nicht geladen werden. Bitte versuchen Sie es später erneut",
+    "RETRY": "Erneut versuchen",
     "ERRORS": {
       "EXCEPTION": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut",
       "TIMEOUT": "Die Anfrage ist abgelaufen. Bitte versuchen Sie es erneut",
@@ -301,7 +303,13 @@
       "UPDATE": "Aktualisieren",
       "DELETE": "Löschen",
       "DOWNLOAD": "Herunterladen",
-      "BACK_TO_LIST": "Zurück zur Schlüsselliste"
+      "BACK_TO_LIST": "Zurück zur Schlüsselliste",
+      "ITERATIONS_LABEL": "Iterationen",
+      "CONSUMERS_LABEL": "Verbraucher",
+      "DESCRIPTION_TITLE": "Beschreibung",
+      "DATA_TABLE_TITLE": "Daten",
+      "SHOW_MORE": "Mehr anzeigen",
+      "SHOW_LESS": "Weniger anzeigen"
     },
     "CREATE": {
       "KEY_TITLE": "Verteilungsschlüssel erstellen",
@@ -336,7 +344,10 @@
       "EGALITARIAN_LABEL": "Egalitär",
       "INJECTION_PERCENTAGE_LABEL": "Einspeisequote",
       "SUM_MUST_BE_100_LABEL": "Die Summe der Prozentsätze muss 100 ergeben!",
-      "FINALISATION": "Abschluss"
+      "FINALISATION": "Abschluss",
+      "STEP_CONSUMERS_COUNT": "Verbraucher",
+      "STEP_CONSUMER_NAMES": "Namen",
+      "STEP_ITERATIONS": "Iterationen"
     },
     "TABLE": {
       "COLUMNS": {
@@ -482,10 +493,15 @@
         "CLOSE_BUTTON_LABEL": "Schließen"
       },
       "INFORMATION_TITLE": "Allgemeine Informationen",
+      "IDENTIFICATION_TITLE": "Identifikation",
+      "CONTACT_TITLE": "Kontakt",
       "INVITATIONS": {
         "NO_INVITE_LABEL": "Keine Einladung",
         "PENDING_LABEL": "Ausstehend",
-        "ACCEPTED_LABEL": "Akzeptiert"
+        "ACCEPTED_LABEL": "Akzeptiert",
+        "INVITE_BUTTON_LABEL": "Einladen",
+        "CANCEL_BUTTON_LABEL": "Abbrechen",
+        "DELETE_BUTTON_LABEL": "Löschen"
       },
       "MEMBER_GUARDIANSHIP_TITLE": "Vormund",
       "MANAGER_TITLE": "Manager",
@@ -1120,7 +1136,8 @@
       "NO_SHARING_OPERATION_FOUND_LABEL": "Keine Teilungsoperation gefunden",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Teilungsoperationen)",
       "ADD_SHARING_OP_HEADER": "Teilungsoperation hinzufügen",
-      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Teilungsoperation erfolgreich hinzugefügt"
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Teilungsoperation erfolgreich hinzugefügt",
+      "SELECT_A_TYPE_PLACEHOLDER": "Typ auswählen"
     },
     "SELECT_METER_NEW_KEY": {
       "NOW": "Jetzt",

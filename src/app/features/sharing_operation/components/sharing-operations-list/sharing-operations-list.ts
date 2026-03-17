@@ -1,12 +1,13 @@
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { PrimeTemplate } from 'primeng/api';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Select } from 'primeng/select';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -16,31 +17,34 @@ import {
 } from '../../../../shared/dtos/sharing_operation.dtos';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
-import { Router } from '@angular/router';
+import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
+import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { SharingOperationCreationUpdate } from '../sharing-operation-creation-update/sharing-operation-creation-update';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
+import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-sharing-operations-list',
   standalone: true,
   imports: [
     Button,
-    InputTextModule,
-    PrimeTemplate,
-    ReactiveFormsModule,
+    FormsModule,
+    Select,
+    InputGroup,
+    InputGroupAddonModule,
     TableModule,
     TagModule,
-    SharingOperationTypePipe,
     TranslatePipe,
     HeaderPage,
+    DebouncedPInputComponent,
   ],
   templateUrl: './sharing-operations-list.html',
   styleUrl: './sharing-operations-list.css',
   providers: [DialogService, ErrorMessageHandler],
 })
-export class SharingOperationsList implements OnInit {
+export class SharingOperationsList {
   private sharingOperationsService = inject(SharingOperationService);
   private routing = inject(Router);
   private dialogService = inject(DialogService);
@@ -54,12 +58,31 @@ export class SharingOperationsList implements OnInit {
   readonly currentPageReportTemplate = signal<string>('');
   ref?: DynamicDialogRef | null;
 
+  // Filter signals
+  readonly searchField = signal<string>('name');
+  readonly searchText = signal<string>('');
+  readonly typeFilter = signal<SharingOperationType | null>(null);
+  readonly hasActiveFilters = computed(() => !!this.searchText() || this.typeFilter() !== null);
+
   readonly firstRow = computed(
     () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
   );
   readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  ngOnInit(): void {
+  searchFieldOptions = [{ label: 'SHARING_OPERATION.LIST.NAME_LABEL', value: 'name' }];
+
+  typeOptions = [
+    {
+      label: 'SHARING_OPERATION.TYPE.INSIDE_BUILDING',
+      value: SharingOperationType.LOCAL,
+      icon: 'pi pi-home',
+    },
+    { label: 'SHARING_OPERATION.TYPE.CER', value: SharingOperationType.CER, icon: 'pi pi-sitemap' },
+    { label: 'SHARING_OPERATION.TYPE.CEC', value: SharingOperationType.CEC, icon: 'pi pi-globe' },
+  ];
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
     this.updatePaginationTranslation();
   }
 
@@ -70,10 +93,39 @@ export class SharingOperationsList implements OnInit {
         total_pages: this.paginationInfo().total_pages,
         total: this.paginationInfo().total,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
         this.currentPageReportTemplate.set(translatedText);
       });
+  }
+
+  applyFilters(): void {
+    const current: SharingOperationPartialQuery = { page: 1, limit: this.filter().limit };
+    const text = this.searchText();
+    if (text) {
+      current.name = text;
+    }
+    const type = this.typeFilter();
+    if (type !== null) {
+      current.type = String(type);
+    }
+    this.filter.set(current);
+    this.loadSharingOperation();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  onSearchFieldChange(): void {
+    if (this.searchText()) {
+      this.applyFilters();
+    }
+  }
+
+  onTypeFilterChange(type: SharingOperationType | null): void {
+    this.typeFilter.set(type);
+    this.applyFilters();
   }
 
   onAddSharingOperation(): void {
@@ -108,12 +160,13 @@ export class SharingOperationsList implements OnInit {
           if (response) {
             this.sharingOperationList.set(response.data as SharingOperationPartialDTO[]);
             this.paginationInfo.set(response.pagination);
+            this.updatePaginationTranslation();
           } else {
-            console.error('Error fetching meters partial list');
+            console.error('Error fetching sharing operations partial list');
           }
         },
         error: (_error) => {
-          console.error('Error fetching meters partial list');
+          console.error('Error fetching sharing operations partial list');
         },
       });
   }
@@ -121,43 +174,10 @@ export class SharingOperationsList implements OnInit {
   lazyLoadSharingOperation($event: TableLazyLoadEvent): void {
     const current: SharingOperationPartialQuery = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
-      if ($event.rows) {
-        current.page = $event.first / $event.rows + 1;
-      } else {
-        current.page = 1;
-      }
+      current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
     }
-
-    if ($event.sortField) {
-      const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
-      delete current.sort_type;
-      delete current.sort_name;
-
-      switch ($event.sortField) {
-        case 'type': {
-          current.sort_type = sortDirection;
-          break;
-        }
-        case 'name': {
-          current.sort_name = sortDirection;
-          break;
-        }
-      }
-    }
-    if ($event.filters) {
-      const nameFilter = $event.filters['name'];
-      if (nameFilter && !Array.isArray(nameFilter) && nameFilter.value) {
-        current.name = nameFilter.value as string;
-      } else {
-        delete current.name;
-      }
-
-      const typeFilter = $event.filters['type'];
-      if (typeFilter && !Array.isArray(typeFilter) && typeFilter.value) {
-        current.type = typeFilter.value as string;
-      } else {
-        delete current.type;
-      }
+    if (current.page < 1) {
+      current.page = 1;
     }
     this.filter.set(current);
     this.loadSharingOperation();
@@ -170,8 +190,11 @@ export class SharingOperationsList implements OnInit {
     this.loadSharingOperation();
   }
 
-  clear(dt: Table): void {
-    dt.clear();
+  clear(table: Table): void {
+    table.clear();
+    this.searchText.set('');
+    this.searchField.set('name');
+    this.typeFilter.set(null);
     this.filter.set({ page: 1, limit: 10 });
     this.loadSharingOperation();
   }
@@ -179,4 +202,6 @@ export class SharingOperationsList implements OnInit {
   onRowClick(sharingOp: SharingOperationPartialDTO): void {
     void this.routing.navigate(['/sharing_operations/', sharingOp.id]);
   }
+
+  protected readonly SharingOperationType = SharingOperationType;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { KeyDTO } from '../../../../shared/dtos/key.dtos';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyService } from '../../../../shared/services/key.service';
@@ -8,6 +8,8 @@ import { HeaderWithHelper } from './header-with-helper/header-with-helper';
 import { HelperDialog } from './helper-dialog/helper-dialog';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
+import { Ripple } from 'primeng/ripple';
+import { Skeleton } from 'primeng/skeleton';
 import { SlicePipe } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -16,12 +18,11 @@ import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { CellClassParams, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { KeyTableRow } from '../../../../shared/types/key.types';
 import { ApiResponse } from '../../../../core/dtos/api.response';
-import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 @Component({
   selector: 'app-key-view',
   standalone: true,
-  imports: [Button, Card, SlicePipe, AgGridAngular, TranslatePipe, HeaderPage, BackArrow],
+  imports: [Button, Card, Ripple, Skeleton, SlicePipe, AgGridAngular, TranslatePipe, BackArrow],
   templateUrl: './key-view.html',
   styleUrl: './key-view.css',
   providers: [DialogService],
@@ -29,7 +30,7 @@ import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 export class KeyView implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private keyService = inject(KeyService);
-  private routing = inject(Router);
+  readonly routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
@@ -37,7 +38,14 @@ export class KeyView implements OnInit, OnDestroy {
 
   readonly key = signal<KeyDTO | undefined>(undefined);
   readonly isLoaded = signal(false);
+  readonly hasError = signal(false);
   readonly displayAllDescription = signal(false);
+  readonly iterationCount = computed(() => this.key()?.iterations?.length ?? 0);
+  readonly consumerCount = computed(() => {
+    const k = this.key();
+    if (!k?.iterations?.length) return 0;
+    return k.iterations[0].consumers.length;
+  });
   readonly rowData = signal<KeyTableRow[]>([]);
   readonly colDefs = signal<ColDef<KeyTableRow>[]>([]);
   public defaultColDef = {
@@ -55,19 +63,19 @@ export class KeyView implements OnInit, OnDestroy {
 
   colorGradient = [
     {
-      backgroundColor: 'rgb(30,75,190, 0.2)',
+      backgroundColor: '#e8f5e9',
       visibility: 'visible',
-      'border-bottom': '1px solid black',
+      'border-bottom': '1px solid #c8e6c9',
     },
     {
-      backgroundColor: 'rgb(0, 144, 230, 0.2)',
+      backgroundColor: '#c8e6c9',
       visibility: 'visible',
-      'border-bottom': '1px solid black',
+      'border-bottom': '1px solid #a5d6a7',
     },
     {
-      backgroundColor: 'rgb(0, 208, 255, 0.2)',
+      backgroundColor: '#a5d6a7',
       visibility: 'visible',
-      'border-bottom': '1px solid black',
+      'border-bottom': '1px solid #81c784',
     },
   ];
 
@@ -141,7 +149,7 @@ export class KeyView implements OnInit, OnDestroy {
       error: (error: unknown) => {
         const errorData = error instanceof ApiResponse ? (error.data as string) : null;
         this.errorHandler.handleError(errorData);
-        void this.routing.navigate(['/keys']);
+        this.hasError.set(true);
       },
     });
   }

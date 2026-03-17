@@ -15,6 +15,8 @@
       "MEMBER": "Membre",
       "MANAGER": "Gestionnaire"
     },
+    "ERROR_LOADING": "La page ne peut pas être chargée. Veuillez réessayer plus tard",
+    "RETRY": "Réessayer",
     "ERRORS": {
       "EXCEPTION": "Une erreur inattendue est survenue. Veuillez réessayer plus tard",
       "TIMEOUT": "La requête a expiré. Veuillez réessayer",
@@ -301,7 +303,13 @@
       "UPDATE": "Mettre à jour",
       "DELETE": "Supprimer",
       "DOWNLOAD": "Télécharger",
-      "BACK_TO_LIST": "Retour à la liste de clef"
+      "BACK_TO_LIST": "Retour à la liste de clef",
+      "ITERATIONS_LABEL": "itérations",
+      "CONSUMERS_LABEL": "consommateurs",
+      "DESCRIPTION_TITLE": "Description",
+      "DATA_TABLE_TITLE": "Données",
+      "SHOW_MORE": "Voir plus",
+      "SHOW_LESS": "Voir moins"
     },
     "CREATE": {
       "KEY_TITLE": "Création d'une clef de répartition",
@@ -336,7 +344,10 @@
       "EGALITARIAN_LABEL": "Egalitaire",
       "INJECTION_PERCENTAGE_LABEL": "Pourcentage d'injection",
       "SUM_MUST_BE_100_LABEL": "La somme des pourcentages doit être égale à 100 !",
-      "FINALISATION": "Finalisation"
+      "FINALISATION": "Finalisation",
+      "STEP_CONSUMERS_COUNT": "Consommateurs",
+      "STEP_CONSUMER_NAMES": "Noms",
+      "STEP_ITERATIONS": "Itérations"
     },
     "TABLE": {
       "COLUMNS": {
@@ -482,10 +493,15 @@
         "CLOSE_BUTTON_LABEL": "Fermer"
       },
       "INFORMATION_TITLE": "Informations générales",
+      "IDENTIFICATION_TITLE": "Identification",
+      "CONTACT_TITLE": "Contact",
       "INVITATIONS": {
         "NO_INVITE_LABEL": "Pas d'invitation",
         "PENDING_LABEL": "En attente",
-        "ACCEPTED_LABEL": "Acceptée"
+        "ACCEPTED_LABEL": "Acceptée",
+        "INVITE_BUTTON_LABEL": "Inviter",
+        "CANCEL_BUTTON_LABEL": "Annuler",
+        "DELETE_BUTTON_LABEL": "Supprimer"
       },
       "MEMBER_GUARDIANSHIP_TITLE": "Tuteur",
       "MANAGER_TITLE": "Gestionnaire",
@@ -1120,7 +1136,8 @@
       "NO_SHARING_OPERATION_FOUND_LABEL": "Aucune opération de partage trouvée",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} opérations de partages)",
       "ADD_SHARING_OP_HEADER": "Ajout d'une opération de partage",
-      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès"
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès",
+      "SELECT_A_TYPE_PLACEHOLDER": "Sélectionner un type"
     },
     "SELECT_METER_NEW_KEY": {
       "NOW": "Maintenant",

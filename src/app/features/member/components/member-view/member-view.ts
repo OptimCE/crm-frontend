@@ -1,5 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ProgressSpinner } from 'primeng/progressspinner';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Dialog } from 'primeng/dialog';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -16,13 +15,12 @@ import { InvitationService } from '../../../../shared/services/invitation.servic
 import { MemberStatus, MemberType } from '../../../../shared/types/member.types';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { Tag } from 'primeng/tag';
-import { Divider } from 'primeng/divider';
-import { Checkbox } from 'primeng/checkbox';
+import { Skeleton } from 'primeng/skeleton';
+import { Card } from 'primeng/card';
+import { Avatar } from 'primeng/avatar';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { MemberViewTabs } from './member-view-tabs/member-view-tabs';
-import { FormsModule } from '@angular/forms';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
-import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 enum InvitationStatus {
   LOADING = 0,
@@ -34,19 +32,17 @@ enum InvitationStatus {
   selector: 'app-member-view',
   standalone: true,
   imports: [
-    ProgressSpinner,
     Dialog,
     TranslatePipe,
     Button,
     Ripple,
     Tag,
-    Divider,
-    Checkbox,
+    Skeleton,
+    Card,
+    Avatar,
     AddressPipe,
     MemberViewTabs,
-    FormsModule,
     BackArrow,
-    HeaderPage,
   ],
   templateUrl: './member-view.html',
   styleUrl: './member-view.css',
@@ -60,7 +56,10 @@ export class MemberView implements OnInit {
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
+
   readonly isLoading = signal<boolean>(true);
+  readonly hasError = signal<boolean>(false);
   readonly id = signal<number>(0);
   readonly individual = signal<IndividualDTO | undefined>(undefined);
   readonly legalEntity = signal<CompanyDTO | undefined>(undefined);
@@ -76,6 +75,22 @@ export class MemberView implements OnInit {
   readonly alertPopupVisible = signal<boolean>(false);
   readonly currentPageReportTemplate = signal<string>('');
 
+  protected readonly memberInitials = computed(() => {
+    const ind = this.individual();
+    if (ind) return ((ind.first_name?.[0] ?? '') + (ind.name?.[0] ?? '')).toUpperCase() || '?';
+    const le = this.legalEntity();
+    if (le) return (le.name?.[0] ?? '').toUpperCase() || '?';
+    return '?';
+  });
+
+  protected readonly manager = computed(
+    () => this.individual()?.manager ?? this.legalEntity()?.manager,
+  );
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
+  }
+
   ngOnInit(): void {
     this.isLoading.set(true);
     const id = this.route.snapshot.paramMap.get('id') ?? '';
@@ -90,25 +105,33 @@ export class MemberView implements OnInit {
   }
 
   loadMember(): void {
-    this.memberService.getMember(this.id()).subscribe((response) => {
-      if (response) {
-        const memberData = response.data as IndividualDTO | CompanyDTO;
-        if (memberData.member_type === MemberType.INDIVIDUAL) {
-          const ind = memberData as IndividualDTO;
-          this.individual.set(ind);
-          this.legalEntity.set(undefined);
-          this.loadInvitationStatusIndividual(ind.id, ind.email);
-          if (ind.manager) {
-            this.loadInvitationStatusManager(ind.id, ind.manager.email);
+    this.hasError.set(false);
+    this.isLoading.set(true);
+    this.memberService.getMember(this.id()).subscribe({
+      next: (response) => {
+        if (response) {
+          const memberData = response.data as IndividualDTO | CompanyDTO;
+          if (memberData.member_type === MemberType.INDIVIDUAL) {
+            const ind = memberData as IndividualDTO;
+            this.individual.set(ind);
+            this.legalEntity.set(undefined);
+            this.loadInvitationStatusIndividual(ind.id, ind.email);
+            if (ind.manager) {
+              this.loadInvitationStatusManager(ind.id, ind.manager.email);
+            }
+          } else if (memberData.member_type === MemberType.COMPANY) {
+            const le = memberData as CompanyDTO;
+            this.legalEntity.set(le);
+            this.individual.set(undefined);
+            this.loadInvitationStatusManager(le.id, le.manager.email);
           }
-        } else if (memberData.member_type === MemberType.COMPANY) {
-          const le = memberData as CompanyDTO;
-          this.legalEntity.set(le);
-          this.individual.set(undefined);
-          this.loadInvitationStatusManager(le.id, le.manager.email);
         }
-      }
-      this.isLoading.set(false);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.hasError.set(true);
+        this.isLoading.set(false);
+      },
     });
   }
 

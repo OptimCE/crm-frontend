@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.meter-hero {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}
+
+:host ::ng-deep .meter-tabs .p-tablist-tab-list {
+  border-bottom: 2px solid var(--p-surface-200);
+}
+
+:host ::ng-deep .meter-tabs .p-tab.p-tab-active {
+  border-color: var(--p-primary-color);
+  color: var(--p-primary-color);
+}
+
+:host ::ng-deep .meter-tabs .p-tabpanel {
+  padding-top: 1.5rem;
+}

@@ -1,0 +1,18 @@
+.button-helper {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-button-helper {
+  color: var(--p-surface-400);
+  font-size: 0.875rem;
+  transition: color 0.15s;
+}
+
+.button-helper:hover .icon-button-helper {
+  color: var(--p-primary-500);
+}

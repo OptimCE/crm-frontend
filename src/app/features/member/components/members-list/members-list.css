@@ -1,0 +1,51 @@
+/* Table row hover with primary palette */
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: var(--p-primary-50);
+}
+
+/* Hide default table borders/bg on mobile card rows */
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.lg\:hidden {
+  background: transparent;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.lg\:hidden > td {
+  border: none;
+}
+
+/* Very subtle green tint for filter bar */
+.filter-bar {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}
+
+/* Search field selector width inside input group */
+.search-field-select {
+  min-width: 140px;
+  max-width: 160px;
+}
+
+/* Make debounced input fill remaining space in input group */
+:host ::ng-deep p-inputGroup app-debounced-p-input {
+  flex: 1;
+}
+
+:host ::ng-deep p-inputGroup app-debounced-p-input input {
+  width: 100%;
+}
+
+/* Tint input backgrounds so they blend with the green filter bar */
+:host ::ng-deep .filter-bar .p-select,
+:host ::ng-deep .filter-bar input.p-inputtext {
+  background-color: color-mix(in srgb, var(--p-primary-50) 20%, white);
+  border-color: var(--p-primary-200);
+}
+
+:host ::ng-deep .filter-bar .p-select:hover,
+:host ::ng-deep .filter-bar input.p-inputtext:hover {
+  border-color: var(--p-primary-400);
+}
+
+:host ::ng-deep .filter-bar .p-select.p-focus,
+:host ::ng-deep .filter-bar input.p-inputtext:focus {
+  border-color: var(--p-primary-500);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-200) 50%, transparent);
+}

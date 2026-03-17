@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -23,6 +23,9 @@ import { MemberPendingInvite } from '../member-pending-invite/member-pending-inv
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-members-list',
@@ -36,12 +39,15 @@ import { HeaderPage } from '../../../../layout/header-page/header-page';
     Select,
     FormsModule,
     HeaderPage,
+    InputGroup,
+    InputGroupAddonModule,
+    DebouncedPInputComponent,
   ],
   templateUrl: './members-list.html',
   styleUrl: './members-list.css',
   providers: [DialogService, ErrorMessageHandler, ConfirmationService, MessageService],
 })
-export class MembersList implements OnInit {
+export class MembersList {
   private membersService = inject(MemberService);
   private invitationService = inject(InvitationService);
   private router = inject(Router);
@@ -51,11 +57,10 @@ export class MembersList implements OnInit {
   private translate = inject(TranslateService);
   private confirmationService = inject(ConfirmationService);
   private destroyRef = inject(DestroyRef);
+
   readonly membersPartialList = signal<MembersPartialDTO[]>([]);
   ref?: DynamicDialogRef | null;
 
-  membreTypeCategory = [MemberType.INDIVIDUAL, MemberType.COMPANY];
-  status = [MemberStatus.ACTIVE, MemberStatus.INACTIVE, MemberStatus.PENDING];
   readonly paginationInfo = signal({
     page: 1,
     limit: 10,
@@ -64,12 +69,52 @@ export class MembersList implements OnInit {
   });
   readonly filter = signal<MemberPartialQuery>({ page: 1, limit: 10 });
   readonly currentPageReportTemplate = signal<string>('');
+  readonly loading = signal<boolean>(true);
+
+  // Filter signals
+  readonly searchField = signal<string>('name');
+  readonly searchText = signal<string>('');
+  readonly typeFilter = signal<MemberType | null>(null);
+  readonly statusFilter = signal<MemberStatus | null>(null);
+  readonly hasActiveFilters = computed(
+    () => !!this.searchText() || this.typeFilter() !== null || this.statusFilter() !== null,
+  );
+  readonly firstRow = computed(
+    () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
+  );
+  readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
+
+  searchFieldOptions = [{ label: 'MEMBER.LIST.NAME_LABEL', value: 'name' }];
+
+  typeOptions = [
+    {
+      label: 'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL',
+      value: MemberType.INDIVIDUAL,
+      icon: 'pi pi-user',
+    },
+    { label: 'MEMBER.LIST.TYPE.COMPANY_LABEL', value: MemberType.COMPANY, icon: 'pi pi-building' },
+  ];
+
+  statusOptions = [
+    {
+      label: 'MEMBER.VIEW.STATUS.ACTIVE_LABEL',
+      value: MemberStatus.ACTIVE,
+      severity: 'success' as const,
+    },
+    {
+      label: 'MEMBER.VIEW.STATUS.INACTIVE_LABEL',
+      value: MemberStatus.INACTIVE,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'MEMBER.VIEW.STATUS.PENDING_LABEL',
+      value: MemberStatus.PENDING,
+      severity: 'warn' as const,
+    },
+  ];
 
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
-  }
-
-  ngOnInit(): void {
     this.updatePaginationTranslation();
   }
 
@@ -84,25 +129,66 @@ export class MembersList implements OnInit {
         this.currentPageReportTemplate.set(translatedText);
       });
   }
+
   loadMembers(): void {
+    this.loading.set(true);
     this.membersService.getMembersList(this.filter()).subscribe({
       next: (response) => {
         if (response) {
           this.membersPartialList.set(response.data as MembersPartialDTO[]);
           this.paginationInfo.set(response.pagination);
-
           this.updatePaginationTranslation();
         } else {
           this.errorHandler.handleError(response);
-          console.error('Error fetching meters partial list');
         }
+        this.loading.set(false);
       },
       error: (error) => {
         this.errorHandler.handleError(error);
-        console.error('Error fetching meters partial list');
+        this.loading.set(false);
       },
     });
   }
+
+  applyFilters(): void {
+    const current: MemberPartialQuery = { page: 1, limit: this.filter().limit };
+    const text = this.searchText();
+    if (text) {
+      current.name = text;
+    }
+    const type = this.typeFilter();
+    if (type !== null) {
+      current.member_type = type;
+    }
+    const status = this.statusFilter();
+    if (status !== null) {
+      current.status = status;
+    }
+    this.filter.set(current);
+    this.loadMembers();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  onSearchFieldChange(): void {
+    if (this.searchText()) {
+      this.applyFilters();
+    }
+  }
+
+  onTypeFilterChange(type: MemberType | null): void {
+    this.typeFilter.set(type);
+    this.applyFilters();
+  }
+
+  onStatusFilterChange(status: MemberStatus | null): void {
+    this.statusFilter.set(status);
+    this.applyFilters();
+  }
+
   onInviteMember(): void {
     this.ref = this.dialogService.open(MemberInvite, {
       modal: true,
@@ -129,6 +215,7 @@ export class MembersList implements OnInit {
       });
     }
   }
+
   onAddMember(event: Event): void {
     this.ref = this.dialogService.open(MemberCreationUpdate, {
       modal: true,
@@ -139,7 +226,6 @@ export class MembersList implements OnInit {
     if (this.ref) {
       this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: unknown) => {
         if (typeof result === 'number' && result > 0) {
-          // Show "Do you want to add meter associated"
           this.confirmationService.confirm({
             target: event.target as EventTarget,
             message: this.translate.instant(
@@ -198,55 +284,10 @@ export class MembersList implements OnInit {
   lazyLoadMembers($event: TableLazyLoadEvent): void {
     const current: MemberPartialQuery = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
-      if ($event.rows) {
-        current.page = $event.first / $event.rows + 1;
-      } else {
-        current.page = 1;
-      }
+      current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
     }
-
-    if ($event.sortField) {
-      const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
-      delete current.sort_type;
-      delete current.sort_name;
-      delete current.sort_status;
-
-      switch ($event.sortField) {
-        case 'type': {
-          current.sort_type = sortDirection;
-          break;
-        }
-        case 'name': {
-          current.sort_name = sortDirection;
-          break;
-        }
-        case 'status': {
-          current.sort_status = sortDirection;
-          break;
-        }
-      }
-    }
-    if ($event.filters) {
-      const typeFilter = $event.filters['type'];
-      if (typeFilter && !Array.isArray(typeFilter) && typeFilter.value !== undefined) {
-        current.member_type = typeFilter.value as MemberType;
-      } else {
-        delete current.member_type;
-      }
-
-      const nameFilter = $event.filters['name'];
-      if (nameFilter && !Array.isArray(nameFilter) && nameFilter.value) {
-        current.name = nameFilter.value as string;
-      } else {
-        delete current.name;
-      }
-
-      const statusFilter = $event.filters['status'];
-      if (statusFilter && !Array.isArray(statusFilter) && statusFilter.value !== undefined) {
-        current.status = statusFilter.value as MemberStatus;
-      } else {
-        delete current.status;
-      }
+    if (current.page < 1) {
+      current.page = 1;
     }
     this.filter.set(current);
     this.loadMembers();
@@ -261,6 +302,10 @@ export class MembersList implements OnInit {
 
   clear(table: Table): void {
     table.clear();
+    this.searchText.set('');
+    this.searchField.set('name');
+    this.typeFilter.set(null);
+    this.statusFilter.set(null);
     this.filter.set({ page: 1, limit: 10 });
     this.loadMembers();
   }

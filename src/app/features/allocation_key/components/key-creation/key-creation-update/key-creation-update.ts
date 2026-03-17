@@ -17,6 +17,7 @@ import { ButtonRenderer } from './button-renderer/button-renderer';
 import { HeaderWithHelper } from '../../key-view/header-with-helper/header-with-helper';
 import { HelperDialog } from '../../key-view/helper-dialog/helper-dialog';
 import { Button } from 'primeng/button';
+import { Card } from 'primeng/card';
 import { Ripple } from 'primeng/ripple';
 import { InputText } from 'primeng/inputtext';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -37,7 +38,6 @@ import {
 import { KeyTableRow } from '../../../../../shared/types/key.types';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../../shared/types/error.types';
-import { HeaderPage } from '../../../../../layout/header-page/header-page';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
 
 interface ButtonClickParams {
@@ -54,6 +54,7 @@ interface KeyForm {
   imports: [
     TranslatePipe,
     Button,
+    Card,
     Ripple,
     InputText,
     ReactiveFormsModule,
@@ -61,7 +62,6 @@ interface KeyForm {
     ErrorHandlerComponent,
     Textarea,
     FormErrorSummaryComponent,
-    HeaderPage,
     BackArrow,
   ],
   templateUrl: './key-creation-update.html',
@@ -84,10 +84,11 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   readonly isLoaded = signal<boolean>(false);
   readonly isSubmitted = signal<boolean>(false);
   readonly rowData = signal<KeyTableRow[]>([]);
-  public themeClass: string = 'ag-theme-quartz';
   public defaultColDef: ColDef = {
     width: 250,
     editable: true,
+    flex: 1,
+    minWidth: 120,
   };
   frameworkComponents: Record<string, unknown> = {
     buttonRenderer: ButtonRenderer,
@@ -269,8 +270,9 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               headerName: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
               flex: 1,
               field: 'va_percentage',
+              cellStyle: this.cellStyleNumber.bind(this),
               onCellValueChanged: this.onCellValueChanged.bind(this),
-              headerComponent: 'headerHelperRenderer', // ✅ class, not string
+              headerComponent: 'headerHelperRenderer',
               headerComponentParams: {
                 label: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
                 tooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
@@ -539,6 +541,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       });
     }
   }
+  static displayedNumbers = new Set<number>();
 
   gridApi!: GridApi;
   onGridReady(event: GridReadyEvent): void {
@@ -667,22 +670,39 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     // this.grid
   }
   static lastNumberCellStyleNumber = 0;
-  static lastParams: CellClassParams<KeyTableRow> | null = null;
-  cellStyleNumber(params: CellClassParams<KeyTableRow>): { height: string } {
-    KeyCreationUpdate.lastParams = params;
+
+  colorGradient = [
+    {
+      backgroundColor: '#e8f5e9',
+      visibility: 'visible',
+      'border-bottom': '1px solid #c8e6c9',
+    },
+    {
+      backgroundColor: '#c8e6c9',
+      visibility: 'visible',
+      'border-bottom': '1px solid #a5d6a7',
+    },
+    {
+      backgroundColor: '#a5d6a7',
+      visibility: 'visible',
+      'border-bottom': '1px solid #81c784',
+    },
+  ];
+
+  cellStyleNumber(params: CellClassParams<KeyTableRow>): {
+    backgroundColor: string;
+    visibility: string;
+    'border-bottom': string;
+  } {
     if (
       params.node.data &&
       params.node.data.number !== undefined &&
       params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber
     ) {
       KeyCreationUpdate.lastNumberCellStyleNumber = params.node.data.number;
-      return { height: '100%' };
-    } else {
-      //return {height: '0px', visibility: 'hidden'};
-      return { height: '100%' };
     }
+    return this.colorGradient[KeyCreationUpdate.lastNumberCellStyleNumber - 1];
   }
-  static displayedNumbers = new Set<number>();
 
   onCellValueChanged(event: NewValueParams<KeyTableRow, string>): void {
     const colId = event.colDef.field;

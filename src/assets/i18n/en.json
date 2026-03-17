@@ -15,6 +15,8 @@
       "MEMBER": "Member",
       "MANAGER": "Manager"
     },
+    "ERROR_LOADING": "The page could not be loaded. Please try again later",
+    "RETRY": "Retry",
     "ERRORS": {
       "EXCEPTION": "An unexpected error occurred. Please try again later",
       "TIMEOUT": "The request timed out. Please try again",
@@ -301,7 +303,13 @@
       "UPDATE": "Update",
       "DELETE": "Delete",
       "DOWNLOAD": "Download",
-      "BACK_TO_LIST": "Back to key list"
+      "BACK_TO_LIST": "Back to key list",
+      "ITERATIONS_LABEL": "iterations",
+      "CONSUMERS_LABEL": "consumers",
+      "DESCRIPTION_TITLE": "Description",
+      "DATA_TABLE_TITLE": "Data",
+      "SHOW_MORE": "Show more",
+      "SHOW_LESS": "Show less"
     },
     "CREATE": {
       "KEY_TITLE": "Create an allocation key",
@@ -336,7 +344,10 @@
       "EGALITARIAN_LABEL": "Equal",
       "INJECTION_PERCENTAGE_LABEL": "Injection percentage",
       "SUM_MUST_BE_100_LABEL": "The sum of the percentages must equal 100!",
-      "FINALISATION": "Finalization"
+      "FINALISATION": "Finalization",
+      "STEP_CONSUMERS_COUNT": "Consumers",
+      "STEP_CONSUMER_NAMES": "Names",
+      "STEP_ITERATIONS": "Iterations"
     },
     "TABLE": {
       "COLUMNS": {
@@ -482,10 +493,15 @@
         "CLOSE_BUTTON_LABEL": "Close"
       },
       "INFORMATION_TITLE": "General information",
+      "IDENTIFICATION_TITLE": "Identification",
+      "CONTACT_TITLE": "Contact",
       "INVITATIONS": {
         "NO_INVITE_LABEL": "No invitation",
         "PENDING_LABEL": "Pending",
-        "ACCEPTED_LABEL": "Accepted"
+        "ACCEPTED_LABEL": "Accepted",
+        "INVITE_BUTTON_LABEL": "Invite",
+        "CANCEL_BUTTON_LABEL": "Cancel",
+        "DELETE_BUTTON_LABEL": "Delete"
       },
       "MEMBER_GUARDIANSHIP_TITLE": "Guardian",
       "MANAGER_TITLE": "Manager",
@@ -1120,7 +1136,8 @@
       "NO_SHARING_OPERATION_FOUND_LABEL": "No sharing operation found",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} sharing operations)",
       "ADD_SHARING_OP_HEADER": "Add a sharing operation",
-      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Sharing operation successfully added"
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Sharing operation successfully added",
+      "SELECT_A_TYPE_PLACEHOLDER": "Select a type"
     },
     "SELECT_METER_NEW_KEY": {
       "NOW": "Now",

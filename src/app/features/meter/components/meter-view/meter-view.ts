@@ -9,10 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
-import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
 import { DatePipe } from '@angular/common';
-import { TagModule } from 'primeng/tag';
+import { Tag } from 'primeng/tag';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
 import { Ripple } from 'primeng/ripple';
@@ -20,7 +18,6 @@ import { ErrorHandlerComponent } from '../../../../shared/components/error.handl
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
-import { TableModule } from 'primeng/table';
 import { Card } from 'primeng/card';
 import { MeterConsumptionDTO, MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -34,8 +31,9 @@ import { MeterDeactivation } from '../meter-deactivation/meter-deactivation';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { MapNumberStringPipe } from '../../../../shared/pipes/map-number-string/map-number-string-pipe';
 import { MeterDataView } from './meter-data-view/meter-data-view';
-import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
+import { Skeleton } from 'primeng/skeleton';
+import { Avatar } from 'primeng/avatar';
 
 interface ChartFormValue {
   dateDeb: string;
@@ -49,10 +47,8 @@ interface ChartFormValue {
     Button,
     FormsModule,
     AddressPipe,
-    InputTextModule,
-    CheckboxModule,
     DatePipe,
-    TagModule,
+    Tag,
     TranslatePipe,
     ChartModule,
     Ripple,
@@ -65,12 +61,12 @@ interface ChartFormValue {
     Tab,
     TabPanels,
     TabPanel,
-    TableModule,
     Card,
     MapNumberStringPipe,
     MeterDataView,
-    HeaderPage,
     BackArrow,
+    Skeleton,
+    Avatar,
   ],
   templateUrl: './meter-view.html',
   styleUrl: './meter-view.css',
@@ -86,7 +82,8 @@ export class MeterView implements OnInit {
   private destroyRef = inject(DestroyRef);
   id!: string;
   readonly meter = signal<MetersDTO | undefined>(undefined);
-  readonly isLoaded = signal<boolean>(false);
+  readonly isLoading = signal<boolean>(false);
+  readonly hasError = signal<boolean>(false);
   readonly historySelected = signal<MetersDataDTO | undefined>(undefined);
   readonly futureSelected = signal<MetersDataDTO | undefined>(undefined);
   ref?: DynamicDialogRef | null;
@@ -94,6 +91,8 @@ export class MeterView implements OnInit {
   readonly hasMeterData = computed(() => !!this.meter()?.meter_data);
   readonly hasHistory = computed(() => !!this.meter()?.meter_data_history?.length);
   readonly hasFutureData = computed(() => !!this.meter()?.futur_meter_data?.length);
+
+  readonly currentStatus = computed(() => this.meter()?.meter_data?.status);
 
   readonly productionChainMap = signal<string[]>([]);
   readonly readingFrequencyMap = signal<string[]>([]);
@@ -136,7 +135,6 @@ export class MeterView implements OnInit {
         },
         ticks: {
           _callback: (_value: unknown, index: number): string => {
-            // Make sure 'this' refers to the component context
             const label = this.data()?.labels?.[index];
             if (!label) return '';
 
@@ -177,16 +175,18 @@ export class MeterView implements OnInit {
     if (!this.id) {
       console.error('No id provided');
     }
-    this.getFullMeter(true);
+    this.getFullMeter();
     this.formChart = new FormGroup({
       dateDeb: new FormControl('', [Validators.required]),
       dateFin: new FormControl('', [Validators.required]),
     });
     this.setupTranslationCategory();
   }
-  getFullMeter(changeIsLoaded = true): void {
-    if (changeIsLoaded) {
-      this.isLoaded.set(false);
+
+  getFullMeter(showLoading = true): void {
+    if (showLoading) {
+      this.isLoading.set(true);
+      this.hasError.set(false);
     }
     this.metersService
       .getMeter(this.id)
@@ -195,15 +195,14 @@ export class MeterView implements OnInit {
         next: (response) => {
           if (response) {
             this.meter.set(response.data as MetersDTO);
-            if (changeIsLoaded) {
-              this.isLoaded.set(true);
-            }
           } else {
-            console.error('Error fetching meter', response);
+            this.hasError.set(true);
           }
+          this.isLoading.set(false);
         },
-        error: (error) => {
-          console.error('Error fetching meter', error);
+        error: () => {
+          this.hasError.set(true);
+          this.isLoading.set(false);
         },
       });
   }
@@ -371,8 +370,8 @@ export class MeterView implements OnInit {
       });
     }
   }
-  toUpdate($event: Event): void {
-    $event.stopPropagation();
+
+  toUpdate(): void {
     const meter = this.meter();
     if (!meter) return;
     this.ref = this.dialogService.open(MeterDataUpdate, {
@@ -440,7 +439,7 @@ export class MeterView implements OnInit {
             const url = window.URL.createObjectURL(response.blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = response.filename; // Use the dynamic filename!
+            a.download = response.filename;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

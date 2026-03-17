@@ -1,17 +1,95 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 justify-center md:justify-between">
+  <!-- Page header -->
+  <div
+    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  >
     <app-header-page
       icon="pi pi-building"
       [text]="'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate"
-    ></app-header-page>
+    />
     <p-button
       type="button"
       icon="pi pi-plus"
       label="{{ 'SHARING_OPERATION.LIST.ADD_BUTTON_LABEL' | translate }}"
       (click)="onAddSharingOperation()"
-    ></p-button>
+      severity="primary"
+    />
   </div>
 
+  <!-- Filter toolbar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
+      <!-- Search: field selector + debounced input -->
+      <div class="sm:col-span-2 lg:flex-1">
+        <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+        <p-input-group class="gap-2">
+          <p-select
+            [options]="searchFieldOptions"
+            [ngModel]="searchField()"
+            (ngModelChange)="searchField.set($event)"
+            (onChange)="onSearchFieldChange()"
+            optionLabel="label"
+            optionValue="value"
+            class="search-field-select"
+          >
+            <ng-template let-option pTemplate="selectedItem">
+              <span class="text-sm">{{ option.label | translate }}</span>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              <span class="text-sm">{{ option.label | translate }}</span>
+            </ng-template>
+          </p-select>
+          <app-debounced-p-input
+            [placeholder]="'COMMON.SEARCH' | translate"
+            [value]="searchText()"
+            (searchEvent)="onSearchTextChange($event)"
+            inputClass="w-full!"
+          />
+        </p-input-group>
+      </div>
+
+      <!-- Type filter -->
+      <div>
+        <span class="field-label">{{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}</span>
+        <p-select
+          [options]="typeOptions"
+          [ngModel]="typeFilter()"
+          (onChange)="onTypeFilterChange($event.value)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="{{ 'SHARING_OPERATION.LIST.SELECT_A_TYPE_PLACEHOLDER' | translate }}"
+          [showClear]="true"
+          class="w-full"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <div class="flex items-center gap-2">
+              <i [class]="option.icon"></i>
+              <span class="text-sm">{{ option.label | translate }}</span>
+            </div>
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <div class="flex items-center gap-2">
+              <i [class]="option.icon"></i>
+              <span class="text-sm">{{ option.label | translate }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+      </div>
+
+      <!-- Clear filters -->
+      <div class="flex items-end">
+        <p-button
+          icon="pi pi-filter-slash"
+          label="{{ 'SHARING_OPERATION.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+          (onClick)="clear(dt)"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
   <p-table
     #dt
     [value]="sharingOperationList()"
@@ -25,77 +103,115 @@
     (onPage)="pageChange($event)"
     [paginator]="showPaginator()"
   >
-    <ng-template pTemplate="caption">
-      <div class="flex content-between">
-        <p-button
-          [outlined]="true"
-          icon="pi pi-filter-slash"
-          label="{{ 'SHARING_OPERATION.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
-          (onClick)="clear(dt)"
-        />
-      </div>
-    </ng-template>
+    <!-- Desktop header -->
     <ng-template pTemplate="header">
       <tr class="max-lg:hidden">
-        <th [pSortableColumn]="'name'" class="text-base px-3">
-          <div class="flex items-center">
-            {{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}
-            <p-sortIcon [field]="'name'"></p-sortIcon>
-            <br />
-            <p-columnFilter
-              type="text"
-              field="name"
-              display="{{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            ></p-columnFilter>
-          </div>
-        </th>
-        <th [pSortableColumn]="'type'" class="text-base px-3">
-          <div class="flex items-center">
-            {{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}
-            <p-sortIcon [field]="'type'"></p-sortIcon>
-            <br />
-            <p-columnFilter
-              type="type"
-              field="type"
-              display="{{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            ></p-columnFilter>
-          </div>
-        </th>
+        <th class="text-base px-3">{{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}</th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-sharingOp>
-      <tr
-        (click)="onRowClick(sharingOp)"
-        class="grid grid-cols-1 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! border-b-2 cursor-pointer"
-      >
-        <td class="border-none!">
-          <div class="flex flex-col lg:flex-row">
-            <span class="visible lg:hidden font-medium">
-              {{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}
-            </span>
-          </div>
-          <span class="text-sm">{{ sharingOp.name }}</span>
+      <!-- Desktop row -->
+      <tr (click)="onRowClick(sharingOp)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+        <td class="text-sm">{{ sharingOp.name }}</td>
+        <td>
+          @switch (sharingOp.type) {
+            @case (SharingOperationType.LOCAL) {
+              <div class="flex items-center gap-2">
+                <i class="pi pi-home text-base text-primary-600"></i>
+                <span class="text-sm">{{
+                  'SHARING_OPERATION.TYPE.INSIDE_BUILDING' | translate
+                }}</span>
+              </div>
+            }
+            @case (SharingOperationType.CER) {
+              <div class="flex items-center gap-2">
+                <i class="pi pi-sitemap text-base text-primary-600"></i>
+                <span class="text-sm">{{ 'SHARING_OPERATION.TYPE.CER' | translate }}</span>
+              </div>
+            }
+            @case (SharingOperationType.CEC) {
+              <div class="flex items-center gap-2">
+                <i class="pi pi-globe text-base text-primary-600"></i>
+                <span class="text-sm">{{ 'SHARING_OPERATION.TYPE.CEC' | translate }}</span>
+              </div>
+            }
+          }
         </td>
-        <td class="border-none!">
-          <div class="flex flex-col lg:flex-row">
-            <span class="visible lg:hidden font-medium">
-              {{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}
-            </span>
+      </tr>
+
+      <!-- Mobile card -->
+      <tr class="lg:hidden !border-0 !bg-transparent" (click)="onRowClick(sharingOp)">
+        <td colspan="2" class="!p-0 !pb-3">
+          <div
+            class="bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+          >
+            <!-- Card header: name + type -->
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+              <span class="font-semibold text-sm text-primary-700">{{ sharingOp.name }}</span>
+              @switch (sharingOp.type) {
+                @case (SharingOperationType.LOCAL) {
+                  <p-tag
+                    severity="success"
+                    value="{{ 'SHARING_OPERATION.TYPE.INSIDE_BUILDING' | translate }}"
+                    class="text-xs"
+                  />
+                }
+                @case (SharingOperationType.CER) {
+                  <p-tag
+                    severity="info"
+                    value="{{ 'SHARING_OPERATION.TYPE.CER' | translate }}"
+                    class="text-xs"
+                  />
+                }
+                @case (SharingOperationType.CEC) {
+                  <p-tag
+                    severity="warn"
+                    value="{{ 'SHARING_OPERATION.TYPE.CEC' | translate }}"
+                    class="text-xs"
+                  />
+                }
+              }
+            </div>
+            <!-- Card body: type details -->
+            <div>
+              <span class="field-label">{{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}</span>
+              @switch (sharingOp.type) {
+                @case (SharingOperationType.LOCAL) {
+                  <span class="field-value">
+                    <i class="pi pi-home mr-1 text-primary-600"></i>
+                    {{ 'SHARING_OPERATION.TYPE.INSIDE_BUILDING' | translate }}
+                  </span>
+                }
+                @case (SharingOperationType.CER) {
+                  <span class="field-value">
+                    <i class="pi pi-sitemap mr-1 text-primary-600"></i>
+                    {{ 'SHARING_OPERATION.TYPE.CER' | translate }}
+                  </span>
+                }
+                @case (SharingOperationType.CEC) {
+                  <span class="field-value">
+                    <i class="pi pi-globe mr-1 text-primary-600"></i>
+                    {{ 'SHARING_OPERATION.TYPE.CEC' | translate }}
+                  </span>
+                }
+              }
+            </div>
           </div>
-          <span class="text-sm">{{ sharingOp.type | sharingOperationType }}</span>
         </td>
       </tr>
     </ng-template>
-    <ng-template #emptyMessage pTemplate="emptymessage">
+
+    <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" style="text-align: center" class="text-base">
-          {{ 'SHARING_OPERATION.LIST.NO_SHARING_OPERATION_FOUND_LABEL' | translate }}
+        <td colspan="2">
+          <div class="py-8 text-center">
+            <i class="pi pi-building text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'SHARING_OPERATION.LIST.NO_SHARING_OPERATION_FOUND_LABEL' | translate }}
+            </p>
+          </div>
         </td>
       </tr>
     </ng-template>

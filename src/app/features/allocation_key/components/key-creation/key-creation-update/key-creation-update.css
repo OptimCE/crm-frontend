@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+/* Hero section — matches key-view pattern */
+.key-hero {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}
+
+/* Form inputs — subtle green tint on focus */
+:host ::ng-deep .form-section input.p-inputtext,
+:host ::ng-deep .form-section textarea {
+  border-color: var(--p-surface-200);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+:host ::ng-deep .form-section input.p-inputtext:hover,
+:host ::ng-deep .form-section textarea:hover {
+  border-color: var(--p-primary-400);
+}
+
+:host ::ng-deep .form-section input.p-inputtext:focus,
+:host ::ng-deep .form-section textarea:focus {
+  border-color: var(--p-primary-500);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-200) 50%, transparent);
+}
+
+/* Actions section hover */
+.actions-section {
+  transition: border-color 0.15s;
+}
+
+.actions-section:hover {
+  border-color: var(--p-primary-200);
+}
+
+/* AG Grid theme overrides — green header and hover */
+:host ::ng-deep .ag-theme-quartz .ag-header {
+  background-color: color-mix(in srgb, var(--p-primary-50) 60%, white);
+  border-bottom: 1px solid var(--p-primary-200);
+}
+
+:host ::ng-deep .ag-theme-quartz .ag-header-cell {
+  color: var(--p-text-color);
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+:host ::ng-deep .ag-theme-quartz .ag-row {
+  border-color: var(--p-surface-200);
+}
+
+:host ::ng-deep .ag-theme-quartz .ag-row:hover {
+  background-color: var(--p-primary-50) !important;
+}
+
+/* Editable cell indicator */
+:host ::ng-deep .ag-theme-quartz .ag-cell-inline-editing {
+  border-color: var(--p-primary-400);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-200) 50%, transparent);
+}
+
+/* Mobile: horizontal scroll for grid */
+@media (max-width: 768px) {
+  .grid-section {
+    overflow-x: auto;
+  }
+
+  :host ::ng-deep .ag-theme-quartz {
+    min-width: 600px;
+  }
+}
