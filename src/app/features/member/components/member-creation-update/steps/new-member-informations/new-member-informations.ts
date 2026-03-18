@@ -60,8 +60,6 @@ export class NewMemberInformations implements OnInit {
   }
 
   submit(): void {
-    console.log(this.form());
-    console.log(this.form().valid);
     if (this.form().valid) {
       this.formSubmitted.emit();
     } else {

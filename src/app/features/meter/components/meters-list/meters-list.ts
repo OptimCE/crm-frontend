@@ -186,6 +186,7 @@ export class MetersList {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '700px',
       header: this.translate.instant('METER.LIST.ADD_METER_HEADER') as string,
     });
     if (this.ref) {

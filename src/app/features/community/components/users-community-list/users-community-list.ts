@@ -1,15 +1,17 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { PrimeTemplate } from 'primeng/api';
-import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
-import { SplitButtonModule } from 'primeng/splitbutton';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { PrimeTemplate } from 'primeng/api';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { Tooltip } from 'primeng/tooltip';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { Role } from '../../../../core/dtos/role';
@@ -21,6 +23,7 @@ import { CommunityInvitation } from '../community-invitation/community-invitatio
 import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { Pagination } from '../../../../core/dtos/api.response';
+import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-users-community-list',
@@ -28,54 +31,63 @@ import { Pagination } from '../../../../core/dtos/api.response';
   imports: [
     PrimeTemplate,
     TableModule,
-    SplitButtonModule,
     DialogModule,
-    InputTextModule,
     FormsModule,
     TranslatePipe,
     Button,
     Select,
     Tooltip,
+    TagModule,
     RolePipe,
     HeaderPage,
+    InputGroup,
+    InputGroupAddonModule,
+    DebouncedPInputComponent,
   ],
   templateUrl: './users-community-list.html',
   styleUrl: './users-community-list.css',
   providers: [DialogService, ErrorMessageHandler],
 })
-export class UsersCommunityList implements OnInit, OnDestroy {
+export class UsersCommunityList {
   protected userContextService = inject(UserContextService);
   private communityService = inject(CommunityService);
   private invitationService = inject(InvitationService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
   private translateService = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
+
   users = signal<UsersCommunityDTO[]>([]);
   pagination = signal<Pagination>({ page: 0, limit: 0, total: 0, total_pages: 0 });
   filter = signal<CommunityUsersQueryDTO>({ page: 1, limit: 10 });
   readonly firstRow = computed(() => (this.pagination().page - 1) * this.pagination().limit);
+  readonly showPaginator = computed(() => this.pagination().total_pages > 1);
   ownId: number = -1;
+
+  // Filter signals
+  readonly searchText = signal<string>('');
+  readonly roleFilter = signal<Role | null>(null);
+  readonly hasActiveFilters = computed(() => !!this.searchText() || this.roleFilter() !== null);
+
+  roleOptions = [
+    { label: 'COMMON.ROLE.MEMBER', value: Role.MEMBER, severity: 'info' as const },
+    { label: 'COMMON.ROLE.MANAGER', value: Role.GESTIONNAIRE, severity: 'warn' as const },
+    { label: 'COMMON.ROLE.ADMIN', value: Role.ADMIN, severity: 'contrast' as const },
+  ];
+
+  // Dialog state
   dialogVisible = signal(false);
   userSelected = signal<UsersCommunityDTO | undefined>(undefined);
   roleSelected = signal<Role | -1>(-1);
-  roles = signal([
-    { name: '', value: Role.MEMBER },
-    { name: '', value: Role.GESTIONNAIRE },
-    { name: '', value: Role.ADMIN },
-  ]);
+  roles = [
+    { name: 'COMMON.ROLE.MEMBER', value: Role.MEMBER },
+    { name: 'COMMON.ROLE.MANAGER', value: Role.GESTIONNAIRE },
+    { name: 'COMMON.ROLE.ADMIN', value: Role.ADMIN },
+  ];
   ref?: DynamicDialogRef | null;
 
-  ngOnInit(): void {
-    // Initialize role names with translations
-    this.translateService
-      .get(['COMMON.ROLE.MEMBER', 'COMMON.ROLE.MANAGER', 'COMMON.ROLE.ADMIN'])
-      .subscribe((translations: Record<string, string>) => {
-        this.roles.set([
-          { name: translations['COMMON.ROLE.MEMBER'], value: Role.MEMBER },
-          { name: translations['COMMON.ROLE.MANAGER'], value: Role.GESTIONNAIRE },
-          { name: translations['COMMON.ROLE.ADMIN'], value: Role.ADMIN },
-        ]);
-      });
+  constructor() {
+    this.destroyRef.onDestroy(() => this.ref?.destroy());
   }
 
   loadUsers(): void {
@@ -86,29 +98,55 @@ export class UsersCommunityList implements OnInit, OnDestroy {
       },
     });
   }
-  lazyLoadUsers($event: TableLazyLoadEvent): void {
-    const current: CommunityUsersQueryDTO = { ...this.filter() };
-    if ($event.sortField) {
-      const sortDirection = $event.sortOrder === 1 ? 'ASC' : 'DESC';
-      delete current.sort_email;
-      delete current.sort_name;
-      delete current.sort_role;
-      switch ($event.sortField) {
-        case 'email': {
-          current.sort_email = sortDirection;
-          break;
-        }
-        case 'name': {
-          current.sort_name = sortDirection;
-          break;
-        }
-        case 'role': {
-          current.sort_role = sortDirection;
-          break;
-        }
-      }
+
+  applyFilters(): void {
+    const current: CommunityUsersQueryDTO = { page: 1, limit: this.filter().limit };
+    const text = this.searchText();
+    if (text) {
+      current.email = text;
+    }
+    const role = this.roleFilter();
+    if (role !== null) {
+      current.role = role;
     }
     this.filter.set(current);
+    this.loadUsers();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  onRoleFilterChange(role: Role | null): void {
+    this.roleFilter.set(role);
+    this.applyFilters();
+  }
+
+  lazyLoadUsers($event: TableLazyLoadEvent): void {
+    const current: CommunityUsersQueryDTO = { ...this.filter() };
+    if ($event.first !== undefined && $event.rows !== undefined) {
+      current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
+    }
+    if (current.page < 1) {
+      current.page = 1;
+    }
+    this.filter.set(current);
+    this.loadUsers();
+  }
+
+  pageChange($event: TablePageEvent): void {
+    const current: CommunityUsersQueryDTO = { ...this.filter() };
+    current.page = ($event.first ?? 0) / ($event.rows ?? 10) + 1;
+    this.filter.set(current);
+    this.loadUsers();
+  }
+
+  clear(table: Table): void {
+    table.clear();
+    this.searchText.set('');
+    this.roleFilter.set(null);
+    this.filter.set({ page: 1, limit: 10 });
     this.loadUsers();
   }
 
@@ -117,6 +155,7 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     this.userSelected.set(user);
     this.roleSelected.set(-1);
   }
+
   updateRole(): void {
     const user = this.userSelected();
     if (this.roleSelected() === -1 || !user) {
@@ -139,6 +178,7 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     this.roleSelected.set(-1);
     this.userSelected.set(undefined);
   }
+
   deleteUser(user: UsersCommunityDTO): void {
     this.communityService.kick(user.id_user).subscribe((response) => {
       if (response) {
@@ -147,36 +187,28 @@ export class UsersCommunityList implements OnInit, OnDestroy {
     });
   }
 
-  protected readonly ADMIN = Role.ADMIN;
-
   seePendingInvite(): void {
-    this.translateService
-      .get('COMMUNITY_PENDING_INVITATION.TITLE')
-      .subscribe((translation: string) => {
-        this.ref = this.dialogService.open(CommunityPendingInvitation, {
-          modal: true,
-          closable: true,
-          closeOnEscape: true,
-          header: translation,
-        });
-      });
+    this.ref = this.dialogService.open(CommunityPendingInvitation, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      header: this.translateService.instant('COMMUNITY_PENDING_INVITATION.TITLE') as string,
+    });
   }
 
   inviteGestionnaire(): void {
-    this.translateService.get('COMMUNITY_INVITATION.TITLE').subscribe((translation: string) => {
-      this.ref = this.dialogService.open(CommunityInvitation, {
-        modal: true,
-        closable: true,
-        closeOnEscape: true,
-        header: translation,
-      });
-      this.ref?.onClose.subscribe((email: unknown) => {
+    this.ref = this.dialogService.open(CommunityInvitation, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      header: this.translateService.instant('COMMUNITY_INVITATION.TITLE') as string,
+    });
+    if (this.ref) {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((email: unknown) => {
         if (typeof email === 'string' && email) {
           this.invitationService.inviteUserToBecomeManager({ user_email: email }).subscribe({
             next: (response) => {
-              if (response) {
-                // Success case handled
-              } else {
+              if (!response) {
                 this.errorHandler.handleError(response);
               }
             },
@@ -186,24 +218,15 @@ export class UsersCommunityList implements OnInit, OnDestroy {
           });
         }
       });
-    });
-  }
-
-  protected readonly GESTIONNAIRE = Role.GESTIONNAIRE;
-  protected readonly MEMBER = Role.MEMBER;
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
     }
   }
 
-  protected readonly Role = Role;
-
-  pageChange($event: TablePageEvent): void {
-    const current: CommunityUsersQueryDTO = { ...this.filter() };
-    current.page = $event.first / $event.rows + 1;
-    this.filter.set(current);
-    this.loadUsers();
+  getUserDisplayName(user: UsersCommunityDTO): string {
+    if (user.last_name) {
+      return user.first_name ? `${user.first_name} ${user.last_name}` : user.last_name;
+    }
+    return user.first_name || '/';
   }
+
+  protected readonly Role = Role;
 }

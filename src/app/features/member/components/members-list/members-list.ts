@@ -255,6 +255,7 @@ export class MembersList {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '700px',
       header: this.translate.instant('MEMBER.LIST.ADD_METER_HEADER') as string,
       data: {
         holder_id: member_id,

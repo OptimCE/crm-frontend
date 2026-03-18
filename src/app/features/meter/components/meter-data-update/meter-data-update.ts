@@ -1,9 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { PaginatorModule } from 'primeng/paginator';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import {
   AbstractControl,
@@ -15,7 +13,6 @@ import {
 } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
-import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
@@ -68,14 +65,11 @@ interface MeterDataFormValue {
 @Component({
   selector: 'app-meter-data-update',
   imports: [
-    CheckboxModule,
     InputTextModule,
-    PaginatorModule,
     RadioButtonModule,
     ReactiveFormsModule,
     Button,
     ErrorHandlerComponent,
-    ToggleButtonModule,
     TranslatePipe,
     FormErrorSummaryComponent,
     Textarea,

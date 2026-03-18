@@ -1,11 +1,10 @@
 import { Component, input, output } from '@angular/core';
-import { InputGroup } from 'primeng/inputgroup';
 import { InputText } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { FormErrorSummaryComponent } from '../../../../../../shared/components/summary-error.handler/summary-error.handler.component';
-import { Button, ButtonLabel } from 'primeng/button';
+import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -13,7 +12,6 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
   selector: 'app-new-member-address',
   imports: [
     ReactiveFormsModule,
-    InputGroup,
     InputText,
     ErrorHandlerComponent,
     TranslatePipe,
@@ -21,7 +19,6 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
     FormErrorSummaryComponent,
     Button,
     Ripple,
-    ButtonLabel,
   ],
   templateUrl: './new-member-address.html',
   styleUrl: './new-member-address.css',

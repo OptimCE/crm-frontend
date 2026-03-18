@@ -202,6 +202,7 @@ export class MemberViewMeterTab implements OnInit {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '700px',
       header: this.translate.instant('MEMBER.VIEW.METERS.ADD_A_METER_HEADER') as string,
       data: {
         holder_id: this.id(),

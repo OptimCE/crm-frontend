@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { PartialMeterDTO } from '../../../../../shared/dtos/meter.dtos';
@@ -11,7 +11,6 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SharingOperationService } from '../../../../../shared/services/sharing_operation.service';
 import { Button } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { Tag } from 'primeng/tag';
@@ -26,6 +25,9 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
 import { Router } from '@angular/router';
 import { SharingOperationMeterEventService } from '../sharing-operation.meter.subjet';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
   selector: 'app-sharing-operation-meters-list',
@@ -33,7 +35,6 @@ import { SharingOperationMeterEventService } from '../sharing-operation.meter.su
     TableModule,
     Button,
     TranslatePipe,
-    InputText,
     FormsModule,
     Select,
     Tag,
@@ -42,6 +43,9 @@ import { SharingOperationMeterEventService } from '../sharing-operation.meter.su
     ConfirmPopup,
     DatePicker,
     Ripple,
+    InputGroup,
+    InputGroupAddonModule,
+    DebouncedPInputComponent,
   ],
   templateUrl: './sharing-operation-meters-list.html',
   styleUrl: './sharing-operation-meters-list.css',
@@ -57,6 +61,7 @@ export class SharingOperationMetersList implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private routing = inject(Router);
   private meterEventService = inject(SharingOperationMeterEventService);
+
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
   readonly loading = signal<boolean>(true);
   readonly pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
@@ -66,18 +71,52 @@ export class SharingOperationMetersList implements OnInit {
     type: SharingOperationMetersQueryType.NOW,
   });
   readonly currentPageReportTemplate = signal<string>('');
-  readonly addressFilter = signal({
-    streetName: '',
-    postcode: '',
-    cityName: '',
-  });
   readonly textChangeStatusMeter = signal<string>('');
   readonly dateStartMeter = signal<Date | string | null>(null);
   readonly minDate = signal<Date>(new Date());
-  readonly statutCategory = signal<{ value: MeterDataStatus; label: string }[]>([]);
+
+  // Filter signals
+  readonly searchField = signal<string>('EAN');
+  readonly searchText = signal<string>('');
+  readonly statusFilter = signal<MeterDataStatus | null>(null);
+  readonly hasActiveFilters = computed(() => !!this.searchText() || this.statusFilter() !== null);
+  readonly firstRow = computed(() => (this.pagination().page - 1) * this.pagination().limit);
+  readonly showPaginator = computed(() => this.pagination().total_pages > 1);
+
+  searchFieldOptions = [
+    { label: 'SHARING_OPERATION.VIEW.METER.INFORMATIONS.EAN_LABEL', value: 'EAN' },
+    {
+      label: 'SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL',
+      value: 'meter_number',
+    },
+    { label: 'SHARING_OPERATION.VIEW.ADDRESS.STREET_NAME_LABEL', value: 'street' },
+    { label: 'SHARING_OPERATION.VIEW.ADDRESS.CITY_LABEL', value: 'city' },
+  ];
+
+  statusOptions = [
+    {
+      label: 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL',
+      value: MeterDataStatus.ACTIVE,
+      severity: 'success' as const,
+    },
+    {
+      label: 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL',
+      value: MeterDataStatus.INACTIVE,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL',
+      value: MeterDataStatus.WAITING_GRD,
+      severity: 'warn' as const,
+    },
+    {
+      label: 'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL',
+      value: MeterDataStatus.WAITING_MANAGER,
+      severity: 'warn' as const,
+    },
+  ];
 
   ngOnInit(): void {
-    this.setupStatusCategory();
     this.filter.set({
       page: 1,
       limit: 10,
@@ -86,55 +125,6 @@ export class SharingOperationMetersList implements OnInit {
     this.meterEventService.meterAdded$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((): void => this.loadMetersSharingOperation());
-  }
-
-  setupStatusCategory(): void {
-    this.translate
-      .get([
-        'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL',
-        'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL',
-        'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL',
-        'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL',
-        'SHARING_OPERATION.VIEW.CHART.X_TITLE_DATE',
-        'SHARING_OPERATION.VIEW.CHART.Y_TITLE_CONSUMPTION',
-        'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_SHARED_LABEL',
-        'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_NET_LABEL',
-        'SHARING_OPERATION.VIEW.CHART.INJECTION_NET_LABEL',
-        'SHARING_OPERATION.VIEW.CHART.INJECTION_SHARED_LABEL',
-        'SHARING_OPERATION.VIEW.METER.ADD_METERS_HEADER',
-        'SHARING_OPERATION.VIEW.METER.METER_ADDED_SUCCESSFULLY_LABEL',
-        'SHARING_OPERATION.VIEW.KEY.MODIFY_KEY_HEADER',
-        'SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL',
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_STARTING_LABEL',
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_ENDING_LABEL',
-        'SHARING_OPERATION.VIEW.METER.CHANGE_STATUS_METER_WAITING_LABEL',
-        'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
-      ])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((translation: Record<string, string>) => {
-        this.statutCategory.set([
-          {
-            value: MeterDataStatus.ACTIVE,
-            label: translation['SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL'],
-          },
-          {
-            value: MeterDataStatus.INACTIVE,
-            label: translation['SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL'],
-          },
-          {
-            value: MeterDataStatus.WAITING_GRD,
-            label:
-              translation['SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'],
-          },
-          {
-            value: MeterDataStatus.WAITING_MANAGER,
-            label:
-              translation[
-                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
-              ],
-          },
-        ]);
-      });
   }
 
   private loadMetersSharingOperation(): void {
@@ -157,57 +147,46 @@ export class SharingOperationMetersList implements OnInit {
       });
   }
 
+  applyFilters(): void {
+    const current: SharingOperationMetersQuery = {
+      page: 1,
+      limit: this.filter().limit,
+      type: this.type(),
+    };
+    const text = this.searchText();
+    if (text) {
+      const field = this.searchField();
+      if (field === 'EAN') current.EAN = text;
+      else if (field === 'meter_number') current.meter_number = text;
+      else if (field === 'street') current.street = text;
+      else if (field === 'city') current.city = text;
+    }
+    const status = this.statusFilter();
+    if (status !== null) current.status = status;
+    this.filter.set(current);
+    this.loadMetersSharingOperation();
+  }
+
+  onSearchTextChange(query: string): void {
+    this.searchText.set(query);
+    this.applyFilters();
+  }
+
+  onSearchFieldChange(): void {
+    if (this.searchText()) this.applyFilters();
+  }
+
+  onStatusFilterChange(status: MeterDataStatus | null): void {
+    this.statusFilter.set(status);
+    this.applyFilters();
+  }
+
   protected lazyLoadMeter($event: TableLazyLoadEvent): void {
-    const current: SharingOperationMetersQuery = { ...this.filter() };
+    const current = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
-      if ($event.rows) {
-        current.page = $event.first / $event.rows + 1;
-      } else {
-        current.page = 1;
-      }
+      current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
     }
-
-    if ($event.filters) {
-      const eanFilter = $event.filters['EAN'];
-      if (eanFilter && !Array.isArray(eanFilter) && eanFilter.value) {
-        current.EAN = eanFilter.value as string;
-      } else {
-        delete current.EAN;
-      }
-
-      const meterNumberFilter = $event.filters['meter_number'];
-      if (meterNumberFilter && !Array.isArray(meterNumberFilter) && meterNumberFilter.value) {
-        current.meter_number = meterNumberFilter.value as string;
-      } else {
-        delete current.meter_number;
-      }
-
-      const statutFilter = $event.filters['statut'];
-      if (statutFilter && !Array.isArray(statutFilter) && statutFilter.value !== undefined) {
-        current.status = statutFilter.value as MeterDataStatus;
-      } else {
-        delete current.status;
-      }
-    }
-
-    // Address filters from custom template
-    const addr = this.addressFilter();
-    if (addr.streetName !== '') {
-      current.street = addr.streetName;
-    } else {
-      delete current.street;
-    }
-    if (addr.postcode !== '') {
-      current.postcode = parseInt(addr.postcode);
-    } else {
-      delete current.postcode;
-    }
-    if (addr.cityName !== '') {
-      current.city = addr.cityName;
-    } else {
-      delete current.city;
-    }
-
+    if (current.page < 1) current.page = 1;
     this.filter.set(current);
     this.loadMetersSharingOperation();
   }
@@ -234,22 +213,12 @@ export class SharingOperationMetersList implements OnInit {
     this.loadMetersSharingOperation();
   }
 
-  updateAddressFilter(field: 'streetName' | 'postcode' | 'cityName', value: string): void {
-    this.addressFilter.update((current) => ({ ...current, [field]: value }));
-  }
-
   clear(table: Table): void {
     table.clear();
-    this.addressFilter.set({
-      streetName: '',
-      postcode: '',
-      cityName: '',
-    });
-    this.filter.set({
-      page: 1,
-      limit: 10,
-      type: this.type(),
-    });
+    this.searchText.set('');
+    this.searchField.set('EAN');
+    this.statusFilter.set(null);
+    this.filter.set({ page: 1, limit: 10, type: this.type() });
     this.loadMetersSharingOperation();
   }
 
@@ -367,6 +336,7 @@ export class SharingOperationMetersList implements OnInit {
 
     this.dateStartMeter.set(null);
   }
+
   onRowClick(meter: PartialMeterDTO): void {
     void this.routing.navigate(['/meters/' + meter.EAN]);
   }

@@ -56,10 +56,6 @@ interface MemberFormValue {
   phone_manager?: string;
 }
 
-interface NextCallback {
-  emit: () => void;
-}
-
 @Component({
   selector: 'app-member-creation-update',
   imports: [
@@ -171,27 +167,28 @@ export class MemberCreationUpdate implements OnInit {
     }
     this.updateGestionnaire(this.typeClient() === MemberType.COMPANY);
   }
-
-  submitForm1(nextCallback: NextCallback): void {
-    if (this.typeClient() !== -1) {
+  onTypeClientChange(type: MemberType | -1): void {
+    this.typeClient.set(type);
+    if (type !== -1) {
       this.buildFormGroup();
-      this.step.set(1);
-      nextCallback.emit();
     }
   }
-
-  submitForm2(nextCallback: NextCallback): void {
-    console.log(this.formData.valid);
+  submitForm1(activateCallback: (step: number) => void): void {
+    if (this.typeClient() !== -1) {
+      activateCallback(1);
+    }
+  }
+  submitForm2(activateCallback: (step: number) => void): void {
     if (this.formData.valid) {
-      this.step.set(2);
-      nextCallback.emit();
+      // nextCallback.emit();
+      activateCallback(2);
     }
   }
 
-  submitForm3(nextCallback: NextCallback): void {
+  submitForm3(activateCallback: (step: number) => void): void {
     if (this.addressForm.valid) {
-      this.step.set(3);
-      nextCallback.emit();
+      // nextCallback.emit();
+      activateCallback(3);
     }
   }
 
@@ -377,8 +374,7 @@ export class MemberCreationUpdate implements OnInit {
     this.updateGestionnaire(value);
   }
 
-  toggleSameAddress(event: CheckboxChangeEvent): void {
-    console.log('THIS EVENT : ', event);
+  toggleSameAddress(_event: CheckboxChangeEvent): void {
     const addressValue = this.addressForm.getRawValue() as AddressFormValue;
     const sameSelected = Array.isArray(addressValue.same_address)
       ? Boolean(addressValue.same_address[0])

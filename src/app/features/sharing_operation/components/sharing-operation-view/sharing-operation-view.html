@@ -1,6 +1,48 @@
 <div class="container mx-auto my-auto">
   @if (isLoading()) {
-    <p-progressSpinner></p-progressSpinner>
+    <!-- Skeleton Loading State -->
+    <div class="space-y-4">
+      <!-- Hero Skeleton -->
+      <div class="sharing-hero rounded-xl border border-primary-100 p-6 flex items-center gap-5">
+        <p-skeleton shape="circle" size="4rem" />
+        <div class="flex flex-col gap-2 flex-1">
+          <p-skeleton width="14rem" height="1.5rem" />
+          <p-skeleton width="9rem" height="1rem" />
+        </div>
+        <p-skeleton width="6rem" height="2.5rem" borderRadius="8px" />
+      </div>
+      <!-- Card Skeletons -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        @for (_ of [1, 2, 3]; track $index) {
+          <div class="bg-white border border-surface-200 rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-4">
+              <p-skeleton shape="circle" size="1.5rem" />
+              <p-skeleton width="8rem" height="1rem" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              @for (_ of [1, 2, 3, 4]; track $index) {
+                <div>
+                  <p-skeleton width="5rem" height="0.75rem" styleClass="mb-2" />
+                  <p-skeleton width="7rem" height="1rem" />
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else if (hasError()) {
+    <!-- Error State -->
+    <div class="flex flex-col items-center justify-center py-16 gap-4">
+      <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
+      <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <p-button
+        [outlined]="true"
+        icon="pi pi-refresh"
+        label="{{ 'COMMON.RETRY' | translate }}"
+        (click)="loadOperationSharing()"
+      />
+    </div>
   } @else if (sharingOperation(); as op) {
     <p-drawer
       [visible]="sidebarHistoryKey()"
@@ -11,7 +53,6 @@
       <h3 class="font-medium text-lg pb-2">
         {{ 'SHARING_OPERATION.VIEW.HISTORY_KEY.KEY_HISTORY_TITLE' | translate }}
       </h3>
-      <!--Liste trois colonnes : date deb, date fin, clé -->
       <div>
         <p-table
           #dtHistory
@@ -81,127 +122,185 @@
       </div>
     </p-drawer>
 
-    <div>
+    <app-back-arrow
+      url="/sharing_operations"
+      [text]="'SHARING_OPERATION.BACK_TO_LIST' | translate"
+    ></app-back-arrow>
+
+    <div class="space-y-4 mt-3">
+      <!-- Hero Section -->
       <div
-        class="flex flex-wrap -mx-2 pb-3 pt-3 items-center justify-between flex-col lg:flex-row gap-2"
+        class="sharing-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
       >
-        <app-header-page
-          icon="pi pi-building"
-          [text]="'SHARING_OPERATION.VIEW.SHARING_OPERATION_TITLE' | translate"
-        ></app-header-page>
-
-        <p-button
-          pRipple
-          label="{{ 'SHARING_OPERATION.VIEW.EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL' | translate }}"
-          severity="success"
-          icon="pi pi-file-export"
-          (click)="exportExcelCWAPe()"
-        ></p-button>
-      </div>
-      <div class="grid grid-cols-1 lg:grid-cols-2 mb-3 gap-2">
-        <div class="flex">
-          <p-card class="w-full grow shadow-lg/30! h-full">
-            <div class="text-center">
-              <h3 class="font-medium text-lg">
-                {{ 'SHARING_OPERATION.VIEW.NAME_LABEL' | translate }}
-              </h3>
-              <span class="text-sm">{{ op.name }}</span>
-            </div>
-            <div class="text-center mt-3">
-              <h3 class="font-medium text-lg">
-                {{ 'SHARING_OPERATION.VIEW.TYPE_LABEL' | translate }}
-              </h3>
-              <span class="text-sm">{{ op.type | sharingOperationType }}</span>
-            </div>
-          </p-card>
+        <p-avatar
+          icon="pi pi-share-alt"
+          size="xlarge"
+          shape="circle"
+          styleClass="bg-primary-100 text-primary-700 text-xl"
+        />
+        <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
+              {{ op.name }}
+            </h1>
+            <p-tag [value]="op.type | sharingOperationType" severity="info" />
+          </div>
+          <p class="text-sm text-surface-500 m-0 truncate">
+            {{ 'SHARING_OPERATION.VIEW.SHARING_OPERATION_TITLE' | translate }}
+          </p>
         </div>
-
-        <div class="flex">
-          <p-card class="w-full grow shadow-lg/30!">
-            <ng-template pTemplate="content">
-              <div class="text-center">
-                <h3 class="font-medium text-lg">
-                  {{ 'SHARING_OPERATION.VIEW.KEY.ACTUAL_KEY_LABEL' | translate }}
-                </h3>
-                @if (op.key && op.key.key) {
-                  <a class="text-sm" routerLink="/key/{{ op.key.key.id }}">
-                    {{ op.key.key.name }}
-                  </a>
-                } @else {
-                  @if (op.key_waiting_approval) {
-                    <div class="flex flex-col">
-                      <span class="text-sm">{{
-                        'SHARING_OPERATION.VIEW.KEY.WAITING_APPROVAL_KEY_LABEL' | translate
-                      }}</span>
-                      <span class="font-semibold text-sm">{{
-                        op.key_waiting_approval.key.name
-                      }}</span>
-                      <div class="flex flex-row space-x-2 justify-center">
-                        <p-button
-                          icon="pi pi-check"
-                          severity="success"
-                          label="{{ 'SHARING_OPERATION.VIEW.KEY.APPROVE_KEY' | translate }}"
-                          (click)="openDateApprovedKey($event)"
-                        ></p-button>
-                        <p-button
-                          icon="pi pi-times"
-                          severity="danger"
-                          label="{{ 'SHARING_OPERATION.VIEW.KEY.REJECT_KEY' | translate }}"
-                          (click)="revokeWaitingKey()"
-                        ></p-button>
-                      </div>
-                    </div>
-                  } @else {
-                    <span class="text-sm">{{
-                      'SHARING_OPERATION.VIEW.KEY.NO_ACTUAL_KEY_LABEL' | translate
-                    }}</span>
-                  }
-                }
-              </div>
-              <div class="text-center mt-3">
-                <p-button
-                  pRipple
-                  icon="pi pi-pencil"
-                  severity="warn"
-                  label="{{ 'SHARING_OPERATION.VIEW.KEY.CHOOSE_KEY_BUTTON_LABEL' | translate }}"
-                  (click)="editKey()"
-                ></p-button>
-                <p-button
-                  pRipple
-                  icon="pi pi-history"
-                  severity="info"
-                  class="ms-2"
-                  (click)="sidebarHistoryKey.set(true)"
-                ></p-button>
-                <p-button
-                  pRipple
-                  icon="pi pi-plus"
-                  severity="success"
-                  class="ms-2"
-                  label="{{ 'SHARING_OPERATION.VIEW.KEY.CREATE_KEY_BUTTON_LABEL' | translate }}"
-                  (click)="newKey()"
-                ></p-button>
-              </div>
-            </ng-template>
-          </p-card>
+        <div class="flex flex-wrap gap-2">
+          <p-button
+            pRipple
+            [outlined]="true"
+            label="{{
+              'SHARING_OPERATION.VIEW.EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL' | translate
+            }}"
+            severity="success"
+            icon="pi pi-file-export"
+            (click)="exportExcelCWAPe()"
+          />
         </div>
       </div>
-      <div
-        class="flex flex-wrap -mx-2 pb-3 pt-3 items-center justify-between flex-col lg:flex-row gap-2"
-      >
-        <app-header-page
-          icon="pi pi-gauge"
-          [text]="'SHARING_OPERATION.VIEW.METER.METERS_TITLE' | translate"
-        ></app-header-page>
-        <p-button
-          pRipple
-          label="{{ 'SHARING_OPERATION.VIEW.METER.ADD_METER_BUTTON_LABEL' | translate }}"
-          icon="pi pi-plus"
-          severity="success"
-          (click)="addMeter()"
-        ></p-button>
+
+      <!-- Information Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Card 1: General Info -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-info-circle text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'SHARING_OPERATION.VIEW.GENERAL_INFO_TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span class="field-label">{{ 'SHARING_OPERATION.VIEW.NAME_LABEL' | translate }}</span>
+              @if (op.name) {
+                <span class="field-value">{{ op.name }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+            <div>
+              <span class="field-label">{{ 'SHARING_OPERATION.VIEW.TYPE_LABEL' | translate }}</span>
+              <span class="field-value">{{ op.type | sharingOperationType }}</span>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Card 2: Key Management -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-key text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'SHARING_OPERATION.VIEW.KEY.ACTUAL_KEY_LABEL' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div>
+              <span class="field-label">{{
+                'SHARING_OPERATION.VIEW.KEY.ACTUAL_KEY_LABEL' | translate
+              }}</span>
+              @if (op.key && op.key.key) {
+                <a
+                  class="field-value text-primary-500 hover:text-primary-700 underline"
+                  routerLink="/key/{{ op.key.key.id }}"
+                >
+                  {{ op.key.key.name }}
+                </a>
+              } @else if (op.key_waiting_approval) {
+                <div class="flex flex-col gap-2 mt-1">
+                  <span class="text-sm text-surface-500">
+                    {{ 'SHARING_OPERATION.VIEW.KEY.WAITING_APPROVAL_KEY_LABEL' | translate }}
+                  </span>
+                  <span class="field-value font-semibold">{{
+                    op.key_waiting_approval.key.name
+                  }}</span>
+                  <div class="flex flex-wrap gap-2">
+                    <p-button
+                      icon="pi pi-check"
+                      severity="success"
+                      size="small"
+                      label="{{ 'SHARING_OPERATION.VIEW.KEY.APPROVE_KEY' | translate }}"
+                      (click)="openDateApprovedKey($event)"
+                    />
+                    <p-button
+                      icon="pi pi-times"
+                      severity="danger"
+                      size="small"
+                      label="{{ 'SHARING_OPERATION.VIEW.KEY.REJECT_KEY' | translate }}"
+                      (click)="revokeWaitingKey()"
+                    />
+                  </div>
+                </div>
+              } @else {
+                <span class="field-empty">
+                  {{ 'SHARING_OPERATION.VIEW.KEY.NO_ACTUAL_KEY_LABEL' | translate }}
+                </span>
+              }
+            </div>
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-surface-200">
+              <p-button
+                pRipple
+                icon="pi pi-pencil"
+                severity="warn"
+                size="small"
+                [outlined]="true"
+                label="{{ 'SHARING_OPERATION.VIEW.KEY.CHOOSE_KEY_BUTTON_LABEL' | translate }}"
+                (click)="editKey()"
+              />
+              <p-button
+                pRipple
+                icon="pi pi-history"
+                severity="info"
+                size="small"
+                [outlined]="true"
+                (click)="sidebarHistoryKey.set(true)"
+              />
+              <p-button
+                pRipple
+                icon="pi pi-plus"
+                severity="success"
+                size="small"
+                [outlined]="true"
+                label="{{ 'SHARING_OPERATION.VIEW.KEY.CREATE_KEY_BUTTON_LABEL' | translate }}"
+                (click)="newKey()"
+              />
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Card 3: Meters & Actions -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-gauge text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'SHARING_OPERATION.VIEW.METER.METERS_TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div>
+              <span class="field-label">{{ 'SHARING_OPERATION.VIEW.TYPE_LABEL' | translate }}</span>
+              <span class="field-value">{{ op.type | sharingOperationType }}</span>
+            </div>
+            <div class="pt-2 border-t border-surface-200">
+              <p-button
+                pRipple
+                [outlined]="true"
+                label="{{ 'SHARING_OPERATION.VIEW.METER.ADD_METER_BUTTON_LABEL' | translate }}"
+                icon="pi pi-plus"
+                severity="success"
+                size="small"
+                (click)="addMeter()"
+              />
+            </div>
+          </div>
+        </p-card>
       </div>
-      <p-tabs [value]="1">
+
+      <!-- Meters Tabs -->
+      <p-tabs [value]="1" class="sharing-tabs">
         <p-tablist>
           <p-tab [value]="0">
             {{ 'SHARING_OPERATION.VIEW.METER.HEADERS.PAST' | translate }}
@@ -235,103 +334,121 @@
         </p-tabpanels>
       </p-tabs>
 
-      <app-header-page
-        icon="pi pi-chart-bar"
-        [text]="
-          'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.CONSUMPTION_MONITORING_TITLE' | translate
-        "
-      ></app-header-page>
-      <form [formGroup]="formChart" class="flex mb-4" (submit)="loadChart()">
-        <div class="grid me-2">
-          <label for="dateDeb">{{
-            'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.START_DATE_LABEL' | translate
-          }}</label>
-          <p-date-picker
-            id="dateDeb"
-            formControlName="dateDeb"
-            dateFormat="dd/mm/yy"
-            [firstDayOfWeek]="1"
-          ></p-date-picker>
-          <app-error-handler controlName="dateDeb"></app-error-handler>
+      <!-- Consumption Monitoring -->
+      <p-card>
+        <div class="flex items-center gap-2.5 mb-4">
+          <i class="pi pi-chart-bar text-primary-500 text-lg"></i>
+          <h3 class="font-semibold text-base text-surface-800 m-0">
+            {{
+              'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.CONSUMPTION_MONITORING_TITLE'
+                | translate
+            }}
+          </h3>
         </div>
-        <div class="grid me-2">
-          <label for="dateFin">{{
-            'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.END_DATE_LABEL' | translate
-          }}</label>
-          <p-date-picker
-            id="dateFin"
-            formControlName="dateFin"
-            dateFormat="dd/mm/yy"
-            [firstDayOfWeek]="1"
-          ></p-date-picker>
-          <app-error-handler controlName="dateFin"></app-error-handler>
-        </div>
-        <div class="content-end">
+
+        <form
+          [formGroup]="formChart"
+          class="flex flex-col sm:flex-row gap-3 items-end mb-4"
+          (submit)="loadChart()"
+        >
+          <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+            <label for="dateDeb" class="field-label">
+              {{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.START_DATE_LABEL' | translate }}
+            </label>
+            <p-date-picker
+              id="dateDeb"
+              formControlName="dateDeb"
+              dateFormat="dd/mm/yy"
+              [firstDayOfWeek]="1"
+              styleClass="w-full"
+            ></p-date-picker>
+            <app-error-handler controlName="dateDeb"></app-error-handler>
+          </div>
+          <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+            <label for="dateFin" class="field-label">
+              {{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.END_DATE_LABEL' | translate }}
+            </label>
+            <p-date-picker
+              id="dateFin"
+              formControlName="dateFin"
+              dateFormat="dd/mm/yy"
+              [firstDayOfWeek]="1"
+              styleClass="w-full"
+            ></p-date-picker>
+            <app-error-handler controlName="dateFin"></app-error-handler>
+          </div>
           <p-button
             pRipple
             label="{{
               'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SEARCH_BUTTON_LABEL' | translate
             }}"
             icon="pi pi-search"
-            severity="info"
             type="submit"
           ></p-button>
-        </div>
-      </form>
-      <div class="card">
-        <p-chart type="bar" [data]="data()" [options]="options" />
-      </div>
-      @if (displayDownloadButton()) {
-        <div class="flex flex-wrap text-center mt-4">
-          <p-button
-            pRipple
-            label="{{
-              'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.DOWNLOAD_BUTTON_LABEL' | translate
-            }}"
-            icon="pi pi-file-export"
-            severity="success"
-            (click)="downloadTotalConsumption()"
-          ></p-button>
-        </div>
-      }
+        </form>
 
-      <div class="w-3/4 mx-auto">
-        <form [formGroup]="formGroup" (ngSubmit)="addConsumptionInformations()">
-          <div class="card">
-            <input
-              type="file"
-              id="fileInput"
-              (change)="onFileSelected($event)"
-              class="file-input"
-            />
-            <label for="fileInput" class="file-upload-message">
-              <div
-                class="file-upload"
-                (dragover)="onDragOver($event)"
-                (dragleave)="onDragLeave($event)"
-                (drop)="onDrop($event)"
-                [class.dragging]="dragging()"
-              >
-                <p>
-                  {{
-                    'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECT_FILE_DRAG_N_DROP_LABEL'
-                      | translate
-                  }}
-                </p>
-              </div>
-            </label>
+        @if (!data()) {
+          <div class="flex flex-col items-center justify-center py-12 gap-3">
+            <i class="pi pi-chart-bar text-3xl text-surface-300"></i>
+            <p class="text-surface-400 m-0 text-sm">
+              {{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECT_DATES_HINT' | translate }}
+            </p>
           </div>
-          @if (fileConsumption()) {
-            <div>
-              <p>
+        } @else {
+          <div class="mb-4">
+            <p-chart type="bar" [data]="data()" [options]="options" />
+          </div>
+        }
+
+        @if (displayDownloadButton()) {
+          <div class="flex justify-center">
+            <p-button
+              pRipple
+              [outlined]="true"
+              icon="pi pi-download"
+              label="{{
+                'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.DOWNLOAD_BUTTON_LABEL' | translate
+              }}"
+              (click)="downloadTotalConsumption()"
+            ></p-button>
+          </div>
+        }
+      </p-card>
+
+      <!-- File Upload -->
+      <p-card>
+        <div class="flex items-center gap-2.5 mb-4">
+          <i class="pi pi-upload text-primary-500 text-lg"></i>
+          <h3 class="font-semibold text-base text-surface-800 m-0">
+            {{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_TITLE' | translate }}
+          </h3>
+        </div>
+        <form [formGroup]="formGroup" (ngSubmit)="addConsumptionInformations()">
+          <input type="file" id="fileInput" (change)="onFileSelected($event)" class="file-input" />
+          <label for="fileInput" class="file-upload-message">
+            <div
+              class="file-upload"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              [class.dragging]="dragging()"
+            >
+              <i class="pi pi-cloud-upload text-2xl mb-2"></i>
+              <p class="m-0">
                 {{
-                  'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECTED_FILE_LABEL' | translate
+                  'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECT_FILE_DRAG_N_DROP_LABEL'
+                    | translate
                 }}
-                : {{ fileConsumption()!.name }}
               </p>
             </div>
+          </label>
+          @if (fileConsumption()) {
+            <div class="mt-3 flex items-center gap-2">
+              <i class="pi pi-file text-primary-500"></i>
+              <span class="text-sm text-surface-700">{{ fileConsumption()!.name }}</span>
+            </div>
           }
-          <div class="flex flex-wrap flex-col mt-2 content-center">
+          <div class="flex flex-col mt-3 items-center gap-2">
             <app-error-handler controlName="fileConsumption"></app-error-handler>
             <p-button
               type="submit"
@@ -343,7 +460,7 @@
             ></p-button>
           </div>
         </form>
-      </div>
+      </p-card>
     </div>
   }
 </div>

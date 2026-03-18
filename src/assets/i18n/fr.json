@@ -270,7 +270,9 @@
       "EMAIL": "Email",
       "PHONE": "N° de téléphone",
       "ROLE": "Rôle"
-    }
+    },
+    "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+    "NO_MANAGER_FOUND": "Aucun gestionnaire trouvé"
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Utilisateur de la communauté",
@@ -286,6 +288,8 @@
     "EDIT_ROLE_BUTTON_LABEL": "Modifier le rôle",
     "EDIT_ROLE_BUTTON_TOOLTIP": "Modifier le rôle de cet utilisateur",
     "DELETE_BUTTON_LABEL": "Supprimer",
+    "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+    "NO_USER_FOUND": "Aucun utilisateur trouvé",
     "UPDATE_ROLE_DIALOG": {
       "TITLE": "Mise à jour du rôle utilisateur",
       "NEW_ROLE_FOR_USER_LABEL": "Nouveau rôle de l'utilisateur",
@@ -798,6 +802,10 @@
       }
     },
     "ADD": {
+      "STEP_IDENTITY": "Identification du compteur",
+      "STEP_CONFIGURATION": "Configuration",
+      "NEXT_STEP_BUTTON": "Suivant",
+      "BACK_STEP_BUTTON": "Retour",
       "INFORMATION_HEADER": "Informations du compteur",
       "ENERGY_CHARACTERISTIC_HEADER": "Caractéristiques énergétiques",
       "FINANCIAL_CHARACTERISTIC_HEADER": "Caractéristiques financières",
@@ -983,6 +991,7 @@
   },
 
   "SHARING_OPERATION": {
+    "BACK_TO_LIST": "Retour aux opérations de partage",
     "TYPE": {
       "INSIDE_BUILDING": "Au sein d'un batiment",
       "CER": "CER",
@@ -1037,6 +1046,7 @@
     },
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Opération de partage",
+      "GENERAL_INFO_TITLE": "Informations générales",
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporter sous format excel (CWAPE)",
       "NAME_LABEL": "Nom",
       "TYPE_LABEL": "Type",
@@ -1105,6 +1115,8 @@
         "SELECTED_FILE_LABEL": "Fichier sélectionné",
         "UPLOAD_BUTTON_LABEL": "Téléverser",
         "UPLOAD_SUCCESS_LABEL": "Le fichier a bien été reçu",
+        "UPLOAD_TITLE": "Importer des données de consommation",
+        "SELECT_DATES_HINT": "Sélectionnez une plage de dates et cliquez sur Rechercher pour visualiser les données",
         "CONSUMPTION_FILE_PREFIX": "consommation_"
       },
       "CHART": {

@@ -2,10 +2,10 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
 import { TranslatePipe } from '@ngx-translate/core';
-import { NewMemberAddressSelfEncoding } from './steps/new-member-address/new-member-address-self-encoding.component';
-import { NewMemberBankingInfoSelfEncoding } from './steps/new-member-banking-info/new-member-banking-info-self-encoding.component';
-import { NewMemberInformationsSelfEncoding } from './steps/new-member-informations/new-member-informations-self-encoding.component';
-import { NewMemberTypeSelfEncoding } from './steps/new-member-type/new-member-type-self-encoding.component';
+import { NewMemberAddress } from '../../../../../../../member/components/member-creation-update/steps/new-member-address/new-member-address';
+import { NewMemberBankingInfo } from '../../../../../../../member/components/member-creation-update/steps/new-member-banking-info/new-member-banking-info';
+import { NewMemberInformations } from '../../../../../../../member/components/member-creation-update/steps/new-member-informations/new-member-informations';
+import { NewMemberType } from '../../../../../../../member/components/member-creation-update/steps/new-member-type/new-member-type';
 import { ErrorMessageHandler } from '../../../../../../../../shared/services-ui/error.message.handler';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -54,10 +54,10 @@ interface EncodeMemberAddressFormValue {
 @Component({
   selector: 'app-encode-new-member',
   imports: [
-    NewMemberAddressSelfEncoding,
-    NewMemberBankingInfoSelfEncoding,
-    NewMemberInformationsSelfEncoding,
-    NewMemberTypeSelfEncoding,
+    NewMemberAddress,
+    NewMemberBankingInfo,
+    NewMemberInformations,
+    NewMemberType,
     Step,
     StepList,
     StepPanel,
@@ -110,7 +110,6 @@ export class EncodeNewMemberSelfComponent implements OnInit {
   }
 
   buildFormGroup(): void {
-    console.log('BUILD FORM GROUP');
     if (this.typeClient() === MemberType.INDIVIDUAL) {
       this.formData = new FormGroup({
         id: new FormControl('', [
@@ -131,26 +130,6 @@ export class EncodeNewMemberSelfComponent implements OnInit {
       });
     }
     this.updateGestionnaire(this.typeClient() === MemberType.COMPANY);
-    // this.formData = new FormGroup({
-    //   id: new FormControl('', [Validators.required]),
-    //   name: new FormControl('', [Validators.required]),
-    // });
-    // if (this.typeClient === MemberType.INDIVIDUAL) {
-    //   // this.formData.controls['id'].addValidators([
-    //   //   numRegistreBeValidator
-    //   // ]);
-    //   // Build form group for individuals
-    //   this.formData.addControl('surname', new FormControl('', [Validators.required]));
-    //   this.formData.addControl(
-    //     'email',
-    //     new FormControl('', [Validators.required, Validators.email]),
-    //   );
-    //   this.formData.addControl('phone', new FormControl('', [Validators.required]));
-    //   this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
-    // } else if (this.typeClient === MemberType.COMPANY) {
-    //   this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
-    // }
-    // this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
   }
 
   onTypeClientChange(type: MemberType | -1): void {
@@ -303,8 +282,7 @@ export class EncodeNewMemberSelfComponent implements OnInit {
     this.updateGestionnaire(value);
   }
 
-  toggleSameAddress(event: CheckboxChangeEvent): void {
-    console.log('THIS EVENT : ', event);
+  toggleSameAddress(_event: CheckboxChangeEvent): void {
     const addressFormValue = this.addressForm.getRawValue() as EncodeMemberAddressFormValue;
     const isSameAddress = Array.isArray(addressFormValue.same_address)
       ? addressFormValue.same_address[0]

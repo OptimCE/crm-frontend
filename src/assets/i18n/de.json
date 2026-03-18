@@ -270,7 +270,9 @@
       "EMAIL": "E-Mail",
       "PHONE": "Telefonnummer",
       "ROLE": "Rolle"
-    }
+    },
+    "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+    "NO_MANAGER_FOUND": "Keine Manager gefunden"
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Benutzer der Gemeinschaft",
@@ -286,6 +288,8 @@
     "EDIT_ROLE_BUTTON_LABEL": "Rolle ändern",
     "EDIT_ROLE_BUTTON_TOOLTIP": "Die Rolle dieses Benutzers ändern",
     "DELETE_BUTTON_LABEL": "Löschen",
+    "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+    "NO_USER_FOUND": "Keine Benutzer gefunden",
     "UPDATE_ROLE_DIALOG": {
       "TITLE": "Benutzerrolle aktualisieren",
       "NEW_ROLE_FOR_USER_LABEL": "Neue Rolle des Benutzers",
@@ -798,6 +802,10 @@
       }
     },
     "ADD": {
+      "STEP_IDENTITY": "Zähleridentifikation",
+      "STEP_CONFIGURATION": "Konfiguration",
+      "NEXT_STEP_BUTTON": "Weiter",
+      "BACK_STEP_BUTTON": "Zurück",
       "INFORMATION_HEADER": "Zählerinformationen",
       "ENERGY_CHARACTERISTIC_HEADER": "Energetische Merkmale",
       "FINANCIAL_CHARACTERISTIC_HEADER": "Finanzielle Merkmale",
@@ -983,6 +991,7 @@
   },
 
   "SHARING_OPERATION": {
+    "BACK_TO_LIST": "Zurück zu Teilungsoperationen",
     "TYPE": {
       "INSIDE_BUILDING": "Innerhalb eines Gebäudes",
       "CER": "CER",
@@ -1037,6 +1046,7 @@
     },
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Teilungsoperation",
+      "GENERAL_INFO_TITLE": "Allgemeine Informationen",
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Als Excel exportieren (CWAPE)",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Typ",
@@ -1105,6 +1115,8 @@
         "SELECTED_FILE_LABEL": "Ausgewählte Datei",
         "UPLOAD_BUTTON_LABEL": "Hochladen",
         "UPLOAD_SUCCESS_LABEL": "Die Datei wurde erfolgreich empfangen",
+        "UPLOAD_TITLE": "Verbrauchsdaten hochladen",
+        "SELECT_DATES_HINT": "Wählen Sie einen Zeitraum und klicken Sie auf Suchen, um die Verbrauchsdaten anzuzeigen",
         "CONSUMPTION_FILE_PREFIX": "verbrauch_"
       },
       "CHART": {

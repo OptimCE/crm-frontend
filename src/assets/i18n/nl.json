@@ -270,7 +270,9 @@
       "EMAIL": "E-mail",
       "PHONE": "Telefoonnummer",
       "ROLE": "Rol"
-    }
+    },
+    "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+    "NO_MANAGER_FOUND": "Geen managers gevonden"
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Gebruiker van de gemeenschap",
@@ -286,6 +288,8 @@
     "EDIT_ROLE_BUTTON_LABEL": "Rol wijzigen",
     "EDIT_ROLE_BUTTON_TOOLTIP": "De rol van deze gebruiker wijzigen",
     "DELETE_BUTTON_LABEL": "Verwijderen",
+    "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+    "NO_USER_FOUND": "Geen gebruikers gevonden",
     "UPDATE_ROLE_DIALOG": {
       "TITLE": "Gebruikersrol bijwerken",
       "NEW_ROLE_FOR_USER_LABEL": "Nieuwe rol van de gebruiker",
@@ -798,6 +802,10 @@
       }
     },
     "ADD": {
+      "STEP_IDENTITY": "Meteridentificatie",
+      "STEP_CONFIGURATION": "Configuratie",
+      "NEXT_STEP_BUTTON": "Volgende",
+      "BACK_STEP_BUTTON": "Terug",
       "INFORMATION_HEADER": "Meterinformatie",
       "ENERGY_CHARACTERISTIC_HEADER": "Energiekenmerken",
       "FINANCIAL_CHARACTERISTIC_HEADER": "Financiële kenmerken",
@@ -983,6 +991,7 @@
   },
 
   "SHARING_OPERATION": {
+    "BACK_TO_LIST": "Terug naar deeloperaties",
     "TYPE": {
       "INSIDE_BUILDING": "Binnen een gebouw",
       "CER": "CER",
@@ -1037,6 +1046,7 @@
     },
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Deeloperatie",
+      "GENERAL_INFO_TITLE": "Algemene informatie",
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporteren als Excel (CWAPE)",
       "NAME_LABEL": "Naam",
       "TYPE_LABEL": "Type",
@@ -1105,6 +1115,8 @@
         "SELECTED_FILE_LABEL": "Geselecteerd bestand",
         "UPLOAD_BUTTON_LABEL": "Uploaden",
         "UPLOAD_SUCCESS_LABEL": "Het bestand is succesvol ontvangen",
+        "UPLOAD_TITLE": "Verbruiksgegevens uploaden",
+        "SELECT_DATES_HINT": "Selecteer een datumbereik en klik op Zoeken om verbruiksgegevens te bekijken",
         "CONSUMPTION_FILE_PREFIX": "verbruik_"
       },
       "CHART": {

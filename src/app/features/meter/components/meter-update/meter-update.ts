@@ -1,8 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -43,8 +41,6 @@ interface MeterUpdateFormValue {
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    InputGroupModule,
-    InputGroupAddonModule,
     InputTextModule,
     ErrorHandlerComponent,
     RadioButtonModule,

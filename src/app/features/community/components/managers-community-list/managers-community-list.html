@@ -1,11 +1,69 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3 flex-col lg:flex-row items-center lg:justify-between">
-    <app-header-page
-      icon="pi pi-user"
-      [text]="'MANAGERS_COMMUNITY_LIST.TITLE' | translate"
-    ></app-header-page>
+  <!-- Page header -->
+  <div
+    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  >
+    <app-header-page icon="pi pi-users" [text]="'MANAGERS_COMMUNITY_LIST.TITLE' | translate" />
   </div>
 
+  <!-- Filter toolbar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
+      <!-- Search by email -->
+      <div class="sm:col-span-2 lg:flex-1">
+        <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+        <app-debounced-p-input
+          [placeholder]="'MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate"
+          [value]="searchText()"
+          (searchEvent)="onSearchTextChange($event)"
+          inputClass="w-full!"
+        />
+      </div>
+
+      <!-- Role filter -->
+      <div>
+        <span class="field-label">{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}</span>
+        <p-select
+          [options]="roleOptions"
+          [ngModel]="roleFilter()"
+          (onChange)="onRoleFilterChange($event.value)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}"
+          [showClear]="true"
+          class="w-full"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <p-tag
+              [severity]="option.severity"
+              [value]="option.label | translate"
+              class="text-xs"
+            />
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <p-tag
+              [severity]="option.severity"
+              [value]="option.label | translate"
+              class="text-xs"
+            />
+          </ng-template>
+        </p-select>
+      </div>
+
+      <!-- Clear filters -->
+      <div class="flex items-end">
+        <p-button
+          icon="pi pi-filter-slash"
+          label="{{ 'MANAGERS_COMMUNITY_LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+          (onClick)="clear(dt)"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
   <p-table
     #dt
     [value]="users()"
@@ -13,82 +71,125 @@
     (onLazyLoad)="lazyLoadUsers($event)"
     [rows]="pagination().limit"
     [totalRecords]="pagination().total"
-    [first]="(pagination().page - 1) * pagination().limit"
+    [first]="firstRow()"
     (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
   >
+    <!-- Desktop header -->
     <ng-template pTemplate="header">
       <tr class="max-lg:hidden">
-        <th [pSortableColumn]="'name'" class="text-base px-3">
-          {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}
-          <p-sortIcon [field]="'name'"></p-sortIcon>
-        </th>
-        <th class="text-base px-3">
-          {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}
-        </th>
-        <th class="text-base px-3">
-          {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.PHONE' | translate }}
-        </th>
-        <th [pSortableColumn]="'role'" class="text-base px-3">
-          {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}
-          <p-sortIcon [field]="'role'"></p-sortIcon>
-        </th>
+        <th class="text-base px-3">{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}</th>
+        <th class="text-base px-3">{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}</th>
+        <th class="text-base px-3">{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.PHONE' | translate }}</th>
+        <th class="text-base px-3">{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}</th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-user>
-      <tr
-        class="grid grid-cols-1 md:grid-cols-3 lg:table-row flex-wrap hover:bg-green-50! border-b-2 cursor-pointer"
-      >
-        <td class="border-none!">
-          <div class="flex flex-col lg:flex-row">
-            <span class="visible lg:hidden font-medium">
-              {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}
-            </span>
-          </div>
-          <span class="text-sm">
-            {{
-              user.last_name
-                ? user.first_name
-                  ? user.first_name + ' ' + user.last_name
-                  : user.last_name
-                : user.first_name
-                  ? user.first_name
-                  : '/'
-            }}</span
-          >
+      <!-- Desktop row -->
+      <tr class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+        <td class="text-sm">{{ getUserDisplayName(user) }}</td>
+        <td>
+          <a href="mailto:{{ user.email }}" class="text-primary-600 hover:underline text-sm">
+            {{ user.email }}
+          </a>
         </td>
-        <td class="border-none!">
-          <div class="flex flex-col lg:flex-row">
-            <span class="visible lg:hidden font-medium">
-              {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}
-            </span>
-          </div>
-          <a href="mailto:{{ user.email }}" class="text-blue-500 hover:underline text-sm">{{
-            user.email
-          }}</a>
-        </td>
-        <td class="border-none!">
-          <div class="flex flex-col lg:flex-row">
-            <span class="visible lg:hidden font-medium">
-              {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.PHONE' | translate }}
-            </span>
-          </div>
+        <td>
           @if (user.phone) {
-            <a href="tel:{{ user.phone }}" class="text-blue-500 hover:underline text-sm">{{
-              user.phone
-            }}</a>
+            <a href="tel:{{ user.phone }}" class="text-primary-600 hover:underline text-sm">
+              {{ user.phone }}
+            </a>
           } @else {
-            /
+            <span class="field-empty">/</span>
           }
         </td>
-        <td class="border-none!">
-          <div class="flex flex-col lg:flex-row">
-            <span class="visible lg:hidden font-medium">
-              {{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}
-            </span>
+        <td>
+          @switch (user.role) {
+            @case (Role.ADMIN) {
+              <p-tag
+                severity="contrast"
+                [value]="'COMMON.ROLE.ADMIN' | translate"
+                class="text-xs"
+              />
+            }
+            @case (Role.GESTIONNAIRE) {
+              <p-tag severity="warn" [value]="'COMMON.ROLE.MANAGER' | translate" class="text-xs" />
+            }
+          }
+        </td>
+      </tr>
+
+      <!-- Mobile card -->
+      <tr class="lg:hidden !border-0 !bg-transparent">
+        <td colspan="4" class="!p-0 !pb-3">
+          <div
+            class="manager-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm hover:border-primary-400 transition-colors"
+          >
+            <!-- Card header: name + role -->
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+              <span class="font-semibold text-sm text-primary-700">
+                {{ getUserDisplayName(user) }}
+              </span>
+              @switch (user.role) {
+                @case (Role.ADMIN) {
+                  <p-tag
+                    severity="contrast"
+                    [value]="'COMMON.ROLE.ADMIN' | translate"
+                    class="text-xs"
+                  />
+                }
+                @case (Role.GESTIONNAIRE) {
+                  <p-tag
+                    severity="warn"
+                    [value]="'COMMON.ROLE.MANAGER' | translate"
+                    class="text-xs"
+                  />
+                }
+              }
+            </div>
+            <!-- Card body -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <span class="field-label">{{
+                  'MANAGERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate
+                }}</span>
+                <a
+                  href="mailto:{{ user.email }}"
+                  class="field-value text-primary-600 hover:underline"
+                >
+                  {{ user.email }}
+                </a>
+              </div>
+              <div>
+                <span class="field-label">{{
+                  'MANAGERS_COMMUNITY_LIST.HEADERS.PHONE' | translate
+                }}</span>
+                @if (user.phone) {
+                  <a
+                    href="tel:{{ user.phone }}"
+                    class="field-value text-primary-600 hover:underline"
+                  >
+                    {{ user.phone }}
+                  </a>
+                } @else {
+                  <span class="field-empty">/</span>
+                }
+              </div>
+            </div>
           </div>
-          <span class="text-sm">
-            {{ user.role | role }}
-          </span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">
+          <div class="py-8 text-center">
+            <i class="pi pi-users text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'MANAGERS_COMMUNITY_LIST.NO_MANAGER_FOUND' | translate }}
+            </p>
+          </div>
         </td>
       </tr>
     </ng-template>

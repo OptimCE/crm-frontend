@@ -13,7 +13,8 @@ import {
 } from '@angular/forms';
 import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Skeleton } from 'primeng/skeleton';
+import { Avatar } from 'primeng/avatar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
@@ -51,7 +52,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { SharingOperationMetersList } from './sharing-operation-meters-list/sharing-operation-meters-list';
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
 import { SelectMeterNewKeyDialog } from './dialogs/select-meter-new-key-dialog/select-meter-new-key-dialog';
-import { HeaderPage } from '../../../../layout/header-page/header-page';
+import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 
 interface ChartFormValue {
   dateDeb: string;
@@ -69,7 +70,8 @@ interface ChartFormValue {
     TableModule,
     TagModule,
     FormsModule,
-    ProgressSpinnerModule,
+    Skeleton,
+    Avatar,
     RouterLink,
     DatePipe,
     ToastModule,
@@ -90,7 +92,7 @@ interface ChartFormValue {
     SharingOperationMetersList,
     TabPanel,
     TabPanels,
-    HeaderPage,
+    BackArrow,
   ],
   templateUrl: './sharing-operation-view.html',
   styleUrl: './sharing-operation-view.css',
@@ -110,6 +112,7 @@ export class SharingOperationView implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   readonly isLoading = signal<boolean>(true);
+  readonly hasError = signal<boolean>(false);
   readonly id = signal<number>(0);
   readonly sharingOperation = signal<SharingOperationDTO | undefined>(undefined);
   readonly sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
@@ -291,15 +294,27 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  loadOperationSharing(): void {
+  loadOperationSharing(showLoading = true): void {
+    if (showLoading) {
+      this.isLoading.set(true);
+    }
+    this.hasError.set(false);
     this.sharingOperationService
       .getSharingOperation(this.id())
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        if (response) {
-          this.sharingOperation.set(response.data as SharingOperationDTO);
-        }
-        this.isLoading.set(false);
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.sharingOperation.set(response.data as SharingOperationDTO);
+          } else {
+            this.hasError.set(true);
+          }
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.hasError.set(true);
+          this.isLoading.set(false);
+        },
       });
   }
   exportExcelCWAPe(): void {

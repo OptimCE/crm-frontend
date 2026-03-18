@@ -18,7 +18,6 @@ import {
 import { Pagination } from '../../../../core/dtos/api.response';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
-import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { SharingOperationCreationUpdate } from '../sharing-operation-creation-update/sharing-operation-creation-update';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';

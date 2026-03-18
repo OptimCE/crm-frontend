@@ -353,6 +353,7 @@ export class MeterView implements OnInit {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '600px',
       header: this.translate.instant('METER.FULL.METER_MODIFICATION_HEADER') as string,
       data: {
         meter: this.meter(),
