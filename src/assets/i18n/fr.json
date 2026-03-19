@@ -3,6 +3,7 @@
   "COMMON": {
     "LANGUAGE_SELECTOR": "Sélecteur de langue",
     "ADDRESS": "Adresse",
+    "SEARCH": "Rechercher",
     "ACTIONS": {
       "YES": "Oui",
       "NO": "Non",
@@ -14,6 +15,8 @@
       "MEMBER": "Membre",
       "MANAGER": "Gestionnaire"
     },
+    "ERROR_LOADING": "La page ne peut pas être chargée. Veuillez réessayer plus tard",
+    "RETRY": "Réessayer",
     "ERRORS": {
       "EXCEPTION": "Une erreur inattendue est survenue. Veuillez réessayer plus tard",
       "TIMEOUT": "La requête a expiré. Veuillez réessayer",
@@ -29,7 +32,17 @@
     }
   },
   "LOGIN": {
-    "LOGIN": "Connectez-vous"
+    "LOGIN": "Connectez-vous",
+    "SLIDES": {
+      "MEMBERS_TITLE": "Gérez vos membres facilement",
+      "MEMBERS_DESC": "Ajoutez, modifiez et suivez tous les membres de votre communauté depuis un seul tableau de bord.",
+      "METERS_TITLE": "Surveillez vos compteurs",
+      "METERS_DESC": "Suivez la production et la consommation d'énergie.",
+      "SHARING_TITLE": "Opérations de partage",
+      "SHARING_DESC": "Configurez et gérez les opérations de partage d'énergie au sein de votre communauté.",
+      "KEYS_TITLE": "Clés de répartition",
+      "KEYS_DESC": "Créez et gérez les clés de répartition pour distribuer l'énergie équitablement."
+    }
   },
   "NAVBAR": {
     "PROFILE": "Profil",
@@ -51,13 +64,18 @@
     "ERROR_AUTH_UPDATE": "Erreur lors de la mise à jour de l'autorisation",
     "ERROR_LOGOUT": "Erreur lors de la déconnexion",
     "DELETE": "Supprimer",
-    "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier"
+    "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier",
+    "MANAGEMENT": "Gestion",
+    "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
+    "RETRY": "Réessayer"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
     "UPDATE": "Mettre à jour",
     "ACCOUNT_INFORMATION": "Informations du compte",
     "UPDATE_PASSWORD": "Changer de mot de passe",
+    "EMAIL_READONLY_HINT": "Géré par votre fournisseur d'identité",
+    "COPY_IBAN": "Copier l'IBAN",
     "DOCUMENTS": "Documents",
     "MY_REPRESENTATIONS": "Mes représentations",
     "DISPLAY_NAME": "Nom",
@@ -84,6 +102,28 @@
         "IBAN": "Iban"
       }
     },
+    "REPRESENTATIONS": {
+      "COMMUNITY_LABEL": "Communauté",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NO_REPRESENTATION_FOUND_LABEL": "Aucune représentation trouvée",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} représentations)"
+    },
+    "METERS": {
+      "COMMUNITY_LABEL": "Communauté",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NO_METERS_FOUND_LABEL": "Aucun compteur trouvé",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} compteurs)"
+    },
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Communauté",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NAME_LABEL": "Nom",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Taille",
+      "UPLOAD_DATE_LABEL": "Date de téléversement",
+      "NO_DOCUMENT_FOUND_LABEL": "Aucun document trouvé",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} documents)"
+    },
     "UPDATE_PROFILE": {
       "TITLE": "Mise à jour du profil",
       "SOCIAL_NUMBER": "Numéro de registre national",
@@ -109,11 +149,14 @@
       "CITY": "Ville",
       "CITY_PLACEHOLDER": "Bruxelles",
       "SAME_ADDRESS": "Même adresse que l'adresse du domicile",
-      "VALIDATE": "Valider"
+      "VALIDATE": "Valider",
+      "CANCEL": "Annuler"
     }
   },
   "INVITATION": {
     "TITLE": "Mes invitations",
+    "SUBTITLE": "Gérez vos invitations en attente",
+    "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
     "MEMBER": {
       "TITLE": "Membres",
       "HEADERS": {
@@ -178,7 +221,9 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Changer de communauté",
       "LEAVE_BUTTON": "Quitter",
       "LEAVE_BUTTON_TOOLTIP": "Quitter la communauté",
-      "NO_COMMUNITY_FOUND": "Aucune communauté trouvée"
+      "NO_COMMUNITY_FOUND": "Aucune communauté trouvée",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
     },
     "CREATE": {
       "TITLE": "Créer une communauté",
@@ -225,7 +270,9 @@
       "EMAIL": "Email",
       "PHONE": "N° de téléphone",
       "ROLE": "Rôle"
-    }
+    },
+    "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+    "NO_MANAGER_FOUND": "Aucun gestionnaire trouvé"
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Utilisateur de la communauté",
@@ -241,6 +288,8 @@
     "EDIT_ROLE_BUTTON_LABEL": "Modifier le rôle",
     "EDIT_ROLE_BUTTON_TOOLTIP": "Modifier le rôle de cet utilisateur",
     "DELETE_BUTTON_LABEL": "Supprimer",
+    "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+    "NO_USER_FOUND": "Aucun utilisateur trouvé",
     "UPDATE_ROLE_DIALOG": {
       "TITLE": "Mise à jour du rôle utilisateur",
       "NEW_ROLE_FOR_USER_LABEL": "Nouveau rôle de l'utilisateur",
@@ -258,7 +307,13 @@
       "UPDATE": "Mettre à jour",
       "DELETE": "Supprimer",
       "DOWNLOAD": "Télécharger",
-      "BACK_TO_LIST": "Retour à la liste de clef"
+      "BACK_TO_LIST": "Retour à la liste de clef",
+      "ITERATIONS_LABEL": "itérations",
+      "CONSUMERS_LABEL": "consommateurs",
+      "DESCRIPTION_TITLE": "Description",
+      "DATA_TABLE_TITLE": "Données",
+      "SHOW_MORE": "Voir plus",
+      "SHOW_LESS": "Voir moins"
     },
     "CREATE": {
       "KEY_TITLE": "Création d'une clef de répartition",
@@ -293,7 +348,10 @@
       "EGALITARIAN_LABEL": "Egalitaire",
       "INJECTION_PERCENTAGE_LABEL": "Pourcentage d'injection",
       "SUM_MUST_BE_100_LABEL": "La somme des pourcentages doit être égale à 100 !",
-      "FINALISATION": "Finalisation"
+      "FINALISATION": "Finalisation",
+      "STEP_CONSUMERS_COUNT": "Consommateurs",
+      "STEP_CONSUMER_NAMES": "Noms",
+      "STEP_ITERATIONS": "Itérations"
     },
     "TABLE": {
       "COLUMNS": {
@@ -439,10 +497,15 @@
         "CLOSE_BUTTON_LABEL": "Fermer"
       },
       "INFORMATION_TITLE": "Informations générales",
+      "IDENTIFICATION_TITLE": "Identification",
+      "CONTACT_TITLE": "Contact",
       "INVITATIONS": {
         "NO_INVITE_LABEL": "Pas d'invitation",
         "PENDING_LABEL": "En attente",
-        "ACCEPTED_LABEL": "Acceptée"
+        "ACCEPTED_LABEL": "Acceptée",
+        "INVITE_BUTTON_LABEL": "Inviter",
+        "CANCEL_BUTTON_LABEL": "Annuler",
+        "DELETE_BUTTON_LABEL": "Supprimer"
       },
       "MEMBER_GUARDIANSHIP_TITLE": "Tuteur",
       "MANAGER_TITLE": "Gestionnaire",
@@ -739,6 +802,10 @@
       }
     },
     "ADD": {
+      "STEP_IDENTITY": "Identification du compteur",
+      "STEP_CONFIGURATION": "Configuration",
+      "NEXT_STEP_BUTTON": "Suivant",
+      "BACK_STEP_BUTTON": "Retour",
       "INFORMATION_HEADER": "Informations du compteur",
       "ENERGY_CHARACTERISTIC_HEADER": "Caractéristiques énergétiques",
       "FINANCIAL_CHARACTERISTIC_HEADER": "Caractéristiques financières",
@@ -815,6 +882,7 @@
       "NO_OWNER_FOUND_LABEL": "Aucun titulaire attribué"
     },
     "FULL": {
+      "BACK_TO_LIST": "Retour à la liste",
       "MODIFY_BUTTON_LABEL": "Modifier",
       "METER_INFORMATION_TITLE": "Information compteur",
       "TABS": {
@@ -923,6 +991,7 @@
   },
 
   "SHARING_OPERATION": {
+    "BACK_TO_LIST": "Retour aux opérations de partage",
     "TYPE": {
       "INSIDE_BUILDING": "Au sein d'un batiment",
       "CER": "CER",
@@ -977,6 +1046,7 @@
     },
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Opération de partage",
+      "GENERAL_INFO_TITLE": "Informations générales",
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporter sous format excel (CWAPE)",
       "NAME_LABEL": "Nom",
       "TYPE_LABEL": "Type",
@@ -1045,6 +1115,8 @@
         "SELECTED_FILE_LABEL": "Fichier sélectionné",
         "UPLOAD_BUTTON_LABEL": "Téléverser",
         "UPLOAD_SUCCESS_LABEL": "Le fichier a bien été reçu",
+        "UPLOAD_TITLE": "Importer des données de consommation",
+        "SELECT_DATES_HINT": "Sélectionnez une plage de dates et cliquez sur Rechercher pour visualiser les données",
         "CONSUMPTION_FILE_PREFIX": "consommation_"
       },
       "CHART": {
@@ -1076,7 +1148,8 @@
       "NO_SHARING_OPERATION_FOUND_LABEL": "Aucune opération de partage trouvée",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} opérations de partages)",
       "ADD_SHARING_OP_HEADER": "Ajout d'une opération de partage",
-      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès"
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès",
+      "SELECT_A_TYPE_PLACEHOLDER": "Sélectionner un type"
     },
     "SELECT_METER_NEW_KEY": {
       "NOW": "Maintenant",

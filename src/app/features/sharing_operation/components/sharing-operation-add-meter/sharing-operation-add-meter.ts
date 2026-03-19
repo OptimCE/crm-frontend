@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -50,37 +51,45 @@ export class SharingOperationAddMeter implements OnInit {
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
-  id: number;
-  metersPartialList: PartialMeterDTO[] = [];
-  addressFilter = {
+  private destroyRef = inject(DestroyRef);
+
+  readonly id = (this.config.data as SharingOperationAddMeterDialogData).id;
+  readonly metersPartialList = signal<PartialMeterDTO[]>([]);
+  readonly addressFilter = signal({
     streetName: '',
     postcode: '',
     cityName: '',
-  };
-  paginationMetersInfo: Pagination = new Pagination(1, 10, 0, 1);
-  statutCategory: { value: MeterDataStatus; label: string }[] = [];
-  selectedMeters?: PartialMeterDTO[];
-  minDate: Date = new Date();
-  dateSelected: Date | null = null;
-  currentPageReportTemplate: string = '';
+  });
+  readonly paginationMetersInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
+  readonly statutCategory = signal<{ value: MeterDataStatus; label: string }[]>([]);
+  readonly selectedMeters = signal<PartialMeterDTO[]>([]);
+  readonly minDate = signal<Date>(new Date());
+  readonly dateSelected = signal<Date | null>(null);
+  readonly currentPageReportTemplate = signal<string>('');
 
-  constructor() {
-    const data = this.config.data as SharingOperationAddMeterDialogData;
-    this.id = data.id;
-  }
+  readonly firstRow = computed(
+    () => (this.paginationMetersInfo().page - 1) * this.paginationMetersInfo().limit,
+  );
+  readonly showPaginator = computed(() => this.paginationMetersInfo().total_pages > 1);
 
   ngOnInit(): void {
     this.setupStatusCategory();
   }
+
+  updateAddressFilter(field: 'streetName' | 'postcode' | 'cityName', value: string): void {
+    this.addressFilter.update((current) => ({ ...current, [field]: value }));
+  }
+
   updatePaginationTranslation(): void {
     this.translate
       .get('SHARING_OPERATION.ADD_METER.PAGE_REPORT_TEMPLATE_METER_LABEL', {
-        page: this.paginationMetersInfo.page,
-        total_pages: this.paginationMetersInfo.total_pages,
-        total: this.paginationMetersInfo.total,
+        page: this.paginationMetersInfo().page,
+        total_pages: this.paginationMetersInfo().total_pages,
+        total: this.paginationMetersInfo().total,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translatedText: string) => {
-        this.currentPageReportTemplate = translatedText;
+        this.currentPageReportTemplate.set(translatedText);
       });
   }
 
@@ -92,8 +101,9 @@ export class SharingOperationAddMeter implements OnInit {
         'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL',
         'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.statutCategory = [
+        this.statutCategory.set([
           {
             value: MeterDataStatus.ACTIVE,
             label: translation['SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL'],
@@ -116,7 +126,7 @@ export class SharingOperationAddMeter implements OnInit {
                 'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
               ],
           },
-        ];
+        ]);
       });
   }
 
@@ -129,23 +139,16 @@ export class SharingOperationAddMeter implements OnInit {
       limit: 10,
       not_sharing_operation_id: this.id,
     };
-    // Check for address
-    if (
-      !(
-        this.addressFilter.streetName === '' &&
-        this.addressFilter.postcode === '' &&
-        this.addressFilter.cityName === ''
-      )
-    ) {
-      // Il y a un filtre d'adresse
-      if (this.addressFilter.streetName !== '') {
-        params.street = this.addressFilter.streetName;
+    const addr = this.addressFilter();
+    if (!(addr.streetName === '' && addr.postcode === '' && addr.cityName === '')) {
+      if (addr.streetName !== '') {
+        params.street = addr.streetName;
       }
-      if (this.addressFilter.postcode !== '') {
-        params.postcode = parseInt(this.addressFilter.postcode);
+      if (addr.postcode !== '') {
+        params.postcode = parseInt(addr.postcode);
       }
-      if (this.addressFilter.cityName !== '') {
-        params.city = this.addressFilter.cityName;
+      if (addr.cityName !== '') {
+        params.city = addr.cityName;
       }
     }
     if (filter) {
@@ -167,20 +170,23 @@ export class SharingOperationAddMeter implements OnInit {
         }
       });
     }
-    this.metersService.getMetersList({ ...params }).subscribe({
-      next: (response) => {
-        if (response) {
-          this.metersPartialList = response.data as PartialMeterDTO[];
-          this.paginationMetersInfo = response.pagination;
-          this.updatePaginationTranslation();
-        } else {
+    this.metersService
+      .getMetersList({ ...params })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.metersPartialList.set(response.data as PartialMeterDTO[]);
+            this.paginationMetersInfo.set(response.pagination);
+            this.updatePaginationTranslation();
+          } else {
+            console.error('Error fetching meters partial list');
+          }
+        },
+        error: (_error) => {
           console.error('Error fetching meters partial list');
-        }
-      },
-      error: (_error) => {
-        console.error('Error fetching meters partial list');
-      },
-    });
+        },
+      });
   }
 
   lazyLoadMeters($event: TableLazyLoadEvent): void {
@@ -193,11 +199,11 @@ export class SharingOperationAddMeter implements OnInit {
 
   clear(table: Table<PartialMeterDTO>): void {
     table.clear();
-    this.addressFilter = {
+    this.addressFilter.set({
       streetName: '',
       postcode: '',
       cityName: '',
-    };
+    });
   }
 
   pageChange($event: TablePageEvent): void {
@@ -206,29 +212,27 @@ export class SharingOperationAddMeter implements OnInit {
   }
 
   onValidate(): void {
-    if (
-      this.dateSelected === null ||
-      this.dateSelected === undefined ||
-      this.selectedMeters === null ||
-      this.selectedMeters === undefined ||
-      this.selectedMeters.length === 0
-    ) {
+    const date = this.dateSelected();
+    if (date === null || this.selectedMeters().length === 0) {
       return;
     }
     const metersToAdd: AddMeterToSharingOperationDTO = {
-      date: this.dateSelected,
-      ean_list: this.selectedMeters.map((meter) => meter.EAN),
+      date: date,
+      ean_list: this.selectedMeters().map((meter) => meter.EAN),
       id_sharing: this.id,
     };
 
-    this.sharingOperationService.addMeterToSharing(metersToAdd).subscribe((response) => {
-      if (response) {
-        this.ref.close(true);
-      } else {
-        console.error('Error adding meters to sharing operation');
-        this.ref.close(false);
-      }
-    });
+    this.sharingOperationService
+      .addMeterToSharing(metersToAdd)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response) {
+          this.ref.close(true);
+        } else {
+          console.error('Error adding meters to sharing operation');
+          this.ref.close(false);
+        }
+      });
   }
 
   protected readonly MeterStatus = MeterDataStatus;

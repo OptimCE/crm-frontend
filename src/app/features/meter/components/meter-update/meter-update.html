@@ -1,178 +1,224 @@
-<div class="container">
+<div class="px-4 py-2">
   <form [formGroup]="metersForm" (ngSubmit)="onSubmit()">
-    <div class="flex flex-wrap -mx-2 pb-1">
-      <div class="flex items-center space-x-2">
-        <i class="pi pi-home text-lg!"></i>
-        <h4 class="text-base font-semibold">{{ 'COMMON.ADDRESS' | translate }}</h4>
-      </div>
-    </div>
-    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
-      <!--Address -->
-      <div class="flex flex-col flex-1">
-        <label for="address_street" class="text-base"
-          >{{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *</label
-        >
-        <p-input-group>
-          <input
-            pInputText
-            formControlName="address_street"
-            id="address_street"
-            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
-          />
-        </p-input-group>
+    <!-- Section: Address -->
+    <h3 class="text-sm font-semibold text-surface-700 mb-3">
+      {{ 'COMMON.ADDRESS' | translate }}
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
+      <div class="md:col-span-2 flex flex-col">
+        <label for="address_street" class="field-label">
+          {{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *
+        </label>
+        <input
+          pInputText
+          formControlName="address_street"
+          id="address_street"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
+          class="w-full"
+        />
         <app-error-handler controlName="address_street" />
       </div>
-      <div class="flex flex-col flex-1">
-        <label for="address_number" class="text-base"
-          >{{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *</label
-        >
-        <p-input-group>
-          <input
-            pInputText
-            formControlName="address_number"
-            id="address_number"
-            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
-          />
-        </p-input-group>
+      <div class="flex flex-col">
+        <label for="address_number" class="field-label">
+          {{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *
+        </label>
+        <input
+          pInputText
+          formControlName="address_number"
+          id="address_number"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+        />
         <app-error-handler controlName="address_number" />
       </div>
-
-      <div class="flex flex-col flex-1">
-        <label for="address_supplement" class="text-base">{{
-          'METER.ADDRESS.BOX_LABEL' | translate
-        }}</label>
-        <p-input-group>
-          <input
-            pInputText
-            formControlName="address_supplement"
-            id="address_supplement"
-            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
-          />
-        </p-input-group>
+      <div class="flex flex-col">
+        <label for="address_supplement" class="field-label">
+          {{ 'METER.ADDRESS.BOX_LABEL' | translate }}
+        </label>
+        <input
+          pInputText
+          formControlName="address_supplement"
+          id="address_supplement"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+        />
         <app-error-handler controlName="address_supplement" />
       </div>
-    </div>
-    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
       <div class="flex flex-col">
-        <label for="address_postcode" class="text-base"
-          >{{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *</label
-        >
-        <p-input-group>
-          <input
-            pInputText
-            formControlName="address_postcode"
-            id="address_postcode"
-            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
-          />
-        </p-input-group>
+        <label for="address_postcode" class="field-label">
+          {{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *
+        </label>
+        <input
+          pInputText
+          formControlName="address_postcode"
+          id="address_postcode"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+        />
         <app-error-handler controlName="address_postcode" />
       </div>
-      <div class="flex flex-col flex-1">
-        <label for="address_city" class="text-base"
-          >{{ 'METER.ADDRESS.CITY_LABEL' | translate }} *</label
-        >
-        <p-input-group>
-          <input
-            pInputText
-            formControlName="address_city"
-            id="address_city"
-            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
-          />
-        </p-input-group>
+      <div class="md:col-span-2 flex flex-col">
+        <label for="address_city" class="field-label">
+          {{ 'METER.ADDRESS.CITY_LABEL' | translate }} *
+        </label>
+        <input
+          pInputText
+          formControlName="address_city"
+          id="address_city"
+          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+          class="w-full"
+        />
         <app-error-handler controlName="address_city" />
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
-      <div class="flex items-center space-x-2">
-        <i class="pi pi-info-circle text-lg!"></i>
-        <h4 class="text-base font-semibold">
-          {{ 'METER.UPDATE.METER_INFORMATION_TITLE' | translate }}
-        </h4>
-      </div>
-    </div>
-    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
-      <!--EAN number group -->
-      <div class="flex flex-col flex-1">
-        <label for="EAN" class="text-base">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</label>
-        <p-input-group>
+
+    <!-- Section: Meter Information -->
+    <div class="border-t border-surface-200 mt-5 pt-4">
+      <h3 class="text-sm font-semibold text-surface-700 mb-3">
+        {{ 'METER.UPDATE.METER_INFORMATION_TITLE' | translate }}
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3">
+        <div class="flex flex-col">
+          <label for="EAN" class="field-label">
+            {{ 'METER.INFORMATIONS.EAN_LABEL' | translate }} *
+          </label>
           <input
             pInputText
             formControlName="EAN"
             id="EAN"
             placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.EAN_LABEL' | translate }}"
           />
-        </p-input-group>
-        <app-error-handler controlName="EAN" />
-      </div>
-      <div class="flex flex-col flex-1">
-        <label for="meterNumber" class="text-base">{{
-          'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
-        }}</label>
-        <p-input-group>
+          <app-error-handler controlName="EAN" />
+        </div>
+        <div class="flex flex-col">
+          <label for="meterNumber" class="field-label">
+            {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }} *
+          </label>
           <input
             pInputText
             formControlName="meterNumber"
             id="meterNumber"
             placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.METER_NUMBER_LABEL' | translate }}"
           />
-        </p-input-group>
-        <app-error-handler controlName="meterNumber" />
+          <app-error-handler controlName="meterNumber" />
+        </div>
       </div>
-    </div>
-    <div class="flex flex-wrap -mx-2 pb-3 space-x-2">
-      <div class="flex flex-col flex-1">
-        <span class="text-base">{{ 'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate }}</span>
-        @for (phase of phaseCategory; track $index) {
-          <div>
-            <p-radioButton
-              [inputId]="'phase_' + phase.id"
-              [value]="phase"
-              formControlName="phasesNumber"
-            />
-            <label [for]="'phase_' + phase.id" class="text-small">
-              {{ phase.name }}
-            </label>
-          </div>
-        }
 
-        <app-error-handler controlName="phasesNumber" />
-      </div>
-      <div class="flex flex-col flex-1">
-        <span class="text-base">{{
-          'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate
-        }}</span>
-        @for (readingFreq of readingFrequencyCategory; track $index) {
-          <div>
-            <p-radioButton
-              [inputId]="'readingFreq_' + readingFreq.id"
-              [value]="readingFreq"
-              formControlName="readingFrequency"
-            />
-            <label [for]="'readingFreq_' + readingFreq.id" class="text-small">
-              {{ readingFreq.name }}
-            </label>
+      <!-- Card radio groups -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+        <!-- Phases -->
+        <div>
+          <span class="field-label mb-2 block">
+            {{ 'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate }} *
+          </span>
+          <div class="flex flex-col gap-2">
+            @for (phase of phaseCategory(); track phase.id) {
+              <div
+                role="button"
+                tabindex="0"
+                class="border rounded-lg p-3 cursor-pointer transition-all duration-200 hover:shadow-sm"
+                [class.border-primary-500]="metersForm.get('phasesNumber')?.value?.id === phase.id"
+                [class.bg-primary-50]="metersForm.get('phasesNumber')?.value?.id === phase.id"
+                [class.border-surface-200]="metersForm.get('phasesNumber')?.value?.id !== phase.id"
+                (click)="metersForm.get('phasesNumber')?.setValue(phase)"
+              >
+                <div class="flex items-center gap-3">
+                  <p-radioButton
+                    [inputId]="'phase_' + phase.id"
+                    [value]="phase"
+                    formControlName="phasesNumber"
+                  />
+                  <label [for]="'phase_' + phase.id" class="font-medium text-sm cursor-pointer">
+                    {{ phase.name }}
+                  </label>
+                </div>
+              </div>
+            }
           </div>
-        }
-        <app-error-handler controlName="readingFrequency" />
-      </div>
-      <div class="flex flex-col flex-1">
-        <span class="text-base">{{ 'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate }}</span>
-        @for (tarifGroup of tarifGroupCategory; track $index) {
-          <div>
-            <p-radioButton
-              [inputId]="'tarifGroup_' + tarifGroup.id"
-              [value]="tarifGroup"
-              formControlName="tarifGroup"
-            />
-            <label [for]="'tarifGroup_' + tarifGroup.id" class="text-small">
-              {{ tarifGroup.name }}
-            </label>
+          <app-error-handler controlName="phasesNumber" />
+        </div>
+
+        <!-- Reading Frequency -->
+        <div>
+          <span class="field-label mb-2 block">
+            {{ 'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate }} *
+          </span>
+          <div class="flex flex-col gap-2">
+            @for (readingFreq of readingFrequencyCategory(); track readingFreq.id) {
+              <div
+                role="button"
+                tabindex="0"
+                class="border rounded-lg p-3 cursor-pointer transition-all duration-200 hover:shadow-sm"
+                [class.border-primary-500]="
+                  metersForm.get('readingFrequency')?.value?.id === readingFreq.id
+                "
+                [class.bg-primary-50]="
+                  metersForm.get('readingFrequency')?.value?.id === readingFreq.id
+                "
+                [class.border-surface-200]="
+                  metersForm.get('readingFrequency')?.value?.id !== readingFreq.id
+                "
+                (click)="metersForm.get('readingFrequency')?.setValue(readingFreq)"
+              >
+                <div class="flex items-center gap-3">
+                  <p-radioButton
+                    [inputId]="'readingFreq_' + readingFreq.id"
+                    [value]="readingFreq"
+                    formControlName="readingFrequency"
+                  />
+                  <label
+                    [for]="'readingFreq_' + readingFreq.id"
+                    class="font-medium text-sm cursor-pointer"
+                  >
+                    {{ readingFreq.name }}
+                  </label>
+                </div>
+              </div>
+            }
           </div>
-        }
-        <app-error-handler controlName="tarifGroup" />
+          <app-error-handler controlName="readingFrequency" />
+        </div>
+
+        <!-- Tarif Group -->
+        <div>
+          <span class="field-label mb-2 block">
+            {{ 'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate }} *
+          </span>
+          <div class="flex flex-col gap-2">
+            @for (tarifGroup of tarifGroupCategory(); track tarifGroup.id) {
+              <div
+                role="button"
+                tabindex="0"
+                class="border rounded-lg p-3 cursor-pointer transition-all duration-200 hover:shadow-sm"
+                [class.border-primary-500]="
+                  metersForm.get('tarifGroup')?.value?.id === tarifGroup.id
+                "
+                [class.bg-primary-50]="metersForm.get('tarifGroup')?.value?.id === tarifGroup.id"
+                [class.border-surface-200]="
+                  metersForm.get('tarifGroup')?.value?.id !== tarifGroup.id
+                "
+                (click)="metersForm.get('tarifGroup')?.setValue(tarifGroup)"
+              >
+                <div class="flex items-center gap-3">
+                  <p-radioButton
+                    [inputId]="'tarifGroup_' + tarifGroup.id"
+                    [value]="tarifGroup"
+                    formControlName="tarifGroup"
+                  />
+                  <label
+                    [for]="'tarifGroup_' + tarifGroup.id"
+                    class="font-medium text-sm cursor-pointer"
+                  >
+                    {{ tarifGroup.name }}
+                  </label>
+                </div>
+              </div>
+            }
+          </div>
+          <app-error-handler controlName="tarifGroup" />
+        </div>
       </div>
     </div>
-    <div class="flex flex-wrap -mx-2 pb-3 text-center">
+
+    <!-- Footer: Error summary + Submit -->
+    <div class="border-t border-surface-200 mt-5 pt-4">
       <app-summary-error
         [controlLabels]="{
           address_street: 'METER.UPDATE.FORM_ERROR.ADDRESS_STREET',
@@ -187,11 +233,13 @@
           tarifGroup: 'METER.UPDATE.FORM_ERROR.TARIFGROUP',
         }"
       ></app-summary-error>
-      <p-button
-        icon="pi pi-check"
-        label="{{ 'METER.UPDATE.VALIDATE_BUTTON_LABEL' | translate }}"
-        type="submit"
-      ></p-button>
+      <div class="flex justify-end mt-4">
+        <p-button
+          icon="pi pi-check"
+          label="{{ 'METER.UPDATE.VALIDATE_BUTTON_LABEL' | translate }}"
+          type="submit"
+        ></p-button>
+      </div>
     </div>
   </form>
 </div>

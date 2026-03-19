@@ -1,9 +1,17 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
-  <h4>{{ 'COMMUNITY.CREATE.NAME' | translate }}</h4>
-  <input
-    pInputText
-    placeholder="{{ 'COMMUNITY.CREATE.NAME_PLACEHOLDER' | translate }}"
-    formControlName="new_name"
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+  <div>
+    <span class="field-label">{{ 'COMMUNITY.CREATE.NAME' | translate }}</span>
+    <input
+      pInputText
+      placeholder="{{ 'COMMUNITY.CREATE.NAME_PLACEHOLDER' | translate }}"
+      formControlName="new_name"
+      class="w-full"
+    />
+  </div>
+  <p-button
+    label="{{ 'COMMUNITY.CREATE.VALIDATE' | translate }}"
+    type="submit"
+    severity="primary"
+    class="w-full"
   />
-  <p-button label="{{ 'COMMUNITY.CREATE.VALIDATE' | translate }}" type="submit"></p-button>
 </form>

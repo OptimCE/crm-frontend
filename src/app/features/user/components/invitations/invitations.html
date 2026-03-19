@@ -1,14 +1,30 @@
 <div class="container mx-auto my-auto">
-  <div class="w-6/12 flex items-center space-x-2">
-    <span class="pi pi-envelope text-2xl! text-green-500!"></span>
-    <h2 class="text-xl! font-medium">{{ 'INVITATION.TITLE' | translate }}</h2>
+  <!-- Hero Header -->
+  <div
+    class="invitations-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4"
+  >
+    <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-100">
+      <i class="pi pi-envelope text-primary-700 text-2xl"></i>
+    </div>
+    <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+      <h1 class="text-xl md:text-2xl font-semibold text-surface-900">
+        {{ 'INVITATION.TITLE' | translate }}
+      </h1>
+      <p class="text-sm text-surface-500 m-0">
+        {{ 'INVITATION.SUBTITLE' | translate }}
+      </p>
+    </div>
   </div>
+
+  <!-- Tabs -->
   <p-tabs value="0">
     <p-tablist>
       <p-tab value="0">
+        <i class="pi pi-users mr-2"></i>
         {{ 'INVITATION.MEMBER.TITLE' | translate }}
       </p-tab>
       <p-tab value="1">
+        <i class="pi pi-briefcase mr-2"></i>
         {{ 'INVITATION.MANAGER.TITLE' | translate }}
       </p-tab>
     </p-tablist>

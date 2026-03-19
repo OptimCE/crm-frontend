@@ -1,22 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Links } from '../dtos';
-import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Tooltip } from 'primeng/tooltip';
+
 @Component({
   selector: 'li[appSidebarMultiItems]',
-  imports: [RouterLink, NgClass, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, Tooltip],
   templateUrl: './sidebar-multi-elements.html',
   styleUrl: './sidebar-multi-elements.css',
 })
 export class SidebarMultiElements {
-  @Input() name!: string;
-  @Input() icon!: string;
-  @Input() sidebarOpen!: boolean;
-  @Input() isRouteActive!: boolean;
-  @Input() links!: Links[];
-  @Input() activeSublist!: boolean;
-  @Output() sidebarClose = new EventEmitter<void>();
+  readonly name = input.required<string>();
+  readonly icon = input.required<string>();
+  readonly sidebarOpen = input.required<boolean>();
+  readonly isRouteActive = input.required<boolean>();
+  readonly links = input.required<Links[]>();
+  readonly activeSublist = input.required<boolean>();
+  readonly sidebarClose = output<void>();
 
   closeSideBar(): void {
     this.sidebarClose.emit();

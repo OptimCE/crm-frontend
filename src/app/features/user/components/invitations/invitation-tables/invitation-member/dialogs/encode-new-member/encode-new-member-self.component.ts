@@ -1,11 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
 import { TranslatePipe } from '@ngx-translate/core';
-import { NewMemberAddressSelfEncoding } from './steps/new-member-address/new-member-address-self-encoding.component';
-import { NewMemberBankingInfoSelfEncoding } from './steps/new-member-banking-info/new-member-banking-info-self-encoding.component';
-import { NewMemberInformationsSelfEncoding } from './steps/new-member-informations/new-member-informations-self-encoding.component';
-import { NewMemberTypeSelfEncoding } from './steps/new-member-type/new-member-type-self-encoding.component';
+import { NewMemberAddress } from '../../../../../../../member/components/member-creation-update/steps/new-member-address/new-member-address';
+import { NewMemberBankingInfo } from '../../../../../../../member/components/member-creation-update/steps/new-member-banking-info/new-member-banking-info';
+import { NewMemberInformations } from '../../../../../../../member/components/member-creation-update/steps/new-member-informations/new-member-informations';
+import { NewMemberType } from '../../../../../../../member/components/member-creation-update/steps/new-member-type/new-member-type';
 import { ErrorMessageHandler } from '../../../../../../../../shared/services-ui/error.message.handler';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -16,6 +16,7 @@ import { AddressDTO } from '../../../../../../../../shared/dtos/address.dtos';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { InvitationService } from '../../../../../../../../shared/services/invitation.service';
+import { MeService } from '../../../../../../../../shared/services/me.service';
 
 interface EncodeNewMemberDialogData {
   invitationID: number;
@@ -53,10 +54,10 @@ interface EncodeMemberAddressFormValue {
 @Component({
   selector: 'app-encode-new-member',
   imports: [
-    NewMemberAddressSelfEncoding,
-    NewMemberBankingInfoSelfEncoding,
-    NewMemberInformationsSelfEncoding,
-    NewMemberTypeSelfEncoding,
+    NewMemberAddress,
+    NewMemberBankingInfo,
+    NewMemberInformations,
+    NewMemberType,
     Step,
     StepList,
     StepPanel,
@@ -68,17 +69,18 @@ interface EncodeMemberAddressFormValue {
   styleUrl: './encode-new-member-self.component.css',
   providers: [ErrorMessageHandler],
 })
-export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
+export class EncodeNewMemberSelfComponent implements OnInit {
   private invitationService = inject(InvitationService);
+  private meService = inject(MeService);
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
-  private cdr = inject(ChangeDetectorRef);
-  typeClient: MemberType | -1 = -1;
+  private destroyRef = inject(DestroyRef);
+  readonly typeClient = signal<MemberType | -1>(-1);
   formData!: FormGroup;
   addressForm!: FormGroup;
   ibanForm!: FormGroup;
-  gestionnaire: boolean = false;
+  readonly gestionnaire = signal<boolean>(false);
   invitationID!: number;
 
   ngOnInit(): void {
@@ -107,13 +109,8 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
     this.formData = new FormGroup({});
   }
 
-  ngAfterViewInit(): void {
-    this.cdr.markForCheck(); // Force change detection once content is rendered
-  }
-
   buildFormGroup(): void {
-    console.log('BUILD FORM GROUP');
-    if (this.typeClient === MemberType.INDIVIDUAL) {
+    if (this.typeClient() === MemberType.INDIVIDUAL) {
       this.formData = new FormGroup({
         id: new FormControl('', [
           Validators.required,
@@ -125,45 +122,25 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
         phone: new FormControl('', [Validators.required]),
         socialRate: new FormControl(false, [Validators.required]),
       });
-    } else if (this.typeClient === MemberType.COMPANY) {
+    } else if (this.typeClient() === MemberType.COMPANY) {
       this.formData = new FormGroup({
         id: new FormControl('', [Validators.required]),
         name: new FormControl('', [Validators.required]),
         vatNumber: new FormControl('', [Validators.required]),
       });
     }
-    this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
-    // this.formData = new FormGroup({
-    //   id: new FormControl('', [Validators.required]),
-    //   name: new FormControl('', [Validators.required]),
-    // });
-    // if (this.typeClient === MemberType.INDIVIDUAL) {
-    //   // this.formData.controls['id'].addValidators([
-    //   //   numRegistreBeValidator
-    //   // ]);
-    //   // Build form group for individuals
-    //   this.formData.addControl('surname', new FormControl('', [Validators.required]));
-    //   this.formData.addControl(
-    //     'email',
-    //     new FormControl('', [Validators.required, Validators.email]),
-    //   );
-    //   this.formData.addControl('phone', new FormControl('', [Validators.required]));
-    //   this.formData.addControl('socialRate', new FormControl(false, [Validators.required]));
-    // } else if (this.typeClient === MemberType.COMPANY) {
-    //   this.formData.addControl('vatNumber', new FormControl('', [Validators.required]));
-    // }
-    // this.updateGestionnaire(this.typeClient === MemberType.COMPANY);
+    this.updateGestionnaire(this.typeClient() === MemberType.COMPANY);
   }
 
   onTypeClientChange(type: MemberType | -1): void {
-    this.typeClient = type;
+    this.typeClient.set(type);
     if (type !== -1) {
       this.buildFormGroup();
     }
   }
 
   submitForm1(activateCallback: (step: number) => void): void {
-    if (this.typeClient !== -1) {
+    if (this.typeClient() !== -1) {
       activateCallback(1);
     }
   }
@@ -219,7 +196,7 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
     }
     const status = 1;
     let manager: CreateManagerDTO | undefined = undefined;
-    if (this.gestionnaire) {
+    if (this.gestionnaire()) {
       manager = {
         NRN: formDataValue.NRN_manager ?? '',
         name: formDataValue.name_manager ?? '',
@@ -232,7 +209,8 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
     const socialRate = Array.isArray(formDataValue.socialRate)
       ? formDataValue.socialRate.length > 0
       : !!formDataValue.socialRate;
-    if (this.typeClient === -1) {
+    const typeClient = this.typeClient();
+    if (typeClient === -1) {
       return;
     }
     const memberToAdd: CreateMemberDTO = {
@@ -242,7 +220,7 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
       first_name: formDataValue.name,
       home_address: homeAddress,
       iban: ibanFormValue.iban,
-      member_type: this.typeClient,
+      member_type: typeClient,
       phone_number: formDataValue.phone ?? '',
       social_rate: socialRate,
       status: status,
@@ -250,14 +228,15 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
       name: formDataValue.surname ?? '',
       manager: manager,
     };
-    if (this.typeClient === MemberType.COMPANY) {
+    if (this.typeClient() === MemberType.COMPANY) {
       // Individuals
       if (manager === undefined) {
         return;
       }
     }
-    this.invitationService
+    this.meService
       .acceptInvitationMemberEncoded({ invitation_id: this.invitationID, member: memberToAdd })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           if (response) {
@@ -273,8 +252,8 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
   }
 
   updateGestionnaire(value: boolean): void {
-    this.gestionnaire = value;
-    if (this.gestionnaire) {
+    this.gestionnaire.set(value);
+    if (this.gestionnaire()) {
       this.formData.addControl(
         'NRN_manager',
         new FormControl('', [Validators.required, numRegistreBeValidator]),
@@ -303,8 +282,7 @@ export class EncodeNewMemberSelfComponent implements OnInit, AfterViewInit {
     this.updateGestionnaire(value);
   }
 
-  toggleSameAddress(event: CheckboxChangeEvent): void {
-    console.log('THIS EVENT : ', event);
+  toggleSameAddress(_event: CheckboxChangeEvent): void {
     const addressFormValue = this.addressForm.getRawValue() as EncodeMemberAddressFormValue;
     const isSameAddress = Array.isArray(addressFormValue.same_address)
       ? addressFormValue.same_address[0]

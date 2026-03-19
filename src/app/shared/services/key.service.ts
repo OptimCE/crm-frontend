@@ -23,30 +23,16 @@ export class KeyService extends ServiceBase {
     this.apiAddress = environments.apiUrl + '/keys';
   }
 
-  // private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
-  //   const params: Record<string, string | number | boolean> = {};
-  //   for (const [key, value] of Object.entries(obj)) {
-  //     if (value !== undefined && value !== null) {
-  //       params[key] = value as string | number | boolean;
-  //     }
-  //   }
-  //   return params;
-  // }
-
   getKeysList(query: KeyPartialQuery): Observable<ApiResponsePaginated<KeyPartialDTO[] | string>> {
     return this.cachedGet<ApiResponsePaginated<KeyPartialDTO[] | string>>(
       `keys-list:${JSON.stringify(query)}`,
       this.apiAddress + '/',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<KeyPartialDTO[] | string>>(this.apiAddress + '/', {
-    //   params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    // });
   }
 
   getKey(id: number): Observable<ApiResponse<KeyDTO | string>> {
     return this.cachedGet<ApiResponse<KeyDTO | string>>(`keys:${id}`, this.apiAddress + `/${id}`);
-    // return this.http.get<ApiResponse<KeyDTO | string>>(this.apiAddress + '/' + id);
   }
 
   downloadKey(id: number): Observable<{ blob: Blob; filename: string }> {

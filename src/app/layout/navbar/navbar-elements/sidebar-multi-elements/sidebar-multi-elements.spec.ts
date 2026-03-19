@@ -13,6 +13,12 @@ describe('SidebarMultiElements', () => {
 
     fixture = TestBed.createComponent(SidebarMultiElements);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('name', 'Test');
+    fixture.componentRef.setInput('icon', 'pi pi-home');
+    fixture.componentRef.setInput('sidebarOpen', false);
+    fixture.componentRef.setInput('isRouteActive', false);
+    fixture.componentRef.setInput('links', []);
+    fixture.componentRef.setInput('activeSublist', false);
     fixture.detectChanges();
   });
 

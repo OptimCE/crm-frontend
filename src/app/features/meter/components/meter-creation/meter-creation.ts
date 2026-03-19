@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import {
   AbstractControl,
@@ -27,10 +28,8 @@ import {
 } from '../../../../shared/types/meter.types';
 import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
-import { Panel } from 'primeng/panel';
 import { InputText } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
-import { InputGroup } from 'primeng/inputgroup';
 import { RadioButton } from 'primeng/radiobutton';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
@@ -38,10 +37,17 @@ import { DatePicker } from 'primeng/datepicker';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { Button } from 'primeng/button';
 import { ApiResponse } from '../../../../core/dtos/api.response';
+import { Stepper } from 'primeng/stepper';
+import { StepList } from 'primeng/stepper';
+import { Step } from 'primeng/stepper';
+import { StepPanel } from 'primeng/stepper';
+import { StepPanels } from 'primeng/stepper';
+
 interface ListRadio {
   id: number;
   name: string;
 }
+
 interface MeterFormValue {
   address_street: string;
   address_number: string;
@@ -70,11 +76,9 @@ interface MeterFormValue {
   selector: 'app-meter-creation',
   standalone: true,
   imports: [
-    Panel,
     TranslatePipe,
     InputText,
     ErrorHandlerComponent,
-    InputGroup,
     RadioButton,
     FormsModule,
     Textarea,
@@ -83,6 +87,11 @@ interface MeterFormValue {
     FormErrorSummaryComponent,
     Button,
     ReactiveFormsModule,
+    Stepper,
+    StepList,
+    Step,
+    StepPanel,
+    StepPanels,
   ],
   templateUrl: './meter-creation.html',
   styleUrl: './meter-creation.css',
@@ -94,18 +103,22 @@ export class MeterCreation implements OnInit {
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
+  private destroyRef = inject(DestroyRef);
+
   errorsSummaryAdded: ErrorSummaryAdded = {};
   errorMemberAdd: ErrorAdded = {};
   metersForm!: FormGroup;
-  productionChainCategory: ListRadio[] = [];
-  rateCategory: ListRadio[] = [];
-  clientCategory: ListRadio[] = [];
-  injectionStatusCategory: ListRadio[] = [];
+
+  readonly productionChainCategory = signal<ListRadio[]>([]);
+  readonly rateCategory = signal<ListRadio[]>([]);
+  readonly clientCategory = signal<ListRadio[]>([]);
+  readonly injectionStatusCategory = signal<ListRadio[]>([]);
+  readonly tarifGroupCategory = signal<ListRadio[]>([]);
+  readonly phaseCategory = signal<ListRadio[]>([]);
+  readonly readingFrequencyCategory = signal<ListRadio[]>([]);
+  readonly membersList = signal<MembersPartialDTO[]>([]);
+
   minDate = new Date();
-  membersList!: MembersPartialDTO[];
-  tarifGroupCategory: ListRadio[] = [];
-  phaseCategory: ListRadio[] = [];
-  readingFrequencyCategory: ListRadio[] = [];
   holder_id?: number;
   grdAvailable: ListRadio[] = [
     { id: 1, name: 'RESA' },
@@ -130,10 +143,7 @@ export class MeterCreation implements OnInit {
       address_postcode: new FormControl('', [Validators.required]),
       address_supplement: new FormControl('', []),
       address_city: new FormControl('', [Validators.required]),
-      EAN: new FormControl('', [
-        Validators.required,
-        // eanValidator
-      ]),
+      EAN: new FormControl('', [Validators.required]),
       grd: new FormControl('', [Validators.required]),
       meterNumber: new FormControl('', [Validators.required]),
       tarifGroup: new FormControl('', [Validators.required]),
@@ -144,42 +154,34 @@ export class MeterCreation implements OnInit {
       totalGeneratingCapacity: new FormControl('', [Validators.required]),
       amperage: new FormControl('', [Validators.required]),
       rate: new FormControl('', [Validators.required]),
-      productionChain: new FormControl(
-        this.productionChainCategory[this.productionChainCategory.length - 1],
-        [Validators.required],
-      ),
+      productionChain: new FormControl('', [Validators.required]),
       clientType: new FormControl('', [Validators.required]),
-      member: new FormControl('', [
-        Validators.required,
-        // this.validMemberValidator()
-      ]),
+      member: new FormControl('', [Validators.required]),
       dateStart: new FormControl('', [Validators.required]),
-      injectionStatus: new FormControl(
-        {
-          value: this.injectionStatusCategory[this.injectionStatusCategory.length - 1],
-          disabled: true,
-        },
-        [Validators.required],
-      ),
+      injectionStatus: new FormControl({ value: '', disabled: true }, [Validators.required]),
     });
-    console.log('TEST : ', (this.metersForm.getRawValue() as MeterFormValue).productionChain);
-    this.memberService.getMembersList({ page: 1, limit: 100 }).subscribe({
-      next: (response) => {
-        if (response && response.data) {
-          this.membersList = response.data as MembersPartialDTO[];
-          if (this.holder_id) {
-            this.metersForm.patchValue({
-              member: this.membersList.find((member) => member.id == this.holder_id),
-            });
+
+    this.memberService
+      .getMembersList({ page: 1, limit: 100 })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response && response.data) {
+            this.membersList.set(response.data as MembersPartialDTO[]);
+            if (this.holder_id) {
+              this.metersForm.patchValue({
+                member: this.membersList().find((member) => member.id == this.holder_id),
+              });
+            }
+          } else {
+            this.errorHandler.handleError(response);
           }
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error);
+        },
+      });
+
     this.setupTranslationError();
     this.setupTranslationCategory();
   }
@@ -187,6 +189,7 @@ export class MeterCreation implements OnInit {
   setupTranslationError(): void {
     this.translate
       .get(['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
         this.errorMemberAdd = {
           errorMember: () => translation['METER.ADD.ERRORS.SELECTED_MEMBER_INCORRECT'],
@@ -197,6 +200,7 @@ export class MeterCreation implements OnInit {
         };
       });
   }
+
   setupTranslationCategory(): void {
     this.setupProductionChainCategory();
     this.setupRateCategory();
@@ -219,8 +223,9 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.PRODUCTION_CHAIN.OTHER',
         'METER.CATEGORIES.PRODUCTION_CHAIN.NONE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.productionChainCategory = [
+        this.productionChainCategory.set([
           {
             id: ProductionChain.PHOTOVOLTAIC,
             name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'],
@@ -247,7 +252,7 @@ export class MeterCreation implements OnInit {
             name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.OTHER'],
           },
           { id: ProductionChain.NONE, name: translation['METER.CATEGORIES.PRODUCTION_CHAIN.NONE'] },
-        ];
+        ]);
       });
   }
 
@@ -258,15 +263,16 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.RATE.BI_HOURLY',
         'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.rateCategory = [
+        this.rateCategory.set([
           { id: MeterRate.SIMPLE, name: translation['METER.CATEGORIES.RATE.SIMPLE'] },
           { id: MeterRate.BI_HOURLY, name: translation['METER.CATEGORIES.RATE.BI_HOURLY'] },
           {
             id: MeterRate.EXCLUSIVE_NIGHT,
             name: translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'],
           },
-        ];
+        ]);
       });
   }
 
@@ -277,15 +283,16 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.CLIENT.PROFESSIONAL',
         'METER.CATEGORIES.CLIENT.INDUSTRIAL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.clientCategory = [
+        this.clientCategory.set([
           { id: ClientType.RESIDENTIAL, name: translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'] },
           {
             id: ClientType.PROFESSIONAL,
             name: translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
           },
           { id: ClientType.INDUSTRIAL, name: translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'] },
-        ];
+        ]);
       });
   }
 
@@ -298,8 +305,9 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION',
         'METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.injectionStatusCategory = [
+        this.injectionStatusCategory.set([
           {
             id: InjectionStatus.AUTOPROD_OWNER,
             name: translation['METER.CATEGORIES.INJECTION_STATUS.AUTOPRODUCER_OWNER'],
@@ -317,7 +325,7 @@ export class MeterCreation implements OnInit {
             name: translation['METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE'],
           },
           { id: InjectionStatus.NONE, name: translation['METER.CATEGORIES.INJECTION_STATUS.NONE'] },
-        ];
+        ]);
       });
   }
 
@@ -327,8 +335,9 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
         'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.readingFrequencyCategory = [
+        this.readingFrequencyCategory.set([
           {
             id: ReadingFrequency.MONTHLY,
             name: translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
@@ -337,18 +346,19 @@ export class MeterCreation implements OnInit {
             id: ReadingFrequency.YEARLY,
             name: translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
           },
-        ];
+        ]);
       });
   }
 
   setupPhaseCategory(): void {
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.phaseCategory = [
+        this.phaseCategory.set([
           { id: PhaseCategory.SINGLE, name: translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'] },
           { id: PhaseCategory.THREE, name: translation['METER.CATEGORIES.PHASE.THREE_PHASES'] },
-        ];
+        ]);
       });
   }
 
@@ -358,8 +368,9 @@ export class MeterCreation implements OnInit {
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
         'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.tarifGroupCategory = [
+        this.tarifGroupCategory.set([
           {
             id: TarifGroup.LOW_TENSION,
             name: translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
@@ -368,29 +379,49 @@ export class MeterCreation implements OnInit {
             id: TarifGroup.HIGH_TENSION,
             name: translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
           },
-        ];
+        ]);
       });
   }
 
   validMemberValidator(): ValidatorFn {
     return (control: AbstractControl) => {
       const value = control.value as MembersPartialDTO | null;
-
-      // Allow empty values (handled by required validator)
       if (!value) {
         return null;
       }
-
-      // Check if value is a valid member
       const isValid =
-        typeof value === 'object' && this.membersList.some((member) => member.id === value.id);
+        typeof value === 'object' && this.membersList().some((member) => member.id === value.id);
       return isValid ? null : { invalidMember: true };
     };
   }
 
+  validateStep1(activateCallback: (step: number) => void): void {
+    const step1Controls = [
+      'address_street',
+      'address_number',
+      'address_postcode',
+      'address_city',
+      'EAN',
+      'meterNumber',
+      'tarifGroup',
+      'phasesNumber',
+      'readingFrequency',
+    ];
+    let valid = true;
+    for (const name of step1Controls) {
+      const ctrl = this.metersForm.get(name);
+      if (ctrl) {
+        ctrl.markAsTouched();
+        if (ctrl.invalid) valid = false;
+      }
+    }
+    if (valid) {
+      activateCallback(1);
+    }
+  }
+
   onSubmit(): void {
     if (!this.metersForm.valid) {
-      console.error('Form not valid');
       return;
     }
     const formValue = this.metersForm.getRawValue() as MeterFormValue;
@@ -424,31 +455,35 @@ export class MeterCreation implements OnInit {
       reading_frequency: formValue.readingFrequency.id,
       tarif_group: formValue.tarifGroup.id,
     };
-    this.meterService.addMeter(newMeter).subscribe({
-      next: (response) => {
-        if (response) {
-          this.ref.close(true);
-        } else {
-          this.errorHandler.handleError();
-        }
-      },
-      error: (error: unknown) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData);
-      },
-    });
+    this.meterService
+      .addMeter(newMeter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.ref.close(true);
+          } else {
+            this.errorHandler.handleError();
+          }
+        },
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
+        },
+      });
   }
 
   onChangeProductionChain(): void {
     const formValue = this.metersForm.getRawValue() as MeterFormValue;
-    if (formValue.productionChain.id === (ProductionChain.NONE as number)) {
-      if (
-        formValue.injectionStatus.id !=
-        this.injectionStatusCategory[this.injectionStatusCategory.length - 1].id
-      ) {
-        this.metersForm
-          .get('injectionStatus')
-          ?.setValue(this.injectionStatusCategory[this.injectionStatusCategory.length - 1]);
+    if (
+      formValue.productionChain &&
+      formValue.productionChain.id === (ProductionChain.NONE as number)
+    ) {
+      const noneOption = this.injectionStatusCategory().find(
+        (item) => (item.id as InjectionStatus) === InjectionStatus.NONE,
+      );
+      if (noneOption) {
+        this.metersForm.get('injectionStatus')?.setValue(noneOption);
       }
       this.metersForm.get('injectionStatus')?.disable();
     } else {

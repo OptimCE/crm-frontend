@@ -27,16 +27,6 @@ export class MemberService extends ServiceBase {
     this.apiAddress = environments.apiUrl + '/members';
   }
 
-  // private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
-  //   const params: Record<string, string | number | boolean> = {};
-  //   for (const [key, value] of Object.entries(obj)) {
-  //     if (value !== undefined && value !== null) {
-  //       params[key] = value as string | number | boolean;
-  //     }
-  //   }
-  //   return params;
-  // }
-
   getMembersList(
     query: MemberPartialQuery,
   ): Observable<ApiResponsePaginated<MembersPartialDTO[] | string>> {
@@ -45,12 +35,6 @@ export class MemberService extends ServiceBase {
       this.apiAddress + '/',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<MembersPartialDTO[] | string>>(
-    //   this.apiAddress + '/',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   getMember(id_member: number): Observable<ApiResponse<IndividualDTO | CompanyDTO | string>> {
@@ -58,9 +42,6 @@ export class MemberService extends ServiceBase {
       `members:${id_member}`,
       this.apiAddress + `/${id_member}`,
     );
-    // return this.http.get<ApiResponse<IndividualDTO | CompanyDTO | string>>(
-    //   this.apiAddress + '/' + id_member,
-    // );
   }
 
   getMemberLink(
@@ -72,12 +53,6 @@ export class MemberService extends ServiceBase {
       this.apiAddress + `/${id_member}/link`,
       query,
     );
-    // return this.http.get<ApiResponse<MemberLinkDTO | string>>(
-    //   this.apiAddress + '/' + id_member + '/link',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   addMember(create_member: CreateMemberDTO): Observable<ApiResponse<string>> {

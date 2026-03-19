@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
@@ -22,8 +22,8 @@ export class MemberAddDocument implements OnInit {
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   formGroup!: FormGroup;
-  public dragging: boolean = false;
-  public fileToUpload: File | null = null;
+  readonly dragging = signal<boolean>(false);
+  readonly fileToUpload = signal<File | null>(null);
   private idMember!: string;
 
   ngOnInit(): void {
@@ -43,8 +43,8 @@ export class MemberAddDocument implements OnInit {
     const input = event.target as HTMLInputElement | null;
     const selectedFile = input?.files?.[0] ?? null;
     if (selectedFile) {
-      this.fileToUpload = selectedFile;
-      this.formGroup.patchValue({ fileToUpload: this.fileToUpload });
+      this.fileToUpload.set(selectedFile);
+      this.formGroup.patchValue({ fileToUpload: this.fileToUpload() });
       this.formGroup.get('fileToUpload')?.updateValueAndValidity();
     }
   }
@@ -52,23 +52,23 @@ export class MemberAddDocument implements OnInit {
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.dragging = true;
+    this.dragging.set(true);
   }
 
   onDragLeave(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.dragging = false;
+    this.dragging.set(false);
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.dragging = false;
+    this.dragging.set(false);
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
-      this.fileToUpload = files[0];
-      this.formGroup.patchValue({ fileToUpload: this.fileToUpload });
+      this.fileToUpload.set(files[0]);
+      this.formGroup.patchValue({ fileToUpload: this.fileToUpload() });
       this.formGroup.get('fileToUpload')?.updateValueAndValidity();
     }
   }
@@ -78,7 +78,7 @@ export class MemberAddDocument implements OnInit {
       return;
     }
     const formData = new FormData();
-    formData.append('file', this.fileToUpload as File);
+    formData.append('file', this.fileToUpload() as File);
     formData.append('idMember', this.idMember);
     this.documentService.uploadDocument(formData).subscribe({
       next: (response) => {

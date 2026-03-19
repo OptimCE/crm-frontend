@@ -3,6 +3,7 @@
   "COMMON": {
     "LANGUAGE_SELECTOR": "Language selector",
     "ADDRESS": "Address",
+    "SEARCH": "Search",
     "ACTIONS": {
       "YES": "Yes",
       "NO": "No",
@@ -14,6 +15,8 @@
       "MEMBER": "Member",
       "MANAGER": "Manager"
     },
+    "ERROR_LOADING": "The page could not be loaded. Please try again later",
+    "RETRY": "Retry",
     "ERRORS": {
       "EXCEPTION": "An unexpected error occurred. Please try again later",
       "TIMEOUT": "The request timed out. Please try again",
@@ -29,7 +32,17 @@
     }
   },
   "LOGIN": {
-    "LOGIN": "Log in"
+    "LOGIN": "Log in",
+    "SLIDES": {
+      "MEMBERS_TITLE": "Manage your members easily",
+      "MEMBERS_DESC": "Add, edit and track all your community members from a single dashboard.",
+      "METERS_TITLE": "Monitor your meters",
+      "METERS_DESC": "Keep track of energy production and consumption.",
+      "SHARING_TITLE": "Sharing operations",
+      "SHARING_DESC": "Configure and manage energy sharing operations across your community.",
+      "KEYS_TITLE": "Allocation keys",
+      "KEYS_DESC": "Create and manage allocation keys to distribute energy fairly."
+    }
   },
   "NAVBAR": {
     "PROFILE": "Profile",
@@ -51,13 +64,18 @@
     "ERROR_AUTH_UPDATE": "Error updating authorization",
     "ERROR_LOGOUT": "Error logging out",
     "DELETE": "Delete",
-    "COPY_TO_CLIPBOARD": "Copy to clipboard"
+    "COPY_TO_CLIPBOARD": "Copy to clipboard",
+    "MANAGEMENT": "Management",
+    "ERROR_LOADING": "An error occurred while loading data",
+    "RETRY": "Retry"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
     "UPDATE": "Update",
     "ACCOUNT_INFORMATION": "Account information",
     "UPDATE_PASSWORD": "Change password",
+    "EMAIL_READONLY_HINT": "Managed by your identity provider",
+    "COPY_IBAN": "Copy IBAN",
     "DOCUMENTS": "Documents",
     "MY_REPRESENTATIONS": "My representations",
     "DISPLAY_NAME": "Name",
@@ -84,6 +102,28 @@
         "IBAN": "IBAN"
       }
     },
+    "REPRESENTATIONS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NO_REPRESENTATION_FOUND_LABEL": "No representation found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} representations)"
+    },
+    "METERS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NO_METERS_FOUND_LABEL": "No meters found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} meters)"
+    },
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Size",
+      "UPLOAD_DATE_LABEL": "Upload date",
+      "NO_DOCUMENT_FOUND_LABEL": "No document found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} documents)"
+    },
     "UPDATE_PROFILE": {
       "TITLE": "Update profile",
       "SOCIAL_NUMBER": "National register number",
@@ -109,11 +149,14 @@
       "CITY": "City",
       "CITY_PLACEHOLDER": "Brussels",
       "SAME_ADDRESS": "Same as home address",
-      "VALIDATE": "Validate"
+      "VALIDATE": "Validate",
+      "CANCEL": "Cancel"
     }
   },
   "INVITATION": {
     "TITLE": "My invitations",
+    "SUBTITLE": "Manage your pending invitations",
+    "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
     "MEMBER": {
       "TITLE": "Members",
       "HEADERS": {
@@ -178,7 +221,9 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Switch community",
       "LEAVE_BUTTON": "Leave",
       "LEAVE_BUTTON_TOOLTIP": "Leave the community",
-      "NO_COMMUNITY_FOUND": "No community found"
+      "NO_COMMUNITY_FOUND": "No community found",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
     },
     "CREATE": {
       "TITLE": "Create a community",
@@ -225,7 +270,9 @@
       "EMAIL": "Email",
       "PHONE": "Phone number",
       "ROLE": "Role"
-    }
+    },
+    "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+    "NO_MANAGER_FOUND": "No managers found"
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Community users",
@@ -241,6 +288,8 @@
     "EDIT_ROLE_BUTTON_LABEL": "Edit role",
     "EDIT_ROLE_BUTTON_TOOLTIP": "Edit this user's role",
     "DELETE_BUTTON_LABEL": "Delete",
+    "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+    "NO_USER_FOUND": "No users found",
     "UPDATE_ROLE_DIALOG": {
       "TITLE": "Update user role",
       "NEW_ROLE_FOR_USER_LABEL": "New user role",
@@ -258,7 +307,13 @@
       "UPDATE": "Update",
       "DELETE": "Delete",
       "DOWNLOAD": "Download",
-      "BACK_TO_LIST": "Back to key list"
+      "BACK_TO_LIST": "Back to key list",
+      "ITERATIONS_LABEL": "iterations",
+      "CONSUMERS_LABEL": "consumers",
+      "DESCRIPTION_TITLE": "Description",
+      "DATA_TABLE_TITLE": "Data",
+      "SHOW_MORE": "Show more",
+      "SHOW_LESS": "Show less"
     },
     "CREATE": {
       "KEY_TITLE": "Create an allocation key",
@@ -293,7 +348,10 @@
       "EGALITARIAN_LABEL": "Equal",
       "INJECTION_PERCENTAGE_LABEL": "Injection percentage",
       "SUM_MUST_BE_100_LABEL": "The sum of the percentages must equal 100!",
-      "FINALISATION": "Finalization"
+      "FINALISATION": "Finalization",
+      "STEP_CONSUMERS_COUNT": "Consumers",
+      "STEP_CONSUMER_NAMES": "Names",
+      "STEP_ITERATIONS": "Iterations"
     },
     "TABLE": {
       "COLUMNS": {
@@ -439,10 +497,15 @@
         "CLOSE_BUTTON_LABEL": "Close"
       },
       "INFORMATION_TITLE": "General information",
+      "IDENTIFICATION_TITLE": "Identification",
+      "CONTACT_TITLE": "Contact",
       "INVITATIONS": {
         "NO_INVITE_LABEL": "No invitation",
         "PENDING_LABEL": "Pending",
-        "ACCEPTED_LABEL": "Accepted"
+        "ACCEPTED_LABEL": "Accepted",
+        "INVITE_BUTTON_LABEL": "Invite",
+        "CANCEL_BUTTON_LABEL": "Cancel",
+        "DELETE_BUTTON_LABEL": "Delete"
       },
       "MEMBER_GUARDIANSHIP_TITLE": "Guardian",
       "MANAGER_TITLE": "Manager",
@@ -739,6 +802,10 @@
       }
     },
     "ADD": {
+      "STEP_IDENTITY": "Meter Identity",
+      "STEP_CONFIGURATION": "Configuration",
+      "NEXT_STEP_BUTTON": "Next",
+      "BACK_STEP_BUTTON": "Back",
       "INFORMATION_HEADER": "Meter information",
       "ENERGY_CHARACTERISTIC_HEADER": "Energy characteristics",
       "FINANCIAL_CHARACTERISTIC_HEADER": "Financial characteristics",
@@ -815,6 +882,7 @@
       "NO_OWNER_FOUND_LABEL": "No assigned holder"
     },
     "FULL": {
+      "BACK_TO_LIST": "Back to list",
       "MODIFY_BUTTON_LABEL": "Modify",
       "METER_INFORMATION_TITLE": "Meter information",
       "TABS": {
@@ -923,6 +991,7 @@
   },
 
   "SHARING_OPERATION": {
+    "BACK_TO_LIST": "Back to sharing operations",
     "TYPE": {
       "INSIDE_BUILDING": "Within a building",
       "CER": "REC",
@@ -977,6 +1046,7 @@
     },
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Sharing operation",
+      "GENERAL_INFO_TITLE": "General Information",
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Export as Excel (CWaPE format)",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Type",
@@ -1045,6 +1115,8 @@
         "SELECTED_FILE_LABEL": "Selected file",
         "UPLOAD_BUTTON_LABEL": "Upload",
         "UPLOAD_SUCCESS_LABEL": "File successfully received",
+        "UPLOAD_TITLE": "Upload Consumption Data",
+        "SELECT_DATES_HINT": "Select a date range and click Search to view consumption data",
         "CONSUMPTION_FILE_PREFIX": "consumption_"
       },
       "CHART": {
@@ -1076,7 +1148,8 @@
       "NO_SHARING_OPERATION_FOUND_LABEL": "No sharing operation found",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} sharing operations)",
       "ADD_SHARING_OP_HEADER": "Add a sharing operation",
-      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Sharing operation successfully added"
+      "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Sharing operation successfully added",
+      "SELECT_A_TYPE_PLACEHOLDER": "Select a type"
     },
     "SELECT_METER_NEW_KEY": {
       "NOW": "Now",

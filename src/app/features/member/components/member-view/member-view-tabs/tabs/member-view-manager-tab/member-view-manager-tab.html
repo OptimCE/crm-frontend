@@ -1,24 +1,52 @@
-<div class="flex flex-wrap -mx-2">
-  <div class="flex flex-col">
-    <h4 class="text-base">{{ 'MEMBER.VIEW.MANAGER.SOCIAL_SECURITY_NUMBER_LABEL' | translate }}</h4>
-    <span class="text-sm">{{ member?.manager?.NRN }}</span>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div>
+    <span class="field-label">
+      {{ 'MEMBER.VIEW.MANAGER.SOCIAL_SECURITY_NUMBER_LABEL' | translate }}
+    </span>
+    @if (member()?.manager?.NRN) {
+      <span class="field-value">{{ member()!.manager!.NRN }}</span>
+    } @else {
+      <span class="field-empty">--</span>
+    }
   </div>
-  <div class="flex flex-col">
-    <h4 class="text-base">{{ 'MEMBER.VIEW.MANAGER.SURNAME_LABEL' | translate }}</h4>
-    <span class="text-sm">{{ member?.manager?.surname }}</span>
+  <div>
+    <span class="field-label">
+      {{ 'MEMBER.VIEW.MANAGER.SURNAME_LABEL' | translate }}
+    </span>
+    @if (member()?.manager?.surname) {
+      <span class="field-value">{{ member()!.manager!.surname }}</span>
+    } @else {
+      <span class="field-empty">--</span>
+    }
   </div>
-  <div class="flex flex-col">
-    <h4 class="text-base">{{ 'MEMBER.VIEW.MANAGER.FIRST_NAME_LABEL' | translate }}</h4>
-    <span class="text-sm">{{ member?.manager?.name }}</span>
+  <div>
+    <span class="field-label">
+      {{ 'MEMBER.VIEW.MANAGER.FIRST_NAME_LABEL' | translate }}
+    </span>
+    @if (member()?.manager?.name) {
+      <span class="field-value">{{ member()!.manager!.name }}</span>
+    } @else {
+      <span class="field-empty">--</span>
+    }
   </div>
-</div>
-<div class="flex flex-wrap -mx-2">
-  <div class="flex flex-col">
-    <h4 class="text-base">{{ 'MEMBER.VIEW.MANAGER.EMAIL_LABEL' | translate }}</h4>
-    <span class="text-sm">{{ member?.manager?.email }}</span>
+  <div>
+    <span class="field-label">
+      {{ 'MEMBER.VIEW.MANAGER.EMAIL_LABEL' | translate }}
+    </span>
+    @if (member()?.manager?.email) {
+      <span class="field-value">{{ member()!.manager!.email }}</span>
+    } @else {
+      <span class="field-empty">--</span>
+    }
   </div>
-  <div class="flex flex-col">
-    <h4 class="text-base">{{ 'MEMBER.VIEW.MANAGER.PHONE_NUMBER_LABEL' | translate }}</h4>
-    <span class="text-sm">{{ member?.manager?.phone_number }}</span>
+  <div>
+    <span class="field-label">
+      {{ 'MEMBER.VIEW.MANAGER.PHONE_NUMBER_LABEL' | translate }}
+    </span>
+    @if (member()?.manager?.phone_number) {
+      <span class="field-value">{{ member()!.manager!.phone_number }}</span>
+    } @else {
+      <span class="field-empty">--</span>
+    }
   </div>
 </div>

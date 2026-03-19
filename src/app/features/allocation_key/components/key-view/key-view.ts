@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { KeyDTO } from '../../../../shared/dtos/key.dtos';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeyService } from '../../../../shared/services/key.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -8,6 +8,8 @@ import { HeaderWithHelper } from './header-with-helper/header-with-helper';
 import { HelperDialog } from './helper-dialog/helper-dialog';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
+import { Ripple } from 'primeng/ripple';
+import { Skeleton } from 'primeng/skeleton';
 import { SlicePipe } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -16,10 +18,11 @@ import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { CellClassParams, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { KeyTableRow } from '../../../../shared/types/key.types';
 import { ApiResponse } from '../../../../core/dtos/api.response';
+import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 @Component({
   selector: 'app-key-view',
   standalone: true,
-  imports: [Button, Card, SlicePipe, AgGridAngular, TranslatePipe, RouterLink],
+  imports: [Button, Card, Ripple, Skeleton, SlicePipe, AgGridAngular, TranslatePipe, BackArrow],
   templateUrl: './key-view.html',
   styleUrl: './key-view.css',
   providers: [DialogService],
@@ -27,17 +30,24 @@ import { ApiResponse } from '../../../../core/dtos/api.response';
 export class KeyView implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private keyService = inject(KeyService);
-  private routing = inject(Router);
+  readonly routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
 
-  key?: KeyDTO;
-  public isLoaded: boolean;
-  displayAllDescription: boolean = false;
-  rowData: KeyTableRow[] = [];
-  colDefs!: ColDef<KeyTableRow>[];
+  readonly key = signal<KeyDTO | undefined>(undefined);
+  readonly isLoaded = signal(false);
+  readonly hasError = signal(false);
+  readonly displayAllDescription = signal(false);
+  readonly iterationCount = computed(() => this.key()?.iterations?.length ?? 0);
+  readonly consumerCount = computed(() => {
+    const k = this.key();
+    if (!k?.iterations?.length) return 0;
+    return k.iterations[0].consumers.length;
+  });
+  readonly rowData = signal<KeyTableRow[]>([]);
+  readonly colDefs = signal<ColDef<KeyTableRow>[]>([]);
   public defaultColDef = {
     width: 250,
     flex: 1,
@@ -45,31 +55,27 @@ export class KeyView implements OnInit, OnDestroy {
   };
   gridApi!: GridApi;
   ref?: DynamicDialogRef | null;
-  frameworkComponents: Record<string, unknown>;
-  constructor() {
-    this.isLoaded = false;
-    this.frameworkComponents = {
-      headerHelperRenderer: HeaderWithHelper,
-    };
-  }
+  frameworkComponents: Record<string, unknown> = {
+    headerHelperRenderer: HeaderWithHelper,
+  };
 
   static lastNumberCellStyleNumber = 0;
 
   colorGradient = [
     {
-      backgroundColor: 'rgb(30,75,190, 0.2)',
+      backgroundColor: '#e8f5e9',
       visibility: 'visible',
-      'border-bottom': '1px solid black',
+      'border-bottom': '1px solid #c8e6c9',
     },
     {
-      backgroundColor: 'rgb(0, 144, 230, 0.2)',
+      backgroundColor: '#c8e6c9',
       visibility: 'visible',
-      'border-bottom': '1px solid black',
+      'border-bottom': '1px solid #a5d6a7',
     },
     {
-      backgroundColor: 'rgb(0, 208, 255, 0.2)',
+      backgroundColor: '#a5d6a7',
       visibility: 'visible',
-      'border-bottom': '1px solid black',
+      'border-bottom': '1px solid #81c784',
     },
   ];
 
@@ -91,8 +97,9 @@ export class KeyView implements OnInit, OnDestroy {
   formatData(): KeyTableRow[] {
     const formattedData: KeyTableRow[] = [];
     let alreadyAdded = false;
-    if (this.key && this.key.iterations) {
-      this.key.iterations.forEach((iteration) => {
+    const key = this.key();
+    if (key && key.iterations) {
+      key.iterations.forEach((iteration) => {
         alreadyAdded = false;
         iteration.consumers.forEach((consumer) => {
           let vp_percentage = (consumer.energy_allocated_percentage * 100).toFixed(2) + '%';
@@ -123,7 +130,7 @@ export class KeyView implements OnInit, OnDestroy {
     KeyView.lastNumberCellStyleNumber = 0;
     this.loadColumnDefinitions();
 
-    this.isLoaded = false;
+    this.isLoaded.set(false);
     const idParam = this.route.snapshot.paramMap.get('id');
     const id: number = idParam !== null ? +idParam : -1;
     if (id == -1) {
@@ -132,8 +139,8 @@ export class KeyView implements OnInit, OnDestroy {
     this.keyService.getKey(id).subscribe({
       next: (response) => {
         if (response) {
-          this.key = response.data as KeyDTO;
-          this.isLoaded = true;
+          this.key.set(response.data as KeyDTO);
+          this.isLoaded.set(true);
         } else {
           this.errorHandler.handleError();
           void this.routing.navigate(['/keys']);
@@ -142,7 +149,7 @@ export class KeyView implements OnInit, OnDestroy {
       error: (error: unknown) => {
         const errorData = error instanceof ApiResponse ? (error.data as string) : null;
         this.errorHandler.handleError(errorData);
-        void this.routing.navigate(['/keys']);
+        this.hasError.set(true);
       },
     });
   }
@@ -163,7 +170,7 @@ export class KeyView implements OnInit, OnDestroy {
         'VAP_HEADER',
       ])
       .subscribe((translations: Record<string, string>) => {
-        this.colDefs = [
+        this.colDefs.set([
           {
             headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
             field: 'number',
@@ -214,12 +221,12 @@ export class KeyView implements OnInit, OnDestroy {
             minWidth: 120,
             suppressSizeToFit: false,
           },
-        ];
+        ]);
       });
   }
 
   onGridReady(event: GridReadyEvent): void {
-    this.rowData = this.formatData();
+    this.rowData.set(this.formatData());
     this.gridApi = event.api;
 
     // Ensure columns are sized properly
@@ -231,8 +238,9 @@ export class KeyView implements OnInit, OnDestroy {
   }
 
   deleteKey(): void {
-    if (this.key) {
-      this.keyService.deleteKey(this.key.id).subscribe({
+    const k = this.key();
+    if (k) {
+      this.keyService.deleteKey(k.id).subscribe({
         next: (response) => {
           if (response) {
             this.snackbarNotification.openSnackBar(
@@ -254,8 +262,9 @@ export class KeyView implements OnInit, OnDestroy {
   }
 
   exportExcel(): void {
-    if (this.key) {
-      this.keyService.downloadKey(this.key.id).subscribe({
+    const k = this.key();
+    if (k) {
+      this.keyService.downloadKey(k.id).subscribe({
         next: (response) => {
           if (response) {
             // Check if the response contains the blob/filename object
@@ -288,9 +297,14 @@ export class KeyView implements OnInit, OnDestroy {
   }
 
   updateKey(): void {
-    if (this.key) {
-      void this.routing.navigate(['/keys/add'], { queryParams: { id: this.key.id } });
+    const k = this.key();
+    if (k) {
+      void this.routing.navigate(['/keys/add'], { queryParams: { id: k.id } });
     }
+  }
+
+  toggleDescription(): void {
+    this.displayAllDescription.update((v) => !v);
   }
 
   openHelper(displayText: string): void {

@@ -1,9 +1,9 @@
-@if ((hasSubmitted || showBeforeSubmit) && errorMessages.length > 0) {
+@if ((hasSubmitted() || showBeforeSubmit()) && errorMessages().length > 0) {
   <p>
     <strong class="error"> {{ 'FORM_ERROR.FIX_THE_FOLLOWING_ERROR' | translate }} :</strong>
   </p>
   <ul>
-    @for (error of errorMessages; track $index) {
+    @for (error of errorMessages(); track $index) {
       <li class="error">{{ error }}</li>
     }
   </ul>

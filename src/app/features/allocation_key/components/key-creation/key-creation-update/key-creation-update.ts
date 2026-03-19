@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
 import {
   AbstractControl,
@@ -9,13 +10,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeyService } from '../../../../../shared/services/key.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ButtonRenderer } from './button-renderer/button-renderer';
 import { HeaderWithHelper } from '../../key-view/header-with-helper/header-with-helper';
 import { HelperDialog } from '../../key-view/helper-dialog/helper-dialog';
 import { Button } from 'primeng/button';
+import { Card } from 'primeng/card';
 import { Ripple } from 'primeng/ripple';
 import { InputText } from 'primeng/inputtext';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -36,6 +38,7 @@ import {
 import { KeyTableRow } from '../../../../../shared/types/key.types';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../../shared/types/error.types';
+import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
 
 interface ButtonClickParams {
   event: MouseEvent;
@@ -51,14 +54,15 @@ interface KeyForm {
   imports: [
     TranslatePipe,
     Button,
+    Card,
     Ripple,
-    RouterLink,
     InputText,
     ReactiveFormsModule,
     AgGridAngular,
     ErrorHandlerComponent,
     Textarea,
     FormErrorSummaryComponent,
+    BackArrow,
   ],
   templateUrl: './key-creation-update.html',
   styleUrl: './key-creation-update.css',
@@ -72,41 +76,38 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private dialogService = inject(DialogService);
+  private destroyRef = inject(DestroyRef);
   private hasPendingConsumers = false;
 
   key!: KeyDTO;
-  @Input()
   keyInput?: KeyDTO | null;
-  isLoaded: boolean;
-  isSubmitted: boolean = false;
-  rowData: KeyTableRow[] = [];
-  public themeClass: string = 'ag-theme-quartz';
+  readonly isLoaded = signal<boolean>(false);
+  readonly isSubmitted = signal<boolean>(false);
+  readonly rowData = signal<KeyTableRow[]>([]);
   public defaultColDef: ColDef = {
     width: 250,
     editable: true,
+    flex: 1,
+    minWidth: 120,
   };
-  frameworkComponents: Record<string, unknown>;
-  colDefs: (ColDef<KeyTableRow> | ColGroupDef<KeyTableRow>)[] = [];
+  frameworkComponents: Record<string, unknown> = {
+    buttonRenderer: ButtonRenderer,
+    headerHelperRenderer: HeaderWithHelper,
+  };
+  readonly colDefs = signal<(ColDef<KeyTableRow> | ColGroupDef<KeyTableRow>)[]>([]);
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     key_data: new FormControl('', [this.keyValidator.bind(this)]),
   });
-  errorsAdded: ErrorAdded = {};
-  errorsSummaryAdded: ErrorSummaryAdded = {};
+  readonly errorsAdded = signal<ErrorAdded>({});
+  readonly errorsSummaryAdded = signal<ErrorSummaryAdded>({});
   ref?: DynamicDialogRef | null;
   gridOptions = {
     suppressCellFocus: false, // just to reduce masking
     debug: true, // enables logs
     suppressReactUi: false,
   };
-  constructor() {
-    this.isLoaded = false;
-    this.frameworkComponents = {
-      buttonRenderer: ButtonRenderer,
-      headerHelperRenderer: HeaderWithHelper,
-    };
-  }
   refreshGrid(): void {
     this.formGroup.updateValueAndValidity();
     this.gridApi.refreshCells({ force: true });
@@ -116,15 +117,15 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     this.key = key;
     this.formGroup.get('name')?.setValue(key.name);
     this.formGroup.get('description')?.setValue(key.description);
-    this.rowData = this.formatData();
-    this.isLoaded = true;
+    this.rowData.set(this.formatData());
+    this.isLoaded.set(true);
   }
 
   ngOnInit(): void {
     this.loadColumnDefinitions();
     this.loadErrorMessages();
     this.keyInput = null;
-    this.isLoaded = false;
+    this.isLoaded.set(false);
 
     this.formGroup = new FormGroup({
       name: new FormControl('', [Validators.required]),
@@ -132,7 +133,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       key_data: new FormControl('', [this.keyValidator.bind(this)]),
     });
 
-    this.route.queryParamMap.subscribe((params) => {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const idParam = params.get('id');
       const id = idParam ? +idParam : 0;
 
@@ -157,15 +158,12 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         // 2. If no ID, check if we received data via Router State (history.state)
         // We check this HERE so it doesn't conflict with the empty default below
         const state = history.state as { keyData?: KeyDTO; consumers?: string[] };
-        console.log('State');
-        console.log(state);
         const transferredKey = state.keyData;
         const transferredConsumers = state.consumers;
         if (transferredKey) {
           this.initializeWithData(structuredClone(transferredKey));
           this.keyInput = transferredKey;
         } else if (transferredConsumers && transferredConsumers.length > 0) {
-          console.log('Transferred consumers');
           this.key = {
             id: -1,
             name: '',
@@ -173,8 +171,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             iterations: [],
           };
           const [first, ...rest] = transferredConsumers;
-          console.log(first);
-          console.log(rest);
           const [number, initialConsumers] = this.newIterationCheck();
           let consumers = initialConsumers;
           if (number === -1 || !consumers) {
@@ -198,12 +194,8 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             consumers: consumers,
           };
           this.key.iterations.push(newIteration);
-          this.rowData = this.formatData();
-          console.log('KEY BEFORE');
-          console.log(this.key);
+          this.rowData.set(this.formatData());
           this.key.iterations[0].consumers[0].name = first;
-          console.log('KEY AFTER');
-          console.log(this.key);
           for (const ean of rest) {
             this.key.iterations[0].consumers.push({
               id: -1,
@@ -211,11 +203,9 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               energy_allocated_percentage: 0,
             });
           }
-          console.log('KEY');
-          console.log(this.key);
           this.hasPendingConsumers = true;
-          this.isLoaded = true;
-          this.rowData = this.formatData();
+          this.isLoaded.set(true);
+          this.rowData.set(this.formatData());
           this.refreshGrid();
         } else {
           // 3. Fallback: Initialize as completely new empty key
@@ -225,15 +215,10 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
             description: '',
             iterations: [],
           };
-          this.isLoaded = true;
+          this.isLoaded.set(true);
         }
       }
     });
-
-    // Global error handlers (optional to keep here)
-    window.onerror = function (message, source, lineno, colno, error) {
-      console.error('Global error caught:', { message, source, lineno, colno, error });
-    };
   }
 
   loadColumnDefinitions(): void {
@@ -253,7 +238,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       ])
       .subscribe({
         next: (translations: Record<string, string>) => {
-          this.colDefs = [
+          this.colDefs.set([
             {
               headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               field: 'number',
@@ -285,8 +270,9 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               headerName: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
               flex: 1,
               field: 'va_percentage',
+              cellStyle: this.cellStyleNumber.bind(this),
               onCellValueChanged: this.onCellValueChanged.bind(this),
-              headerComponent: 'headerHelperRenderer', // ✅ class, not string
+              headerComponent: 'headerHelperRenderer',
               headerComponentParams: {
                 label: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
                 tooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
@@ -331,7 +317,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                 label: translations['KEY.TABLE.DELETE_CONSUMER_BUTTON_LABEL'],
               },
             },
-          ];
+          ]);
         },
         error: (error) => {
           console.error('LOAD COLUMN DEFINITIONS ERROR : ', error);
@@ -351,16 +337,16 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       ])
       .subscribe({
         next: (translations: Record<string, string>) => {
-          this.errorsAdded = {
+          this.errorsAdded.set({
             NoIteration: () => translations['KEY.CREATE.ERROR.NO_ITERATION'],
             NoConsumers: () => translations['KEY.CREATE.ERROR.NO_CONSUMERS'],
             SumIterations: () => translations['KEY.CREATE.ERROR.SUM_ITERATIONS_ERROR'],
             SumConsumers: () => translations['KEY.CREATE.ERROR.SUM_CONSUMERS'],
             ConsumerName: () => translations['KEY.CREATE.ERROR.CONSUMER_NAME_REQUIRED'],
             NoChange: () => translations['CREATE_ALLOCATION_KEY_NO_CHANGE'],
-          };
+          });
 
-          this.errorsSummaryAdded = {
+          this.errorsSummaryAdded.set({
             NoIteration: (_: unknown, _controlName: string) =>
               translations['KEY.CREATE.ERROR.NO_ITERATION'],
             NoConsumers: (_: unknown, _controlName: string) =>
@@ -373,7 +359,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               translations['KEY.CREATE.ERROR.CONSUMER_NAME_REQUIRED'],
             NoChange: (_: unknown, _controlName: string) =>
               translations['CREATE_ALLOCATION_KEY_NO_CHANGE'],
-          };
+          });
         },
         error: (error) => {
           console.error('ERROR LOAD ERROR MESSAGE : ', error);
@@ -507,7 +493,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.isSubmitted = true;
+    this.isSubmitted.set(true);
     this.formGroup.get('key_data')?.updateValueAndValidity();
 
     this.formGroup.updateValueAndValidity();
@@ -555,6 +541,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       });
     }
   }
+  static displayedNumbers = new Set<number>();
 
   gridApi!: GridApi;
   onGridReady(event: GridReadyEvent): void {
@@ -562,7 +549,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     KeyCreationUpdate.displayedNumbers.clear();
 
     if (this.keyInput || this.hasPendingConsumers) {
-      this.rowData = this.formatData();
+      this.rowData.set(this.formatData());
     }
 
     if (this.hasPendingConsumers) {
@@ -605,7 +592,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         iteration.consumers.push(newConsumer);
       }
     }
-    this.rowData = this.formatData();
+    this.rowData.set(this.formatData());
     this.refreshGrid();
   }
 
@@ -646,7 +633,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         consumers: consumers,
       };
       this.key.iterations.push(newIteration);
-      this.rowData = this.formatData();
+      this.rowData.set(this.formatData());
       this.refreshGrid();
       // this.gridApi.applyTransaction({add: [newIteration]});
       // this.gridApi.refresh();
@@ -677,28 +664,45 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     };
     newIteration.consumers.forEach((consumer) => (consumer.energy_allocated_percentage = -1));
     this.key.iterations.push(newIteration);
-    this.rowData = this.formatData();
+    this.rowData.set(this.formatData());
     this.refreshGrid();
     // this.gridApi.applyTransaction({add: [newIteration]});
     // this.grid
   }
   static lastNumberCellStyleNumber = 0;
-  static lastParams: CellClassParams<KeyTableRow> | null = null;
-  cellStyleNumber(params: CellClassParams<KeyTableRow>): { height: string } {
-    KeyCreationUpdate.lastParams = params;
+
+  colorGradient = [
+    {
+      backgroundColor: '#e8f5e9',
+      visibility: 'visible',
+      'border-bottom': '1px solid #c8e6c9',
+    },
+    {
+      backgroundColor: '#c8e6c9',
+      visibility: 'visible',
+      'border-bottom': '1px solid #a5d6a7',
+    },
+    {
+      backgroundColor: '#a5d6a7',
+      visibility: 'visible',
+      'border-bottom': '1px solid #81c784',
+    },
+  ];
+
+  cellStyleNumber(params: CellClassParams<KeyTableRow>): {
+    backgroundColor: string;
+    visibility: string;
+    'border-bottom': string;
+  } {
     if (
       params.node.data &&
       params.node.data.number !== undefined &&
       params.node.data.number !== KeyCreationUpdate.lastNumberCellStyleNumber
     ) {
       KeyCreationUpdate.lastNumberCellStyleNumber = params.node.data.number;
-      return { height: '100%' };
-    } else {
-      //return {height: '0px', visibility: 'hidden'};
-      return { height: '100%' };
     }
+    return this.colorGradient[KeyCreationUpdate.lastNumberCellStyleNumber - 1];
   }
-  static displayedNumbers = new Set<number>();
 
   onCellValueChanged(event: NewValueParams<KeyTableRow, string>): void {
     const colId = event.colDef.field;
@@ -720,7 +724,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
         if (data.va_percentage.match('^\\d+(\\.\\d+)*$')) {
           //this.rowData[event.node.rowIndex].va_percentage = data.va_percentage + "%";
           data.va_percentage = data.va_percentage + '%';
-          for (const rData of this.rowData) {
+          for (const rData of this.rowData()) {
             if (rData.number === iterationNumber) {
               rData.va_percentage = data.va_percentage;
             }
@@ -745,7 +749,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                 consumerIndex
               ].energy_allocated_percentage = parseFloat(data.vp_percentage) / 100;
               if (data.vp_percentage.match('^\\d+(\\.\\d+)*$')) {
-                this.rowData[rowIndex].vp_percentage = data.vp_percentage + '%';
+                this.rowData()[rowIndex].vp_percentage = data.vp_percentage + '%';
                 this.refreshGrid();
               } else {
                 data.vp_percentage = '';
@@ -755,7 +759,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               for (const iteration of this.key.iterations) {
                 iteration.consumers[consumerIndex].name = data.name;
               }
-              this.rowData = this.formatData(); // A changer
+              this.rowData.set(this.formatData()); // A changer
               this.refreshGrid();
             }
           }
@@ -778,7 +782,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
       }
       this.key.iterations.splice(index, 1);
     }
-    this.rowData = this.formatData();
+    this.rowData.set(this.formatData());
     this.refreshGrid();
   }
   deleteConsumer(params: ButtonClickParams): void {
@@ -798,7 +802,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     if (this.key.iterations[0].consumers.length === 0) {
       this.key.iterations = [];
     }
-    this.rowData = this.formatData();
+    this.rowData.set(this.formatData());
     this.refreshGrid();
   }
 

@@ -1,349 +1,258 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-gauge text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">{{ 'METER.LIST.METERS_TITLE' | translate }}</h2>
-    </div>
-    <div class="w-6/12 text-end">
-      <p-button
-        type="button"
-        label="{{ 'METER.LIST.ADD_BUTTON_LABEL' | translate }}"
-        icon="pi pi-plus"
-        (click)="onAddMeter()"
-      ></p-button>
-    </div>
+  <!-- Page header -->
+  <div
+    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  >
+    <app-header-page icon="pi pi-gauge" [text]="'METER.LIST.METERS_TITLE' | translate" />
+    <p-button
+      type="button"
+      icon="pi pi-plus"
+      label="{{ 'METER.LIST.ADD_BUTTON_LABEL' | translate }}"
+      (click)="onAddMeter()"
+      severity="primary"
+    />
   </div>
 
-  <p-table
-    #dt
-    [value]="metersPartialList()"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [lazy]="true"
-    (onLazyLoad)="lazyLoadMeters($event)"
-    [rows]="paginationInfo.limit"
-    [totalRecords]="paginationInfo.total"
-    [first]="(paginationInfo.page - 1) * paginationInfo.limit"
-    [showCurrentPageReport]="true"
-    [currentPageReportTemplate]="currentPageReportTemplate"
-    (onPage)="pageChange($event)"
-    [paginator]="paginationInfo.total_pages > 1"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex justify-content-between">
+  <!-- Filter toolbar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
+      <!-- Search: field selector + debounced input -->
+      <div class="sm:col-span-2 lg:flex-1">
+        <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+        <p-input-group class="gap-2">
+          <p-select
+            [options]="searchFieldOptions"
+            [ngModel]="searchField()"
+            (ngModelChange)="searchField.set($event)"
+            (onChange)="onSearchFieldChange()"
+            optionLabel="label"
+            optionValue="value"
+            class="search-field-select"
+          >
+            <ng-template let-option pTemplate="selectedItem">
+              <span class="text-sm">{{ option.label | translate }}</span>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              <span class="text-sm">{{ option.label | translate }}</span>
+            </ng-template>
+          </p-select>
+          <app-debounced-p-input
+            [placeholder]="'COMMON.SEARCH' | translate"
+            [value]="searchText()"
+            (searchEvent)="onSearchTextChange($event)"
+            inputClass="w-full!"
+          />
+        </p-input-group>
+      </div>
+
+      <!-- Status filter -->
+      <div>
+        <span class="field-label">{{ 'METER.INFORMATIONS.STATUS_LABEL' | translate }}</span>
+        <p-select
+          [options]="statusOptions"
+          [ngModel]="statusFilter()"
+          (onChange)="onStatusFilterChange($event.value)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="{{ 'METER.LIST.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
+          [showClear]="true"
+          class="w-full"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <p-tag
+              [severity]="option.severity"
+              [value]="option.label | translate"
+              class="text-xs"
+            />
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <p-tag
+              [severity]="option.severity"
+              [value]="option.label | translate"
+              class="text-xs"
+            />
+          </ng-template>
+        </p-select>
+      </div>
+
+      <!-- Clear filters -->
+      <div class="flex items-end">
         <p-button
-          [outlined]="true"
           icon="pi pi-filter-slash"
           label="{{ 'METER.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
           (onClick)="clear(dt)"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
         />
       </div>
-    </ng-template>
+    </div>
+  </div>
+
+  <!-- Data table -->
+  <p-table
+    #dt
+    [value]="metersPartialList()"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoadMeters($event)"
+    [rows]="paginationInfo().limit"
+    [totalRecords]="paginationInfo().total"
+    [first]="firstRow()"
+    [showCurrentPageReport]="true"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
+  >
+    <!-- Desktop header -->
     <ng-template pTemplate="header">
-      <tr>
-        <th class="text-base px-3">
-          <div class="items-center">
-            {{ 'COMMON.ADDRESS' | translate }}
-            <br />
-            <p-columnFilter
-              field="address"
-              display="menu"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-              [showClearButton]="false"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <div class="p-grid">
-                  <div class="p-col">
-                    <label for="streetName">{{
-                      'METER.ADDRESS.STREET_NAME_LABEL' | translate
-                    }}</label>
-                    <input
-                      pInputText
-                      id="streetName"
-                      [(ngModel)]="addressFilter.streetName"
-                      placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
-                    />
-                  </div>
-                  <div class="p-col">
-                    <label for="postcode">{{
-                      'METER.ADDRESS.POSTAL_CODE_LABEL' | translate
-                    }}</label>
-                    <input
-                      pInputText
-                      id="postcode"
-                      [(ngModel)]="addressFilter.postcode"
-                      placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
-                    />
-                  </div>
-                  <div class="p-col">
-                    <label for="city">{{ 'METER.ADDRESS.CITY_LABEL' | translate }}</label>
-                    <input
-                      pInputText
-                      id="city"
-                      [(ngModel)]="addressFilter.cityName"
-                      placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
-                    />
-                  </div>
-                </div>
-              </ng-template>
-            </p-columnFilter>
-          </div>
-        </th>
-        <th class="text-base px-3">
-          <div class="items-center">
-            {{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}<br />
-            <p-columnFilter
-              type="text"
-              field="EAN"
-              display="{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            ></p-columnFilter>
-          </div>
-        </th>
-        <th class="text-base px-3">
-          <div class="items-center">
-            {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}<br />
-            <p-columnFilter
-              type="text"
-              field="meter_number"
-              display="{{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            ></p-columnFilter>
-          </div>
-        </th>
-        <th class="text-base px-3">
-          <div class="items-center">
-            {{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}<br />
-            <p-columnFilter
-              field="holder"
-              display="menu"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            >
-              <ng-template pTemplate="header">
-                <span class="text-sm px-3">{{
-                  'METER.LIST.FILTER_BY_OWNER_LABEL' | translate
-                }}</span>
-              </ng-template>
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-select
-                  [ngModel]="value"
-                  [options]="holders"
-                  (onChange)="filter($event.value)"
-                  placeholder="{{ 'METER.LIST.SELECT_AN_OWNER_PLACEHOLDER' | translate }}"
-                  [showClear]="true"
-                >
-                  <ng-template let-option pTemplate="item">
-                    <span class="text-sm px-3">{{ option.name }}</span>
-                  </ng-template>
-                  <ng-template pTemplate="selectedItem">
-                    <span class="text-sm px-3">{{ value.name }}</span>
-                  </ng-template>
-                </p-select>
-              </ng-template>
-            </p-columnFilter>
-            <!--            <p-columnFilter type="text" field="titulaire" display="Titulaire" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"></p-columnFilter>-->
-          </div>
-        </th>
-        <th class="text-base px-3">
-          <div class="items-center">
-            {{ 'METER.INFORMATIONS.STATUS_LABEL' | translate }}<br />
-            <p-columnFilter
-              field="statut"
-              display="menu"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            >
-              <ng-template pTemplate="header">
-                <span class="text-sm">{{ 'METER.LIST.FILTER_BY_STATUS_LABEL' | translate }}</span>
-              </ng-template>
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-select
-                  [ngModel]="value"
-                  [options]="statutCategory"
-                  optionLabel="label"
-                  optionValue="value"
-                  (onChange)="filter($event.value)"
-                  placeholder="{{ 'METER.LIST.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
-                  [showClear]="true"
-                >
-                  <ng-template let-option pTemplate="item">
-                    @switch (option.value) {
-                      @case (MeterStatus.ACTIVE) {
-                        <p-tag
-                          severity="success"
-                          value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                      @case (MeterStatus.INACTIVE) {
-                        <p-tag
-                          severity="danger"
-                          value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                      @case (MeterStatus.WAITING_GRD) {
-                        <p-tag
-                          severity="danger"
-                          value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                      @case (MeterStatus.WAITING_MANAGER) {
-                        <p-tag
-                          severity="danger"
-                          value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                    }
-                  </ng-template>
-                  <ng-template pTemplate="selectedItem">
-                    @switch (value) {
-                      @case (MeterStatus.ACTIVE) {
-                        <p-tag
-                          severity="success"
-                          value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                      @case (MeterStatus.INACTIVE) {
-                        <p-tag
-                          severity="danger"
-                          value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                      @case (MeterStatus.WAITING_GRD) {
-                        <p-tag
-                          severity="danger"
-                          value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                      @case (MeterStatus.WAITING_MANAGER) {
-                        <p-tag
-                          severity="danger"
-                          value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                          class="text-sm px-3"
-                        ></p-tag>
-                      }
-                    }
-                  </ng-template>
-                </p-select>
-              </ng-template>
-            </p-columnFilter>
-            <!--            <p-columnFilter type="text" field="statut" display="Statut" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"></p-columnFilter>-->
-          </div>
-        </th>
-        <th class="text-base px-3">
-          <div class="items-center">
-            {{ 'METER.LIST.SHARING_OPERATION_TITLE' | translate }} <br />
-            <p-columnFilter
-              field="sharingOperation"
-              display="menu"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            >
-              <ng-template pTemplate="header">
-                <span class="text-sm px-3">{{
-                  'METER.LIST.FILTER_BY_SHARING_OPERATION_LABEL' | translate
-                }}</span>
-              </ng-template>
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-select
-                  [ngModel]="value"
-                  [options]="sharingOperations"
-                  (onChange)="filter($event.value)"
-                  placeholder="{{
-                    'METER.LIST.SELECT_A_SHARING_OPERATION_PLACEHOLDER' | translate
-                  }}"
-                  [showClear]="true"
-                >
-                  <ng-template let-option pTemplate="item">
-                    <span class="text-sm px-3">{{ option.name }}</span>
-                  </ng-template>
-                  <ng-template pTemplate="selectedItem">
-                    <span class="text-sm px-3">{{ value.name }}</span>
-                  </ng-template>
-                </p-select>
-              </ng-template>
-            </p-columnFilter>
-          </div>
-        </th>
+      <tr class="max-lg:hidden">
+        <th class="text-base px-3">{{ 'COMMON.ADDRESS' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.STATUS_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.LIST.SHARING_OPERATION_TITLE' | translate }}</th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-meter>
-      <tr
-        (click)="onRowClick(meter)"
-        style="cursor: pointer"
-        class="flex-wrap -mx-2 hover:bg-green-50! cursor-pointer"
-      >
-        <td [innerHTML]="meter.address | address" class="text-sm px-3 py-2"></td>
-        <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
-        <td class="text-sm px-3 py-2">{{ meter.meter_number }}</td>
-        <td
-          [innerHTML]="meter.holder ? (meter.holder | memberPartial) : '/'"
-          class="text-sm px-3 py-2"
-        ></td>
+      <!-- Desktop row -->
+      <tr (click)="onRowClick(meter)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+        <td>
+          <span [innerHTML]="meter.address | address" class="text-sm"></span>
+        </td>
+        <td class="text-sm">{{ meter.EAN }}</td>
+        <td class="text-sm">{{ meter.meter_number }}</td>
+        <td>
+          <span
+            [innerHTML]="meter.holder ? (meter.holder | memberPartial) : '/'"
+            class="text-sm"
+          ></span>
+        </td>
         <td>
           @if (!meter.status) {
-            <p-tag severity="danger" value="/" class="text-sm px-3 py-2"></p-tag>
+            <p-tag severity="danger" value="/" class="text-xs" />
           } @else {
             @switch (meter.status) {
               @case (MeterStatus.ACTIVE) {
                 <p-tag
                   severity="success"
                   value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                  class="text-sm px-3 py-2"
-                ></p-tag>
+                  class="text-xs"
+                />
               }
               @case (MeterStatus.INACTIVE) {
                 <p-tag
                   severity="danger"
                   value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                  class="text-sm px-3 py-2"
-                ></p-tag>
+                  class="text-xs"
+                />
               }
               @case (MeterStatus.WAITING_GRD) {
                 <p-tag
-                  severity="danger"
+                  severity="warn"
                   value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                  class="text-sm px-3 py-2"
-                ></p-tag>
+                  class="text-xs"
+                />
               }
               @case (MeterStatus.WAITING_MANAGER) {
                 <p-tag
-                  severity="danger"
+                  severity="warn"
                   value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                  class="text-sm px-3 py-2"
-                ></p-tag>
+                  class="text-xs"
+                />
               }
             }
           }
         </td>
-        <td>
-          @if (meter.sharingOperation) {
-            <span class="text-sm px-3 py-2">{{ meter.sharingOperation.name }}</span>
-          } @else {
-            <span> / </span>
-          }
+        <td class="text-sm">
+          {{ meter.sharing_operation ? meter.sharing_operation.name : '/' }}
+        </td>
+      </tr>
+
+      <!-- Mobile card -->
+      <tr class="lg:hidden !border-0 !bg-transparent" (click)="onRowClick(meter)">
+        <td colspan="6" class="!p-0 !pb-3">
+          <div
+            class="meter-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+          >
+            <!-- Card header: EAN + status -->
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+              <span class="font-semibold text-sm text-primary-700">{{ meter.EAN }}</span>
+              @if (!meter.status) {
+                <p-tag severity="danger" value="/" class="text-xs" />
+              } @else {
+                @switch (meter.status) {
+                  @case (MeterStatus.ACTIVE) {
+                    <p-tag
+                      severity="success"
+                      value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                  @case (MeterStatus.INACTIVE) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                  @case (MeterStatus.WAITING_GRD) {
+                    <p-tag
+                      severity="warn"
+                      value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                  @case (MeterStatus.WAITING_MANAGER) {
+                    <p-tag
+                      severity="warn"
+                      value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                }
+              }
+            </div>
+            <!-- Card body: details grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <span class="field-label">{{ 'COMMON.ADDRESS' | translate }}</span>
+                <span class="field-value" [innerHTML]="meter.address | address"></span>
+              </div>
+              <div>
+                <span class="field-label">{{
+                  'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
+                }}</span>
+                <span class="field-value">{{ meter.meter_number }}</span>
+              </div>
+              <div>
+                <span class="field-label">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</span>
+                <span
+                  class="field-value"
+                  [innerHTML]="meter.holder ? (meter.holder | memberPartial) : '/'"
+                ></span>
+              </div>
+              <div>
+                <span class="field-label">{{
+                  'METER.LIST.SHARING_OPERATION_TITLE' | translate
+                }}</span>
+                <span class="field-value">
+                  {{ meter.sharing_operation ? meter.sharing_operation.name : '/' }}
+                </span>
+              </div>
+            </div>
+          </div>
         </td>
       </tr>
     </ng-template>
-    <ng-template #emptyMessage pTemplate="emptymessage">
+
+    <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" style="text-align: center" class="text-base">
-          {{ 'METER.LIST.NO_METERS_FOUND_LABEL' | translate }}
+        <td colspan="6">
+          <div class="py-8 text-center">
+            <i class="pi pi-gauge text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">{{ 'METER.LIST.NO_METERS_FOUND_LABEL' | translate }}</p>
+          </div>
         </td>
       </tr>
     </ng-template>

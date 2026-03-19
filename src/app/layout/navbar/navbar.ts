@@ -1,11 +1,9 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
 import { filter } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
 import { Role } from '../../core/dtos/role';
-import { DrawerModule } from 'primeng/drawer';
-import { NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Divider } from 'primeng/divider';
 import { SidebarElement } from './navbar-elements/sidebar-element/sidebar-element';
 import { SidebarMultiElements } from './navbar-elements/sidebar-multi-elements/sidebar-multi-elements';
 import { Links } from './navbar-elements/dtos';
@@ -13,87 +11,101 @@ import { Title } from '@angular/platform-browser';
 import { LanguageSelector } from '../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
+import { Tooltip } from 'primeng/tooltip';
 
 interface RouteActiveState {
-  key: boolean;
+  keys: boolean;
   members: boolean;
-  communities: boolean;
+  meters: boolean;
+  sharing_operations: boolean;
   communities_users: boolean;
-  user_invitations: boolean;
-  user: boolean;
-  [key: string]: boolean;
+  communities_managers: boolean;
+  users_communities: boolean;
+  users_invitations: boolean;
+  users: boolean;
 }
+
+/** Map each state key to its actual route prefix. Ordered longest-first for correct matching. */
+const ROUTE_MAP: [keyof RouteActiveState, string][] = [
+  ['sharing_operations', '/sharing_operations'],
+  ['communities_managers', '/communities/managers'],
+  ['communities_users', '/communities/users'],
+  ['users_communities', '/users/communities'],
+  ['users_invitations', '/users/invitations'],
+  ['members', '/members'],
+  ['meters', '/meters'],
+  ['keys', '/keys'],
+  ['users', '/users'],
+];
 
 @Component({
   selector: 'app-navbar',
   imports: [
-    DrawerModule,
-    NgStyle,
+    NgClass,
     TranslatePipe,
-    Divider,
     SidebarElement,
     SidebarMultiElements,
     LanguageSelector,
+    Tooltip,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar implements OnInit {
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
   protected userContextService = inject(UserContextService);
   private titleService = inject(Title);
   private translateService = inject(TranslateService);
   private readonly keycloak = inject(Keycloak);
-  title = 'front-end-orchestrator';
-  isExpanded: boolean[] = [false];
-  showSubmenu: boolean[] = [false];
-  sidebarWidth = '70px';
-  sidebarOpen: boolean = false;
-  activeSublist: string | null = null;
-  previousSublist: string | null = null;
-  isRouteActive: RouteActiveState = {
-    key: false,
+  private destroyRef = inject(DestroyRef);
+
+  readonly sidebarPinChanged = output<boolean>();
+
+  readonly sidebarOpen = signal(false);
+  readonly mobile = signal(false);
+  readonly visibleSideBar = signal(true);
+  readonly activeSublist = signal<string | null>(null);
+  readonly pinned = signal(false);
+  readonly isRouteActive = signal<RouteActiveState>({
+    keys: false,
     members: false,
-    communities: false,
+    meters: false,
+    sharing_operations: false,
     communities_users: false,
-    user_invitations: false,
-    user: false,
-  };
-  mobile: boolean = false;
-  isAuth: boolean = true;
-  visibleSideBar: boolean = true;
+    communities_managers: false,
+    users_communities: false,
+    users_invitations: false,
+    users: false,
+  });
+
+  private hoverTimeout: ReturnType<typeof setTimeout> | null = null;
 
   memberLinks: Links[] = [
-    {
-      name: 'NAVBAR.HANDLE_MEMBRE',
-      // name: "Gérer les membres",
-      icon: 'pi pi-users',
-      url: '/members',
-    },
-    {
-      name: 'NAVBAR.HANDLE_METER',
-      // name: "Gérer les compteurs",
-      icon: 'pi pi-gauge',
-      url: '/meters',
-    },
-    {
-      name: 'NAVBAR.HANDLE_SHARING_OP',
-      // name: "Opérations de partage",
-      icon: 'pi pi-building',
-      url: '/sharing_operations',
-    },
+    { name: 'NAVBAR.HANDLE_MEMBRE', icon: 'pi pi-users', url: '/members' },
+    { name: 'NAVBAR.HANDLE_METER', icon: 'pi pi-gauge', url: '/meters' },
+    { name: 'NAVBAR.HANDLE_SHARING_OP', icon: 'pi pi-building', url: '/sharing_operations' },
   ];
 
   constructor() {
-    this.sidebarOpen = false;
-    this.setSidebarWidth();
+    const savedPin = localStorage.getItem('sidebar-pinned');
+    if (savedPin === 'true') {
+      this.pinned.set(true);
+      this.sidebarOpen.set(true);
+    }
   }
-  ngOnInit(): void {
-    // Set the page title based on the current language
-    this.updatePageTitle();
 
-    // Subscribe to language changes to update the title
+  ngOnInit(): void {
+    const mq = window.matchMedia('(max-width: 1023px)');
+    const handler = (e: MediaQueryListEvent | MediaQueryList) => {
+      this.mobile.set(e.matches);
+      this.visibleSideBar.set(!e.matches);
+      this.sidebarOpen.set(e.matches ? false : this.pinned());
+    };
+    handler(mq);
+    mq.addEventListener('change', handler);
+    this.destroyRef.onDestroy(() => mq.removeEventListener('change', handler));
+
+    this.updatePageTitle();
     this.translateService.onLangChange.subscribe(() => {
       this.updatePageTitle();
     });
@@ -101,34 +113,69 @@ export class Navbar implements OnInit {
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => {
-        const new_state: RouteActiveState = {
-          key: false,
+        const newState: RouteActiveState = {
+          keys: false,
           members: false,
-          communities: false,
+          meters: false,
+          sharing_operations: false,
           communities_users: false,
-          user_invitations: false,
-          user: false,
+          communities_managers: false,
+          users_communities: false,
+          users_invitations: false,
+          users: false,
         };
 
-        this.isAuth = !this.router.url.includes('auth');
-        // Sort keys to prioritize more specific paths
-        const keys = Object.keys(new_state).sort((a, b) => b.length - a.length);
-        console.log(keys);
-        for (const key of keys) {
-          const tmpKey = key.replace('_', '/');
-          if (this.router.url.startsWith(`/${tmpKey}`)) {
-            new_state[key] = true;
+        for (const [stateKey, routePrefix] of ROUTE_MAP) {
+          if (this.router.url.startsWith(routePrefix)) {
+            newState[stateKey] = true;
             break;
           }
         }
-        this.isRouteActive = new_state;
-        console.log(this.isRouteActive);
+        this.isRouteActive.set(newState);
       });
   }
 
-  openSubmenu(index: number): void {
-    this.showSubmenu[index] = !this.showSubmenu[index];
-    this.isExpanded[index] = !this.isExpanded[index];
+  onMouseEnter(): void {
+    if (this.mobile() || this.pinned()) return;
+    this.hoverTimeout = setTimeout(() => {
+      this.sidebarOpen.set(true);
+    }, 120);
+  }
+
+  onMouseLeave(): void {
+    if (this.mobile() || this.pinned()) return;
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+    this.sidebarOpen.set(false);
+    this.activeSublist.set(null);
+  }
+
+  togglePin(): void {
+    const newState = !this.pinned();
+    this.pinned.set(newState);
+    if (newState) {
+      this.sidebarOpen.set(true);
+    }
+    localStorage.setItem('sidebar-pinned', String(newState));
+    this.sidebarPinChanged.emit(newState);
+  }
+
+  toggleSublist(sublist: string): void {
+    this.activeSublist.set(this.activeSublist() === sublist ? null : sublist);
+  }
+
+  openSideBar(): void {
+    this.visibleSideBar.set(true);
+    this.sidebarOpen.set(true);
+  }
+
+  closeSideBar(): void {
+    if (this.mobile()) {
+      this.visibleSideBar.set(false);
+      this.sidebarOpen.set(false);
+    }
   }
 
   logout(): void {
@@ -137,48 +184,7 @@ export class Navbar implements OnInit {
       redirectUri: window.location.origin + '/auth',
     });
   }
-  onMouseEnter(_$event: MouseEvent): void {
-    this.sidebarOpen = true;
-    this.setSidebarWidth();
-  }
 
-  onMouseLeave(_$event: MouseEvent): void {
-    this.sidebarOpen = false;
-    this.setSidebarWidth();
-  }
-
-  setSidebarWidth(): void {
-    this.sidebarWidth = this.sidebarOpen ? '300px' : '70px';
-  }
-  toggleSublist(sublist: string): void {
-    if (this.activeSublist === sublist) {
-      this.previousSublist = this.activeSublist;
-      this.activeSublist = null;
-    } else {
-      this.previousSublist = this.activeSublist;
-      this.activeSublist = sublist;
-    }
-    this.cdr.detectChanges();
-  }
-
-  openSideBar(): void {
-    this.visibleSideBar = true;
-    this.sidebarOpen = true;
-  }
-
-  closeSideBar(): void {
-    if (this.mobile) {
-      this.visibleSideBar = false;
-      this.sidebarOpen = false;
-    }
-  }
-
-  protected readonly GESTIONNAIRE = Role.GESTIONNAIRE;
-  protected readonly MEMBER = Role.MEMBER;
-
-  /**
-   * Updates the page title based on the current language
-   */
   private updatePageTitle(): void {
     this.translateService.get('TITLE').subscribe((title: string) => {
       this.titleService.setTitle(title);

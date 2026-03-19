@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import {
   FormControl,
@@ -8,10 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
-import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
 import { DatePipe } from '@angular/common';
-import { TagModule } from 'primeng/tag';
+import { Tag } from 'primeng/tag';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
 import { Ripple } from 'primeng/ripple';
@@ -19,7 +18,6 @@ import { ErrorHandlerComponent } from '../../../../shared/components/error.handl
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
-import { TableModule } from 'primeng/table';
 import { Card } from 'primeng/card';
 import { MeterConsumptionDTO, MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -33,6 +31,9 @@ import { MeterDeactivation } from '../meter-deactivation/meter-deactivation';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { MapNumberStringPipe } from '../../../../shared/pipes/map-number-string/map-number-string-pipe';
 import { MeterDataView } from './meter-data-view/meter-data-view';
+import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
+import { Skeleton } from 'primeng/skeleton';
+import { Avatar } from 'primeng/avatar';
 
 interface ChartFormValue {
   dateDeb: string;
@@ -46,10 +47,8 @@ interface ChartFormValue {
     Button,
     FormsModule,
     AddressPipe,
-    InputTextModule,
-    CheckboxModule,
     DatePipe,
-    TagModule,
+    Tag,
     TranslatePipe,
     ChartModule,
     Ripple,
@@ -62,10 +61,12 @@ interface ChartFormValue {
     Tab,
     TabPanels,
     TabPanel,
-    TableModule,
     Card,
     MapNumberStringPipe,
     MeterDataView,
+    BackArrow,
+    Skeleton,
+    Avatar,
   ],
   templateUrl: './meter-view.html',
   styleUrl: './meter-view.css',
@@ -78,22 +79,29 @@ export class MeterView implements OnInit {
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
   private router = inject(Router);
-  @Input()
+  private destroyRef = inject(DestroyRef);
   id!: string;
-  meter!: MetersDTO;
-  isLoaded: boolean;
-  historySelected?: MetersDataDTO;
-  futureSelected?: MetersDataDTO;
+  readonly meter = signal<MetersDTO | undefined>(undefined);
+  readonly isLoading = signal<boolean>(false);
+  readonly hasError = signal<boolean>(false);
+  readonly historySelected = signal<MetersDataDTO | undefined>(undefined);
+  readonly futureSelected = signal<MetersDataDTO | undefined>(undefined);
   ref?: DynamicDialogRef | null;
 
-  productionChainMap: string[] = [];
-  readingFrequencyMap: string[] = [];
-  phasesNumberMap: string[] = [];
-  tarifGroupMap: string[] = [];
-  rateMap: string[] = [];
-  clientTypeMap: string[] = [];
-  injectionStatusMap: string[] = [];
-  data: {
+  readonly hasMeterData = computed(() => !!this.meter()?.meter_data);
+  readonly hasHistory = computed(() => !!this.meter()?.meter_data_history?.length);
+  readonly hasFutureData = computed(() => !!this.meter()?.futur_meter_data?.length);
+
+  readonly currentStatus = computed(() => this.meter()?.meter_data?.status);
+
+  readonly productionChainMap = signal<string[]>([]);
+  readonly readingFrequencyMap = signal<string[]>([]);
+  readonly phasesNumberMap = signal<string[]>([]);
+  readonly tarifGroupMap = signal<string[]>([]);
+  readonly rateMap = signal<string[]>([]);
+  readonly clientTypeMap = signal<string[]>([]);
+  readonly injectionStatusMap = signal<string[]>([]);
+  readonly data = signal<{
     labels: string[];
     datasets: {
       type: string;
@@ -101,7 +109,7 @@ export class MeterView implements OnInit {
       stack: string;
       data: number[];
     }[];
-  } | null = null;
+  } | null>(null);
   options = {
     maintainAspectRatio: false,
     aspectRatio: 0.8,
@@ -127,8 +135,7 @@ export class MeterView implements OnInit {
         },
         ticks: {
           _callback: (_value: unknown, index: number): string => {
-            // Make sure 'this' refers to the component context
-            const label = this.data?.labels?.[index];
+            const label = this.data()?.labels?.[index];
             if (!label) return '';
 
             const date = new Date(label);
@@ -154,13 +161,8 @@ export class MeterView implements OnInit {
       },
     },
   };
-  displayDownloadButton: boolean = false;
+  readonly displayDownloadButton = signal<boolean>(false);
   formChart!: FormGroup;
-  constructor() {
-    this.isLoaded = false;
-    this.historySelected = undefined;
-    this.futureSelected = undefined;
-  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -173,32 +175,36 @@ export class MeterView implements OnInit {
     if (!this.id) {
       console.error('No id provided');
     }
-    this.getFullMeter(true);
+    this.getFullMeter();
     this.formChart = new FormGroup({
       dateDeb: new FormControl('', [Validators.required]),
       dateFin: new FormControl('', [Validators.required]),
     });
     this.setupTranslationCategory();
   }
-  getFullMeter(changeIsLoaded = true): void {
-    if (changeIsLoaded) {
-      this.isLoaded = false;
+
+  getFullMeter(showLoading = true): void {
+    if (showLoading) {
+      this.isLoading.set(true);
+      this.hasError.set(false);
     }
-    this.metersService.getMeter(this.id).subscribe({
-      next: (response) => {
-        if (response) {
-          this.meter = response.data as MetersDTO;
-          if (changeIsLoaded) {
-            this.isLoaded = true;
+    this.metersService
+      .getMeter(this.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.meter.set(response.data as MetersDTO);
+          } else {
+            this.hasError.set(true);
           }
-        } else {
-          console.error('Error fetching meter', response);
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching meter', error);
-      },
-    });
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.hasError.set(true);
+          this.isLoading.set(false);
+        },
+      });
   }
 
   setupTranslationCategory(): void {
@@ -223,8 +229,9 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.PRODUCTION_CHAIN.OTHER',
         'METER.CATEGORIES.PRODUCTION_CHAIN.NONE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.productionChainMap = [
+        this.productionChainMap.set([
           '',
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'],
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.WIND'],
@@ -234,7 +241,7 @@ export class MeterView implements OnInit {
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.FOSSIL_FIRE_COGENERATION'],
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.OTHER'],
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.NONE'],
-        ];
+        ]);
       });
   }
 
@@ -245,13 +252,14 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.RATE.BI_HOURLY',
         'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.rateMap = [
+        this.rateMap.set([
           '',
           translation['METER.CATEGORIES.RATE.SIMPLE'],
           translation['METER.CATEGORIES.RATE.BI_HOURLY'],
           translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'],
-        ];
+        ]);
       });
   }
 
@@ -262,13 +270,14 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.CLIENT.PROFESSIONAL',
         'METER.CATEGORIES.CLIENT.INDUSTRIAL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.clientTypeMap = [
+        this.clientTypeMap.set([
           '',
           translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
           translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
           translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'],
-        ];
+        ]);
       });
   }
 
@@ -281,15 +290,16 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION',
         'METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.injectionStatusMap = [
+        this.injectionStatusMap.set([
           '',
           translation['METER.CATEGORIES.INJECTION_STATUS.AUTOPRODUCER_OWNER'],
           translation['METER.CATEGORIES.INJECTION_STATUS.SELF_PRODUCTION_RIGHT_OF_USER'],
           translation['METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION'],
           translation['METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE'],
           translation['METER.CATEGORIES.INJECTION_STATUS.NONE'],
-        ];
+        ]);
       });
   }
 
@@ -299,24 +309,26 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.READING_FREQUENCY.MONTHLY',
         'METER.CATEGORIES.READING_FREQUENCY.ANNUAL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.readingFrequencyMap = [
+        this.readingFrequencyMap.set([
           '',
           translation['METER.CATEGORIES.READING_FREQUENCY.MONTHLY'],
           translation['METER.CATEGORIES.READING_FREQUENCY.ANNUAL'],
-        ];
+        ]);
       });
   }
 
   setupPhaseCategory(): void {
     this.translate
       .get(['METER.CATEGORIES.PHASE.SINGLE_PHASE', 'METER.CATEGORIES.PHASE.THREE_PHASES'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.phasesNumberMap = [
+        this.phasesNumberMap.set([
           '',
           translation['METER.CATEGORIES.PHASE.SINGLE_PHASE'],
           translation['METER.CATEGORIES.PHASE.THREE_PHASES'],
-        ];
+        ]);
       });
   }
 
@@ -326,12 +338,13 @@ export class MeterView implements OnInit {
         'METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE',
         'METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.tarifGroupMap = [
+        this.tarifGroupMap.set([
           '',
           translation['METER.CATEGORIES.TARIF_GROUP.LOW_VOLTAGE'],
           translation['METER.CATEGORIES.TARIF_GROUP.HIGH_VOLTAGE'],
-        ];
+        ]);
       });
   }
 
@@ -340,13 +353,14 @@ export class MeterView implements OnInit {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '600px',
       header: this.translate.instant('METER.FULL.METER_MODIFICATION_HEADER') as string,
       data: {
-        meter: this.meter,
+        meter: this.meter(),
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant('METER.FULL.METER_MODIFIED_SUCCESS_LABEL') as string,
@@ -357,8 +371,10 @@ export class MeterView implements OnInit {
       });
     }
   }
-  toUpdate($event: Event): void {
-    $event.stopPropagation();
+
+  toUpdate(): void {
+    const meter = this.meter();
+    if (!meter) return;
     this.ref = this.dialogService.open(MeterDataUpdate, {
       modal: true,
       closable: true,
@@ -366,12 +382,12 @@ export class MeterView implements OnInit {
       header: this.translate.instant('METER.FULL.METER_DATA_UPDATE_HEADER') as string,
       width: '1000px',
       data: {
-        id: this.meter.EAN,
-        meterData: this.meter.meter_data,
+        id: meter.EAN,
+        meterData: meter.meter_data,
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant('METER.FULL.METER_DATA_UPDATE_SUCCESS_LABEL') as string,
@@ -384,17 +400,19 @@ export class MeterView implements OnInit {
   }
 
   toDeactivate(): void {
+    const meter = this.meter();
+    if (!meter) return;
     this.ref = this.dialogService.open(MeterDeactivation, {
       modal: true,
       closable: true,
       closeOnEscape: true,
       header: this.translate.instant('METER.FULL.METER_DEACTIVATE_HEADER') as string,
       data: {
-        ean: this.meter.EAN,
+        ean: meter.EAN,
       },
     });
     if (this.ref) {
-      this.ref.onClose.subscribe((response) => {
+      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant('METER.FULL.METER_DEACTIVATED_SUCCESS_LABEL') as string,
@@ -407,19 +425,22 @@ export class MeterView implements OnInit {
   }
 
   downloadTotalConsumption(): void {
+    const meter = this.meter();
+    if (!meter) return;
     const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.metersService
-      .downloadMeterConsumptions(this.meter.EAN, {
+      .downloadMeterConsumptions(meter.EAN, {
         date_start: formValue.dateDeb,
         date_end: formValue.dateFin,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {
           if ('blob' in response) {
             const url = window.URL.createObjectURL(response.blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = response.filename; // Use the dynamic filename!
+            a.download = response.filename;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -430,21 +451,24 @@ export class MeterView implements OnInit {
   }
 
   loadChart(): void {
-    this.displayDownloadButton = false;
+    this.displayDownloadButton.set(false);
     if (this.formChart.invalid) {
       return;
     }
 
+    const meter = this.meter();
+    if (!meter) return;
     const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.metersService
-      .getMeterConsumptions(this.meter.EAN, {
+      .getMeterConsumptions(meter.EAN, {
         date_start: formValue.dateDeb,
         date_end: formValue.dateFin,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {
           const tmpData = response.data as MeterConsumptionDTO;
-          this.data = {
+          this.data.set({
             labels: tmpData.timestamps,
             datasets: [
               {
@@ -474,8 +498,8 @@ export class MeterView implements OnInit {
                 data: tmpData.inj_shared,
               },
             ],
-          };
-          this.displayDownloadButton = true;
+          });
+          this.displayDownloadButton.set(true);
         }
       });
   }

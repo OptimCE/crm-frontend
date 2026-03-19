@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CompanyDTO, IndividualDTO } from '../../../../../../../shared/dtos/member.dtos';
 
@@ -9,5 +9,5 @@ import { CompanyDTO, IndividualDTO } from '../../../../../../../shared/dtos/memb
   styleUrl: './member-view-manager-tab.css',
 })
 export class MemberViewManagerTab {
-  @Input() member?: IndividualDTO | CompanyDTO;
+  readonly member = input<IndividualDTO | CompanyDTO>();
 }

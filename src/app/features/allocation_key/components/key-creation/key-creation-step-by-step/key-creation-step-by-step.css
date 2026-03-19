@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+/* Hero section — matches key-view pattern */
+.key-hero {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}
+
+/* Form inputs — subtle green tint on focus */
+:host ::ng-deep .form-section input.p-inputtext,
+:host ::ng-deep .form-section textarea,
+:host ::ng-deep .form-section .p-inputnumber-input {
+  border-color: var(--p-surface-200);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+:host ::ng-deep .form-section input.p-inputtext:hover,
+:host ::ng-deep .form-section textarea:hover,
+:host ::ng-deep .form-section .p-inputnumber-input:hover {
+  border-color: var(--p-primary-400);
+}
+
+:host ::ng-deep .form-section input.p-inputtext:focus,
+:host ::ng-deep .form-section textarea:focus,
+:host ::ng-deep .form-section .p-inputnumber-input:focus {
+  border-color: var(--p-primary-500);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-200) 50%, transparent);
+}
+
+/* Iteration cards */
+.iteration-card {
+  transition: border-color 0.15s;
+}
+
+.iteration-card:hover {
+  border-color: var(--p-primary-200);
+}
+
+/* Stepper overrides — green palette */
+:host ::ng-deep .p-stepper .p-step-header .p-step-number {
+  background-color: var(--p-surface-200);
+  color: var(--p-surface-600);
+  border: none;
+}
+
+:host ::ng-deep .p-stepper .p-step-active .p-step-number {
+  background-color: var(--p-primary-500);
+  color: white;
+}
+
+:host ::ng-deep .p-stepper .p-step-header .p-step-title {
+  color: var(--p-surface-500);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .p-stepper .p-step-active .p-step-title {
+  color: var(--p-primary-700);
+  font-weight: 600;
+}
+
+:host ::ng-deep .p-stepper .p-steppanel-content {
+  padding: 1.25rem 0 0 0;
+}
+
+/* Responsive: hide step titles on small screens */
+@media (max-width: 640px) {
+  :host ::ng-deep .p-stepper .p-step-header .p-step-title {
+    display: none;
+  }
+}

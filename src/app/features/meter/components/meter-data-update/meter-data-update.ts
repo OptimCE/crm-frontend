@@ -1,8 +1,7 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { PaginatorModule } from 'primeng/paginator';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import {
   AbstractControl,
@@ -14,7 +13,6 @@ import {
 } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
-import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
@@ -67,14 +65,11 @@ interface MeterDataFormValue {
 @Component({
   selector: 'app-meter-data-update',
   imports: [
-    CheckboxModule,
     InputTextModule,
-    PaginatorModule,
     RadioButtonModule,
     ReactiveFormsModule,
     Button,
     ErrorHandlerComponent,
-    ToggleButtonModule,
     TranslatePipe,
     FormErrorSummaryComponent,
     Textarea,
@@ -91,13 +86,12 @@ export class MeterDataUpdate implements OnInit {
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
-  errorMemberAdded: ErrorAdded = {};
-  errorsSummaryAdded: ErrorSummaryAdded = {};
+  private destroyRef = inject(DestroyRef);
+  readonly errorMemberAdded = signal<ErrorAdded>({});
+  readonly errorsSummaryAdded = signal<ErrorSummaryAdded>({});
 
-  @Input()
-  meterData?: MetersDataDTO;
-  @Input()
-  id: string;
+  readonly meterData?: MetersDataDTO;
+  readonly id: string;
   metersForm!: FormGroup;
   statusOptions: MeterDataStatusOption[] = [
     { value: MeterDataStatus.ACTIVE, label: 'METER.STATUS.ACTIVE_LABEL' },
@@ -105,7 +99,7 @@ export class MeterDataUpdate implements OnInit {
     { value: MeterDataStatus.WAITING_GRD, label: 'METER.STATUS.WAITING_GRD_LABEL' },
     { value: MeterDataStatus.WAITING_MANAGER, label: 'METER.STATUS.WAITING_MANAGER_LABEL' },
   ];
-  productionChainCategory: MeterDataCategory<ProductionChain>[] = [
+  readonly productionChainCategory = signal<MeterDataCategory<ProductionChain>[]>([
     { id: ProductionChain.PHOTOVOLTAIC, name: '' },
     { id: ProductionChain.WIND, name: '' },
     { id: ProductionChain.HYDRO, name: '' },
@@ -114,39 +108,24 @@ export class MeterDataUpdate implements OnInit {
     { id: ProductionChain.COGEN_FOSSIL, name: '' },
     { id: ProductionChain.OTHER, name: '' },
     { id: ProductionChain.NONE, name: '' },
-  ];
-  rateCategory: MeterDataCategory<MeterRate>[] = [
+  ]);
+  readonly rateCategory = signal<MeterDataCategory<MeterRate>[]>([
     { id: MeterRate.SIMPLE, name: '' },
     { id: MeterRate.BI_HOURLY, name: '' },
     { id: MeterRate.EXCLUSIVE_NIGHT, name: '' },
-  ];
-  clientCategory: MeterDataCategory<ClientType>[] = [
+  ]);
+  readonly clientCategory = signal<MeterDataCategory<ClientType>[]>([
     { id: ClientType.RESIDENTIAL, name: '' },
     { id: ClientType.PROFESSIONAL, name: '' },
     { id: ClientType.INDUSTRIAL, name: '' },
-  ];
-  injectionStatusCategory: MeterDataCategory<InjectionStatus>[] = [
-    {
-      id: InjectionStatus.AUTOPROD_OWNER,
-      name: '',
-    },
-    {
-      id: InjectionStatus.AUTOPROD_RIGHTS,
-      name: '',
-    },
-    {
-      id: InjectionStatus.INJECTION_OWNER,
-      name: '',
-    },
-    {
-      id: InjectionStatus.INJECTION_RIGHTS,
-      name: '',
-    },
-    {
-      id: InjectionStatus.NONE,
-      name: '',
-    },
-  ];
+  ]);
+  readonly injectionStatusCategory = signal<MeterDataCategory<InjectionStatus>[]>([
+    { id: InjectionStatus.AUTOPROD_OWNER, name: '' },
+    { id: InjectionStatus.AUTOPROD_RIGHTS, name: '' },
+    { id: InjectionStatus.INJECTION_OWNER, name: '' },
+    { id: InjectionStatus.INJECTION_RIGHTS, name: '' },
+    { id: InjectionStatus.NONE, name: '' },
+  ]);
   grdAvailable: MeterDataCategory[] = [
     { id: 1, name: 'RESA' },
     { id: 2, name: 'ORES' },
@@ -155,7 +134,7 @@ export class MeterDataUpdate implements OnInit {
     { id: 5, name: 'REW' },
     { id: 6, name: 'ELIA' },
   ];
-  membersList!: MembersPartialDTO[];
+  readonly membersList = signal<MembersPartialDTO[]>([]);
   constructor() {
     const data = this.config.data as MeterDataUpdateDialogData;
     this.meterData = data.meterData;
@@ -163,24 +142,27 @@ export class MeterDataUpdate implements OnInit {
   }
 
   ngOnInit(): void {
-    this.memberService.getMembersList({ page: 1, limit: 10 }).subscribe({
-      next: (response) => {
-        if (response && response.data) {
-          this.membersList = response.data as MembersPartialDTO[];
-          if (this.meterData && this.meterData.member) {
-            const member = this.meterData.member;
-            this.metersForm.patchValue({
-              member: this.membersList.find((m) => m.id === member.id),
-            });
+    this.memberService
+      .getMembersList({ page: 1, limit: 10 })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response && response.data) {
+            this.membersList.set(response.data as MembersPartialDTO[]);
+            if (this.meterData && this.meterData.member) {
+              const member = this.meterData.member;
+              this.metersForm.patchValue({
+                member: this.membersList().find((m) => m.id === member.id),
+              });
+            }
+          } else {
+            console.error(response);
           }
-        } else {
-          console.error(response);
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
     this.metersForm = new FormGroup({
       description: new FormControl('', []),
       samplingPower: new FormControl('', [Validators.required]),
@@ -199,25 +181,19 @@ export class MeterDataUpdate implements OnInit {
     this.setupErrorTranslation();
     this.setupTranslationCategory();
     if (this.meterData) {
-      console.log('PATCH VALUE');
-      console.log(this.productionChainCategory);
-      console.log(this.meterData?.production_chain);
-      console.log(
-        this.productionChainCategory.find((p) => p.id === this.meterData?.production_chain),
-      );
       this.metersForm.patchValue({
         description: this.meterData.description,
         samplingPower: this.meterData.sampling_power,
         totalGeneratingCapacity: this.meterData.totalGenerating_capacity,
         amperage: this.meterData.amperage,
-        productionChain: this.productionChainCategory.find(
+        productionChain: this.productionChainCategory().find(
           (p) => p.id === this.meterData?.production_chain,
         ),
-        injectionStatus: this.injectionStatusCategory.find(
+        injectionStatus: this.injectionStatusCategory().find(
           (p) => p.id === this.meterData?.injection_status,
         ),
-        rate: this.rateCategory.find((p) => p.id === this.meterData?.rate),
-        clientType: this.clientCategory.find((p) => p.id === this.meterData?.client_type),
+        rate: this.rateCategory().find((p) => p.id === this.meterData?.rate),
+        clientType: this.clientCategory().find((p) => p.id === this.meterData?.client_type),
         grd: this.grdAvailable.find((p) => p.name === this.meterData?.grd),
         status: this.meterData.status,
       });
@@ -226,14 +202,15 @@ export class MeterDataUpdate implements OnInit {
   setupErrorTranslation(): void {
     this.translate
       .get(['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.errorMemberAdded = {
+        this.errorMemberAdded.set({
           invalidMember: () => translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
-        };
-        this.errorsSummaryAdded = {
+        });
+        this.errorsSummaryAdded.set({
           invalidMember: (_: unknown, _controlName: string) =>
             translation['METER.UPDATE_DATA.ERRORS.SELECTED_MEMBER_INCORRECT'],
-        };
+        });
       });
   }
 
@@ -256,6 +233,7 @@ export class MeterDataUpdate implements OnInit {
         'METER.CATEGORIES.PRODUCTION_CHAIN.OTHER',
         'METER.CATEGORIES.PRODUCTION_CHAIN.NONE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.PHOTOVOLTAIC'],
@@ -267,9 +245,9 @@ export class MeterDataUpdate implements OnInit {
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.OTHER'],
           translation['METER.CATEGORIES.PRODUCTION_CHAIN.NONE'],
         ];
-        this.productionChainCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.productionChainCategory.update((items) =>
+          items.map((item, index) => ({ ...item, name: translations[index] })),
+        );
       });
   }
 
@@ -280,15 +258,16 @@ export class MeterDataUpdate implements OnInit {
         'METER.CATEGORIES.RATE.BI_HOURLY',
         'METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.RATE.SIMPLE'],
           translation['METER.CATEGORIES.RATE.BI_HOURLY'],
           translation['METER.CATEGORIES.RATE.EXCLUSIVE_NIGHT'],
         ];
-        this.rateCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.rateCategory.update((items) =>
+          items.map((item, index) => ({ ...item, name: translations[index] })),
+        );
       });
   }
 
@@ -299,16 +278,16 @@ export class MeterDataUpdate implements OnInit {
         'METER.CATEGORIES.CLIENT.PROFESSIONAL',
         'METER.CATEGORIES.CLIENT.INDUSTRIAL',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.CLIENT.RESIDENTIAL'],
           translation['METER.CATEGORIES.CLIENT.PROFESSIONAL'],
           translation['METER.CATEGORIES.CLIENT.INDUSTRIAL'],
         ];
-
-        this.clientCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.clientCategory.update((items) =>
+          items.map((item, index) => ({ ...item, name: translations[index] })),
+        );
       });
   }
 
@@ -321,6 +300,7 @@ export class MeterDataUpdate implements OnInit {
         'METER.CATEGORIES.INJECTION_STATUS.OWNER_PURE_INJECTION',
         'METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
         const translations = [
           translation['METER.CATEGORIES.INJECTION_STATUS.AUTOPRODUCER_OWNER'],
@@ -329,10 +309,9 @@ export class MeterDataUpdate implements OnInit {
           translation['METER.CATEGORIES.INJECTION_STATUS.PURE_INJECTION_RIGHT_OF_USE'],
           translation['METER.CATEGORIES.INJECTION_STATUS.NONE'],
         ];
-
-        this.injectionStatusCategory.forEach((item, index) => {
-          item.name = translations[index];
-        });
+        this.injectionStatusCategory.update((items) =>
+          items.map((item, index) => ({ ...item, name: translations[index] })),
+        );
       });
   }
 
@@ -350,15 +329,13 @@ export class MeterDataUpdate implements OnInit {
         typeof value === 'object' &&
         true &&
         'id' in value &&
-        this.membersList.some((member) => member.id === value.id);
+        this.membersList().some((member) => member.id === value.id);
       return isValid ? null : { invalidMember: true };
     };
   }
 
   onSubmit(): void {
     if (!this.metersForm.valid) {
-      console.error('Form not valid');
-      console.log('Form validation errors:', this.metersForm.errors);
       return;
     }
 
@@ -383,17 +360,20 @@ export class MeterDataUpdate implements OnInit {
       total_generating_capacity: formValue.totalGeneratingCapacity,
     };
 
-    this.meterService.patchMeterData(updateMeterData).subscribe({
-      next: (response) => {
-        if (response) {
-          this.ref.close(true);
-        } else {
-          this.errorHandler.handleError();
-        }
-      },
-      error: (error: { data?: unknown }) => {
-        this.errorHandler.handleError(error.data ?? null);
-      },
-    });
+    this.meterService
+      .patchMeterData(updateMeterData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.ref.close(true);
+          } else {
+            this.errorHandler.handleError();
+          }
+        },
+        error: (error: { data?: unknown }) => {
+          this.errorHandler.handleError(error.data ?? null);
+        },
+      });
   }
 }

@@ -1,130 +1,302 @@
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 mb-3">
-    <div class="w-6/12 flex items-center space-x-2">
-      <span class="pi pi-user text-2xl! text-green-500!"></span>
-      <h2 class="text-xl! font-medium">
-        {{ 'USERS_COMMUNITY_LIST.TITLE' | translate }}
-      </h2>
-    </div>
+  <!-- Page header -->
+  <div
+    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  >
+    <app-header-page icon="pi pi-users" [text]="'USERS_COMMUNITY_LIST.TITLE' | translate" />
     @if (userContextService.isActiveRole(Role.ADMIN)) {
-      <div class="w-6/12 flex justify-end gap-3">
+      <div class="flex flex-col sm:flex-row gap-2">
         <p-button
           type="button"
           icon="pi pi-eye"
           label="{{ 'USERS_COMMUNITY_LIST.SEE_PENDING_INVITE_BUTTON_LABEL' | translate }}"
-          severity="help"
+          severity="contrast"
           (click)="seePendingInvite()"
-        >
-        </p-button>
+        />
         <p-button
           type="button"
           label="{{ 'USERS_COMMUNITY_LIST.INVITE_MANAGER_BUTTON_LABEL' | translate }}"
           icon="pi pi-plus"
+          severity="primary"
           (click)="inviteGestionnaire()"
-        >
-        </p-button>
+        />
       </div>
     }
   </div>
+
+  <!-- Filter toolbar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
+      <!-- Search by email -->
+      <div class="sm:col-span-2 lg:flex-1">
+        <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+        <app-debounced-p-input
+          [placeholder]="'USERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate"
+          [value]="searchText()"
+          (searchEvent)="onSearchTextChange($event)"
+          inputClass="w-full!"
+        />
+      </div>
+
+      <!-- Role filter -->
+      <div>
+        <span class="field-label">{{ 'USERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}</span>
+        <p-select
+          [options]="roleOptions"
+          [ngModel]="roleFilter()"
+          (onChange)="onRoleFilterChange($event.value)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="{{ 'USERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}"
+          [showClear]="true"
+          class="w-full"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <p-tag
+              [severity]="option.severity"
+              [value]="option.label | translate"
+              class="text-xs"
+            />
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <p-tag
+              [severity]="option.severity"
+              [value]="option.label | translate"
+              class="text-xs"
+            />
+          </ng-template>
+        </p-select>
+      </div>
+
+      <!-- Clear filters -->
+      <div class="flex items-end">
+        <p-button
+          icon="pi pi-filter-slash"
+          label="{{ 'USERS_COMMUNITY_LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+          (onClick)="clear(dt)"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
   <p-table
     #dt
     [value]="users()"
-    [tableStyle]="{ 'min-width': '50rem' }"
     [lazy]="true"
     (onLazyLoad)="lazyLoadUsers($event)"
+    [rows]="pagination().limit"
+    [totalRecords]="pagination().total"
+    [first]="firstRow()"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
   >
+    <!-- Desktop header -->
     <ng-template pTemplate="header">
-      <tr>
-        <th [pSortableColumn]="'name'" class="text-base px-3">
-          {{ 'USERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}
-        </th>
-        <th [pSortableColumn]="'email'" class="text-base px-3">
-          {{ 'USERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}
-        </th>
-        <th [pSortableColumn]="'role'" class="text-base px-3">
-          {{ 'USERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}
-        </th>
+      <tr class="max-lg:hidden">
+        <th class="text-base px-3">{{ 'USERS_COMMUNITY_LIST.HEADERS.NAME' | translate }}</th>
+        <th class="text-base px-3">{{ 'USERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate }}</th>
+        <th class="text-base px-3">{{ 'USERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}</th>
         @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
-          <th class="text-base px-3">{{ 'USERS_COMMUNITY_LIST.HEADERS.ACTIONS' | translate }}</th>
+          <th class="text-base px-3">
+            {{ 'USERS_COMMUNITY_LIST.HEADERS.ACTIONS' | translate }}
+          </th>
         }
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-user>
-      <tr>
-        <td class="text-small px-3 py-2">
-          {{
-            user.last_name
-              ? user.first_name
-                ? user.first_name + ' ' + user.last_name
-                : user.last_name
-              : user.first_name
-                ? user.first_name
-                : '/'
-          }}
-        </td>
-        <td class="text-small px-3 py-2">{{ user.email }}</td>
-        <td class="text-small px-3 py-2">{{ user.role | role }}</td>
+      <!-- Desktop row -->
+      <tr class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+        <td class="text-sm">{{ getUserDisplayName(user) }}</td>
+        <td class="text-sm">{{ user.email }}</td>
         <td>
-          @if (ownId !== user.id_user) {
-            <div class="flex flex-wrap gap-2">
-              @if (userContextService.isActiveRole(Role.ADMIN) && user.role !== Role.ADMIN) {
-                <p-button
-                  label="{{ 'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_LABEL' | translate }}"
-                  icon="pi pi-pencil"
-                  severity="warn"
-                  [pTooltip]="'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_TOOLTIP' | translate"
-                  (onClick)="openDialogEditRole(user)"
-                />
+          @switch (user.role) {
+            @case (Role.ADMIN) {
+              <p-tag
+                severity="contrast"
+                [value]="'COMMON.ROLE.ADMIN' | translate"
+                class="text-xs"
+              />
+            }
+            @case (Role.GESTIONNAIRE) {
+              <p-tag severity="warn" [value]="'COMMON.ROLE.MANAGER' | translate" class="text-xs" />
+            }
+            @case (Role.MEMBER) {
+              <p-tag severity="info" [value]="'COMMON.ROLE.MEMBER' | translate" class="text-xs" />
+            }
+          }
+        </td>
+        @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
+          <td>
+            @if (ownId !== user.id_user) {
+              <div class="flex gap-2">
+                @if (userContextService.isActiveRole(Role.ADMIN) && user.role !== Role.ADMIN) {
+                  <p-button
+                    icon="pi pi-pencil"
+                    severity="warn"
+                    [rounded]="true"
+                    [text]="true"
+                    [pTooltip]="'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_TOOLTIP' | translate"
+                    (onClick)="openDialogEditRole(user)"
+                  />
+                }
+                @if (
+                  userContextService.compareWithActiveRole(Role.GESTIONNAIRE) &&
+                  user.role === Role.MEMBER
+                ) {
+                  <p-button
+                    icon="pi pi-times"
+                    severity="danger"
+                    [rounded]="true"
+                    [text]="true"
+                    [pTooltip]="'USERS_COMMUNITY_LIST.DELETE_BUTTON_LABEL' | translate"
+                    (click)="deleteUser(user)"
+                  />
+                }
+              </div>
+            }
+          </td>
+        }
+      </tr>
+
+      <!-- Mobile card -->
+      <tr class="lg:hidden !border-0 !bg-transparent">
+        <td
+          [attr.colspan]="userContextService.compareWithActiveRole(Role.GESTIONNAIRE) ? 4 : 3"
+          class="!p-0 !pb-3"
+        >
+          <div
+            class="user-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm hover:border-primary-400 transition-colors"
+          >
+            <!-- Card header: name + role -->
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+              <span class="font-semibold text-sm text-primary-700">
+                {{ getUserDisplayName(user) }}
+              </span>
+              @switch (user.role) {
+                @case (Role.ADMIN) {
+                  <p-tag
+                    severity="contrast"
+                    [value]="'COMMON.ROLE.ADMIN' | translate"
+                    class="text-xs"
+                  />
+                }
+                @case (Role.GESTIONNAIRE) {
+                  <p-tag
+                    severity="warn"
+                    [value]="'COMMON.ROLE.MANAGER' | translate"
+                    class="text-xs"
+                  />
+                }
+                @case (Role.MEMBER) {
+                  <p-tag
+                    severity="info"
+                    [value]="'COMMON.ROLE.MEMBER' | translate"
+                    class="text-xs"
+                  />
+                }
               }
-              @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
-                @if (user.role === MEMBER) {
+            </div>
+            <!-- Card body -->
+            <div class="grid grid-cols-1 gap-2">
+              <div>
+                <span class="field-label">{{
+                  'USERS_COMMUNITY_LIST.HEADERS.EMAIL' | translate
+                }}</span>
+                <span class="field-value">{{ user.email }}</span>
+              </div>
+            </div>
+            <!-- Card actions -->
+            @if (
+              ownId !== user.id_user && userContextService.compareWithActiveRole(Role.GESTIONNAIRE)
+            ) {
+              <div class="flex gap-2 mt-3 pt-2 border-t border-primary-100">
+                @if (userContextService.isActiveRole(Role.ADMIN) && user.role !== Role.ADMIN) {
+                  <p-button
+                    label="{{ 'USERS_COMMUNITY_LIST.EDIT_ROLE_BUTTON_LABEL' | translate }}"
+                    icon="pi pi-pencil"
+                    severity="warn"
+                    [outlined]="true"
+                    size="small"
+                    (onClick)="openDialogEditRole(user)"
+                  />
+                }
+                @if (user.role === Role.MEMBER) {
                   <p-button
                     label="{{ 'USERS_COMMUNITY_LIST.DELETE_BUTTON_LABEL' | translate }}"
                     severity="danger"
                     icon="pi pi-times"
+                    [outlined]="true"
+                    size="small"
                     (click)="deleteUser(user)"
-                  ></p-button>
+                  />
                 }
-              }
-            </div>
-          }
+              </div>
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="userContextService.compareWithActiveRole(Role.GESTIONNAIRE) ? 4 : 3">
+          <div class="py-8 text-center">
+            <i class="pi pi-users text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'USERS_COMMUNITY_LIST.NO_USER_FOUND' | translate }}
+            </p>
+          </div>
         </td>
       </tr>
     </ng-template>
   </p-table>
+
+  <!-- Role edit dialog -->
   <p-dialog
     header="{{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.TITLE' | translate }}"
     [modal]="true"
-    [(visible)]="dialogVisible"
+    [visible]="dialogVisible()"
+    (visibleChange)="dialogVisible.set($event)"
     [style]="{ width: '25rem' }"
-    id="dialog"
   >
-    <span class="p-text-secondary block mb-5 text-base">{{
-      'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.NEW_ROLE_FOR_USER_LABEL' | translate
-    }}</span>
-    <div class="flex align-items-center gap-3 mb-5">
+    <span class="p-text-secondary block mb-5 text-base">
+      {{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.NEW_ROLE_FOR_USER_LABEL' | translate }}
+    </span>
+    <div class="flex items-center gap-3 mb-5">
       <p-select
         [options]="roles"
-        optionLabel="name"
         optionValue="value"
-        [(ngModel)]="roleSelected"
+        optionLabel="name"
+        [ngModel]="roleSelected()"
+        (ngModelChange)="roleSelected.set($event)"
         appendTo="body"
         placeholder="{{
           'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.SELECT_ROLE_PLACEHOLDER' | translate
         }}"
+        class="w-full"
       >
-        class="text-small"
+        <ng-template let-option pTemplate="selectedItem">
+          <span class="text-sm">{{ option.name | translate }}</span>
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <span class="text-sm">{{ option.name | translate }}</span>
+        </ng-template>
       </p-select>
     </div>
-    <div class="flex justify-content-end gap-2">
+    <div class="flex justify-end gap-2">
       <p-button
         label="{{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.CANCEL_BUTTON_LABEL' | translate }}"
         severity="danger"
-        (onClick)="dialogVisible = false"
+        [outlined]="true"
+        (onClick)="dialogVisible.set(false)"
       />
       <p-button
         label="{{ 'USERS_COMMUNITY_LIST.UPDATE_ROLE_DIALOG.SAVE_BUTTON_LABEL' | translate }}"
-        severity="success"
+        severity="primary"
         (onClick)="updateRole()"
       />
     </div>

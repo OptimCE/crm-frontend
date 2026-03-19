@@ -1,194 +1,302 @@
 <div class="container mx-auto my-auto">
-  <!-- First Step -->
-  <form
-    [formGroup]="formFirstStep"
-    (ngSubmit)="submitFirstForm()"
-    class="mb-4 shadow-sm p-4 rounded bg-white"
-  >
-    <div class="text-center mb-3">
-      <h5 class="font-medium">
-        {{ 'KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL' | translate }} *
-      </h5>
-    </div>
-    <div class="flex flex-wrap -mx-2 justify-self-center">
-      <div class="md:w-6/12 px-2">
-        <p-inputNumber class="w-full" formControlName="nb_consumers" [min]="1"></p-inputNumber>
-        <app-error-handler controlName="nb_consumers"></app-error-handler>
+  <app-back-arrow url="/keys" [text]="'KEY.VIEW.BACK_TO_LIST' | translate"></app-back-arrow>
+
+  <div class="space-y-4 mt-3">
+    <!-- Hero Section -->
+    <div
+      class="key-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+    >
+      <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-100 shrink-0">
+        <i class="pi pi-key text-primary-700 text-2xl"></i>
+      </div>
+      <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+        <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
+          {{ 'KEY.CREATE.KEY_TITLE' | translate }}
+        </h1>
+        <p class="text-sm text-surface-500 m-0">
+          {{ 'KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL' | translate }}
+        </p>
       </div>
     </div>
-    <div class="text-center mt-3">
-      <p-button
-        type="submit"
-        label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
-        class="p-button-lg"
-      ></p-button>
-    </div>
-  </form>
 
-  <!-- Second Step -->
-  @if (secondStep) {
-    <div>
-      <form
-        [formGroup]="formSecondStep"
-        (ngSubmit)="submitSecondForm()"
-        class="mb-4 shadow-sm p-4 rounded bg-white"
-      >
-        <div class="flex flex-wrap -mx-2 gap-2">
-          @for (_ of controls; let i = $index; track i) {
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-              <div class="mb-3">
-                <label for="consumer_name_{{ i }}" class="font-medium"
-                  >{{ 'KEY.CREATE.CONSUMER_NAME_LABEL' | translate }} {{ i + 1 }} *</label
-                >
-                <input
-                  id="consumer_name_{{ i }}"
-                  pInputText
-                  class="w-full"
-                  [formControlName]="'consumer_name_' + i"
-                />
-                <app-error-handler [controlName]="'consumer_name_' + i"></app-error-handler>
-              </div>
-            </div>
-          }
-        </div>
-        <div class="text-center mt-3">
-          <p-button
-            type="submit"
-            label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
-            class="p-button-lg"
-          ></p-button>
-        </div>
-      </form>
-    </div>
-  }
-  @for (iterForm of formIterations; let i = $index; track i) {
-    <div>
-      <form
-        [formGroup]="iterForm"
-        class="container shadow-sm p-4 bg-white rounded mb-3"
-        (ngSubmit)="submitIteration()"
-      >
-        <div class="flex flex-wrap -mx-2">
-          <!-- Type de clef -->
-          <div class="lg:w-6/12 mb-3">
-            <span class="font-medium">{{ 'KEY.CREATE.KEY_TYPE_LABEL' | translate }} *</span>
-            <div class="flex gap-3 mt-2">
-              <div>
-                <p-radioButton
-                  [inputId]="'type_' + i + '_1'"
-                  value="1"
-                  formControlName="type"
-                ></p-radioButton>
-                <label [for]="'type_' + i + '_1'" class="ms-2">{{
-                  'KEY.CREATE.PRORATA_LABEL' | translate
-                }}</label>
-              </div>
-              <div>
-                <p-radioButton
-                  [inputId]="'type_' + i + '_2'"
-                  value="2"
-                  formControlName="type"
-                ></p-radioButton>
-                <label [for]="'type_' + i + '_2'" class="ms-2">{{
-                  'KEY.CREATE.EGALITARIAN_LABEL' | translate
-                }}</label>
-              </div>
-            </div>
-            <app-error-handler controlName="type"></app-error-handler>
-          </div>
+    <!-- Stepper -->
+    <p-stepper [value]="0" [linear]="true">
+      <p-step-list>
+        <p-step [value]="0">{{ 'KEY.CREATE.STEP_CONSUMERS_COUNT' | translate }}</p-step>
+        <p-step [value]="1">{{ 'KEY.CREATE.STEP_CONSUMER_NAMES' | translate }}</p-step>
+        <p-step [value]="2">{{ 'KEY.CREATE.STEP_ITERATIONS' | translate }}</p-step>
+        <p-step [value]="3">{{ 'KEY.CREATE.FINALISATION' | translate }}</p-step>
+      </p-step-list>
 
-          <!-- Pourcentage d'injection -->
-          <div class="lg:w-6/12 mb-3">
-            <label for="injection_percetange" class="font-medium"
-              >{{ 'KEY.CREATE.INJECTION_PERCENTAGE_LABEL' | translate }} *</label
-            >
-            <p-inputNumber
-              id="injection_percentage"
-              class="w-full"
-              formControlName="inj_percentage"
-            ></p-inputNumber>
-            <app-error-handler controlName="inj_percentage"></app-error-handler>
-          </div>
-        </div>
+      <p-step-panels>
+        <!-- Step 0: Number of consumers -->
+        <p-step-panel [value]="0">
+          <ng-template #content let-activateCallback="activateCallback">
+            <p-card styleClass="border-l-3 border-l-primary-400">
+              <div class="flex items-center gap-2.5 mb-4">
+                <i class="pi pi-users text-primary-500 text-lg"></i>
+                <h3 class="font-semibold text-base text-surface-800 m-0">
+                  {{ 'KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL' | translate }}
+                </h3>
+              </div>
 
-        <div class="flex justify-between mt-3">
-          @if (iterations.length === 0 || i === formIterations.length - 1) {
-            <p-button
-              type="submit"
-              label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
-              class="p-button-lg"
-            ></p-button>
-          }
-          @if (formIterations.length > 1 && i !== formIterations.length - 1) {
-            <p-button
-              class="w-full text-end"
-              icon="pi pi-trash"
-              severity="danger"
-              (click)="deleteIteration(i)"
-            ></p-button>
-          } @else {
-            @if (formIterations.length > 1) {
+              <form [formGroup]="formFirstStep" class="form-section">
+                <div class="flex flex-col gap-1 max-w-md">
+                  <label for="nb_consumers" class="field-label">
+                    {{ 'KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL' | translate }} *
+                  </label>
+                  <p-inputNumber
+                    class="w-full"
+                    formControlName="nb_consumers"
+                    [min]="1"
+                    inputId="nb_consumers"
+                  ></p-inputNumber>
+                  <app-error-handler controlName="nb_consumers"></app-error-handler>
+                </div>
+              </form>
+            </p-card>
+
+            <div class="flex justify-end mt-4">
               <p-button
-                icon="pi pi-trash"
-                severity="danger"
-                (click)="deleteIteration(i)"
+                [outlined]="true"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
+                severity="primary"
+                (click)="submitFirstForm(); formFirstStep.valid && activateCallback(1)"
               ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <!-- Step 1: Consumer names -->
+        <p-step-panel [value]="1">
+          <ng-template #content let-activateCallback="activateCallback">
+            @if (secondStep()) {
+              <p-card styleClass="border-l-3 border-l-primary-400">
+                <div class="flex items-center gap-2.5 mb-4">
+                  <i class="pi pi-id-card text-primary-500 text-lg"></i>
+                  <h3 class="font-semibold text-base text-surface-800 m-0">
+                    {{ 'KEY.CREATE.CONSUMER_NAME_LABEL' | translate }}
+                  </h3>
+                </div>
+
+                <form [formGroup]="formSecondStep" class="form-section">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for (_ of controls; let i = $index; track i) {
+                      <div class="flex flex-col gap-1">
+                        <label for="consumer_name_{{ i }}" class="field-label">
+                          {{ 'KEY.CREATE.CONSUMER_NAME_LABEL' | translate }} {{ i + 1 }} *
+                        </label>
+                        <input
+                          id="consumer_name_{{ i }}"
+                          pInputText
+                          class="w-full"
+                          [formControlName]="'consumer_name_' + i"
+                        />
+                        <app-error-handler [controlName]="'consumer_name_' + i"></app-error-handler>
+                      </div>
+                    }
+                  </div>
+                </form>
+              </p-card>
+
+              <div class="flex justify-between mt-4">
+                <p-button
+                  [outlined]="true"
+                  icon="pi pi-arrow-left"
+                  label="{{ 'KEY.SHARED.BACK' | translate }}"
+                  severity="secondary"
+                  (click)="activateCallback(0)"
+                ></p-button>
+                <p-button
+                  [outlined]="true"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
+                  severity="primary"
+                  (click)="submitSecondForm(); formSecondStep.valid && activateCallback(2)"
+                ></p-button>
+              </div>
             }
-          }
-        </div>
-      </form>
-    </div>
-  }
-  <!-- Iteration Forms -->
-  @if (displayErrorInj) {
-    <div class="alert alert-danger text-center">
-      {{ 'KEY.CREATE.SUM_MUST_BE_100_LABEL' | translate }}
-    </div>
-  }
-  @if (displayEnd) {
-    <div class="container shadow-sm p-4 rounded bg-white mt-4">
-      <form [formGroup]="lastForm" (ngSubmit)="submitKey()">
-        <h5 class="font-medium text-center mb-3">{{ 'KEY.CREATE.FINALISATION' | translate }}</h5>
+          </ng-template>
+        </p-step-panel>
 
-        <!-- Key Name -->
-        <div class="mb-3">
-          <label class="font-medium" for="key_name">{{
-            'KEY.CREATE.FORM.KEY_NAME_LABEL' | translate
-          }}</label>
-          <input
-            pInputText
-            class="w-full"
-            formControlName="key_name"
-            id="key_name"
-            placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
-          />
-          <app-error-handler controlName="key_name"></app-error-handler>
-        </div>
+        <!-- Step 2: Iterations -->
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="space-y-4">
+              @for (iterForm of formIterations(); let i = $index; track i) {
+                <div
+                  class="iteration-card rounded-xl border border-surface-200 bg-surface-0 p-5 transition-colors"
+                >
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2.5">
+                      <i class="pi pi-sliders-h text-primary-500 text-lg"></i>
+                      <h3 class="font-semibold text-base text-surface-800 m-0">
+                        Iteration {{ i + 1 }}
+                      </h3>
+                    </div>
+                    @if (formIterations().length > 1) {
+                      <p-button
+                        icon="pi pi-trash"
+                        [rounded]="true"
+                        [text]="true"
+                        severity="danger"
+                        (click)="deleteIteration(i)"
+                      ></p-button>
+                    }
+                  </div>
 
-        <!-- Description -->
-        <div class="mb-3">
-          <label class="font-medium" for="key_description">{{
-            'KEY.CREATE.FORM.KEY_DESCRIPTION_LABEL' | translate
-          }}</label>
-          <input
-            pInputTextarea
-            class="w-full"
-            formControlName="key_description"
-            id="key_description"
-            placeholder="{{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate }}"
-          />
-          <app-error-handler controlName="key_description"></app-error-handler>
-        </div>
+                  <form [formGroup]="iterForm" class="form-section">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <!-- Key type -->
+                      <div class="flex flex-col gap-2">
+                        <span class="field-label">
+                          {{ 'KEY.CREATE.KEY_TYPE_LABEL' | translate }} *
+                        </span>
+                        <div class="flex gap-4">
+                          <div class="flex items-center gap-2">
+                            <p-radioButton
+                              [inputId]="'type_' + i + '_1'"
+                              value="1"
+                              formControlName="type"
+                            ></p-radioButton>
+                            <label [for]="'type_' + i + '_1'" class="text-sm text-surface-700">
+                              {{ 'KEY.CREATE.PRORATA_LABEL' | translate }}
+                            </label>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <p-radioButton
+                              [inputId]="'type_' + i + '_2'"
+                              value="2"
+                              formControlName="type"
+                            ></p-radioButton>
+                            <label [for]="'type_' + i + '_2'" class="text-sm text-surface-700">
+                              {{ 'KEY.CREATE.EGALITARIAN_LABEL' | translate }}
+                            </label>
+                          </div>
+                        </div>
+                        <app-error-handler controlName="type"></app-error-handler>
+                      </div>
 
-        <div class="text-center">
-          <p-button
-            label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
-            type="submit"
-            class="p-button-lg"
-          ></p-button>
-        </div>
-      </form>
-    </div>
-  }
-  <!-- Final Step -->
+                      <!-- Injection percentage -->
+                      <div class="flex flex-col gap-1">
+                        <label for="injection_percentage_{{ i }}" class="field-label">
+                          {{ 'KEY.CREATE.INJECTION_PERCENTAGE_LABEL' | translate }} *
+                        </label>
+                        <p-inputNumber
+                          id="injection_percentage_{{ i }}"
+                          class="w-full"
+                          formControlName="inj_percentage"
+                        ></p-inputNumber>
+                        <app-error-handler controlName="inj_percentage"></app-error-handler>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              }
+
+              @if (displayErrorInj()) {
+                <div
+                  class="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+                >
+                  <i class="pi pi-exclamation-triangle"></i>
+                  {{ 'KEY.CREATE.SUM_MUST_BE_100_LABEL' | translate }}
+                </div>
+              }
+            </div>
+
+            <div class="flex justify-between mt-4">
+              <p-button
+                [outlined]="true"
+                icon="pi pi-arrow-left"
+                label="{{ 'KEY.SHARED.BACK' | translate }}"
+                severity="secondary"
+                (click)="activateCallback(1)"
+              ></p-button>
+              <p-button
+                [outlined]="true"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
+                severity="primary"
+                (click)="submitIteration(); displayEnd() && activateCallback(3)"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <!-- Step 3: Finalization -->
+        <p-step-panel [value]="3">
+          <ng-template #content let-activateCallback="activateCallback">
+            @if (displayEnd()) {
+              <p-card styleClass="border-l-3 border-l-primary-400">
+                <div class="flex items-center gap-2.5 mb-4">
+                  <i class="pi pi-check-circle text-primary-500 text-lg"></i>
+                  <h3 class="font-semibold text-base text-surface-800 m-0">
+                    {{ 'KEY.CREATE.FINALISATION' | translate }}
+                  </h3>
+                </div>
+
+                <form [formGroup]="lastForm" (ngSubmit)="submitKey()" class="form-section">
+                  <div class="space-y-4">
+                    <!-- Key Name -->
+                    <div class="flex flex-col gap-1">
+                      <label class="field-label" for="key_name">
+                        {{ 'KEY.CREATE.FORM.KEY_NAME_LABEL' | translate }}
+                      </label>
+                      <input
+                        pInputText
+                        class="w-full"
+                        formControlName="key_name"
+                        id="key_name"
+                        placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
+                      />
+                      <app-error-handler controlName="key_name"></app-error-handler>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="flex flex-col gap-1">
+                      <label class="field-label" for="key_description">
+                        {{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_LABEL' | translate }}
+                      </label>
+                      <textarea
+                        pInputTextarea
+                        rows="4"
+                        class="w-full"
+                        formControlName="key_description"
+                        id="key_description"
+                        placeholder="{{
+                          'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate
+                        }}"
+                      ></textarea>
+                      <app-error-handler controlName="key_description"></app-error-handler>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-2">
+                      <p-button
+                        [outlined]="true"
+                        icon="pi pi-arrow-left"
+                        label="{{ 'KEY.SHARED.BACK' | translate }}"
+                        severity="secondary"
+                        type="button"
+                        (click)="activateCallback(2)"
+                      ></p-button>
+                      <p-button
+                        icon="pi pi-check"
+                        label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
+                        severity="primary"
+                        type="submit"
+                      ></p-button>
+                    </div>
+                  </div>
+                </form>
+              </p-card>
+            }
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+  </div>
 </div>

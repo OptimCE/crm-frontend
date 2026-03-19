@@ -20,10 +20,10 @@ export class PendingManagerInvitation {
   private errorHandler = inject(ErrorMessageHandler);
   pendingGestionnaireInvitation = signal<UserManagerInvitationDTO[]>([]);
   filter = signal<UserManagerInvitationQuery>({ page: 1, limit: 10 });
-  loadingGestionnaire = true;
+  loadingGestionnaire = signal(true);
 
   loadPendingGestionnaireInvitation(): void {
-    this.loadingGestionnaire = true;
+    this.loadingGestionnaire.set(true);
     this.invitationService.getManagerPendingInvitation(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -31,11 +31,11 @@ export class PendingManagerInvitation {
         } else {
           this.errorHandler.handleError(response);
         }
-        this.loadingGestionnaire = false;
+        this.loadingGestionnaire.set(false);
       },
       error: (error) => {
         this.errorHandler.handleError(error);
-        this.loadingGestionnaire = false;
+        this.loadingGestionnaire.set(false);
       },
     });
   }

@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4">
+<div class="container mx-auto px-4 py-2">
   <p-stepper [value]="0" [linear]="true">
     <p-step-list>
       <p-step [value]="0">{{ 'MEMBER.ADD.TAB_HEADER.STATUS_LABEL' | translate }}</p-step>
@@ -11,42 +11,42 @@
     <p-step-panels>
       <p-step-panel [value]="0">
         <ng-template #content let-activateCallback="activateCallback">
-          <app-new-member-type-self-encoding
-            [typeClient]="typeClient"
+          <app-new-member-type
+            [typeClient]="typeClient()"
             (typeClientChange)="onTypeClientChange($event)"
             (formSubmitted)="submitForm1(activateCallback)"
-          ></app-new-member-type-self-encoding>
+          ></app-new-member-type>
         </ng-template>
       </p-step-panel>
       <p-step-panel [value]="1">
         <ng-template #content let-activateCallback="activateCallback">
-          <app-new-member-informations-self-encoding
+          <app-new-member-informations
             (formSubmitted)="submitForm2(activateCallback)"
             (backClicked)="activateCallback(0)"
             (gestionnaireChangeEvent)="gestionnaireChange($event)"
             [form]="formData"
-            [gestionnaire]="gestionnaire"
-            [typeClient]="typeClient"
-          ></app-new-member-informations-self-encoding>
+            [gestionnaire]="gestionnaire()"
+            [typeClient]="typeClient()"
+          ></app-new-member-informations>
         </ng-template>
       </p-step-panel>
       <p-step-panel [value]="2">
         <ng-template #content let-activateCallback="activateCallback">
-          <app-new-member-address-self-encoding
+          <app-new-member-address
             (backClicked)="activateCallback(1)"
             (formSubmitted)="submitForm3(activateCallback)"
             (toggleSameAddressEvent)="toggleSameAddress($event)"
             [addressForm]="addressForm"
-          ></app-new-member-address-self-encoding>
+          ></app-new-member-address>
         </ng-template>
       </p-step-panel>
       <p-step-panel [value]="3">
         <ng-template #content let-activateCallback="activateCallback">
-          <app-new-member-banking-info-self-encoding
+          <app-new-member-banking-info
             (formSubmitted)="onSubmitEnd()"
             (backClicked)="activateCallback(2)"
             [ibanForm]="ibanForm"
-          ></app-new-member-banking-info-self-encoding>
+          ></app-new-member-banking-info>
         </ng-template>
       </p-step-panel>
     </p-step-panels>

@@ -1,14 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../../../shared/services/user.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UpdateUserDTO, UserDTO } from '../../../../../shared/dtos/user.dtos';
-import { InputGroup } from 'primeng/inputgroup';
 import { InputText } from 'primeng/inputtext';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+import { Divider } from 'primeng/divider';
 
 interface UserUpdateDialogData {
   user: UserDTO;
@@ -26,16 +27,16 @@ interface UserUpdateFormValue {
   home_address_postcode: string;
   home_address_supplement: string;
   home_address_city: string;
-  billing_address_street?: string;
-  billing_address_number?: string;
-  billing_address_postcode?: string;
-  billing_address_supplement?: string;
-  billing_address_city?: string;
+  billing_address_street: string;
+  billing_address_number: string;
+  billing_address_postcode: string;
+  billing_address_supplement: string;
+  billing_address_city: string;
 }
 
 @Component({
   selector: 'app-user-update-dialog',
-  imports: [ReactiveFormsModule, InputGroup, InputText, TranslatePipe, Checkbox, Button, Ripple],
+  imports: [ReactiveFormsModule, InputText, TranslatePipe, Checkbox, Button, Ripple, Divider],
   templateUrl: './user-update-dialog.html',
   styleUrl: './user-update-dialog.css',
 })
@@ -43,8 +44,18 @@ export class UserUpdateDialog implements OnInit {
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private userService = inject(UserService);
+  private destroyRef = inject(DestroyRef);
   formData!: FormGroup;
   user!: UpdateUserDTO;
+  protected readonly isSameAddress = signal(false);
+
+  private readonly billingControls = [
+    'billing_address_street',
+    'billing_address_number',
+    'billing_address_postcode',
+    'billing_address_supplement',
+    'billing_address_city',
+  ];
 
   ngOnInit(): void {
     this.initializeForm();
@@ -57,22 +68,22 @@ export class UserUpdateDialog implements OnInit {
 
   initializeForm(): void {
     this.formData = new FormGroup({
-      id: new FormControl('', []),
-      name: new FormControl('', []),
-      surname: new FormControl('', []),
-      phone: new FormControl('', []),
-      iban: new FormControl('', []),
+      id: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      surname: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [Validators.required]),
+      iban: new FormControl('', [Validators.required]),
       same_address: new FormControl(false),
-      home_address_street: new FormControl('', []),
-      home_address_number: new FormControl('', []),
-      home_address_postcode: new FormControl('', []),
-      home_address_supplement: new FormControl('', []),
-      home_address_city: new FormControl('', []),
-      billing_address_street: new FormControl('', []),
-      billing_address_number: new FormControl('', []),
-      billing_address_postcode: new FormControl('', []),
-      billing_address_supplement: new FormControl('', []),
-      billing_address_city: new FormControl('', []),
+      home_address_street: new FormControl('', [Validators.required]),
+      home_address_number: new FormControl('', [Validators.required]),
+      home_address_postcode: new FormControl('', [Validators.required]),
+      home_address_supplement: new FormControl(''),
+      home_address_city: new FormControl('', [Validators.required]),
+      billing_address_street: new FormControl('', [Validators.required]),
+      billing_address_number: new FormControl('', [Validators.required]),
+      billing_address_postcode: new FormControl('', [Validators.required]),
+      billing_address_supplement: new FormControl(''),
+      billing_address_city: new FormControl('', [Validators.required]),
     });
   }
 
@@ -109,28 +120,23 @@ export class UserUpdateDialog implements OnInit {
   toggleSameAddress(_event: CheckboxChangeEvent): void {
     const formValue = this.formData.getRawValue() as UserUpdateFormValue;
     const sameAddressValue = formValue.same_address;
-    const isSameAddress = Array.isArray(sameAddressValue)
-      ? sameAddressValue[0]
-      : !!sameAddressValue;
+    const same = Array.isArray(sameAddressValue) ? sameAddressValue[0] : !!sameAddressValue;
+    this.isSameAddress.set(same as boolean);
 
-    if (isSameAddress) {
-      // Remove billing address from form
-      this.formData.removeControl('billing_address_street');
-      this.formData.removeControl('billing_address_number');
-      this.formData.removeControl('billing_address_postcode');
-      this.formData.removeControl('billing_address_supplement');
-      this.formData.removeControl('billing_address_city');
+    if (same) {
+      this.billingControls.forEach((c) => this.formData.get(c)?.disable());
     } else {
-      this.formData.addControl('billing_address_street', new FormControl(''));
-      this.formData.addControl('billing_address_number', new FormControl(''));
-      this.formData.addControl('billing_address_postcode', new FormControl(''));
-      this.formData.addControl('billing_address_supplement', new FormControl(''));
-      this.formData.addControl('billing_address_city', new FormControl(''));
+      this.billingControls.forEach((c) => this.formData.get(c)?.enable());
     }
+  }
+
+  cancel(): void {
+    this.ref.close(false);
   }
 
   submitForm(): void {
     if (this.formData.invalid) {
+      this.formData.markAllAsTouched();
       return;
     }
     const formValue = this.formData.getRawValue() as UserUpdateFormValue;
@@ -155,6 +161,7 @@ export class UserUpdateDialog implements OnInit {
       };
     }
     if (
+      !this.isSameAddress() &&
       formValue.billing_address_street &&
       formValue.billing_address_number &&
       formValue.billing_address_postcode &&
@@ -168,11 +175,13 @@ export class UserUpdateDialog implements OnInit {
         city: formValue.billing_address_city,
       };
     }
-    console.log(this.user);
-    this.userService.updateUserInfo(this.user).subscribe((response) => {
-      if (response) {
-        this.ref.close(true);
-      }
-    });
+    this.userService
+      .updateUserInfo(this.user)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response) {
+          this.ref.close(true);
+        }
+      });
   }
 }

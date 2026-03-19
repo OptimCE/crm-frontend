@@ -1,22 +1,89 @@
-.menu-item {
-  position: relative;
-}
-.menu-link {
-  display: flex;
-  align-items: center;
-  padding: 12px 0;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.active-class > i,
-.active-class > span {
-  color: var(--primary-color) !important;
+:host {
+  display: block;
 }
 
-.menu-link-opened {
-  padding-left: 16px;
-  padding-right: 16px;
+.sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  color: var(--sidebar-text, #374038);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 200ms ease;
+  overflow: hidden;
+  min-height: 40px;
 }
-.pcontent-end {
-  place-content: end;
+
+.sidebar-item--collapsed {
+  justify-content: center;
+  padding: 6px;
+}
+
+.sidebar-item:hover {
+  background: var(--sidebar-accent-soft, rgba(67, 160, 71, 0.08));
+  color: var(--sidebar-text-bright, #181e18);
+}
+
+.sidebar-item:hover .sidebar-item__icon-wrapper {
+  transform: scale(1.08);
+}
+
+.sidebar-item--active {
+  background: var(--sidebar-accent-medium, rgba(67, 160, 71, 0.14));
+  color: var(--sidebar-text-bright, #181e18);
+}
+
+.sidebar-item__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition:
+    transform 200ms ease,
+    background 200ms ease;
+  font-size: 1.1rem;
+}
+
+.sidebar-item__icon-wrapper--active {
+  background: var(--sidebar-accent, #43a047);
+  color: #fff;
+}
+
+.sidebar-item__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  animation: labelSlideIn 200ms ease forwards;
+  animation-delay: 60ms;
+}
+
+@keyframes labelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar-item__active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--sidebar-accent, #43a047);
+  border-radius: 0 3px 3px 0;
 }

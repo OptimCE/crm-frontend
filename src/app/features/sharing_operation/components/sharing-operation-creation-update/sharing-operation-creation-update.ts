@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { Button } from 'primeng/button';
@@ -41,8 +42,9 @@ export class SharingOperationCreationUpdate implements OnInit {
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
+  private destroyRef = inject(DestroyRef);
   formAddSharingOp!: FormGroup;
-  categories: SharingOperationCategory[] = [];
+  readonly categories = signal<SharingOperationCategory[]>([]);
 
   ngOnInit(): void {
     this.formAddSharingOp = new FormGroup({
@@ -62,15 +64,16 @@ export class SharingOperationCreationUpdate implements OnInit {
         'SHARING_OPERATION.TYPE.CER',
         'SHARING_OPERATION.TYPE.CEC',
       ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((translation: Record<string, string>) => {
-        this.categories = [
+        this.categories.set([
           {
             key: SharingOperationType.LOCAL,
             value: translation['SHARING_OPERATION.TYPE.INSIDE_BUILDING'],
           },
           { key: SharingOperationType.CER, value: translation['SHARING_OPERATION.TYPE.CER'] },
           { key: SharingOperationType.CEC, value: translation['SHARING_OPERATION.TYPE.CEC'] },
-        ];
+        ]);
       });
   }
   onSubmitForm(): void {
@@ -82,17 +85,20 @@ export class SharingOperationCreationUpdate implements OnInit {
       name: formValue.name,
       type: formValue.type,
     };
-    this.sharingOpService.createSharingOperation(newSharing).subscribe({
-      next: (response) => {
-        if (response) {
-          this.ref.close(true);
-        } else {
-          this.errorHandler.handleError(response);
-        }
-      },
-      error: (error) => {
-        this.errorHandler.handleError(error);
-      },
-    });
+    this.sharingOpService
+      .createSharingOperation(newSharing)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.ref.close(true);
+          } else {
+            this.errorHandler.handleError(response);
+          }
+        },
+        error: (error) => {
+          this.errorHandler.handleError(error);
+        },
+      });
   }
 }

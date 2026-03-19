@@ -1,139 +1,217 @@
 <div class="container mx-auto my-auto">
   @if (isLoading()) {
-    <div class="flex items-center justify-center py-10">
-      <p-progressSpinner></p-progressSpinner>
-    </div>
-  } @else {
+    <!-- Skeleton Loading State -->
     <div class="space-y-4">
-      <!-- Header -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <i class="pi pi-user text-green-500! text-2xl!"></i>
-          <h2 class="text-xl font-medium">{{ 'PROFILE.MY_PROFILE' | translate }}</h2>
+      <!-- Hero Skeleton -->
+      <div class="profile-hero rounded-xl border border-primary-100 p-6 flex items-center gap-5">
+        <p-skeleton shape="circle" size="4rem" />
+        <div class="flex flex-col gap-2 flex-1">
+          <p-skeleton width="12rem" height="1.5rem" />
+          <p-skeleton width="8rem" height="1rem" />
+        </div>
+        <p-skeleton width="6rem" height="2.5rem" borderRadius="8px" />
+      </div>
+      <!-- Card Skeletons -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        @for (_ of [1, 2, 3]; track $index) {
+          <div class="bg-white border border-surface-200 rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-4">
+              <p-skeleton shape="circle" size="1.5rem" />
+              <p-skeleton width="8rem" height="1rem" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              @for (_ of [1, 2, 3, 4]; track $index) {
+                <div>
+                  <p-skeleton width="5rem" height="0.75rem" styleClass="mb-2" />
+                  <p-skeleton width="7rem" height="1rem" />
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else if (hasError()) {
+    <!-- Error State -->
+    <div class="flex flex-col items-center justify-center py-16 gap-4">
+      <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
+      <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <p-button
+        [outlined]="true"
+        icon="pi pi-refresh"
+        label="{{ 'COMMON.RETRY' | translate }}"
+        (click)="loadUser()"
+      />
+    </div>
+  } @else if (user()) {
+    <div class="space-y-4">
+      <!-- Hero Header -->
+      <div
+        class="profile-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+      >
+        <p-avatar
+          [label]="userInitials()"
+          size="xlarge"
+          shape="circle"
+          styleClass="bg-primary-100 text-primary-700 text-xl font-semibold"
+        />
+        <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+          <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate">
+            {{ user()!.first_name ?? '' }} {{ user()!.last_name ?? '' }}
+          </h1>
+          <p class="text-sm text-surface-500 truncate">{{ user()!.email }}</p>
         </div>
         <p-button
           pRipple
+          [outlined]="true"
           icon="pi pi-pencil"
           label="{{ 'PROFILE.UPDATE' | translate }}"
-          class="p-button-primary"
+          severity="primary"
           (click)="updateMember()"
-        ></p-button>
+        />
       </div>
 
-      <!-- Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <!-- General Information -->
-        <p-card class="h-full">
-          <ng-template #header>
-            <div class="flex items-center gap-2 rounded-t-2xl p-2">
-              <i class="pi pi-user text-green-300! mr-1 text-xl!"></i>
-              <h5 class="m-0 font-medium text-lg">
-                {{ 'PROFILE.PERSONAL_INFORMATION.TITLE' | translate }}
-              </h5>
+      <!-- Information Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+        <!-- Personal Information -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-user text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800">
+              {{ 'PROFILE.PERSONAL_INFORMATION.TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.SOCIAL_NUMBER' | translate }}
+              </span>
+              @if (user()!.nrn) {
+                <span class="field-value">{{ user()!.nrn }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
             </div>
-          </ng-template>
-          @if (user()) {
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.SOCIAL_NUMBER' | translate }}
-                </h6>
-                <p class="mt-1">{{ user()!.nrn ?? '/' }}</p>
-              </div>
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.LAST_NAME' | translate }}
-                </h6>
-                <p class="mt-1">{{ user()!.last_name ?? '/' }}</p>
-              </div>
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.FIRST_NAME' | translate }}
-                </h6>
-                <p class="mt-1">{{ user()!.first_name ?? '/' }}</p>
-              </div>
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.PHONE_NUMBER' | translate }}
-                </h6>
-                <p class="mt-1">{{ user()!.phone_number ?? '/' }}</p>
-              </div>
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.LAST_NAME' | translate }}
+              </span>
+              @if (user()!.last_name) {
+                <span class="field-value">{{ user()!.last_name }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
             </div>
-          }
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.FIRST_NAME' | translate }}
+              </span>
+              @if (user()!.first_name) {
+                <span class="field-value">{{ user()!.first_name }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.PHONE_NUMBER' | translate }}
+              </span>
+              @if (user()!.phone_number) {
+                <span class="field-value">{{ user()!.phone_number }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+          </div>
         </p-card>
 
         <!-- Addresses -->
-        <p-card class="h-full">
-          <ng-template #header>
-            <div class="flex items-center gap-2 rounded-t-2xl p-2">
-              <i class="pi pi-home text-green-300! mr-1 text-xl!"></i>
-              <h5 class="m-0 text-md">{{ 'COMMON.ADDRESS' | translate }}</h5>
-            </div>
-          </ng-template>
-          @if (user()) {
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.HOUSE_ADDRESS' | translate }}
-                </h6>
-                <div class="p-3 bg-gray-100 rounded">
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-home text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800">
+              {{ 'COMMON.ADDRESS' | translate }}
+            </h3>
+          </div>
+          <div class="grid grid-cols-1 gap-4">
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.HOUSE_ADDRESS' | translate }}
+              </span>
+              @if (user()!.home_address) {
+                <div class="bg-surface-50 border border-surface-200 rounded-lg p-3 mt-1">
                   <p
-                    class="m-0"
-                    [innerHTML]="user()!.home_address ? (user()!.home_address! | address) : '/'"
+                    class="m-0 text-sm text-surface-800"
+                    [innerHTML]="user()!.home_address! | address"
                   ></p>
                 </div>
-              </div>
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.BILLING_ADDRESS' | translate }}
-                </h6>
-                <div class="p-3 bg-gray-100 rounded">
+              } @else {
+                <div class="flex items-center gap-2 mt-1">
+                  <i class="pi pi-map-marker text-sm text-surface-300"></i>
+                  <span class="field-empty">--</span>
+                </div>
+              }
+            </div>
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.BILLING_ADDRESS' | translate }}
+              </span>
+              @if (user()!.billing_address) {
+                <div class="bg-surface-50 border border-surface-200 rounded-lg p-3 mt-1">
                   <p
-                    class="m-0"
-                    [innerHTML]="
-                      user()!.billing_address ? (user()!.billing_address! | address) : '/'
-                    "
+                    class="m-0 text-sm text-surface-800"
+                    [innerHTML]="user()!.billing_address! | address"
                   ></p>
                 </div>
-              </div>
+              } @else {
+                <div class="flex items-center gap-2 mt-1">
+                  <i class="pi pi-map-marker text-sm text-surface-300"></i>
+                  <span class="field-empty">--</span>
+                </div>
+              }
             </div>
-          }
+          </div>
         </p-card>
 
         <!-- Account -->
-        <p-card class="h-full">
-          <ng-template #header>
-            <div class="flex items-center gap-2 rounded-t-2xl p-2">
-              <i class="pi pi-lock text-green-300! mr-1 text-xl!"></i>
-              <h5 class="m-0 font-medium text-lg">
-                {{ 'PROFILE.ACCOUNT_INFORMATION' | translate }}
-              </h5>
-            </div>
-          </ng-template>
-          @if (user()) {
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-              <div>
-                <h6 class="text-muted text-md font-medium">
-                  {{ 'PROFILE.PERSONAL_INFORMATION.EMAIL' | translate }}
-                </h6>
-                <div class="p-3 bg-gray-100 rounded">
-                  <p class="m-0">{{ user()!.email }}</p>
-                </div>
-              </div>
-              <div class="flex items-end">
-                <p-button
-                  pRipple
-                  icon="pi pi-key"
-                  label="{{ 'PROFILE.UPDATE_PASSWORD' | translate }}"
-                ></p-button>
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-lock text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800">
+              {{ 'PROFILE.ACCOUNT_INFORMATION' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div>
+              <span class="field-label">
+                {{ 'PROFILE.PERSONAL_INFORMATION.EMAIL' | translate }}
+              </span>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="field-value">{{ user()!.email }}</span>
+                <i
+                  class="pi pi-lock text-xs text-surface-300"
+                  pTooltip="{{ 'PROFILE.EMAIL_READONLY_HINT' | translate }}"
+                  tooltipPosition="top"
+                ></i>
               </div>
             </div>
-          }
+            <div>
+              <p-button
+                pRipple
+                [text]="true"
+                [plain]="true"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                label="{{ 'PROFILE.UPDATE_PASSWORD' | translate }}"
+                styleClass="p-0 text-sm"
+              />
+            </div>
+          </div>
         </p-card>
       </div>
 
       <!-- Tabs -->
-      <!--      <app-profile-tabs [user]="user()!"></app-profile-tabs>-->
+      <app-profile-tabs [user]="user()!"></app-profile-tabs>
     </div>
   }
 </div>

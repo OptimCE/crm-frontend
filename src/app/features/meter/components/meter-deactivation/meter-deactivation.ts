@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -14,29 +14,22 @@ interface MeterDeactivationDialogData {
 
 @Component({
   selector: 'app-meter-deactivation',
-  standalone: true,
   imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './meter-deactivation.html',
   styleUrl: './meter-deactivation.css',
 })
-export class MeterDeactivation implements OnInit {
+export class MeterDeactivation {
   private config = inject(DynamicDialogConfig);
 
-  @Input()
-  ean!: string;
-  deleteForm!: FormGroup;
-  calendarOpen: boolean;
+  readonly ean: string;
+  readonly deleteForm = new FormGroup({
+    date: new FormControl('', [Validators.required]),
+  });
+  readonly calendarOpen = signal<boolean>(false);
 
   constructor() {
     const data = this.config.data as MeterDeactivationDialogData;
     this.ean = data.ean;
-    this.calendarOpen = false;
-  }
-
-  ngOnInit(): void {
-    this.deleteForm = new FormGroup({
-      date: new FormControl('', [Validators.required]),
-    });
   }
 
   // onSubmit() {

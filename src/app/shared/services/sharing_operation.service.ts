@@ -34,16 +34,6 @@ export class SharingOperationService extends ServiceBase {
     this.apiAddress = environments.apiUrl + '/sharing_operations';
   }
 
-  // private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
-  //   const params: Record<string, string | number | boolean> = {};
-  //   for (const [key, value] of Object.entries(obj)) {
-  //     if (value !== undefined && value !== null) {
-  //       params[key] = value as string | number | boolean;
-  //     }
-  //   }
-  //   return params;
-  // }
-
   getSharingOperationList(
     query: SharingOperationPartialQuery,
   ): Observable<ApiResponsePaginated<SharingOperationPartialDTO[] | string>> {
@@ -52,12 +42,6 @@ export class SharingOperationService extends ServiceBase {
       this.apiAddress + '/',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<SharingOperationPartialDTO[] | string>>(
-    //   this.apiAddress + '/',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   getSharingOperation(id: number): Observable<ApiResponse<SharingOperationDTO | string>> {
@@ -65,7 +49,6 @@ export class SharingOperationService extends ServiceBase {
       `sharing-operation:${id}`,
       this.apiAddress + `/${id}`,
     );
-    // return this.http.get<ApiResponse<SharingOperationDTO | string>>(this.apiAddress + '/' + id);
   }
 
   getSharingOperationMetersList(
@@ -77,12 +60,6 @@ export class SharingOperationService extends ServiceBase {
       this.apiAddress + `/${id}/meters`,
       query,
     );
-    // return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(
-    //   this.apiAddress + '/' + id + '/meters',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   getSharingOperationKeysList(
@@ -94,12 +71,6 @@ export class SharingOperationService extends ServiceBase {
       this.apiAddress + `/${id}/keys`,
       query,
     );
-    // return this.http.get<ApiResponsePaginated<SharingOperationKeyDTO[] | string>>(
-    //   this.apiAddress + '/' + id + '/keys',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   getSharingOperationConsumptions(
@@ -111,12 +82,6 @@ export class SharingOperationService extends ServiceBase {
       this.apiAddress + `/${id}/consumption`,
       query,
     );
-    // return this.http.get<ApiResponse<SharingOpConsumptionDTO | string>>(
-    //   this.apiAddress + '/' + id + '/consumptions',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   downloadSharingOperationConsumptions(

@@ -18,12 +18,12 @@ import { InvitationService } from '../../../../shared/services/invitation.servic
 })
 export class MemberPendingInvite {
   private invitationService = inject(InvitationService);
-  pendingMembresInvitation = signal<UserMemberInvitationDTO[]>([]);
-  filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
-  loadingMembers = true;
+  readonly pendingMembresInvitation = signal<UserMemberInvitationDTO[]>([]);
+  readonly filter = signal<UserMemberInvitationQuery>({ page: 1, limit: 10 });
+  readonly loadingMembers = signal<boolean>(true);
 
   loadPendingMemberInvitation(): void {
-    this.loadingMembers = true;
+    this.loadingMembers.set(true);
     this.invitationService.getMembersPendingInviation(this.filter()).subscribe({
       next: (response) => {
         if (response) {
@@ -31,11 +31,11 @@ export class MemberPendingInvite {
         } else {
           console.error(response);
         }
-        this.loadingMembers = false;
+        this.loadingMembers.set(false);
       },
       error: (error) => {
         console.error(error);
-        this.loadingMembers = false;
+        this.loadingMembers.set(false);
       },
     });
   }

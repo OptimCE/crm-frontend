@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+.profile-hero {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}

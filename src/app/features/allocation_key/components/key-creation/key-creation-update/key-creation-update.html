@@ -1,112 +1,161 @@
-<!-- Header Section -->
 <div class="container mx-auto my-auto">
-  <div class="flex flex-wrap -mx-2 items-center pb-3">
-    <div class="lg:w-8/12 px-2 flex items-center">
-      <i class="pi pi-key text-xl text-primary mr-2"></i>
-      <h2 class="mt-0 mb-0 text-lg font-medium">{{ 'KEY.CREATE.KEY_TITLE' | translate }}</h2>
+  @if (key && key.id && key.id > 0) {
+    <app-back-arrow
+      url="/keys/{{ key.id }}"
+      [text]="'KEY.VIEW.BACK_TO_LIST' | translate"
+    ></app-back-arrow>
+  } @else {
+    <app-back-arrow url="/keys" [text]="'KEY.VIEW.BACK_TO_LIST' | translate"></app-back-arrow>
+  }
+
+  <div class="space-y-4 mt-3">
+    <!-- Hero Section -->
+    <div
+      class="key-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+    >
+      <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-100 shrink-0">
+        <i class="pi pi-key text-primary-700 text-2xl"></i>
+      </div>
+      <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+        <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
+          {{ 'KEY.CREATE.KEY_TITLE' | translate }}
+        </h1>
+        @if (keyInput) {
+          <p class="text-sm text-surface-500 m-0">
+            {{ key.name }}
+          </p>
+        }
+      </div>
     </div>
-    <div class="lg:w-4/12 text-end">
-      <p-button
-        pRipple
-        label="{{ 'KEY.SHARED.BACK' | translate }}"
-        class="p-button-outlined"
-        icon="pi pi-arrow-left"
-        routerLink="/key"
-      ></p-button>
-    </div>
-  </div>
-  @if (isLoaded) {
-    <div>
-      <div class="container">
-        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-container">
-          <!-- Key Name -->
-          <div class="form-group pb-3 flex flex-col">
-            <label for="name" class="text-base font-medium">{{
-              'KEY.CREATE.FORM.KEY_NAME_LABEL' | translate
-            }}</label>
-            <input
-              pInputText
-              type="text"
-              class="form-control"
-              formControlName="name"
-              id="name"
-              placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
-            />
-            <app-error-handler controlName="name" [errorsAdd]="errorsAdded"></app-error-handler>
+
+    @if (isLoaded()) {
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <!-- Form Fields Section -->
+        <div class="space-y-4">
+          <p-card styleClass="border-l-3 border-l-primary-400">
+            <div class="flex items-center gap-2.5 mb-4">
+              <i class="pi pi-file-edit text-primary-500 text-lg"></i>
+              <h3 class="font-semibold text-base text-surface-800 m-0">
+                {{ 'KEY.CREATE.FORM.KEY_NAME_LABEL' | translate }}
+              </h3>
+            </div>
+
+            <div class="form-section space-y-4">
+              <!-- Key Name -->
+              <div class="flex flex-col gap-1">
+                <label for="name" class="field-label">{{
+                  'KEY.CREATE.FORM.KEY_NAME_LABEL' | translate
+                }}</label>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-full"
+                  formControlName="name"
+                  id="name"
+                  placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
+                />
+                <app-error-handler
+                  controlName="name"
+                  [errorsAdd]="errorsAdded()"
+                ></app-error-handler>
+              </div>
+
+              <!-- Description -->
+              <div class="flex flex-col gap-1">
+                <label for="description" class="field-label">{{
+                  'KEY.CREATE.FORM.KEY_DESCRIPTION_LABEL' | translate
+                }}</label>
+                <textarea
+                  pInputTextarea
+                  rows="4"
+                  class="w-full"
+                  formControlName="description"
+                  id="description"
+                  placeholder="{{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate }}"
+                ></textarea>
+                <app-error-handler
+                  controlName="description"
+                  [errorsAdd]="errorsAdded()"
+                ></app-error-handler>
+              </div>
+            </div>
+          </p-card>
+
+          <!-- Action Buttons Section -->
+          <div class="actions-section rounded-xl border border-surface-200 bg-surface-0 p-4">
+            <div class="flex items-center gap-2.5 mb-3">
+              <i class="pi pi-plus-circle text-primary-500 text-lg"></i>
+              <h3 class="font-semibold text-base text-surface-800 m-0">
+                {{ 'KEY.CREATE.FORM.KEY_DATAS_LABEL' | translate }}
+              </h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              @if (key.iterations.length < 3) {
+                <p-button
+                  pRipple
+                  [outlined]="true"
+                  icon="pi pi-plus"
+                  label="{{ 'KEY.CREATE.FORM.KEY_ADD_ITERATION_BUTTON_LABEL' | translate }}"
+                  severity="primary"
+                  (click)="newIteration()"
+                ></p-button>
+                <p-button
+                  pRipple
+                  [outlined]="true"
+                  icon="pi pi-percentage"
+                  label="{{ 'KEY.CREATE.FORM.KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL' | translate }}"
+                  severity="primary"
+                  (click)="newIterationProrata()"
+                ></p-button>
+              }
+
+              @if (key.iterations.length > 0) {
+                <p-button
+                  pRipple
+                  [outlined]="true"
+                  icon="pi pi-user-plus"
+                  label="{{ 'KEY.CREATE.FORM.KEY_ADD_CONSUMER_BUTTON_LABEL' | translate }}"
+                  severity="primary"
+                  (click)="newConsumer()"
+                ></p-button>
+              }
+            </div>
           </div>
 
-          <!-- Description -->
-          <div class="form-group pb-3 flex flex-col">
-            <label for="description" class="text-base font-medium">{{
-              'KEY.CREATE.FORM.KEY_DESCRIPTION_LABEL' | translate
-            }}</label>
-            <textarea
-              pInputTextarea
-              rows="5"
-              cols="50"
-              class="form-control"
-              formControlName="description"
-              id="description"
-              placeholder="{{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate }}"
-            ></textarea>
-            <app-error-handler
-              controlName="description"
-              [errorsAdd]="errorsAdded"
-            ></app-error-handler>
+          <!-- Grid Section -->
+          <div
+            class="grid-section rounded-xl border border-surface-200 bg-surface-0 overflow-hidden"
+          >
+            <div class="flex items-center gap-2.5 p-4 pb-0">
+              <i class="pi pi-table text-primary-500 text-lg"></i>
+              <h3 class="font-semibold text-base text-surface-800 m-0">
+                {{ 'KEY.CREATE.FORM.KEY_DATAS_LABEL' | translate }}
+              </h3>
+            </div>
+            <div class="p-4 pt-3">
+              <ag-grid-angular
+                class="ag-theme-quartz"
+                style="width: 100%"
+                [rowData]="rowData()"
+                [columnDefs]="colDefs()"
+                (gridReady)="onGridReady($event)"
+                [defaultColDef]="defaultColDef"
+                (cellValueChanged)="onCellValueChanged($event)"
+                [components]="frameworkComponents"
+                [context]="getContext()"
+                [gridOptions]="gridOptions"
+                domLayout="autoHeight"
+                id="key_data"
+              >
+              </ag-grid-angular>
+            </div>
           </div>
+          <app-error-handler controlName="key_data" [errorsAdd]="errorsAdded()"></app-error-handler>
 
-          <!-- Action Buttons -->
-          <div class="text-center pb-3 space-x-2">
-            @if (key.iterations.length < 3) {
-              <p-button
-                pRipple
-                label="{{ 'KEY.CREATE.FORM.KEY_ADD_ITERATION_BUTTON_LABEL' | translate }}"
-                (click)="newIteration()"
-                class="p-button-outlined"
-              ></p-button>
-              <p-button
-                pRipple
-                label="{{ 'KEY.CREATE.FORM.KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL' | translate }}"
-                (click)="newIterationProrata()"
-                class="p-button-outlined"
-              ></p-button>
-            }
-
-            @if (key.iterations.length > 0) {
-              <p-button
-                pRipple
-                label="{{ 'KEY.CREATE.FORM.KEY_ADD_CONSUMER_BUTTON_LABEL' | translate }}"
-                (click)="newConsumer()"
-                class="p-button-outlined"
-              ></p-button>
-            }
-          </div>
-          <!-- Ag-Grid Wrapper -->
-          <div class="card p-4 grid-container mb-4">
-            <h4 class="text-center mb-3 text-primary">
-              {{ 'KEY.CREATE.FORM.KEY_DATAS_LABEL' | translate }}
-            </h4>
-            <ag-grid-angular
-              style="width: 100%; height: 500px; overflow-x: hidden"
-              [rowData]="rowData"
-              [columnDefs]="colDefs"
-              [class]="themeClass"
-              (gridReady)="onGridReady($event)"
-              [defaultColDef]="defaultColDef"
-              (cellValueChanged)="onCellValueChanged($event)"
-              [components]="frameworkComponents"
-              [context]="getContext()"
-              [gridOptions]="gridOptions"
-              id="key_data"
-            >
-            </ag-grid-angular>
-          </div>
-          <app-error-handler controlName="key_data" [errorsAdd]="errorsAdded"></app-error-handler>
-
-          <!-- Submit Button -->
-          <div class="form-field text-center">
+          <!-- Submit Section -->
+          <div class="flex flex-col items-center gap-3 pt-2 pb-4">
             <app-summary-error
-              [errorsAdd]="errorsSummaryAdded"
+              [errorsAdd]="errorsSummaryAdded()"
               [controlLabels]="{
                 name: 'KEY.CREATE.FORM.ERROR.KEY_NAME_LABEL',
                 description: 'KEY.CREATE.FORM.ERROR.DESCRIPTION_LABEL',
@@ -115,12 +164,14 @@
             <p-button
               pRipple
               type="submit"
+              icon="pi pi-check"
               label="{{ 'KEY.CREATE.FORM.KEY_CREATE_BUTTON_LABEL' | translate }}"
-              class="p-button-lg p-button-primary"
+              severity="primary"
+              size="large"
             ></p-button>
           </div>
-        </form>
-      </div>
-    </div>
-  }
+        </div>
+      </form>
+    }
+  </div>
 </div>

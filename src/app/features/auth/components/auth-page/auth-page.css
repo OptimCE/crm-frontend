@@ -1,84 +1,280 @@
-.bg-card {
-  background-color: white;
-  max-width: 500px;
-  max-height: 1000px;
-  height: 100%;
+/* ===== Split layout ===== */
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ===== Left panel: carousel ===== */
+.left-panel {
+  flex: 1;
+  background: linear-gradient(160deg, #e8f5e9 0%, #f1f8e9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-panel::before {
+  content: '';
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: rgba(67, 160, 71, 0.06);
+  border-radius: 50%;
+  top: -60px;
+  left: -60px;
+}
+
+.left-panel::after {
+  content: '';
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: rgba(67, 160, 71, 0.05);
+  border-radius: 50%;
+  bottom: -40px;
+  right: -40px;
+}
+
+:host ::ng-deep .left-panel .p-carousel {
+  max-width: 420px;
   width: 100%;
 }
-.logo {
-  width: 35%;
+
+:host ::ng-deep .left-panel .p-carousel-indicator-list {
+  gap: 0.5rem;
+  padding-top: 2rem;
 }
-.center-screen {
+
+:host ::ng-deep .left-panel .p-carousel-indicator-button {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: #c8e6c9 !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+:host ::ng-deep .left-panel .p-carousel-indicator-active .p-carousel-indicator-button {
+  background: #43a047 !important;
+  width: 28px !important;
+  border-radius: 5px !important;
+}
+
+/* ===== Carousel slides ===== */
+.slide {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
+  padding: 2rem 1rem;
 }
 
-.wave {
-  background: rgb(255 255 255 / 25%);
-  border-radius: 1000% 1000% 0 0;
-  position: fixed;
-  width: 200%;
-  /*height: 12em;*/
-  height: 25%;
-  animation: wave 10s -3s linear infinite;
-  transform: translate3d(0, 0, 0);
-  opacity: 0.8;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
+.slide-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  background: rgba(67, 160, 71, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
-.wave:nth-of-type(2) {
-  /*bottom: +1.25em;*/
-  height: 20%;
-  animation: wave 18s linear reverse infinite;
-  opacity: 0.8;
+.slide-icon {
+  font-size: 2.5rem;
+  color: #43a047;
 }
 
-.wave:nth-of-type(3) {
-  /*bottom: -2.5em;*/
-  height: 15%;
-  animation: wave 20s -1s reverse infinite;
-  opacity: 0.9;
+.slide-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.75rem 0;
 }
 
-@keyframes wave {
-  2% {
-    transform: translateX(1%);
+.slide-desc {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 320px;
+}
+
+/* ===== Right panel: login ===== */
+.right-panel {
+  flex: 1;
+  background: #f9fdf9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.lang-selector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 340px;
+  padding: 2rem;
+}
+
+.login-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 1.25rem;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 1px;
+}
+
+.divider {
+  width: 40px;
+  height: 3px;
+  background: #43a047;
+  border-radius: 2px;
+  margin-bottom: 2rem;
+}
+
+/* ===== Login button ===== */
+:host ::ng-deep .login-btn {
+  width: 100%;
+  background: #43a047 !important;
+  border-color: #43a047 !important;
+  border-radius: 10px !important;
+  padding: 0.7rem 1.5rem !important;
+  font-weight: 600 !important;
+  transition: background 0.2s ease !important;
+}
+
+:host ::ng-deep .login-btn:hover {
+  background: #2e7d32 !important;
+  border-color: #2e7d32 !important;
+}
+
+/* ===== Responsive: tablet ===== */
+@media (max-width: 1024px) {
+  .left-panel {
+    padding: 2rem;
   }
 
-  25% {
-    transform: translateX(-25%);
+  :host ::ng-deep .left-panel .p-carousel {
+    max-width: 340px;
   }
 
-  50% {
-    transform: translateX(-50%);
+  .slide-icon-wrapper {
+    width: 80px;
+    height: 80px;
   }
 
-  75% {
-    transform: translateX(-25%);
+  .slide-icon {
+    font-size: 2rem;
   }
 
-  100% {
-    transform: translateX(1%);
+  .slide-title {
+    font-size: 1.15rem;
+  }
+
+  .slide-desc {
+    font-size: 0.9rem;
   }
 }
-.bg {
-  margin: auto;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(
-    315deg,
-    rgb(113, 216, 218) 3%,
-    rgb(95, 162, 190) 28%,
-    rgb(76, 108, 163) 48%,
-    rgb(39, 0, 107) 68%,
-    rgb(39, 0, 107) 88%
-  );
-  animation: gradient 15s ease infinite;
-  backdrop-filter: blur(50px);
-  background-size: 400% 400%;
-  overflow: hidden;
+
+/* ===== Responsive: mobile — stack vertically ===== */
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    min-height: auto;
+    padding: 2.5rem 1.5rem 1.5rem;
+  }
+
+  .left-panel::before,
+  .left-panel::after {
+    display: none;
+  }
+
+  .slide {
+    padding: 1rem 0.5rem;
+  }
+
+  .slide-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 1.25rem;
+  }
+
+  .slide-icon {
+    font-size: 1.75rem;
+  }
+
+  .slide-title {
+    font-size: 1.1rem;
+  }
+
+  .slide-desc {
+    font-size: 0.85rem;
+    max-width: 280px;
+  }
+
+  .right-panel {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .lang-selector {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .login-content {
+    padding: 1.5rem;
+  }
+
+  .login-logo {
+    width: 80px;
+  }
+
+  .login-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===== Responsive: small mobile ===== */
+@media (max-width: 480px) {
+  .left-panel {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .slide-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+  }
+
+  .slide-icon {
+    font-size: 1.5rem;
+  }
+
+  .login-content {
+    padding: 1rem;
+  }
 }

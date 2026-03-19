@@ -18,7 +18,6 @@ export class UserService extends ServiceBase {
 
   getUserInfo(): Observable<ApiResponse<UserDTO | string>> {
     return this.cachedGet<ApiResponse<UserDTO | string>>('users', this.apiAddress + '/');
-    // return this.http.get<ApiResponse<UserDTO | string>>(this.apiAddress + '/');
   }
 
   updateUserInfo(update_user: UpdateUserDTO): Observable<ApiResponse<string>> {

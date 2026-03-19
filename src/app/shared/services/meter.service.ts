@@ -26,16 +26,6 @@ export class MeterService extends ServiceBase {
     this.apiAddress = environments.apiUrl + '/meters';
   }
 
-  // private toHttpParams(obj: Record<string, unknown>): Record<string, string | number | boolean> {
-  //   const params: Record<string, string | number | boolean> = {};
-  //   for (const [key, value] of Object.entries(obj)) {
-  //     if (value !== undefined && value !== null) {
-  //       params[key] = value as string | number | boolean;
-  //     }
-  //   }
-  //   return params;
-  // }
-
   getMetersList(
     query: MeterPartialQuery,
   ): Observable<ApiResponsePaginated<PartialMeterDTO[] | string>> {
@@ -44,9 +34,6 @@ export class MeterService extends ServiceBase {
       this.apiAddress + '/',
       query,
     );
-    // return this.http.get<ApiResponsePaginated<PartialMeterDTO[] | string>>(this.apiAddress + '/', {
-    //   params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    // });
   }
 
   getMeter(id: string): Observable<ApiResponse<MetersDTO | string>> {
@@ -54,7 +41,6 @@ export class MeterService extends ServiceBase {
       `meters:${id}`,
       this.apiAddress + `/${id}`,
     );
-    // return this.http.get<ApiResponse<MetersDTO | string>>(this.apiAddress + '/' + id);
   }
 
   getMeterConsumptions(
@@ -66,12 +52,6 @@ export class MeterService extends ServiceBase {
       this.apiAddress + `/${id}/consumptions`,
       query,
     );
-    // return this.http.get<ApiResponse<MeterConsumptionDTO | string>>(
-    //   this.apiAddress + '/' + id + '/consumptions',
-    //   {
-    //     params: this.toHttpParams(query as unknown as Record<string, unknown>),
-    //   },
-    // );
   }
 
   downloadMeterConsumptions(

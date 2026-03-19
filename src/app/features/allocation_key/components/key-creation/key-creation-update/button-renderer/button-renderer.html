@@ -2,7 +2,11 @@
   pRipple
   type="button"
   (click)="onClick($event)"
-  label="{{ label }}"
+  label="{{ label() }}"
+  icon="pi pi-trash"
+  [outlined]="true"
+  severity="danger"
+  size="small"
   class="flex h-full"
-  styleClass="w-full"
+  styleClass="w-full text-sm!"
 ></p-button>

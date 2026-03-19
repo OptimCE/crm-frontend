@@ -1,7 +1,7 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
 import { InputText } from 'primeng/inputtext';
-import { Button, ButtonLabel } from 'primeng/button';
+import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -9,24 +9,16 @@ import { ErrorAdded } from '../../../../../../shared/types/error.types';
 
 @Component({
   selector: 'app-new-member-banking-info',
-  imports: [
-    ReactiveFormsModule,
-    ErrorHandlerComponent,
-    InputText,
-    Button,
-    ButtonLabel,
-    Ripple,
-    TranslatePipe,
-  ],
+  imports: [ReactiveFormsModule, ErrorHandlerComponent, InputText, Button, Ripple, TranslatePipe],
   templateUrl: './new-member-banking-info.html',
   styleUrl: './new-member-banking-info.css',
 })
 export class NewMemberBankingInfo implements OnInit {
   private translate = inject(TranslateService);
-  @Input() ibanForm!: FormGroup;
-  @Output() backClicked = new EventEmitter<void>();
-  @Output() formSubmitted = new EventEmitter<void>();
-  ibanErrorAdded: ErrorAdded = {};
+  readonly ibanForm = input.required<FormGroup>();
+  readonly backClicked = output<void>();
+  readonly formSubmitted = output<void>();
+  readonly ibanErrorAdded = signal<ErrorAdded>({});
 
   ngOnInit(): void {
     this.setupErrorTranslation();
@@ -36,9 +28,9 @@ export class NewMemberBankingInfo implements OnInit {
     this.translate
       .get(['MEMBER.ADD.BANK.ERROR.IBAN'])
       .subscribe((translation: Record<string, string>) => {
-        this.ibanErrorAdded = {
+        this.ibanErrorAdded.set({
           invalidIban: () => translation['MEMBER.ADD.BANK.ERROR.IBAN'],
-        };
+        });
       });
   }
 
@@ -47,7 +39,7 @@ export class NewMemberBankingInfo implements OnInit {
   }
 
   submit(): void {
-    if (this.ibanForm.valid) {
+    if (this.ibanForm().valid) {
       this.formSubmitted.emit();
     }
   }
