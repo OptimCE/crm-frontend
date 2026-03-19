@@ -1,6 +1,11 @@
 import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { getAppConfig, loadRuntimeConfig } from './app/app.config';
 
-bootstrapApplication(App, appConfig).catch((err) => console.error(err));
+async function bootstrap() {
+  await loadRuntimeConfig();
+  await bootstrapApplication(App, getAppConfig());
+}
+
+bootstrap().catch((err) => console.error(err));
