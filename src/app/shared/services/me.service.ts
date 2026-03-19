@@ -110,7 +110,7 @@ export class MeService extends ServiceBase {
   ): Observable<ApiResponsePaginated<UserMemberInvitationDTO[] | string>> {
     return this.cachedGet<ApiResponsePaginated<UserMemberInvitationDTO[] | string>>(
       `own-members-invitation:${JSON.stringify(query)}`,
-      this.apiAddress + '/invitations/members',
+      this.apiAddress + '/invitations',
       query,
     );
   }
