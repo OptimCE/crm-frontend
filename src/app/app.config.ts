@@ -17,6 +17,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageService } from './core/services/language/language.service';
 import { communityContextInterceptor } from './core/interceptors/community.context.inteceptor';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { RuntimeConfig } from '../environments/environments';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -37,7 +38,7 @@ export async function loadRuntimeConfig(): Promise<void> {
       throw new Error(`Unable to load runtime config: ${response.status}`);
     }
 
-    const config = await response.json();
+    const config = (await response.json()) as Partial<RuntimeConfig>;
     const { setRuntimeConfig } = await import('../environments/environments');
     setRuntimeConfig(config);
   } catch (error) {

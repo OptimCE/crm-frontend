@@ -371,6 +371,7 @@ describe('MemberViewDocumentsTab', () => {
       expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:test-url');
 
       vi.restoreAllMocks();
+      vi.unstubAllGlobals();
     });
 
     it('should call errorHandler on error', () => {
