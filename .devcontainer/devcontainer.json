@@ -1,47 +1,28 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-  "name": "Existing Dockerfile",
-  "build": {
-    // Sets the run context to one level up instead of the .devcontainer folder.
-    "context": "..",
-    // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-    "dockerfile": "../Dockerfile.dev"
-  },
-  // The optional 'workspaceFolder' property is the path VS Code should open by default when
-	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
-  "workspaceFolder": "/app",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "github.vscode-github-actions",
-        "Angular.ng-template"
-      ]
-    }
-  },
-  "mounts": [
-    // Mount the project into the container so it can be edited and run.
-    "source=./,target=/app,type=bind"
-    //ignore the node_modules folder to use the prebuild dependencies in the container, but still allow it to be edited and viewed in the container.
-    // "source=./node_modules,target=/app/node_modules,type=bind,consistency=cached,bind-propagation=rprivate"
-    // Allow git commands to work inside the container, and use the host's SSH agent for authentication.
-    // "source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind", # Uncomment this line if you want to use the host's SSH agent for authentication in the container.
-  ],
-  "remoteEnv": {
-    // "SSH_AUTH_SOCK": "/ssh-agent"
-  }
+	"name": "Node.js & TypeScript",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie",
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	// Mount an optional volume to have git working properly
+	"mounts": [
+		"source=${localWorkspaceFolder}/../.git/modules/crm-frontend,target=/workspaces/.git/modules/crm-frontend,type=bind"
+	]
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "cat /etc/os-release",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
 
-	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "devcontainer"
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
 }
