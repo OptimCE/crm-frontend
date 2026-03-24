@@ -74,8 +74,8 @@
 }
 
 .slide-icon-wrapper {
-  width: 100px;
-  height: 100px;
+  width: 350px;
+  height: 350px;
   background: rgba(67, 160, 71, 0.1);
   border-radius: 50%;
   display: flex;
@@ -179,8 +179,8 @@
   }
 
   .slide-icon-wrapper {
-    width: 80px;
-    height: 80px;
+    width: 280px;
+    height: 280px;
   }
 
   .slide-icon {
@@ -217,8 +217,8 @@
   }
 
   .slide-icon-wrapper {
-    width: 72px;
-    height: 72px;
+    width: 252px;
+    height: 252px;
     margin-bottom: 1.25rem;
   }
 
@@ -265,8 +265,8 @@
   }
 
   .slide-icon-wrapper {
-    width: 64px;
-    height: 64px;
+    width: 224px;
+    height: 224px;
     margin-bottom: 1rem;
   }
 

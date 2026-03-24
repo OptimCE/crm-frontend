@@ -1,6 +1,6 @@
 <div class="login-wrapper">
   <!-- Left side: Feature carousel -->
-  <div class="left-panel">
+  <div class="left-panel flex flex-col">
     <p-carousel
       [value]="slides"
       [numVisible]="1"
@@ -12,13 +12,19 @@
       <ng-template let-slide #item>
         <div class="slide">
           <div class="slide-icon-wrapper">
-            <i [class]="'pi ' + slide.icon + ' slide-icon'"></i>
+            <!--            <i [class]="'pi ' + slide.icon + ' slide-icon'"></i>-->
+            <img
+              [src]="slide.images + '.svg'"
+              alt="{{ slide.titleKey | translate }}"
+              class="slide-icon"
+            />
           </div>
           <h2 class="slide-title">{{ slide.titleKey | translate }}</h2>
           <p class="slide-desc">{{ slide.descKey | translate }}</p>
         </div>
       </ng-template>
     </p-carousel>
+    <a href="https://storyset.com/people">People illustrations by Storyset</a>
   </div>
 
   <!-- Right side: Login -->
