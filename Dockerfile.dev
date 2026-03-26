@@ -1,5 +1,5 @@
 # Development stage (optional, can be used for debugging and as a devcontainer)
-FROM node:22-alpine AS development
+FROM node:25-alpine AS development
 #Setup Alpine packages for development
 RUN apk add --no-cache git openssh-client
 #Setup NodeJS for development
