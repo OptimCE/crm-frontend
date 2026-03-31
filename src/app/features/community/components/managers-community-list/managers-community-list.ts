@@ -6,13 +6,11 @@ import { TagModule } from 'primeng/tag';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
-import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { Role } from '../../../../core/dtos/role';
 import { Pagination } from '../../../../core/dtos/api.response';
-import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
@@ -27,9 +25,7 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
     FormsModule,
     Button,
     Select,
-    RolePipe,
     HeaderPage,
-    InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
   ],

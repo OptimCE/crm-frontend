@@ -10,7 +10,6 @@ import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { Tooltip } from 'primeng/tooltip';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
@@ -20,7 +19,6 @@ import { UserContextService } from '../../../../core/services/authorization/auth
 import { InvitationService } from '../../../../shared/services/invitation.service';
 import { CommunityPendingInvitation } from '../community-pending-invitation/community-pending-invitation';
 import { CommunityInvitation } from '../community-invitation/community-invitation';
-import { RolePipe } from '../../../../shared/pipes/role/role-pipe';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
@@ -38,9 +36,7 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
     Select,
     Tooltip,
     TagModule,
-    RolePipe,
     HeaderPage,
-    InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
   ],

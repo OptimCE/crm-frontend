@@ -6,7 +6,7 @@ interface RuntimeKeycloakConfig {
   urlPatternFlags?: string;
 }
 
-interface RuntimeConfig {
+export interface RuntimeConfig {
   apiUrl: string;
   basePath: string;
   keycloak: RuntimeKeycloakConfig;

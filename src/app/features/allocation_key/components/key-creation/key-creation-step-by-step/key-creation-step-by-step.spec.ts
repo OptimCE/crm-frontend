@@ -440,9 +440,9 @@ describe('KeyCreationStepByStep', () => {
       );
       expect(routerSpy.navigate).toHaveBeenCalledWith(
         ['/keys/add'],
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         expect.objectContaining({
-          state: expect.objectContaining({ keyData: expect.any(Object) }),
+          state: expect.objectContaining({ keyData: expect.any(Object) as unknown }) as unknown,
         }),
       );
     });
