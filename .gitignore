@@ -306,4 +306,4 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/angular,node,visualstudiocode,webstorm
 src/environments/environments.prod.ts
-
+.understand-anything
