@@ -223,7 +223,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Leave the community",
       "NO_COMMUNITY_FOUND": "No community found",
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)",
+      "PUBLIC_TITLE": "Available public communities",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Details",
+      "DETAILS_BUTTON_TOOLTIP": "View community details",
+      "NO_PUBLIC_COMMUNITY_FOUND": "No public communities available",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
     },
     "CREATE": {
       "TITLE": "Create a community",

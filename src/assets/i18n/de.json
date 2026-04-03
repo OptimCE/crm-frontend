@@ -223,7 +223,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Gemeinschaft verlassen",
       "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)",
+      "PUBLIC_TITLE": "Verfügbare öffentliche Gemeinschaften",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Details",
+      "DETAILS_BUTTON_TOOLTIP": "Gemeinschaftsdetails anzeigen",
+      "NO_PUBLIC_COMMUNITY_FOUND": "Keine öffentlichen Gemeinschaften verfügbar",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",

@@ -223,7 +223,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Quitter la communauté",
       "NO_COMMUNITY_FOUND": "Aucune communauté trouvée",
       "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)",
+      "PUBLIC_TITLE": "Communautés publiques disponibles",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Détails",
+      "DETAILS_BUTTON_TOOLTIP": "Voir les détails de la communauté",
+      "NO_PUBLIC_COMMUNITY_FOUND": "Aucune communauté publique disponible",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
     },
     "CREATE": {
       "TITLE": "Créer une communauté",

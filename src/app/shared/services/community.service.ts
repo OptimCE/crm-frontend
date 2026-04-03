@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
 import {
+  CommunityDetailDTO,
   CommunityQueryDTO,
   CommunityUsersQueryDTO,
   CreateCommunityDTO,
   MyCommunityDTO,
   PatchRoleUserDTO,
+  PublicCommunityDTO,
   UsersCommunityDTO,
 } from '../dtos/community.dtos';
 import { Observable, tap } from 'rxjs';
@@ -30,6 +32,23 @@ export class CommunityService extends ServiceBase {
       `communities-own:${JSON.stringify(query)}`,
       this.apiAddress + '/my-communities',
       query,
+    );
+  }
+
+  getPublicCommunities(
+    query: CommunityQueryDTO,
+  ): Observable<ApiResponsePaginated<PublicCommunityDTO[] | string>> {
+    return this.cachedGet<ApiResponsePaginated<PublicCommunityDTO[] | string>>(
+      `communities-public:${JSON.stringify(query)}`,
+      this.apiAddress,
+      query,
+    );
+  }
+
+  getCommunityDetail(id: number): Observable<ApiResponse<CommunityDetailDTO>> {
+    return this.cachedGet<ApiResponse<CommunityDetailDTO>>(
+      `community-detail:${id}`,
+      this.apiAddress + `/${id}`,
     );
   }
 

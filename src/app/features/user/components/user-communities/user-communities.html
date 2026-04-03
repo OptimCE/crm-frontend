@@ -216,4 +216,137 @@
       </tr>
     </ng-template>
   </p-table>
+
+  <!-- Public Communities Section -->
+  <div class="mt-8">
+    <!-- Section header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+      <app-header-page icon="pi pi-globe" [text]="'COMMUNITY.LIST.PUBLIC_TITLE' | translate" />
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+      <div class="grid grid-cols-1 sm:flex sm:items-end gap-3">
+        <!-- Name search -->
+        <div class="sm:flex-1">
+          <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
+          <app-debounced-p-input
+            [placeholder]="'COMMUNITY.LIST.HEADERS.NAME' | translate"
+            [value]="publicSearchText()"
+            (searchEvent)="onPublicSearchTextChange($event)"
+            inputClass="w-full!"
+          />
+        </div>
+        <!-- Clear filters -->
+        <div class="flex items-end">
+          <p-button
+            icon="pi pi-filter-slash"
+            label="{{ 'COMMUNITY.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+            (onClick)="clearPublic(dtPublic)"
+            [outlined]="!publicHasActiveFilters()"
+            severity="primary"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Data table -->
+    <p-table
+      #dtPublic
+      [value]="publicCommunities()"
+      [lazy]="true"
+      (onLazyLoad)="lazyLoadPublicCommunities($event)"
+      [rows]="publicPagination().limit"
+      [totalRecords]="publicPagination().total"
+      [first]="publicFirstRow()"
+      [showCurrentPageReport]="true"
+      (onPage)="pageChangePublic($event)"
+      [paginator]="publicShowPaginator()"
+      [currentPageReportTemplate]="publicCurrentPageReportTemplate()"
+    >
+      <!-- Desktop header -->
+      <ng-template pTemplate="header">
+        <tr class="max-lg:hidden">
+          <th class="text-base px-3 w-12">{{ 'COMMUNITY.LIST.PUBLIC_LOGO' | translate }}</th>
+          <th class="text-base px-3">{{ 'COMMUNITY.LIST.HEADERS.NAME' | translate }}</th>
+          <th class="text-base px-3 text-center">
+            {{ 'COMMUNITY.LIST.DETAILS_BUTTON' | translate }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-community>
+        <!-- Desktop row -->
+        <tr class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+          <td class="px-3">
+            @if (community.logo_url) {
+              <img [src]="community.logo_url" alt="" class="w-8 h-8 object-contain rounded" />
+            } @else {
+              <div class="w-8 h-8 bg-surface-100 rounded"></div>
+            }
+          </td>
+          <td class="text-sm">{{ community.name }}</td>
+          <td class="text-center">
+            <div class="flex justify-center gap-2">
+              <p-button
+                type="button"
+                icon="pi pi-eye"
+                label="{{ 'COMMUNITY.LIST.DETAILS_BUTTON' | translate }}"
+                (click)="viewDetails(community)"
+                [outlined]="true"
+                severity="primary"
+                size="small"
+                pTooltip="{{ 'COMMUNITY.LIST.DETAILS_BUTTON_TOOLTIP' | translate }}"
+              />
+            </div>
+          </td>
+        </tr>
+
+        <!-- Mobile card -->
+        <tr class="lg:hidden !border-0 !bg-transparent">
+          <td colspan="3" class="!p-0 !pb-3">
+            <div
+              class="community-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm hover:border-primary-400 transition-colors"
+            >
+              <!-- Card header: logo + name -->
+              <div class="flex items-center gap-3 mb-3 pb-2 border-b border-primary-100">
+                @if (community.logo_url) {
+                  <img [src]="community.logo_url" alt="" class="w-8 h-8 object-contain rounded" />
+                } @else {
+                  <div class="w-8 h-8 bg-surface-100 rounded"></div>
+                }
+                <span class="font-semibold text-sm text-primary-700">{{ community.name }}</span>
+              </div>
+
+              <!-- Card footer: actions -->
+              <div class="flex flex-wrap gap-2 pt-2">
+                <p-button
+                  type="button"
+                  icon="pi pi-eye"
+                  label="{{ 'COMMUNITY.LIST.DETAILS_BUTTON' | translate }}"
+                  (click)="viewDetails(community)"
+                  [outlined]="true"
+                  severity="primary"
+                  size="small"
+                />
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptyMessage pTemplate="emptymessage">
+        <tr>
+          <td colspan="3">
+            <div class="py-8 text-center">
+              <i class="pi pi-globe text-3xl text-surface-300 mb-2"></i>
+              <p class="text-surface-400 m-0">
+                {{ 'COMMUNITY.LIST.NO_PUBLIC_COMMUNITY_FOUND' | translate }}
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>

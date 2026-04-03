@@ -17,7 +17,15 @@ export interface CommunityUsersQueryDTO extends PaginationQuery {
 }
 
 export interface CommunityDTO {
+  id: number;
   name: string;
+  logo_url: string | null;
+}
+
+export interface PublicCommunityDTO {
+  id: number;
+  name: string;
+  logo_url: string | null;
 }
 
 export interface MyCommunityDTO {
@@ -25,6 +33,17 @@ export interface MyCommunityDTO {
   auth_community_id: string;
   name: string;
   role: Role;
+  logo_url?: string | null;
+}
+
+export interface CommunityDetailDTO {
+  id: number;
+  name: string;
+  auth_community_id: string;
+  created_at: string;
+  updated_at: string;
+  member_count: number;
+  user_role?: Role;
 }
 
 export interface UsersCommunityDTO {

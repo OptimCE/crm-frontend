@@ -223,7 +223,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Gemeenschap verlaten",
       "NO_COMMUNITY_FOUND": "Geen gemeenschap gevonden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)",
+      "PUBLIC_TITLE": "Beschikbare openbare gemeenschappen",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Details",
+      "DETAILS_BUTTON_TOOLTIP": "Details van de gemeenschap bekijken",
+      "NO_PUBLIC_COMMUNITY_FOUND": "Geen openbare gemeenschappen beschikbaar",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)"
     },
     "CREATE": {
       "TITLE": "Gemeenschap aanmaken",
