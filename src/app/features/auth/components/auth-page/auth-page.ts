@@ -15,7 +15,7 @@ interface Slide {
 
 @Component({
   selector: 'app-auth-page',
-  imports: [Button, Carousel, TranslatePipe, LanguageSelector, NgOptimizedImage],
+  imports: [Button, Carousel, TranslatePipe, LanguageSelector],
   standalone: true,
   templateUrl: './auth-page.html',
   styleUrl: './auth-page.css',

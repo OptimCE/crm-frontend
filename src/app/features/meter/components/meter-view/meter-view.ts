@@ -1,25 +1,16 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { DatePipe } from '@angular/common';
 import { Tag } from 'primeng/tag';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ChartModule } from 'primeng/chart';
 import { Ripple } from 'primeng/ripple';
-import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { Select } from 'primeng/select';
-import { DatePicker } from 'primeng/datepicker';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { Card } from 'primeng/card';
-import { MeterConsumptionDTO, MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
+import { MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MeterService } from '../../../../shared/services/meter.service';
@@ -34,11 +25,7 @@ import { MeterDataView } from './meter-data-view/meter-data-view';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { Skeleton } from 'primeng/skeleton';
 import { Avatar } from 'primeng/avatar';
-
-interface ChartFormValue {
-  dateDeb: string;
-  dateFin: string;
-}
+import { MeterConsumptionChart } from './meter-consumption-chart/meter-consumption-chart';
 
 @Component({
   selector: 'app-meter-view',
@@ -50,12 +37,8 @@ interface ChartFormValue {
     DatePipe,
     Tag,
     TranslatePipe,
-    ChartModule,
     Ripple,
-    ErrorHandlerComponent,
-    ReactiveFormsModule,
     Select,
-    DatePicker,
     Tabs,
     TabList,
     Tab,
@@ -67,6 +50,7 @@ interface ChartFormValue {
     BackArrow,
     Skeleton,
     Avatar,
+    MeterConsumptionChart,
   ],
   templateUrl: './meter-view.html',
   styleUrl: './meter-view.css',
@@ -101,68 +85,6 @@ export class MeterView implements OnInit {
   readonly rateMap = signal<string[]>([]);
   readonly clientTypeMap = signal<string[]>([]);
   readonly injectionStatusMap = signal<string[]>([]);
-  readonly data = signal<{
-    labels: string[];
-    datasets: {
-      type: string;
-      label: string;
-      stack: string;
-      data: number[];
-    }[];
-  } | null>(null);
-  options = {
-    maintainAspectRatio: false,
-    aspectRatio: 0.8,
-    plugins: {
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function (tooltipItem: { dataset: { label?: string }; raw: unknown }): string {
-            const label = tooltipItem.dataset.label || '';
-            const value = tooltipItem.raw as number;
-            return `${label}: ${value} kWh`;
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-        title: {
-          display: true,
-          text: this.translate.instant('METER.FULL.CHART.X_TITLE_DATE') as string,
-        },
-        ticks: {
-          _callback: (_value: unknown, index: number): string => {
-            const label = this.data()?.labels?.[index];
-            if (!label) return '';
-
-            const date = new Date(label);
-            if (isNaN(date.getTime())) return label;
-
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-
-            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-          },
-        },
-      },
-      y: {
-        stacked: true,
-        title: {
-          display: true,
-          text: this.translate.instant('METER.FULL.CHART.Y_TITLE_CONSUMPTION') as string,
-        },
-      },
-    },
-  };
-  readonly displayDownloadButton = signal<boolean>(false);
-  formChart!: FormGroup;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -176,10 +98,6 @@ export class MeterView implements OnInit {
       console.error('No id provided');
     }
     this.getFullMeter();
-    this.formChart = new FormGroup({
-      dateDeb: new FormControl('', [Validators.required]),
-      dateFin: new FormControl('', [Validators.required]),
-    });
     this.setupTranslationCategory();
   }
 
@@ -422,86 +340,6 @@ export class MeterView implements OnInit {
         }
       });
     }
-  }
-
-  downloadTotalConsumption(): void {
-    const meter = this.meter();
-    if (!meter) return;
-    const formValue = this.formChart.getRawValue() as ChartFormValue;
-    this.metersService
-      .downloadMeterConsumptions(meter.EAN, {
-        date_start: formValue.dateDeb,
-        date_end: formValue.dateFin,
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        if (response) {
-          if ('blob' in response) {
-            const url = window.URL.createObjectURL(response.blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = response.filename;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-          }
-        }
-      });
-  }
-
-  loadChart(): void {
-    this.displayDownloadButton.set(false);
-    if (this.formChart.invalid) {
-      return;
-    }
-
-    const meter = this.meter();
-    if (!meter) return;
-    const formValue = this.formChart.getRawValue() as ChartFormValue;
-    this.metersService
-      .getMeterConsumptions(meter.EAN, {
-        date_start: formValue.dateDeb,
-        date_end: formValue.dateFin,
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        if (response) {
-          const tmpData = response.data as MeterConsumptionDTO;
-          this.data.set({
-            labels: tmpData.timestamps,
-            datasets: [
-              {
-                type: 'bar',
-                label: this.translate.instant(
-                  'METER.FULL.CHART.CONSUMPTION_SHARED_LABEL',
-                ) as string,
-                stack: 'consumption',
-                data: tmpData.shared,
-              },
-              {
-                type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.CONSUMPTION_NET_LABEL') as string,
-                stack: 'consumption',
-                data: tmpData.net,
-              },
-              {
-                type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.INJECTION_NET_LABEL') as string,
-                stack: 'inj',
-                data: tmpData.inj_net,
-              },
-              {
-                type: 'bar',
-                label: this.translate.instant('METER.FULL.CHART.INJECTION_SHARED_LABEL') as string,
-                stack: 'inj',
-                data: tmpData.inj_shared,
-              },
-            ],
-          });
-          this.displayDownloadButton.set(true);
-        }
-      });
   }
 
   protected readonly MeterStatus = MeterDataStatus;
