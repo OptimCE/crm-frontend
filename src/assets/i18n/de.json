@@ -56,6 +56,7 @@
     "HANDLE_SHARING_OP": "Teilungsoperationen",
     "COMMUNITIES": "Gemeinschaften",
     "MY_COMMUNITIES": "Meine Gemeinschaften",
+    "PUBLIC_COMMUNITIES": "Öffentliche Gemeinschaften",
     "COMMUNITY_USERS": "Benutzer",
     "USER_GUIDE": "Benutzerhandbuch",
     "REPORT_BUG": "Fehler melden",
@@ -212,7 +213,10 @@
         "NAME": "Name",
         "ROLE": "Rolle",
         "ACTIVATE": "Aktivieren",
-        "ACTIONS": "Aktionen"
+        "ACTIONS": "Aktionen",
+        "MEMBER_COUNT": "Mitglieder",
+        "CREATED_AT": "Erstellt",
+        "UPDATED_AT": "Aktualisiert"
       },
       "ACTIVATED": "Aktivieren",
       "NON_ACTIVATED": "Deaktivieren",

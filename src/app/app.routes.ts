@@ -51,8 +51,7 @@ export const routes: Routes = [
   },
   {
     path: 'communities',
-    canActivate: [canActivateAuth, minRoleGuard],
-    data: { minRole: Role.MEMBER },
+    canActivate: [canActivateAuth],
     loadChildren: () =>
       import('./features/community/community.routes').then((m) => m.COMMUNITY_ROUTES),
   },

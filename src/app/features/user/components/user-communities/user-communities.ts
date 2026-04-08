@@ -7,11 +7,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Tag } from 'primeng/tag';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import {
-  CommunityQueryDTO,
-  MyCommunityDTO,
-  PublicCommunityDTO,
-} from '../../../../shared/dtos/community.dtos';
+import { CommunityQueryDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
@@ -19,7 +15,6 @@ import { CommunityDialog } from './community-dialog/community-dialog';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
-import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-user-communities',
@@ -32,7 +27,6 @@ import { Tooltip } from 'primeng/tooltip';
     TableModule,
     HeaderPage,
     DebouncedPInputComponent,
-    Tooltip,
   ],
   templateUrl: './user-communities.html',
   styleUrl: './user-communities.css',
@@ -54,18 +48,6 @@ export class UserCommunities {
 
   readonly searchText = signal<string>('');
   readonly hasActiveFilters = computed(() => !!this.searchText());
-
-  readonly publicCommunities = signal<PublicCommunityDTO[]>([]);
-  readonly publicFilter = signal<CommunityQueryDTO>({ page: 1, limit: 10 });
-  readonly publicPagination = signal<Pagination>({ page: 0, limit: 0, total: 0, total_pages: 0 });
-  readonly publicCurrentPageReportTemplate = signal<string>('');
-  readonly publicFirstRow = computed(
-    () => (this.publicPagination().page - 1) * this.publicPagination().limit,
-  );
-  readonly publicShowPaginator = computed(() => this.publicPagination().total_pages > 1);
-
-  readonly publicSearchText = signal<string>('');
-  readonly publicHasActiveFilters = computed(() => !!this.publicSearchText());
 
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
@@ -165,78 +147,5 @@ export class UserCommunities {
     current.page = ($event.first ?? 0) / ($event.rows ?? 10) + 1;
     this.filter.set(current);
     this.loadCommunities();
-  }
-
-  updatePublicPaginationTranslation(): void {
-    this.translate
-      .get('COMMUNITY.LIST.PAGE_REPORT_TEMPLATE_PUBLIC_LABEL', {
-        page: this.publicPagination().page,
-        total_pages: this.publicPagination().total_pages,
-        total: this.publicPagination().total,
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((translatedText: string) => {
-        this.publicCurrentPageReportTemplate.set(translatedText);
-      });
-  }
-
-  applyPublicFilters(): void {
-    const current: CommunityQueryDTO = { page: 1, limit: this.publicFilter().limit };
-    const text = this.publicSearchText();
-    if (text) {
-      current.name = text;
-    }
-    this.publicFilter.set(current);
-    this.loadPublicCommunities();
-  }
-
-  onPublicSearchTextChange(query: string): void {
-    this.publicSearchText.set(query);
-    this.applyPublicFilters();
-  }
-
-  clearPublic(table: Table): void {
-    table.clear();
-    this.publicSearchText.set('');
-    this.publicFilter.set({ page: 1, limit: 10 });
-    this.loadPublicCommunities();
-  }
-
-  loadPublicCommunities(): void {
-    this.communityService
-      .getPublicCommunities(this.publicFilter())
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.publicCommunities.set(response.data as PublicCommunityDTO[]);
-            this.publicPagination.set(response.pagination);
-            this.updatePublicPaginationTranslation();
-          }
-        },
-        error: (_error) => {
-          // TODO: Handle error
-        },
-      });
-  }
-
-  lazyLoadPublicCommunities($event: TableLazyLoadEvent): void {
-    const current: CommunityQueryDTO = { ...this.publicFilter() };
-    if ($event.first !== undefined && $event.rows !== undefined) {
-      current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
-    }
-    this.publicFilter.set(current);
-    this.loadPublicCommunities();
-  }
-
-  pageChangePublic($event: TablePageEvent): void {
-    const current: CommunityQueryDTO = { ...this.publicFilter() };
-    current.page = ($event.first ?? 0) / ($event.rows ?? 10) + 1;
-    this.publicFilter.set(current);
-    this.loadPublicCommunities();
-  }
-
-  viewDetails(_community: PublicCommunityDTO): void {
-    // TODO: Implement details view using GET /communities/:id endpoint
   }
 }

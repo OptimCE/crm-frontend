@@ -56,6 +56,7 @@
     "HANDLE_SHARING_OP": "Sharing operations",
     "COMMUNITIES": "Communities",
     "MY_COMMUNITIES": "My communities",
+    "PUBLIC_COMMUNITIES": "Public communities",
     "COMMUNITY_USERS": "Users",
     "USER_GUIDE": "User guide",
     "REPORT_BUG": "Report a bug",
@@ -212,7 +213,10 @@
         "NAME": "Name",
         "ROLE": "Role",
         "ACTIVATE": "Activate",
-        "ACTIONS": "Actions"
+        "ACTIONS": "Actions",
+        "MEMBER_COUNT": "Members",
+        "CREATED_AT": "Created",
+        "UPDATED_AT": "Updated"
       },
       "ACTIVATED": "Activate",
       "NON_ACTIVATED": "Deactivate",

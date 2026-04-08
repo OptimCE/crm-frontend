@@ -1,0 +1,62 @@
+<div class="community-accordion">
+  @for (community of communities(); track community.id) {
+    <div class="accordion-item border border-primary-100 rounded-lg mb-2 overflow-hidden">
+      <button
+        type="button"
+        class="accordion-header w-full flex items-center gap-3 p-3 bg-surface-0 hover:bg-primary-50 transition-colors cursor-pointer text-left"
+        (click)="toggleAccordion(community.id)"
+        [attr.aria-expanded]="isExpanded(community.id)"
+      >
+        @if (community.logo_url) {
+          <img [src]="community.logo_url" alt="" class="w-6 h-6 object-contain rounded" />
+        } @else {
+          <div class="w-6 h-6 bg-surface-100 rounded"></div>
+        }
+        <span class="flex-1 font-medium">{{ community.name }}</span>
+        <i
+          class="pi text-surface-500 transition-transform"
+          [class.pi-chevron-down]="!isExpanded(community.id)"
+          [class.pi-chevron-up]="isExpanded(community.id)"
+        ></i>
+      </button>
+      @if (isExpanded(community.id)) {
+        <div class="accordion-content p-3 bg-surface-50 border-t border-primary-100">
+          @if (getCommunityDetail(community.id); as detail) {
+            <div class="flex flex-col gap-2">
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <span class="text-surface-500">ID:</span>
+                <span class="font-medium">{{ detail.auth_community_id }}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <span class="text-surface-500"
+                  >{{ 'COMMUNITY.LIST.HEADERS.MEMBER_COUNT' | translate }}:</span
+                >
+                <span class="font-medium">{{ detail.member_count }}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <span class="text-surface-500"
+                  >{{ 'COMMUNITY.LIST.HEADERS.CREATED_AT' | translate }}:</span
+                >
+                <span class="font-medium">{{ detail.created_at | date: 'short' }}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <span class="text-surface-500"
+                  >{{ 'COMMUNITY.LIST.HEADERS.UPDATED_AT' | translate }}:</span
+                >
+                <span class="font-medium">{{ detail.updated_at | date: 'short' }}</span>
+              </div>
+              @if (detail.user_role) {
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                  <span class="text-surface-500"
+                    >{{ 'COMMUNITY.LIST.HEADERS.ROLE' | translate }}:</span
+                  >
+                  <p-tag [value]="detail.user_role | translate" severity="info" />
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

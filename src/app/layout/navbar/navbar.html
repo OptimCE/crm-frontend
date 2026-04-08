@@ -102,6 +102,15 @@
         [routerLinkUrl]="'/users/communities'"
         [sidebarOpen]="sidebarOpen()"
       ></li>
+      <li
+        appSidebarItem
+        (sidebarClose)="closeSideBar()"
+        [icon]="'pi pi-globe'"
+        [isRouteActive]="isRouteActive().communities_public"
+        [name]="'NAVBAR.PUBLIC_COMMUNITIES' | translate"
+        [routerLinkUrl]="'/communities/public'"
+        [sidebarOpen]="sidebarOpen()"
+      ></li>
     </ul>
 
     <!-- Section: Gestionnaire -->
