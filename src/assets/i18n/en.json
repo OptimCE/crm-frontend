@@ -215,6 +215,7 @@
         "ACTIVATE": "Activate",
         "ACTIONS": "Actions",
         "MEMBER_COUNT": "Members",
+        "DESCRIPTION": "Description",
         "CREATED_AT": "Created",
         "UPDATED_AT": "Updated"
       },

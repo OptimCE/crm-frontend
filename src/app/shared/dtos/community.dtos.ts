@@ -43,7 +43,7 @@ export interface CommunityDetailDTO {
   created_at: string;
   updated_at: string;
   member_count: number;
-  user_role?: Role;
+  description?: string;
 }
 
 export interface UsersCommunityDTO {

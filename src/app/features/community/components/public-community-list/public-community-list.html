@@ -33,6 +33,14 @@
                 >
                 <span class="font-medium">{{ detail.member_count }}</span>
               </div>
+              @if (detail.description) {
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                  <span class="text-surface-500"
+                    >{{ 'COMMUNITY.LIST.HEADERS.DESCRIPTION' | translate }}:</span
+                  >
+                  <span class="font-medium">{{ detail.description }}</span>
+                </div>
+              }
               <div class="grid grid-cols-2 gap-2 text-sm">
                 <span class="text-surface-500"
                   >{{ 'COMMUNITY.LIST.HEADERS.CREATED_AT' | translate }}:</span
@@ -45,14 +53,6 @@
                 >
                 <span class="font-medium">{{ detail.updated_at | date: 'short' }}</span>
               </div>
-              @if (detail.user_role) {
-                <div class="grid grid-cols-2 gap-2 text-sm">
-                  <span class="text-surface-500"
-                    >{{ 'COMMUNITY.LIST.HEADERS.ROLE' | translate }}:</span
-                  >
-                  <p-tag [value]="detail.user_role | translate" severity="info" />
-                </div>
-              }
             </div>
           }
         </div>
