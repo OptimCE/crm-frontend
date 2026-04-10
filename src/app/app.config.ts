@@ -8,7 +8,7 @@ import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from 
 
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
+import { OptimcePreset } from './shared/styles/preset';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideKeycloakAngular } from './core/guards/keycloack.config';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -68,7 +68,7 @@ export function getAppConfig(): ApplicationConfig {
       provideZoneChangeDetection({ eventCoalescing: true }),
       providePrimeNG({
         theme: {
-          preset: Aura,
+          preset: OptimcePreset,
           options: {
             darkMode: false,
             darkModeSelector: 'none',
