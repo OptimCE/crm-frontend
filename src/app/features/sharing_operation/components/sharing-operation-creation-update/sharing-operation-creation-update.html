@@ -1,42 +1,54 @@
-<div>
+<div class="dialog-content">
   <form [formGroup]="formAddSharingOp" (submit)="onSubmitForm()">
-    <div class="flex flex-wrap gap-2">
-      <div class="flex flex-col w-full items-center">
-        <label for="name" class="text-normal"
-          >{{ 'SHARING_OPERATION.ADD.NAME_LABEL' | translate }} *</label
-        >
-        <input id="name" pInputText type="text" formControlName="name" />
-        <app-error-handler controlName="name"></app-error-handler>
-      </div>
+    <div class="mb-5">
+      <label for="name" class="field-label mb-2 block">
+        {{ 'SHARING_OPERATION.ADD.NAME_LABEL' | translate }} *
+      </label>
+      <input id="name" pInputText type="text" formControlName="name" class="w-full" />
+      <app-error-handler controlName="name"></app-error-handler>
     </div>
-    <div class="flex mt-2">
-      <div class="flex flex-wrap w-full">
-        <div class="flex flex-col w-full">
-          <span class="text-normal text-center"
-            >{{ 'SHARING_OPERATION.ADD.TYPE_LABEL' | translate }} *</span
+
+    <div class="mb-5">
+      <span class="field-label mb-3 block">
+        {{ 'SHARING_OPERATION.ADD.TYPE_LABEL' | translate }} *
+      </span>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        @for (category of categories(); track $index) {
+          <div
+            role="button"
+            tabindex="0"
+            class="type-card border rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-sm"
+            [class.border-primary-500]="formAddSharingOp.get('type')?.value === category.key"
+            [class.bg-primary-50]="formAddSharingOp.get('type')?.value === category.key"
+            [class.border-surface-200]="formAddSharingOp.get('type')?.value !== category.key"
+            (click)="formAddSharingOp.get('type')?.setValue(category.key)"
+            (keydown.enter)="formAddSharingOp.get('type')?.setValue(category.key)"
+            (keydown.space)="
+              formAddSharingOp.get('type')?.setValue(category.key); $event.preventDefault()
+            "
           >
-          <div class="flex flex-wrap gap-2 flex-col w-full">
-            @for (category of categories(); track $index) {
-              <div class="flex flex-col items-center">
-                <label [for]="'{{category.key}}'" class="text-sm">{{ category.value }}</label>
-                <p-radioButton
-                  [inputId]="'{{category.key}}'"
-                  [value]="category.key"
-                  formControlName="type"
-                  class="flex text-sm"
-                />
-              </div>
-            }
+            <div class="flex items-center gap-3">
+              <p-radioButton
+                [inputId]="'type-' + category.key"
+                [value]="category.key"
+                formControlName="type"
+              />
+              <label [for]="'type-' + category.key" class="font-medium text-sm cursor-pointer">
+                {{ category.value }}
+              </label>
+            </div>
           </div>
-        </div>
-        <app-error-handler controlName="type"></app-error-handler>
+        }
       </div>
+      <app-error-handler controlName="type"></app-error-handler>
     </div>
-    <div class="flex flex-wrap justify-center mt-2">
+
+    <div class="flex justify-end pt-2">
       <p-button
         type="submit"
-        label="{{ 'SHARING_OPERATION.ADD.ADD_BUTTON_LABEL' | translate }}"
-        class="text-center"
+        [label]="'SHARING_OPERATION.ADD.ADD_BUTTON_LABEL' | translate"
+        icon="pi pi-check"
+        iconPos="right"
       />
     </div>
   </form>

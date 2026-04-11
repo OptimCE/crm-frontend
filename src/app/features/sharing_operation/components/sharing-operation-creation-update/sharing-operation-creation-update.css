@@ -1,0 +1,12 @@
+.dialog-content {
+  padding: 0.5rem 0;
+}
+
+.type-card {
+  border-width: 2px;
+}
+
+.type-card:focus-visible {
+  outline: 2px solid var(--p-focus-ring-color);
+  outline-offset: 2px;
+}

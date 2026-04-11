@@ -56,6 +56,7 @@
     "HANDLE_SHARING_OP": "Teilungsoperationen",
     "COMMUNITIES": "Gemeinschaften",
     "MY_COMMUNITIES": "Meine Gemeinschaften",
+    "PUBLIC_COMMUNITIES": "Öffentliche Gemeinschaften",
     "COMMUNITY_USERS": "Benutzer",
     "USER_GUIDE": "Benutzerhandbuch",
     "REPORT_BUG": "Fehler melden",
@@ -212,7 +213,11 @@
         "NAME": "Name",
         "ROLE": "Rolle",
         "ACTIVATE": "Aktivieren",
-        "ACTIONS": "Aktionen"
+        "ACTIONS": "Aktionen",
+        "MEMBER_COUNT": "Mitglieder",
+        "DESCRIPTION": "Beschreibung",
+        "CREATED_AT": "Erstellt",
+        "UPDATED_AT": "Aktualisiert"
       },
       "ACTIVATED": "Aktivieren",
       "NON_ACTIVATED": "Deaktivieren",
@@ -223,7 +228,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Gemeinschaft verlassen",
       "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)",
+      "PUBLIC_TITLE": "Verfügbare öffentliche Gemeinschaften",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Details",
+      "DETAILS_BUTTON_TOOLTIP": "Gemeinschaftsdetails anzeigen",
+      "NO_PUBLIC_COMMUNITY_FOUND": "Keine öffentlichen Gemeinschaften verfügbar",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",
@@ -1137,6 +1148,12 @@
         "DENIED_LABEL": "Abgelehnt",
         "NO_HISTORY_KEY_FOUND_LABEL": "Kein Schlüsselverlauf gefunden",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Kein Schlüsselverlauf verfügbar"
+      },
+      "VISIBILITY": {
+        "PUBLIC_LABEL": "Öffentlich",
+        "PRIVATE_LABEL": "Privat",
+        "SET_PUBLIC_SUCCESS": "Teilungsoperation ist jetzt öffentlich",
+        "SET_PRIVATE_SUCCESS": "Teilungsoperation ist jetzt privat"
       }
     },
     "LIST": {

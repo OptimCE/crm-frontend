@@ -20,7 +20,7 @@ function buildMember(overrides: Partial<MeMembersPartialDTO> = {}): MeMembersPar
     name: 'John Doe',
     member_type: MemberType.INDIVIDUAL,
     status: MemberStatus.ACTIVE,
-    community: { name: 'Test Community' },
+    community: { id: 1, name: 'Test Community', logo_url: null },
     ...overrides,
   };
 }

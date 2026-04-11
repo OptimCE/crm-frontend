@@ -1,6 +1,6 @@
 <a
   pRipple
-  routerLink="{{ routerLinkUrl() }}"
+  [routerLink]="routerLinkUrl()"
   (click)="closeSideBar()"
   class="sidebar-item"
   [class.sidebar-item--active]="isRouteActive()"

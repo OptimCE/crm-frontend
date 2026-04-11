@@ -56,6 +56,7 @@
     "HANDLE_SHARING_OP": "Opérations de partage",
     "COMMUNITIES": "Communautés",
     "MY_COMMUNITIES": "Mes communautés",
+    "PUBLIC_COMMUNITIES": "Communautés publiques",
     "COMMUNITY_USERS": "Utilisateurs",
     "USER_GUIDE": "Guide utilisateur",
     "REPORT_BUG": "Signaler un bug",
@@ -212,7 +213,11 @@
         "NAME": "Nom",
         "ROLE": "Rôle",
         "ACTIVATE": "Activer",
-        "ACTIONS": "Actions"
+        "ACTIONS": "Actions",
+        "MEMBER_COUNT": "Membres",
+        "DESCRIPTION": "Description",
+        "CREATED_AT": "Créé le",
+        "UPDATED_AT": "Mis à jour le"
       },
       "ACTIVATED": "Activer",
       "NON_ACTIVATED": "Désactiver",
@@ -223,7 +228,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Quitter la communauté",
       "NO_COMMUNITY_FOUND": "Aucune communauté trouvée",
       "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)",
+      "PUBLIC_TITLE": "Communautés publiques disponibles",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Détails",
+      "DETAILS_BUTTON_TOOLTIP": "Voir les détails de la communauté",
+      "NO_PUBLIC_COMMUNITY_FOUND": "Aucune communauté publique disponible",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
     },
     "CREATE": {
       "TITLE": "Créer une communauté",
@@ -1137,6 +1148,12 @@
         "DENIED_LABEL": "Refusée",
         "NO_HISTORY_KEY_FOUND_LABEL": "Aucun historique de clé trouvé",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Aucun historique de clé disponible"
+      },
+      "VISIBILITY": {
+        "PUBLIC_LABEL": "Public",
+        "PRIVATE_LABEL": "Privé",
+        "SET_PUBLIC_SUCCESS": "L'opération de partage est désormais publique",
+        "SET_PRIVATE_SUCCESS": "L'opération de partage est désormais privée"
       }
     },
     "LIST": {

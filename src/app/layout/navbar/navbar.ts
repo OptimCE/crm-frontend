@@ -20,6 +20,7 @@ interface RouteActiveState {
   sharing_operations: boolean;
   communities_users: boolean;
   communities_managers: boolean;
+  communities_public: boolean;
   users_communities: boolean;
   users_invitations: boolean;
   users: boolean;
@@ -29,6 +30,7 @@ interface RouteActiveState {
 const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['sharing_operations', '/sharing_operations'],
   ['communities_managers', '/communities/managers'],
+  ['communities_public', '/communities/public'],
   ['communities_users', '/communities/users'],
   ['users_communities', '/users/communities'],
   ['users_invitations', '/users/invitations'],
@@ -73,6 +75,7 @@ export class Navbar implements OnInit {
     sharing_operations: false,
     communities_users: false,
     communities_managers: false,
+    communities_public: false,
     users_communities: false,
     users_invitations: false,
     users: false,
@@ -120,6 +123,7 @@ export class Navbar implements OnInit {
           sharing_operations: false,
           communities_users: false,
           communities_managers: false,
+          communities_public: false,
           users_communities: false,
           users_invitations: false,
           users: false,

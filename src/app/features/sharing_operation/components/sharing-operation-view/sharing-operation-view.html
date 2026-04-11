@@ -9,7 +9,10 @@
           <p-skeleton width="14rem" height="1.5rem" />
           <p-skeleton width="9rem" height="1rem" />
         </div>
-        <p-skeleton width="6rem" height="2.5rem" borderRadius="8px" />
+        <div class="flex gap-2">
+          <p-skeleton width="5rem" height="2.5rem" borderRadius="8px" />
+          <p-skeleton width="6rem" height="2.5rem" borderRadius="8px" />
+        </div>
       </div>
       <!-- Card Skeletons -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -153,6 +156,20 @@
           <p-button
             pRipple
             [outlined]="true"
+            [label]="
+              (op.is_public
+                ? 'SHARING_OPERATION.VIEW.VISIBILITY.PUBLIC_LABEL'
+                : 'SHARING_OPERATION.VIEW.VISIBILITY.PRIVATE_LABEL'
+              ) | translate
+            "
+            [severity]="op.is_public ? 'success' : 'secondary'"
+            [icon]="op.is_public ? 'pi pi-eye' : 'pi pi-eye-slash'"
+            [loading]="togglingVisibility()"
+            (click)="toggleVisibility()"
+          />
+          <p-button
+            pRipple
+            [outlined]="true"
             label="{{
               'SHARING_OPERATION.VIEW.EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL' | translate
             }}"
@@ -205,7 +222,7 @@
               @if (op.key && op.key.key) {
                 <a
                   class="field-value text-primary-500 hover:text-primary-700 underline"
-                  routerLink="/key/{{ op.key.key.id }}"
+                  routerLink="/keys/{{ op.key.key.id }}"
                 >
                   {{ op.key.key.name }}
                 </a>

@@ -56,6 +56,7 @@
     "HANDLE_SHARING_OP": "Sharing operations",
     "COMMUNITIES": "Communities",
     "MY_COMMUNITIES": "My communities",
+    "PUBLIC_COMMUNITIES": "Public communities",
     "COMMUNITY_USERS": "Users",
     "USER_GUIDE": "User guide",
     "REPORT_BUG": "Report a bug",
@@ -212,7 +213,11 @@
         "NAME": "Name",
         "ROLE": "Role",
         "ACTIVATE": "Activate",
-        "ACTIONS": "Actions"
+        "ACTIONS": "Actions",
+        "MEMBER_COUNT": "Members",
+        "DESCRIPTION": "Description",
+        "CREATED_AT": "Created",
+        "UPDATED_AT": "Updated"
       },
       "ACTIVATED": "Activate",
       "NON_ACTIVATED": "Deactivate",
@@ -223,7 +228,13 @@
       "LEAVE_BUTTON_TOOLTIP": "Leave the community",
       "NO_COMMUNITY_FOUND": "No community found",
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)",
+      "PUBLIC_TITLE": "Available public communities",
+      "PUBLIC_LOGO": "Logo",
+      "DETAILS_BUTTON": "Details",
+      "DETAILS_BUTTON_TOOLTIP": "View community details",
+      "NO_PUBLIC_COMMUNITY_FOUND": "No public communities available",
+      "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
     },
     "CREATE": {
       "TITLE": "Create a community",
@@ -1137,6 +1148,12 @@
         "DENIED_LABEL": "Rejected",
         "NO_HISTORY_KEY_FOUND_LABEL": "No key history found",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "No key history available"
+      },
+      "VISIBILITY": {
+        "PUBLIC_LABEL": "Public",
+        "PRIVATE_LABEL": "Private",
+        "SET_PUBLIC_SUCCESS": "Sharing operation is now public",
+        "SET_PRIVATE_SUCCESS": "Sharing operation is now private"
       }
     },
     "LIST": {
