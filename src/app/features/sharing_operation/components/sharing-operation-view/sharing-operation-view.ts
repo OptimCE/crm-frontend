@@ -22,16 +22,13 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CardModule } from 'primeng/card';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ChartModule } from 'primeng/chart';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Drawer } from 'primeng/drawer';
-import { DatePicker } from 'primeng/datepicker';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import {
   AddConsumptionDataDTO,
-  SharingOpConsumptionDTO,
   SharingOperationDTO,
   SharingOperationKeyDTO,
   SharingOperationMetersQueryType,
@@ -53,11 +50,7 @@ import { SharingOperationMetersList } from './sharing-operation-meters-list/shar
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
 import { SelectMeterNewKeyDialog } from './dialogs/select-meter-new-key-dialog/select-meter-new-key-dialog';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
-
-interface ChartFormValue {
-  dateDeb: string;
-  dateFin: string;
-}
+import { SharingOperationConsumptionChart } from './sharing-operation-consumption-chart/sharing-operation-consumption-chart';
 
 @Component({
   selector: 'app-sharing-operation-view',
@@ -79,11 +72,9 @@ interface ChartFormValue {
     ConfirmPopupModule,
     CardModule,
     TranslatePipe,
-    ChartModule,
     ErrorHandlerComponent,
     CheckboxModule,
     Drawer,
-    DatePicker,
     SharingOperationTypePipe,
     Button,
     Tabs,
@@ -93,6 +84,7 @@ interface ChartFormValue {
     TabPanel,
     TabPanels,
     BackArrow,
+    SharingOperationConsumptionChart,
   ],
   templateUrl: './sharing-operation-view.html',
   styleUrl: './sharing-operation-view.css',
@@ -131,71 +123,6 @@ export class SharingOperationView implements OnInit {
   readonly sidebarHistoryKey = signal<boolean>(false);
   readonly dateStartApproved = signal<Date | null>(null);
   readonly currentPageReportTemplate = signal<string>('');
-  readonly data = signal<{
-    labels: string[];
-    datasets: {
-      type: string;
-      label: string;
-      stack: string;
-      data: number[];
-    }[];
-  } | null>(null);
-
-  options = {
-    maintainAspectRatio: false,
-    aspectRatio: 0.8,
-    plugins: {
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function (tooltipItem: { dataset: { label?: string }; raw: unknown }): string {
-            const label = tooltipItem.dataset.label || '';
-            const value = tooltipItem.raw as number;
-            return `${label}: ${value} kWh`;
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-        title: {
-          display: true,
-          text: this.translate.instant('SHARING_OPERATION.VIEW.CHART.X_TITLE_DATE') as string,
-        },
-        ticks: {
-          callback: (_value: unknown, index: number): string => {
-            const label = this.data()?.labels?.[index];
-            if (!label) return '';
-
-            const date = new Date(label);
-            if (isNaN(date.getTime())) return label;
-
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-
-            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-          },
-        },
-      },
-      y: {
-        stacked: true,
-        title: {
-          display: true,
-          text: this.translate.instant(
-            'SHARING_OPERATION.VIEW.CHART.Y_TITLE_CONSUMPTION',
-          ) as string,
-        },
-      },
-    },
-  };
-  formChart!: FormGroup;
-  readonly displayDownloadButton = signal<boolean>(false);
   readonly metersCharts = signal<PartialMeterDTO[]>([]);
   readonly selectedMeterCharts = signal<boolean[]>([]);
 
@@ -218,10 +145,6 @@ export class SharingOperationView implements OnInit {
       this.loadOperationSharing();
       this.setupStatusCategory();
       this.updatePaginationTranslation();
-      this.formChart = new FormGroup({
-        dateDeb: new FormControl('', [Validators.required]),
-        dateFin: new FormControl('', [Validators.required]),
-      });
       this.formGroup = new FormGroup(
         {
           fileConsumption: new FormControl('', [Validators.required]),
@@ -520,98 +443,6 @@ export class SharingOperationView implements OnInit {
           state: { consumers: selectedEANs },
         });
       });
-  }
-
-  loadChart(): void {
-    this.displayDownloadButton.set(false);
-    if (this.formChart.invalid) {
-      return;
-    }
-    const formValue = this.formChart.getRawValue() as ChartFormValue;
-    this.sharingOperationService
-      .getSharingOperationConsumptions(this.id(), {
-        date_start: formValue.dateDeb,
-        date_end: formValue.dateFin,
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        if (response) {
-          const tmpData = response.data as SharingOpConsumptionDTO;
-          this.data.set({
-            labels: tmpData.timestamps,
-            datasets: [
-              {
-                type: 'bar',
-                label: this.translate.instant(
-                  'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_SHARED_LABEL',
-                ) as string,
-                stack: 'consumption',
-                data: tmpData.shared,
-              },
-              {
-                type: 'bar',
-                label: this.translate.instant(
-                  'SHARING_OPERATION.VIEW.CHART.CONSUMPTION_NET_LABEL',
-                ) as string,
-                stack: 'consumption',
-                data: tmpData.net,
-              },
-              {
-                type: 'bar',
-                label: this.translate.instant(
-                  'SHARING_OPERATION.VIEW.CHART.INJECTION_NET_LABEL',
-                ) as string,
-                stack: 'inj',
-                data: tmpData.inj_net,
-              },
-              {
-                type: 'bar',
-                label: this.translate.instant(
-                  'SHARING_OPERATION.VIEW.CHART.INJECTION_SHARED_LABEL',
-                ) as string,
-                stack: 'inj',
-                data: tmpData.inj_shared,
-              },
-            ],
-          });
-          this.displayDownloadButton.set(true);
-        }
-      });
-  }
-
-  downloadTotalConsumption(): void {
-    const formValue = this.formChart.getRawValue() as ChartFormValue;
-    const op = this.sharingOperation();
-    if (op) {
-      this.sharingOperationService
-        .downloadSharingOperationConsumptions(op.id, {
-          date_start: formValue.dateDeb,
-          date_end: formValue.dateFin,
-        })
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (response) => {
-            if (response) {
-              if ('blob' in response) {
-                const url = window.URL.createObjectURL(response.blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = response.filename;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-              } else {
-                this.errorHandler.handleError(response.data ? response.data : null);
-              }
-            }
-          },
-          error: (error) => {
-            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-            this.errorHandler.handleError(errorData);
-          },
-        });
-    }
   }
 
   onFileSelected(event: Event): void {

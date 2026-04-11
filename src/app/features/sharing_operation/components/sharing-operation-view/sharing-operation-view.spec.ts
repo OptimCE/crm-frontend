@@ -15,7 +15,6 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
 import { ApiResponse, ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
 import {
-  SharingOpConsumptionDTO,
   SharingOperationDTO,
   SharingOperationKeyDTO,
 } from '../../../../shared/dtos/sharing_operation.dtos';
@@ -29,6 +28,7 @@ import { SharingOperationMetersList } from './sharing-operation-meters-list/shar
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { AddressDTO } from '../../../../shared/dtos/address.dtos';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { SharingOperationConsumptionChart } from './sharing-operation-consumption-chart/sharing-operation-consumption-chart';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -64,19 +64,6 @@ function buildSharingOperation(overrides: Partial<SharingOperationDTO> = {}): Sh
     is_public: false,
     key: buildSharingOperationKey(),
     ...overrides,
-  };
-}
-
-function buildConsumptionData(): SharingOpConsumptionDTO {
-  return {
-    id: 1,
-    timestamps: ['2025-01-01T00:00:00', '2025-01-02T00:00:00'],
-    gross: [100, 200],
-    net: [80, 160],
-    shared: [50, 100],
-    inj_gross: [10, 20],
-    inj_net: [8, 16],
-    inj_shared: [5, 10],
   };
 }
 
@@ -121,8 +108,6 @@ describe('SharingOperationView', () => {
 
   let sharingOperationServiceSpy: {
     getSharingOperation: ReturnType<typeof vi.fn>;
-    getSharingOperationConsumptions: ReturnType<typeof vi.fn>;
-    downloadSharingOperationConsumptions: ReturnType<typeof vi.fn>;
     addConsumptionDataToSharing: ReturnType<typeof vi.fn>;
     patchKeyStatus: ReturnType<typeof vi.fn>;
     getSharingOperationKeysList: ReturnType<typeof vi.fn>;
@@ -155,12 +140,6 @@ describe('SharingOperationView', () => {
       getSharingOperation: vi
         .fn()
         .mockReturnValue(of(new ApiResponse<SharingOperationDTO>(buildSharingOperation()))),
-      getSharingOperationConsumptions: vi
-        .fn()
-        .mockReturnValue(of(new ApiResponse<SharingOpConsumptionDTO>(buildConsumptionData()))),
-      downloadSharingOperationConsumptions: vi
-        .fn()
-        .mockReturnValue(of({ blob: new Blob(), filename: 'test.csv' })),
       addConsumptionDataToSharing: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
       patchKeyStatus: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
       getSharingOperationKeysList: vi.fn().mockReturnValue(of(buildPaginatedKeysResponse())),
@@ -200,6 +179,7 @@ describe('SharingOperationView', () => {
             Tab,
             TabPanel,
             TabPanels,
+            SharingOperationConsumptionChart,
           ],
           providers: [DialogService, ConfirmationService, MessageService, ErrorMessageHandler],
         },
@@ -266,13 +246,6 @@ describe('SharingOperationView', () => {
         page: 1,
         limit: 100,
       });
-    });
-
-    it('should initialize formChart with dateDeb and dateFin controls', async () => {
-      await createComponent();
-      expect(component.formChart).toBeTruthy();
-      expect(component.formChart.contains('dateDeb')).toBe(true);
-      expect(component.formChart.contains('dateFin')).toBe(true);
     });
 
     it('should initialize formGroup with fileConsumption control', async () => {
@@ -671,97 +644,6 @@ describe('SharingOperationView', () => {
       const mockEvent = { target: document.createElement('button') } as unknown as Event;
       component.openDateApprovedKey(mockEvent);
       expect(confirmationServiceSpy.confirm).toHaveBeenCalled();
-    });
-  });
-
-  // ── 8. Chart / Consumption ────────────────────────────────────────
-
-  describe('loadChart', () => {
-    beforeEach(async () => {
-      await createComponent();
-    });
-
-    it('should return early if formChart is invalid', () => {
-      component.loadChart();
-      expect(sharingOperationServiceSpy.getSharingOperationConsumptions).not.toHaveBeenCalled();
-    });
-
-    it('should call service and set data on success when form is valid', () => {
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-      component.loadChart();
-      expect(sharingOperationServiceSpy.getSharingOperationConsumptions).toHaveBeenCalledWith(
-        1,
-        expect.objectContaining({ date_start: '2025-01-01', date_end: '2025-01-31' }),
-      );
-      expect(component.data()).toBeTruthy();
-      expect(component.data()?.labels).toEqual(['2025-01-01T00:00:00', '2025-01-02T00:00:00']);
-    });
-
-    it('should set displayDownloadButton to true on success', () => {
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-      component.loadChart();
-      expect(component.displayDownloadButton()).toBe(true);
-    });
-
-    it('should set displayDownloadButton to false initially', () => {
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-      // Before calling loadChart, the button should be set to false
-      expect(component.displayDownloadButton()).toBe(false);
-    });
-
-    it('should not set data on null response', () => {
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-      sharingOperationServiceSpy.getSharingOperationConsumptions.mockReturnValue(of(null));
-      component.loadChart();
-      expect(component.data()).toBeNull();
-    });
-
-    it('should create 4 datasets (consumption shared, net, injection net, shared)', () => {
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-      component.loadChart();
-      expect(component.data()?.datasets.length).toBe(4);
-    });
-  });
-
-  describe('downloadTotalConsumption', () => {
-    beforeEach(async () => {
-      await createComponent();
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-    });
-
-    it('should call downloadSharingOperationConsumptions', () => {
-      component.downloadTotalConsumption();
-      expect(sharingOperationServiceSpy.downloadSharingOperationConsumptions).toHaveBeenCalledWith(
-        1,
-        expect.objectContaining({ date_start: '2025-01-01' }),
-      );
-    });
-
-    it('should call errorHandler on error', () => {
-      sharingOperationServiceSpy.downloadSharingOperationConsumptions.mockReturnValue(
-        throwError(() => new Error('fail')),
-      );
-      component.downloadTotalConsumption();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalled();
-    });
-
-    it('should call errorHandler when response has no blob', () => {
-      sharingOperationServiceSpy.downloadSharingOperationConsumptions.mockReturnValue(
-        of(new ApiResponse('error')),
-      );
-      component.downloadTotalConsumption();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalled();
-    });
-
-    it('should not call service when no sharingOperation', async () => {
-      sharingOperationServiceSpy.getSharingOperation.mockReturnValue(of(null));
-      await createComponent();
-      component.formChart.patchValue({ dateDeb: '2025-01-01', dateFin: '2025-01-31' });
-      sharingOperationServiceSpy.downloadSharingOperationConsumptions.mockClear();
-      component.downloadTotalConsumption();
-      expect(
-        sharingOperationServiceSpy.downloadSharingOperationConsumptions,
-      ).not.toHaveBeenCalled();
     });
   });
 

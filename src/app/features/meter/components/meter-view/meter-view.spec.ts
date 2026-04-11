@@ -10,7 +10,7 @@ import { MeterView } from './meter-view';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ApiResponse } from '../../../../core/dtos/api.response';
-import { MeterConsumptionDTO, MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
+import { MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
 import { AddressDTO } from '../../../../shared/dtos/address.dtos';
 import {
   ClientType,
@@ -29,7 +29,7 @@ import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { MeterDataView } from './meter-data-view/meter-data-view';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
-import { ChartModule } from 'primeng/chart';
+import { MeterConsumptionChart } from './meter-consumption-chart/meter-consumption-chart';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -89,20 +89,6 @@ function buildMeter(overrides: Partial<MetersDTO> = {}): MetersDTO {
   };
 }
 
-function buildConsumption(overrides: Partial<MeterConsumptionDTO> = {}): MeterConsumptionDTO {
-  return {
-    EAN: '541449000000000001',
-    timestamps: ['2024-01-01T00:00:00', '2024-02-01T00:00:00'],
-    gross: [100, 200],
-    net: [80, 160],
-    shared: [20, 40],
-    inj_gross: [10, 20],
-    inj_net: [8, 16],
-    inj_shared: [2, 4],
-    ...overrides,
-  };
-}
-
 // ── Test Suite ─────────────────────────────────────────────────────
 
 describe('MeterView', () => {
@@ -111,8 +97,6 @@ describe('MeterView', () => {
 
   let meterServiceSpy: {
     getMeter: ReturnType<typeof vi.fn>;
-    getMeterConsumptions: ReturnType<typeof vi.fn>;
-    downloadMeterConsumptions: ReturnType<typeof vi.fn>;
   };
   let routerSpy: { navigate: ReturnType<typeof vi.fn> };
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
@@ -134,12 +118,6 @@ describe('MeterView', () => {
 
     meterServiceSpy = {
       getMeter: vi.fn().mockReturnValue(of(new ApiResponse<MetersDTO>(buildMeter()))),
-      getMeterConsumptions: vi
-        .fn()
-        .mockReturnValue(of(new ApiResponse<MeterConsumptionDTO>(buildConsumption()))),
-      downloadMeterConsumptions: vi
-        .fn()
-        .mockReturnValue(of({ blob: new Blob(), filename: 'consumptions.xlsx' })),
     };
 
     routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
@@ -157,7 +135,16 @@ describe('MeterView', () => {
     })
       .overrideComponent(MeterView, {
         remove: {
-          imports: [BackArrow, MeterDataView, Tabs, TabList, Tab, TabPanels, TabPanel, ChartModule],
+          imports: [
+            BackArrow,
+            MeterDataView,
+            Tabs,
+            TabList,
+            Tab,
+            TabPanels,
+            TabPanel,
+            MeterConsumptionChart,
+          ],
           providers: [DialogService],
         },
         add: {
@@ -211,14 +198,6 @@ describe('MeterView', () => {
       meterServiceSpy.getMeter.mockReturnValue(of(null));
       await createComponent();
       expect(component.hasError()).toBe(true);
-    });
-
-    it('should initialize formChart with required validators', async () => {
-      await createComponent();
-      expect(component.formChart).toBeTruthy();
-      expect(component.formChart.get('dateDeb')).toBeTruthy();
-      expect(component.formChart.get('dateFin')).toBeTruthy();
-      expect(component.formChart.valid).toBe(false);
     });
   });
 
@@ -456,80 +435,7 @@ describe('MeterView', () => {
     });
   });
 
-  // ── 5. Chart & Consumption ───────────────────────────────────────
-
-  describe('Chart & Consumption', () => {
-    beforeEach(async () => {
-      await createComponent();
-    });
-
-    describe('loadChart', () => {
-      it('should not call service when form is invalid', () => {
-        component.loadChart();
-        expect(meterServiceSpy.getMeterConsumptions).not.toHaveBeenCalled();
-      });
-
-      it('should not call service when meter is undefined', () => {
-        component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
-        component['meter'].set(undefined);
-        component.loadChart();
-        expect(meterServiceSpy.getMeterConsumptions).not.toHaveBeenCalled();
-      });
-
-      it('should call getMeterConsumptions with correct params', () => {
-        component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
-        component.loadChart();
-        expect(meterServiceSpy.getMeterConsumptions).toHaveBeenCalledWith('541449000000000001', {
-          date_start: '2024-01-01',
-          date_end: '2024-12-31',
-        });
-      });
-
-      it('should set data signal after successful response', () => {
-        component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
-        component.loadChart();
-        expect(component.data()).toBeTruthy();
-        const chartData = component.data();
-        expect(chartData?.labels).toEqual(['2024-01-01T00:00:00', '2024-02-01T00:00:00']);
-        expect(chartData?.datasets.length).toBe(4);
-      });
-
-      it('should set displayDownloadButton to true after success', () => {
-        expect(component.displayDownloadButton()).toBe(false);
-        component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
-        component.loadChart();
-        expect(component.displayDownloadButton()).toBe(true);
-      });
-
-      it('should reset displayDownloadButton before loading', () => {
-        component['displayDownloadButton'].set(true);
-        component.loadChart();
-        expect(component.displayDownloadButton()).toBe(false);
-      });
-    });
-
-    describe('downloadTotalConsumption', () => {
-      it('should no-op if meter is undefined', () => {
-        component['meter'].set(undefined);
-        component.downloadTotalConsumption();
-        expect(meterServiceSpy.downloadMeterConsumptions).not.toHaveBeenCalled();
-      });
-
-      it('should call downloadMeterConsumptions with form values', () => {
-        component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
-        component.downloadTotalConsumption();
-        expect(meterServiceSpy.downloadMeterConsumptions).toHaveBeenCalledWith(
-          '541449000000000001',
-          {
-            date_start: '2024-01-01',
-            date_end: '2024-12-31',
-          },
-        );
-      });
-    });
-  });
-
-  // ── 6. getFullMeter ──────────────────────────────────────────────
+  // ── 5. getFullMeter ──────────────────────────────────────────────
 
   describe('getFullMeter', () => {
     it('should not set isLoading when showLoading is false', async () => {

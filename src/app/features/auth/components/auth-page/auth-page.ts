@@ -4,7 +4,6 @@ import { Carousel } from 'primeng/carousel';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSelector } from '../../../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
-import { NgOptimizedImage } from '@angular/common';
 
 interface Slide {
   icon: string;
@@ -15,7 +14,7 @@ interface Slide {
 
 @Component({
   selector: 'app-auth-page',
-  imports: [Button, Carousel, TranslatePipe, LanguageSelector, NgOptimizedImage],
+  imports: [Button, Carousel, TranslatePipe, LanguageSelector],
   standalone: true,
   templateUrl: './auth-page.html',
   styleUrl: './auth-page.css',

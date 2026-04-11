@@ -1,0 +1,50 @@
+<form
+  [formGroup]="formChart"
+  class="flex flex-col sm:flex-row gap-3 items-end mb-4"
+  (submit)="loadChart()"
+>
+  <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+    <label for="dateDeb" class="field-label">{{
+      'METER.FULL.BEGINNING_DATE_LABEL' | translate
+    }}</label>
+    <p-date-picker
+      id="dateDeb"
+      formControlName="dateDeb"
+      dateFormat="dd/mm/yy"
+      [firstDayOfWeek]="1"
+      styleClass="w-full"
+    ></p-date-picker>
+    <app-error-handler controlName="dateDeb"></app-error-handler>
+  </div>
+  <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+    <label for="dateFin" class="field-label">{{ 'METER.FULL.END_DATE_LABEL' | translate }}</label>
+    <p-date-picker
+      id="dateFin"
+      formControlName="dateFin"
+      dateFormat="dd/mm/yy"
+      [firstDayOfWeek]="1"
+      styleClass="w-full"
+    ></p-date-picker>
+    <app-error-handler controlName="dateFin"></app-error-handler>
+  </div>
+  <p-button
+    pRipple
+    label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
+    icon="pi pi-search"
+    type="submit"
+  ></p-button>
+</form>
+<p-card styleClass="mb-4">
+  <p-chart type="bar" [data]="data()" [options]="options" />
+</p-card>
+@if (displayDownloadButton()) {
+  <div class="flex justify-center">
+    <p-button
+      pRipple
+      [outlined]="true"
+      icon="pi pi-download"
+      label="{{ 'METER.FULL.DOWNLOAD_BUTTON_LABEL' | translate }}"
+      (click)="downloadTotalConsumption()"
+    ></p-button>
+  </div>
+}
