@@ -61,6 +61,7 @@ export interface SharingOperationKeyDTO {
  * Full DTO including keys and history for a sharing operation.
  */
 export interface SharingOperationDTO extends SharingOperationPartialDTO {
+  is_public: boolean;
   key: SharingOperationKeyDTO;
   key_waiting_approval?: SharingOperationKeyDTO;
 }
@@ -139,4 +140,12 @@ export interface RemoveMeterFromSharingOperationDTO {
   id_meter: string;
   id_sharing: number;
   date: Date;
+}
+
+/**
+ * DTO for updating the visibility of a sharing operation.
+ */
+export interface PatchSharingOperationVisibilityDTO {
+  id_sharing: number;
+  is_public: boolean;
 }

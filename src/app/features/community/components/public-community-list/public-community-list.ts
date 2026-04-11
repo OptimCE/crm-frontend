@@ -5,11 +5,12 @@ import { TagModule } from 'primeng/tag';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PublicCommunityDTO, CommunityDetailDTO } from '../../../../shared/dtos/community.dtos';
 import { CommunityService } from '../../../../shared/services/community.service';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 @Component({
   selector: 'app-public-community-list',
   standalone: true,
-  imports: [TagModule, TranslatePipe, DatePipe],
+  imports: [TagModule, TranslatePipe, DatePipe, HeaderPage],
   templateUrl: './public-community-list.html',
   styleUrl: './public-community-list.css',
 })
@@ -20,6 +21,17 @@ export class PublicCommunityList {
   communities = signal<PublicCommunityDTO[]>([]);
   communityDetails = signal<Map<number, CommunityDetailDTO>>(new Map());
   expandedCommunityId = signal<number | null>(null);
+  brokenLogos = signal<Set<number>>(new Set());
+
+  onLogoError(communityId: number): void {
+    const updated = new Set(this.brokenLogos());
+    updated.add(communityId);
+    this.brokenLogos.set(updated);
+  }
+
+  hasValidLogo(community: PublicCommunityDTO): boolean {
+    return !!community.logo_url && !this.brokenLogos().has(community.id);
+  }
 
   constructor() {
     this.loadPublicCommunities();
@@ -27,7 +39,7 @@ export class PublicCommunityList {
 
   private loadPublicCommunities(): void {
     this.communityService
-      .getPublicCommunities({ page: 1, limit: 100 })
+      .getPublicCommunities({ page: 1, limit: 10 })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {

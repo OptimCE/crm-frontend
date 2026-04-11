@@ -1,0 +1,11 @@
+/* Remove default button styling from accordion header */
+.accordion-header {
+  background: none;
+  border: none;
+  font: inherit;
+}
+
+/* Smooth chevron rotation */
+.accordion-header .pi {
+  transition: transform 0.2s ease;
+}

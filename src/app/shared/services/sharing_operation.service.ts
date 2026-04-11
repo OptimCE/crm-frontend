@@ -7,6 +7,7 @@ import {
   CreateSharingOperationDTO,
   PatchKeyToSharingOperationDTO,
   PatchMeterToSharingOperationDTO,
+  PatchSharingOperationVisibilityDTO,
   RemoveMeterFromSharingOperationDTO,
   SharingOpConsumptionDTO,
   SharingOperationConsumptionQuery,
@@ -182,6 +183,18 @@ export class SharingOperationService extends ServiceBase {
         tap(() => {
           this.cache.invalidate(`sharing-operation:${patched_meter_status.id_sharing}`);
           this.cache.invalidate(`sharing-operation-meters-list:${patched_meter_status.id_sharing}`);
+        }),
+      );
+  }
+
+  patchVisibility(
+    patched_sharing: PatchSharingOperationVisibilityDTO,
+  ): Observable<ApiResponse<string>> {
+    return this.http
+      .patch<ApiResponse<string>>(this.apiAddress + '/visibility', patched_sharing)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate(`sharing-operation:${patched_sharing.id_sharing}`);
         }),
       );
   }

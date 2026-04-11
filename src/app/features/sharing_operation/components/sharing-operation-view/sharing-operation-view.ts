@@ -113,6 +113,7 @@ export class SharingOperationView implements OnInit {
 
   readonly isLoading = signal<boolean>(true);
   readonly hasError = signal<boolean>(false);
+  readonly togglingVisibility = signal<boolean>(false);
   readonly id = signal<number>(0);
   readonly sharingOperation = signal<SharingOperationDTO | undefined>(undefined);
   readonly sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
@@ -317,6 +318,42 @@ export class SharingOperationView implements OnInit {
         },
       });
   }
+  toggleVisibility(): void {
+    const op = this.sharingOperation();
+    if (!op || this.togglingVisibility()) return;
+
+    this.togglingVisibility.set(true);
+    this.sharingOperationService
+      .patchVisibility({
+        id_sharing: op.id,
+        is_public: !op.is_public,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.snackbar.openSnackBar(
+              this.translate.instant(
+                op.is_public
+                  ? 'SHARING_OPERATION.VIEW.VISIBILITY.SET_PRIVATE_SUCCESS'
+                  : 'SHARING_OPERATION.VIEW.VISIBILITY.SET_PUBLIC_SUCCESS',
+              ) as string,
+              VALIDATION_TYPE,
+            );
+            this.loadOperationSharing(false);
+          } else {
+            this.errorHandler.handleError();
+          }
+          this.togglingVisibility.set(false);
+        },
+        error: (error: unknown) => {
+          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
+          this.errorHandler.handleError(errorData);
+          this.togglingVisibility.set(false);
+        },
+      });
+  }
+
   exportExcelCWAPe(): void {
     console.log('TO IMPLEMENT');
   }

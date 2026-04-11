@@ -1148,6 +1148,12 @@
         "DENIED_LABEL": "Geweigerd",
         "NO_HISTORY_KEY_FOUND_LABEL": "Geen sleutelgeschiedenis gevonden",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Geen sleutelgeschiedenis beschikbaar"
+      },
+      "VISIBILITY": {
+        "PUBLIC_LABEL": "Openbaar",
+        "PRIVATE_LABEL": "Privé",
+        "SET_PUBLIC_SUCCESS": "Deeloperatie is nu openbaar",
+        "SET_PRIVATE_SUCCESS": "Deeloperatie is nu privé"
       }
     },
     "LIST": {

@@ -1148,6 +1148,12 @@
         "DENIED_LABEL": "Abgelehnt",
         "NO_HISTORY_KEY_FOUND_LABEL": "Kein Schlüsselverlauf gefunden",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Kein Schlüsselverlauf verfügbar"
+      },
+      "VISIBILITY": {
+        "PUBLIC_LABEL": "Öffentlich",
+        "PRIVATE_LABEL": "Privat",
+        "SET_PUBLIC_SUCCESS": "Teilungsoperation ist jetzt öffentlich",
+        "SET_PRIVATE_SUCCESS": "Teilungsoperation ist jetzt privat"
       }
     },
     "LIST": {
