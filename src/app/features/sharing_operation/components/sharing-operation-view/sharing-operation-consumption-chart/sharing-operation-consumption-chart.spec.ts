@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -9,10 +10,6 @@ import { SharingOperationService } from '../../../../../shared/services/sharing_
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { SharingOpConsumptionDTO } from '../../../../../shared/dtos/sharing_operation.dtos';
-import { Button } from 'primeng/button';
-import { ChartModule } from 'primeng/chart';
-import { DatePicker } from 'primeng/datepicker';
-import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -71,10 +68,9 @@ describe('SharingOperationConsumptionChart', () => {
       ],
     })
       .overrideComponent(SharingOperationConsumptionChart, {
-        remove: {
-          imports: [Button, ChartModule, DatePicker, ErrorHandlerComponent],
-        },
-        add: {
+        set: {
+          imports: [ReactiveFormsModule, TranslatePipe],
+          template: '',
           schemas: [NO_ERRORS_SCHEMA],
         },
       })

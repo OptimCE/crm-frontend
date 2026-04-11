@@ -4,7 +4,6 @@ import { Carousel } from 'primeng/carousel';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSelector } from '../../../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
-import { NgOptimizedImage } from '@angular/common';
 
 interface Slide {
   icon: string;

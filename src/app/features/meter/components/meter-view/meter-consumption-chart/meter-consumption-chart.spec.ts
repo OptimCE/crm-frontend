@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -8,11 +9,6 @@ import { MeterConsumptionChart } from './meter-consumption-chart';
 import { MeterService } from '../../../../../shared/services/meter.service';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { MeterConsumptionDTO } from '../../../../../shared/dtos/meter.dtos';
-import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
-import { ChartModule } from 'primeng/chart';
-import { DatePicker } from 'primeng/datepicker';
-import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -64,10 +60,9 @@ describe('MeterConsumptionChart', () => {
       providers: [{ provide: MeterService, useValue: meterServiceSpy }],
     })
       .overrideComponent(MeterConsumptionChart, {
-        remove: {
-          imports: [Button, Card, ChartModule, DatePicker, ErrorHandlerComponent],
-        },
-        add: {
+        set: {
+          imports: [ReactiveFormsModule, TranslatePipe],
+          template: '',
           schemas: [NO_ERRORS_SCHEMA],
         },
       })
