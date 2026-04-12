@@ -18,10 +18,10 @@ export interface UploadDocumentDTO {
 /**
  * DTO representing a downloaded document.
  */
-export interface DownloadDocument {
-  // document: Buffer; TODO: Fix this
-  fileName: string;
-  fileType: string;
+export class DownloadDocument {
+  url!: string;
+  fileName!: string;
+  fileType!: string;
 }
 
 /**

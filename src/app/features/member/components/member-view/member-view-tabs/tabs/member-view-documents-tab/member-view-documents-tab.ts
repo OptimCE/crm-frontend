@@ -16,6 +16,7 @@ import {
 import { ApiResponse, Pagination } from '../../../../../../../core/dtos/api.response';
 import { DocumentService } from '../../../../../../../shared/services/document.service';
 import { MemberAddDocument } from '../../../../member-add-document/member-add-document';
+import { downloadFromUrl } from '../../../../../../../shared/utils/download.utils';
 import { VALIDATION_TYPE } from '../../../../../../../core/dtos/notification';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
@@ -169,16 +170,7 @@ export class MemberViewDocumentsTab implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          if (response && 'blob' in response) {
-            const url = window.URL.createObjectURL(response.blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = response.filename;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-          }
+          downloadFromUrl(response.data.url, response.data.fileName);
         },
         error: (error) => {
           const errorData = error instanceof ApiResponse ? (error.data as string) : null;

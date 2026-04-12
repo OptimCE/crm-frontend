@@ -79,7 +79,7 @@ export class MemberAddDocument implements OnInit {
     }
     const formData = new FormData();
     formData.append('file', this.fileToUpload() as File);
-    formData.append('idMember', this.idMember);
+    formData.append('id_member', this.idMember);
     this.documentService.uploadDocument(formData).subscribe({
       next: (response) => {
         if (response) {
