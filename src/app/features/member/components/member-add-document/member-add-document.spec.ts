@@ -169,7 +169,7 @@ describe('MemberAddDocument', () => {
     expect(documentServiceSpy.uploadDocument).toHaveBeenCalledTimes(1);
     const formData = documentServiceSpy.uploadDocument.mock.calls[0][0] as FormData;
     expect(formData.get('file')).toBe(mockFile);
-    expect(formData.get('idMember')).toBe('member-1');
+    expect(formData.get('id_member')).toBe('member-1');
   });
 
   it('should close dialog with true on successful upload', () => {

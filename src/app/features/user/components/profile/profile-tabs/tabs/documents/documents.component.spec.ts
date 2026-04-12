@@ -13,6 +13,7 @@ import {
 } from '../../../../../../../core/dtos/api.response';
 import { MeDocumentDTO } from '../../../../../../../shared/dtos/me.dtos';
 import { CommunityDTO } from '../../../../../../../shared/dtos/community.dtos';
+import { DownloadDocument } from '../../../../../../../shared/dtos/document.dtos';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { Table, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
 
@@ -67,9 +68,14 @@ describe('DocumentsComponent', () => {
   }
 
   beforeEach(async () => {
+    const defaultDownloadDoc = new DownloadDocument();
+    defaultDownloadDoc.url = 'http://minio/test.pdf';
+    defaultDownloadDoc.fileName = 'test.pdf';
+    defaultDownloadDoc.fileType = 'application/pdf';
+
     meServiceSpy = {
       getDocuments: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
-      getDocumentById: vi.fn().mockReturnValue(of({ blob: new Blob(), filename: 'test.pdf' })),
+      getDocumentById: vi.fn().mockReturnValue(of(new ApiResponse(defaultDownloadDoc))),
     };
 
     errorHandlerSpy = {
@@ -424,10 +430,18 @@ describe('DocumentsComponent', () => {
       community: { id: 1, name: 'Test Community' } as CommunityDTO,
     };
 
+    let fetchSpy: ReturnType<typeof vi.fn>;
+
     beforeEach(async () => {
+      fetchSpy = vi.fn().mockResolvedValue({ blob: () => Promise.resolve(new Blob()) });
+      vi.stubGlobal('fetch', fetchSpy);
       await createComponent();
       meServiceSpy.getDocumentById.mockClear();
       errorHandlerSpy.handleError.mockClear();
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
     });
 
     it('should call meService.getDocumentById with document id', () => {
@@ -435,46 +449,16 @@ describe('DocumentsComponent', () => {
       expect(meServiceSpy.getDocumentById).toHaveBeenCalledWith(42);
     });
 
-    it('should create an anchor element and trigger download on success', () => {
-      const blob = new Blob(['content'], { type: 'application/pdf' });
-      const fakeUrl = 'blob:http://localhost/fake-url';
-      meServiceSpy.getDocumentById.mockReturnValue(of({ blob, filename: 'download.pdf' }));
-
-      const createObjectURLSpy = vi.spyOn(window.URL, 'createObjectURL').mockReturnValue(fakeUrl);
-      const revokeObjectURLSpy = vi
-        .spyOn(window.URL, 'revokeObjectURL')
-        .mockImplementation(() => void 0);
-      const appendChildSpy = vi
-        .spyOn(document.body, 'appendChild')
-        .mockImplementation((node) => node);
-      const removeChildSpy = vi
-        .spyOn(document.body, 'removeChild')
-        .mockImplementation((node) => node);
-      const clickSpy = vi.fn();
-      const createElementSpy = vi.spyOn(document, 'createElement').mockReturnValue({
-        set href(_v: string) {
-          /* noop */
-        },
-        set download(_v: string) {
-          /* noop */
-        },
-        click: clickSpy,
-      } as unknown as HTMLAnchorElement);
+    it('should call fetch with the download URL on success', () => {
+      const downloadDoc = new DownloadDocument();
+      downloadDoc.url = 'http://minio/download.pdf';
+      downloadDoc.fileName = 'download.pdf';
+      downloadDoc.fileType = 'application/pdf';
+      meServiceSpy.getDocumentById.mockReturnValue(of(new ApiResponse(downloadDoc)));
 
       component.onDownloadDocument(doc);
 
-      expect(createObjectURLSpy).toHaveBeenCalledWith(blob);
-      expect(createElementSpy).toHaveBeenCalledWith('a');
-      expect(clickSpy).toHaveBeenCalled();
-      expect(revokeObjectURLSpy).toHaveBeenCalledWith(fakeUrl);
-      expect(appendChildSpy).toHaveBeenCalled();
-      expect(removeChildSpy).toHaveBeenCalled();
-
-      createObjectURLSpy.mockRestore();
-      revokeObjectURLSpy.mockRestore();
-      appendChildSpy.mockRestore();
-      removeChildSpy.mockRestore();
-      createElementSpy.mockRestore();
+      expect(fetchSpy).toHaveBeenCalledWith('http://minio/download.pdf');
     });
 
     it('should call errorHandler.handleError with data when error is ApiResponse', () => {
