@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
-import { DocumentExposedDTO, DocumentQueryDTO } from '../dtos/document.dtos';
+import { DocumentExposedDTO, DocumentQueryDTO, DownloadDocument } from '../dtos/document.dtos';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
-import { catchError, map, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ServiceBase } from './service.base';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -31,29 +30,10 @@ export class DocumentService extends ServiceBase {
   downloadDocument(
     memberId: number,
     documentId: number,
-  ): Observable<{ blob: Blob; filename: string }> {
-    return this.http
-      .get(this.apiAddress + '/' + memberId + '/' + documentId, {
-        observe: 'response',
-        responseType: 'blob',
-      })
-      .pipe(
-        map((response) => {
-          const blob = response.body as Blob;
-
-          const contentDisposition = response.headers.get('content-disposition');
-          let filename = 'document.';
-          if (contentDisposition) {
-            const match = contentDisposition.match(/filename="(.+)"/);
-            if (match?.[1]) {
-              filename = match[1];
-            }
-          }
-
-          return { blob, filename };
-        }),
-        catchError((error: HttpErrorResponse) => this.blobErrorHandler(error)),
-      );
+  ): Observable<ApiResponse<DownloadDocument>> {
+    return this.http.get<ApiResponse<DownloadDocument>>(
+      this.apiAddress + '/' + memberId + '/' + documentId,
+    );
   }
 
   uploadDocument(formData: FormData): Observable<ApiResponse<string>> {

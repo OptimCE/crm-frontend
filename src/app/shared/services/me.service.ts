@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
-import { catchError, map, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ServiceBase } from './service.base';
 import {
   MeCompanyDTO,
@@ -14,7 +14,6 @@ import {
   MeMetersPartialQuery,
   MePartialMeterDTO,
 } from '../dtos/me.dtos';
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   AcceptInvitationDTO,
   AcceptInvitationWEncodedDTO,
@@ -24,6 +23,7 @@ import {
   UserMemberInvitationQuery,
 } from '../dtos/invitation.dtos';
 import { CompanyDTO, IndividualDTO } from '../dtos/member.dtos';
+import { DownloadDocument } from '../dtos/document.dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -46,29 +46,8 @@ export class MeService extends ServiceBase {
     );
   }
 
-  getDocumentById(id: number): Observable<{ blob: Blob; filename: string }> {
-    return this.http
-      .get(this.apiAddress + `/documents/${id}`, {
-        observe: 'response',
-        responseType: 'blob',
-      })
-      .pipe(
-        map((response) => {
-          const blob = response.body as Blob;
-
-          const contentDisposition = response.headers.get('content-disposition');
-          let filename = 'document.';
-          if (contentDisposition) {
-            const match = contentDisposition.match(/filename="(.+)"/);
-            if (match?.[1]) {
-              filename = match[1];
-            }
-          }
-
-          return { blob, filename };
-        }),
-        catchError((error: HttpErrorResponse) => this.blobErrorHandler(error)),
-      );
+  getDocumentById(id: number): Observable<ApiResponse<DownloadDocument>> {
+    return this.http.get<ApiResponse<DownloadDocument>>(this.apiAddress + `/documents/${id}`);
   }
 
   getMembers(

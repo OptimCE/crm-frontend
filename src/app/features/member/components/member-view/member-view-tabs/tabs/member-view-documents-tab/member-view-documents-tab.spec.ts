@@ -15,6 +15,7 @@ import {
 import {
   DocumentExposedDTO,
   DocumentQueryDTO,
+  DownloadDocument,
 } from '../../../../../../../shared/dtos/document.dtos';
 import { DocumentService } from '../../../../../../../shared/services/document.service';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
@@ -342,36 +343,28 @@ describe('MemberViewDocumentsTab', () => {
   // ── 10. onDownloadDocument ──────────────────────────────────────
 
   describe('onDownloadDocument', () => {
+    let fetchSpy: ReturnType<typeof vi.fn>;
+
     beforeEach(async () => {
+      fetchSpy = vi.fn().mockResolvedValue({ blob: () => Promise.resolve(new Blob()) });
+      vi.stubGlobal('fetch', fetchSpy);
       await createComponent();
     });
 
-    it('should create download link on success', () => {
-      const blob = new Blob(['test'], { type: 'application/pdf' });
-      documentServiceSpy.downloadDocument.mockReturnValue(of({ blob, filename: 'contract.pdf' }));
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
 
-      const createObjectURLSpy = vi.fn().mockReturnValue('blob:test-url');
-      const revokeObjectURLSpy = vi.fn();
-      vi.stubGlobal('URL', {
-        createObjectURL: createObjectURLSpy,
-        revokeObjectURL: revokeObjectURLSpy,
-      });
-
-      const mockAnchor = { href: '', download: '', click: vi.fn() } as unknown as HTMLAnchorElement;
-      vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
-      vi.spyOn(document.body, 'appendChild').mockImplementation((node) => node);
-      vi.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
+    it('should call fetch with the download URL on success', () => {
+      const downloadDoc = new DownloadDocument();
+      downloadDoc.url = 'http://minio/file';
+      downloadDoc.fileName = 'contract.pdf';
+      downloadDoc.fileType = 'application/pdf';
+      documentServiceSpy.downloadDocument.mockReturnValue(of(new ApiResponse(downloadDoc)));
 
       component.onDownloadDocument(buildDocuments()[0]);
 
-      expect(createObjectURLSpy).toHaveBeenCalledWith(blob);
-      expect(mockAnchor.download).toBe('contract.pdf');
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(mockAnchor.click).toHaveBeenCalled();
-      expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:test-url');
-
-      vi.restoreAllMocks();
-      vi.unstubAllGlobals();
+      expect(fetchSpy).toHaveBeenCalledWith('http://minio/file');
     });
 
     it('should call errorHandler on error', () => {
