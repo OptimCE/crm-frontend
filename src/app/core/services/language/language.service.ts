@@ -24,7 +24,6 @@ export class LanguageService {
   }
 
   setlanguage(): void {
-    console.log('SET LANGUAGE');
     const savedLang = localStorage.getItem('language');
     if (savedLang) {
       this.setTranslate(savedLang);
@@ -36,8 +35,6 @@ export class LanguageService {
         this.changeLanguage('fr');
       }
     }
-    console.log('GET CURRENT LANGUAGE');
-    console.log(this.getCurrentLanguage());
   }
 
   getUsersLocale(): string | undefined {

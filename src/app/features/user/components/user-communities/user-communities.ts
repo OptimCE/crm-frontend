@@ -15,6 +15,7 @@ import { CommunityDialog } from './community-dialog/community-dialog';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-user-communities',
@@ -35,6 +36,7 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
 export class UserCommunities {
   private communityService = inject(CommunityService);
   protected userContextService = inject(UserContextService);
+  private keycloak = inject(Keycloak);
   private dialogService = inject(DialogService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
@@ -133,7 +135,10 @@ export class UserCommunities {
     });
     this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: boolean) => {
       if (result) {
-        this.loadCommunities();
+        void this.keycloak.updateToken(-1).then(() => {
+          this.userContextService.refreshUserContext();
+          this.loadCommunities();
+        });
       }
     });
   }

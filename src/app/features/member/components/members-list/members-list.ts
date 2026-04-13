@@ -202,7 +202,7 @@ export class MembersList {
           this.invitationService.inviteUserToBecomeMember({ user_email: email }).subscribe({
             next: (response) => {
               if (response) {
-                console.log('SUCCESS');
+                console.log('success');
               } else {
                 console.error(response);
               }
