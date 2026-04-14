@@ -1,6 +1,12 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+} from '@angular/forms';
 import { UserService } from '../../../../../shared/services/user.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UpdateUserDTO, UserDTO } from '../../../../../shared/dtos/user.dtos';
@@ -32,6 +38,31 @@ interface UserUpdateFormValue {
   billing_address_postcode: string;
   billing_address_supplement: string;
   billing_address_city: string;
+}
+
+/**
+ * Cross-field validator for address groups.
+ * If any required address field (street, number, postcode, city) is filled,
+ * all of them must be filled. Supplement is always optional.
+ */
+function addressGroupValidator(prefix: string) {
+  const requiredFields = ['street', 'number', 'postcode', 'city'];
+  return (group: AbstractControl): ValidationErrors | null => {
+    const controls = requiredFields.map((f) => group.get(`${prefix}_${f}`));
+    const anyFilled = controls.some((c) => c?.value != null && c.value !== '');
+    if (!anyFilled) return null;
+
+    let hasError = false;
+    controls.forEach((c) => {
+      if (c && (c.value == null || c.value === '')) {
+        c.setErrors({ addressRequired: true });
+        hasError = true;
+      } else if (c && c.errors?.['addressRequired']) {
+        c.setErrors(null);
+      }
+    });
+    return hasError ? { addressIncomplete: true } : null;
+  };
 }
 
 @Component({
@@ -67,24 +98,27 @@ export class UserUpdateDialog implements OnInit {
   }
 
   initializeForm(): void {
-    this.formData = new FormGroup({
-      id: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      surname: new FormControl('', [Validators.required]),
-      phone: new FormControl('', [Validators.required]),
-      iban: new FormControl('', [Validators.required]),
-      same_address: new FormControl(false),
-      home_address_street: new FormControl('', [Validators.required]),
-      home_address_number: new FormControl('', [Validators.required]),
-      home_address_postcode: new FormControl('', [Validators.required]),
-      home_address_supplement: new FormControl(''),
-      home_address_city: new FormControl('', [Validators.required]),
-      billing_address_street: new FormControl('', [Validators.required]),
-      billing_address_number: new FormControl('', [Validators.required]),
-      billing_address_postcode: new FormControl('', [Validators.required]),
-      billing_address_supplement: new FormControl(''),
-      billing_address_city: new FormControl('', [Validators.required]),
-    });
+    this.formData = new FormGroup(
+      {
+        id: new FormControl(''),
+        name: new FormControl(''),
+        surname: new FormControl(''),
+        phone: new FormControl(''),
+        iban: new FormControl(''),
+        same_address: new FormControl(false),
+        home_address_street: new FormControl(''),
+        home_address_number: new FormControl(''),
+        home_address_postcode: new FormControl(''),
+        home_address_supplement: new FormControl(''),
+        home_address_city: new FormControl(''),
+        billing_address_street: new FormControl(''),
+        billing_address_number: new FormControl(''),
+        billing_address_postcode: new FormControl(''),
+        billing_address_supplement: new FormControl(''),
+        billing_address_city: new FormControl(''),
+      },
+      [addressGroupValidator('home_address'), addressGroupValidator('billing_address')],
+    );
   }
 
   patchValue(): void {
@@ -140,19 +174,21 @@ export class UserUpdateDialog implements OnInit {
       return;
     }
     const formValue = this.formData.getRawValue() as UserUpdateFormValue;
+    const dto: UpdateUserDTO = {};
 
-    this.user.nrn = formValue.id;
-    this.user.first_name = formValue.name;
-    this.user.last_name = formValue.surname;
-    this.user.phone_number = formValue.phone;
-    this.user.iban = formValue.iban;
+    if (formValue.id) dto.nrn = formValue.id;
+    if (formValue.name) dto.first_name = formValue.name;
+    if (formValue.surname) dto.last_name = formValue.surname;
+    if (formValue.phone) dto.phone_number = formValue.phone;
+    if (formValue.iban) dto.iban = formValue.iban;
+
     if (
       formValue.home_address_street &&
       formValue.home_address_number &&
       formValue.home_address_postcode &&
       formValue.home_address_city
     ) {
-      this.user.home_address = {
+      dto.home_address = {
         street: formValue.home_address_street,
         number: +formValue.home_address_number,
         postcode: formValue.home_address_postcode,
@@ -160,6 +196,7 @@ export class UserUpdateDialog implements OnInit {
         city: formValue.home_address_city,
       };
     }
+
     if (
       !this.isSameAddress() &&
       formValue.billing_address_street &&
@@ -167,7 +204,7 @@ export class UserUpdateDialog implements OnInit {
       formValue.billing_address_postcode &&
       formValue.billing_address_city
     ) {
-      this.user.billing_address = {
+      dto.billing_address = {
         street: formValue.billing_address_street,
         number: +formValue.billing_address_number,
         postcode: formValue.billing_address_postcode,
@@ -175,8 +212,9 @@ export class UserUpdateDialog implements OnInit {
         city: formValue.billing_address_city,
       };
     }
+
     this.userService
-      .updateUserInfo(this.user)
+      .updateUserInfo(dto)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {

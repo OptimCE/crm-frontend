@@ -8,7 +8,7 @@
       <!-- STEP 1: Meter Identity -->
       <p-step-panel [value]="0">
         <ng-template #content let-activateCallback="activateCallback">
-          <div class="py-4">
+          <div class="py-4" [formGroup]="metersForm">
             <!-- Section: Address -->
             <h3 class="text-sm font-semibold text-surface-700 mb-3">
               {{ 'COMMON.ADDRESS' | translate }}
@@ -24,7 +24,6 @@
                   formControlName="address_street"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
                   class="w-full"
-                  [formGroup]="metersForm"
                 />
                 <app-error-handler controlName="address_street" [formGroup]="metersForm" />
               </div>
@@ -38,7 +37,6 @@
                   type="number"
                   formControlName="address_number"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
-                  [formGroup]="metersForm"
                 />
                 <app-error-handler controlName="address_number" [formGroup]="metersForm" />
               </div>
@@ -52,7 +50,6 @@
                   type="number"
                   formControlName="address_supplement"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
-                  [formGroup]="metersForm"
                 />
                 <app-error-handler controlName="address_supplement" [formGroup]="metersForm" />
               </div>
@@ -66,7 +63,6 @@
                   type="number"
                   formControlName="address_postcode"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
-                  [formGroup]="metersForm"
                 />
                 <app-error-handler controlName="address_postcode" [formGroup]="metersForm" />
               </div>
@@ -80,7 +76,6 @@
                   formControlName="address_city"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
                   class="w-full"
-                  [formGroup]="metersForm"
                 />
                 <app-error-handler controlName="address_city" [formGroup]="metersForm" />
               </div>
@@ -101,7 +96,6 @@
                     formControlName="EAN"
                     id="EAN"
                     placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.EAN_LABEL' | translate }}"
-                    [formGroup]="metersForm"
                   />
                   <app-error-handler controlName="EAN" [formGroup]="metersForm" />
                 </div>
@@ -116,7 +110,6 @@
                     placeholder="{{
                       'METER.INFORMATIONS.PLACEHOLDER.METER_NUMBER_LABEL' | translate
                     }}"
-                    [formGroup]="metersForm"
                   />
                   <app-error-handler controlName="meterNumber" [formGroup]="metersForm" />
                 </div>
