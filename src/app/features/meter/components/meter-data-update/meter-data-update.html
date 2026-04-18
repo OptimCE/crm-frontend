@@ -11,6 +11,7 @@
         class="w-full"
         pInputTextarea
         formControlName="description"
+        data-testid="meter-data-update__textarea--description"
       ></textarea>
       <app-error-handler controlName="description" />
     </div>
@@ -31,6 +32,7 @@
             pInputText
             formControlName="samplingPower"
             [min]="0"
+            data-testid="meter-data-update__input--sampling-power"
           />
           <app-error-handler controlName="samplingPower" />
         </div>
@@ -44,6 +46,7 @@
             pInputText
             formControlName="totalGeneratingCapacity"
             [min]="0"
+            data-testid="meter-data-update__input--total-generating-capacity"
           />
           <app-error-handler controlName="totalGeneratingCapacity" />
         </div>
@@ -51,7 +54,14 @@
           <label for="amperage" class="field-label">
             {{ 'METER.INFORMATIONS.AMPERAGE_LABEL' | translate }} *
           </label>
-          <input id="amperage" type="number" pInputText formControlName="amperage" [min]="0" />
+          <input
+            id="amperage"
+            type="number"
+            pInputText
+            formControlName="amperage"
+            [min]="0"
+            data-testid="meter-data-update__input--amperage"
+          />
           <app-error-handler controlName="amperage" />
         </div>
       </div>
@@ -69,6 +79,7 @@
             optionLabel="name"
             placeholder="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
             appendTo="body"
+            data-testid="meter-data-update__select--production-chain"
           />
           <app-error-handler controlName="productionChain" />
         </div>
@@ -83,6 +94,7 @@
             optionLabel="name"
             placeholder="{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}"
             appendTo="body"
+            data-testid="meter-data-update__select--injection-status"
           />
           <app-error-handler controlName="injectionStatus" />
         </div>
@@ -97,6 +109,7 @@
             optionLabel="name"
             placeholder="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
             appendTo="body"
+            data-testid="meter-data-update__select--grd"
           />
           <app-error-handler controlName="grd" />
         </div>
@@ -124,6 +137,7 @@
               [class.bg-primary-50]="metersForm.get('rate')?.value?.id === rate.id"
               [class.border-surface-200]="metersForm.get('rate')?.value?.id !== rate.id"
               (click)="metersForm.get('rate')?.setValue(rate)"
+              [attr.data-testid]="'meter-data-update__radio-card--rate--' + rate.id"
             >
               <div class="flex items-center gap-3">
                 <p-radioButton
@@ -156,6 +170,7 @@
               [class.bg-primary-50]="metersForm.get('clientType')?.value?.id === client.id"
               [class.border-surface-200]="metersForm.get('clientType')?.value?.id !== client.id"
               (click)="metersForm.get('clientType')?.setValue(client)"
+              [attr.data-testid]="'meter-data-update__radio-card--client-type--' + client.id"
             >
               <div class="flex items-center gap-3">
                 <p-radioButton
@@ -188,6 +203,7 @@
             [editable]="true"
             placeholder="{{ 'METER.UPDATE_DATA.PLACEHOLDER.SELECT_OWNER_LABEL' | translate }}"
             appendTo="body"
+            data-testid="meter-data-update__select--member"
           />
           <app-error-handler controlName="member" [errorsAdd]="errorMemberAdded()" />
         </div>
@@ -202,6 +218,7 @@
             optionLabel="label"
             [options]="statusOptions"
             appendTo="body"
+            data-testid="meter-data-update__select--status"
           >
             <ng-template #selectedItem let-selectedOption>
               @if (selectedOption) {
@@ -225,6 +242,7 @@
             [showOnFocus]="true"
             dateFormat="dd/mm/yy"
             appendTo="body"
+            data-testid="meter-data-update__datepicker--start-date"
           />
           <app-error-handler controlName="dateStart" />
         </div>
@@ -254,6 +272,7 @@
           icon="pi pi-check"
           label="{{ 'METER.UPDATE_DATA.VALIDATE_BUTTON_FORM_LABEL' | translate }}"
           type="submit"
+          data-testid="meter-data-update__btn--submit"
         ></p-button>
       </div>
     </div>

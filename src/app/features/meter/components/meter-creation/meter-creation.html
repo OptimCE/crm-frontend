@@ -1,8 +1,12 @@
 <div class="container mx-auto px-4 py-2">
-  <p-stepper [value]="0" [linear]="true">
+  <p-stepper [value]="0" [linear]="true" data-testid="meter-creation__stepper">
     <p-step-list>
-      <p-step [value]="0">{{ 'METER.ADD.STEP_IDENTITY' | translate }}</p-step>
-      <p-step [value]="1">{{ 'METER.ADD.STEP_CONFIGURATION' | translate }}</p-step>
+      <p-step [value]="0" data-testid="meter-creation__step--identity">{{
+        'METER.ADD.STEP_IDENTITY' | translate
+      }}</p-step>
+      <p-step [value]="1" data-testid="meter-creation__step--configuration">{{
+        'METER.ADD.STEP_CONFIGURATION' | translate
+      }}</p-step>
     </p-step-list>
     <p-step-panels>
       <!-- STEP 1: Meter Identity -->
@@ -24,6 +28,7 @@
                   formControlName="address_street"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
                   class="w-full"
+                  data-testid="meter-creation__input--street"
                 />
                 <app-error-handler controlName="address_street" [formGroup]="metersForm" />
               </div>
@@ -37,6 +42,7 @@
                   type="number"
                   formControlName="address_number"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+                  data-testid="meter-creation__input--address-number"
                 />
                 <app-error-handler controlName="address_number" [formGroup]="metersForm" />
               </div>
@@ -50,6 +56,7 @@
                   type="number"
                   formControlName="address_supplement"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+                  data-testid="meter-creation__input--box-number"
                 />
                 <app-error-handler controlName="address_supplement" [formGroup]="metersForm" />
               </div>
@@ -63,6 +70,7 @@
                   type="number"
                   formControlName="address_postcode"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+                  data-testid="meter-creation__input--postcode"
                 />
                 <app-error-handler controlName="address_postcode" [formGroup]="metersForm" />
               </div>
@@ -76,6 +84,7 @@
                   formControlName="address_city"
                   placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
                   class="w-full"
+                  data-testid="meter-creation__input--city"
                 />
                 <app-error-handler controlName="address_city" [formGroup]="metersForm" />
               </div>
@@ -96,6 +105,7 @@
                     formControlName="EAN"
                     id="EAN"
                     placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.EAN_LABEL' | translate }}"
+                    data-testid="meter-creation__input--ean"
                   />
                   <app-error-handler controlName="EAN" [formGroup]="metersForm" />
                 </div>
@@ -110,6 +120,7 @@
                     placeholder="{{
                       'METER.INFORMATIONS.PLACEHOLDER.METER_NUMBER_LABEL' | translate
                     }}"
+                    data-testid="meter-creation__input--meter-number"
                   />
                   <app-error-handler controlName="meterNumber" [formGroup]="metersForm" />
                 </div>
@@ -138,6 +149,7 @@
                           metersForm.get('phasesNumber')?.value?.id !== phase.id
                         "
                         (click)="metersForm.get('phasesNumber')?.setValue(phase)"
+                        [attr.data-testid]="'meter-creation__radio-card--phase--' + phase.id"
                       >
                         <div class="flex items-center gap-3">
                           <p-radioButton
@@ -179,6 +191,9 @@
                           metersForm.get('readingFrequency')?.value?.id !== readingFreq.id
                         "
                         (click)="metersForm.get('readingFrequency')?.setValue(readingFreq)"
+                        [attr.data-testid]="
+                          'meter-creation__radio-card--reading-freq--' + readingFreq.id
+                        "
                       >
                         <div class="flex items-center gap-3">
                           <p-radioButton
@@ -220,6 +235,9 @@
                           metersForm.get('tarifGroup')?.value?.id !== tarifGroup.id
                         "
                         (click)="metersForm.get('tarifGroup')?.setValue(tarifGroup)"
+                        [attr.data-testid]="
+                          'meter-creation__radio-card--tarif-group--' + tarifGroup.id
+                        "
                       >
                         <div class="flex items-center gap-3">
                           <p-radioButton
@@ -249,6 +267,7 @@
                 iconPos="right"
                 label="{{ 'METER.ADD.NEXT_STEP_BUTTON' | translate }}"
                 (click)="validateStep1(activateCallback)"
+                data-testid="meter-creation__btn--next-step"
               />
             </div>
           </div>
@@ -271,6 +290,7 @@
                   class="w-full"
                   pInputTextarea
                   formControlName="description"
+                  data-testid="meter-creation__textarea--description"
                 ></textarea>
               </div>
 
@@ -290,6 +310,7 @@
                       pInputText
                       formControlName="samplingPower"
                       [min]="0"
+                      data-testid="meter-creation__input--sampling-power"
                     />
                     <app-error-handler controlName="samplingPower" />
                   </div>
@@ -303,6 +324,7 @@
                       pInputText
                       formControlName="totalGeneratingCapacity"
                       [min]="0"
+                      data-testid="meter-creation__input--total-generating-capacity"
                     />
                     <app-error-handler controlName="totalGeneratingCapacity" />
                   </div>
@@ -316,6 +338,7 @@
                       pInputText
                       formControlName="amperage"
                       [min]="0"
+                      data-testid="meter-creation__input--amperage"
                     />
                     <app-error-handler controlName="amperage" />
                   </div>
@@ -335,6 +358,7 @@
                       placeholder="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
                       appendTo="body"
                       (onChange)="onChangeProductionChain()"
+                      data-testid="meter-creation__select--production-chain"
                     />
                     <app-error-handler controlName="productionChain" />
                   </div>
@@ -349,6 +373,7 @@
                       optionLabel="name"
                       placeholder="{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}"
                       appendTo="body"
+                      data-testid="meter-creation__select--injection-status"
                     />
                     <app-error-handler controlName="injectionStatus" />
                   </div>
@@ -364,6 +389,7 @@
                       optionValue="name"
                       placeholder="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
                       appendTo="body"
+                      data-testid="meter-creation__select--grd"
                     />
                     <app-error-handler controlName="grd" />
                   </div>
@@ -391,6 +417,7 @@
                         [class.bg-primary-50]="metersForm.get('rate')?.value?.id === rate.id"
                         [class.border-surface-200]="metersForm.get('rate')?.value?.id !== rate.id"
                         (click)="metersForm.get('rate')?.setValue(rate)"
+                        [attr.data-testid]="'meter-creation__radio-card--rate--' + rate.id"
                       >
                         <div class="flex items-center gap-3">
                           <p-radioButton
@@ -432,6 +459,7 @@
                           metersForm.get('clientType')?.value?.id !== client.id
                         "
                         (click)="metersForm.get('clientType')?.setValue(client)"
+                        [attr.data-testid]="'meter-creation__radio-card--client-type--' + client.id"
                       >
                         <div class="flex items-center gap-3">
                           <p-radioButton
@@ -467,6 +495,7 @@
                       [editable]="true"
                       placeholder="{{ 'METER.ADD.PLACEHOLDER.SELECT_OWNER_LABEL' | translate }}"
                       appendTo="body"
+                      data-testid="meter-creation__select--member"
                     />
                     <app-error-handler controlName="member" [errorsAdd]="errorMemberAdd" />
                   </div>
@@ -482,6 +511,7 @@
                       [minDate]="minDate"
                       dateFormat="dd/mm/yy"
                       appendTo="body"
+                      data-testid="meter-creation__datepicker--start-date"
                     />
                     <app-error-handler controlName="dateStart" />
                   </div>
@@ -523,11 +553,13 @@
                     icon="pi pi-arrow-left"
                     label="{{ 'METER.ADD.BACK_STEP_BUTTON' | translate }}"
                     (click)="activateCallback(0)"
+                    data-testid="meter-creation__btn--back"
                   />
                   <p-button
                     icon="pi pi-check"
                     label="{{ 'METER.ADD.VALIDATE_BUTTON_FORM_LABEL' | translate }}"
                     type="submit"
+                    data-testid="meter-creation__btn--submit"
                   />
                 </div>
               </div>

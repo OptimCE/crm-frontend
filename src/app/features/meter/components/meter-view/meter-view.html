@@ -41,6 +41,7 @@
         icon="pi pi-refresh"
         label="{{ 'COMMON.RETRY' | translate }}"
         (click)="getFullMeter()"
+        data-testid="meter-view__btn--retry"
       />
     </div>
   } @else if (meter()) {
@@ -50,6 +51,7 @@
       <!-- Hero Section -->
       <div
         class="meter-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+        data-testid="meter-view__hero"
       >
         <p-avatar
           icon="pi pi-gauge"
@@ -64,18 +66,31 @@
             </h1>
             @switch (currentStatus()) {
               @case (MeterStatus.ACTIVE) {
-                <p-tag severity="success" value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}" />
+                <p-tag
+                  severity="success"
+                  value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                  data-testid="meter-view__tag--status"
+                />
               }
               @case (MeterStatus.INACTIVE) {
-                <p-tag severity="danger" value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}" />
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                  data-testid="meter-view__tag--status"
+                />
               }
               @case (MeterStatus.WAITING_GRD) {
-                <p-tag severity="info" value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}" />
+                <p-tag
+                  severity="info"
+                  value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                  data-testid="meter-view__tag--status"
+                />
               }
               @case (MeterStatus.WAITING_MANAGER) {
                 <p-tag
                   severity="info"
                   value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                  data-testid="meter-view__tag--status"
                 />
               }
             }
@@ -92,6 +107,7 @@
               icon="pi pi-sync"
               severity="warn"
               (click)="toUpdate()"
+              data-testid="meter-view__btn--update"
             />
             <p-button
               [outlined]="true"
@@ -99,6 +115,7 @@
               icon="pi pi-circle-off"
               severity="danger"
               (click)="toDeactivate()"
+              data-testid="meter-view__btn--deactivate"
             />
           }
           <p-button
@@ -108,6 +125,7 @@
             label="{{ 'METER.FULL.MODIFY_BUTTON_LABEL' | translate }}"
             severity="primary"
             (click)="toModify()"
+            data-testid="meter-view__btn--modify"
           />
         </div>
       </div>
@@ -115,7 +133,10 @@
       <!-- Information Cards -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Card 1: Location -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          styleClass="h-full border-l-3 border-l-primary-400"
+          data-testid="meter-view__card--location"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-map-marker text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -169,7 +190,10 @@
         </p-card>
 
         <!-- Card 2: Technical -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          styleClass="h-full border-l-3 border-l-primary-400"
+          data-testid="meter-view__card--technical"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-cog text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -211,7 +235,10 @@
         </p-card>
 
         <!-- Card 3: Holder -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          styleClass="h-full border-l-3 border-l-primary-400"
+          data-testid="meter-view__card--holder"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-user text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -236,6 +263,7 @@
                   <a
                     href="/members/{{ meter()!.holder!.id }}"
                     class="text-primary-500 hover:text-primary-700 text-sm font-medium underline"
+                    data-testid="meter-view__link--holder"
                   >
                     {{ meter()!.holder!.name }}
                   </a>
@@ -252,12 +280,20 @@
       </div>
 
       <!-- Tabs -->
-      <p-tabs [value]="0" class="meter-tabs">
+      <p-tabs [value]="0" class="meter-tabs" data-testid="meter-view__tabs">
         <p-tablist>
-          <p-tab [value]="0">{{ 'METER.FULL.TABS.ACTUAL_DATA_HEADER' | translate }}</p-tab>
-          <p-tab [value]="1">{{ 'METER.FULL.TABS.HISTORICAL_DATA_HEADER' | translate }}</p-tab>
-          <p-tab [value]="2">{{ 'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate }}</p-tab>
-          <p-tab [value]="3">{{ 'METER.FULL.TABS.CONSUMPTION_HEADER' | translate }}</p-tab>
+          <p-tab [value]="0" data-testid="meter-view__tab--actual">{{
+            'METER.FULL.TABS.ACTUAL_DATA_HEADER' | translate
+          }}</p-tab>
+          <p-tab [value]="1" data-testid="meter-view__tab--historical">{{
+            'METER.FULL.TABS.HISTORICAL_DATA_HEADER' | translate
+          }}</p-tab>
+          <p-tab [value]="2" data-testid="meter-view__tab--future">{{
+            'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate
+          }}</p-tab>
+          <p-tab [value]="3" data-testid="meter-view__tab--consumption">{{
+            'METER.FULL.TABS.CONSUMPTION_HEADER' | translate
+          }}</p-tab>
         </p-tablist>
         <p-tabpanels>
           <!-- Actual Data Tab -->
@@ -273,7 +309,7 @@
             } @else {
               <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <i class="pi pi-gauge text-3xl text-surface-300"></i>
-                <p class="text-surface-500 m-0">
+                <p class="text-surface-500 m-0" data-testid="meter-view__empty--no-data">
                   {{ 'METER.FULL.NO_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
@@ -294,6 +330,7 @@
                     (ngModelChange)="historySelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
                     styleClass="w-full sm:w-80"
+                    data-testid="meter-view__select--history-period"
                   >
                     <ng-template pTemplate="selectedItem">
                       @if (historySelected()) {
@@ -330,7 +367,7 @@
             } @else {
               <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <i class="pi pi-history text-3xl text-surface-300"></i>
-                <p class="text-surface-500 m-0">
+                <p class="text-surface-500 m-0" data-testid="meter-view__empty--no-history">
                   {{ 'METER.FULL.NO_HISTORY_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
@@ -351,6 +388,7 @@
                     (ngModelChange)="futureSelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
                     styleClass="w-full sm:w-80"
+                    data-testid="meter-view__select--future-period"
                   >
                     <ng-template pTemplate="selectedItem">
                       @if (futureSelected()) {
@@ -387,7 +425,7 @@
             } @else {
               <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <i class="pi pi-calendar-plus text-3xl text-surface-300"></i>
-                <p class="text-surface-500 m-0">
+                <p class="text-surface-500 m-0" data-testid="meter-view__empty--no-future">
                   {{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>

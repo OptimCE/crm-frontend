@@ -1,10 +1,12 @@
 @if ((hasSubmitted() || showBeforeSubmit()) && errorMessages().length > 0) {
-  <p>
-    <strong class="error"> {{ 'FORM_ERROR.FIX_THE_FOLLOWING_ERROR' | translate }} :</strong>
+  <p data-testid="summary-error__header">
+    <strong class="error" data-testid="summary-error__header-label">
+      {{ 'FORM_ERROR.FIX_THE_FOLLOWING_ERROR' | translate }} :</strong
+    >
   </p>
-  <ul>
+  <ul data-testid="summary-error__list">
     @for (error of errorMessages(); track $index) {
-      <li class="error">{{ error }}</li>
+      <li class="error" [attr.data-testid]="'summary-error__item--' + $index">{{ error }}</li>
     }
   </ul>
 }

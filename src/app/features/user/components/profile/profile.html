@@ -37,6 +37,7 @@
       <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
       <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
       <p-button
+        data-testid="profile__button--retry"
         [outlined]="true"
         icon="pi pi-refresh"
         label="{{ 'COMMON.RETRY' | translate }}"
@@ -50,6 +51,7 @@
         class="profile-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
       >
         <p-avatar
+          data-testid="profile__avatar"
           [label]="userInitials()"
           size="xlarge"
           shape="circle"
@@ -62,6 +64,7 @@
           <p class="text-sm text-surface-500 truncate">{{ user()!.email }}</p>
         </div>
         <p-button
+          data-testid="profile__button--update-profile"
           pRipple
           [outlined]="true"
           icon="pi pi-pencil"
@@ -74,7 +77,10 @@
       <!-- Information Cards -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
         <!-- Personal Information -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          data-testid="profile__card--personal-info"
+          styleClass="h-full border-l-3 border-l-primary-400"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-user text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800">
@@ -126,7 +132,10 @@
         </p-card>
 
         <!-- Addresses -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          data-testid="profile__card--addresses"
+          styleClass="h-full border-l-3 border-l-primary-400"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-home text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800">
@@ -174,7 +183,10 @@
         </p-card>
 
         <!-- Account -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          data-testid="profile__card--account"
+          styleClass="h-full border-l-3 border-l-primary-400"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-lock text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800">
@@ -197,6 +209,7 @@
             </div>
             <div>
               <p-button
+                data-testid="profile__button--update-password"
                 pRipple
                 [text]="true"
                 [plain]="true"
@@ -211,7 +224,7 @@
       </div>
 
       <!-- Tabs -->
-      <app-profile-tabs [user]="user()!"></app-profile-tabs>
+      <app-profile-tabs data-testid="profile__tabs" [user]="user()!"></app-profile-tabs>
     </div>
   }
 </div>

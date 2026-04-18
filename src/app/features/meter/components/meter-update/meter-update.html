@@ -15,6 +15,7 @@
           id="address_street"
           placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
           class="w-full"
+          data-testid="meter-update__input--street"
         />
         <app-error-handler controlName="address_street" />
       </div>
@@ -27,6 +28,7 @@
           formControlName="address_number"
           id="address_number"
           placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+          data-testid="meter-update__input--address-number"
         />
         <app-error-handler controlName="address_number" />
       </div>
@@ -39,6 +41,7 @@
           formControlName="address_supplement"
           id="address_supplement"
           placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+          data-testid="meter-update__input--address-supplement"
         />
         <app-error-handler controlName="address_supplement" />
       </div>
@@ -51,6 +54,7 @@
           formControlName="address_postcode"
           id="address_postcode"
           placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+          data-testid="meter-update__input--postcode"
         />
         <app-error-handler controlName="address_postcode" />
       </div>
@@ -64,6 +68,7 @@
           id="address_city"
           placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
           class="w-full"
+          data-testid="meter-update__input--city"
         />
         <app-error-handler controlName="address_city" />
       </div>
@@ -84,6 +89,7 @@
             formControlName="EAN"
             id="EAN"
             placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.EAN_LABEL' | translate }}"
+            data-testid="meter-update__input--ean"
           />
           <app-error-handler controlName="EAN" />
         </div>
@@ -96,6 +102,7 @@
             formControlName="meterNumber"
             id="meterNumber"
             placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.METER_NUMBER_LABEL' | translate }}"
+            data-testid="meter-update__input--meter-number"
           />
           <app-error-handler controlName="meterNumber" />
         </div>
@@ -118,6 +125,7 @@
                 [class.bg-primary-50]="metersForm.get('phasesNumber')?.value?.id === phase.id"
                 [class.border-surface-200]="metersForm.get('phasesNumber')?.value?.id !== phase.id"
                 (click)="metersForm.get('phasesNumber')?.setValue(phase)"
+                [attr.data-testid]="'meter-update__radio-card--phase--' + phase.id"
               >
                 <div class="flex items-center gap-3">
                   <p-radioButton
@@ -156,6 +164,7 @@
                   metersForm.get('readingFrequency')?.value?.id !== readingFreq.id
                 "
                 (click)="metersForm.get('readingFrequency')?.setValue(readingFreq)"
+                [attr.data-testid]="'meter-update__radio-card--reading-freq--' + readingFreq.id"
               >
                 <div class="flex items-center gap-3">
                   <p-radioButton
@@ -195,6 +204,7 @@
                   metersForm.get('tarifGroup')?.value?.id !== tarifGroup.id
                 "
                 (click)="metersForm.get('tarifGroup')?.setValue(tarifGroup)"
+                [attr.data-testid]="'meter-update__radio-card--tarif-group--' + tarifGroup.id"
               >
                 <div class="flex items-center gap-3">
                   <p-radioButton
@@ -238,6 +248,7 @@
           icon="pi pi-check"
           label="{{ 'METER.UPDATE.VALIDATE_BUTTON_LABEL' | translate }}"
           type="submit"
+          data-testid="meter-update__btn--submit"
         ></p-button>
       </div>
     </div>

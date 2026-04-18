@@ -7,9 +7,20 @@
   [ariaLabel]="'COMMON.LANGUAGE_SELECTOR' | translate"
   (onChange)="setLang($event.value)"
   class="w-40"
+  data-testid="language-selector__select"
 >
-  <ng-template #selectedItem> <i class="pi pi-globe mr-2"></i>{{ currentLangLabel }} </ng-template>
+  <ng-template #selectedItem>
+    <i class="pi pi-globe mr-2" data-testid="language-selector__icon--globe"></i
+    >{{ currentLangLabel }}
+  </ng-template>
   <ng-template let-opt #item>
-    {{ opt.label }} <span class="opacity-60 text-sm ml-1">({{ opt.code }})</span>
+    <span [attr.data-testid]="'language-selector__option--' + opt.code">
+      {{ opt.label }}
+      <span
+        class="opacity-60 text-sm ml-1"
+        [attr.data-testid]="'language-selector__option-code--' + opt.code"
+        >({{ opt.code }})</span
+      >
+    </span>
   </ng-template>
 </p-select>

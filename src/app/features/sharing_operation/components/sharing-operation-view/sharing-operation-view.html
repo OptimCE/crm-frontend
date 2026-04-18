@@ -1,7 +1,7 @@
 <div class="container mx-auto my-auto">
   @if (isLoading()) {
     <!-- Skeleton Loading State -->
-    <div class="space-y-4">
+    <div class="space-y-4" data-testid="op-view__skeleton">
       <!-- Hero Skeleton -->
       <div class="sharing-hero rounded-xl border border-primary-100 p-6 flex items-center gap-5">
         <p-skeleton shape="circle" size="4rem" />
@@ -36,7 +36,10 @@
     </div>
   } @else if (hasError()) {
     <!-- Error State -->
-    <div class="flex flex-col items-center justify-center py-16 gap-4">
+    <div
+      class="flex flex-col items-center justify-center py-16 gap-4"
+      data-testid="op-view__container--error"
+    >
       <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
       <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
       <p-button
@@ -44,6 +47,7 @@
         icon="pi pi-refresh"
         label="{{ 'COMMON.RETRY' | translate }}"
         (click)="loadOperationSharing()"
+        data-testid="op-view__btn--retry"
       />
     </div>
   } @else if (sharingOperation(); as op) {
@@ -52,6 +56,7 @@
       (visibleChange)="sidebarHistoryKey.set($event)"
       position="right"
       styleClass="!w-1/2"
+      data-testid="op-view__drawer--key-history"
     >
       <h3 class="font-medium text-lg pb-2">
         {{ 'SHARING_OPERATION.VIEW.HISTORY_KEY.KEY_HISTORY_TITLE' | translate }}
@@ -59,6 +64,7 @@
       <div>
         <p-table
           #dtHistory
+          data-testid="op-view__table--key-history"
           [value]="sharingOperationKeys()"
           [lazy]="true"
           [loading]="loadingSharingOperationKeys()"
@@ -87,8 +93,11 @@
               </th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-historyKey>
-            <tr class="hover-flex flex-wrap">
+          <ng-template pTemplate="body" let-historyKey let-rowIndex="rowIndex">
+            <tr
+              class="hover-flex flex-wrap"
+              [attr.data-testid]="'op-view__row--history--' + rowIndex"
+            >
               <td class="text-sm px-3 py-2">{{ historyKey.start_date | date: 'dd/MM/yyyy' }}</td>
               <td class="text-sm px-3 py-2">{{ historyKey.end_date | date: 'dd/MM/yyyy' }}</td>
               <td class="text-sm px-3 py-2">{{ historyKey.key.name }}</td>
@@ -128,25 +137,35 @@
     <app-back-arrow
       url="/sharing_operations"
       [text]="'SHARING_OPERATION.BACK_TO_LIST' | translate"
+      data-testid="op-view__btn--back"
     ></app-back-arrow>
 
     <div class="space-y-4 mt-3">
       <!-- Hero Section -->
       <div
         class="sharing-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+        data-testid="op-view__hero"
       >
         <p-avatar
           icon="pi pi-share-alt"
           size="xlarge"
           shape="circle"
           styleClass="bg-primary-100 text-primary-700 text-xl"
+          data-testid="op-view__avatar"
         />
         <div class="flex flex-col gap-0.5 flex-1 min-w-0">
           <div class="flex items-center gap-2 flex-wrap">
-            <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
+            <h1
+              class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0"
+              data-testid="op-view__title--name"
+            >
               {{ op.name }}
             </h1>
-            <p-tag [value]="op.type | sharingOperationType" severity="info" />
+            <p-tag
+              [value]="op.type | sharingOperationType"
+              severity="info"
+              data-testid="op-view__tag--type"
+            />
           </div>
           <p class="text-sm text-surface-500 m-0 truncate">
             {{ 'SHARING_OPERATION.VIEW.SHARING_OPERATION_TITLE' | translate }}
@@ -166,6 +185,7 @@
             [icon]="op.is_public ? 'pi pi-eye' : 'pi pi-eye-slash'"
             [loading]="togglingVisibility()"
             (click)="toggleVisibility()"
+            data-testid="op-view__btn--toggle-visibility"
           />
           <p-button
             pRipple
@@ -176,6 +196,7 @@
             severity="success"
             icon="pi pi-file-export"
             (click)="exportExcelCWAPe()"
+            data-testid="op-view__btn--export-excel"
           />
         </div>
       </div>
@@ -183,7 +204,10 @@
       <!-- Information Cards -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Card 1: General Info -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          styleClass="h-full border-l-3 border-l-primary-400"
+          data-testid="op-view__card--general-info"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-info-circle text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -207,7 +231,10 @@
         </p-card>
 
         <!-- Card 2: Key Management -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          styleClass="h-full border-l-3 border-l-primary-400"
+          data-testid="op-view__card--key-management"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-key text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -223,6 +250,7 @@
                 <a
                   class="field-value text-primary-500 hover:text-primary-700 underline"
                   routerLink="/keys/{{ op.key.key.id }}"
+                  data-testid="op-view__link--key"
                 >
                   {{ op.key.key.name }}
                 </a>
@@ -241,6 +269,7 @@
                       size="small"
                       label="{{ 'SHARING_OPERATION.VIEW.KEY.APPROVE_KEY' | translate }}"
                       (click)="openDateApprovedKey($event)"
+                      data-testid="op-view__btn--approve-key"
                     />
                     <p-button
                       icon="pi pi-times"
@@ -248,6 +277,7 @@
                       size="small"
                       label="{{ 'SHARING_OPERATION.VIEW.KEY.REJECT_KEY' | translate }}"
                       (click)="revokeWaitingKey()"
+                      data-testid="op-view__btn--reject-key"
                     />
                   </div>
                 </div>
@@ -266,6 +296,7 @@
                 [outlined]="true"
                 label="{{ 'SHARING_OPERATION.VIEW.KEY.CHOOSE_KEY_BUTTON_LABEL' | translate }}"
                 (click)="editKey()"
+                data-testid="op-view__btn--choose-key"
               />
               <p-button
                 pRipple
@@ -274,6 +305,7 @@
                 size="small"
                 [outlined]="true"
                 (click)="sidebarHistoryKey.set(true)"
+                data-testid="op-view__btn--key-history"
               />
               <p-button
                 pRipple
@@ -283,13 +315,17 @@
                 [outlined]="true"
                 label="{{ 'SHARING_OPERATION.VIEW.KEY.CREATE_KEY_BUTTON_LABEL' | translate }}"
                 (click)="newKey()"
+                data-testid="op-view__btn--create-key"
               />
             </div>
           </div>
         </p-card>
 
         <!-- Card 3: Meters & Actions -->
-        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+        <p-card
+          styleClass="h-full border-l-3 border-l-primary-400"
+          data-testid="op-view__card--meters"
+        >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-gauge text-primary-500 text-lg"></i>
             <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -310,6 +346,7 @@
                 severity="success"
                 size="small"
                 (click)="addMeter()"
+                data-testid="op-view__btn--add-meter"
               />
             </div>
           </div>
@@ -317,15 +354,15 @@
       </div>
 
       <!-- Meters Tabs -->
-      <p-tabs [value]="1" class="sharing-tabs">
+      <p-tabs [value]="1" class="sharing-tabs" data-testid="op-view__tabs--meters">
         <p-tablist>
-          <p-tab [value]="0">
+          <p-tab [value]="0" data-testid="op-view__tab--past">
             {{ 'SHARING_OPERATION.VIEW.METER.HEADERS.PAST' | translate }}
           </p-tab>
-          <p-tab [value]="1">
+          <p-tab [value]="1" data-testid="op-view__tab--now">
             {{ 'SHARING_OPERATION.VIEW.METER.HEADERS.NOW' | translate }}
           </p-tab>
-          <p-tab [value]="2">
+          <p-tab [value]="2" data-testid="op-view__tab--future">
             {{ 'SHARING_OPERATION.VIEW.METER.HEADERS.FUTURE' | translate }}
           </p-tab>
         </p-tablist>
@@ -352,7 +389,7 @@
       </p-tabs>
 
       <!-- Consumption Monitoring -->
-      <p-card>
+      <p-card data-testid="op-view__card--consumption">
         <div class="flex items-center gap-2.5 mb-4">
           <i class="pi pi-chart-bar text-primary-500 text-lg"></i>
           <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -373,7 +410,7 @@
       </p-card>
 
       <!-- File Upload -->
-      <p-card>
+      <p-card data-testid="op-view__card--file-upload">
         <div class="flex items-center gap-2.5 mb-4">
           <i class="pi pi-upload text-primary-500 text-lg"></i>
           <h3 class="font-semibold text-base text-surface-800 m-0">
@@ -381,7 +418,13 @@
           </h3>
         </div>
         <form [formGroup]="formGroup" (ngSubmit)="addConsumptionInformations()">
-          <input type="file" id="fileInput" (change)="onFileSelected($event)" class="file-input" />
+          <input
+            type="file"
+            id="fileInput"
+            (change)="onFileSelected($event)"
+            class="file-input"
+            data-testid="op-view__input--file"
+          />
           <label for="fileInput" class="file-upload-message">
             <div
               class="file-upload"
@@ -389,6 +432,7 @@
               (dragleave)="onDragLeave($event)"
               (drop)="onDrop($event)"
               [class.dragging]="dragging()"
+              data-testid="op-view__dropzone--upload"
             >
               <i class="pi pi-cloud-upload text-2xl mb-2"></i>
               <p class="m-0">
@@ -400,7 +444,7 @@
             </div>
           </label>
           @if (fileConsumption()) {
-            <div class="mt-3 flex items-center gap-2">
+            <div class="mt-3 flex items-center gap-2" data-testid="op-view__file--selected">
               <i class="pi pi-file text-primary-500"></i>
               <span class="text-sm text-surface-700">{{ fileConsumption()!.name }}</span>
             </div>
@@ -414,6 +458,7 @@
               label="{{
                 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_BUTTON_LABEL' | translate
               }}"
+              data-testid="op-view__btn--upload"
             ></p-button>
           </div>
         </form>

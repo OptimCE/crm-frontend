@@ -1,4 +1,5 @@
 <a
+  data-testid="sidebar-element__link"
   pRipple
   [routerLink]="routerLinkUrl()"
   (click)="closeSideBar()"
@@ -9,15 +10,19 @@
   tooltipPosition="right"
 >
   <div
+    data-testid="sidebar-element__icon-wrapper"
     class="sidebar-item__icon-wrapper"
     [class.sidebar-item__icon-wrapper--active]="isRouteActive()"
   >
-    <i class="{{ icon() }}"></i>
+    <i data-testid="sidebar-element__icon" class="{{ icon() }}"></i>
   </div>
   @if (sidebarOpen()) {
-    <span class="sidebar-item__label">{{ name() }}</span>
+    <span data-testid="sidebar-element__label" class="sidebar-item__label">{{ name() }}</span>
   }
   @if (isRouteActive()) {
-    <div class="sidebar-item__active-indicator"></div>
+    <div
+      data-testid="sidebar-element__active-indicator"
+      class="sidebar-item__active-indicator"
+    ></div>
   }
 </a>

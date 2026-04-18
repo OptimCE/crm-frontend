@@ -13,6 +13,7 @@
           placeholder="123456789"
           formControlName="id"
           class="w-full"
+          data-testid="new-member-informations__input--nrn"
         />
         <app-error-handler controlName="id" [errorsAdd]="idErrorAdded()" />
       </div>
@@ -27,6 +28,7 @@
           id="surname"
           placeholder="Doe"
           formControlName="surname"
+          data-testid="new-member-informations__input--surname"
         />
         <app-error-handler controlName="surname" />
       </div>
@@ -41,6 +43,7 @@
           id="name"
           placeholder="John"
           formControlName="name"
+          data-testid="new-member-informations__input--name"
         />
         <app-error-handler controlName="name" />
       </div>
@@ -55,6 +58,7 @@
           id="email"
           placeholder="john.doe@gmail.com"
           formControlName="email"
+          data-testid="new-member-informations__input--email"
         />
         <app-error-handler controlName="email" />
       </div>
@@ -69,6 +73,7 @@
           id="phone"
           placeholder="049477113344"
           formControlName="phone"
+          data-testid="new-member-informations__input--phone"
         />
         <app-error-handler controlName="phone" />
       </div>
@@ -78,13 +83,19 @@
           formControlName="socialRate"
           value="true"
           inputId="socialRate"
+          data-testid="new-member-informations__checkbox--social-rate"
         />
         <label for="socialRate" class="text-sm">
           {{ 'MEMBER.ADD.INFORMATIONS.SOCIAL_RATE_CHECKBOX_LABEL' | translate }}
         </label>
       </div>
       <div class="flex items-center gap-2">
-        <p-checkbox id="guardian_ship" (onChange)="gestionnaireChange($event)" value="true" />
+        <p-checkbox
+          id="guardian_ship"
+          (onChange)="gestionnaireChange($event)"
+          value="true"
+          data-testid="new-member-informations__checkbox--guardian"
+        />
         <label for="guardian_ship" class="text-sm">
           {{ 'MEMBER.ADD.INFORMATIONS.GUARDIAN_CHECKBOX_LABEL' | translate }}
         </label>
@@ -104,6 +115,7 @@
           placeholder="123456789"
           formControlName="id"
           class="w-full"
+          data-testid="new-member-informations__input--company-number"
         />
         <app-error-handler controlName="id" />
       </div>
@@ -118,6 +130,7 @@
           id="name_soc"
           placeholder="Locomotrice cie."
           formControlName="name"
+          data-testid="new-member-informations__input--company-name"
         />
         <app-error-handler controlName="name" />
       </div>
@@ -132,6 +145,7 @@
           id="vatNumber"
           placeholder="BE0999991234"
           formControlName="vatNumber"
+          data-testid="new-member-informations__input--vat-number"
         />
         <app-error-handler controlName="vatNumber" />
       </div>
@@ -156,6 +170,7 @@
             placeholder="123456789"
             formControlName="NRN_manager"
             class="w-full"
+            data-testid="new-member-informations__input--manager-nrn"
           />
           <app-error-handler controlName="NRN_manager" [errorsAdd]="idErrorAdded()" />
         </div>
@@ -170,6 +185,7 @@
             id="surname_manager"
             placeholder="Doe"
             formControlName="surname_manager"
+            data-testid="new-member-informations__input--manager-surname"
           />
           <app-error-handler controlName="surname_manager" />
         </div>
@@ -184,6 +200,7 @@
             id="name_manager"
             placeholder="John"
             formControlName="name_manager"
+            data-testid="new-member-informations__input--manager-name"
           />
           <app-error-handler controlName="name_manager" />
         </div>
@@ -198,6 +215,7 @@
             id="email_manager"
             placeholder="john.doe@gmail.com"
             formControlName="email_manager"
+            data-testid="new-member-informations__input--manager-email"
           />
           <app-error-handler controlName="email_manager" />
         </div>
@@ -212,6 +230,7 @@
             id="phone_manager"
             placeholder="049477113344"
             formControlName="phone_manager"
+            data-testid="new-member-informations__input--manager-phone"
           />
           <app-error-handler controlName="phone_manager" />
         </div>
@@ -244,6 +263,7 @@
       icon="pi pi-arrow-left"
       [label]="'MEMBER.ADD.INFORMATIONS.BACK_TO_STATUS' | translate"
       (click)="goBack()"
+      data-testid="new-member-informations__btn--back"
     />
     <p-button
       pRipple
@@ -251,6 +271,7 @@
       icon="pi pi-arrow-right"
       iconPos="right"
       [label]="'MEMBER.ADD.INFORMATIONS.VALIDATE_INFORMATION_FORM_BUTTON' | translate"
+      data-testid="new-member-informations__btn--next"
     />
   </div>
 </form>

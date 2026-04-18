@@ -4,6 +4,7 @@
 </div>
 <p-table
   #dt
+  data-testid="op-add-key__table--keys"
   [value]="keysList()"
   [loading]="loading()"
   [tableStyle]="{ 'min-width': '50rem' }"
@@ -26,6 +27,7 @@
         icon="pi pi-filter-slash"
         label="{{ 'SHARING_OPERATION.ADD_KEY.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
         (onClick)="clear(dt)"
+        data-testid="op-add-key__btn--clear-filter"
       ></p-button>
     </div>
   </ng-template>
@@ -41,6 +43,7 @@
           [showMatchModes]="false"
           [showOperator]="false"
           [showAddButton]="false"
+          data-testid="op-add-key__filter--name"
         ></p-columnFilter>
       </th>
       <th>
@@ -52,14 +55,19 @@
           [showMatchModes]="false"
           [showOperator]="false"
           [showAddButton]="false"
+          data-testid="op-add-key__filter--description"
         ></p-columnFilter>
       </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-key>
-    <tr style="cursor: pointer">
+    <tr style="cursor: pointer" [attr.data-testid]="'op-add-key__row--' + key.id">
       <td>
-        <p-tableRadioButton [value]="key" class="text-sm" />
+        <p-tableRadioButton
+          [value]="key"
+          class="text-sm"
+          [attr.data-testid]="'op-add-key__radio--' + key.id"
+        />
       </td>
       <td class="text-sm">{{ key.name }}</td>
       <td class="text-sm">{{ key.description }}</td>
@@ -78,5 +86,6 @@
     label="{{ 'SHARING_OPERATION.ADD_KEY.ADD_BUTTON_LABEL' | translate }}"
     icon="pi pi-plus"
     (click)="addKey()"
+    data-testid="op-add-key__btn--add"
   ></p-button>
 </div>

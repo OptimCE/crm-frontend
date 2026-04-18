@@ -1,6 +1,7 @@
 <div class="container mx-auto my-auto">
   <!-- Hero Header -->
   <div
+    data-testid="invitations__hero"
     class="invitations-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4"
   >
     <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-100">
@@ -17,13 +18,13 @@
   </div>
 
   <!-- Tabs -->
-  <p-tabs value="0">
+  <p-tabs data-testid="invitations__tabs" value="0">
     <p-tablist>
-      <p-tab value="0">
+      <p-tab data-testid="invitations__tab--member" value="0">
         <i class="pi pi-users mr-2"></i>
         {{ 'INVITATION.MEMBER.TITLE' | translate }}
       </p-tab>
-      <p-tab value="1">
+      <p-tab data-testid="invitations__tab--manager" value="1">
         <i class="pi pi-briefcase mr-2"></i>
         {{ 'INVITATION.MANAGER.TITLE' | translate }}
       </p-tab>

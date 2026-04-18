@@ -4,7 +4,12 @@
     pInputText
     placeholder="{{ 'COMMUNITY_INVITATION.EMAIL_PLACEHOLDER' | translate }}"
     formControlName="email"
+    data-testid="community-invitation__input--email"
   />
   <app-error-handler controlName="email"></app-error-handler>
-  <p-button label="{{ 'COMMON.ACTIONS.VALIDATE' | translate }}" type="submit"></p-button>
+  <p-button
+    label="{{ 'COMMON.ACTIONS.VALIDATE' | translate }}"
+    type="submit"
+    data-testid="community-invitation__btn--submit"
+  ></p-button>
 </form>

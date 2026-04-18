@@ -1,10 +1,17 @@
 <div class="dialog-content">
-  <form [formGroup]="formAddSharingOp" (submit)="onSubmitForm()">
+  <form [formGroup]="formAddSharingOp" (submit)="onSubmitForm()" data-testid="op-creation__form">
     <div class="mb-5">
       <label for="name" class="field-label mb-2 block">
         {{ 'SHARING_OPERATION.ADD.NAME_LABEL' | translate }} *
       </label>
-      <input id="name" pInputText type="text" formControlName="name" class="w-full" />
+      <input
+        id="name"
+        pInputText
+        type="text"
+        formControlName="name"
+        class="w-full"
+        data-testid="op-creation__input--name"
+      />
       <app-error-handler controlName="name"></app-error-handler>
     </div>
 
@@ -18,6 +25,7 @@
             role="button"
             tabindex="0"
             class="type-card border rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-sm"
+            [attr.data-testid]="'op-creation__card--type--' + $index"
             [class.border-primary-500]="formAddSharingOp.get('type')?.value === category.key"
             [class.bg-primary-50]="formAddSharingOp.get('type')?.value === category.key"
             [class.border-surface-200]="formAddSharingOp.get('type')?.value !== category.key"
@@ -32,6 +40,7 @@
                 [inputId]="'type-' + category.key"
                 [value]="category.key"
                 formControlName="type"
+                [attr.data-testid]="'op-creation__radio--type--' + $index"
               />
               <label [for]="'type-' + category.key" class="font-medium text-sm cursor-pointer">
                 {{ category.value }}
@@ -49,6 +58,7 @@
         [label]="'SHARING_OPERATION.ADD.ADD_BUTTON_LABEL' | translate"
         icon="pi pi-check"
         iconPos="right"
+        data-testid="op-creation__btn--submit"
       />
     </div>
   </form>

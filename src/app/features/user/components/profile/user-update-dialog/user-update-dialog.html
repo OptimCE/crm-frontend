@@ -1,4 +1,9 @@
-<form [formGroup]="formData" (submit)="submitForm()" class="w-full">
+<form
+  data-testid="user-update-dialog__form"
+  [formGroup]="formData"
+  (submit)="submitForm()"
+  class="w-full"
+>
   <!-- Personal Information Section -->
   <h4 class="text-sm font-semibold uppercase tracking-wide text-surface-500 mb-3">
     {{ 'PROFILE.PERSONAL_INFORMATION.TITLE' | translate }}
@@ -10,6 +15,7 @@
       {{ 'PROFILE.UPDATE_PROFILE.SOCIAL_NUMBER' | translate }}
     </label>
     <input
+      data-testid="user-update-dialog__input--nrn"
       pInputText
       type="text"
       name="nrn"
@@ -27,6 +33,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.SURNAME' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--surname"
         pInputText
         type="text"
         name="surname"
@@ -42,6 +49,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.FIRST_NAME' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--first-name"
         pInputText
         type="text"
         name="name"
@@ -59,6 +67,7 @@
       {{ 'PROFILE.UPDATE_PROFILE.PHONE_NUMBER' | translate }}
     </label>
     <input
+      data-testid="user-update-dialog__input--phone"
       pInputText
       type="text"
       name="phone"
@@ -80,6 +89,7 @@
       {{ 'PROFILE.UPDATE_PROFILE.IBAN' | translate }}
     </label>
     <input
+      data-testid="user-update-dialog__input--iban"
       pInputText
       type="text"
       name="iban"
@@ -102,6 +112,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.STREET_NAME' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--home-street"
         pInputText
         formControlName="home_address_street"
         id="home_address_street"
@@ -115,6 +126,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.NUMBER' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--home-number"
         pInputText
         formControlName="home_address_number"
         id="home_address_number"
@@ -128,6 +140,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.BOX' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--home-supplement"
         pInputText
         formControlName="home_address_supplement"
         id="home_address_supplement"
@@ -143,6 +156,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.POSTAL_CODE' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--home-postcode"
         pInputText
         formControlName="home_address_postcode"
         id="home_address_postcode"
@@ -156,6 +170,7 @@
         {{ 'PROFILE.UPDATE_PROFILE.CITY' | translate }}
       </label>
       <input
+        data-testid="user-update-dialog__input--home-city"
         pInputText
         formControlName="home_address_city"
         id="home_address_city"
@@ -168,6 +183,7 @@
   <!-- Same address checkbox -->
   <div class="mt-3 flex items-center gap-2">
     <p-checkbox
+      data-testid="user-update-dialog__checkbox--same-address"
       formControlName="same_address"
       [value]="true"
       (onChange)="toggleSameAddress($event)"
@@ -191,6 +207,7 @@
           {{ 'PROFILE.UPDATE_PROFILE.STREET_NAME' | translate }}
         </label>
         <input
+          data-testid="user-update-dialog__input--billing-street"
           pInputText
           formControlName="billing_address_street"
           id="billing_address_street"
@@ -204,6 +221,7 @@
           {{ 'PROFILE.UPDATE_PROFILE.NUMBER' | translate }}
         </label>
         <input
+          data-testid="user-update-dialog__input--billing-number"
           pInputText
           formControlName="billing_address_number"
           id="billing_address_number"
@@ -217,6 +235,7 @@
           {{ 'PROFILE.UPDATE_PROFILE.BOX' | translate }}
         </label>
         <input
+          data-testid="user-update-dialog__input--billing-supplement"
           pInputText
           formControlName="billing_address_supplement"
           id="billing_address_supplement"
@@ -232,6 +251,7 @@
           {{ 'PROFILE.UPDATE_PROFILE.POSTAL_CODE' | translate }}
         </label>
         <input
+          data-testid="user-update-dialog__input--billing-postcode"
           pInputText
           formControlName="billing_address_postcode"
           id="billing_address_postcode"
@@ -245,6 +265,7 @@
           {{ 'PROFILE.UPDATE_PROFILE.CITY' | translate }}
         </label>
         <input
+          data-testid="user-update-dialog__input--billing-city"
           pInputText
           formControlName="billing_address_city"
           id="billing_address_city"
@@ -258,12 +279,14 @@
   <!-- Footer -->
   <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-surface-200">
     <p-button
+      data-testid="user-update-dialog__button--cancel"
       [text]="true"
       severity="secondary"
       label="{{ 'PROFILE.UPDATE_PROFILE.CANCEL' | translate }}"
       (click)="cancel()"
     />
     <p-button
+      data-testid="user-update-dialog__button--submit"
       pRipple
       type="submit"
       icon="pi pi-check"

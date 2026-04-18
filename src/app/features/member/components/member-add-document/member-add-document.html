@@ -6,8 +6,13 @@
         id="fileInput"
         (change)="onFileSelected($event)"
         class="file-input text-base"
+        data-testid="member-add-document__input--file"
       />
-      <label for="fileInput" class="file-upload-message">
+      <label
+        for="fileInput"
+        class="file-upload-message"
+        data-testid="member-add-document__label--drag-drop"
+      >
         <div
           class="file-upload"
           (dragover)="onDragOver($event)"
@@ -29,7 +34,7 @@
       </div>
     }
     <app-error-handler controlName="fileToUpload"></app-error-handler>
-    <p-button class="mt-2 w-full" type="submit">{{
+    <p-button class="mt-2 w-full" type="submit" data-testid="member-add-document__btn--submit">{{
       'MEMBER.ADD_DOCUMENT.UPLOAD_DOCUMENT_BUTTON_LABEL' | translate
     }}</p-button>
   </form>

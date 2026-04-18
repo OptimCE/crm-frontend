@@ -5,6 +5,7 @@
   [lazy]="true"
   (onLazyLoad)="lazyLoadPendingMemberInvitation($event)"
   [loading]="loadingMembers()"
+  data-testid="pending-member-invitation__table"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -24,7 +25,7 @@
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-invitation>
+  <ng-template pTemplate="body" let-invitation let-rowIndex="rowIndex">
     <tr>
       <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
       <td class="text-sm px-3 py-2">{{ invitation.memberName }}</td>
@@ -33,11 +34,13 @@
           <p-tag
             value="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.TO_ENCODE_LABEL' | translate }}"
             severity="warn"
+            [attr.data-testid]="'pending-member-invitation__tag--to-encode--' + rowIndex"
           ></p-tag>
         } @else {
           <p-tag
             value="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.ENCODED_LABEL' | translate }}"
             severity="success"
+            [attr.data-testid]="'pending-member-invitation__tag--encoded--' + rowIndex"
           ></p-tag>
         }
       </td>
@@ -48,6 +51,7 @@
           severity="danger"
           label="{{ 'COMMUNITY_PENDING_INVITATION.MEMBERS.CANCEL_BUTTON_LABEL' | translate }}"
           (click)="cancelMemberInvitation(invitation)"
+          [attr.data-testid]="'pending-member-invitation__btn--cancel--' + rowIndex"
         ></p-button>
       </td>
     </tr>

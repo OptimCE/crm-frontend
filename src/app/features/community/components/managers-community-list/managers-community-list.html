@@ -17,6 +17,7 @@
           [value]="searchText()"
           (searchEvent)="onSearchTextChange($event)"
           inputClass="w-full!"
+          data-testid="managers-community-list__input--search"
         />
       </div>
 
@@ -32,6 +33,7 @@
           placeholder="{{ 'MANAGERS_COMMUNITY_LIST.HEADERS.ROLE' | translate }}"
           [showClear]="true"
           class="w-full"
+          data-testid="managers-community-list__select--role"
         >
           <ng-template let-option pTemplate="selectedItem">
             <p-tag
@@ -58,6 +60,7 @@
           (onClick)="clear(dt)"
           [outlined]="!hasActiveFilters()"
           severity="primary"
+          data-testid="managers-community-list__btn--clear-filters"
         />
       </div>
     </div>
@@ -74,6 +77,7 @@
     [first]="firstRow()"
     (onPage)="pageChange($event)"
     [paginator]="showPaginator()"
+    data-testid="managers-community-list__table"
   >
     <!-- Desktop header -->
     <ng-template pTemplate="header">
@@ -85,9 +89,12 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-user>
+    <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
       <!-- Desktop row -->
-      <tr class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <tr
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+        [attr.data-testid]="'managers-community-list__row--desktop--' + rowIndex"
+      >
         <td class="text-sm">{{ getUserDisplayName(user) }}</td>
         <td>
           <a href="mailto:{{ user.email }}" class="text-primary-600 hover:underline text-sm">
@@ -124,6 +131,7 @@
         <td colspan="4" class="!p-0 !pb-3">
           <div
             class="manager-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm hover:border-primary-400 transition-colors"
+            [attr.data-testid]="'managers-community-list__card--mobile--' + rowIndex"
           >
             <!-- Card header: name + role -->
             <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
@@ -184,7 +192,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="4">
-          <div class="py-8 text-center">
+          <div class="py-8 text-center" data-testid="managers-community-list__empty--message">
             <i class="pi pi-users text-3xl text-surface-300 mb-2"></i>
             <p class="text-surface-400 m-0">
               {{ 'MANAGERS_COMMUNITY_LIST.NO_MANAGER_FOUND' | translate }}

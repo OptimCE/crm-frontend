@@ -8,7 +8,7 @@
 
   <!-- Community list -->
   @if (communities().length === 0) {
-    <div class="py-8 text-center">
+    <div class="py-8 text-center" data-testid="public-community-list__empty--message">
       <i class="pi pi-address-book text-3xl text-surface-300 mb-2"></i>
       <p class="text-surface-400 m-0">
         {{ 'COMMUNITY.LIST.NO_PUBLIC_COMMUNITY_FOUND' | translate }}
@@ -25,6 +25,7 @@
             class="accordion-header w-full flex items-center gap-3 p-4 cursor-pointer text-left"
             (click)="toggleAccordion(community.id)"
             [attr.aria-expanded]="isExpanded(community.id)"
+            [attr.data-testid]="'public-community-list__btn--accordion--' + $index"
           >
             @if (hasValidLogo(community)) {
               <img
@@ -47,7 +48,10 @@
           </button>
 
           @if (isExpanded(community.id)) {
-            <div class="p-4 border-t border-primary-100 bg-surface-50">
+            <div
+              class="p-4 border-t border-primary-100 bg-surface-50"
+              [attr.data-testid]="'public-community-list__detail--' + $index"
+            >
               @if (getCommunityDetail(community.id); as detail) {
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>

@@ -1,11 +1,15 @@
 <!-- Filter toolbar -->
-<div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+<div
+  data-testid="representations__filter-bar"
+  class="filter-bar rounded-xl p-4 border border-primary-100 mb-4"
+>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
     <!-- Search field selector + input -->
     <div class="sm:col-span-2 lg:flex-1">
       <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
       <p-input-group class="gap-2">
         <p-select
+          data-testid="representations__select--search-field"
           [options]="searchFieldOptions"
           [ngModel]="searchField()"
           (ngModelChange)="searchField.set($event)"
@@ -22,6 +26,7 @@
           </ng-template>
         </p-select>
         <app-debounced-p-input
+          data-testid="representations__input--search"
           [placeholder]="'COMMON.SEARCH' | translate"
           [value]="searchText()"
           (searchEvent)="onSearchTextChange($event)"
@@ -34,6 +39,7 @@
     <div>
       <span class="field-label">{{ 'MEMBER.LIST.TYPE_LABEL' | translate }}</span>
       <p-select
+        data-testid="representations__select--type-filter"
         [ngModel]="typeFilter()"
         [options]="memberTypeCategory"
         (onChange)="onTypeFilterChange($event.value)"
@@ -76,6 +82,7 @@
     <div>
       <span class="field-label">{{ 'MEMBER.LIST.STATUS_LABEL' | translate }}</span>
       <p-select
+        data-testid="representations__select--status-filter"
         [ngModel]="statusFilter()"
         [options]="statusCategory"
         (onChange)="onStatusFilterChange($event.value)"
@@ -139,6 +146,7 @@
     <!-- Clear filters -->
     <div class="flex items-end">
       <p-button
+        data-testid="representations__button--clear-filters"
         icon="pi pi-filter-slash"
         label="{{ 'PROFILE.REPRESENTATIONS.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
         (onClick)="clear(dt)"
@@ -151,6 +159,7 @@
 
 <!-- Data table -->
 <p-table
+  data-testid="representations__table"
   #dt
   [value]="membersPartialList()"
   [lazy]="true"
@@ -173,9 +182,13 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-member>
+  <ng-template pTemplate="body" let-member let-rowIndex="rowIndex">
     <!-- Desktop row -->
-    <tr (click)="onRowClick(member)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+    <tr
+      [attr.data-testid]="'representations__row--desktop--' + rowIndex"
+      (click)="onRowClick(member)"
+      class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+    >
       <td class="text-sm">{{ member.community.name }}</td>
       <td class="text-sm">
         @if (member.member_type === MemberType.INDIVIDUAL) {
@@ -220,7 +233,11 @@
     </tr>
 
     <!-- Mobile card -->
-    <tr class="lg:hidden !border-0 !bg-transparent" (click)="onRowClick(member)">
+    <tr
+      [attr.data-testid]="'representations__row--mobile--' + rowIndex"
+      class="lg:hidden !border-0 !bg-transparent"
+      (click)="onRowClick(member)"
+    >
       <td colspan="4" class="!p-0 !pb-3">
         <div
           class="member-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"

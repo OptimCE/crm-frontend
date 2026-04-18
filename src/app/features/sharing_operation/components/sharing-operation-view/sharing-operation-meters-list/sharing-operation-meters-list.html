@@ -1,5 +1,5 @@
-<p-toast />
-<p-confirmpopup>
+<p-toast data-testid="op-meters-list__toast" />
+<p-confirmpopup data-testid="op-meters-list__confirm-popup">
   <ng-template pTemplate="content" let-message>
     <div class="flex flex-column items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3">
       <h3 class="font-medium text-lg">{{ textChangeStatusMeter() }}</h3>
@@ -13,6 +13,7 @@
         [inline]="false"
         dateFormat="dd/mm/yy"
         appendTo="body"
+        data-testid="op-meters-list__datepicker--status-change"
       ></p-date-picker>
     </div>
   </ng-template>
@@ -33,6 +34,7 @@
           optionLabel="label"
           optionValue="value"
           class="search-field-select"
+          data-testid="op-meters-list__select--search-field"
         >
           <ng-template let-option pTemplate="selectedItem">
             <span class="text-sm">{{ option.label | translate }}</span>
@@ -46,6 +48,7 @@
           [value]="searchText()"
           (searchEvent)="onSearchTextChange($event)"
           inputClass="w-full!"
+          data-testid="op-meters-list__input--search"
         />
       </p-input-group>
     </div>
@@ -62,6 +65,7 @@
         placeholder="{{ 'SHARING_OPERATION.VIEW.METER.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
         [showClear]="true"
         class="w-full"
+        data-testid="op-meters-list__select--status"
       >
         <ng-template let-option pTemplate="selectedItem">
           <p-tag [severity]="option.severity" [value]="option.label | translate" class="text-xs" />
@@ -80,6 +84,7 @@
         (onClick)="clear(dt)"
         [outlined]="!hasActiveFilters()"
         severity="primary"
+        data-testid="op-meters-list__btn--clear-filters"
       />
     </div>
   </div>
@@ -88,6 +93,7 @@
 <!-- Data table -->
 <p-table
   #dt
+  data-testid="op-meters-list__table--meters"
   [value]="metersPartialList()"
   [lazy]="true"
   [loading]="loading()"
@@ -117,9 +123,13 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-meter>
+  <ng-template pTemplate="body" let-meter let-rowIndex="rowIndex">
     <!-- Desktop row -->
-    <tr (click)="onRowClick(meter)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+    <tr
+      (click)="onRowClick(meter)"
+      class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+      [attr.data-testid]="'op-meters-list__row--desktop--' + rowIndex"
+    >
       <td>
         <span [innerHTML]="meter.address | address" class="text-sm"></span>
       </td>
@@ -179,6 +189,7 @@
               (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
               icon="pi pi-clock"
               size="small"
+              [attr.data-testid]="'op-meters-list__btn--waiting-list--' + rowIndex"
             />
           } @else {
             <p-button
@@ -188,6 +199,7 @@
               (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
               icon="pi pi-check"
               size="small"
+              [attr.data-testid]="'op-meters-list__btn--approve--' + rowIndex"
             />
           }
           <p-button
@@ -197,13 +209,18 @@
             (onClick)="openMeterChangeStatusPopup($event, meter, 2)"
             icon="pi pi-times"
             size="small"
+            [attr.data-testid]="'op-meters-list__btn--delete--' + rowIndex"
           />
         </div>
       </td>
     </tr>
 
     <!-- Mobile card -->
-    <tr class="lg:hidden !border-0 !bg-transparent" (click)="onRowClick(meter)">
+    <tr
+      class="lg:hidden !border-0 !bg-transparent"
+      (click)="onRowClick(meter)"
+      [attr.data-testid]="'op-meters-list__card--mobile--' + rowIndex"
+    >
       <td colspan="5" class="!p-0 !pb-3">
         <div
           class="bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
@@ -280,6 +297,7 @@
                 (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
                 icon="pi pi-clock"
                 size="small"
+                [attr.data-testid]="'op-meters-list__btn--card-waiting-list--' + rowIndex"
               />
             } @else {
               <p-button
@@ -289,6 +307,7 @@
                 (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
                 icon="pi pi-check"
                 size="small"
+                [attr.data-testid]="'op-meters-list__btn--card-approve--' + rowIndex"
               />
             }
             <p-button
@@ -298,6 +317,7 @@
               (onClick)="openMeterChangeStatusPopup($event, meter, 2)"
               icon="pi pi-times"
               size="small"
+              [attr.data-testid]="'op-meters-list__btn--card-delete--' + rowIndex"
             />
           </div>
         </div>
@@ -308,7 +328,7 @@
   <ng-template pTemplate="emptymessage">
     <tr>
       <td colspan="5">
-        <div class="py-8 text-center">
+        <div class="py-8 text-center" data-testid="op-meters-list__empty--message">
           <i class="pi pi-gauge text-3xl text-surface-300 mb-2"></i>
           <p class="text-surface-400 m-0">
             {{ 'SHARING_OPERATION.VIEW.METER.NO_METERS_FOUND_LABEL' | translate }}

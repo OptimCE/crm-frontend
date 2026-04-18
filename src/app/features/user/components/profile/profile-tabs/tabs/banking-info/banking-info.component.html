@@ -1,5 +1,8 @@
 <div class="max-w-md">
-  <div class="bg-surface-50 border border-surface-200 rounded-xl p-5">
+  <div
+    data-testid="banking-info__card"
+    class="bg-surface-50 border border-surface-200 rounded-xl p-5"
+  >
     <div class="flex items-center gap-3 mb-4">
       <div
         class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center"
@@ -13,10 +16,14 @@
 
     @if (user()?.iban) {
       <div class="flex items-center gap-2">
-        <span class="text-base font-mono text-surface-800 tracking-wider">
+        <span
+          data-testid="banking-info__iban--value"
+          class="text-base font-mono text-surface-800 tracking-wider"
+        >
           {{ user()!.iban }}
         </span>
         <p-button
+          data-testid="banking-info__button--copy-iban"
           [text]="true"
           [rounded]="true"
           icon="pi pi-copy"

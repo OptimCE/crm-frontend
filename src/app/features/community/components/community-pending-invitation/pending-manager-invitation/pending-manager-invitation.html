@@ -5,6 +5,7 @@
   [lazy]="true"
   (onLazyLoad)="lazyLoadPendingGestionnaireInvitation($event)"
   [loading]="loadingGestionnaire()"
+  data-testid="pending-manager-invitation__table"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -17,7 +18,7 @@
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-invitation>
+  <ng-template pTemplate="body" let-invitation let-rowIndex="rowIndex">
     <tr>
       <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
       <td class="text-sm px-3 py-2">
@@ -26,6 +27,7 @@
           icon="pi pi-cross"
           label="{{ 'COMMUNITY_PENDING_INVITATION.MANAGERS.CANCEL_BUTTON_LABEL' | translate }}"
           (click)="cancelInvitation(invitation)"
+          [attr.data-testid]="'pending-manager-invitation__btn--cancel--' + rowIndex"
         ></p-button>
       </td>
     </tr>

@@ -1,4 +1,6 @@
-<div class="flex flex-wrap space-x-2">
-  <i class="pi pi-arrow-left text-sm!"></i>
-  <a class="text-sm decoration-0" [routerLink]="url()">{{ text() }}</a>
+<div data-testid="back-arrow__container" class="flex flex-wrap space-x-2">
+  <i data-testid="back-arrow__icon" class="pi pi-arrow-left text-sm!"></i>
+  <a data-testid="back-arrow__link" class="text-sm decoration-0" [routerLink]="url()">{{
+    text()
+  }}</a>
 </div>

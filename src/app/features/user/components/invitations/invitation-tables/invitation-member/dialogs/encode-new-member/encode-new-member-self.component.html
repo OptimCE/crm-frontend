@@ -1,12 +1,18 @@
 <div class="container mx-auto px-4 py-2">
-  <p-stepper [value]="0" [linear]="true">
+  <p-stepper data-testid="encode-new-member__stepper" [value]="0" [linear]="true">
     <p-step-list>
-      <p-step [value]="0">{{ 'MEMBER.ADD.TAB_HEADER.STATUS_LABEL' | translate }}</p-step>
-      <p-step [value]="1">{{
+      <p-step data-testid="encode-new-member__step--status" [value]="0">{{
+        'MEMBER.ADD.TAB_HEADER.STATUS_LABEL' | translate
+      }}</p-step>
+      <p-step data-testid="encode-new-member__step--personal-info" [value]="1">{{
         'MEMBER.ADD.TAB_HEADER.PERSONAL_INFORMATIONS_LABEL' | translate
       }}</p-step>
-      <p-step [value]="2">{{ 'MEMBER.ADD.TAB_HEADER.ADDRESS_LABEL' | translate }}</p-step>
-      <p-step [value]="3">{{ 'MEMBER.ADD.TAB_HEADER.BANKING_INFO' | translate }}</p-step>
+      <p-step data-testid="encode-new-member__step--address" [value]="2">{{
+        'MEMBER.ADD.TAB_HEADER.ADDRESS_LABEL' | translate
+      }}</p-step>
+      <p-step data-testid="encode-new-member__step--banking" [value]="3">{{
+        'MEMBER.ADD.TAB_HEADER.BANKING_INFO' | translate
+      }}</p-step>
     </p-step-list>
     <p-step-panels>
       <p-step-panel [value]="0">

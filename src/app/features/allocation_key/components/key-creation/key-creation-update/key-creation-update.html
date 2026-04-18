@@ -53,6 +53,7 @@
                   formControlName="name"
                   id="name"
                   placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
+                  data-testid="key-update__input--name"
                 />
                 <app-error-handler
                   controlName="name"
@@ -72,6 +73,7 @@
                   formControlName="description"
                   id="description"
                   placeholder="{{ 'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate }}"
+                  data-testid="key-update__textarea--description"
                 ></textarea>
                 <app-error-handler
                   controlName="description"
@@ -98,6 +100,7 @@
                   label="{{ 'KEY.CREATE.FORM.KEY_ADD_ITERATION_BUTTON_LABEL' | translate }}"
                   severity="primary"
                   (click)="newIteration()"
+                  data-testid="key-update__btn--add-iteration"
                 ></p-button>
                 <p-button
                   pRipple
@@ -106,6 +109,7 @@
                   label="{{ 'KEY.CREATE.FORM.KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL' | translate }}"
                   severity="primary"
                   (click)="newIterationProrata()"
+                  data-testid="key-update__btn--add-prorata-iteration"
                 ></p-button>
               }
 
@@ -117,6 +121,7 @@
                   label="{{ 'KEY.CREATE.FORM.KEY_ADD_CONSUMER_BUTTON_LABEL' | translate }}"
                   severity="primary"
                   (click)="newConsumer()"
+                  data-testid="key-update__btn--add-consumer"
                 ></p-button>
               }
             </div>
@@ -145,6 +150,7 @@
                 [gridOptions]="gridOptions"
                 domLayout="autoHeight"
                 id="key_data"
+                data-testid="key-update__grid--data"
               >
               </ag-grid-angular>
             </div>
@@ -167,6 +173,7 @@
               label="{{ 'KEY.CREATE.FORM.KEY_CREATE_BUTTON_LABEL' | translate }}"
               severity="primary"
               size="large"
+              data-testid="key-update__btn--submit"
             ></p-button>
           </div>
         </div>

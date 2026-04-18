@@ -13,6 +13,7 @@
         id="home_address_street"
         placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
         class="w-full"
+        data-testid="new-member-address__input--home-street"
       />
       <app-error-handler controlName="home_address_street" />
     </div>
@@ -25,6 +26,7 @@
         formControlName="home_address_number"
         id="home_address_number"
         placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+        data-testid="new-member-address__input--home-number"
       />
       <app-error-handler controlName="home_address_number" />
     </div>
@@ -37,6 +39,7 @@
         formControlName="home_address_supplement"
         id="home_address_supplement"
         placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+        data-testid="new-member-address__input--home-supplement"
       />
       <app-error-handler controlName="home_address_supplement" />
     </div>
@@ -49,6 +52,7 @@
         formControlName="home_address_postcode"
         id="home_address_postcode"
         placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+        data-testid="new-member-address__input--home-postcode"
       />
       <app-error-handler controlName="home_address_postcode" />
     </div>
@@ -61,6 +65,7 @@
         formControlName="home_address_city"
         id="home_address_city"
         placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+        data-testid="new-member-address__input--home-city"
       />
       <app-error-handler controlName="home_address_city" />
     </div>
@@ -72,6 +77,7 @@
       [value]="true"
       (onChange)="toggleSameAddress($event)"
       id="sameAddress"
+      data-testid="new-member-address__checkbox--same-address"
     />
     <label for="sameAddress" class="text-sm">
       {{ 'MEMBER.ADD.ADDRESS.SAME_ADDRESS_FOR_BILLING_CHECKBOX_LABEL' | translate }}
@@ -94,6 +100,7 @@
             id="billing_address_street"
             placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
             class="w-full"
+            data-testid="new-member-address__input--billing-street"
           />
           <app-error-handler controlName="billing_address_street" />
         </div>
@@ -106,6 +113,7 @@
             formControlName="billing_address_number"
             id="billing_address_number"
             placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+            data-testid="new-member-address__input--billing-number"
           />
           <app-error-handler controlName="billing_address_number" />
         </div>
@@ -118,6 +126,7 @@
             formControlName="billing_address_supplement"
             id="billing_address_supplement"
             placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+            data-testid="new-member-address__input--billing-supplement"
           />
           <app-error-handler controlName="billing_address_supplement" />
         </div>
@@ -130,6 +139,7 @@
             formControlName="billing_address_postcode"
             id="billing_address_postcode"
             placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+            data-testid="new-member-address__input--billing-postcode"
           />
           <app-error-handler controlName="billing_address_postcode" />
         </div>
@@ -142,6 +152,7 @@
             formControlName="billing_address_city"
             id="billing_address_city"
             placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+            data-testid="new-member-address__input--billing-city"
           />
           <app-error-handler controlName="billing_address_city" />
         </div>
@@ -171,6 +182,7 @@
       icon="pi pi-arrow-left"
       [label]="'MEMBER.ADD.ADDRESS.BACK_TO_PERSONAL_INFORMATIONS' | translate"
       (click)="goBack()"
+      data-testid="new-member-address__btn--back"
     />
     <p-button
       pRipple
@@ -178,6 +190,7 @@
       icon="pi pi-arrow-right"
       iconPos="right"
       [label]="'MEMBER.ADD.ADDRESS.VALIDATE_ADDRESS_FORM_BUTTON' | translate"
+      data-testid="new-member-address__btn--next"
     />
   </div>
 </form>

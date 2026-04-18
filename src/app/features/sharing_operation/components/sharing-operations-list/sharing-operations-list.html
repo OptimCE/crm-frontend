@@ -6,6 +6,7 @@
     <app-header-page
       icon="pi pi-building"
       [text]="'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate"
+      data-testid="operations-list__header"
     />
     <p-button
       type="button"
@@ -13,6 +14,7 @@
       label="{{ 'SHARING_OPERATION.LIST.ADD_BUTTON_LABEL' | translate }}"
       (click)="onAddSharingOperation()"
       severity="primary"
+      data-testid="operations-list__btn--add"
     />
   </div>
 
@@ -31,6 +33,7 @@
             optionLabel="label"
             optionValue="value"
             class="search-field-select"
+            data-testid="operations-list__select--search-field"
           >
             <ng-template let-option pTemplate="selectedItem">
               <span class="text-sm">{{ option.label | translate }}</span>
@@ -44,6 +47,7 @@
             [value]="searchText()"
             (searchEvent)="onSearchTextChange($event)"
             inputClass="w-full!"
+            data-testid="operations-list__input--search"
           />
         </p-input-group>
       </div>
@@ -60,6 +64,7 @@
           placeholder="{{ 'SHARING_OPERATION.LIST.SELECT_A_TYPE_PLACEHOLDER' | translate }}"
           [showClear]="true"
           class="w-full"
+          data-testid="operations-list__select--type"
         >
           <ng-template let-option pTemplate="selectedItem">
             <div class="flex items-center gap-2">
@@ -84,6 +89,7 @@
           (onClick)="clear(dt)"
           [outlined]="!hasActiveFilters()"
           severity="primary"
+          data-testid="operations-list__btn--clear-filters"
         />
       </div>
     </div>
@@ -92,6 +98,7 @@
   <!-- Data table -->
   <p-table
     #dt
+    data-testid="operations-list__table"
     [value]="sharingOperationList()"
     [lazy]="true"
     (onLazyLoad)="lazyLoadSharingOperation($event)"
@@ -113,7 +120,11 @@
 
     <ng-template pTemplate="body" let-sharingOp>
       <!-- Desktop row -->
-      <tr (click)="onRowClick(sharingOp)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <tr
+        (click)="onRowClick(sharingOp)"
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+        [attr.data-testid]="'operations-list__row--desktop--' + sharingOp.id"
+      >
         <td class="text-sm">{{ sharingOp.name }}</td>
         <td>
           @switch (sharingOp.type) {
@@ -142,7 +153,11 @@
       </tr>
 
       <!-- Mobile card -->
-      <tr class="lg:hidden !border-0 !bg-transparent" (click)="onRowClick(sharingOp)">
+      <tr
+        class="lg:hidden !border-0 !bg-transparent"
+        (click)="onRowClick(sharingOp)"
+        [attr.data-testid]="'operations-list__card--mobile--' + sharingOp.id"
+      >
         <td colspan="2" class="!p-0 !pb-3">
           <div
             class="bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
@@ -206,7 +221,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="2">
-          <div class="py-8 text-center">
+          <div class="py-8 text-center" data-testid="operations-list__empty--message">
             <i class="pi pi-building text-3xl text-surface-300 mb-2"></i>
             <p class="text-surface-400 m-0">
               {{ 'SHARING_OPERATION.LIST.NO_SHARING_OPERATION_FOUND_LABEL' | translate }}

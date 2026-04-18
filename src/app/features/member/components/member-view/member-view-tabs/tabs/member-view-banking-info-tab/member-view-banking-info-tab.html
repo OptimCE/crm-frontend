@@ -13,7 +13,10 @@
 
     @if (member()?.iban) {
       <div class="flex items-center gap-2">
-        <span class="text-base font-mono text-surface-800 tracking-wider">
+        <span
+          class="text-base font-mono text-surface-800 tracking-wider"
+          data-testid="member-view-banking-info-tab__text--iban"
+        >
           {{ member()!.iban }}
         </span>
         <p-button
@@ -24,6 +27,7 @@
           pTooltip="{{ 'COMMON.COPY_TO_CLIPBOARD' | translate }}"
           tooltipPosition="top"
           (click)="copyIban()"
+          data-testid="member-view-banking-info-tab__btn--copy-iban"
         />
       </div>
     } @else {

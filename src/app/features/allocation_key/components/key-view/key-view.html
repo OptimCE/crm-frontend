@@ -35,7 +35,10 @@
     </div>
   } @else if (hasError()) {
     <!-- Error State -->
-    <div class="flex flex-col items-center justify-center py-16 gap-4">
+    <div
+      class="flex flex-col items-center justify-center py-16 gap-4"
+      data-testid="key-view__container--error"
+    >
       <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
       <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
       <p-button
@@ -43,6 +46,7 @@
         icon="pi pi-arrow-left"
         label="{{ 'KEY.VIEW.BACK_TO_LIST' | translate }}"
         (click)="routing.navigate(['/keys'])"
+        data-testid="key-view__btn--error-back"
       />
     </div>
   } @else if (key()) {
@@ -76,6 +80,7 @@
             label="{{ 'KEY.VIEW.UPDATE' | translate }}"
             severity="primary"
             (click)="updateKey()"
+            data-testid="key-view__btn--update"
           />
           <p-button
             pRipple
@@ -84,6 +89,7 @@
             label="{{ 'KEY.VIEW.DOWNLOAD' | translate }}"
             severity="primary"
             (click)="exportExcel()"
+            data-testid="key-view__btn--download"
           />
           <p-button
             pRipple
@@ -92,6 +98,7 @@
             label="{{ 'KEY.VIEW.DELETE' | translate }}"
             severity="danger"
             (click)="deleteKey()"
+            data-testid="key-view__btn--delete"
           />
         </div>
       </div>
@@ -105,7 +112,10 @@
               {{ 'KEY.VIEW.DESCRIPTION_TITLE' | translate }}
             </h3>
           </div>
-          <p class="text-sm text-surface-700 leading-relaxed m-0">
+          <p
+            class="text-sm text-surface-700 leading-relaxed m-0"
+            data-testid="key-view__text--description"
+          >
             @if (key()!.description.length > 200 && !displayAllDescription()) {
               {{ key()!.description | slice: 0 : 200 }}...
             } @else {
@@ -119,6 +129,7 @@
               (click)="toggleDescription()"
               [attr.aria-expanded]="displayAllDescription()"
               aria-label="Toggle description"
+              data-testid="key-view__btn--toggle-description"
             >
               <span>
                 @if (displayAllDescription()) {
@@ -154,6 +165,7 @@
             (gridReady)="onGridReady($event)"
             [defaultColDef]="defaultColDef"
             domLayout="autoHeight"
+            data-testid="key-view__grid--data"
           />
         </div>
       </div>

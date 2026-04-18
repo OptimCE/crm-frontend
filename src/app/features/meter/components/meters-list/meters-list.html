@@ -10,6 +10,7 @@
       label="{{ 'METER.LIST.ADD_BUTTON_LABEL' | translate }}"
       (click)="onAddMeter()"
       severity="primary"
+      data-testid="meters-list__btn--add"
     />
   </div>
 
@@ -28,6 +29,7 @@
             optionLabel="label"
             optionValue="value"
             class="search-field-select"
+            data-testid="meters-list__select--search-field"
           >
             <ng-template let-option pTemplate="selectedItem">
               <span class="text-sm">{{ option.label | translate }}</span>
@@ -41,6 +43,7 @@
             [value]="searchText()"
             (searchEvent)="onSearchTextChange($event)"
             inputClass="w-full!"
+            data-testid="meters-list__input--search"
           />
         </p-input-group>
       </div>
@@ -57,6 +60,7 @@
           placeholder="{{ 'METER.LIST.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
           [showClear]="true"
           class="w-full"
+          data-testid="meters-list__select--status-filter"
         >
           <ng-template let-option pTemplate="selectedItem">
             <p-tag
@@ -83,6 +87,7 @@
           (onClick)="clear(dt)"
           [outlined]="!hasActiveFilters()"
           severity="primary"
+          data-testid="meters-list__btn--clear-filters"
         />
       </div>
     </div>
@@ -91,6 +96,7 @@
   <!-- Data table -->
   <p-table
     #dt
+    data-testid="meters-list__table--meters"
     [value]="metersPartialList()"
     [lazy]="true"
     (onLazyLoad)="lazyLoadMeters($event)"
@@ -116,7 +122,11 @@
 
     <ng-template pTemplate="body" let-meter>
       <!-- Desktop row -->
-      <tr (click)="onRowClick(meter)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <tr
+        (click)="onRowClick(meter)"
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+        [attr.data-testid]="'meters-list__row--desktop--' + meter.id"
+      >
         <td>
           <span [innerHTML]="meter.address | address" class="text-sm"></span>
         </td>
@@ -174,6 +184,7 @@
         <td colspan="6" class="!p-0 !pb-3">
           <div
             class="meter-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+            [attr.data-testid]="'meters-list__card--mobile--' + meter.id"
           >
             <!-- Card header: EAN + status -->
             <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
@@ -251,7 +262,9 @@
         <td colspan="6">
           <div class="py-8 text-center">
             <i class="pi pi-gauge text-3xl text-surface-300 mb-2"></i>
-            <p class="text-surface-400 m-0">{{ 'METER.LIST.NO_METERS_FOUND_LABEL' | translate }}</p>
+            <p class="text-surface-400 m-0" data-testid="meters-list__empty--message">
+              {{ 'METER.LIST.NO_METERS_FOUND_LABEL' | translate }}
+            </p>
           </div>
         </td>
       </tr>

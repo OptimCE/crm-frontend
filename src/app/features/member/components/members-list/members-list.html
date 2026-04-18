@@ -13,6 +13,7 @@
         label="{{ 'MEMBER.LIST.ADD_BUTTON_LABEL' | translate }}"
         (click)="onAddMember($event)"
         severity="primary"
+        data-testid="members-list__btn--add"
       />
       <p-button
         type="button"
@@ -20,6 +21,7 @@
         icon="pi pi-envelope"
         label="{{ 'MEMBER.LIST.INVITE_NEW_MEMBER_BUTTON_LABEL' | translate }}"
         (click)="onInviteMember()"
+        data-testid="members-list__btn--invite"
       />
       <p-button
         type="button"
@@ -27,6 +29,7 @@
         icon="pi pi-eye"
         label="{{ 'MEMBER.LIST.SEE_PENDING_INVITATION_BUTTON_LABEL' | translate }}"
         (click)="seePendingInvite()"
+        data-testid="members-list__btn--see-pending"
       />
     </div>
   </div>
@@ -46,6 +49,7 @@
             optionLabel="label"
             optionValue="value"
             class="search-field-select"
+            data-testid="members-list__select--search-field"
           >
             <ng-template let-option pTemplate="selectedItem">
               <span class="text-sm">{{ option.label | translate }}</span>
@@ -59,6 +63,7 @@
             [value]="searchText()"
             (searchEvent)="onSearchTextChange($event)"
             inputClass="w-full!"
+            data-testid="members-list__input--search"
           />
         </p-input-group>
       </div>
@@ -75,6 +80,7 @@
           placeholder="{{ 'MEMBER.LIST.SELECT_A_TYPE_PLACEHOLDER' | translate }}"
           [showClear]="true"
           class="w-full"
+          data-testid="members-list__select--type"
         >
           <ng-template let-option pTemplate="selectedItem">
             <div class="flex items-center gap-2">
@@ -103,6 +109,7 @@
           placeholder="{{ 'MEMBER.LIST.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
           [showClear]="true"
           class="w-full"
+          data-testid="members-list__select--status"
         >
           <ng-template let-option pTemplate="selectedItem">
             <p-tag
@@ -129,6 +136,7 @@
           (onClick)="clear(dt)"
           [outlined]="!hasActiveFilters()"
           severity="primary"
+          data-testid="members-list__btn--clear-filters"
         />
       </div>
     </div>
@@ -147,6 +155,7 @@
     [currentPageReportTemplate]="currentPageReportTemplate()"
     (onPage)="pageChange($event)"
     [paginator]="showPaginator()"
+    data-testid="members-list__table"
   >
     <!-- Desktop header -->
     <ng-template pTemplate="header">
@@ -157,9 +166,13 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-member>
+    <ng-template pTemplate="body" let-member let-rowIndex="rowIndex">
       <!-- Desktop row -->
-      <tr (click)="onRowClick(member)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <tr
+        (click)="onRowClick(member)"
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+        [attr.data-testid]="'members-list__row--desktop--' + rowIndex"
+      >
         <td>
           @if (member.member_type === MemberType.INDIVIDUAL) {
             <div class="flex items-center gap-2">
@@ -207,6 +220,7 @@
         <td colspan="3" class="!p-0 !pb-3">
           <div
             class="member-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+            [attr.data-testid]="'members-list__card--mobile--' + rowIndex"
           >
             <!-- Card header: name + status -->
             <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
@@ -259,7 +273,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="3">
-          <div class="py-8 text-center">
+          <div class="py-8 text-center" data-testid="members-list__empty--message">
             <i class="pi pi-users text-3xl text-surface-300 mb-2"></i>
             <p class="text-surface-400 m-0">
               {{ 'MEMBER.LIST.NO_MEMBER_FOUND_LABEL' | translate }}
