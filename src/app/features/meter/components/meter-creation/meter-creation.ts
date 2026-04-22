@@ -156,7 +156,7 @@ export class MeterCreation implements OnInit {
       rate: new FormControl('', [Validators.required]),
       productionChain: new FormControl('', [Validators.required]),
       clientType: new FormControl('', [Validators.required]),
-      member: new FormControl('', [Validators.required]),
+      member: new FormControl(''),
       dateStart: new FormControl('', [Validators.required]),
       injectionStatus: new FormControl({ value: '', disabled: true }, [Validators.required]),
     });
@@ -437,7 +437,7 @@ export class MeterCreation implements OnInit {
       production_chain: formValue.productionChain.id,
       total_generating_capacity: formValue.totalGeneratingCapacity,
       grd: formValue.grd,
-      member_id: formValue.member.id,
+      member_id: formValue.member ? formValue.member.id : undefined,
       end_date: undefined,
     };
     const newAddress: CreateAddressDTO = {

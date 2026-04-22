@@ -1,7 +1,3 @@
-.invitations-hero {
-  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
-}
-
 /* Green accent on active tab indicator */
 :host ::ng-deep .p-tabs .p-tablist-active-bar {
   background-color: var(--p-primary-500);

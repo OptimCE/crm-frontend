@@ -25,23 +25,23 @@ describe('HeaderPage', () => {
   });
 
   it('should display the icon with correct class', () => {
-    const iconEl = el.querySelector('i');
+    const iconEl = el.querySelector('[data-testid="header-page__icon"]');
     expect(iconEl).toBeTruthy();
     expect(iconEl?.classList).toContain('pi');
     expect(iconEl?.classList).toContain('pi-home');
   });
 
   it('should display the text in heading', () => {
-    const h2El = el.querySelector('h2');
-    expect(h2El).toBeTruthy();
-    expect(h2El?.textContent?.trim()).toBe('Dashboard');
+    const titleEl = el.querySelector('h1');
+    expect(titleEl).toBeTruthy();
+    expect(titleEl?.textContent?.trim()).toBe('Dashboard');
   });
 
   it('should update icon when input changes', () => {
     fixture.componentRef.setInput('icon', 'pi pi-users');
     fixture.detectChanges();
 
-    const iconEl = el.querySelector('i');
+    const iconEl = el.querySelector('[data-testid="header-page__icon"]');
     expect(iconEl?.classList).toContain('pi');
     expect(iconEl?.classList).toContain('pi-users');
   });
@@ -50,7 +50,21 @@ describe('HeaderPage', () => {
     fixture.componentRef.setInput('text', 'Settings');
     fixture.detectChanges();
 
-    const h2El = el.querySelector('h2');
-    expect(h2El?.textContent?.trim()).toBe('Settings');
+    const titleEl = el.querySelector('h1');
+    expect(titleEl?.textContent?.trim()).toBe('Settings');
+  });
+
+  it('should not render subtitle when input is omitted', () => {
+    const subtitleEl = el.querySelector('[data-testid="header-page__subtitle"]');
+    expect(subtitleEl).toBeNull();
+  });
+
+  it('should render subtitle when input is provided', () => {
+    fixture.componentRef.setInput('subtitle', 'Subtitle text');
+    fixture.detectChanges();
+
+    const subtitleEl = el.querySelector('[data-testid="header-page__subtitle"]');
+    expect(subtitleEl).toBeTruthy();
+    expect(subtitleEl?.textContent?.trim()).toBe('Subtitle text');
   });
 });

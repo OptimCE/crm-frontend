@@ -103,14 +103,6 @@
           @if (currentStatus() === MeterStatus.ACTIVE) {
             <p-button
               [outlined]="true"
-              label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
-              icon="pi pi-sync"
-              severity="warn"
-              (click)="toUpdate()"
-              data-testid="meter-view__btn--update"
-            />
-            <p-button
-              [outlined]="true"
               label="{{ 'METER.FULL.METER_DEACTIVATE_HEADER' | translate }}"
               icon="pi pi-circle-off"
               severity="danger"
@@ -118,6 +110,14 @@
               data-testid="meter-view__btn--deactivate"
             />
           }
+          <p-button
+            [outlined]="true"
+            label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
+            icon="pi pi-sync"
+            severity="warn"
+            (click)="toUpdate()"
+            data-testid="meter-view__btn--update"
+          />
           <p-button
             pRipple
             [outlined]="true"

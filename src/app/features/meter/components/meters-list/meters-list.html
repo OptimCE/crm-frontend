@@ -1,10 +1,13 @@
 <div class="container mx-auto my-auto">
   <!-- Page header -->
-  <div
-    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  <app-header-page
+    icon="pi pi-gauge"
+    [text]="'METER.LIST.METERS_TITLE' | translate"
+    [subtitle]="'METER.LIST.SUBTITLE' | translate"
+    class="block mb-4"
   >
-    <app-header-page icon="pi pi-gauge" [text]="'METER.LIST.METERS_TITLE' | translate" />
     <p-button
+      headerActions
       type="button"
       icon="pi pi-plus"
       label="{{ 'METER.LIST.ADD_BUTTON_LABEL' | translate }}"
@@ -12,7 +15,7 @@
       severity="primary"
       data-testid="meters-list__btn--add"
     />
-  </div>
+  </app-header-page>
 
   <!-- Filter toolbar -->
   <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">

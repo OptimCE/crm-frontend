@@ -190,6 +190,63 @@ describe('UserUpdateDialog', () => {
       expect(ctrl(component, 'home_address_supplement').hasError('addressRequired')).toBe(false);
       expect(component.formData.valid).toBe(true);
     });
+
+    it('should clear stale addressRequired errors when a partially filled group is emptied', () => {
+      ctrl(component, 'billing_address_street').setValue('X');
+      component.formData.updateValueAndValidity();
+      expect(component.formData.hasError('addressIncomplete')).toBe(true);
+
+      ctrl(component, 'billing_address_street').setValue('');
+      component.formData.updateValueAndValidity();
+
+      expect(ctrl(component, 'billing_address_number').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_postcode').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_city').hasError('addressRequired')).toBe(false);
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should be valid when only the home address is filled and billing is empty', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      ctrl(component, 'home_address_number').setValue('10');
+      ctrl(component, 'home_address_postcode').setValue('1000');
+      ctrl(component, 'home_address_city').setValue('Brussels');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should be valid when only the billing address is filled and home is empty', () => {
+      ctrl(component, 'billing_address_street').setValue('Rue Basse');
+      ctrl(component, 'billing_address_number').setValue('20');
+      ctrl(component, 'billing_address_postcode').setValue('2000');
+      ctrl(component, 'billing_address_city').setValue('Antwerp');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should be valid when same_address disables a partially pre-filled billing group', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      ctrl(component, 'home_address_number').setValue('10');
+      ctrl(component, 'home_address_postcode').setValue('1000');
+      ctrl(component, 'home_address_city').setValue('Brussels');
+
+      ctrl(component, 'billing_address_street').setValue('Stale');
+
+      [
+        'billing_address_street',
+        'billing_address_number',
+        'billing_address_postcode',
+        'billing_address_supplement',
+        'billing_address_city',
+      ].forEach((name) => component.formData.get(name)?.disable());
+      component.formData.updateValueAndValidity();
+
+      expect(ctrl(component, 'billing_address_number').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_postcode').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_city').hasError('addressRequired')).toBe(false);
+      expect(component.formData.valid).toBe(true);
+    });
   });
 
   // ── 4. patchValue ───────────────────────────────────────────────────

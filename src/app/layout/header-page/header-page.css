@@ -1,0 +1,9 @@
+.header-page-hero {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}
+
+/* Collapse the actions slot when nothing is projected so it doesn't
+   create a stray flex gap to the right of the title. */
+.header-page-actions:empty {
+  display: none;
+}

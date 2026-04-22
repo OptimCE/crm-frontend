@@ -209,6 +209,8 @@
     "LIST": {
       "CREATE_COMMUNITY": "Create a community",
       "TITLE": "My communities",
+      "SUBTITLE": "Switch between and manage the communities you belong to",
+      "PUBLIC_SUBTITLE": "Discover and join open communities in your area",
       "HEADERS": {
         "NAME": "Name",
         "ROLE": "Role",
@@ -276,6 +278,7 @@
   },
   "MANAGERS_COMMUNITY_LIST": {
     "TITLE": "Community managers",
+    "SUBTITLE": "Browse the managers running your community",
     "HEADERS": {
       "NAME": "Name",
       "EMAIL": "Email",
@@ -287,6 +290,7 @@
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Community users",
+    "SUBTITLE": "Manage roles and access for everyone in your community",
     "SEE_PENDING_INVITE_BUTTON_LABEL": "View pending invitations",
     "INVITE_MANAGER_BUTTON_LABEL": "Invite a manager",
     "HEADERS": {
@@ -394,6 +398,7 @@
     },
     "LIST": {
       "TITLE": "Allocation keys",
+      "SUBTITLE": "Configure how energy is shared between consumers",
       "ERASE_FILTERS_BUTTON_LABEL": "Clear filters",
       "ADD_BUTTON_LABEL": "Add",
       "ADD_STANDARD_KEY_BUTTON_LABEL": "Add a standard key",
@@ -600,6 +605,7 @@
     },
     "LIST": {
       "MEMBER_TITLE": "Members",
+      "SUBTITLE": "Add, invite and manage the members of your community",
       "ADD_BUTTON_LABEL": "Add",
       "INVITE_NEW_MEMBER_BUTTON_LABEL": "Invite a new member",
       "SEE_PENDING_INVITATION_BUTTON_LABEL": "View pending invitations",
@@ -931,6 +937,7 @@
     },
     "LIST": {
       "METERS_TITLE": "Meters",
+      "SUBTITLE": "Track and administer the meters connected to your community",
       "ADD_BUTTON_LABEL": "Add",
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
       "FILTER_BY_OWNER_LABEL": "Filter by holder",
@@ -1158,6 +1165,7 @@
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Sharing operation",
+      "SUBTITLE": "Set up and supervise your energy sharing operations",
       "ADD_BUTTON_LABEL": "Add",
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
       "NAME_LABEL": "Name",

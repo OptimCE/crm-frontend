@@ -1,4 +1,24 @@
-<div data-testid="header-page__container" class="flex items-center space-x-2">
-  <i data-testid="header-page__icon" class="{{ icon() }} text-green-500! text-2xl!"></i>
-  <h2 data-testid="header-page__title" class="text-xl font-medium">{{ text() }}</h2>
+<div
+  data-testid="header-page__container"
+  class="header-page-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+>
+  <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-100 shrink-0">
+    <i data-testid="header-page__icon" class="{{ icon() }} text-primary-700 text-2xl"></i>
+  </div>
+  <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+    <h1 data-testid="header-page__title" class="text-xl md:text-2xl font-semibold text-surface-900">
+      {{ text() }}
+    </h1>
+    @if (subtitle()) {
+      <p data-testid="header-page__subtitle" class="text-sm text-surface-500 m-0">
+        {{ subtitle() }}
+      </p>
+    }
+  </div>
+  <div
+    data-testid="header-page__actions"
+    class="header-page-actions flex flex-wrap items-center gap-2 w-full sm:w-auto sm:shrink-0 sm:justify-end"
+  >
+    <ng-content select="[headerActions]"></ng-content>
+  </div>
 </div>

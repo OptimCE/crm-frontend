@@ -1,10 +1,11 @@
 <div class="container mx-auto my-auto">
   <!-- Page header -->
-  <div
-    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
-  >
-    <app-header-page icon="pi pi-address-book" [text]="'COMMUNITY.LIST.PUBLIC_TITLE' | translate" />
-  </div>
+  <app-header-page
+    icon="pi pi-address-book"
+    [text]="'COMMUNITY.LIST.PUBLIC_TITLE' | translate"
+    [subtitle]="'COMMUNITY.LIST.PUBLIC_SUBTITLE' | translate"
+    class="block mb-4"
+  />
 
   <!-- Community list -->
   @if (communities().length === 0) {

@@ -26,10 +26,10 @@
   </ng-template>
   <ng-template pTemplate="body" let-invitation let-rowIndex="rowIndex">
     <tr>
-      <td class="text-sm px-3 py-2">{{ invitation.userEmail }}</td>
-      <td class="text-sm px-3 py-2">{{ invitation.memberName }}</td>
+      <td class="text-sm px-3 py-2">{{ invitation.user_email }}</td>
+      <td class="text-sm px-3 py-2">{{ invitation.member_name }}</td>
       <td class="text-sm px-3 py-2">
-        @if (invitation.toBeEncoded) {
+        @if (invitation.to_be_encoded) {
           <p-tag
             value="{{ 'MEMBER.PENDING_INVITE.TO_ENCODE_TAG_LABEL' | translate }}"
             severity="warn"

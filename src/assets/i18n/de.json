@@ -209,6 +209,8 @@
     "LIST": {
       "CREATE_COMMUNITY": "Gemeinschaft erstellen",
       "TITLE": "Meine Gemeinschaften",
+      "SUBTITLE": "Wechseln Sie zwischen Ihren Gemeinschaften und verwalten Sie diese",
+      "PUBLIC_SUBTITLE": "Entdecken Sie offene Gemeinschaften in Ihrer Nähe und treten Sie ihnen bei",
       "HEADERS": {
         "NAME": "Name",
         "ROLE": "Rolle",
@@ -276,6 +278,7 @@
   },
   "MANAGERS_COMMUNITY_LIST": {
     "TITLE": "Manager der Gemeinschaft",
+    "SUBTITLE": "Sehen Sie sich die Manager an, die Ihre Gemeinschaft führen",
     "HEADERS": {
       "NAME": "Name",
       "EMAIL": "E-Mail",
@@ -287,6 +290,7 @@
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Benutzer der Gemeinschaft",
+    "SUBTITLE": "Verwalten Sie Rollen und Zugriff für alle Mitglieder Ihrer Gemeinschaft",
     "SEE_PENDING_INVITE_BUTTON_LABEL": "Ausstehende Einladungen anzeigen",
     "INVITE_MANAGER_BUTTON_LABEL": "Einen Manager einladen",
     "HEADERS": {
@@ -394,6 +398,7 @@
     },
     "LIST": {
       "TITLE": "Verteilungsschlüssel",
+      "SUBTITLE": "Konfigurieren Sie, wie Energie zwischen Verbrauchern verteilt wird",
       "ERASE_FILTERS_BUTTON_LABEL": "Filter löschen",
       "ADD_BUTTON_LABEL": "Hinzufügen",
       "ADD_STANDARD_KEY_BUTTON_LABEL": "Standardschlüssel hinzufügen",
@@ -600,6 +605,7 @@
     },
     "LIST": {
       "MEMBER_TITLE": "Mitglieder",
+      "SUBTITLE": "Fügen Sie Mitglieder Ihrer Gemeinschaft hinzu, laden Sie sie ein und verwalten Sie sie",
       "ADD_BUTTON_LABEL": "Hinzufügen",
       "INVITE_NEW_MEMBER_BUTTON_LABEL": "Neues Mitglied einladen",
       "SEE_PENDING_INVITATION_BUTTON_LABEL": "Ausstehende Einladungen anzeigen",
@@ -931,6 +937,7 @@
     },
     "LIST": {
       "METERS_TITLE": "Zähler",
+      "SUBTITLE": "Verfolgen und verwalten Sie die Zähler, die an Ihre Gemeinschaft angeschlossen sind",
       "ADD_BUTTON_LABEL": "Hinzufügen",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
       "FILTER_BY_OWNER_LABEL": "Nach Inhaber filtern",
@@ -1158,6 +1165,7 @@
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Teilungsoperation",
+      "SUBTITLE": "Richten Sie Ihre Energieteilungsoperationen ein und überwachen Sie sie",
       "ADD_BUTTON_LABEL": "Hinzufügen",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
       "NAME_LABEL": "Name",

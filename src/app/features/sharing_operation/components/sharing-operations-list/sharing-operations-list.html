@@ -1,14 +1,14 @@
 <div class="container mx-auto my-auto">
   <!-- Page header -->
-  <div
-    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  <app-header-page
+    icon="pi pi-building"
+    [text]="'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate"
+    [subtitle]="'SHARING_OPERATION.LIST.SUBTITLE' | translate"
+    data-testid="operations-list__header"
+    class="block mb-4"
   >
-    <app-header-page
-      icon="pi pi-building"
-      [text]="'SHARING_OPERATION.LIST.SHARING_OPERATION_TITLE' | translate"
-      data-testid="operations-list__header"
-    />
     <p-button
+      headerActions
       type="button"
       icon="pi pi-plus"
       label="{{ 'SHARING_OPERATION.LIST.ADD_BUTTON_LABEL' | translate }}"
@@ -16,7 +16,7 @@
       severity="primary"
       data-testid="operations-list__btn--add"
     />
-  </div>
+  </app-header-page>
 
   <!-- Filter toolbar -->
   <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">

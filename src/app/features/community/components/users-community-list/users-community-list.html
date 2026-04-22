@@ -1,11 +1,13 @@
 <div class="container mx-auto my-auto">
   <!-- Page header -->
-  <div
-    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  <app-header-page
+    icon="pi pi-users"
+    [text]="'USERS_COMMUNITY_LIST.TITLE' | translate"
+    [subtitle]="'USERS_COMMUNITY_LIST.SUBTITLE' | translate"
+    class="block mb-4"
   >
-    <app-header-page icon="pi pi-users" [text]="'USERS_COMMUNITY_LIST.TITLE' | translate" />
     @if (userContextService.isActiveRole(Role.ADMIN)) {
-      <div class="flex flex-col sm:flex-row gap-2">
+      <div headerActions class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
         <p-button
           type="button"
           icon="pi pi-eye"
@@ -24,7 +26,7 @@
         />
       </div>
     }
-  </div>
+  </app-header-page>
 
   <!-- Filter toolbar -->
   <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">

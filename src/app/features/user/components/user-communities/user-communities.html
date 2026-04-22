@@ -3,16 +3,21 @@
 
 <div class="container mx-auto">
   <!-- Page header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-    <app-header-page icon="pi pi-briefcase" [text]="'COMMUNITY.LIST.TITLE' | translate" />
+  <app-header-page
+    icon="pi pi-briefcase"
+    [text]="'COMMUNITY.LIST.TITLE' | translate"
+    [subtitle]="'COMMUNITY.LIST.SUBTITLE' | translate"
+    class="block mb-4"
+  >
     <p-button
+      headerActions
       data-testid="user-communities__button--create"
       type="button"
       icon="pi pi-plus"
       label="{{ 'COMMUNITY.LIST.CREATE_COMMUNITY' | translate }}"
       (click)="createCommunity()"
     />
-  </div>
+  </app-header-page>
 
   <!-- Filter bar -->
   <div

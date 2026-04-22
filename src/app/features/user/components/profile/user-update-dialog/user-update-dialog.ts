@@ -49,16 +49,35 @@ function addressGroupValidator(prefix: string) {
   const requiredFields = ['street', 'number', 'postcode', 'city'];
   return (group: AbstractControl): ValidationErrors | null => {
     const controls = requiredFields.map((f) => group.get(`${prefix}_${f}`));
-    const anyFilled = controls.some((c) => c?.value != null && c.value !== '');
-    if (!anyFilled) return null;
+
+    const clearAddressRequired = (c: AbstractControl | null) => {
+      if (!c || !c.errors?.['addressRequired']) return;
+      const { addressRequired: _removed, ...rest } = c.errors;
+      c.setErrors(Object.keys(rest).length ? rest : null);
+    };
+    const clearStaleErrors = () => controls.forEach(clearAddressRequired);
+
+    const allDisabled = controls.every((c) => !c || c.disabled);
+    if (allDisabled) {
+      clearStaleErrors();
+      return null;
+    }
+
+    const enabled = controls.filter((c): c is AbstractControl => !!c && !c.disabled);
+    const anyFilled = enabled.some((c) => c.value != null && c.value !== '');
+    if (!anyFilled) {
+      clearStaleErrors();
+      return null;
+    }
 
     let hasError = false;
     controls.forEach((c) => {
-      if (c && (c.value == null || c.value === '')) {
-        c.setErrors({ addressRequired: true });
+      if (!c || c.disabled) return;
+      if (c.value == null || c.value === '') {
+        c.setErrors({ ...(c.errors ?? {}), addressRequired: true });
         hasError = true;
-      } else if (c && c.errors?.['addressRequired']) {
-        c.setErrors(null);
+      } else {
+        clearAddressRequired(c);
       }
     });
     return hasError ? { addressIncomplete: true } : null;
@@ -162,6 +181,7 @@ export class UserUpdateDialog implements OnInit {
     } else {
       this.billingControls.forEach((c) => this.formData.get(c)?.enable());
     }
+    this.formData.updateValueAndValidity();
   }
 
   cancel(): void {

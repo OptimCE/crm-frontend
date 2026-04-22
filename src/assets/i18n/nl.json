@@ -209,6 +209,8 @@
     "LIST": {
       "CREATE_COMMUNITY": "Gemeenschap aanmaken",
       "TITLE": "Mijn gemeenschappen",
+      "SUBTITLE": "Wissel tussen uw gemeenschappen en beheer waar u lid van bent",
+      "PUBLIC_SUBTITLE": "Ontdek open gemeenschappen bij u in de buurt en sluit u erbij aan",
       "HEADERS": {
         "NAME": "Naam",
         "ROLE": "Rol",
@@ -276,6 +278,7 @@
   },
   "MANAGERS_COMMUNITY_LIST": {
     "TITLE": "Managers van de gemeenschap",
+    "SUBTITLE": "Bekijk de managers die uw gemeenschap leiden",
     "HEADERS": {
       "NAME": "Naam",
       "EMAIL": "E-mail",
@@ -287,6 +290,7 @@
   },
   "USERS_COMMUNITY_LIST": {
     "TITLE": "Gebruiker van de gemeenschap",
+    "SUBTITLE": "Beheer rollen en toegang voor iedereen in uw gemeenschap",
     "SEE_PENDING_INVITE_BUTTON_LABEL": "Uitnodigingen in behandeling bekijken",
     "INVITE_MANAGER_BUTTON_LABEL": "Een manager uitnodigen",
     "HEADERS": {
@@ -394,6 +398,7 @@
     },
     "LIST": {
       "TITLE": "Verdeelsleutels",
+      "SUBTITLE": "Configureer hoe energie wordt verdeeld tussen verbruikers",
       "ERASE_FILTERS_BUTTON_LABEL": "Filters wissen",
       "ADD_BUTTON_LABEL": "Toevoegen",
       "ADD_STANDARD_KEY_BUTTON_LABEL": "Standaardsleutel toevoegen",
@@ -600,6 +605,7 @@
     },
     "LIST": {
       "MEMBER_TITLE": "Leden",
+      "SUBTITLE": "Voeg leden van uw gemeenschap toe, nodig ze uit en beheer ze",
       "ADD_BUTTON_LABEL": "Toevoegen",
       "INVITE_NEW_MEMBER_BUTTON_LABEL": "Nieuw lid uitnodigen",
       "SEE_PENDING_INVITATION_BUTTON_LABEL": "Uitnodigingen in behandeling bekijken",
@@ -931,6 +937,7 @@
     },
     "LIST": {
       "METERS_TITLE": "Meters",
+      "SUBTITLE": "Volg en beheer de meters die met uw gemeenschap zijn verbonden",
       "ADD_BUTTON_LABEL": "Toevoegen",
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
       "FILTER_BY_OWNER_LABEL": "Filteren op houder",
@@ -1158,6 +1165,7 @@
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Deeloperatie",
+      "SUBTITLE": "Stel uw deeloperaties voor energie in en houd ze in de gaten",
       "ADD_BUTTON_LABEL": "Toevoegen",
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
       "NAME_LABEL": "Naam",
