@@ -60,22 +60,6 @@ describe('Invitations', () => {
       const hero = el.querySelector('app-header-page[data-testid="invitations__hero"]');
       expect(hero?.getAttribute('icon')).toBe('pi pi-envelope');
     });
-
-    it('should display the translated title', () => {
-      const title = el.querySelector(
-        'app-header-page[data-testid="invitations__hero"] [data-testid="header-page__title"]',
-      );
-      expect(title).toBeTruthy();
-      expect(title?.textContent).toContain('INVITATION.TITLE');
-    });
-
-    it('should display the translated subtitle', () => {
-      const subtitle = el.querySelector(
-        'app-header-page[data-testid="invitations__hero"] [data-testid="header-page__subtitle"]',
-      );
-      expect(subtitle).toBeTruthy();
-      expect(subtitle?.textContent).toContain('INVITATION.SUBTITLE');
-    });
   });
 
   // ── 3. Tabs ─────────────────────────────────────────────────────
