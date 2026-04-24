@@ -112,8 +112,8 @@ describe('UserUpdateDialog', () => {
       });
     });
 
-    it('should set required validators on mandatory fields', () => {
-      const requiredFields = [
+    it('should not have required validators on individual fields', () => {
+      const fields = [
         'id',
         'name',
         'surname',
@@ -129,25 +129,127 @@ describe('UserUpdateDialog', () => {
         'billing_address_city',
       ];
 
-      requiredFields.forEach((field) => {
-        const control = ctrl(component, field);
-        control.setValue('');
-        expect(control.hasError('required')).toBe(true);
-      });
-    });
-
-    it('should not set required validator on supplement fields', () => {
-      const optionalFields = ['home_address_supplement', 'billing_address_supplement'];
-
-      optionalFields.forEach((field) => {
+      fields.forEach((field) => {
         const control = ctrl(component, field);
         control.setValue('');
         expect(control.hasError('required')).toBe(false);
       });
     });
+
+    it('should allow submitting an empty form (no fields required)', () => {
+      dialogConfigMock.data = undefined;
+      component.ngOnInit();
+
+      expect(component.formData.valid).toBe(true);
+    });
   });
 
-  // ── 3. patchValue ───────────────────────────────────────────────────
+  // ── 3. Address cross-validation ────────────────────────────────────
+
+  describe('address cross-validation', () => {
+    beforeEach(async () => {
+      dialogConfigMock.data = undefined;
+      await createComponent();
+    });
+
+    it('should mark form invalid when only some home address fields are filled', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.hasError('addressIncomplete')).toBe(true);
+      expect(ctrl(component, 'home_address_number').hasError('addressRequired')).toBe(true);
+      expect(ctrl(component, 'home_address_postcode').hasError('addressRequired')).toBe(true);
+      expect(ctrl(component, 'home_address_city').hasError('addressRequired')).toBe(true);
+    });
+
+    it('should be valid when all required home address fields are filled', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      ctrl(component, 'home_address_number').setValue('10');
+      ctrl(component, 'home_address_postcode').setValue('1000');
+      ctrl(component, 'home_address_city').setValue('Brussels');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.hasError('addressIncomplete')).toBe(false);
+    });
+
+    it('should mark form invalid when only some billing address fields are filled', () => {
+      ctrl(component, 'billing_address_street').setValue('Rue Basse');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.hasError('addressIncomplete')).toBe(true);
+      expect(ctrl(component, 'billing_address_number').hasError('addressRequired')).toBe(true);
+    });
+
+    it('should not require supplement for address validation', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      ctrl(component, 'home_address_number').setValue('10');
+      ctrl(component, 'home_address_postcode').setValue('1000');
+      ctrl(component, 'home_address_city').setValue('Brussels');
+      component.formData.updateValueAndValidity();
+
+      expect(ctrl(component, 'home_address_supplement').hasError('addressRequired')).toBe(false);
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should clear stale addressRequired errors when a partially filled group is emptied', () => {
+      ctrl(component, 'billing_address_street').setValue('X');
+      component.formData.updateValueAndValidity();
+      expect(component.formData.hasError('addressIncomplete')).toBe(true);
+
+      ctrl(component, 'billing_address_street').setValue('');
+      component.formData.updateValueAndValidity();
+
+      expect(ctrl(component, 'billing_address_number').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_postcode').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_city').hasError('addressRequired')).toBe(false);
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should be valid when only the home address is filled and billing is empty', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      ctrl(component, 'home_address_number').setValue('10');
+      ctrl(component, 'home_address_postcode').setValue('1000');
+      ctrl(component, 'home_address_city').setValue('Brussels');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should be valid when only the billing address is filled and home is empty', () => {
+      ctrl(component, 'billing_address_street').setValue('Rue Basse');
+      ctrl(component, 'billing_address_number').setValue('20');
+      ctrl(component, 'billing_address_postcode').setValue('2000');
+      ctrl(component, 'billing_address_city').setValue('Antwerp');
+      component.formData.updateValueAndValidity();
+
+      expect(component.formData.valid).toBe(true);
+    });
+
+    it('should be valid when same_address disables a partially pre-filled billing group', () => {
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      ctrl(component, 'home_address_number').setValue('10');
+      ctrl(component, 'home_address_postcode').setValue('1000');
+      ctrl(component, 'home_address_city').setValue('Brussels');
+
+      ctrl(component, 'billing_address_street').setValue('Stale');
+
+      [
+        'billing_address_street',
+        'billing_address_number',
+        'billing_address_postcode',
+        'billing_address_supplement',
+        'billing_address_city',
+      ].forEach((name) => component.formData.get(name)?.disable());
+      component.formData.updateValueAndValidity();
+
+      expect(ctrl(component, 'billing_address_number').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_postcode').hasError('addressRequired')).toBe(false);
+      expect(ctrl(component, 'billing_address_city').hasError('addressRequired')).toBe(false);
+      expect(component.formData.valid).toBe(true);
+    });
+  });
+
+  // ── 4. patchValue ───────────────────────────────────────────────────
 
   describe('patchValue', () => {
     it('should patch personal info fields from user DTO', async () => {
@@ -201,7 +303,7 @@ describe('UserUpdateDialog', () => {
     });
   });
 
-  // ── 4. toggleSameAddress ────────────────────────────────────────────
+  // ── 5. toggleSameAddress ────────────────────────────────────────────
 
   describe('toggleSameAddress', () => {
     const billingControlNames = [
@@ -249,7 +351,7 @@ describe('UserUpdateDialog', () => {
     });
   });
 
-  // ── 5. cancel ───────────────────────────────────────────────────────
+  // ── 6. cancel ───────────────────────────────────────────────────────
 
   describe('cancel', () => {
     it('should close dialog with false', async () => {
@@ -259,12 +361,15 @@ describe('UserUpdateDialog', () => {
     });
   });
 
-  // ── 6. submitForm — validation ──────────────────────────────────────
+  // ── 7. submitForm — validation ──────────────────────────────────────
 
   describe('submitForm — invalid form', () => {
-    it('should mark all fields as touched and not call service when form is invalid', async () => {
+    it('should mark all fields as touched and not call service when address is incomplete', async () => {
       dialogConfigMock.data = undefined;
       await createComponent();
+
+      ctrl(component, 'home_address_street').setValue('Rue Haute');
+      component.formData.updateValueAndValidity();
 
       component.submitForm();
 
@@ -274,14 +379,49 @@ describe('UserUpdateDialog', () => {
     });
   });
 
-  // ── 7. submitForm — success with both addresses ─────────────────────
+  // ── 8. submitForm — only sends filled fields ───────────────────────
+
+  describe('submitForm — partial update', () => {
+    it('should only send filled fields to the service', async () => {
+      dialogConfigMock.data = undefined;
+      await createComponent();
+
+      ctrl(component, 'name').setValue('Alice');
+      ctrl(component, 'phone').setValue('0499999999');
+
+      component.submitForm();
+
+      expect(userServiceSpy.updateUserInfo).toHaveBeenCalledTimes(1);
+      const arg = userServiceSpy.updateUserInfo.mock.calls[0][0] as UpdateUserDTO;
+      expect(arg.first_name).toBe('Alice');
+      expect(arg.phone_number).toBe('0499999999');
+      expect(arg.nrn).toBeUndefined();
+      expect(arg.last_name).toBeUndefined();
+      expect(arg.iban).toBeUndefined();
+      expect(arg.home_address).toBeUndefined();
+      expect(arg.billing_address).toBeUndefined();
+    });
+
+    it('should send an empty DTO when no fields are filled', async () => {
+      dialogConfigMock.data = undefined;
+      await createComponent();
+
+      component.submitForm();
+
+      expect(userServiceSpy.updateUserInfo).toHaveBeenCalledTimes(1);
+      const arg = userServiceSpy.updateUserInfo.mock.calls[0][0] as UpdateUserDTO;
+      expect(Object.keys(arg).length).toBe(0);
+    });
+  });
+
+  // ── 9. submitForm — success with both addresses ─────────────────────
 
   describe('submitForm — valid form with both addresses', () => {
     beforeEach(async () => {
       await createComponent();
     });
 
-    it('should call updateUserInfo with the updated user DTO', () => {
+    it('should call updateUserInfo with the filled fields and addresses', () => {
       component.submitForm();
 
       expect(userServiceSpy.updateUserInfo).toHaveBeenCalledTimes(1);
@@ -313,7 +453,7 @@ describe('UserUpdateDialog', () => {
     });
   });
 
-  // ── 8. submitForm — same address (billing skipped) ──────────────────
+  // ── 10. submitForm — same address (billing skipped) ──────────────────
 
   describe('submitForm — isSameAddress is true', () => {
     beforeEach(async () => {
@@ -322,13 +462,11 @@ describe('UserUpdateDialog', () => {
       component.toggleSameAddress({} as never);
     });
 
-    it('should not set billing_address when isSameAddress is true', () => {
-      const originalBilling = component.user.billing_address;
+    it('should not include billing_address in DTO when isSameAddress is true', () => {
       component.submitForm();
 
       const arg = userServiceSpy.updateUserInfo.mock.calls[0][0] as UpdateUserDTO;
-      // billing_address should remain unchanged (not overwritten by form values)
-      expect(arg.billing_address).toEqual(originalBilling);
+      expect(arg.billing_address).toBeUndefined();
     });
   });
 });

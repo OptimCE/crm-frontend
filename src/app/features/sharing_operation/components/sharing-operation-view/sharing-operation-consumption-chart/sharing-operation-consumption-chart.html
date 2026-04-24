@@ -2,6 +2,7 @@
   [formGroup]="formChart"
   class="flex flex-col sm:flex-row gap-3 items-end mb-4"
   (submit)="loadChart()"
+  data-testid="op-chart__form"
 >
   <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
     <label for="dateDeb" class="field-label">
@@ -13,6 +14,7 @@
       dateFormat="dd/mm/yy"
       [firstDayOfWeek]="1"
       styleClass="w-full"
+      data-testid="op-chart__datepicker--start"
     ></p-date-picker>
     <app-error-handler controlName="dateDeb"></app-error-handler>
   </div>
@@ -26,6 +28,7 @@
       dateFormat="dd/mm/yy"
       [firstDayOfWeek]="1"
       styleClass="w-full"
+      data-testid="op-chart__datepicker--end"
     ></p-date-picker>
     <app-error-handler controlName="dateFin"></app-error-handler>
   </div>
@@ -34,11 +37,15 @@
     label="{{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SEARCH_BUTTON_LABEL' | translate }}"
     icon="pi pi-search"
     type="submit"
+    data-testid="op-chart__btn--search"
   ></p-button>
 </form>
 
 @if (!data()) {
-  <div class="flex flex-col items-center justify-center py-12 gap-3">
+  <div
+    class="flex flex-col items-center justify-center py-12 gap-3"
+    data-testid="op-chart__empty--message"
+  >
     <i class="pi pi-chart-bar text-3xl text-surface-300"></i>
     <p class="text-surface-400 m-0 text-sm">
       {{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SELECT_DATES_HINT' | translate }}
@@ -46,7 +53,12 @@
   </div>
 } @else {
   <div class="mb-4">
-    <p-chart type="bar" [data]="data()" [options]="options" />
+    <p-chart
+      type="bar"
+      [data]="data()"
+      [options]="options"
+      data-testid="op-chart__chart--consumption"
+    />
   </div>
 }
 
@@ -60,6 +72,7 @@
         'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.DOWNLOAD_BUTTON_LABEL' | translate
       }}"
       (click)="downloadTotalConsumption()"
+      data-testid="op-chart__btn--download"
     ></p-button>
   </div>
 }

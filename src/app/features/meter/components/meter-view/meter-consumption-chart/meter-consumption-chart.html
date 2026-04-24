@@ -13,6 +13,7 @@
       dateFormat="dd/mm/yy"
       [firstDayOfWeek]="1"
       styleClass="w-full"
+      data-testid="meter-consumption-chart__datepicker--date-start"
     ></p-date-picker>
     <app-error-handler controlName="dateDeb"></app-error-handler>
   </div>
@@ -24,6 +25,7 @@
       dateFormat="dd/mm/yy"
       [firstDayOfWeek]="1"
       styleClass="w-full"
+      data-testid="meter-consumption-chart__datepicker--date-end"
     ></p-date-picker>
     <app-error-handler controlName="dateFin"></app-error-handler>
   </div>
@@ -32,9 +34,10 @@
     label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
     icon="pi pi-search"
     type="submit"
+    data-testid="meter-consumption-chart__btn--search"
   ></p-button>
 </form>
-<p-card styleClass="mb-4">
+<p-card styleClass="mb-4" data-testid="meter-consumption-chart__card--chart">
   <p-chart type="bar" [data]="data()" [options]="options" />
 </p-card>
 @if (displayDownloadButton()) {
@@ -45,6 +48,7 @@
       icon="pi pi-download"
       label="{{ 'METER.FULL.DOWNLOAD_BUTTON_LABEL' | translate }}"
       (click)="downloadTotalConsumption()"
+      data-testid="meter-consumption-chart__btn--download"
     ></p-button>
   </div>
 }

@@ -1,12 +1,18 @@
 <div class="container mx-auto px-4 py-2">
   <p-stepper [value]="0" [linear]="true">
     <p-step-list>
-      <p-step [value]="0">{{ 'MEMBER.ADD.TAB_HEADER.STATUS_LABEL' | translate }}</p-step>
-      <p-step [value]="1">{{
+      <p-step [value]="0" data-testid="member-creation-update__step--status">{{
+        'MEMBER.ADD.TAB_HEADER.STATUS_LABEL' | translate
+      }}</p-step>
+      <p-step [value]="1" data-testid="member-creation-update__step--informations">{{
         'MEMBER.ADD.TAB_HEADER.PERSONAL_INFORMATIONS_LABEL' | translate
       }}</p-step>
-      <p-step [value]="2">{{ 'MEMBER.ADD.TAB_HEADER.ADDRESS_LABEL' | translate }}</p-step>
-      <p-step [value]="3">{{ 'MEMBER.ADD.TAB_HEADER.BANKING_INFO' | translate }}</p-step>
+      <p-step [value]="2" data-testid="member-creation-update__step--address">{{
+        'MEMBER.ADD.TAB_HEADER.ADDRESS_LABEL' | translate
+      }}</p-step>
+      <p-step [value]="3" data-testid="member-creation-update__step--banking">{{
+        'MEMBER.ADD.TAB_HEADER.BANKING_INFO' | translate
+      }}</p-step>
     </p-step-list>
     <p-step-panels>
       <p-step-panel [value]="0">

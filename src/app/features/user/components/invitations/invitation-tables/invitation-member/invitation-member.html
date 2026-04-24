@@ -1,10 +1,14 @@
 <!-- Filter toolbar -->
-<div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+<div
+  data-testid="invitation-member__filter-bar"
+  class="filter-bar rounded-xl p-4 border border-primary-100 mb-4"
+>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3">
     <!-- Search input -->
     <div class="sm:col-span-2 lg:flex-1">
       <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
       <app-debounced-p-input
+        data-testid="invitation-member__input--search"
         [placeholder]="'COMMON.SEARCH' | translate"
         [value]="searchText()"
         (searchEvent)="onSearchTextChange($event)"
@@ -16,6 +20,7 @@
     <div>
       <span class="field-label">{{ 'INVITATION.MEMBER.HEADERS.STATE' | translate }}</span>
       <p-select
+        data-testid="invitation-member__select--state"
         [ngModel]="stateFilter()"
         [options]="stateOptions"
         (onChange)="onStateFilterChange($event.value)"
@@ -52,6 +57,7 @@
     <!-- Clear filters -->
     <div class="flex items-end">
       <p-button
+        data-testid="invitation-member__button--clear-filters"
         icon="pi pi-filter-slash"
         label="{{ 'INVITATION.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
         (onClick)="clear(dt)"
@@ -64,6 +70,7 @@
 
 <!-- Data table -->
 <p-table
+  data-testid="invitation-member__table"
   #dt
   [value]="invitations()"
   [lazy]="true"
@@ -88,9 +95,12 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-invitation>
+  <ng-template pTemplate="body" let-invitation let-rowIndex="rowIndex">
     <!-- Desktop row -->
-    <tr class="max-lg:hidden hover:bg-primary-50">
+    <tr
+      [attr.data-testid]="'invitation-member__row--desktop--' + rowIndex"
+      class="max-lg:hidden hover:bg-primary-50"
+    >
       <td class="text-sm px-3">{{ invitation.user_email ?? '/' }}</td>
       <td class="text-sm px-3">{{ invitation.community.name }}</td>
       <td class="px-3">
@@ -113,6 +123,7 @@
         <div class="flex gap-2">
           @if (invitation.to_be_encoded) {
             <p-button
+              [attr.data-testid]="'invitation-member__button--encode-accept-desktop--' + rowIndex"
               icon="pi pi-pencil"
               label="{{ 'INVITATION.MEMBER.ENCODE_AND_ACCEPT' | translate }}"
               severity="success"
@@ -120,6 +131,7 @@
               (click)="encodeNewMember(invitation)"
             ></p-button>
             <p-button
+              [attr.data-testid]="'invitation-member__button--refuse-desktop--' + rowIndex"
               icon="pi pi-times"
               label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}"
               severity="danger"
@@ -129,6 +141,7 @@
             ></p-button>
           } @else {
             <p-button
+              [attr.data-testid]="'invitation-member__button--accept-desktop--' + rowIndex"
               icon="pi pi-check"
               label="{{ 'INVITATION.MEMBER.ACCEPT' | translate }}"
               severity="success"
@@ -136,6 +149,7 @@
               (click)="acceptInvitation(invitation)"
             ></p-button>
             <p-button
+              [attr.data-testid]="'invitation-member__button--refuse-desktop--' + rowIndex"
               icon="pi pi-times"
               label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}"
               severity="danger"
@@ -144,6 +158,7 @@
               (click)="refuseInvitation(invitation)"
             ></p-button>
             <p-button
+              [attr.data-testid]="'invitation-member__button--see-desktop--' + rowIndex"
               icon="pi pi-eye"
               label="{{ 'INVITATION.MEMBER.SEE' | translate }}"
               severity="secondary"
@@ -157,7 +172,10 @@
     </tr>
 
     <!-- Mobile card -->
-    <tr class="lg:hidden !border-0 !bg-transparent">
+    <tr
+      [attr.data-testid]="'invitation-member__row--mobile--' + rowIndex"
+      class="lg:hidden !border-0 !bg-transparent"
+    >
       <td colspan="5" class="!p-0 !pb-3">
         <div
           class="invitation-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm"
@@ -202,6 +220,7 @@
           <div class="flex flex-wrap gap-2 pt-2 border-t border-primary-100">
             @if (invitation.to_be_encoded) {
               <p-button
+                [attr.data-testid]="'invitation-member__button--encode-accept-mobile--' + rowIndex"
                 icon="pi pi-pencil"
                 label="{{ 'INVITATION.MEMBER.ENCODE_AND_ACCEPT' | translate }}"
                 severity="success"
@@ -209,6 +228,7 @@
                 (click)="encodeNewMember(invitation)"
               ></p-button>
               <p-button
+                [attr.data-testid]="'invitation-member__button--refuse-mobile--' + rowIndex"
                 icon="pi pi-times"
                 label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}"
                 severity="danger"
@@ -218,6 +238,7 @@
               ></p-button>
             } @else {
               <p-button
+                [attr.data-testid]="'invitation-member__button--accept-mobile--' + rowIndex"
                 icon="pi pi-check"
                 label="{{ 'INVITATION.MEMBER.ACCEPT' | translate }}"
                 severity="success"
@@ -225,6 +246,7 @@
                 (click)="acceptInvitation(invitation)"
               ></p-button>
               <p-button
+                [attr.data-testid]="'invitation-member__button--refuse-mobile--' + rowIndex"
                 icon="pi pi-times"
                 label="{{ 'INVITATION.MEMBER.REFUSE' | translate }}"
                 severity="danger"
@@ -233,6 +255,7 @@
                 (click)="refuseInvitation(invitation)"
               ></p-button>
               <p-button
+                [attr.data-testid]="'invitation-member__button--see-mobile--' + rowIndex"
                 icon="pi pi-eye"
                 label="{{ 'INVITATION.MEMBER.SEE' | translate }}"
                 severity="secondary"

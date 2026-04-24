@@ -1,6 +1,6 @@
-<div class="login-wrapper">
+<div class="login-wrapper" data-testid="auth-page__wrapper">
   <!-- Left side: Feature carousel -->
-  <div class="left-panel flex flex-col">
+  <div class="left-panel flex flex-col" data-testid="auth-page__panel--left">
     <p-carousel
       [value]="slides"
       [numVisible]="1"
@@ -8,42 +8,56 @@
       [circular]="true"
       [autoplayInterval]="5000"
       [showNavigators]="false"
+      data-testid="auth-page__carousel"
     >
       <ng-template let-slide #item>
-        <div class="slide">
+        <div class="slide" [attr.data-testid]="'auth-page__slide--' + slide.index">
           <div class="slide-icon-wrapper">
             <!--            <i [class]="'pi ' + slide.icon + ' slide-icon'"></i>-->
             <img
               [src]="slide.images + '.svg'"
               alt="{{ slide.titleKey | translate }}"
               class="slide-icon"
+              [attr.data-testid]="'auth-page__slide-image--' + slide.index"
             />
           </div>
-          <h2 class="slide-title">{{ slide.titleKey | translate }}</h2>
-          <p class="slide-desc">{{ slide.descKey | translate }}</p>
+          <h2 class="slide-title" [attr.data-testid]="'auth-page__slide-title--' + slide.index">
+            {{ slide.titleKey | translate }}
+          </h2>
+          <p class="slide-desc" [attr.data-testid]="'auth-page__slide-desc--' + slide.index">
+            {{ slide.descKey | translate }}
+          </p>
         </div>
       </ng-template>
     </p-carousel>
-    <a href="https://storyset.com/people">People illustrations by Storyset</a>
+    <a href="https://storyset.com/people" data-testid="auth-page__link--attribution"
+      >People illustrations by Storyset</a
+    >
   </div>
 
   <!-- Right side: Login -->
-  <div class="right-panel">
-    <div class="lang-selector">
-      <app-language-selector></app-language-selector>
+  <div class="right-panel" data-testid="auth-page__panel--right">
+    <div class="lang-selector" data-testid="auth-page__lang-selector">
+      <app-language-selector data-testid="auth-page__language-selector"></app-language-selector>
     </div>
 
     <div class="login-content">
-      <img src="../../../../../assets/images/logo.svg" alt="OptimCE" class="login-logo" />
-      <h1 class="login-title">{{ 'TITLE' | translate }}</h1>
+      <img
+        src="../../../../../assets/images/logo.svg"
+        alt="OptimCE"
+        class="login-logo"
+        data-testid="auth-page__logo"
+      />
+      <h1 class="login-title" data-testid="auth-page__title">{{ 'TITLE' | translate }}</h1>
 
-      <div class="divider"></div>
+      <div class="divider" data-testid="auth-page__divider"></div>
 
       <p-button
         label="{{ 'LOGIN.LOGIN' | translate }}"
         icon="pi pi-sign-in"
         (onClick)="login()"
         styleClass="login-btn"
+        data-testid="auth-page__button--login"
       ></p-button>
     </div>
   </div>

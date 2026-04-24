@@ -1,7 +1,13 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+<form
+  data-testid="community-dialog__form"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col gap-3"
+>
   <div>
     <span class="field-label">{{ 'COMMUNITY.CREATE.NAME' | translate }}</span>
     <input
+      data-testid="community-dialog__input--name"
       pInputText
       placeholder="{{ 'COMMUNITY.CREATE.NAME_PLACEHOLDER' | translate }}"
       formControlName="new_name"
@@ -9,6 +15,7 @@
     />
   </div>
   <p-button
+    data-testid="community-dialog__button--submit"
     label="{{ 'COMMUNITY.CREATE.VALIDATE' | translate }}"
     type="submit"
     severity="primary"

@@ -9,6 +9,7 @@
       [class.bg-primary-50]="typeClient() === MemberType.INDIVIDUAL"
       [class.border-surface-200]="typeClient() !== MemberType.INDIVIDUAL"
       (click)="typeClient.set(MemberType.INDIVIDUAL)"
+      data-testid="new-member-type__card--individual"
     >
       <div class="flex items-center gap-3">
         <p-radioButton
@@ -18,6 +19,7 @@
           (ngModelChange)="typeClient.set($event)"
           [ngModelOptions]="{ standalone: true }"
           inputId="particulier"
+          data-testid="new-member-type__radio--individual"
         />
         <label for="particulier" class="font-medium text-sm cursor-pointer">
           {{ 'MEMBER.ADD.STATUS.INDIVIDUAL_RADIOBUTTON_LABEL' | translate }}
@@ -32,6 +34,7 @@
       [class.bg-primary-50]="typeClient() === MemberType.COMPANY"
       [class.border-surface-200]="typeClient() !== MemberType.COMPANY"
       (click)="typeClient.set(MemberType.COMPANY)"
+      data-testid="new-member-type__card--company"
     >
       <div class="flex items-center gap-3">
         <p-radioButton
@@ -41,6 +44,7 @@
           (ngModelChange)="typeClient.set($event)"
           [ngModelOptions]="{ standalone: true }"
           inputId="entreprise"
+          data-testid="new-member-type__radio--company"
         />
         <label for="entreprise" class="font-medium text-sm cursor-pointer">
           {{ 'MEMBER.ADD.STATUS.COMPANY_RADIOBUTTON_LABEL' | translate }}
@@ -55,6 +59,7 @@
       icon="pi pi-arrow-right"
       iconPos="right"
       (click)="submit()"
+      data-testid="new-member-type__btn--next"
     />
   </div>
 </div>

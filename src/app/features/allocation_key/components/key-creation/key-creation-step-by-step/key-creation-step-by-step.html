@@ -50,6 +50,7 @@
                     formControlName="nb_consumers"
                     [min]="1"
                     inputId="nb_consumers"
+                    data-testid="key-creation__input--nb-consumers"
                   ></p-inputNumber>
                   <app-error-handler controlName="nb_consumers"></app-error-handler>
                 </div>
@@ -64,6 +65,7 @@
                 label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
                 severity="primary"
                 (click)="submitFirstForm(); formFirstStep.valid && activateCallback(1)"
+                data-testid="key-creation__btn--step0-validate"
               ></p-button>
             </div>
           </ng-template>
@@ -93,6 +95,7 @@
                           pInputText
                           class="w-full"
                           [formControlName]="'consumer_name_' + i"
+                          [attr.data-testid]="'key-creation__input--consumer-name--' + i"
                         />
                         <app-error-handler [controlName]="'consumer_name_' + i"></app-error-handler>
                       </div>
@@ -108,6 +111,7 @@
                   label="{{ 'KEY.SHARED.BACK' | translate }}"
                   severity="secondary"
                   (click)="activateCallback(0)"
+                  data-testid="key-creation__btn--step1-back"
                 ></p-button>
                 <p-button
                   [outlined]="true"
@@ -116,6 +120,7 @@
                   label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
                   severity="primary"
                   (click)="submitSecondForm(); formSecondStep.valid && activateCallback(2)"
+                  data-testid="key-creation__btn--step1-validate"
                 ></p-button>
               </div>
             }
@@ -129,6 +134,7 @@
               @for (iterForm of formIterations(); let i = $index; track i) {
                 <div
                   class="iteration-card rounded-xl border border-surface-200 bg-surface-0 p-5 transition-colors"
+                  [attr.data-testid]="'key-creation__card--iteration--' + i"
                 >
                   <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
@@ -144,6 +150,7 @@
                         [text]="true"
                         severity="danger"
                         (click)="deleteIteration(i)"
+                        [attr.data-testid]="'key-creation__btn--delete-iteration--' + i"
                       ></p-button>
                     }
                   </div>
@@ -161,6 +168,7 @@
                               [inputId]="'type_' + i + '_1'"
                               value="1"
                               formControlName="type"
+                              [attr.data-testid]="'key-creation__radio--type-prorata--' + i"
                             ></p-radioButton>
                             <label [for]="'type_' + i + '_1'" class="text-sm text-surface-700">
                               {{ 'KEY.CREATE.PRORATA_LABEL' | translate }}
@@ -171,6 +179,7 @@
                               [inputId]="'type_' + i + '_2'"
                               value="2"
                               formControlName="type"
+                              [attr.data-testid]="'key-creation__radio--type-egalitarian--' + i"
                             ></p-radioButton>
                             <label [for]="'type_' + i + '_2'" class="text-sm text-surface-700">
                               {{ 'KEY.CREATE.EGALITARIAN_LABEL' | translate }}
@@ -189,6 +198,7 @@
                           id="injection_percentage_{{ i }}"
                           class="w-full"
                           formControlName="inj_percentage"
+                          [attr.data-testid]="'key-creation__input--inj-percentage--' + i"
                         ></p-inputNumber>
                         <app-error-handler controlName="inj_percentage"></app-error-handler>
                       </div>
@@ -200,6 +210,7 @@
               @if (displayErrorInj()) {
                 <div
                   class="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+                  data-testid="key-creation__error--inj-sum"
                 >
                   <i class="pi pi-exclamation-triangle"></i>
                   {{ 'KEY.CREATE.SUM_MUST_BE_100_LABEL' | translate }}
@@ -214,6 +225,7 @@
                 label="{{ 'KEY.SHARED.BACK' | translate }}"
                 severity="secondary"
                 (click)="activateCallback(1)"
+                data-testid="key-creation__btn--step2-back"
               ></p-button>
               <p-button
                 [outlined]="true"
@@ -222,6 +234,7 @@
                 label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
                 severity="primary"
                 (click)="submitIteration(); displayEnd() && activateCallback(3)"
+                data-testid="key-creation__btn--step2-validate"
               ></p-button>
             </div>
           </ng-template>
@@ -252,6 +265,7 @@
                         formControlName="key_name"
                         id="key_name"
                         placeholder="{{ 'KEY.CREATE.FORM.KEY_NAME_PLACEHOLDER' | translate }}"
+                        data-testid="key-creation__input--key-name"
                       />
                       <app-error-handler controlName="key_name"></app-error-handler>
                     </div>
@@ -270,6 +284,7 @@
                         placeholder="{{
                           'KEY.CREATE.FORM.KEY_DESCRIPTION_PLACEHOLDER' | translate
                         }}"
+                        data-testid="key-creation__textarea--key-description"
                       ></textarea>
                       <app-error-handler controlName="key_description"></app-error-handler>
                     </div>
@@ -282,12 +297,14 @@
                         severity="secondary"
                         type="button"
                         (click)="activateCallback(2)"
+                        data-testid="key-creation__btn--step3-back"
                       ></p-button>
                       <p-button
                         icon="pi pi-check"
                         label="{{ 'KEY.CREATE.VALIDATE_BUTTON_LABEL' | translate }}"
                         severity="primary"
                         type="submit"
+                        data-testid="key-creation__btn--step3-submit"
                       ></p-button>
                     </div>
                   </div>

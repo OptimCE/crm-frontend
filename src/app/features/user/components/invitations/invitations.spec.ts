@@ -6,6 +6,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { Invitations } from './invitations';
 import { InvitationMember } from './invitation-tables/invitation-member/invitation-member';
 import { InvitationGestionnaire } from './invitation-tables/invitation-gestionnaire/invitation-gestionnaire';
+import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 describe('Invitations', () => {
   let component: Invitations;
@@ -26,6 +27,7 @@ describe('Invitations', () => {
             TabPanel,
             InvitationMember,
             InvitationGestionnaire,
+            HeaderPage,
           ],
         },
         add: { schemas: [NO_ERRORS_SCHEMA] },
@@ -49,26 +51,14 @@ describe('Invitations', () => {
   // ── 2. Hero Header ─────────────────────────────────────────────
 
   describe('hero header', () => {
-    it('should render the hero header section', () => {
-      const hero = el.querySelector('.invitations-hero');
+    it('should render the shared header-page hero', () => {
+      const hero = el.querySelector('app-header-page[data-testid="invitations__hero"]');
       expect(hero).toBeTruthy();
     });
 
-    it('should display the envelope icon', () => {
-      const icon = el.querySelector('.invitations-hero .pi-envelope');
-      expect(icon).toBeTruthy();
-    });
-
-    it('should display the translated title', () => {
-      const h1 = el.querySelector('.invitations-hero h1');
-      expect(h1).toBeTruthy();
-      expect(h1?.textContent).toContain('INVITATION.TITLE');
-    });
-
-    it('should display the translated subtitle', () => {
-      const p = el.querySelector('.invitations-hero p');
-      expect(p).toBeTruthy();
-      expect(p?.textContent).toContain('INVITATION.SUBTITLE');
+    it('should pass the envelope icon to the header', () => {
+      const hero = el.querySelector('app-header-page[data-testid="invitations__hero"]');
+      expect(hero?.getAttribute('icon')).toBe('pi pi-envelope');
     });
   });
 

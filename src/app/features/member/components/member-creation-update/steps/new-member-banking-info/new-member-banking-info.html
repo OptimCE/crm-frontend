@@ -12,6 +12,7 @@
       placeholder="BE68539007547034"
       formControlName="iban"
       class="w-full"
+      data-testid="new-member-banking-info__input--iban"
     />
     <app-error-handler controlName="iban" [errorsAdd]="ibanErrorAdded()" />
   </div>
@@ -23,6 +24,7 @@
       icon="pi pi-arrow-left"
       [label]="'MEMBER.ADD.BANK.BACK_TO_ADDRESS' | translate"
       (click)="goBack()"
+      data-testid="new-member-banking-info__btn--back"
     />
     <p-button
       pRipple
@@ -30,6 +32,7 @@
       icon="pi pi-check"
       iconPos="right"
       [label]="'MEMBER.ADD.BANK.VALIDATE_BANKING_INFO_FORM_BUTTON' | translate"
+      data-testid="new-member-banking-info__btn--submit"
     />
   </div>
 </form>

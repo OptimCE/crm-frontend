@@ -10,6 +10,7 @@ interface Slide {
   titleKey: string;
   descKey: string;
   images: string;
+  index: number;
 }
 
 @Component({
@@ -28,24 +29,28 @@ export class AuthPage {
       titleKey: 'LOGIN.SLIDES.MEMBERS_TITLE',
       descKey: 'LOGIN.SLIDES.MEMBERS_DESC',
       images: 'assets/images/sliders/members',
+      index: 0,
     },
     {
       icon: 'pi-bolt',
       titleKey: 'LOGIN.SLIDES.METERS_TITLE',
       descKey: 'LOGIN.SLIDES.METERS_DESC',
       images: 'assets/images/sliders/chart',
+      index: 1,
     },
     {
       icon: 'pi-share-alt',
       titleKey: 'LOGIN.SLIDES.SHARING_TITLE',
       descKey: 'LOGIN.SLIDES.SHARING_DESC',
       images: 'assets/images/sliders/sharing',
+      index: 2,
     },
     {
       icon: 'pi-key',
       titleKey: 'LOGIN.SLIDES.KEYS_TITLE',
       descKey: 'LOGIN.SLIDES.KEYS_DESC',
       images: 'assets/images/sliders/sun',
+      index: 3,
     },
   ];
 

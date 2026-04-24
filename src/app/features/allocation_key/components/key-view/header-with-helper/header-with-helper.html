@@ -1,6 +1,10 @@
 <!-- Use AG Grid header classes so the theme lays out content on one line -->
 <div class="ag-header-cell-label">
-  <span class="ag-header-cell-text" [title]="params()?.tooltip ?? ''">
+  <span
+    class="ag-header-cell-text"
+    [title]="params()?.tooltip ?? ''"
+    data-testid="header-helper__label--text"
+  >
     {{ params()?.label }}
   </span>
 
@@ -11,6 +15,7 @@
       class="ag-header-icon-button button-helper"
       (click)="onClick()"
       [attr.aria-label]="'KEY.SHARED.HELP_LABEL' | translate"
+      data-testid="header-helper__btn--help"
     >
       <i class="pi pi-question-circle icon-button-helper"></i>
     </button>

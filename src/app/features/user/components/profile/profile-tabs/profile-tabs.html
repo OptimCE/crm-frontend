@@ -1,10 +1,18 @@
 <div class="mt-6">
-  <p-tabs [value]="0" styleClass="profile-tabs">
+  <p-tabs data-testid="profile-tabs__tabs" [value]="0" styleClass="profile-tabs">
     <p-tablist>
-      <p-tab [value]="0">{{ 'PROFILE.TABS.HEADERS.METERS' | translate }}</p-tab>
-      <p-tab [value]="1">{{ 'PROFILE.TABS.HEADERS.BANKING_INFORMATIONS' | translate }}</p-tab>
-      <p-tab [value]="2">{{ 'PROFILE.TABS.HEADERS.DOCUMENTS' | translate }}</p-tab>
-      <p-tab [value]="3">{{ 'PROFILE.TABS.HEADERS.REPRESENTATIONS' | translate }}</p-tab>
+      <p-tab data-testid="profile-tabs__tab--meters" [value]="0">{{
+        'PROFILE.TABS.HEADERS.METERS' | translate
+      }}</p-tab>
+      <p-tab data-testid="profile-tabs__tab--banking" [value]="1">{{
+        'PROFILE.TABS.HEADERS.BANKING_INFORMATIONS' | translate
+      }}</p-tab>
+      <p-tab data-testid="profile-tabs__tab--documents" [value]="2">{{
+        'PROFILE.TABS.HEADERS.DOCUMENTS' | translate
+      }}</p-tab>
+      <p-tab data-testid="profile-tabs__tab--representations" [value]="3">{{
+        'PROFILE.TABS.HEADERS.REPRESENTATIONS' | translate
+      }}</p-tab>
     </p-tablist>
 
     <p-tabpanels>

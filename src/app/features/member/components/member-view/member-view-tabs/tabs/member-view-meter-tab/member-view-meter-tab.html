@@ -13,6 +13,7 @@
           optionLabel="label"
           optionValue="value"
           class="search-field-select"
+          data-testid="member-view-meter-tab__select--search-field"
         >
           <ng-template let-option pTemplate="selectedItem">
             <span class="text-sm">{{ option.label | translate }}</span>
@@ -26,6 +27,7 @@
           [value]="searchText()"
           (searchEvent)="onSearchTextChange($event)"
           inputClass="w-full!"
+          data-testid="member-view-meter-tab__input--search"
         />
       </p-input-group>
     </div>
@@ -40,6 +42,7 @@
         placeholder="{{ 'MEMBER.VIEW.METERS.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
         [showClear]="true"
         class="w-full"
+        data-testid="member-view-meter-tab__select--status"
       >
         <ng-template let-option pTemplate="item">
           @switch (option) {
@@ -116,6 +119,7 @@
         (onClick)="clear(dt)"
         [outlined]="!hasActiveFilters()"
         severity="primary"
+        data-testid="member-view-meter-tab__btn--clear-filters"
       />
     </div>
   </div>
@@ -134,6 +138,7 @@
   [currentPageReportTemplate]="currentPageReportTemplate()"
   (onPage)="pageChange($event)"
   [paginator]="showPaginator()"
+  data-testid="member-view-meter-tab__table"
 >
   <!-- Desktop header -->
   <ng-template pTemplate="header">
@@ -145,9 +150,13 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-meter>
+  <ng-template pTemplate="body" let-meter let-rowIndex="rowIndex">
     <!-- Desktop row -->
-    <tr (click)="onRowClick(meter)" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+    <tr
+      (click)="onRowClick(meter)"
+      class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+      [attr.data-testid]="'member-view-meter-tab__row--desktop--' + rowIndex"
+    >
       <td class="text-sm"><span [innerHTML]="meter.address | address"></span></td>
       <td class="text-sm">{{ meter.EAN }}</td>
       <td class="text-sm">{{ meter.meter_number }}</td>
@@ -194,6 +203,7 @@
       <td colspan="4" class="!p-0 !pb-3">
         <div
           class="meter-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+          [attr.data-testid]="'member-view-meter-tab__card--mobile--' + rowIndex"
         >
           <!-- Card header: address + status -->
           <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
@@ -258,7 +268,7 @@
   <ng-template #emptyMessage pTemplate="emptymessage">
     <tr>
       <td colspan="4">
-        <div class="py-8 text-center">
+        <div class="py-8 text-center" data-testid="member-view-meter-tab__empty--message">
           <i class="pi pi-gauge text-3xl text-surface-300 mb-2"></i>
           <p class="text-surface-400 m-0">
             {{ 'MEMBER.VIEW.METERS.NO_METER_FOUND_LABEL' | translate }}
@@ -276,5 +286,6 @@
     icon="pi pi-plus"
     label="{{ 'MEMBER.VIEW.METERS.ADD_METER_BUTTON_LABEL' | translate }}"
     (click)="toAddMeter()"
+    data-testid="member-view-meter-tab__btn--add"
   />
 </div>

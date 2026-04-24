@@ -9,4 +9,5 @@ import { Component, input } from '@angular/core';
 export class HeaderPage {
   readonly icon = input.required<string>();
   readonly text = input.required<string>();
+  readonly subtitle = input<string | undefined>();
 }

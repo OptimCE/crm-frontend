@@ -3,23 +3,33 @@
 
 <div class="container mx-auto">
   <!-- Page header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-    <app-header-page icon="pi pi-briefcase" [text]="'COMMUNITY.LIST.TITLE' | translate" />
+  <app-header-page
+    icon="pi pi-briefcase"
+    [text]="'COMMUNITY.LIST.TITLE' | translate"
+    [subtitle]="'COMMUNITY.LIST.SUBTITLE' | translate"
+    class="block mb-4"
+  >
     <p-button
+      headerActions
+      data-testid="user-communities__button--create"
       type="button"
       icon="pi pi-plus"
       label="{{ 'COMMUNITY.LIST.CREATE_COMMUNITY' | translate }}"
       (click)="createCommunity()"
     />
-  </div>
+  </app-header-page>
 
   <!-- Filter bar -->
-  <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+  <div
+    data-testid="user-communities__filter-bar"
+    class="filter-bar rounded-xl p-4 border border-primary-100 mb-4"
+  >
     <div class="grid grid-cols-1 sm:flex sm:items-end gap-3">
       <!-- Name search -->
       <div class="sm:flex-1">
         <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
         <app-debounced-p-input
+          data-testid="user-communities__input--search"
           [placeholder]="'COMMUNITY.LIST.HEADERS.NAME' | translate"
           [value]="searchText()"
           (searchEvent)="onSearchTextChange($event)"
@@ -29,6 +39,7 @@
       <!-- Clear filters -->
       <div class="flex items-end">
         <p-button
+          data-testid="user-communities__button--clear-filters"
           icon="pi pi-filter-slash"
           label="{{ 'COMMUNITY.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
           (onClick)="clear(dt)"
@@ -41,6 +52,7 @@
 
   <!-- Data table -->
   <p-table
+    data-testid="user-communities__table"
     #dt
     [value]="communities()"
     [lazy]="true"
@@ -67,9 +79,12 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-community>
+    <ng-template pTemplate="body" let-community let-rowIndex="rowIndex">
       <!-- Desktop row -->
-      <tr class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <tr
+        [attr.data-testid]="'user-communities__row--desktop--' + rowIndex"
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+      >
         <td class="text-sm">{{ community.name }}</td>
         <td class="text-sm">{{ community.role }}</td>
         <td class="text-center">
@@ -94,6 +109,7 @@
               community.role >= 1
             ) {
               <p-button
+                [attr.data-testid]="'user-communities__button--update-desktop--' + rowIndex"
                 type="button"
                 icon="pi pi-pencil"
                 label="{{ 'COMMUNITY.LIST.UPDATE_COMMUNITY' | translate }}"
@@ -105,6 +121,7 @@
             } @else {
               @if (userContextService.activeCommunityId() !== community.auth_community_id) {
                 <p-button
+                  [attr.data-testid]="'user-communities__button--activate-desktop--' + rowIndex"
                   type="button"
                   icon="pi pi-check"
                   label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
@@ -115,6 +132,7 @@
                 />
               }
               <p-button
+                [attr.data-testid]="'user-communities__button--leave-desktop--' + rowIndex"
                 type="button"
                 icon="pi pi-sign-out"
                 label="{{ 'COMMUNITY.LIST.LEAVE_BUTTON' | translate }}"
@@ -129,7 +147,10 @@
       </tr>
 
       <!-- Mobile card -->
-      <tr class="lg:hidden !border-0 !bg-transparent">
+      <tr
+        [attr.data-testid]="'user-communities__row--mobile--' + rowIndex"
+        class="lg:hidden !border-0 !bg-transparent"
+      >
         <td colspan="4" class="!p-0 !pb-3">
           <div
             class="community-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm hover:border-primary-400 transition-colors"
@@ -167,6 +188,7 @@
                 community.role >= 1
               ) {
                 <p-button
+                  [attr.data-testid]="'user-communities__button--update-mobile--' + rowIndex"
                   type="button"
                   icon="pi pi-pencil"
                   label="{{ 'COMMUNITY.LIST.UPDATE_COMMUNITY' | translate }}"
@@ -178,6 +200,7 @@
               } @else {
                 @if (userContextService.activeCommunityId() !== community.auth_community_id) {
                   <p-button
+                    [attr.data-testid]="'user-communities__button--activate-mobile--' + rowIndex"
                     type="button"
                     icon="pi pi-check"
                     label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
@@ -188,6 +211,7 @@
                   />
                 }
                 <p-button
+                  [attr.data-testid]="'user-communities__button--leave-mobile--' + rowIndex"
                   type="button"
                   icon="pi pi-sign-out"
                   label="{{ 'COMMUNITY.LIST.LEAVE_BUTTON' | translate }}"

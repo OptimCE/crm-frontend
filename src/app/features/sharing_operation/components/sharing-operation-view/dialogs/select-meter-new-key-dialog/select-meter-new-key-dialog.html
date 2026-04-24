@@ -1,14 +1,14 @@
 <div class="flex flex-col gap-3">
   <!-- TABS NOW / FUTURE -->
-  <p-tabs [value]="activeTab()">
+  <p-tabs [value]="activeTab()" data-testid="meter-key-dialog__tabs">
     <p-tablist>
-      <p-tab [value]="0">
+      <p-tab [value]="0" data-testid="meter-key-dialog__tab--now">
         {{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.NOW' | translate }}
         @if (countSelected(QueryType.NOW)) {
           <p-badge [value]="countSelected(QueryType.NOW)" severity="info" class="ml-2" />
         }
       </p-tab>
-      <p-tab [value]="1">
+      <p-tab [value]="1" data-testid="meter-key-dialog__tab--future">
         {{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.FUTURE' | translate }}
         @if (countSelected(QueryType.FUTURE)) {
           <p-badge [value]="countSelected(QueryType.FUTURE)" severity="info" class="ml-2" />
@@ -28,7 +28,7 @@
 
   <!-- SELECTED METERS SUMMARY -->
   @if (selectedMeters.size) {
-    <div class="border-t pt-3">
+    <div class="border-t pt-3" data-testid="meter-key-dialog__selected-list">
       <div class="flex items-center justify-between mb-2">
         <span class="font-semibold text-sm">
           {{
@@ -42,12 +42,16 @@
           [text]="true"
           severity="danger"
           (onClick)="selectedMeters.clear()"
+          data-testid="meter-key-dialog__btn--clear-all"
         />
       </div>
 
       <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
         @for (entry of selectedMetersArray(); track $index) {
-          <div class="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 text-sm">
+          <div
+            class="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 text-sm"
+            [attr.data-testid]="'meter-key-dialog__selected-item--' + $index"
+          >
             <p-badge
               [value]="
                 entry.type === QueryType.NOW
@@ -63,6 +67,7 @@
               tabindex="0"
               (click)="toggleMeter(entry.meter, entry.type)"
               (keydown.enter)="toggleMeter(entry.meter, entry.type)"
+              [attr.data-testid]="'meter-key-dialog__btn--remove--' + $index"
             ></i>
           </div>
         }
@@ -72,11 +77,17 @@
 
   <!-- FOOTER -->
   <div class="flex justify-end gap-2 border-t pt-3">
-    <p-button label="Cancel" [outlined]="true" (onClick)="cancel()" />
+    <p-button
+      label="Cancel"
+      [outlined]="true"
+      (onClick)="cancel()"
+      data-testid="meter-key-dialog__btn--cancel"
+    />
     <p-button
       label="Confirm ({{ selectedMeters.size }})"
       [disabled]="!selectedMeters.size"
       (onClick)="confirm()"
+      data-testid="meter-key-dialog__btn--confirm"
     />
   </div>
 </div>
@@ -85,6 +96,7 @@
 <ng-template #metersTable let-type="type">
   <p-table
     #dt
+    data-testid="meter-key-dialog__table--meters"
     [value]="getList(type)()"
     [lazy]="true"
     (onLazyLoad)="lazyLoad($event, type)"
@@ -107,6 +119,11 @@
               : 'SHARING_OPERATION.SELECT_METER_NEW_KEY.SELECT_ALL_FUTURE'
           }}"
           (onClick)="selectAllInTab(type)"
+          [attr.data-testid]="
+            type === QueryType.NOW
+              ? 'meter-key-dialog__btn--select-all--now'
+              : 'meter-key-dialog__btn--select-all--future'
+          "
         />
         <p-button
           size="small"
@@ -115,6 +132,11 @@
           icon="pi pi-filter-slash"
           label="{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.CLEAN_FILTERS' | translate }}"
           (onClick)="dt.clear()"
+          [attr.data-testid]="
+            type === QueryType.NOW
+              ? 'meter-key-dialog__btn--clean-filters--now'
+              : 'meter-key-dialog__btn--clean-filters--future'
+          "
         />
       </div>
     </ng-template>
@@ -127,6 +149,11 @@
             [binary]="true"
             [ngModel]="isPageFullySelected(type)"
             (ngModelChange)="togglePage(type, $event)"
+            [attr.data-testid]="
+              type === QueryType.NOW
+                ? 'meter-key-dialog__checkbox--select-all--now'
+                : 'meter-key-dialog__checkbox--select-all--future'
+            "
           />
         </th>
         <th>{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.ADDRESS' | translate }}</th>
@@ -138,6 +165,7 @@
             [showMatchModes]="false"
             [showOperator]="false"
             [showAddButton]="false"
+            data-testid="meter-key-dialog__filter--ean"
           />
         </th>
         <th>{{ 'SHARING_OPERATION.SELECT_METER_NEW_KEY.TABLE.METER_NUMBER' | translate }}</th>
@@ -146,24 +174,30 @@
       </tr>
     </ng-template>
 
-    <ng-template #body let-meter>
+    <ng-template #body let-meter let-rowIndex="rowIndex">
       <tr
         [class.bg-blue-50]="isSelected(meter.EAN)"
         class="cursor-pointer hover:bg-gray-50"
         (click)="toggleMeter(meter, type)"
+        [attr.data-testid]="'meter-key-dialog__row--' + rowIndex"
       >
         <td (click)="$event.stopPropagation()">
           <p-checkbox
             [binary]="true"
             [ngModel]="isSelected(meter.EAN)"
             (ngModelChange)="toggleMeter(meter, type)"
+            [attr.data-testid]="'meter-key-dialog__checkbox--' + rowIndex"
           />
         </td>
         <td class="text-sm" [innerHTML]="meter.address | address"></td>
         <td class="text-sm font-mono">{{ meter.EAN }}</td>
         <td class="text-sm">{{ meter.meter_number }}</td>
         <td>
-          <p-tag [value]="meter.status" [severity]="getStatusSeverity(meter.status)" />
+          <p-tag
+            [value]="meter.status"
+            [severity]="getStatusSeverity(meter.status)"
+            [attr.data-testid]="'meter-key-dialog__tag--status--' + rowIndex"
+          />
         </td>
         <td class="text-sm">{{ meter.holder?.name ?? '—' }}</td>
       </tr>

@@ -1,18 +1,23 @@
 <div class="container mx-auto my-auto">
+  <p-toast />
+
   <!-- Page header -->
-  <div
-    class="flex flex-wrap mb-4 flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3"
+  <app-header-page
+    icon="pi pi-key"
+    [text]="'KEY.LIST.TITLE' | translate"
+    [subtitle]="'KEY.LIST.SUBTITLE' | translate"
+    class="block mb-4"
   >
-    <app-header-page icon="pi pi-key" [text]="'KEY.LIST.TITLE' | translate" />
-    <p-toast />
     <p-split-button
+      headerActions
       label="{{ 'KEY.LIST.ADD_BUTTON_LABEL' | translate }}"
       icon="pi pi-plus"
       (onClick)="addKey()"
       [model]="optionsSplitButton"
       severity="primary"
+      data-testid="keys-list__btn--add"
     />
-  </div>
+  </app-header-page>
 
   <!-- Filter toolbar -->
   <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
@@ -29,6 +34,7 @@
             optionLabel="label"
             optionValue="value"
             class="search-field-select"
+            data-testid="keys-list__select--search-field"
           >
             <ng-template let-option pTemplate="selectedItem">
               <span class="text-sm">{{ option.label | translate }}</span>
@@ -42,6 +48,7 @@
             [value]="searchText()"
             (searchEvent)="onSearchTextChange($event)"
             inputClass="w-full!"
+            data-testid="keys-list__input--search"
           />
         </p-input-group>
       </div>
@@ -54,6 +61,7 @@
           (onClick)="clear(dt)"
           [outlined]="!hasActiveFilters()"
           severity="primary"
+          data-testid="keys-list__btn--clear-filters"
         />
       </div>
     </div>
@@ -72,6 +80,7 @@
     [currentPageReportTemplate]="currentPageReportTemplate()"
     (onPage)="pageChange($event)"
     [paginator]="showPaginator()"
+    data-testid="keys-list__table--keys"
   >
     <!-- Desktop header -->
     <ng-template pTemplate="header">
@@ -83,13 +92,21 @@
 
     <ng-template pTemplate="body" let-key>
       <!-- Desktop row -->
-      <tr routerLink="/keys/{{ key.id }}" class="max-lg:hidden hover:bg-primary-50 cursor-pointer">
+      <tr
+        routerLink="/keys/{{ key.id }}"
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+        [attr.data-testid]="'keys-list__row--desktop--' + key.id"
+      >
         <td class="text-sm">{{ key.name }}</td>
         <td class="text-sm">{{ key.description }}</td>
       </tr>
 
       <!-- Mobile card -->
-      <tr class="lg:hidden !border-0 !bg-transparent" routerLink="/keys/{{ key.id }}">
+      <tr
+        class="lg:hidden !border-0 !bg-transparent"
+        routerLink="/keys/{{ key.id }}"
+        [attr.data-testid]="'keys-list__row--mobile--' + key.id"
+      >
         <td colspan="2" class="!p-0 !pb-3">
           <div
             class="key-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
@@ -111,7 +128,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="2">
-          <div class="py-8 text-center">
+          <div class="py-8 text-center" data-testid="keys-list__empty--message">
             <i class="pi pi-key text-3xl text-surface-300 mb-2"></i>
             <p class="text-surface-400 m-0">{{ 'KEY.LIST.EMPTY' | translate }}</p>
           </div>

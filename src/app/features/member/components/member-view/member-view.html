@@ -33,7 +33,10 @@
     </div>
   } @else if (hasError()) {
     <!-- Error State -->
-    <div class="flex flex-col items-center justify-center py-16 gap-4">
+    <div
+      class="flex flex-col items-center justify-center py-16 gap-4"
+      data-testid="member-view__container--error"
+    >
       <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
       <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
       <p-button
@@ -41,6 +44,7 @@
         icon="pi pi-refresh"
         label="{{ 'COMMON.RETRY' | translate }}"
         (click)="loadMember()"
+        data-testid="member-view__btn--retry"
       />
     </div>
   } @else if (member()) {
@@ -50,6 +54,7 @@
       [modal]="true"
       [visible]="alertPopupVisible()"
       (visibleChange)="alertPopupVisible.set($event)"
+      data-testid="member-view__dialog--deactivation-error"
     >
       <div class="p-3 text-center">
         <p class="text-base">
@@ -63,6 +68,7 @@
           label="{{ 'MEMBER.VIEW.ERROR_DEACTIVATING_MEMBER.CLOSE_BUTTON_LABEL' | translate }}"
           (onClick)="alertPopupVisible.set(false)"
           class="p-button-primary mt-2"
+          data-testid="member-view__btn--dialog-close"
         />
       </div>
     </p-dialog>
@@ -98,18 +104,21 @@
                 <p-tag
                   severity="success"
                   value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
+                  data-testid="member-view__tag--status-active"
                 />
               }
               @case (MemberStatus.INACTIVE) {
                 <p-tag
                   severity="danger"
                   value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
+                  data-testid="member-view__tag--status-inactive"
                 />
               }
               @case (MemberStatus.PENDING) {
                 <p-tag
                   severity="warn"
                   value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
+                  data-testid="member-view__tag--status-pending"
                 />
               }
             }
@@ -130,6 +139,7 @@
               icon="pi pi-circle-on"
               severity="success"
               (click)="setStatus(1)"
+              data-testid="member-view__btn--activate"
             />
           }
           @if (status() !== MemberStatus.INACTIVE) {
@@ -139,6 +149,7 @@
               icon="pi pi-circle-off"
               severity="danger"
               (click)="setStatus(2)"
+              data-testid="member-view__btn--deactivate"
             />
           }
           @if (status() !== MemberStatus.PENDING) {
@@ -148,6 +159,7 @@
               severity="warn"
               icon="pi pi-pause"
               (click)="setStatus(3)"
+              data-testid="member-view__btn--put-pending"
             />
           }
           <p-button
@@ -157,6 +169,7 @@
             icon="pi pi-pencil"
             severity="primary"
             (click)="toModify()"
+            data-testid="member-view__btn--modify"
           />
         </div>
       </div>
@@ -250,6 +263,7 @@
                       <p-tag
                         severity="danger"
                         value="{{ 'MEMBER.VIEW.INVITATIONS.NO_INVITE_LABEL' | translate }}"
+                        data-testid="member-view__tag--invite-no-invite"
                       />
                       <p-button
                         [outlined]="true"
@@ -258,12 +272,14 @@
                         size="small"
                         severity="success"
                         (click)="invite()"
+                        data-testid="member-view__btn--invite"
                       />
                     }
                     @case (InvitationStatus.PENDING) {
                       <p-tag
                         severity="warn"
                         value="{{ 'MEMBER.VIEW.INVITATIONS.PENDING_LABEL' | translate }}"
+                        data-testid="member-view__tag--invite-pending"
                       />
                       <p-button
                         [outlined]="true"
@@ -272,12 +288,14 @@
                         size="small"
                         severity="danger"
                         (click)="cancel(individualInvitationLink()!)"
+                        data-testid="member-view__btn--invite-cancel"
                       />
                     }
                     @case (InvitationStatus.ACCEPTED) {
                       <p-tag
                         severity="success"
                         value="{{ 'MEMBER.VIEW.INVITATIONS.ACCEPTED_LABEL' | translate }}"
+                        data-testid="member-view__tag--invite-accepted"
                       />
                       <p-button
                         [outlined]="true"
@@ -286,6 +304,7 @@
                         severity="danger"
                         size="small"
                         (click)="delete(individualInvitationLink()!)"
+                        data-testid="member-view__btn--invite-delete"
                       />
                     }
                   }
@@ -437,6 +456,7 @@
                     <p-tag
                       severity="danger"
                       value="{{ 'MEMBER.VIEW.INVITATIONS.NO_INVITE_LABEL' | translate }}"
+                      data-testid="member-view__tag--manager-invite-no-invite"
                     />
                     <p-button
                       [outlined]="true"
@@ -445,12 +465,14 @@
                       size="small"
                       severity="success"
                       (click)="invite(true)"
+                      data-testid="member-view__btn--manager-invite"
                     />
                   }
                   @case (InvitationStatus.PENDING) {
                     <p-tag
                       severity="warn"
                       value="{{ 'MEMBER.VIEW.INVITATIONS.PENDING_LABEL' | translate }}"
+                      data-testid="member-view__tag--manager-invite-pending"
                     />
                     <p-button
                       [outlined]="true"
@@ -459,12 +481,14 @@
                       size="small"
                       severity="danger"
                       (click)="cancel(managerInvitationLink()!, true)"
+                      data-testid="member-view__btn--manager-invite-cancel"
                     />
                   }
                   @case (InvitationStatus.ACCEPTED) {
                     <p-tag
                       severity="success"
                       value="{{ 'MEMBER.VIEW.INVITATIONS.ACCEPTED_LABEL' | translate }}"
+                      data-testid="member-view__tag--manager-invite-accepted"
                     />
                     <p-button
                       [outlined]="true"
@@ -473,6 +497,7 @@
                       severity="danger"
                       size="small"
                       (click)="delete(managerInvitationLink()!, true)"
+                      data-testid="member-view__btn--manager-invite-delete"
                     />
                   }
                 }
