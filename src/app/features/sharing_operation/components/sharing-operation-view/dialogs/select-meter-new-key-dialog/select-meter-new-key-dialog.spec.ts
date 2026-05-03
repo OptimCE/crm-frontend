@@ -47,8 +47,8 @@ describe('SelectMeterNewKeyDialog', () => {
     serviceSpy = {
       getSharingOperationMetersList: vi
         .fn()
-        .mockImplementation((_id: number, query: { type: SharingOperationMetersQueryType }) => {
-          if (query.type === SharingOperationMetersQueryType.NOW) {
+        .mockImplementation((_id: number, type: SharingOperationMetersQueryType) => {
+          if (type === SharingOperationMetersQueryType.NOW) {
             return of(buildPaginatedResponse(metersNow));
           }
           return of(buildPaginatedResponse(metersFuture));
@@ -287,9 +287,11 @@ describe('SelectMeterNewKeyDialog', () => {
 
         const lastCall = serviceSpy.getSharingOperationMetersList.mock.calls.at(-1) as [
           number,
+          SharingOperationMetersQueryType,
           { limit: number },
         ];
-        expect(lastCall[1].limit).toBe(9999);
+        expect(lastCall[1]).toBe(SharingOperationMetersQueryType.NOW);
+        expect(lastCall[2].limit).toBe(9999);
         allMeters.forEach((m) => expect(component.selectedMeters.has(m.EAN)).toBe(true));
       });
     });

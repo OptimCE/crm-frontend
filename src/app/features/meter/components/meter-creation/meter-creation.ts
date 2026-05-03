@@ -27,6 +27,7 @@ import {
   TarifGroup,
 } from '../../../../shared/types/meter.types';
 import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { toLocalDateString } from '../../../../shared/utils/date.utils';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { InputText } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
@@ -432,7 +433,7 @@ export class MeterCreation implements OnInit {
       amperage: formValue.amperage,
       rate: formValue.rate.id,
       client_type: formValue.clientType.id,
-      start_date: formValue.dateStart,
+      start_date: toLocalDateString(formValue.dateStart),
       injection_status: formValue.injectionStatus.id,
       production_chain: formValue.productionChain.id,
       total_generating_capacity: formValue.totalGeneratingCapacity,

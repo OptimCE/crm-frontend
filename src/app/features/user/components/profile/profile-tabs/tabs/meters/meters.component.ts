@@ -1,5 +1,6 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -39,6 +40,7 @@ export class MetersComponent {
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   readonly metersPartialList = signal<MePartialMeterDTO[]>([]);
 
@@ -174,7 +176,7 @@ export class MetersComponent {
   }
 
   onRowClick(meter: MePartialMeterDTO): void {
-    console.log('Row clicked:', meter.EAN);
+    void this.router.navigate(['/users/me/meters', meter.EAN]);
   }
 
   protected readonly MeterDataStatus = MeterDataStatus;

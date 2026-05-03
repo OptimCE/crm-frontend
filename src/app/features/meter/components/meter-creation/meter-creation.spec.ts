@@ -299,6 +299,9 @@ describe('MeterCreation', () => {
       expect(dto.address.city).toBe('Brussels');
       expect(dto.initial_data.status).toBe(MeterDataStatus.INACTIVE);
       expect(dto.initial_data.member_id).toBe(1);
+      // Calendar dates must travel as YYYY-MM-DD using the user's local components,
+      // not as a UTC-shifted Date — guards against the timezone off-by-one bug.
+      expect(dto.initial_data.start_date).toBe('2026-04-01');
     });
 
     it('should close dialog on successful response', () => {

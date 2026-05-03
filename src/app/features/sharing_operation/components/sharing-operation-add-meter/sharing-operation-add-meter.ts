@@ -19,6 +19,7 @@ import { MeterService } from '../../../../shared/services/meter.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { AddMeterToSharingOperationDTO } from '../../../../shared/dtos/sharing_operation.dtos';
+import { toLocalDateString } from '../../../../shared/utils/date.utils';
 
 interface SharingOperationAddMeterDialogData {
   id: number;
@@ -217,7 +218,7 @@ export class SharingOperationAddMeter implements OnInit {
       return;
     }
     const metersToAdd: AddMeterToSharingOperationDTO = {
-      date: date,
+      date: toLocalDateString(date),
       ean_list: this.selectedMeters().map((meter) => meter.EAN),
       id_sharing: this.id,
     };

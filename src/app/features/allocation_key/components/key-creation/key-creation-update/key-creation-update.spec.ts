@@ -1181,7 +1181,7 @@ describe('KeyCreationUpdate', () => {
 
       component.onCellValueChanged(event);
 
-      expect(data.va_percentage).toBe('60%');
+      expect(data.va_percentage).toBe('60');
     });
 
     it('should set va_percentage to empty string if non-numeric', () => {
@@ -1200,6 +1200,45 @@ describe('KeyCreationUpdate', () => {
       component.onCellValueChanged(event);
 
       expect(data.va_percentage).toBe('');
+    });
+
+    it('should leave iteration energy unchanged when va_percentage is non-numeric', () => {
+      const data: KeyTableRow = {
+        number: 1,
+        name: 'A',
+        vp_percentage: '50%',
+        va_percentage: 'abc',
+      };
+      const event = {
+        colDef: { field: 'va_percentage' },
+        data,
+        node: { rowIndex: 0 },
+      } as unknown as NewValueParams<KeyTableRow, string>;
+
+      component.onCellValueChanged(event);
+
+      expect(component.key.iterations[0].energy_allocated_percentage).toBeCloseTo(0.5);
+    });
+
+    it('should propagate va_percentage to all rows of the same iteration', () => {
+      const data: KeyTableRow = { number: 1, name: 'B', vp_percentage: '50%', va_percentage: '70' };
+      const event = {
+        colDef: { field: 'va_percentage' },
+        data,
+        node: { rowIndex: 1 },
+      } as unknown as NewValueParams<KeyTableRow, string>;
+
+      component.onCellValueChanged(event);
+
+      const iterationOneRows = component.rowData().filter((r) => r.number === 1);
+      const iterationTwoRows = component.rowData().filter((r) => r.number === 2);
+      expect(iterationOneRows.length).toBeGreaterThan(1);
+      for (const row of iterationOneRows) {
+        expect(row.va_percentage).toBe('70%');
+      }
+      for (const row of iterationTwoRows) {
+        expect(row.va_percentage).toBe('50%');
+      }
     });
 
     it('should parse vp_percentage and update consumer energy', () => {

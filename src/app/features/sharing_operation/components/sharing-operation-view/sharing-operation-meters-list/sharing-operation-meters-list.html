@@ -76,6 +76,56 @@
       </p-select>
     </div>
 
+    <!-- PAST tab: range-overlap date filter -->
+    @if (type() === QueryType.PAST) {
+      <div>
+        <span class="field-label">{{
+          'SHARING_OPERATION.VIEW.METER.FILTER_PAST_FROM_LABEL' | translate
+        }}</span>
+        <p-date-picker
+          [ngModel]="pastStartDate()"
+          (ngModelChange)="pastStartDate.set($event); applyFilters()"
+          [showIcon]="true"
+          [showButtonBar]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          data-testid="op-meters-list__datepicker--past-from"
+        ></p-date-picker>
+      </div>
+      <div>
+        <span class="field-label">{{
+          'SHARING_OPERATION.VIEW.METER.FILTER_PAST_TO_LABEL' | translate
+        }}</span>
+        <p-date-picker
+          [ngModel]="pastEndDate()"
+          (ngModelChange)="pastEndDate.set($event); applyFilters()"
+          [showIcon]="true"
+          [showButtonBar]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          data-testid="op-meters-list__datepicker--past-to"
+        ></p-date-picker>
+      </div>
+    }
+
+    <!-- FUTURE tab: snapshot date -->
+    @if (type() === QueryType.FUTURE) {
+      <div>
+        <span class="field-label">{{
+          'SHARING_OPERATION.VIEW.METER.FILTER_FUTURE_AT_LABEL' | translate
+        }}</span>
+        <p-date-picker
+          [ngModel]="futureAt()"
+          (ngModelChange)="futureAt.set($event); applyFilters()"
+          [showIcon]="true"
+          [showButtonBar]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          data-testid="op-meters-list__datepicker--future-at"
+        ></p-date-picker>
+      </div>
+    }
+
     <!-- Clear filters -->
     <div class="flex items-end">
       <p-button
@@ -211,6 +261,18 @@
             size="small"
             [attr.data-testid]="'op-meters-list__btn--delete--' + rowIndex"
           />
+          @if (isFutureRow(meter)) {
+            <p-button
+              pRipple
+              label="{{ 'SHARING_OPERATION.VIEW.METER.HARD_DELETE_BUTTON_LABEL' | translate }}"
+              severity="danger"
+              [outlined]="true"
+              (onClick)="hardDeleteMeter($event, meter)"
+              icon="pi pi-trash"
+              size="small"
+              [attr.data-testid]="'op-meters-list__btn--hard-delete--' + rowIndex"
+            />
+          }
         </div>
       </td>
     </tr>
@@ -319,6 +381,18 @@
               size="small"
               [attr.data-testid]="'op-meters-list__btn--card-delete--' + rowIndex"
             />
+            @if (isFutureRow(meter)) {
+              <p-button
+                pRipple
+                label="{{ 'SHARING_OPERATION.VIEW.METER.HARD_DELETE_BUTTON_LABEL' | translate }}"
+                severity="danger"
+                [outlined]="true"
+                (onClick)="hardDeleteMeter($event, meter)"
+                icon="pi pi-trash"
+                size="small"
+                [attr.data-testid]="'op-meters-list__btn--card-hard-delete--' + rowIndex"
+              />
+            }
           </div>
         </div>
       </td>

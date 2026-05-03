@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -46,6 +47,7 @@ describe('RepresentationsComponent', () => {
 
   let meServiceSpy: { getMembers: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
+  let routerSpy: { navigate: ReturnType<typeof vi.fn> };
 
   async function createComponent(): Promise<void> {
     fixture = TestBed.createComponent(RepresentationsComponent);
@@ -58,10 +60,14 @@ describe('RepresentationsComponent', () => {
       getMembers: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
     };
     errorHandlerSpy = { handleError: vi.fn() };
+    routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
 
     await TestBed.configureTestingModule({
       imports: [RepresentationsComponent, TranslateModule.forRoot()],
-      providers: [{ provide: MeService, useValue: meServiceSpy }],
+      providers: [
+        { provide: MeService, useValue: meServiceSpy },
+        { provide: Router, useValue: routerSpy },
+      ],
     })
       .overrideComponent(RepresentationsComponent, {
         remove: {
@@ -459,14 +465,13 @@ describe('RepresentationsComponent', () => {
   // ── 8. onRowClick ───────────────────────────────────────────────
 
   describe('onRowClick', () => {
-    it('should log member id to console', async () => {
+    it('should navigate to the read-only member view', async () => {
       await createComponent();
-      const consoleSpy = vi.spyOn(console, 'log');
       const member = buildMember({ id: 42 });
 
       component.onRowClick(member);
 
-      expect(consoleSpy).toHaveBeenCalledWith('Row clicked:', 42);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/users/me/members', 42]);
     });
   });
 });

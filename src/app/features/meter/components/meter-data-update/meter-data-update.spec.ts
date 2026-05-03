@@ -44,7 +44,7 @@ function buildMeterData(overrides: Partial<MetersDataDTO> = {}): MetersDataDTO {
     amperage: 25,
     rate: MeterRate.SIMPLE,
     client_type: ClientType.RESIDENTIAL,
-    start_date: new Date('2024-01-01'),
+    start_date: '2024-01-01',
     injection_status: InjectionStatus.NONE,
     production_chain: ProductionChain.PHOTOVOLTAIC,
     totalGenerating_capacity: 5,
@@ -248,11 +248,16 @@ describe('MeterDataUpdate', () => {
 
     it('should call patchMeterData and close dialog on success', () => {
       initAndEmitMembers();
-      component.metersForm.patchValue({ dateStart: new Date('2024-01-01') });
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
 
       component.onSubmit();
 
       expect(meterServiceSpy.patchMeterData).toHaveBeenCalled();
+      // Calendar date is sent as YYYY-MM-DD built from local Date components,
+      // so it survives any timezone — guards the off-by-one bug.
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ start_date: '2024-01-01' }),
+      );
       expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
     });
 

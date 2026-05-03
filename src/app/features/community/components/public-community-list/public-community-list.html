@@ -77,13 +77,13 @@
                     <span class="field-label">{{
                       'COMMUNITY.LIST.HEADERS.CREATED_AT' | translate
                     }}</span>
-                    <span class="field-value">{{ detail.created_at | date: 'short' }}</span>
+                    <span class="field-value">{{ detail.created_at | date: 'dd/MM/yyyy' }}</span>
                   </div>
                   <div>
                     <span class="field-label">{{
                       'COMMUNITY.LIST.HEADERS.UPDATED_AT' | translate
                     }}</span>
-                    <span class="field-value">{{ detail.updated_at | date: 'short' }}</span>
+                    <span class="field-value">{{ detail.updated_at | date: 'dd/MM/yyyy' }}</span>
                   </div>
                 </div>
               } @else {

@@ -503,7 +503,7 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     const formValue = this.formGroup.getRawValue() as KeyForm;
     this.key.name = formValue.name;
     this.key.description = formValue.description;
-    if (this.keyInput) {
+    if (this.keyInput && this.keyInput.id !== -1) {
       this.keyService.updateKey(this.key).subscribe({
         next: (response) => {
           if (response) {
@@ -716,19 +716,13 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     );
     if (iterationIndex !== -1) {
       if (colId === 'va_percentage' && data.va_percentage !== undefined) {
-        this.key.iterations[iterationIndex].energy_allocated_percentage =
-          parseFloat(data.va_percentage) / 100;
         if (data.va_percentage.includes('%')) {
           data.va_percentage = data.va_percentage.replace('%', '');
         }
         if (data.va_percentage.match('^\\d+(\\.\\d+)*$')) {
-          //this.rowData[event.node.rowIndex].va_percentage = data.va_percentage + "%";
-          data.va_percentage = data.va_percentage + '%';
-          for (const rData of this.rowData()) {
-            if (rData.number === iterationNumber) {
-              rData.va_percentage = data.va_percentage;
-            }
-          }
+          this.key.iterations[iterationIndex].energy_allocated_percentage =
+            parseFloat(data.va_percentage) / 100;
+          this.rowData.set(this.formatData());
           this.refreshGrid();
         } else {
           data.va_percentage = '';

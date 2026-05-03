@@ -28,6 +28,12 @@ export interface SharingOperationMetersQuery extends PaginationQuery {
   meter_number?: string;
   status?: MeterDataStatus;
   holder_id?: number;
+  /** PAST tab range-overlap filter: lower bound (`YYYY-MM-DD`). */
+  start_date_from?: string;
+  /** PAST tab range-overlap filter: upper bound (`YYYY-MM-DD`). */
+  end_date_to?: string;
+  /** FUTURE tab snapshot date (`YYYY-MM-DD`). Defaults to tomorrow on the backend. */
+  future_at?: string;
   type: SharingOperationMetersQueryType;
 }
 
@@ -101,7 +107,8 @@ export interface AddKeyToSharingOperationDTO {
  */
 export interface AddMeterToSharingOperationDTO {
   id_sharing: number;
-  date: Date;
+  /** Calendar date `YYYY-MM-DD` — no time/zone. */
+  date: string;
   ean_list: string[];
 }
 
@@ -130,16 +137,25 @@ export interface PatchMeterToSharingOperationDTO {
   id_meter: string;
   id_sharing: number;
   status: MeterDataStatus;
-  date: Date;
+  /** Calendar date `YYYY-MM-DD` — no time/zone. */
+  date: string;
 }
 
 /**
  * DTO for removing a meter from a sharing operation.
+ *
+ * Two modes:
+ *  - default (`hard_delete` falsy): close the meter's participation by appending an
+ *    INACTIVE record starting at `date` (required).
+ *  - `hard_delete = true`: physically delete a not-yet-started future record. `date`
+ *    is ignored and the backend rejects the call if the meter has already started.
  */
 export interface RemoveMeterFromSharingOperationDTO {
   id_meter: string;
   id_sharing: number;
-  date: Date;
+  /** Calendar date `YYYY-MM-DD` — required unless `hard_delete` is true. */
+  date?: string;
+  hard_delete?: boolean;
 }
 
 /**

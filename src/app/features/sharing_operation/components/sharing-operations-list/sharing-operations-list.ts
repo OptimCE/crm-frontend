@@ -137,6 +137,7 @@ export class SharingOperationsList {
     });
     if (this.ref) {
       this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+        console.log('RESULT : ', result);
         if (result) {
           this.snackbarNotification.openSnackBar(
             this.translate.instant(
@@ -151,6 +152,8 @@ export class SharingOperationsList {
   }
 
   loadSharingOperation(): void {
+    this.sharingOperationList.set([]);
+    this.paginationInfo.set({ page: 1, limit: 10, total: 0, total_pages: 0 });
     this.sharingOperationsService
       .getSharingOperationList(this.filter())
       .pipe(takeUntilDestroyed(this.destroyRef))

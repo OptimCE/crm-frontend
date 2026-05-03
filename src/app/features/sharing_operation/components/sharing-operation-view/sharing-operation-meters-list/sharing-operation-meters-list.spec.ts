@@ -127,14 +127,11 @@ describe('SharingOperationMetersList', () => {
 
   // ── ngOnInit ──────────────────────────────────────────────────────
   describe('ngOnInit', () => {
-    it('should set filter type from input', () => {
-      expect(component['filter']().type).toBe(SharingOperationMetersQueryType.NOW);
-    });
-
-    it('should load meters on init', () => {
+    it('should load meters on init with type passed as a separate argument', () => {
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalledWith(
         1,
-        expect.objectContaining({ page: 1, limit: 10, type: SharingOperationMetersQueryType.NOW }),
+        SharingOperationMetersQueryType.NOW,
+        expect.objectContaining({ page: 1, limit: 10 }),
       );
     });
 
@@ -180,6 +177,7 @@ describe('SharingOperationMetersList', () => {
       component.applyFilters();
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalledWith(
         1,
+        SharingOperationMetersQueryType.NOW,
         expect.objectContaining({ EAN: 'EAN123', page: 1 }),
       );
     });
@@ -190,6 +188,7 @@ describe('SharingOperationMetersList', () => {
       component.applyFilters();
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalledWith(
         1,
+        SharingOperationMetersQueryType.NOW,
         expect.objectContaining({ meter_number: 'MTR-X' }),
       );
     });
@@ -200,6 +199,7 @@ describe('SharingOperationMetersList', () => {
       component.applyFilters();
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalledWith(
         1,
+        SharingOperationMetersQueryType.NOW,
         expect.objectContaining({ street: 'Rue' }),
       );
     });
@@ -210,6 +210,7 @@ describe('SharingOperationMetersList', () => {
       component.applyFilters();
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalledWith(
         1,
+        SharingOperationMetersQueryType.NOW,
         expect.objectContaining({ city: 'Liège' }),
       );
     });
@@ -219,6 +220,7 @@ describe('SharingOperationMetersList', () => {
       component.applyFilters();
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalledWith(
         1,
+        SharingOperationMetersQueryType.NOW,
         expect.objectContaining({ status: MeterDataStatus.ACTIVE }),
       );
     });
@@ -226,8 +228,10 @@ describe('SharingOperationMetersList', () => {
     it('should not include search params when searchText is empty', () => {
       component['searchText'].set('');
       component.applyFilters();
-      const query = sharingServiceSpy.getSharingOperationMetersList.mock
-        .calls[0][1] as SharingOperationMetersQuery;
+      const query = sharingServiceSpy.getSharingOperationMetersList.mock.calls[0][2] as Omit<
+        SharingOperationMetersQuery,
+        'type'
+      >;
       expect(query.EAN).toBeUndefined();
       expect(query.meter_number).toBeUndefined();
       expect(query.street).toBeUndefined();
@@ -238,11 +242,12 @@ describe('SharingOperationMetersList', () => {
       component['filter'].set({
         page: 5,
         limit: 10,
-        type: SharingOperationMetersQueryType.NOW,
       });
       component.applyFilters();
-      const query = sharingServiceSpy.getSharingOperationMetersList.mock
-        .calls[0][1] as SharingOperationMetersQuery;
+      const query = sharingServiceSpy.getSharingOperationMetersList.mock.calls[0][2] as Omit<
+        SharingOperationMetersQuery,
+        'type'
+      >;
       expect(query.page).toBe(1);
     });
   });
@@ -295,24 +300,30 @@ describe('SharingOperationMetersList', () => {
     it('should calculate page from event and reload', () => {
       sharingServiceSpy.getSharingOperationMetersList.mockClear();
       component['lazyLoadMeter']({ first: 20, rows: 10 } as never);
-      const query = sharingServiceSpy.getSharingOperationMetersList.mock
-        .calls[0][1] as SharingOperationMetersQuery;
+      const query = sharingServiceSpy.getSharingOperationMetersList.mock.calls[0][2] as Omit<
+        SharingOperationMetersQuery,
+        'type'
+      >;
       expect(query.page).toBe(3);
     });
 
     it('should default page to 1 when rows is 0', () => {
       sharingServiceSpy.getSharingOperationMetersList.mockClear();
       component['lazyLoadMeter']({ first: 0, rows: 0 } as never);
-      const query = sharingServiceSpy.getSharingOperationMetersList.mock
-        .calls[0][1] as SharingOperationMetersQuery;
+      const query = sharingServiceSpy.getSharingOperationMetersList.mock.calls[0][2] as Omit<
+        SharingOperationMetersQuery,
+        'type'
+      >;
       expect(query.page).toBe(1);
     });
 
     it('should clamp page to at least 1', () => {
       sharingServiceSpy.getSharingOperationMetersList.mockClear();
       component['lazyLoadMeter']({ first: undefined, rows: undefined } as never);
-      const query = sharingServiceSpy.getSharingOperationMetersList.mock
-        .calls[0][1] as SharingOperationMetersQuery;
+      const query = sharingServiceSpy.getSharingOperationMetersList.mock.calls[0][2] as Omit<
+        SharingOperationMetersQuery,
+        'type'
+      >;
       expect(query.page).toBeGreaterThanOrEqual(1);
     });
   });
@@ -322,8 +333,10 @@ describe('SharingOperationMetersList', () => {
     it('should update filter page and reload', () => {
       sharingServiceSpy.getSharingOperationMetersList.mockClear();
       component['pageChange']({ first: 10, rows: 10 } as never);
-      const query = sharingServiceSpy.getSharingOperationMetersList.mock
-        .calls[0][1] as SharingOperationMetersQuery;
+      const query = sharingServiceSpy.getSharingOperationMetersList.mock.calls[0][2] as Omit<
+        SharingOperationMetersQuery,
+        'type'
+      >;
       expect(query.page).toBe(2);
     });
   });
@@ -348,7 +361,6 @@ describe('SharingOperationMetersList', () => {
       expect(component['filter']()).toEqual({
         page: 1,
         limit: 10,
-        type: SharingOperationMetersQueryType.NOW,
       });
       expect(sharingServiceSpy.getSharingOperationMetersList).toHaveBeenCalled();
     });
@@ -457,12 +469,12 @@ describe('SharingOperationMetersList', () => {
       expect(component['dateStartMeter']()).toBeNull();
     });
 
-    it('should use dateStartMeter value if set', () => {
-      const date = new Date('2026-06-15');
+    it('should use dateStartMeter value if set, serialized as YYYY-MM-DD local string', () => {
+      const date = new Date(2026, 5, 15); // June 15 2026 local time
       component['dateStartMeter'].set(date);
       component.approveMeter(meter);
       expect(sharingServiceSpy.patchMeterStatus).toHaveBeenCalledWith(
-        expect.objectContaining({ date }),
+        expect.objectContaining({ date: '2026-06-15' }),
       );
     });
 

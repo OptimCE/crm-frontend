@@ -55,15 +55,13 @@ export class SelectMeterNewKeyDialog implements OnInit {
   readonly loadingFuture = signal(true);
   readonly paginationNow = signal<Pagination>({ total: 0, total_pages: 0, page: 1, limit: 10 });
   readonly paginationFuture = signal<Pagination>({ total: 0, total_pages: 0, page: 1, limit: 10 });
-  readonly filterNow = signal<SharingOperationMetersQuery>({
+  readonly filterNow = signal<Omit<SharingOperationMetersQuery, 'type'>>({
     page: 1,
     limit: 10,
-    type: SharingOperationMetersQueryType.NOW,
   });
-  readonly filterFuture = signal<SharingOperationMetersQuery>({
+  readonly filterFuture = signal<Omit<SharingOperationMetersQuery, 'type'>>({
     page: 1,
     limit: 10,
-    type: SharingOperationMetersQueryType.FUTURE,
   });
 
   selectedMeters = new Map<string, SharingOperationMetersQueryType>();
@@ -84,14 +82,16 @@ export class SelectMeterNewKeyDialog implements OnInit {
   getPagination(type: SharingOperationMetersQueryType): WritableSignal<Pagination> {
     return type === this.QueryType.NOW ? this.paginationNow : this.paginationFuture;
   }
-  getFilter(type: SharingOperationMetersQueryType): WritableSignal<SharingOperationMetersQuery> {
+  getFilter(
+    type: SharingOperationMetersQueryType,
+  ): WritableSignal<Omit<SharingOperationMetersQuery, 'type'>> {
     return type === this.QueryType.NOW ? this.filterNow : this.filterFuture;
   }
 
   private loadMeters(type: SharingOperationMetersQueryType): void {
     this.getLoading(type).set(true);
     this.sharingOperationService
-      .getSharingOperationMetersList(this.idSharing, this.getFilter(type)())
+      .getSharingOperationMetersList(this.idSharing, type, this.getFilter(type)())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -144,9 +144,13 @@ export class SelectMeterNewKeyDialog implements OnInit {
 
   // Selects ALL records (not just current page) — triggers a full load
   selectAllInTab(type: SharingOperationMetersQueryType): void {
-    const allFilter = { ...this.getFilter(type)(), page: 1, limit: 9999 };
+    const allFilter: Omit<SharingOperationMetersQuery, 'type'> = {
+      ...this.getFilter(type)(),
+      page: 1,
+      limit: 9999,
+    };
     this.sharingOperationService
-      .getSharingOperationMetersList(this.idSharing, allFilter)
+      .getSharingOperationMetersList(this.idSharing, type, allFilter)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         (response.data as PartialMeterDTO[]).forEach((m) => this.selectedMeters.set(m.EAN, type));

@@ -1,5 +1,6 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { of, throwError } from 'rxjs';
@@ -62,6 +63,9 @@ describe('MetersComponent', () => {
   let errorHandlerSpy: {
     handleError: ReturnType<typeof vi.fn>;
   };
+  let routerSpy: {
+    navigate: ReturnType<typeof vi.fn>;
+  };
 
   async function createComponent(): Promise<void> {
     fixture = TestBed.createComponent(MetersComponent);
@@ -75,12 +79,14 @@ describe('MetersComponent', () => {
     };
     snackbarSpy = { openSnackBar: vi.fn() };
     errorHandlerSpy = { handleError: vi.fn() };
+    routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
 
     await TestBed.configureTestingModule({
       imports: [MetersComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MeService, useValue: meServiceSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
+        { provide: Router, useValue: routerSpy },
       ],
     })
       .overrideComponent(MetersComponent, {
@@ -377,12 +383,10 @@ describe('MetersComponent', () => {
       await createComponent();
     });
 
-    it('should log the meter EAN', () => {
-      const consoleSpy = vi.spyOn(console, 'log');
+    it('should navigate to the read-only meter view', () => {
       const meter = buildMeters()[0];
       component.onRowClick(meter);
-      expect(consoleSpy).toHaveBeenCalledWith('Row clicked:', meter.EAN);
-      consoleSpy.mockRestore();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/users/me/meters', meter.EAN]);
     });
   });
 

@@ -28,6 +28,7 @@ import { SharingOperationMeterEventService } from '../sharing-operation.meter.su
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { toLocalDateString } from '../../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-sharing-operation-meters-list',
@@ -65,10 +66,9 @@ export class SharingOperationMetersList implements OnInit {
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
   readonly loading = signal<boolean>(true);
   readonly pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
-  readonly filter = signal<SharingOperationMetersQuery>({
+  readonly filter = signal<Omit<SharingOperationMetersQuery, 'type'>>({
     page: 1,
     limit: 10,
-    type: SharingOperationMetersQueryType.NOW,
   });
   readonly currentPageReportTemplate = signal<string>('');
   readonly textChangeStatusMeter = signal<string>('');
@@ -79,7 +79,21 @@ export class SharingOperationMetersList implements OnInit {
   readonly searchField = signal<string>('EAN');
   readonly searchText = signal<string>('');
   readonly statusFilter = signal<MeterDataStatus | null>(null);
-  readonly hasActiveFilters = computed(() => !!this.searchText() || this.statusFilter() !== null);
+  // PAST tab range filter (start_date_from .. end_date_to).
+  readonly pastStartDate = signal<Date | null>(null);
+  readonly pastEndDate = signal<Date | null>(null);
+  // FUTURE tab snapshot date.
+  readonly futureAt = signal<Date | null>(null);
+  readonly hasActiveFilters = computed(
+    () =>
+      !!this.searchText() ||
+      this.statusFilter() !== null ||
+      this.pastStartDate() !== null ||
+      this.pastEndDate() !== null ||
+      this.futureAt() !== null,
+  );
+  readonly today = computed(() => toLocalDateString(new Date()));
+  readonly QueryType = SharingOperationMetersQueryType;
   readonly firstRow = computed(() => (this.pagination().page - 1) * this.pagination().limit);
   readonly showPaginator = computed(() => this.pagination().total_pages > 1);
 
@@ -117,11 +131,6 @@ export class SharingOperationMetersList implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.filter.set({
-      page: 1,
-      limit: 10,
-      type: this.type(),
-    });
     this.meterEventService.meterAdded$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((): void => this.loadMetersSharingOperation());
@@ -130,7 +139,7 @@ export class SharingOperationMetersList implements OnInit {
   private loadMetersSharingOperation(): void {
     this.loading.set(true);
     this.sharingOperationService
-      .getSharingOperationMetersList(this.id_sharing(), this.filter())
+      .getSharingOperationMetersList(this.id_sharing(), this.type(), this.filter())
       .subscribe({
         next: (response) => {
           if (response) {
@@ -148,10 +157,9 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   applyFilters(): void {
-    const current: SharingOperationMetersQuery = {
+    const current: Omit<SharingOperationMetersQuery, 'type'> = {
       page: 1,
       limit: this.filter().limit,
-      type: this.type(),
     };
     const text = this.searchText();
     if (text) {
@@ -163,6 +171,18 @@ export class SharingOperationMetersList implements OnInit {
     }
     const status = this.statusFilter();
     if (status !== null) current.status = status;
+    // PAST tab range filter — only meaningful when type === PAST.
+    if (this.type() === SharingOperationMetersQueryType.PAST) {
+      const from = this.pastStartDate();
+      const to = this.pastEndDate();
+      if (from) current.start_date_from = toLocalDateString(from);
+      if (to) current.end_date_to = toLocalDateString(to);
+    }
+    // FUTURE tab snapshot date — only meaningful when type === FUTURE.
+    if (this.type() === SharingOperationMetersQueryType.FUTURE) {
+      const at = this.futureAt();
+      if (at) current.future_at = toLocalDateString(at);
+    }
     this.filter.set(current);
     this.loadMetersSharingOperation();
   }
@@ -182,7 +202,7 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   protected lazyLoadMeter($event: TableLazyLoadEvent): void {
-    const current = { ...this.filter() };
+    const current: Omit<SharingOperationMetersQuery, 'type'> = { ...this.filter() };
     if ($event.first !== undefined && $event.rows !== undefined) {
       current.page = $event.rows ? $event.first / $event.rows + 1 : 1;
     }
@@ -205,7 +225,7 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   protected pageChange($event: TablePageEvent): void {
-    const current: SharingOperationMetersQuery = { ...this.filter() };
+    const current: Omit<SharingOperationMetersQuery, 'type'> = { ...this.filter() };
     if ($event.rows) {
       current.page = ($event.first ?? 0) / $event.rows + 1;
     }
@@ -218,7 +238,10 @@ export class SharingOperationMetersList implements OnInit {
     this.searchText.set('');
     this.searchField.set('EAN');
     this.statusFilter.set(null);
-    this.filter.set({ page: 1, limit: 10, type: this.type() });
+    this.pastStartDate.set(null);
+    this.pastEndDate.set(null);
+    this.futureAt.set(null);
+    this.filter.set({ page: 1, limit: 10 });
     this.loadMetersSharingOperation();
   }
 
@@ -261,10 +284,14 @@ export class SharingOperationMetersList implements OnInit {
     });
   }
 
+  private resolvePickedDate(value: Date | string | null): string {
+    if (!value) return toLocalDateString(new Date());
+    return toLocalDateString(value instanceof Date ? value : new Date(value));
+  }
+
   approveMeter(meter: PartialMeterDTO): void {
-    const dateVal = this.dateStartMeter();
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: dateVal ? new Date(dateVal) : new Date(),
+      date: this.resolvePickedDate(this.dateStartMeter()),
       id_meter: meter.EAN,
       id_sharing: this.id_sharing(),
       status: MeterDataStatus.ACTIVE,
@@ -288,9 +315,8 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   removeMeter(meter: PartialMeterDTO): void {
-    const dateVal = this.dateStartMeter();
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: dateVal ? new Date(dateVal) : new Date(),
+      date: this.resolvePickedDate(this.dateStartMeter()),
       id_meter: meter.EAN,
       id_sharing: this.id_sharing(),
       status: MeterDataStatus.INACTIVE,
@@ -313,9 +339,8 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   putMeterToWaiting(meter: PartialMeterDTO): void {
-    const dateVal = this.dateStartMeter();
     const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: dateVal ? new Date(dateVal) : new Date(),
+      date: this.resolvePickedDate(this.dateStartMeter()),
       id_meter: meter.EAN,
       id_sharing: this.id_sharing(),
       status: MeterDataStatus.WAITING_GRD,
@@ -335,6 +360,50 @@ export class SharingOperationMetersList implements OnInit {
       });
 
     this.dateStartMeter.set(null);
+  }
+
+  /**
+   * True when the row's MeterData has not yet started — only such rows can be hard-deleted.
+   */
+  isFutureRow(meter: PartialMeterDTO): boolean {
+    return !!meter.start_date && meter.start_date > this.today();
+  }
+
+  /**
+   * Hard-delete a never-started future row: removes the MeterData record and reopens the
+   * predecessor record's end_date if it was closed by this row's creation.
+   */
+  hardDeleteMeter(event: Event, meter: PartialMeterDTO): void {
+    event.stopPropagation();
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      acceptIcon: 'pi pi-check',
+      rejectIcon: 'pi pi-times',
+      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
+      message: this.translate.instant(
+        'SHARING_OPERATION.VIEW.METER.HARD_DELETE_CONFIRM_LABEL',
+      ) as string,
+      accept: () => {
+        this.sharingOperationService
+          .deleteMeterFromSharingOperation(this.id_sharing(), {
+            id_meter: meter.EAN,
+            id_sharing: this.id_sharing(),
+            hard_delete: true,
+          })
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (response) => {
+              if (response) {
+                this.loadMetersSharingOperation();
+              }
+            },
+            error: (error: { data?: unknown }) => {
+              this.errorHandler.handleError(error.data ?? null);
+            },
+          });
+      },
+    });
   }
 
   onRowClick(meter: PartialMeterDTO): void {

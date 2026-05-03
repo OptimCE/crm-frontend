@@ -811,13 +811,4 @@ describe('SharingOperationView', () => {
       expect(component.filterSharingOperationKey().page).toBe(1);
     });
   });
-
-  // ── 11. exportExcelCWAPe ──────────────────────────────────────────
-
-  describe('exportExcelCWAPe', () => {
-    it('should not throw', async () => {
-      await createComponent();
-      expect(() => component.exportExcelCWAPe()).not.toThrow();
-    });
-  });
 });

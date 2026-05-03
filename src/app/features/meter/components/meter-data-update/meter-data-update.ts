@@ -19,6 +19,7 @@ import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import { MetersDataDTO, PatchMeterDataDTO } from '../../../../shared/dtos/meter.dtos';
+import { toLocalDateString } from '../../../../shared/utils/date.utils';
 import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
 import { MemberService } from '../../../../shared/services/member.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -354,8 +355,9 @@ export class MeterDataUpdate implements OnInit {
       rate: formValue.rate.id,
       sampling_power: formValue.samplingPower,
       sharing_operation_id: undefined,
-      start_date:
+      start_date: toLocalDateString(
         formValue.dateStart instanceof Date ? formValue.dateStart : new Date(formValue.dateStart),
+      ),
       status: formValue.status,
       total_generating_capacity: formValue.totalGeneratingCapacity,
     };
