@@ -9,10 +9,16 @@ import {
   MyCommunityDTO,
   PatchRoleUserDTO,
   PublicCommunityDTO,
+  UpdateCommunityDTO,
+  UploadLogoResponse,
   UsersCommunityDTO,
 } from '../dtos/community.dtos';
 import { Observable, tap } from 'rxjs';
 import { ServiceBase } from './service.base';
+import {
+  SharingOperationPartialDTO,
+  SharingOperationPartialQuery,
+} from '../dtos/sharing_operation.dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +58,17 @@ export class CommunityService extends ServiceBase {
     );
   }
 
+  getCommunityPublicSharingOperations(
+    id: number,
+    query: SharingOperationPartialQuery,
+  ): Observable<ApiResponsePaginated<SharingOperationPartialDTO[] | string>> {
+    return this.cachedGet<ApiResponsePaginated<SharingOperationPartialDTO[] | string>>(
+      `community-public-sharing-ops:${id}:${JSON.stringify(query)}`,
+      this.apiAddress + `/${id}/sharing_operations/public`,
+      query,
+    );
+  }
+
   getUsers(
     query: CommunityUsersQueryDTO,
   ): Observable<ApiResponsePaginated<UsersCommunityDTO[] | string>> {
@@ -79,8 +96,28 @@ export class CommunityService extends ServiceBase {
     );
   }
 
-  updateCommunity(updated_community: CreateCommunityDTO): Observable<ApiResponse<string>> {
+  updateCommunity(updated_community: UpdateCommunityDTO): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>(this.apiAddress + '/', updated_community).pipe(
+      tap(() => {
+        this.cache.invalidate('communities');
+      }),
+    );
+  }
+
+  uploadLogo(file: File): Observable<ApiResponse<UploadLogoResponse>> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http
+      .post<ApiResponse<UploadLogoResponse>>(this.apiAddress + '/logo', formData)
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('communities');
+        }),
+      );
+  }
+
+  deleteLogo(): Observable<ApiResponse<string>> {
+    return this.http.delete<ApiResponse<string>>(this.apiAddress + '/logo').pipe(
       tap(() => {
         this.cache.invalidate('communities');
       }),

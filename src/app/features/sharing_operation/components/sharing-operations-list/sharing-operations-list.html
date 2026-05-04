@@ -115,6 +115,9 @@
       <tr class="max-lg:hidden">
         <th class="text-base px-3">{{ 'SHARING_OPERATION.LIST.NAME_LABEL' | translate }}</th>
         <th class="text-base px-3">{{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}</th>
+        <th class="text-base px-3">
+          {{ 'SHARING_OPERATION.LIST.MUNICIPALITIES' | translate }}
+        </th>
       </tr>
     </ng-template>
 
@@ -150,6 +153,22 @@
             }
           }
         </td>
+        <td class="text-sm">
+          @if (sharingOp.municipalities && sharingOp.municipalities.length > 0) {
+            <div class="flex flex-wrap gap-1 items-center">
+              @for (m of sharingOp.municipalities.slice(0, 3); track m.nis_code) {
+                <p-tag [value]="m.fr_name" severity="secondary" styleClass="text-xs" />
+              }
+              @if (sharingOp.municipalities.length > 3) {
+                <span class="text-xs text-surface-500">
+                  +{{ sharingOp.municipalities.length - 3 }}
+                </span>
+              }
+            </div>
+          } @else {
+            <span class="text-xs text-surface-400">—</span>
+          }
+        </td>
       </tr>
 
       <!-- Mobile card -->
@@ -158,7 +177,7 @@
         (click)="onRowClick(sharingOp)"
         [attr.data-testid]="'operations-list__card--mobile--' + sharingOp.id"
       >
-        <td colspan="2" class="!p-0 !pb-3">
+        <td colspan="3" class="!p-0 !pb-3">
           <div
             class="bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
           >
@@ -213,6 +232,24 @@
                 }
               }
             </div>
+            <!-- Card body: municipalities -->
+            @if (sharingOp.municipalities && sharingOp.municipalities.length > 0) {
+              <div class="mt-2">
+                <span class="field-label">{{
+                  'SHARING_OPERATION.LIST.MUNICIPALITIES' | translate
+                }}</span>
+                <div class="flex flex-wrap gap-1 mt-1">
+                  @for (m of sharingOp.municipalities.slice(0, 3); track m.nis_code) {
+                    <p-tag [value]="m.fr_name" severity="secondary" styleClass="text-xs" />
+                  }
+                  @if (sharingOp.municipalities.length > 3) {
+                    <span class="text-xs text-surface-500 self-center">
+                      +{{ sharingOp.municipalities.length - 3 }}
+                    </span>
+                  }
+                </div>
+              </div>
+            }
           </div>
         </td>
       </tr>
@@ -220,7 +257,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <div class="py-8 text-center" data-testid="operations-list__empty--message">
             <i class="pi pi-building text-3xl text-surface-300 mb-2"></i>
             <p class="text-surface-400 m-0">

@@ -37,6 +37,7 @@ function buildMeterData(overrides: Partial<MetersDataDTO> = {}): MetersDataDTO {
       id: 5,
       name: 'Test Operation',
       type: 1,
+      municipalities: [],
     },
     ...overrides,
   };
@@ -306,7 +307,7 @@ describe('MeterDataView', () => {
       setInputs(
         fixture,
         buildMeterData({
-          sharing_operation: { id: 42, name: 'My Operation', type: 1 },
+          sharing_operation: { id: 42, name: 'My Operation', type: 1, municipalities: [] },
         }),
       );
       fixture.detectChanges();

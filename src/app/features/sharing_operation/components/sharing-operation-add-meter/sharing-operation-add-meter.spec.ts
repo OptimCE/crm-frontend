@@ -385,7 +385,7 @@ describe('SharingOperationAddMeter', () => {
       component.onValidate();
 
       expect(sharingOperationServiceSpy.addMeterToSharing).toHaveBeenCalledWith({
-        date: date,
+        date: '2026-06-01',
         ean_list: ['EAN001', 'EAN002'],
         id_sharing: 42,
       });

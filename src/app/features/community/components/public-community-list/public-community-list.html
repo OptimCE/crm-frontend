@@ -7,6 +7,43 @@
     class="block mb-4"
   />
 
+  <!-- Municipality filter -->
+  <div class="mb-4">
+    <label
+      for="public-community-list-municipality-filter"
+      class="block text-sm font-medium text-surface-700 mb-1"
+    >
+      {{ 'COMMUNITY.PUBLIC_LIST.MUNICIPALITY_FILTER_LABEL' | translate }}
+    </label>
+    <p-autoComplete
+      inputId="public-community-list-municipality-filter"
+      [ngModel]="selectedMunicipalities()"
+      (ngModelChange)="onMunicipalitiesChange($event)"
+      [suggestions]="municipalitySuggestions()"
+      (completeMethod)="searchMunicipalities($event)"
+      [multiple]="true"
+      [forceSelection]="true"
+      [delay]="250"
+      dataKey="nis_code"
+      styleClass="w-full"
+      appendTo="body"
+      [placeholder]="'COMMUNITY.PUBLIC_LIST.MUNICIPALITY_FILTER_PLACEHOLDER' | translate"
+      data-testid="public-community-list__filter--municipality"
+    >
+      <ng-template let-m pTemplate="item">
+        <div class="flex flex-col">
+          <span class="text-sm">{{ municipalityName(m) }}</span>
+          @if (m.postal_codes && m.postal_codes.length > 0) {
+            <span class="text-xs text-surface-500">{{ m.postal_codes.join(', ') }}</span>
+          }
+        </div>
+      </ng-template>
+      <ng-template let-m pTemplate="selectedItem">
+        <span>{{ municipalityName(m) }}</span>
+      </ng-template>
+    </p-autoComplete>
+  </div>
+
   <!-- Community list -->
   @if (communities().length === 0) {
     <div class="py-8 text-center" data-testid="public-community-list__empty--message">
@@ -53,43 +90,54 @@
               class="p-4 border-t border-primary-100 bg-surface-50"
               [attr.data-testid]="'public-community-list__detail--' + $index"
             >
-              @if (getCommunityDetail(community.id); as detail) {
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <span class="field-label">ID</span>
-                    <span class="field-value">{{ detail.auth_community_id }}</span>
-                  </div>
-                  <div>
-                    <span class="field-label">{{
-                      'COMMUNITY.LIST.HEADERS.MEMBER_COUNT' | translate
-                    }}</span>
-                    <span class="field-value">{{ detail.member_count }}</span>
-                  </div>
-                  @if (detail.description) {
-                    <div class="sm:col-span-2">
-                      <span class="field-label">{{
-                        'COMMUNITY.LIST.HEADERS.DESCRIPTION' | translate
-                      }}</span>
-                      <span class="field-value">{{ detail.description }}</span>
-                    </div>
-                  }
-                  <div>
-                    <span class="field-label">{{
-                      'COMMUNITY.LIST.HEADERS.CREATED_AT' | translate
-                    }}</span>
-                    <span class="field-value">{{ detail.created_at | date: 'dd/MM/yyyy' }}</span>
-                  </div>
-                  <div>
-                    <span class="field-label">{{
-                      'COMMUNITY.LIST.HEADERS.UPDATED_AT' | translate
-                    }}</span>
-                    <span class="field-value">{{ detail.updated_at | date: 'dd/MM/yyyy' }}</span>
-                  </div>
-                </div>
-              } @else {
+              @if (isLoading(community.id)) {
                 <div class="flex items-center justify-center py-4">
                   <i class="pi pi-spinner pi-spin text-primary-400"></i>
                 </div>
+              } @else if (getOperations(community.id); as ops) {
+                @if (ops.length === 0) {
+                  <p class="text-surface-400 text-sm m-0">
+                    {{ 'COMMUNITY.PUBLIC_LIST.NO_OPERATIONS' | translate }}
+                  </p>
+                } @else {
+                  <ul
+                    class="flex flex-col gap-3 list-none p-0 m-0"
+                    [attr.data-testid]="'public-community-list__ops--' + $index"
+                  >
+                    @for (op of ops; track op.id) {
+                      <li
+                        class="bg-surface-0 border border-primary-100 rounded-lg p-3"
+                        [attr.data-testid]="'public-community-list__op--' + op.id"
+                      >
+                        <div class="flex items-center gap-2 mb-2">
+                          <i [class]="typeIcon(op.type) + ' text-primary-500'"></i>
+                          <span class="font-semibold text-sm text-primary-700 flex-1">{{
+                            op.name
+                          }}</span>
+                          <p-tag
+                            [value]="typeLabelKey(op.type) | translate"
+                            severity="info"
+                            styleClass="text-xs"
+                          />
+                        </div>
+                        @if (op.municipalities && op.municipalities.length > 0) {
+                          <div class="flex flex-wrap gap-1">
+                            <span class="text-xs text-surface-500 mr-1">
+                              {{ 'COMMUNITY.PUBLIC_LIST.MUNICIPALITIES' | translate }}:
+                            </span>
+                            @for (m of op.municipalities; track m.nis_code) {
+                              <p-tag
+                                [value]="municipalityName(m)"
+                                severity="secondary"
+                                styleClass="text-xs"
+                              />
+                            }
+                          </div>
+                        }
+                      </li>
+                    }
+                  </ul>
+                }
               }
             </div>
           }

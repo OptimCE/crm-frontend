@@ -1,0 +1,15 @@
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--p-surface-500);
+  margin-bottom: 0.25rem;
+}
+
+.field-value {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--p-surface-800);
+}

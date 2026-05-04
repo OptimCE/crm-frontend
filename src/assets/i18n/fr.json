@@ -17,6 +17,7 @@
     },
     "ERROR_LOADING": "La page ne peut pas être chargée. Veuillez réessayer plus tard",
     "RETRY": "Réessayer",
+    "LOADING": "Chargement…",
     "ERRORS": {
       "EXCEPTION": "Une erreur inattendue est survenue. Veuillez réessayer plus tard",
       "TIMEOUT": "La requête a expiré. Veuillez réessayer",
@@ -28,7 +29,8 @@
       "PARAM_IS_STRING": "Le paramètre doit être une chaîne de caractères",
       "QUERY_IS_STRING": "La valeur de la requête doit être une chaîne",
       "QUERY_IS_NUMERIC": "La valeur de la requête doit être numérique",
-      "QUERY_IS_BOOLEAN": "La valeur de la requête doit être un booléen"
+      "QUERY_IS_BOOLEAN": "La valeur de la requête doit être un booléen",
+      "REQUIRED": "Ce champ est requis"
     }
   },
   "LOGIN": {
@@ -57,6 +59,7 @@
     "COMMUNITIES": "Communautés",
     "MY_COMMUNITIES": "Mes communautés",
     "PUBLIC_COMMUNITIES": "Communautés publiques",
+    "COMMUNITY_INFO": "Infos communauté",
     "COMMUNITY_USERS": "Utilisateurs",
     "USER_GUIDE": "Guide utilisateur",
     "REPORT_BUG": "Signaler un bug",
@@ -66,6 +69,7 @@
     "ERROR_LOGOUT": "Erreur lors de la déconnexion",
     "DELETE": "Supprimer",
     "COPY_TO_CLIPBOARD": "Copier/Coller dans le presse-papier",
+    "COMMUNITY": "Communauté",
     "MANAGEMENT": "Gestion",
     "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
     "RETRY": "Réessayer"
@@ -205,6 +209,32 @@
       "NO_INVITATIONS_AVAILABLE": "Aucune invitations de manager trouvées"
     }
   },
+  "COMMUNITY_INFO": {
+    "TITLE": "Infos de la communauté",
+    "SUBTITLE": "Consulter et gérer les informations de votre communauté",
+    "EDIT_BUTTON": "Modifier",
+    "SAVE_BUTTON": "Enregistrer",
+    "CANCEL_BUTTON": "Annuler",
+    "NAME": "Nom",
+    "NAME_PLACEHOLDER": "Nom de la communauté",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "Quelle est la mission de votre communauté ?",
+    "WEBSITE": "Site web",
+    "HEADQUARTERS": "Siège social",
+    "STREET": "Rue",
+    "NUMBER": "Numéro",
+    "SUPPLEMENT": "Complément d’adresse",
+    "POSTCODE": "Code postal",
+    "CITY": "Ville",
+    "MEMBERS": "membres",
+    "CHOOSE_LOGO": "Choisir un logo",
+    "REMOVE_LOGO": "Supprimer le logo",
+    "NO_COMMUNITY": "Aucune communauté active sélectionnée.",
+    "ERRORS": {
+      "INVALID_URL": "Veuillez saisir une URL valide commençant par http:// ou https://",
+      "PARTIAL_ADDRESS": "Veuillez compléter tous les champs d’adresse requis ou les laisser vides"
+    }
+  },
   "COMMUNITY": {
     "LIST": {
       "CREATE_COMMUNITY": "Créer une communauté",
@@ -237,6 +267,12 @@
       "DETAILS_BUTTON_TOOLTIP": "Voir les détails de la communauté",
       "NO_PUBLIC_COMMUNITY_FOUND": "Aucune communauté publique disponible",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)"
+    },
+    "PUBLIC_LIST": {
+      "NO_OPERATIONS": "Aucune opération de partage publique pour cette communauté",
+      "MUNICIPALITIES": "Communes",
+      "MUNICIPALITY_FILTER_LABEL": "Filtrer par commune",
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Rechercher une commune…"
     },
     "CREATE": {
       "TITLE": "Créer une communauté",
@@ -1017,6 +1053,8 @@
     "ADD": {
       "NAME_LABEL": "Nom",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES_LABEL": "Communes couvertes",
+      "MUNICIPALITIES_PLACEHOLDER": "Rechercher une commune…",
       "ADD_BUTTON_LABEL": "Ajouter"
     },
     "ADD_KEY": {
@@ -1174,6 +1212,7 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
       "NAME_LABEL": "Nom",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES": "Communes",
       "NO_SHARING_OPERATION_FOUND_LABEL": "Aucune opération de partage trouvée",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} opérations de partages)",
       "ADD_SHARING_OP_HEADER": "Ajout d'une opération de partage",

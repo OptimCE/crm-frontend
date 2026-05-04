@@ -60,7 +60,7 @@ export class ServiceBase {
     const httpParams = params
       ? (Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined)) as Record<
           string,
-          string | number | boolean
+          string | number | boolean | readonly (string | number | boolean)[]
         >)
       : undefined;
 

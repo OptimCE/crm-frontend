@@ -2,12 +2,15 @@ import { PaginationQuery, Sort } from './query.dtos';
 import { SharingKeyStatus, SharingOperationType } from '../types/sharing_operation.types';
 import { KeyPartialDTO } from './key.dtos';
 import { MeterDataStatus } from '../types/meter.types';
+import { MunicipalityPartialDTO } from './municipality.dtos';
 /**
  * Query parameters for filtering and paginating a list of sharing operations.
  */
 export interface SharingOperationPartialQuery extends PaginationQuery {
   name?: string;
   type?: string;
+  /** Filter operations to those covering at least one of these municipality NIS codes. */
+  municipality_nis_codes?: number[];
   sort_name?: Sort;
   sort_type?: Sort;
 }
@@ -52,6 +55,7 @@ export interface SharingOperationPartialDTO {
   id: number;
   name: string;
   type: SharingOperationType;
+  municipalities: MunicipalityPartialDTO[];
 }
 /**
  * DTO representing a key associated with a sharing operation.
@@ -92,6 +96,16 @@ export interface SharingOpConsumptionDTO {
 export interface CreateSharingOperationDTO {
   name: string;
   type: SharingOperationType;
+  /** NIS codes of the Belgian municipalities the operation covers (at least one). */
+  municipality_nis_codes: number[];
+}
+
+/**
+ * DTO for replacing the full set of municipalities linked to a sharing operation.
+ */
+export interface UpdateSharingOperationMunicipalitiesDTO {
+  id_sharing: number;
+  municipality_nis_codes: number[];
 }
 
 /**

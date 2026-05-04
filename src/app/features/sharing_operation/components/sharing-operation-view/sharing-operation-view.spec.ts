@@ -61,6 +61,7 @@ function buildSharingOperation(overrides: Partial<SharingOperationDTO> = {}): Sh
     id: 1,
     name: 'Test Operation',
     type: SharingOperationType.LOCAL,
+    municipalities: [],
     is_public: false,
     key: buildSharingOperationKey(),
     ...overrides,

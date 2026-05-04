@@ -17,6 +17,7 @@ import {
   SharingOperationMetersQueryType,
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
+  UpdateSharingOperationMunicipalitiesDTO,
 } from '../dtos/sharing_operation.dtos';
 import { catchError, map, Observable, tap } from 'rxjs';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
@@ -127,6 +128,7 @@ export class SharingOperationService extends ServiceBase {
     return this.http.post<ApiResponse<string>>(this.apiAddress + '/', new_sharing_operations).pipe(
       tap(() => {
         this.cache.invalidate('sharing-operation-list');
+        this.cache.invalidate('community-public-sharing-ops');
       }),
     );
   }
@@ -195,6 +197,22 @@ export class SharingOperationService extends ServiceBase {
       );
   }
 
+  updateMunicipalities(
+    dto: UpdateSharingOperationMunicipalitiesDTO,
+  ): Observable<ApiResponse<string>> {
+    return this.http
+      .put<ApiResponse<string>>(this.apiAddress + `/${dto.id_sharing}/municipalities`, {
+        municipality_nis_codes: dto.municipality_nis_codes,
+      })
+      .pipe(
+        tap(() => {
+          this.cache.invalidate(`sharing-operation-list`);
+          this.cache.invalidate(`sharing-operation:${dto.id_sharing}`);
+          this.cache.invalidate('community-public-sharing-ops');
+        }),
+      );
+  }
+
   patchVisibility(
     patched_sharing: PatchSharingOperationVisibilityDTO,
   ): Observable<ApiResponse<string>> {
@@ -203,6 +221,8 @@ export class SharingOperationService extends ServiceBase {
       .pipe(
         tap(() => {
           this.cache.invalidate(`sharing-operation:${patched_sharing.id_sharing}`);
+          this.cache.invalidate('sharing-operation-list');
+          this.cache.invalidate('community-public-sharing-ops');
         }),
       );
   }
@@ -214,6 +234,7 @@ export class SharingOperationService extends ServiceBase {
         this.cache.invalidate(`sharing-operation-meters-list:${id}`);
         this.cache.invalidate(`sharing-operation-consumption:${id}`);
         this.cache.invalidate(`sharing-operation-list`);
+        this.cache.invalidate('community-public-sharing-ops');
       }),
     );
   }

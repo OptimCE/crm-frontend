@@ -52,6 +52,39 @@
       <app-error-handler controlName="type"></app-error-handler>
     </div>
 
+    <div class="mb-5">
+      <label for="municipalities" class="field-label mb-2 block">
+        {{ 'SHARING_OPERATION.ADD.MUNICIPALITIES_LABEL' | translate }} *
+      </label>
+      <p-autoComplete
+        inputId="municipalities"
+        formControlName="municipalities"
+        [suggestions]="municipalitySuggestions()"
+        (completeMethod)="searchMunicipalities($event)"
+        [multiple]="true"
+        [forceSelection]="true"
+        [delay]="250"
+        dataKey="nis_code"
+        styleClass="w-full"
+        appendTo="body"
+        [placeholder]="'SHARING_OPERATION.ADD.MUNICIPALITIES_PLACEHOLDER' | translate"
+        data-testid="op-creation__autocomplete--municipalities"
+      >
+        <ng-template let-m pTemplate="item">
+          <div class="flex flex-col">
+            <span class="text-sm">{{ m.fr_name }}</span>
+            @if (m.postal_codes && m.postal_codes.length > 0) {
+              <span class="text-xs text-surface-500">{{ m.postal_codes.join(', ') }}</span>
+            }
+          </div>
+        </ng-template>
+        <ng-template let-m pTemplate="selectedItem">
+          <span>{{ municipalityLabel(m) }}</span>
+        </ng-template>
+      </p-autoComplete>
+      <app-error-handler controlName="municipalities"></app-error-handler>
+    </div>
+
     <div class="flex justify-end pt-2">
       <p-button
         type="submit"

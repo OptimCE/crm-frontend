@@ -17,6 +17,7 @@
     },
     "ERROR_LOADING": "De pagina kan niet worden geladen. Probeer het later opnieuw",
     "RETRY": "Opnieuw proberen",
+    "LOADING": "Laden…",
     "ERRORS": {
       "EXCEPTION": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw",
       "TIMEOUT": "Het verzoek is verlopen. Probeer het opnieuw",
@@ -28,7 +29,8 @@
       "PARAM_IS_STRING": "De parameter moet een tekenreeks zijn",
       "QUERY_IS_STRING": "De querywaarde moet een tekenreeks zijn",
       "QUERY_IS_NUMERIC": "De querywaarde moet numeriek zijn",
-      "QUERY_IS_BOOLEAN": "De querywaarde moet een booleaanse waarde zijn"
+      "QUERY_IS_BOOLEAN": "De querywaarde moet een booleaanse waarde zijn",
+      "REQUIRED": "Dit veld is verplicht"
     }
   },
   "LOGIN": {
@@ -57,6 +59,7 @@
     "COMMUNITIES": "Gemeenschappen",
     "MY_COMMUNITIES": "Mijn gemeenschappen",
     "PUBLIC_COMMUNITIES": "Openbare gemeenschappen",
+    "COMMUNITY_INFO": "Gemeenschapsinfo",
     "COMMUNITY_USERS": "Gebruikers",
     "USER_GUIDE": "Gebruikershandleiding",
     "REPORT_BUG": "Bug melden",
@@ -66,6 +69,7 @@
     "ERROR_LOGOUT": "Fout bij het afmelden",
     "DELETE": "Verwijderen",
     "COPY_TO_CLIPBOARD": "Kopiëren naar klembord",
+    "COMMUNITY": "Gemeenschap",
     "MANAGEMENT": "Beheer",
     "ERROR_LOADING": "Er is een fout opgetreden bij het laden van de gegevens",
     "RETRY": "Opnieuw proberen"
@@ -206,6 +210,32 @@
       "NO_INVITATIONS_AVAILABLE": "Geen manageruitnodigingen gevonden"
     }
   },
+  "COMMUNITY_INFO": {
+    "TITLE": "Gemeenschapsinfo",
+    "SUBTITLE": "Bekijk en beheer de gegevens van uw gemeenschap",
+    "EDIT_BUTTON": "Bewerken",
+    "SAVE_BUTTON": "Opslaan",
+    "CANCEL_BUTTON": "Annuleren",
+    "NAME": "Naam",
+    "NAME_PLACEHOLDER": "Naam van de gemeenschap",
+    "DESCRIPTION": "Beschrijving",
+    "DESCRIPTION_PLACEHOLDER": "Wat doet uw gemeenschap?",
+    "WEBSITE": "Website",
+    "HEADQUARTERS": "Hoofdzetel",
+    "STREET": "Straat",
+    "NUMBER": "Nummer",
+    "SUPPLEMENT": "Adresregel 2",
+    "POSTCODE": "Postcode",
+    "CITY": "Stad",
+    "MEMBERS": "leden",
+    "CHOOSE_LOGO": "Logo kiezen",
+    "REMOVE_LOGO": "Logo verwijderen",
+    "NO_COMMUNITY": "Geen actieve gemeenschap geselecteerd.",
+    "ERRORS": {
+      "INVALID_URL": "Voer een geldige URL in die begint met http:// of https://",
+      "PARTIAL_ADDRESS": "Vul alle verplichte adresvelden in of laat ze allemaal leeg"
+    }
+  },
   "COMMUNITY": {
     "LIST": {
       "CREATE_COMMUNITY": "Gemeenschap aanmaken",
@@ -238,6 +268,12 @@
       "DETAILS_BUTTON_TOOLTIP": "Details van de gemeenschap bekijken",
       "NO_PUBLIC_COMMUNITY_FOUND": "Geen openbare gemeenschappen beschikbaar",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)"
+    },
+    "PUBLIC_LIST": {
+      "NO_OPERATIONS": "Geen openbare deeloperatie voor deze gemeenschap",
+      "MUNICIPALITIES": "Gemeenten",
+      "MUNICIPALITY_FILTER_LABEL": "Filter op gemeente",
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Zoek een gemeente…"
     },
     "CREATE": {
       "TITLE": "Gemeenschap aanmaken",
@@ -1019,6 +1055,8 @@
     "ADD": {
       "NAME_LABEL": "Naam",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES_LABEL": "Gedekte gemeenten",
+      "MUNICIPALITIES_PLACEHOLDER": "Zoek een gemeente…",
       "ADD_BUTTON_LABEL": "Toevoegen"
     },
     "ADD_KEY": {
@@ -1176,6 +1214,7 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
       "NAME_LABEL": "Naam",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES": "Gemeenten",
       "NO_SHARING_OPERATION_FOUND_LABEL": "Geen deeloperatie gevonden",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} deeloperaties)",
       "ADD_SHARING_OP_HEADER": "Deeloperatie toevoegen",

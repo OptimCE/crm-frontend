@@ -123,6 +123,32 @@
       ></li>
     </ul>
 
+    <!-- Section: Active community -->
+    @if (userContextService.compareWithActiveRole(Role.MEMBER)) {
+      @if (sidebarOpen()) {
+        <div data-testid="navbar__section-label--community" class="sidebar__section-label">
+          {{ 'NAVBAR.COMMUNITY' | translate }}
+        </div>
+      } @else {
+        <div
+          data-testid="navbar__section-divider--community"
+          class="sidebar__section-divider"
+        ></div>
+      }
+
+      <ul data-testid="navbar__menu--community" class="sidebar__menu">
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-id-card'"
+          [isRouteActive]="isRouteActive().communities_info"
+          [name]="'NAVBAR.COMMUNITY_INFO' | translate"
+          [routerLinkUrl]="'/communities/info'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
+      </ul>
+    }
+
     <!-- Section: Gestionnaire -->
     @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
       @if (sidebarOpen()) {

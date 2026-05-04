@@ -17,6 +17,7 @@
     },
     "ERROR_LOADING": "The page could not be loaded. Please try again later",
     "RETRY": "Retry",
+    "LOADING": "Loading…",
     "ERRORS": {
       "EXCEPTION": "An unexpected error occurred. Please try again later",
       "TIMEOUT": "The request timed out. Please try again",
@@ -28,7 +29,8 @@
       "PARAM_IS_STRING": "The parameter must be a string",
       "QUERY_IS_STRING": "The query value must be a string",
       "QUERY_IS_NUMERIC": "The query value must be numeric",
-      "QUERY_IS_BOOLEAN": "The query value must be a boolean"
+      "QUERY_IS_BOOLEAN": "The query value must be a boolean",
+      "REQUIRED": "This field is required"
     }
   },
   "LOGIN": {
@@ -57,6 +59,7 @@
     "COMMUNITIES": "Communities",
     "MY_COMMUNITIES": "My communities",
     "PUBLIC_COMMUNITIES": "Public communities",
+    "COMMUNITY_INFO": "Community info",
     "COMMUNITY_USERS": "Users",
     "USER_GUIDE": "User guide",
     "REPORT_BUG": "Report a bug",
@@ -66,6 +69,7 @@
     "ERROR_LOGOUT": "Error logging out",
     "DELETE": "Delete",
     "COPY_TO_CLIPBOARD": "Copy to clipboard",
+    "COMMUNITY": "Community",
     "MANAGEMENT": "Management",
     "ERROR_LOADING": "An error occurred while loading data",
     "RETRY": "Retry"
@@ -206,6 +210,32 @@
       "NO_INVITATIONS_AVAILABLE": "No manager invitations found"
     }
   },
+  "COMMUNITY_INFO": {
+    "TITLE": "Community info",
+    "SUBTITLE": "View and manage your community's details",
+    "EDIT_BUTTON": "Edit",
+    "SAVE_BUTTON": "Save",
+    "CANCEL_BUTTON": "Cancel",
+    "NAME": "Name",
+    "NAME_PLACEHOLDER": "Community name",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "What is your community about?",
+    "WEBSITE": "Website",
+    "HEADQUARTERS": "Headquarters",
+    "STREET": "Street",
+    "NUMBER": "Number",
+    "SUPPLEMENT": "Address line 2",
+    "POSTCODE": "Postcode",
+    "CITY": "City",
+    "MEMBERS": "members",
+    "CHOOSE_LOGO": "Choose a logo",
+    "REMOVE_LOGO": "Remove logo",
+    "NO_COMMUNITY": "No active community selected.",
+    "ERRORS": {
+      "INVALID_URL": "Please enter a valid URL starting with http:// or https://",
+      "PARTIAL_ADDRESS": "Please complete every required address field or leave them all empty"
+    }
+  },
   "COMMUNITY": {
     "LIST": {
       "CREATE_COMMUNITY": "Create a community",
@@ -238,6 +268,12 @@
       "DETAILS_BUTTON_TOOLTIP": "View community details",
       "NO_PUBLIC_COMMUNITY_FOUND": "No public communities available",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
+    },
+    "PUBLIC_LIST": {
+      "NO_OPERATIONS": "No public sharing operation for this community",
+      "MUNICIPALITIES": "Municipalities",
+      "MUNICIPALITY_FILTER_LABEL": "Filter by municipality",
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Search a municipality…"
     },
     "CREATE": {
       "TITLE": "Create a community",
@@ -1019,6 +1055,8 @@
     "ADD": {
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES_LABEL": "Covered municipalities",
+      "MUNICIPALITIES_PLACEHOLDER": "Search for a municipality…",
       "ADD_BUTTON_LABEL": "Add"
     },
     "ADD_KEY": {
@@ -1176,6 +1214,7 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES": "Municipalities",
       "NO_SHARING_OPERATION_FOUND_LABEL": "No sharing operation found",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} sharing operations)",
       "ADD_SHARING_OP_HEADER": "Add a sharing operation",

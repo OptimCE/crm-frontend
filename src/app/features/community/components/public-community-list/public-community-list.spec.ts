@@ -1,11 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { of, NEVER } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { of, NEVER, throwError } from 'rxjs';
 import { PublicCommunityList } from './public-community-list';
 import { CommunityService } from '../../../../shared/services/community.service';
-import { PublicCommunityDTO, CommunityDetailDTO } from '../../../../shared/dtos/community.dtos';
-import { ApiResponse, ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
+import { MunicipalityService } from '../../../../shared/services/municipality.service';
+import { PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import {
+  SharingOperationPartialDTO,
+  SharingOperationPartialQuery,
+} from '../../../../shared/dtos/sharing_operation.dtos';
+import { MunicipalityPartialDTO } from '../../../../shared/dtos/municipality.dtos';
+import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
+import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
 
 function buildCommunities(): PublicCommunityDTO[] {
   return [
@@ -15,23 +22,43 @@ function buildCommunities(): PublicCommunityDTO[] {
   ];
 }
 
-function buildDetail(id: number, overrides: Partial<CommunityDetailDTO> = {}): CommunityDetailDTO {
+function buildMunicipality(
+  nis_code: number,
+  overrides: Partial<MunicipalityPartialDTO> = {},
+): MunicipalityPartialDTO {
   return {
-    id,
-    name: `Community ${id}`,
-    auth_community_id: `auth-${id}`,
-    created_at: '2025-01-15T10:00:00Z',
-    updated_at: '2025-03-20T14:30:00Z',
-    member_count: 42,
+    nis_code,
+    fr_name: `Ville-${nis_code}`,
+    nl_name: null,
+    de_name: null,
+    region_fr: null,
+    postal_codes: [],
     ...overrides,
   };
 }
 
-function buildPaginatedResponse(
-  data: PublicCommunityDTO[] = buildCommunities(),
+function buildOps(): SharingOperationPartialDTO[] {
+  return [
+    {
+      id: 10,
+      name: 'Op One',
+      type: SharingOperationType.LOCAL,
+      municipalities: [buildMunicipality(11001, { fr_name: 'Bruxelles' })],
+    },
+    {
+      id: 11,
+      name: 'Op Two',
+      type: SharingOperationType.CER,
+      municipalities: [],
+    },
+  ];
+}
+
+function buildPaginatedResponse<T>(
+  data: T[] = [],
   pagination: Pagination = new Pagination(1, 10, data.length, 1),
-): ApiResponsePaginated<PublicCommunityDTO[] | string> {
-  return new ApiResponsePaginated(data, pagination);
+): ApiResponsePaginated<T[] | string> {
+  return new ApiResponsePaginated<T[] | string>(data, pagination);
 }
 
 describe('PublicCommunityList', () => {
@@ -40,18 +67,31 @@ describe('PublicCommunityList', () => {
   let el: HTMLElement;
   let communityServiceSpy: {
     getPublicCommunities: ReturnType<typeof vi.fn>;
-    getCommunityDetail: ReturnType<typeof vi.fn>;
+    getCommunityPublicSharingOperations: ReturnType<typeof vi.fn>;
+  };
+  let municipalityServiceSpy: {
+    searchMunicipalities: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
     communityServiceSpy = {
-      getPublicCommunities: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
-      getCommunityDetail: vi.fn().mockReturnValue(of(new ApiResponse(buildDetail(1)))),
+      getPublicCommunities: vi.fn().mockReturnValue(of(buildPaginatedResponse(buildCommunities()))),
+      getCommunityPublicSharingOperations: vi
+        .fn()
+        .mockReturnValue(of(buildPaginatedResponse(buildOps()))),
+    };
+    municipalityServiceSpy = {
+      searchMunicipalities: vi
+        .fn()
+        .mockReturnValue(of(buildPaginatedResponse<MunicipalityPartialDTO>([]))),
     };
 
     await TestBed.configureTestingModule({
       imports: [PublicCommunityList, TranslateModule.forRoot()],
-      providers: [{ provide: CommunityService, useValue: communityServiceSpy }],
+      providers: [
+        { provide: CommunityService, useValue: communityServiceSpy },
+        { provide: MunicipalityService, useValue: municipalityServiceSpy },
+      ],
     })
       .overrideComponent(PublicCommunityList, {
         set: { schemas: [NO_ERRORS_SCHEMA] },
@@ -218,19 +258,22 @@ describe('PublicCommunityList', () => {
       expect(component.isExpanded(3)).toBe(false);
     });
 
-    it('expanding a community calls getCommunityDetail', () => {
-      communityServiceSpy.getCommunityDetail.mockClear();
+    it('expanding a community calls getCommunityPublicSharingOperations', () => {
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
       component.toggleAccordion(1);
 
-      expect(communityServiceSpy.getCommunityDetail).toHaveBeenCalledWith(1);
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).toHaveBeenCalledWith(1, {
+        page: 1,
+        limit: 50,
+      });
     });
 
-    it('collapsing a community does not call getCommunityDetail', () => {
+    it('collapsing a community does not call getCommunityPublicSharingOperations', () => {
       component.toggleAccordion(1);
-      communityServiceSpy.getCommunityDetail.mockClear();
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
 
       component.toggleAccordion(1); // collapse
-      expect(communityServiceSpy.getCommunityDetail).not.toHaveBeenCalled();
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).not.toHaveBeenCalled();
     });
 
     it('clicking the accordion button toggles expansion', () => {
@@ -247,101 +290,274 @@ describe('PublicCommunityList', () => {
     });
   });
 
-  // ── Detail caching ──────────────────────────────────────────────────
+  // ── Public sharing operations loading ───────────────────────────────
 
-  describe('detail caching', () => {
-    it('does not re-fetch if detail is already cached', () => {
+  describe('public sharing operations loading', () => {
+    it('marks the community as loading while the request is pending', () => {
+      communityServiceSpy.getCommunityPublicSharingOperations.mockReturnValue(NEVER);
+
+      component.toggleAccordion(1);
+
+      expect(component.isLoading(1)).toBe(true);
+      expect(component.getOperations(1)).toBeUndefined();
+    });
+
+    it('populates publicOperations and clears loading on success', () => {
+      component.toggleAccordion(1);
+
+      expect(component.isLoading(1)).toBe(false);
+      const ops = component.getOperations(1);
+      expect(ops).toBeDefined();
+      expect(ops?.length).toBe(2);
+      expect(ops?.[0].name).toBe('Op One');
+    });
+
+    it('falls back to an empty array on error', () => {
+      communityServiceSpy.getCommunityPublicSharingOperations.mockReturnValue(
+        throwError(() => new Error('boom')),
+      );
+
+      component.toggleAccordion(2);
+
+      expect(component.isLoading(2)).toBe(false);
+      expect(component.getOperations(2)).toEqual([]);
+    });
+
+    it('falls back to an empty array when response.data is missing', () => {
+      communityServiceSpy.getCommunityPublicSharingOperations.mockReturnValue(of(null));
+
+      component.toggleAccordion(3);
+
+      expect(component.getOperations(3)).toEqual([]);
+    });
+
+    it('does not refetch when the same community is re-expanded', () => {
       component.toggleAccordion(1); // first expand → fetches
-      communityServiceSpy.getCommunityDetail.mockClear();
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
 
       component.toggleAccordion(1); // collapse
       component.toggleAccordion(1); // expand again
 
-      expect(communityServiceSpy.getCommunityDetail).not.toHaveBeenCalled();
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).not.toHaveBeenCalled();
     });
 
-    it('fetches for a different community', () => {
+    it('fetches when a different community is expanded', () => {
       component.toggleAccordion(1);
-      communityServiceSpy.getCommunityDetail.mockClear();
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
 
-      communityServiceSpy.getCommunityDetail.mockReturnValue(of(new ApiResponse(buildDetail(2))));
       component.toggleAccordion(2);
 
-      expect(communityServiceSpy.getCommunityDetail).toHaveBeenCalledWith(2);
-    });
-
-    it('stores the detail in the communityDetails map', () => {
-      component.toggleAccordion(1);
-
-      expect(component.communityDetails().has(1)).toBe(true);
-      expect(component.communityDetails().get(1)?.auth_community_id).toBe('auth-1');
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).toHaveBeenCalledWith(2, {
+        page: 1,
+        limit: 50,
+      });
     });
   });
 
-  // ── Detail display ──────────────────────────────────────────────────
+  // ── Municipality filter ─────────────────────────────────────────────
 
-  describe('detail display', () => {
-    it('shows detail fields when loaded', () => {
-      component.toggleAccordion(1);
-      fixture.detectChanges();
+  describe('municipality filter', () => {
+    it('searchMunicipalities calls the service with the trimmed query', () => {
+      component.searchMunicipalities({ query: '  Brux  ' } as never);
 
-      const detail = el.querySelector('.bg-surface-50') as Element;
-      expect(detail).toBeTruthy();
-
-      const fieldValues = detail.querySelectorAll('.field-value');
-      const texts = Array.from(fieldValues).map((e) => e.textContent?.trim());
-
-      expect(texts).toContain('auth-1');
-      expect(texts).toContain('42');
+      expect(municipalityServiceSpy.searchMunicipalities).toHaveBeenCalledWith({
+        page: 1,
+        limit: 20,
+        name: 'Brux',
+      });
     });
 
-    it('shows spinner while detail is loading', () => {
-      communityServiceSpy.getCommunityDetail.mockReturnValue(NEVER);
-      component.toggleAccordion(2);
-      fixture.detectChanges();
+    it('searchMunicipalities passes name as undefined when query is empty', () => {
+      component.searchMunicipalities({ query: '   ' } as never);
 
-      const spinner = el.querySelector('.pi-spinner');
-      expect(spinner).toBeTruthy();
+      expect(municipalityServiceSpy.searchMunicipalities).toHaveBeenCalledWith({
+        page: 1,
+        limit: 20,
+        name: undefined,
+      });
     });
 
-    it('shows description when present', () => {
-      communityServiceSpy.getCommunityDetail.mockReturnValue(
-        of(new ApiResponse(buildDetail(1, { description: 'A great community' }))),
+    it('searchMunicipalities filters out already selected entries by nis_code', () => {
+      const m1 = buildMunicipality(1);
+      const m2 = buildMunicipality(2);
+      const m3 = buildMunicipality(3);
+      component.selectedMunicipalities.set([m2]);
+      municipalityServiceSpy.searchMunicipalities.mockReturnValue(
+        of(buildPaginatedResponse([m1, m2, m3])),
       );
-      component.toggleAccordion(1);
-      fixture.detectChanges();
 
-      const fieldValues = el.querySelectorAll('.field-value');
-      const texts = Array.from(fieldValues).map((e) => e.textContent?.trim());
-      expect(texts).toContain('A great community');
+      component.searchMunicipalities({ query: '' } as never);
+
+      expect(component.municipalitySuggestions().map((m) => m.nis_code)).toEqual([1, 3]);
     });
 
-    it('does not show description div when absent', () => {
-      communityServiceSpy.getCommunityDetail.mockReturnValue(
-        of(new ApiResponse(buildDetail(1))), // no description
+    it('searchMunicipalities clears suggestions on error', () => {
+      component.municipalitySuggestions.set([buildMunicipality(99)]);
+      municipalityServiceSpy.searchMunicipalities.mockReturnValue(
+        throwError(() => new Error('net')),
       );
-      component.toggleAccordion(1);
-      fixture.detectChanges();
 
-      const detailSection = el.querySelector('.bg-surface-50') as Element;
-      const colSpan2 = detailSection.querySelector('.sm\\:col-span-2');
-      expect(colSpan2).toBeFalsy();
+      component.searchMunicipalities({ query: 'x' } as never);
+
+      expect(component.municipalitySuggestions()).toEqual([]);
+    });
+
+    it('onMunicipalitiesChange replaces selectedMunicipalities and clears caches', () => {
+      const m1 = buildMunicipality(1);
+      // Prime caches as if a community had been expanded already
+      component.publicOperations.set(new Map([[1, buildOps()]]));
+      component.loadingOperations.set(new Set([2]));
+      component.expandedCommunityId.set(null);
+
+      component.onMunicipalitiesChange([m1]);
+
+      expect(component.selectedMunicipalities()).toEqual([m1]);
+      expect(component.publicOperations().size).toBe(0);
+      expect(component.loadingOperations().size).toBe(0);
+    });
+
+    it('onMunicipalitiesChange treats null/undefined as an empty selection', () => {
+      component.selectedMunicipalities.set([buildMunicipality(1)]);
+
+      component.onMunicipalitiesChange(null as unknown as MunicipalityPartialDTO[]);
+
+      expect(component.selectedMunicipalities()).toEqual([]);
+    });
+
+    it('onMunicipalitiesChange refetches the currently expanded community', () => {
+      component.toggleAccordion(1); // expand & fetch once
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
+
+      const m = buildMunicipality(11001);
+      component.onMunicipalitiesChange([m]);
+
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).toHaveBeenCalledWith(1, {
+        page: 1,
+        limit: 50,
+        municipality_nis_codes: [11001],
+      });
+    });
+
+    it('onMunicipalitiesChange does not fetch when no community is expanded', () => {
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
+
+      component.onMunicipalitiesChange([buildMunicipality(1)]);
+
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).not.toHaveBeenCalled();
     });
   });
 
-  // ── getCommunityDetail accessor ─────────────────────────────────────
+  // ── Query building ──────────────────────────────────────────────────
 
-  describe('getCommunityDetail accessor', () => {
-    it('returns undefined when detail is not in the map', () => {
-      expect(component.getCommunityDetail(999)).toBeUndefined();
+  describe('query building', () => {
+    it('omits municipality_nis_codes when the filter is empty', () => {
+      component.toggleAccordion(2);
+
+      const call = communityServiceSpy.getCommunityPublicSharingOperations.mock.calls[0];
+      expect(call[1]).toEqual({ page: 1, limit: 50 });
+      expect((call[1] as SharingOperationPartialQuery).municipality_nis_codes).toBeUndefined();
     });
 
-    it('returns the detail when it is in the map', () => {
-      component.toggleAccordion(1);
+    it('includes municipality_nis_codes when the filter is populated', () => {
+      component.selectedMunicipalities.set([buildMunicipality(11001), buildMunicipality(21001)]);
 
-      const detail = component.getCommunityDetail(1) as CommunityDetailDTO;
-      expect(detail).toBeDefined();
-      expect(detail.member_count).toBe(42);
+      component.toggleAccordion(3);
+
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).toHaveBeenCalledWith(3, {
+        page: 1,
+        limit: 50,
+        municipality_nis_codes: [11001, 21001],
+      });
+    });
+  });
+
+  // ── municipalityName ────────────────────────────────────────────────
+
+  describe('municipalityName', () => {
+    let translate: TranslateService;
+
+    beforeEach(() => {
+      translate = TestBed.inject(TranslateService);
+    });
+
+    it('returns fr_name by default (fr language)', () => {
+      vi.spyOn(translate, 'currentLang', 'get').mockReturnValue('fr');
+      const m = buildMunicipality(1, {
+        fr_name: 'Bruxelles',
+        nl_name: 'Brussel',
+        de_name: 'Brüssel',
+      });
+      expect(component.municipalityName(m)).toBe('Bruxelles');
+    });
+
+    it('returns nl_name when language starts with nl', () => {
+      vi.spyOn(translate, 'currentLang', 'get').mockReturnValue('nl');
+      const m = buildMunicipality(1, {
+        fr_name: 'Bruxelles',
+        nl_name: 'Brussel',
+        de_name: null,
+      });
+      expect(component.municipalityName(m)).toBe('Brussel');
+    });
+
+    it('falls back to fr_name when nl_name is missing for nl language', () => {
+      vi.spyOn(translate, 'currentLang', 'get').mockReturnValue('nl-BE');
+      const m = buildMunicipality(1, { fr_name: 'Liège', nl_name: null, de_name: null });
+      expect(component.municipalityName(m)).toBe('Liège');
+    });
+
+    it('returns de_name when language starts with de', () => {
+      vi.spyOn(translate, 'currentLang', 'get').mockReturnValue('de');
+      const m = buildMunicipality(1, {
+        fr_name: 'Eupen',
+        nl_name: null,
+        de_name: 'Eupen-DE',
+      });
+      expect(component.municipalityName(m)).toBe('Eupen-DE');
+    });
+
+    it('returns "—" when no name is available in any locale', () => {
+      vi.spyOn(translate, 'currentLang', 'get').mockReturnValue('fr');
+      const m = buildMunicipality(1, {
+        fr_name: '',
+        nl_name: null,
+        de_name: null,
+      });
+      expect(component.municipalityName(m)).toBe('—');
+    });
+  });
+
+  // ── typeIcon / typeLabelKey ─────────────────────────────────────────
+
+  describe('typeIcon', () => {
+    it('returns pi pi-home for LOCAL', () => {
+      expect(component.typeIcon(SharingOperationType.LOCAL)).toBe('pi pi-home');
+    });
+    it('returns pi pi-sitemap for CER', () => {
+      expect(component.typeIcon(SharingOperationType.CER)).toBe('pi pi-sitemap');
+    });
+    it('returns pi pi-globe for CEC', () => {
+      expect(component.typeIcon(SharingOperationType.CEC)).toBe('pi pi-globe');
+    });
+    it('returns pi pi-bolt for unknown values', () => {
+      expect(component.typeIcon(999 as unknown as SharingOperationType)).toBe('pi pi-bolt');
+    });
+  });
+
+  describe('typeLabelKey', () => {
+    it('returns INSIDE_BUILDING key for LOCAL', () => {
+      expect(component.typeLabelKey(SharingOperationType.LOCAL)).toBe(
+        'SHARING_OPERATION.TYPE.INSIDE_BUILDING',
+      );
+    });
+    it('returns CER key for CER', () => {
+      expect(component.typeLabelKey(SharingOperationType.CER)).toBe('SHARING_OPERATION.TYPE.CER');
+    });
+    it('returns CEC key for CEC', () => {
+      expect(component.typeLabelKey(SharingOperationType.CEC)).toBe('SHARING_OPERATION.TYPE.CEC');
+    });
+    it('returns empty string for unknown values', () => {
+      expect(component.typeLabelKey(999 as unknown as SharingOperationType)).toBe('');
     });
   });
 });
