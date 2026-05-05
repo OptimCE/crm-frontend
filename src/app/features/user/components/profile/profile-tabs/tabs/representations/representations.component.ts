@@ -1,5 +1,6 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -40,6 +41,7 @@ export class RepresentationsComponent {
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   readonly membersPartialList = signal<MeMembersPartialDTO[]>([]);
 
@@ -183,8 +185,7 @@ export class RepresentationsComponent {
   }
 
   onRowClick(member: MeMembersPartialDTO): void {
-    // TODO: Navigate to member detail view
-    console.log('Row clicked:', member.id);
+    void this.router.navigate(['/users/me/members', member.id]);
   }
 
   protected readonly MemberType = MemberType;

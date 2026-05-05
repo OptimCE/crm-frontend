@@ -21,8 +21,8 @@ function buildMeterData(overrides: Partial<MetersDataDTO> = {}): MetersDataDTO {
     amperage: 40,
     rate: 1 as MeterRate,
     client_type: 1 as ClientType,
-    start_date: new Date('2024-01-15'),
-    end_date: new Date('2025-12-31'),
+    start_date: '2024-01-15',
+    end_date: '2025-12-31',
     injection_status: 0 as InjectionStatus,
     production_chain: 0 as ProductionChain,
     totalGenerating_capacity: 500,
@@ -37,6 +37,7 @@ function buildMeterData(overrides: Partial<MetersDataDTO> = {}): MetersDataDTO {
       id: 5,
       name: 'Test Operation',
       type: 1,
+      municipalities: [],
     },
     ...overrides,
   };
@@ -142,7 +143,7 @@ describe('MeterDataView', () => {
     });
 
     it('should display formatted start_date when provided', () => {
-      setInputs(fixture, buildMeterData({ start_date: new Date('2024-03-15') }));
+      setInputs(fixture, buildMeterData({ start_date: '2024-03-15' }));
       fixture.detectChanges();
       const firstCard = getCards(fixture)[0];
       const fieldValues = firstCard.querySelectorAll('.field-value');
@@ -153,7 +154,7 @@ describe('MeterDataView', () => {
     });
 
     it('should display "--" when start_date is missing', () => {
-      setInputs(fixture, buildMeterData({ start_date: undefined as unknown as Date }));
+      setInputs(fixture, buildMeterData({ start_date: undefined as unknown as string }));
       fixture.detectChanges();
       const firstCard = getCards(fixture)[0];
       const emptyFields = firstCard.querySelectorAll('.field-empty');
@@ -161,7 +162,7 @@ describe('MeterDataView', () => {
     });
 
     it('should display formatted end_date when provided', () => {
-      setInputs(fixture, buildMeterData({ end_date: new Date('2025-06-30') }));
+      setInputs(fixture, buildMeterData({ end_date: '2025-06-30' }));
       fixture.detectChanges();
       const firstCard = getCards(fixture)[0];
       const fieldValues = firstCard.querySelectorAll('.field-value');
@@ -306,7 +307,7 @@ describe('MeterDataView', () => {
       setInputs(
         fixture,
         buildMeterData({
-          sharing_operation: { id: 42, name: 'My Operation', type: 1 },
+          sharing_operation: { id: 42, name: 'My Operation', type: 1, municipalities: [] },
         }),
       );
       fixture.detectChanges();

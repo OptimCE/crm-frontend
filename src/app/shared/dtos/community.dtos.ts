@@ -1,5 +1,6 @@
 import { Role } from '../../core/dtos/role';
 import { PaginationQuery, Sort } from './query.dtos';
+import { AddressDTO, CreateAddressDTO } from './address.dtos';
 
 export interface CommunityQueryDTO extends PaginationQuery {
   name?: string;
@@ -43,7 +44,12 @@ export interface CommunityDetailDTO {
   created_at: string;
   updated_at: string;
   member_count: number;
-  description?: string;
+  description?: string | null;
+  website_url?: string | null;
+  logo_url?: string | null;
+  /** Short-lived presigned URL (~15 min) for direct logo display. */
+  logo_presigned_url?: string | null;
+  headquarters_address?: AddressDTO | null;
 }
 
 export interface UsersCommunityDTO {
@@ -58,6 +64,18 @@ export interface UsersCommunityDTO {
 
 export interface CreateCommunityDTO {
   name: string;
+}
+
+export interface UpdateCommunityDTO {
+  name?: string;
+  description?: string | null;
+  website_url?: string | null;
+  headquarters_address?: CreateAddressDTO;
+}
+
+export interface UploadLogoResponse {
+  logo_url: string;
+  logo_presigned_url: string;
 }
 
 export interface PatchRoleUserDTO {

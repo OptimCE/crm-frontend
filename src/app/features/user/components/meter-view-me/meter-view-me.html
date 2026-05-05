@@ -1,17 +1,13 @@
 <div class="container mx-auto my-auto">
   @if (isLoading()) {
-    <!-- Skeleton Loading State -->
     <div class="space-y-4">
-      <!-- Hero Skeleton -->
       <div class="meter-hero rounded-xl border border-primary-100 p-6 flex items-center gap-5">
         <p-skeleton shape="circle" size="4rem" />
         <div class="flex flex-col gap-2 flex-1">
           <p-skeleton width="14rem" height="1.5rem" />
           <p-skeleton width="9rem" height="1rem" />
         </div>
-        <p-skeleton width="6rem" height="2.5rem" borderRadius="8px" />
       </div>
-      <!-- Card Skeletons -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         @for (_ of [1, 2, 3]; track $index) {
           <div class="bg-white border border-surface-200 rounded-xl p-5">
@@ -32,8 +28,10 @@
       </div>
     </div>
   } @else if (hasError()) {
-    <!-- Error State -->
-    <div class="flex flex-col items-center justify-center py-16 gap-4">
+    <div
+      class="flex flex-col items-center justify-center py-16 gap-4"
+      data-testid="meter-view-me__container--error"
+    >
       <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
       <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
       <p-button
@@ -41,17 +39,17 @@
         icon="pi pi-refresh"
         label="{{ 'COMMON.RETRY' | translate }}"
         (click)="getFullMeter()"
-        data-testid="meter-view__btn--retry"
+        data-testid="meter-view-me__btn--retry"
       />
     </div>
   } @else if (meter()) {
-    <app-back-arrow url="/meters" [text]="'METER.FULL.BACK_TO_LIST' | translate"></app-back-arrow>
+    <app-back-arrow url="/users" [text]="'PROFILE.BACK_TO_PROFILE' | translate"></app-back-arrow>
 
     <div class="space-y-4 mt-3">
       <!-- Hero Section -->
       <div
         class="meter-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
-        data-testid="meter-view__hero"
+        data-testid="meter-view-me__hero"
       >
         <p-avatar
           icon="pi pi-gauge"
@@ -69,28 +67,28 @@
                 <p-tag
                   severity="success"
                   value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
+                  data-testid="meter-view-me__tag--status"
                 />
               }
               @case (MeterStatus.INACTIVE) {
                 <p-tag
                   severity="danger"
                   value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
+                  data-testid="meter-view-me__tag--status"
                 />
               }
               @case (MeterStatus.WAITING_GRD) {
                 <p-tag
                   severity="info"
                   value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
+                  data-testid="meter-view-me__tag--status"
                 />
               }
               @case (MeterStatus.WAITING_MANAGER) {
                 <p-tag
                   severity="info"
                   value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
+                  data-testid="meter-view-me__tag--status"
                 />
               }
             }
@@ -99,35 +97,6 @@
             {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}: {{ meter()!.meter_number }}
           </p>
         </div>
-        <div class="flex flex-wrap gap-2">
-          @if (currentStatus() === MeterStatus.ACTIVE) {
-            <p-button
-              [outlined]="true"
-              label="{{ 'METER.FULL.METER_DEACTIVATE_HEADER' | translate }}"
-              icon="pi pi-circle-off"
-              severity="danger"
-              (click)="toDeactivate()"
-              data-testid="meter-view__btn--deactivate"
-            />
-          }
-          <p-button
-            [outlined]="true"
-            label="{{ 'METER.FULL.TABS.UPDATE_BUTTON_LABEL' | translate }}"
-            icon="pi pi-sync"
-            severity="warn"
-            (click)="toUpdate()"
-            data-testid="meter-view__btn--update"
-          />
-          <p-button
-            pRipple
-            [outlined]="true"
-            icon="pi pi-pencil"
-            label="{{ 'METER.FULL.MODIFY_BUTTON_LABEL' | translate }}"
-            severity="primary"
-            (click)="toModify()"
-            data-testid="meter-view__btn--modify"
-          />
-        </div>
       </div>
 
       <!-- Information Cards -->
@@ -135,7 +104,7 @@
         <!-- Card 1: Location -->
         <p-card
           styleClass="h-full border-l-3 border-l-primary-400"
-          data-testid="meter-view__card--location"
+          data-testid="meter-view-me__card--location"
         >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-map-marker text-primary-500 text-lg"></i>
@@ -192,7 +161,7 @@
         <!-- Card 2: Technical -->
         <p-card
           styleClass="h-full border-l-3 border-l-primary-400"
-          data-testid="meter-view__card--technical"
+          data-testid="meter-view-me__card--technical"
         >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-cog text-primary-500 text-lg"></i>
@@ -237,7 +206,7 @@
         <!-- Card 3: Holder -->
         <p-card
           styleClass="h-full border-l-3 border-l-primary-400"
-          data-testid="meter-view__card--holder"
+          data-testid="meter-view-me__card--holder"
         >
           <div class="flex items-center gap-2.5 mb-4">
             <i class="pi pi-user text-primary-500 text-lg"></i>
@@ -260,13 +229,12 @@
                       <i class="pi pi-building text-sm text-primary-500"></i>
                     }
                   }
-                  <a
-                    href="/members/{{ meter()!.holder!.id }}"
-                    class="text-primary-500 hover:text-primary-700 text-sm font-medium underline"
-                    data-testid="meter-view__link--holder"
+                  <span
+                    class="text-sm font-medium text-surface-800"
+                    data-testid="meter-view-me__text--holder"
                   >
                     {{ meter()!.holder!.name }}
-                  </a>
+                  </span>
                 </div>
               </div>
             } @else {
@@ -280,23 +248,19 @@
       </div>
 
       <!-- Tabs -->
-      <p-tabs [value]="0" class="meter-tabs" data-testid="meter-view__tabs">
+      <p-tabs [value]="0" class="meter-tabs" data-testid="meter-view-me__tabs">
         <p-tablist>
-          <p-tab [value]="0" data-testid="meter-view__tab--actual">{{
+          <p-tab [value]="0" data-testid="meter-view-me__tab--actual">{{
             'METER.FULL.TABS.ACTUAL_DATA_HEADER' | translate
           }}</p-tab>
-          <p-tab [value]="1" data-testid="meter-view__tab--historical">{{
+          <p-tab [value]="1" data-testid="meter-view-me__tab--historical">{{
             'METER.FULL.TABS.HISTORICAL_DATA_HEADER' | translate
           }}</p-tab>
-          <p-tab [value]="2" data-testid="meter-view__tab--future">{{
+          <p-tab [value]="2" data-testid="meter-view-me__tab--future">{{
             'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate
-          }}</p-tab>
-          <p-tab [value]="3" data-testid="meter-view__tab--consumption">{{
-            'METER.FULL.TABS.CONSUMPTION_HEADER' | translate
           }}</p-tab>
         </p-tablist>
         <p-tabpanels>
-          <!-- Actual Data Tab -->
           <p-tabpanel [value]="0">
             @if (hasMeterData()) {
               <app-meter-data-view
@@ -309,14 +273,13 @@
             } @else {
               <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <i class="pi pi-gauge text-3xl text-surface-300"></i>
-                <p class="text-surface-500 m-0" data-testid="meter-view__empty--no-data">
+                <p class="text-surface-500 m-0" data-testid="meter-view-me__empty--no-data">
                   {{ 'METER.FULL.NO_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
             }
           </p-tabpanel>
 
-          <!-- Historical Data Tab -->
           <p-tabpanel [value]="1">
             @if (hasHistory()) {
               <div class="space-y-4">
@@ -330,7 +293,7 @@
                     (ngModelChange)="historySelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
                     styleClass="w-full sm:w-80"
-                    data-testid="meter-view__select--history-period"
+                    data-testid="meter-view-me__select--history-period"
                   >
                     <ng-template #selectedItem>
                       @if (historySelected()) {
@@ -373,14 +336,13 @@
             } @else {
               <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <i class="pi pi-history text-3xl text-surface-300"></i>
-                <p class="text-surface-500 m-0" data-testid="meter-view__empty--no-history">
+                <p class="text-surface-500 m-0" data-testid="meter-view-me__empty--no-history">
                   {{ 'METER.FULL.NO_HISTORY_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
             }
           </p-tabpanel>
 
-          <!-- Future Data Tab -->
           <p-tabpanel [value]="2">
             @if (hasFutureData()) {
               <div class="space-y-4">
@@ -394,7 +356,7 @@
                     (ngModelChange)="futureSelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
                     styleClass="w-full sm:w-80"
-                    data-testid="meter-view__select--future-period"
+                    data-testid="meter-view-me__select--future-period"
                   >
                     <ng-template #selectedItem>
                       @if (futureSelected()) {
@@ -437,21 +399,10 @@
             } @else {
               <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <i class="pi pi-calendar-plus text-3xl text-surface-300"></i>
-                <p class="text-surface-500 m-0" data-testid="meter-view__empty--no-future">
+                <p class="text-surface-500 m-0" data-testid="meter-view-me__empty--no-future">
                   {{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
-            }
-          </p-tabpanel>
-
-          <!-- Consumption Tab -->
-          <p-tabpanel [value]="3">
-            @defer (on viewport) {
-              <app-meter-consumption-chart [ean]="id" />
-            } @placeholder {
-              <div class="min-h-[20rem]"></div>
-            } @loading (after 100ms; minimum 200ms) {
-              <p-skeleton height="20rem" />
             }
           </p-tabpanel>
         </p-tabpanels>

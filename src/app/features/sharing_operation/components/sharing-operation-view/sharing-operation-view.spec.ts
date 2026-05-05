@@ -61,6 +61,7 @@ function buildSharingOperation(overrides: Partial<SharingOperationDTO> = {}): Sh
     id: 1,
     name: 'Test Operation',
     type: SharingOperationType.LOCAL,
+    municipalities: [],
     is_public: false,
     key: buildSharingOperationKey(),
     ...overrides,
@@ -809,15 +810,6 @@ describe('SharingOperationView', () => {
     it('should set page to 1 when rows is 0', () => {
       component['onLazyLoadSharingOperationKey']({ first: 0, rows: 0 });
       expect(component.filterSharingOperationKey().page).toBe(1);
-    });
-  });
-
-  // ── 11. exportExcelCWAPe ──────────────────────────────────────────
-
-  describe('exportExcelCWAPe', () => {
-    it('should not throw', async () => {
-      await createComponent();
-      expect(() => component.exportExcelCWAPe()).not.toThrow();
     });
   });
 });

@@ -117,6 +117,7 @@ describe('Navbar', () => {
       expect(state.sharing_operations).toBe(false);
       expect(state.communities_users).toBe(false);
       expect(state.communities_managers).toBe(false);
+      expect(state.communities_info).toBe(false);
       expect(state.users_communities).toBe(false);
       expect(state.users_invitations).toBe(false);
       expect(state.users).toBe(false);
@@ -185,6 +186,7 @@ describe('Navbar', () => {
       ['sharing_operations', '/sharing_operations'],
       ['communities_users', '/communities/users'],
       ['communities_managers', '/communities/managers'],
+      ['communities_info', '/communities/info'],
       ['users_communities', '/users/communities'],
       ['users_invitations', '/users/invitations'],
       ['users', '/users'],

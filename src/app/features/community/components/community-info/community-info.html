@@ -1,0 +1,309 @@
+<div class="container mx-auto my-auto">
+  <app-header-page
+    icon="pi pi-id-card"
+    [text]="'COMMUNITY_INFO.TITLE' | translate"
+    [subtitle]="'COMMUNITY_INFO.SUBTITLE' | translate"
+    class="block mb-4"
+  >
+    @if (canEdit() && !editMode() && community()) {
+      <div headerActions class="flex gap-2 w-full sm:w-auto">
+        <p-button
+          type="button"
+          icon="pi pi-pencil"
+          severity="primary"
+          label="{{ 'COMMUNITY_INFO.EDIT_BUTTON' | translate }}"
+          (onClick)="enterEdit()"
+          data-testid="community-info__btn--edit"
+        />
+      </div>
+    }
+  </app-header-page>
+
+  @if (loading()) {
+    <p-card>
+      <div class="flex items-center justify-center py-10 text-surface-400">
+        <i class="pi pi-spin pi-spinner text-2xl mr-3"></i>
+        <span>{{ 'COMMON.LOADING' | translate }}</span>
+      </div>
+    </p-card>
+  } @else if (!community()) {
+    <p-card>
+      <div class="py-8 text-center text-surface-400">
+        <i class="pi pi-info-circle text-3xl mb-2"></i>
+        <p class="m-0">{{ 'COMMUNITY_INFO.NO_COMMUNITY' | translate }}</p>
+      </div>
+    </p-card>
+  } @else {
+    <!-- VIEW MODE -->
+    @if (!editMode()) {
+      <p-card data-testid="community-info__card--view">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex flex-col items-center md:items-start md:w-48 gap-3">
+            @if (community()!.logo_presigned_url) {
+              <img
+                [src]="community()!.logo_presigned_url"
+                [alt]="community()!.name"
+                class="w-40 h-40 object-contain rounded-xl border border-primary-100 bg-surface-0"
+                data-testid="community-info__img--logo"
+              />
+            } @else {
+              <div
+                class="w-40 h-40 rounded-xl border border-dashed border-primary-200 flex items-center justify-center text-surface-300"
+                data-testid="community-info__img--logo-placeholder"
+              >
+                <i class="pi pi-image text-4xl"></i>
+              </div>
+            }
+            <p-tag
+              severity="info"
+              icon="pi pi-users"
+              [value]="community()!.member_count + ' ' + ('COMMUNITY_INFO.MEMBERS' | translate)"
+            />
+          </div>
+
+          <div class="flex-1 grid grid-cols-1 gap-3">
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.NAME' | translate }}</span>
+              <span
+                class="field-value text-lg font-semibold"
+                data-testid="community-info__view--name"
+              >
+                {{ community()!.name }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.DESCRIPTION' | translate }}</span>
+              <span
+                class="field-value whitespace-pre-line"
+                data-testid="community-info__view--description"
+              >
+                {{ community()!.description || '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.WEBSITE' | translate }}</span>
+              @if (community()!.website_url) {
+                <a
+                  [href]="community()!.website_url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="field-value text-primary-600 hover:underline"
+                  data-testid="community-info__view--website"
+                >
+                  {{ community()!.website_url }}
+                </a>
+              } @else {
+                <span class="field-value">—</span>
+              }
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.HEADQUARTERS' | translate }}</span>
+              @if (community()!.headquarters_address; as addr) {
+                <span class="field-value" data-testid="community-info__view--address">
+                  {{ addr.street }} {{ addr.number }}
+                  @if (addr.supplement) {
+                    , {{ addr.supplement }}
+                  }
+                  <br />
+                  {{ addr.postcode }} {{ addr.city }}
+                </span>
+              } @else {
+                <span class="field-value">—</span>
+              }
+            </div>
+          </div>
+        </div>
+      </p-card>
+    }
+
+    <!-- EDIT MODE -->
+    @if (editMode()) {
+      <form
+        [formGroup]="form"
+        (ngSubmit)="save()"
+        data-testid="community-info__form"
+        class="flex flex-col gap-4"
+      >
+        <p-card>
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex flex-col items-center md:items-start md:w-48 gap-3">
+              @if (logoSource(); as src) {
+                <img
+                  [src]="src"
+                  alt="logo preview"
+                  class="w-40 h-40 object-contain rounded-xl border border-primary-100 bg-surface-0"
+                  data-testid="community-info__img--logo-preview"
+                />
+              } @else {
+                <div
+                  class="w-40 h-40 rounded-xl border border-dashed border-primary-200 flex items-center justify-center text-surface-300"
+                >
+                  <i class="pi pi-image text-4xl"></i>
+                </div>
+              }
+              <label class="w-full">
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  (change)="onFileSelected($event)"
+                  data-testid="community-info__input--file"
+                  #fileInput
+                />
+                <p-button
+                  type="button"
+                  icon="pi pi-upload"
+                  severity="secondary"
+                  [outlined]="true"
+                  label="{{ 'COMMUNITY_INFO.CHOOSE_LOGO' | translate }}"
+                  (onClick)="fileInput.click()"
+                  class="w-full"
+                  data-testid="community-info__btn--choose-logo"
+                />
+              </label>
+              @if (community()!.logo_presigned_url || logoPreview()) {
+                <p-button
+                  type="button"
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [text]="true"
+                  label="{{ 'COMMUNITY_INFO.REMOVE_LOGO' | translate }}"
+                  (onClick)="removeLogo()"
+                  class="w-full"
+                  data-testid="community-info__btn--remove-logo"
+                />
+              }
+            </div>
+
+            <div class="flex-1 grid grid-cols-1 gap-3">
+              <div>
+                <span class="field-label">{{ 'COMMUNITY_INFO.NAME' | translate }} *</span>
+                <input
+                  pInputText
+                  formControlName="name"
+                  class="w-full"
+                  placeholder="{{ 'COMMUNITY_INFO.NAME_PLACEHOLDER' | translate }}"
+                  data-testid="community-info__input--name"
+                />
+                @if (form.controls.name.touched && form.controls.name.errors?.['required']) {
+                  <small class="text-red-600">{{ 'COMMON.ERRORS.REQUIRED' | translate }}</small>
+                }
+              </div>
+
+              <div>
+                <span class="field-label">{{ 'COMMUNITY_INFO.DESCRIPTION' | translate }}</span>
+                <textarea
+                  pTextarea
+                  formControlName="description"
+                  rows="4"
+                  class="w-full"
+                  placeholder="{{ 'COMMUNITY_INFO.DESCRIPTION_PLACEHOLDER' | translate }}"
+                  data-testid="community-info__input--description"
+                ></textarea>
+              </div>
+
+              <div>
+                <span class="field-label">{{ 'COMMUNITY_INFO.WEBSITE' | translate }}</span>
+                <input
+                  pInputText
+                  formControlName="website_url"
+                  class="w-full"
+                  placeholder="https://example.com"
+                  data-testid="community-info__input--website"
+                />
+                @if (
+                  form.controls.website_url.touched && form.controls.website_url.errors?.['pattern']
+                ) {
+                  <small class="text-red-600">{{
+                    'COMMUNITY_INFO.ERRORS.INVALID_URL' | translate
+                  }}</small>
+                }
+              </div>
+
+              <div
+                formGroupName="headquarters_address"
+                class="grid grid-cols-1 sm:grid-cols-12 gap-3"
+              >
+                <div class="sm:col-span-9">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.STREET' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="street"
+                    class="w-full"
+                    data-testid="community-info__input--street"
+                  />
+                </div>
+                <div class="sm:col-span-3">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.NUMBER' | translate }}</span>
+                  <input
+                    pInputText
+                    type="number"
+                    formControlName="number"
+                    class="w-full"
+                    data-testid="community-info__input--number"
+                  />
+                </div>
+                <div class="sm:col-span-12">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.SUPPLEMENT' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="supplement"
+                    class="w-full"
+                    data-testid="community-info__input--supplement"
+                  />
+                </div>
+                <div class="sm:col-span-4">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.POSTCODE' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="postcode"
+                    class="w-full"
+                    data-testid="community-info__input--postcode"
+                  />
+                </div>
+                <div class="sm:col-span-8">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.CITY' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="city"
+                    class="w-full"
+                    data-testid="community-info__input--city"
+                  />
+                </div>
+                @if (hasPartialAddressError()) {
+                  <small class="sm:col-span-12 text-red-600">{{
+                    'COMMUNITY_INFO.ERRORS.PARTIAL_ADDRESS' | translate
+                  }}</small>
+                }
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <div class="flex justify-end gap-2">
+          <p-button
+            type="button"
+            severity="secondary"
+            [outlined]="true"
+            label="{{ 'COMMUNITY_INFO.CANCEL_BUTTON' | translate }}"
+            (onClick)="cancelEdit()"
+            [disabled]="saving()"
+            data-testid="community-info__btn--cancel"
+          />
+          <p-button
+            type="submit"
+            severity="primary"
+            icon="pi pi-check"
+            label="{{ 'COMMUNITY_INFO.SAVE_BUTTON' | translate }}"
+            [loading]="saving()"
+            [disabled]="saving() || form.invalid"
+            data-testid="community-info__btn--save"
+          />
+        </div>
+      </form>
+    }
+  }
+</div>

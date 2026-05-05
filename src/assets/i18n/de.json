@@ -17,6 +17,7 @@
     },
     "ERROR_LOADING": "Die Seite konnte nicht geladen werden. Bitte versuchen Sie es später erneut",
     "RETRY": "Erneut versuchen",
+    "LOADING": "Wird geladen…",
     "ERRORS": {
       "EXCEPTION": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut",
       "TIMEOUT": "Die Anfrage ist abgelaufen. Bitte versuchen Sie es erneut",
@@ -28,7 +29,8 @@
       "PARAM_IS_STRING": "Der Parameter muss eine Zeichenkette sein",
       "QUERY_IS_STRING": "Der Abfragewert muss eine Zeichenkette sein",
       "QUERY_IS_NUMERIC": "Der Abfragewert muss numerisch sein",
-      "QUERY_IS_BOOLEAN": "Der Abfragewert muss ein boolescher Wert sein"
+      "QUERY_IS_BOOLEAN": "Der Abfragewert muss ein boolescher Wert sein",
+      "REQUIRED": "Dieses Feld ist erforderlich"
     }
   },
   "LOGIN": {
@@ -57,6 +59,7 @@
     "COMMUNITIES": "Gemeinschaften",
     "MY_COMMUNITIES": "Meine Gemeinschaften",
     "PUBLIC_COMMUNITIES": "Öffentliche Gemeinschaften",
+    "COMMUNITY_INFO": "Gemeinschaftsinfo",
     "COMMUNITY_USERS": "Benutzer",
     "USER_GUIDE": "Benutzerhandbuch",
     "REPORT_BUG": "Fehler melden",
@@ -66,12 +69,14 @@
     "ERROR_LOGOUT": "Fehler beim Abmelden",
     "DELETE": "Löschen",
     "COPY_TO_CLIPBOARD": "In die Zwischenablage kopieren",
+    "COMMUNITY": "Gemeinschaft",
     "MANAGEMENT": "Verwaltung",
     "ERROR_LOADING": "Beim Laden der Daten ist ein Fehler aufgetreten",
     "RETRY": "Erneut versuchen"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
+    "BACK_TO_PROFILE": "Zurück zum Profil",
     "UPDATE": "Aktualisieren",
     "ACCOUNT_INFORMATION": "Kontoinformationen",
     "UPDATE_PASSWORD": "Passwort ändern",
@@ -205,6 +210,32 @@
       "NO_INVITATIONS_AVAILABLE": "Keine Managereinladungen gefunden"
     }
   },
+  "COMMUNITY_INFO": {
+    "TITLE": "Gemeinschaftsinfo",
+    "SUBTITLE": "Anzeigen und Verwalten der Daten Ihrer Gemeinschaft",
+    "EDIT_BUTTON": "Bearbeiten",
+    "SAVE_BUTTON": "Speichern",
+    "CANCEL_BUTTON": "Abbrechen",
+    "NAME": "Name",
+    "NAME_PLACEHOLDER": "Name der Gemeinschaft",
+    "DESCRIPTION": "Beschreibung",
+    "DESCRIPTION_PLACEHOLDER": "Worum geht es in Ihrer Gemeinschaft?",
+    "WEBSITE": "Website",
+    "HEADQUARTERS": "Hauptsitz",
+    "STREET": "Straße",
+    "NUMBER": "Nummer",
+    "SUPPLEMENT": "Adresszusatz",
+    "POSTCODE": "PLZ",
+    "CITY": "Stadt",
+    "MEMBERS": "Mitglieder",
+    "CHOOSE_LOGO": "Logo auswählen",
+    "REMOVE_LOGO": "Logo entfernen",
+    "NO_COMMUNITY": "Keine aktive Gemeinschaft ausgewählt.",
+    "ERRORS": {
+      "INVALID_URL": "Bitte geben Sie eine gültige URL ein, die mit http:// oder https:// beginnt",
+      "PARTIAL_ADDRESS": "Bitte vervollständigen Sie alle erforderlichen Adressfelder oder lassen Sie sie leer"
+    }
+  },
   "COMMUNITY": {
     "LIST": {
       "CREATE_COMMUNITY": "Gemeinschaft erstellen",
@@ -237,6 +268,12 @@
       "DETAILS_BUTTON_TOOLTIP": "Gemeinschaftsdetails anzeigen",
       "NO_PUBLIC_COMMUNITY_FOUND": "Keine öffentlichen Gemeinschaften verfügbar",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
+    },
+    "PUBLIC_LIST": {
+      "NO_OPERATIONS": "Keine öffentliche Teilungsoperation für diese Gemeinschaft",
+      "MUNICIPALITIES": "Gemeinden",
+      "MUNICIPALITY_FILTER_LABEL": "Nach Gemeinde filtern",
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Eine Gemeinde suchen…"
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",
@@ -1018,6 +1055,8 @@
     "ADD": {
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Typ",
+      "MUNICIPALITIES_LABEL": "Abgedeckte Gemeinden",
+      "MUNICIPALITIES_PLACEHOLDER": "Gemeinde suchen…",
       "ADD_BUTTON_LABEL": "Hinzufügen"
     },
     "ADD_KEY": {
@@ -1104,6 +1143,11 @@
         "PUT_TO_WAITING_LIST_BUTTON_LABEL": "Auf die Warteliste setzen",
         "APPROVE_BUTTON_LABEL": "Genehmigen",
         "DELETE_BUTTON_LABEL": "Löschen",
+        "HARD_DELETE_BUTTON_LABEL": "Endgültig löschen",
+        "HARD_DELETE_CONFIRM_LABEL": "Dieser Zähler hat noch nicht begonnen. Aus dieser Beteiligung endgültig entfernen?",
+        "FILTER_PAST_FROM_LABEL": "Von",
+        "FILTER_PAST_TO_LABEL": "Bis",
+        "FILTER_FUTURE_AT_LABEL": "Am Datum",
         "NO_METERS_FOUND_LABEL": "Kein Zähler gefunden",
         "CHANGE_STATUS_METER_STARTING_LABEL": "Aktivitätsstartdatum des Zählers",
         "CHANGE_STATUS_METER_ENDING_LABEL": "Enddatum des Zählers",
@@ -1170,6 +1214,7 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Typ",
+      "MUNICIPALITIES": "Gemeinden",
       "NO_SHARING_OPERATION_FOUND_LABEL": "Keine Teilungsoperation gefunden",
       "PAGE_REPORT_TEMPLATE_SHARING_OP_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Teilungsoperationen)",
       "ADD_SHARING_OP_HEADER": "Teilungsoperation hinzufügen",

@@ -13,6 +13,7 @@ import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.no
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
 import { SharingOperationPartialDTO } from '../../../../shared/dtos/sharing_operation.dtos';
+import { MunicipalityPartialDTO } from '../../../../shared/dtos/municipality.dtos';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
@@ -28,10 +29,34 @@ class HeaderPageStub {}
 
 // ── Helpers ────────────────────────────────────────────────────────
 
+function buildMunicipality(
+  nis_code: number,
+  fr_name = `Ville-${nis_code}`,
+): MunicipalityPartialDTO {
+  return {
+    nis_code,
+    fr_name,
+    nl_name: null,
+    de_name: null,
+    region_fr: null,
+    postal_codes: [],
+  };
+}
+
 function buildSharingOpList(): SharingOperationPartialDTO[] {
   return [
-    { id: 1, name: 'Op Alpha', type: SharingOperationType.LOCAL },
-    { id: 2, name: 'Op Beta', type: SharingOperationType.CER },
+    {
+      id: 1,
+      name: 'Op Alpha',
+      type: SharingOperationType.LOCAL,
+      municipalities: [],
+    },
+    {
+      id: 2,
+      name: 'Op Beta',
+      type: SharingOperationType.CER,
+      municipalities: [buildMunicipality(11001, 'Bruxelles'), buildMunicipality(21001, 'Liège')],
+    },
   ];
 }
 
@@ -477,9 +502,50 @@ describe('SharingOperationsList', () => {
         id: 42,
         name: 'Test',
         type: SharingOperationType.LOCAL,
+        municipalities: [],
       };
       component.onRowClick(op);
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/sharing_operations/', 42]);
+    });
+  });
+
+  // ── 11b. Municipalities passthrough ──────────────────────────────
+
+  describe('municipalities passthrough', () => {
+    beforeEach(async () => {
+      await createComponent();
+      sharingOpServiceSpy.getSharingOperationList.mockClear();
+    });
+
+    it('should preserve municipalities on each op when loading from the service', () => {
+      component.loadSharingOperation();
+
+      const list = component.sharingOperationList();
+      expect(list[0].municipalities).toEqual([]);
+      expect(list[1].municipalities).toHaveLength(2);
+      expect(list[1].municipalities[0].fr_name).toBe('Bruxelles');
+      expect(list[1].municipalities[1].fr_name).toBe('Liège');
+    });
+
+    it('should accept ops with more than 3 municipalities (overflow case)', () => {
+      const heavyOp: SharingOperationPartialDTO = {
+        id: 99,
+        name: 'Heavy',
+        type: SharingOperationType.CEC,
+        municipalities: [
+          buildMunicipality(1, 'A'),
+          buildMunicipality(2, 'B'),
+          buildMunicipality(3, 'C'),
+          buildMunicipality(4, 'D'),
+        ],
+      };
+      sharingOpServiceSpy.getSharingOperationList.mockReturnValue(
+        of(buildPaginatedResponse([heavyOp])),
+      );
+
+      component.loadSharingOperation();
+
+      expect(component.sharingOperationList()[0].municipalities.length).toBe(4);
     });
   });
 

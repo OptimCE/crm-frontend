@@ -1,0 +1,287 @@
+<div class="container mx-auto my-auto">
+  @if (isLoading()) {
+    <div class="space-y-4">
+      <div class="member-hero rounded-xl border border-primary-100 p-6 flex items-center gap-5">
+        <p-skeleton shape="circle" size="4rem" />
+        <div class="flex flex-col gap-2 flex-1">
+          <p-skeleton width="14rem" height="1.5rem" />
+          <p-skeleton width="9rem" height="1rem" />
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        @for (_ of [1, 2, 3]; track $index) {
+          <div class="bg-white border border-surface-200 rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-4">
+              <p-skeleton shape="circle" size="1.5rem" />
+              <p-skeleton width="8rem" height="1rem" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              @for (_ of [1, 2, 3, 4]; track $index) {
+                <div>
+                  <p-skeleton width="5rem" height="0.75rem" styleClass="mb-2" />
+                  <p-skeleton width="7rem" height="1rem" />
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else if (hasError()) {
+    <div
+      class="flex flex-col items-center justify-center py-16 gap-4"
+      data-testid="member-view-me__container--error"
+    >
+      <i class="pi pi-exclamation-circle text-4xl text-surface-300"></i>
+      <p class="text-surface-500 text-center">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <p-button
+        [outlined]="true"
+        icon="pi pi-refresh"
+        label="{{ 'COMMON.RETRY' | translate }}"
+        (click)="loadMember()"
+        data-testid="member-view-me__btn--retry"
+      />
+    </div>
+  } @else if (member()) {
+    <app-back-arrow url="/users" [text]="'PROFILE.BACK_TO_PROFILE' | translate"></app-back-arrow>
+
+    <div class="space-y-4 mt-3">
+      <!-- Hero Section -->
+      <div
+        class="member-hero rounded-xl border border-primary-100 p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+        data-testid="member-view-me__hero"
+      >
+        <p-avatar
+          [label]="memberInitials()"
+          size="xlarge"
+          shape="circle"
+          [styleClass]="
+            membersType() === MemberType.COMPANY
+              ? 'bg-primary-50 text-primary-700 text-xl font-semibold'
+              : 'bg-primary-100 text-primary-700 text-xl font-semibold'
+          "
+        />
+        <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
+              @if (individual()) {
+                {{ individual()!.first_name }} {{ individual()!.name }}
+              } @else if (legalEntity()) {
+                {{ legalEntity()!.name }}
+              }
+            </h1>
+            @switch (status()) {
+              @case (MemberStatus.ACTIVE) {
+                <p-tag
+                  severity="success"
+                  value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
+                  data-testid="member-view-me__tag--status-active"
+                />
+              }
+              @case (MemberStatus.INACTIVE) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
+                  data-testid="member-view-me__tag--status-inactive"
+                />
+              }
+              @case (MemberStatus.PENDING) {
+                <p-tag
+                  severity="warn"
+                  value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
+                  data-testid="member-view-me__tag--status-pending"
+                />
+              }
+            }
+          </div>
+          <p class="text-sm text-surface-500 m-0 truncate">
+            @if (individual()) {
+              {{ individual()!.email }}
+            } @else if (legalEntity()) {
+              {{ legalEntity()!.vat_number }}
+            }
+          </p>
+        </div>
+      </div>
+
+      <!-- Information Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Card 1: Identification -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-id-card text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'MEMBER.VIEW.IDENTIFICATION_TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @if (individual()) {
+              <div>
+                <span class="field-label">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.SOCIAL_SECURITY_NUMBER_LABEL' | translate }}
+                </span>
+                @if (individual()!.NRN) {
+                  <span class="field-value">{{ individual()!.NRN }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+            }
+            @if (legalEntity()) {
+              <div>
+                <span class="field-label">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.COMPANY_VAT_NUMBER_LABEL' | translate }}
+                </span>
+                @if (legalEntity()!.vat_number) {
+                  <span class="field-value">{{ legalEntity()!.vat_number }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+            }
+            <div>
+              <span class="field-label">
+                {{ 'MEMBER.VIEW.INFORMATIONS.NAME_LABEL' | translate }}
+              </span>
+              @if (member()!.name) {
+                <span class="field-value">{{ member()!.name }}</span>
+              } @else {
+                <span class="field-empty">--</span>
+              }
+            </div>
+            @if (individual()) {
+              <div>
+                <span class="field-label">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.FIRST_NAME_LABEL' | translate }}
+                </span>
+                @if (individual()!.first_name) {
+                  <span class="field-value">{{ individual()!.first_name }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+            }
+          </div>
+        </p-card>
+
+        <!-- Card 2: Contact -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-envelope text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'MEMBER.VIEW.CONTACT_TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            @if (individual()) {
+              <div>
+                <span class="field-label">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.EMAIL_LABEL' | translate }}
+                </span>
+                @if (individual()!.email) {
+                  <span class="field-value">{{ individual()!.email }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+              <div>
+                <span class="field-label">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.PHONE_LABEL' | translate }}
+                </span>
+                @if (individual()!.phone_number) {
+                  <span class="field-value">{{ individual()!.phone_number }}</span>
+                } @else {
+                  <span class="field-empty">--</span>
+                }
+              </div>
+              <div>
+                <span class="field-label">
+                  {{ 'MEMBER.VIEW.INFORMATIONS.SOCIAL_RATE_LABEL' | translate }}
+                </span>
+                @if (individual()!.social_rate) {
+                  <span class="field-value">{{ 'COMMON.ACTIONS.YES' | translate }}</span>
+                } @else {
+                  <span class="field-value">{{ 'COMMON.ACTIONS.NO' | translate }}</span>
+                }
+              </div>
+            }
+          </div>
+        </p-card>
+
+        <!-- Card 3: Addresses -->
+        <p-card styleClass="h-full border-l-3 border-l-primary-400">
+          <div class="flex items-center gap-2.5 mb-4">
+            <i class="pi pi-home text-primary-500 text-lg"></i>
+            <h3 class="font-semibold text-base text-surface-800 m-0">
+              {{ 'MEMBER.VIEW.INFORMATIONS.ADDRESSES_LABEL' | translate }}
+            </h3>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div>
+              <span class="field-label">
+                {{ 'MEMBER.VIEW.INFORMATIONS.ADDRESS.HOUSE' | translate }}
+              </span>
+              @if (member()!.home_address) {
+                <div class="bg-surface-50 border border-surface-200 rounded-lg p-3 mt-1">
+                  <p
+                    class="m-0 text-sm text-surface-800"
+                    [innerHTML]="member()!.home_address | address"
+                  ></p>
+                </div>
+              } @else {
+                <div class="flex items-center gap-2 mt-1">
+                  <i class="pi pi-map-marker text-sm text-surface-300"></i>
+                  <span class="field-empty">--</span>
+                </div>
+              }
+            </div>
+            <div>
+              <span class="field-label">
+                {{ 'MEMBER.VIEW.INFORMATIONS.ADDRESS.BILLING' | translate }}
+              </span>
+              @if (member()!.billing_address) {
+                <div class="bg-surface-50 border border-surface-200 rounded-lg p-3 mt-1">
+                  <p
+                    class="m-0 text-sm text-surface-800"
+                    [innerHTML]="member()!.billing_address | address"
+                  ></p>
+                </div>
+              } @else {
+                <div class="flex items-center gap-2 mt-1">
+                  <i class="pi pi-map-marker text-sm text-surface-300"></i>
+                  <span class="field-empty">--</span>
+                </div>
+              }
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Tabs -->
+      <p-tabs [value]="0" styleClass="member-tabs">
+        <p-tablist>
+          <p-tab [value]="0" data-testid="member-view-me__tab--banking">
+            {{ 'MEMBER.VIEW.TAB_HEADER.BANKING_INFO_LABEL' | translate }}
+          </p-tab>
+          @if (manager()) {
+            <p-tab [value]="1" data-testid="member-view-me__tab--manager">
+              {{ 'MEMBER.VIEW.TAB_HEADER.MANAGER_LABEL' | translate }}
+            </p-tab>
+          }
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel [value]="0">
+            <app-member-view-banking-info-tab
+              [member]="member()!"
+            ></app-member-view-banking-info-tab>
+          </p-tabpanel>
+          @if (manager()) {
+            <p-tabpanel [value]="1">
+              <app-member-view-manager-tab [member]="member()!"></app-member-view-manager-tab>
+            </p-tabpanel>
+          }
+        </p-tabpanels>
+      </p-tabs>
+    </div>
+  }
+</div>

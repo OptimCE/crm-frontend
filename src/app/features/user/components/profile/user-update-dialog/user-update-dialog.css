@@ -4,6 +4,6 @@
   margin-bottom: 0.75rem;
 }
 
-:host ::ng-deep .ng-invalid.ng-dirty .p-inputtext {
+:host ::ng-deep .p-inputtext.ng-invalid.ng-dirty {
   border-color: var(--p-red-400);
 }

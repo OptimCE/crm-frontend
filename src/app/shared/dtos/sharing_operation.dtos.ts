@@ -2,12 +2,15 @@ import { PaginationQuery, Sort } from './query.dtos';
 import { SharingKeyStatus, SharingOperationType } from '../types/sharing_operation.types';
 import { KeyPartialDTO } from './key.dtos';
 import { MeterDataStatus } from '../types/meter.types';
+import { MunicipalityPartialDTO } from './municipality.dtos';
 /**
  * Query parameters for filtering and paginating a list of sharing operations.
  */
 export interface SharingOperationPartialQuery extends PaginationQuery {
   name?: string;
   type?: string;
+  /** Filter operations to those covering at least one of these municipality NIS codes. */
+  municipality_nis_codes?: number[];
   sort_name?: Sort;
   sort_type?: Sort;
 }
@@ -28,6 +31,12 @@ export interface SharingOperationMetersQuery extends PaginationQuery {
   meter_number?: string;
   status?: MeterDataStatus;
   holder_id?: number;
+  /** PAST tab range-overlap filter: lower bound (`YYYY-MM-DD`). */
+  start_date_from?: string;
+  /** PAST tab range-overlap filter: upper bound (`YYYY-MM-DD`). */
+  end_date_to?: string;
+  /** FUTURE tab snapshot date (`YYYY-MM-DD`). Defaults to tomorrow on the backend. */
+  future_at?: string;
   type: SharingOperationMetersQueryType;
 }
 
@@ -46,6 +55,7 @@ export interface SharingOperationPartialDTO {
   id: number;
   name: string;
   type: SharingOperationType;
+  municipalities: MunicipalityPartialDTO[];
 }
 /**
  * DTO representing a key associated with a sharing operation.
@@ -86,6 +96,16 @@ export interface SharingOpConsumptionDTO {
 export interface CreateSharingOperationDTO {
   name: string;
   type: SharingOperationType;
+  /** NIS codes of the Belgian municipalities the operation covers (at least one). */
+  municipality_nis_codes: number[];
+}
+
+/**
+ * DTO for replacing the full set of municipalities linked to a sharing operation.
+ */
+export interface UpdateSharingOperationMunicipalitiesDTO {
+  id_sharing: number;
+  municipality_nis_codes: number[];
 }
 
 /**
@@ -101,7 +121,8 @@ export interface AddKeyToSharingOperationDTO {
  */
 export interface AddMeterToSharingOperationDTO {
   id_sharing: number;
-  date: Date;
+  /** Calendar date `YYYY-MM-DD` — no time/zone. */
+  date: string;
   ean_list: string[];
 }
 
@@ -130,16 +151,25 @@ export interface PatchMeterToSharingOperationDTO {
   id_meter: string;
   id_sharing: number;
   status: MeterDataStatus;
-  date: Date;
+  /** Calendar date `YYYY-MM-DD` — no time/zone. */
+  date: string;
 }
 
 /**
  * DTO for removing a meter from a sharing operation.
+ *
+ * Two modes:
+ *  - default (`hard_delete` falsy): close the meter's participation by appending an
+ *    INACTIVE record starting at `date` (required).
+ *  - `hard_delete = true`: physically delete a not-yet-started future record. `date`
+ *    is ignored and the backend rejects the call if the meter has already started.
  */
 export interface RemoveMeterFromSharingOperationDTO {
   id_meter: string;
   id_sharing: number;
-  date: Date;
+  /** Calendar date `YYYY-MM-DD` — required unless `hard_delete` is true. */
+  date?: string;
+  hard_delete?: boolean;
 }
 
 /**

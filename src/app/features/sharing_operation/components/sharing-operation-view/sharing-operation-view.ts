@@ -276,10 +276,10 @@ export class SharingOperationView implements OnInit {
         },
       });
   }
-
-  exportExcelCWAPe(): void {
-    console.log('TO IMPLEMENT');
-  }
+  //
+  // exportExcelCWAPe(): void {
+  //   console.log('TO IMPLEMENT');
+  // }
   loadAllMeters(): void {
     try {
       const params: MeterPartialQuery = {

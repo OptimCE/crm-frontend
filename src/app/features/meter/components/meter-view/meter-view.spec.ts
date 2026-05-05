@@ -53,7 +53,7 @@ function buildMeterData(overrides: Partial<MetersDataDTO> = {}): MetersDataDTO {
     amperage: 25,
     rate: MeterRate.SIMPLE,
     client_type: ClientType.RESIDENTIAL,
-    start_date: new Date('2024-01-01'),
+    start_date: '2024-01-01',
     injection_status: InjectionStatus.NONE,
     production_chain: ProductionChain.PHOTOVOLTAIC,
     totalGenerating_capacity: 5,
@@ -75,14 +75,14 @@ function buildMeter(overrides: Partial<MetersDTO> = {}): MetersDTO {
       buildMeterData({
         id: 2,
         status: MeterDataStatus.INACTIVE,
-        start_date: new Date('2023-01-01'),
-        end_date: new Date('2023-12-31'),
+        start_date: '2023-01-01',
+        end_date: '2023-12-31',
       }),
     ],
     futur_meter_data: [
       buildMeterData({
         id: 3,
-        start_date: new Date('2025-01-01'),
+        start_date: '2025-01-01',
       }),
     ],
     ...overrides,

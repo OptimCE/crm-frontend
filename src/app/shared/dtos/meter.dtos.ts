@@ -47,6 +47,14 @@ export interface PartialMeterDTO {
   address: AddressDTO;
   holder?: MembersPartialDTO;
   status: MeterDataStatus;
+  /**
+   * Start date (`YYYY-MM-DD`) of the meter data record selected for this view.
+   * In sharing-operation tabs, lets the UI tell whether the row is a future-only
+   * scheduled record (eligible for hard delete) or already-active.
+   */
+  start_date?: string;
+  /** End date (`YYYY-MM-DD`) of the meter data record selected for this view, if closed. */
+  end_date?: string;
   sharing_operation?: SharingOperationPartialDTO;
 }
 
@@ -61,8 +69,8 @@ export interface MetersDataDTO {
   amperage: number;
   rate: MeterRate;
   client_type: ClientType;
-  start_date: Date;
-  end_date?: Date;
+  start_date: string;
+  end_date?: string;
   injection_status: InjectionStatus;
   production_chain: ProductionChain;
   totalGenerating_capacity: number;
@@ -137,9 +145,9 @@ export interface MeterConsumptionDTO {
  * DTO for creating or updating a MeterData configuration period.
  */
 export interface CreateMeterDataDTO {
-  start_date: Date;
+  start_date: string;
 
-  end_date?: Date;
+  end_date?: string;
 
   status: MeterDataStatus;
 
