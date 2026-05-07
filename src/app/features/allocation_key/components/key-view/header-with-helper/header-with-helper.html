@@ -1,4 +1,3 @@
-<!-- Use AG Grid header classes so the theme lays out content on one line -->
 <div class="ag-header-cell-label">
   <span
     class="ag-header-cell-text"
@@ -8,16 +7,38 @@
     {{ params()?.label }}
   </span>
 
-  <!-- right-side icon/button area -->
   <span class="ag-header-icon ag-header-label-icon">
     <button
       type="button"
-      class="ag-header-icon-button button-helper"
-      (click)="onClick()"
+      class="helper-trigger"
+      (click)="onClick($event)"
       [attr.aria-label]="'KEY.SHARED.HELP_LABEL' | translate"
+      aria-haspopup="dialog"
+      [attr.aria-expanded]="isOpen()"
       data-testid="header-helper__btn--help"
     >
-      <i class="pi pi-question-circle icon-button-helper"></i>
+      <i class="pi pi-info-circle helper-trigger__icon" aria-hidden="true"></i>
     </button>
   </span>
 </div>
+
+<p-popover
+  #helpPopover
+  styleClass="helper-popover"
+  (onShow)="isOpen.set(true)"
+  (onHide)="isOpen.set(false)"
+>
+  <div class="helper-popover__content" data-testid="header-helper__popover--content">
+    <div class="helper-popover__header">
+      <span class="helper-popover__icon" aria-hidden="true">
+        <i class="pi pi-info-circle"></i>
+      </span>
+      <h3 class="helper-popover__title" data-testid="header-helper__title--label">
+        {{ params()?.label }}
+      </h3>
+    </div>
+    <p class="helper-popover__body" data-testid="header-helper__text--description">
+      {{ params()?.tooltip }}
+    </p>
+  </div>
+</p-popover>

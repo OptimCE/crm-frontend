@@ -313,6 +313,9 @@ export class SharingOperationView implements OnInit {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '960px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('SHARING_OPERATION.VIEW.METER.ADD_METERS_HEADER') as string,
       data: {
         id: this.id(),

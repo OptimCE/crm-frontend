@@ -424,6 +424,52 @@ describe('Navbar', () => {
     });
   });
 
+  describe('User guide link', () => {
+    let queryGuideLink: () => HTMLAnchorElement | null;
+
+    beforeEach(async () => {
+      mockMatchMedia(false);
+      await setupTestBed();
+      fixture.detectChanges();
+
+      queryGuideLink = () =>
+        (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>(
+          '[data-testid="navbar__btn--user-guide"]',
+        );
+    });
+
+    it('should render the user guide link in the footer', () => {
+      expect(queryGuideLink()).toBeTruthy();
+    });
+
+    it('should point to the public user guide URL', () => {
+      expect(queryGuideLink()?.getAttribute('href')).toBe('https://guide.optimce.be');
+    });
+
+    it('should open in a new tab with safe rel attributes', () => {
+      const link = queryGuideLink();
+      expect(link?.getAttribute('target')).toBe('_blank');
+      expect(link?.getAttribute('rel')).toContain('noopener');
+      expect(link?.getAttribute('rel')).toContain('noreferrer');
+    });
+
+    it('should hide the label when the sidebar is collapsed', () => {
+      component['sidebarOpen'].set(false);
+      fixture.detectChanges();
+
+      expect(queryGuideLink()?.querySelector('span')).toBeNull();
+    });
+
+    it('should show the translated label when the sidebar is expanded', () => {
+      component['sidebarOpen'].set(true);
+      fixture.detectChanges();
+
+      const label = queryGuideLink()?.querySelector('span');
+      expect(label).toBeTruthy();
+      expect(label?.textContent?.trim()).toBe('NAVBAR.USER_GUIDE');
+    });
+  });
+
   describe('Logout', () => {
     beforeEach(async () => {
       mockMatchMedia(false);

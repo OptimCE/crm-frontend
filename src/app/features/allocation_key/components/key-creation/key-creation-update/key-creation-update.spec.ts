@@ -2,7 +2,6 @@ import { Component, input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { DialogService } from 'primeng/dynamicdialog';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -93,7 +92,6 @@ describe('KeyCreationUpdate', () => {
   let translateService: TranslateService;
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
-  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
   let queryParamSubject: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
   let gridApiMock: { refreshCells: ReturnType<typeof vi.fn> };
 
@@ -137,7 +135,6 @@ describe('KeyCreationUpdate', () => {
     routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
     snackbarSpy = { openSnackBar: vi.fn() };
     errorHandlerSpy = { handleError: vi.fn() };
-    dialogServiceSpy = { open: vi.fn() };
     gridApiMock = { refreshCells: vi.fn() };
 
     // Ensure history.state is never null (test environment default)
@@ -159,10 +156,9 @@ describe('KeyCreationUpdate', () => {
       ],
     })
       .overrideComponent(KeyCreationUpdate, {
-        remove: { imports: [BackArrow, AgGridAngular], providers: [DialogService] },
+        remove: { imports: [BackArrow, AgGridAngular] },
         add: {
           imports: [BackArrowStub, AgGridStub],
-          providers: [{ provide: DialogService, useValue: dialogServiceSpy }],
           schemas: [NO_ERRORS_SCHEMA],
         },
       })
@@ -1307,56 +1303,7 @@ describe('KeyCreationUpdate', () => {
     });
   });
 
-  // ── 14. openHelper & ngOnDestroy ─────────────────────────────────
-
-  describe('openHelper', () => {
-    beforeEach(async () => {
-      await createComponent();
-      setupGridApi();
-    });
-
-    it('should call dialogService.open with display text', () => {
-      component.openHelper('Some tooltip text');
-
-      expect(dialogServiceSpy.open).toHaveBeenCalledWith(
-        expect.any(Function),
-        expect.objectContaining({
-          modal: true,
-          closable: true,
-          closeOnEscape: true,
-          data: { displayText: 'Some tooltip text' },
-        }),
-      );
-    });
-  });
-
-  describe('ngOnDestroy', () => {
-    beforeEach(async () => {
-      await createComponent();
-      setupGridApi();
-    });
-
-    it('should destroy ref when it exists', () => {
-      const destroyFn = vi.fn();
-      component.ref = { destroy: destroyFn } as unknown as typeof component.ref;
-
-      component.ngOnDestroy();
-
-      expect(destroyFn).toHaveBeenCalled();
-    });
-
-    it('should not throw when ref is null', () => {
-      component.ref = null;
-      expect(() => component.ngOnDestroy()).not.toThrow();
-    });
-
-    it('should not throw when ref is undefined', () => {
-      component.ref = undefined;
-      expect(() => component.ngOnDestroy()).not.toThrow();
-    });
-  });
-
-  // ── 15. cellStyleNumber ──────────────────────────────────────────
+  // ── 14. cellStyleNumber ──────────────────────────────────────────
 
   describe('cellStyleNumber', () => {
     beforeEach(async () => {

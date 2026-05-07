@@ -2,13 +2,11 @@ import { Component, input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { DialogService } from 'primeng/dynamicdialog';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { KeyView } from './key-view';
 import { HeaderWithHelper } from './header-with-helper/header-with-helper';
-import { HelperDialog } from './helper-dialog/helper-dialog';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { AgGridAngular } from 'ag-grid-angular';
 import { KeyService } from '../../../../shared/services/key.service';
@@ -88,7 +86,6 @@ describe('KeyView', () => {
   let translateService: TranslateService;
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
-  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
   let gridApiMock: {
     sizeColumnsToFit: ReturnType<typeof vi.fn>;
     refreshHeader: ReturnType<typeof vi.fn>;
@@ -131,7 +128,6 @@ describe('KeyView', () => {
     routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
     snackbarSpy = { openSnackBar: vi.fn() };
     errorHandlerSpy = { handleError: vi.fn() };
-    dialogServiceSpy = { open: vi.fn() };
     gridApiMock = {
       sizeColumnsToFit: vi.fn(),
       refreshHeader: vi.fn(),
@@ -149,10 +145,9 @@ describe('KeyView', () => {
       ],
     })
       .overrideComponent(KeyView, {
-        remove: { imports: [BackArrow, AgGridAngular], providers: [DialogService] },
+        remove: { imports: [BackArrow, AgGridAngular] },
         add: {
           imports: [BackArrowStub, AgGridStub],
-          providers: [{ provide: DialogService, useValue: dialogServiceSpy }],
           schemas: [NO_ERRORS_SCHEMA],
         },
       })
@@ -655,32 +650,7 @@ describe('KeyView', () => {
     });
   });
 
-  // ── 10. openHelper ─────────────────────────────────────────────────
-
-  describe('openHelper', () => {
-    beforeEach(async () => {
-      await createComponent();
-    });
-
-    it('should call dialogService.open with HelperDialog and display text', () => {
-      component.openHelper('Some help text');
-      expect(dialogServiceSpy.open).toHaveBeenCalledWith(HelperDialog, {
-        closable: true,
-        modal: true,
-        closeOnEscape: true,
-        data: { displayText: 'Some help text' },
-      });
-    });
-
-    it('should store the dialog ref', () => {
-      const mockRef = { destroy: vi.fn() };
-      dialogServiceSpy.open.mockReturnValue(mockRef);
-      component.openHelper('text');
-      expect(component.ref).toBe(mockRef);
-    });
-  });
-
-  // ── 11. Computed signals ───────────────────────────────────────────
+  // ── 10. Computed signals ───────────────────────────────────────────
 
   describe('computed signals', () => {
     beforeEach(async () => {
@@ -742,31 +712,6 @@ describe('KeyView', () => {
     it('should return 0 for consumerCount when key is undefined', () => {
       component.key.set(undefined);
       expect(component.consumerCount()).toBe(0);
-    });
-  });
-
-  // ── 12. ngOnDestroy ────────────────────────────────────────────────
-
-  describe('ngOnDestroy', () => {
-    beforeEach(async () => {
-      await createComponent();
-    });
-
-    it('should destroy dialog ref if present', () => {
-      const destroySpy = vi.fn();
-      component.ref = { destroy: destroySpy } as unknown as typeof component.ref;
-      component.ngOnDestroy();
-      expect(destroySpy).toHaveBeenCalled();
-    });
-
-    it('should not throw when ref is null', () => {
-      component.ref = null;
-      expect(() => component.ngOnDestroy()).not.toThrow();
-    });
-
-    it('should not throw when ref is undefined', () => {
-      component.ref = undefined;
-      expect(() => component.ngOnDestroy()).not.toThrow();
     });
   });
 });

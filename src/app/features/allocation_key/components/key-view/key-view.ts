@@ -1,11 +1,9 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { KeyDTO } from '../../../../shared/dtos/key.dtos';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyService } from '../../../../shared/services/key.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { HeaderWithHelper } from './header-with-helper/header-with-helper';
-import { HelperDialog } from './helper-dialog/helper-dialog';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { Ripple } from 'primeng/ripple';
@@ -25,16 +23,14 @@ import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
   imports: [Button, Card, Ripple, Skeleton, SlicePipe, AgGridAngular, TranslatePipe, BackArrow],
   templateUrl: './key-view.html',
   styleUrl: './key-view.css',
-  providers: [DialogService],
 })
-export class KeyView implements OnInit, OnDestroy {
+export class KeyView implements OnInit {
   private route = inject(ActivatedRoute);
   private keyService = inject(KeyService);
   readonly routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
-  private dialogService = inject(DialogService);
 
   readonly key = signal<KeyDTO | undefined>(undefined);
   readonly isLoaded = signal(false);
@@ -54,7 +50,6 @@ export class KeyView implements OnInit, OnDestroy {
     minWidth: 140,
   };
   gridApi!: GridApi;
-  ref?: DynamicDialogRef | null;
   frameworkComponents: Record<string, unknown> = {
     headerHelperRenderer: HeaderWithHelper,
   };
@@ -179,7 +174,6 @@ export class KeyView implements OnInit, OnDestroy {
             headerComponentParams: {
               label: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               tooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
-              click: this.openHelper.bind(this),
             },
             headerTooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             minWidth: 120,
@@ -193,7 +187,6 @@ export class KeyView implements OnInit, OnDestroy {
             headerComponentParams: {
               label: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
               tooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
-              click: this.openHelper.bind(this),
             },
             headerTooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             minWidth: 120,
@@ -215,7 +208,6 @@ export class KeyView implements OnInit, OnDestroy {
             headerComponentParams: {
               label: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
               tooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
-              click: this.openHelper.bind(this),
             },
             headerTooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
             minWidth: 120,
@@ -305,22 +297,5 @@ export class KeyView implements OnInit, OnDestroy {
 
   toggleDescription(): void {
     this.displayAllDescription.update((v) => !v);
-  }
-
-  openHelper(displayText: string): void {
-    this.ref = this.dialogService.open(HelperDialog, {
-      closable: true,
-      modal: true,
-      closeOnEscape: true,
-      data: {
-        displayText: displayText,
-      },
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
-    }
   }
 }

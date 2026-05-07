@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import { CommunityDetailDTO, PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import {
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
@@ -35,6 +35,9 @@ export class PublicCommunityList {
    */
   publicOperations = signal<Map<number, SharingOperationPartialDTO[]>>(new Map());
   loadingOperations = signal<Set<number>>(new Set());
+  /** Per-community detail (description, website, HQ address) lazy-loaded on expand. */
+  communityDetails = signal<Map<number, CommunityDetailDTO>>(new Map());
+  loadingDetails = signal<Set<number>>(new Set());
   expandedCommunityId = signal<number | null>(null);
   brokenLogos = signal<Set<number>>(new Set());
 
@@ -51,7 +54,7 @@ export class PublicCommunityList {
   }
 
   hasValidLogo(community: PublicCommunityDTO): boolean {
-    return !!community.logo_url && !this.brokenLogos().has(community.id);
+    return !!community.logo_presigned_url && !this.brokenLogos().has(community.id);
   }
 
   constructor() {
@@ -66,6 +69,36 @@ export class PublicCommunityList {
         if (response) {
           this.communities.set(response.data as PublicCommunityDTO[]);
         }
+      });
+  }
+
+  private loadCommunityDetail(communityId: number): void {
+    if (this.communityDetails().has(communityId) || this.loadingDetails().has(communityId)) {
+      return;
+    }
+    const loadingNext = new Set(this.loadingDetails());
+    loadingNext.add(communityId);
+    this.loadingDetails.set(loadingNext);
+
+    this.communityService
+      .getCommunityDetail(communityId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response?.data) {
+            const next = new Map(this.communityDetails());
+            next.set(communityId, response.data);
+            this.communityDetails.set(next);
+          }
+          const stillLoading = new Set(this.loadingDetails());
+          stillLoading.delete(communityId);
+          this.loadingDetails.set(stillLoading);
+        },
+        error: () => {
+          const stillLoading = new Set(this.loadingDetails());
+          stillLoading.delete(communityId);
+          this.loadingDetails.set(stillLoading);
+        },
       });
   }
 
@@ -144,6 +177,7 @@ export class PublicCommunityList {
       this.expandedCommunityId.set(null);
     } else {
       this.expandedCommunityId.set(communityId);
+      this.loadCommunityDetail(communityId);
       this.loadCommunityPublicSharingOperations(communityId);
     }
   }
@@ -158,6 +192,14 @@ export class PublicCommunityList {
 
   isLoading(id: number): boolean {
     return this.loadingOperations().has(id);
+  }
+
+  getDetail(id: number): CommunityDetailDTO | undefined {
+    return this.communityDetails().get(id);
+  }
+
+  isLoadingDetail(id: number): boolean {
+    return this.loadingDetails().has(id);
   }
 
   /**

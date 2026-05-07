@@ -1,0 +1,49 @@
+<div class="field-label-row">
+  @if (forId()) {
+    <label [for]="forId()" class="field-label"
+      >{{ label() }}
+      @if (required()) {
+        *
+      }
+    </label>
+  } @else {
+    <span class="field-label"
+      >{{ label() }}
+      @if (required()) {
+        *
+      }
+    </span>
+  }
+  <button
+    type="button"
+    class="helper-trigger"
+    (click)="onClick($event)"
+    [attr.aria-label]="'KEY.SHARED.HELP_LABEL' | translate"
+    aria-haspopup="dialog"
+    [attr.aria-expanded]="isOpen()"
+    data-testid="field-label-helper__btn--help"
+  >
+    <i class="pi pi-info-circle helper-trigger__icon" aria-hidden="true"></i>
+  </button>
+</div>
+
+<p-popover
+  #helpPopover
+  styleClass="helper-popover"
+  (onShow)="isOpen.set(true)"
+  (onHide)="isOpen.set(false)"
+>
+  <div class="helper-popover__content" data-testid="field-label-helper__popover--content">
+    <div class="helper-popover__header">
+      <span class="helper-popover__icon" aria-hidden="true">
+        <i class="pi pi-info-circle"></i>
+      </span>
+      <h3 class="helper-popover__title" data-testid="field-label-helper__title--label">
+        {{ label() }}
+      </h3>
+    </div>
+    <p class="helper-popover__body" data-testid="field-label-helper__text--description">
+      {{ tooltip() }}
+    </p>
+  </div>
+</p-popover>

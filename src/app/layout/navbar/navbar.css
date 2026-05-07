@@ -293,6 +293,41 @@
   animation-delay: 60ms;
 }
 
+.sidebar__guide-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-family: inherit;
+  white-space: nowrap;
+  width: 100%;
+  transition: all 200ms ease;
+}
+
+.sidebar__guide-btn:hover {
+  background: var(--sidebar-bg-hover);
+  color: var(--sidebar-text-bright);
+}
+
+.sidebar__guide-btn i {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+
+.sidebar__guide-btn span {
+  opacity: 0;
+  animation: labelFadeIn 200ms ease forwards;
+  animation-delay: 60ms;
+}
+
 /* ---- Global link reset inside sidebar ---- */
 a {
   color: inherit;

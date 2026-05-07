@@ -129,9 +129,12 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                 <!-- Phases -->
                 <div>
-                  <span class="field-label mb-2 block">
-                    {{ 'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate }} *
-                  </span>
+                  <app-field-label-helper
+                    label="{{ 'METER.INFORMATIONS.PHASE_NUMBER_LABEL' | translate }}"
+                    tooltip="{{ 'METER.INFORMATIONS.PHASE_NUMBER_TOOLTIP' | translate }}"
+                    [required]="true"
+                    class="mb-2"
+                  />
                   <div class="flex flex-col gap-2">
                     @for (phase of phaseCategory(); track phase.id) {
                       <div
@@ -171,9 +174,12 @@
 
                 <!-- Reading Frequency -->
                 <div>
-                  <span class="field-label mb-2 block">
-                    {{ 'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate }} *
-                  </span>
+                  <app-field-label-helper
+                    label="{{ 'METER.INFORMATIONS.READING_FREQUENCY_LABEL' | translate }}"
+                    tooltip="{{ 'METER.INFORMATIONS.READING_FREQUENCY_TOOLTIP' | translate }}"
+                    [required]="true"
+                    class="mb-2"
+                  />
                   <div class="flex flex-col gap-2">
                     @for (readingFreq of readingFrequencyCategory(); track readingFreq.id) {
                       <div
@@ -215,9 +221,12 @@
 
                 <!-- Tarif Group -->
                 <div>
-                  <span class="field-label mb-2 block">
-                    {{ 'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate }} *
-                  </span>
+                  <app-field-label-helper
+                    label="{{ 'METER.INFORMATIONS.TARIF_GROUP_LABEL' | translate }}"
+                    tooltip="{{ 'METER.INFORMATIONS.TARIF_GROUP_TOOLTIP' | translate }}"
+                    [required]="true"
+                    class="mb-2"
+                  />
                   <div class="flex flex-col gap-2">
                     @for (tarifGroup of tarifGroupCategory(); track tarifGroup.id) {
                       <div
@@ -300,9 +309,12 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
                   <div class="flex flex-col">
-                    <label for="samplingPower" class="field-label">
-                      {{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_LABEL' | translate }} *
-                    </label>
+                    <app-field-label-helper
+                      forId="samplingPower"
+                      label="{{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_LABEL' | translate }}"
+                      tooltip="{{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_TOOLTIP' | translate }}"
+                      [required]="true"
+                    />
                     <input
                       id="samplingPower"
                       type="number"
@@ -314,9 +326,14 @@
                     <app-error-handler controlName="samplingPower" />
                   </div>
                   <div class="flex flex-col">
-                    <label for="totalGeneratingCapacity" class="field-label">
-                      {{ 'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_LABEL' | translate }} *
-                    </label>
+                    <app-field-label-helper
+                      forId="totalGeneratingCapacity"
+                      label="{{ 'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_LABEL' | translate }}"
+                      tooltip="{{
+                        'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_TOOLTIP' | translate
+                      }}"
+                      [required]="true"
+                    />
                     <input
                       id="totalGeneratingCapacity"
                       type="number"
@@ -328,9 +345,12 @@
                     <app-error-handler controlName="totalGeneratingCapacity" />
                   </div>
                   <div class="flex flex-col">
-                    <label for="amperage" class="field-label">
-                      {{ 'METER.INFORMATIONS.AMPERAGE_LABEL' | translate }} *
-                    </label>
+                    <app-field-label-helper
+                      forId="amperage"
+                      label="{{ 'METER.INFORMATIONS.AMPERAGE_LABEL' | translate }}"
+                      tooltip="{{ 'METER.INFORMATIONS.AMPERAGE_TOOLTIP' | translate }}"
+                      [required]="true"
+                    />
                     <input
                       id="amperage"
                       type="number"
@@ -346,9 +366,12 @@
                 <!-- Dropdowns for large option sets -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 mt-4">
                   <div class="flex flex-col">
-                    <label class="field-label" for="selectProductionChainCategory">
-                      {{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }} *
-                    </label>
+                    <app-field-label-helper
+                      forId="selectProductionChainCategory"
+                      label="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
+                      tooltip="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_TOOLTIP' | translate }}"
+                      [required]="true"
+                    />
                     <p-select
                       id="selectProductionChainCategory"
                       [options]="productionChainCategory()"
@@ -362,9 +385,12 @@
                     <app-error-handler controlName="productionChain" />
                   </div>
                   <div class="flex flex-col">
-                    <label class="field-label" for="selectInjectionStatusCategory">
-                      {{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }} *
-                    </label>
+                    <app-field-label-helper
+                      forId="selectInjectionStatusCategory"
+                      label="{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}"
+                      tooltip="{{ 'METER.INFORMATIONS.INJECTION_STATUS_TOOLTIP' | translate }}"
+                      [required]="true"
+                    />
                     <p-select
                       id="selectInjectionStatusCategory"
                       [options]="injectionStatusCategory()"
@@ -377,9 +403,12 @@
                     <app-error-handler controlName="injectionStatus" />
                   </div>
                   <div class="flex flex-col">
-                    <label class="field-label" for="selectGrd">
-                      {{ 'METER.INFORMATIONS.GRD_LABEL' | translate }} *
-                    </label>
+                    <app-field-label-helper
+                      forId="selectGrd"
+                      label="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
+                      tooltip="{{ 'METER.INFORMATIONS.GRD_TOOLTIP' | translate }}"
+                      [required]="true"
+                    />
                     <p-select
                       id="selectGrd"
                       [options]="grdAvailable"
@@ -403,9 +432,12 @@
 
                 <!-- Card radios: Rate -->
                 <div class="mb-4">
-                  <span class="field-label mb-2 block">
-                    {{ 'METER.INFORMATIONS.RATE_LABEL' | translate }} *
-                  </span>
+                  <app-field-label-helper
+                    label="{{ 'METER.INFORMATIONS.RATE_LABEL' | translate }}"
+                    tooltip="{{ 'METER.INFORMATIONS.RATE_TOOLTIP' | translate }}"
+                    [required]="true"
+                    class="mb-2"
+                  />
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     @for (rate of rateCategory(); track rate.id) {
                       <div
@@ -439,9 +471,12 @@
 
                 <!-- Card radios: Client Type -->
                 <div class="mb-4">
-                  <span class="field-label mb-2 block">
-                    {{ 'METER.INFORMATIONS.USAGE_LABEL' | translate }} *
-                  </span>
+                  <app-field-label-helper
+                    label="{{ 'METER.INFORMATIONS.USAGE_LABEL' | translate }}"
+                    tooltip="{{ 'METER.INFORMATIONS.USAGE_TOOLTIP' | translate }}"
+                    [required]="true"
+                    class="mb-2"
+                  />
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     @for (client of clientCategory(); track client.id) {
                       <div

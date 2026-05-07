@@ -67,7 +67,7 @@
           >
             @if (hasValidLogo(community)) {
               <img
-                [src]="community.logo_url"
+                [src]="community.logo_presigned_url"
                 alt=""
                 class="w-8 h-8 object-contain rounded"
                 (error)="onLogoError(community.id)"
@@ -90,6 +90,59 @@
               class="p-4 border-t border-primary-100 bg-surface-50"
               [attr.data-testid]="'public-community-list__detail--' + $index"
             >
+              @if (getDetail(community.id); as detail) {
+                @if (detail.description || detail.website_url || detail.headquarters_address) {
+                  <div
+                    class="mb-4 flex flex-col gap-2"
+                    [attr.data-testid]="'public-community-list__info--' + $index"
+                  >
+                    @if (detail.description) {
+                      <div>
+                        <span class="text-xs font-medium text-surface-500 block">{{
+                          'COMMUNITY_INFO.DESCRIPTION' | translate
+                        }}</span>
+                        <span class="text-sm text-surface-800 whitespace-pre-line">{{
+                          detail.description
+                        }}</span>
+                      </div>
+                    }
+                    @if (detail.website_url) {
+                      <div>
+                        <span class="text-xs font-medium text-surface-500 block">{{
+                          'COMMUNITY_INFO.WEBSITE' | translate
+                        }}</span>
+                        <a
+                          [href]="detail.website_url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-sm text-primary-600 hover:underline"
+                          >{{ detail.website_url }}</a
+                        >
+                      </div>
+                    }
+                    @if (detail.headquarters_address; as addr) {
+                      <div>
+                        <span class="text-xs font-medium text-surface-500 block">{{
+                          'COMMUNITY_INFO.HEADQUARTERS' | translate
+                        }}</span>
+                        <span class="text-sm text-surface-800">
+                          {{ addr.street }} {{ addr.number }}
+                          @if (addr.supplement) {
+                            , {{ addr.supplement }}
+                          }
+                          <br />
+                          {{ addr.postcode }} {{ addr.city }}
+                        </span>
+                      </div>
+                    }
+                  </div>
+                }
+              } @else if (isLoadingDetail(community.id)) {
+                <div class="flex items-center justify-center py-2 mb-2">
+                  <i class="pi pi-spinner pi-spin text-primary-400"></i>
+                </div>
+              }
+
               @if (isLoading(community.id)) {
                 <div class="flex items-center justify-center py-4">
                   <i class="pi pi-spinner pi-spin text-primary-400"></i>

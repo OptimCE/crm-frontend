@@ -1,0 +1,25 @@
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: var(--p-primary-50);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.lg\:hidden {
+  background: transparent;
+}
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.lg\:hidden > td {
+  border: none;
+  padding: 0;
+}
+
+@media (max-width: 1023px) {
+  :host ::ng-deep .p-datatable-table {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  :host ::ng-deep .p-datatable-wrapper {
+    overflow-x: hidden;
+  }
+}
+
+:host ::ng-deep .p-datepicker-input {
+  max-width: 100%;
+}

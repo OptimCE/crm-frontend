@@ -5,7 +5,8 @@ import { of, NEVER, throwError } from 'rxjs';
 import { PublicCommunityList } from './public-community-list';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { MunicipalityService } from '../../../../shared/services/municipality.service';
-import { PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import { CommunityDetailDTO, PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import { ApiResponse } from '../../../../core/dtos/api.response';
 import {
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
@@ -16,10 +17,37 @@ import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.resp
 
 function buildCommunities(): PublicCommunityDTO[] {
   return [
-    { id: 1, name: 'Alpha Community', logo_url: 'https://example.com/alpha.png' },
-    { id: 2, name: 'Beta Community', logo_url: null },
-    { id: 3, name: 'Gamma Community', logo_url: 'https://example.com/gamma.png' },
+    {
+      id: 1,
+      name: 'Alpha Community',
+      logo_url: 'communities/1/logo.png',
+      logo_presigned_url: 'https://example.com/alpha.png?sig=1',
+    },
+    { id: 2, name: 'Beta Community', logo_url: null, logo_presigned_url: null },
+    {
+      id: 3,
+      name: 'Gamma Community',
+      logo_url: 'communities/3/logo.png',
+      logo_presigned_url: 'https://example.com/gamma.png?sig=3',
+    },
   ];
+}
+
+function buildDetail(id: number, overrides: Partial<CommunityDetailDTO> = {}): CommunityDetailDTO {
+  return {
+    id,
+    name: `Community ${id}`,
+    auth_community_id: `auth-${id}`,
+    created_at: '2024-01-01T00:00:00.000Z',
+    updated_at: '2024-01-01T00:00:00.000Z',
+    member_count: 0,
+    description: null,
+    website_url: null,
+    logo_url: null,
+    logo_presigned_url: null,
+    headquarters_address: null,
+    ...overrides,
+  };
 }
 
 function buildMunicipality(
@@ -68,6 +96,7 @@ describe('PublicCommunityList', () => {
   let communityServiceSpy: {
     getPublicCommunities: ReturnType<typeof vi.fn>;
     getCommunityPublicSharingOperations: ReturnType<typeof vi.fn>;
+    getCommunityDetail: ReturnType<typeof vi.fn>;
   };
   let municipalityServiceSpy: {
     searchMunicipalities: ReturnType<typeof vi.fn>;
@@ -79,6 +108,11 @@ describe('PublicCommunityList', () => {
       getCommunityPublicSharingOperations: vi
         .fn()
         .mockReturnValue(of(buildPaginatedResponse(buildOps()))),
+      getCommunityDetail: vi
+        .fn()
+        .mockImplementation((id: number) =>
+          of(new ApiResponse<CommunityDetailDTO>(buildDetail(id))),
+        ),
     };
     municipalityServiceSpy = {
       searchMunicipalities: vi
@@ -180,13 +214,13 @@ describe('PublicCommunityList', () => {
   // ── Logo handling ───────────────────────────────────────────────────
 
   describe('logo handling', () => {
-    it('hasValidLogo returns true when logo_url exists and is not broken', () => {
-      const community = buildCommunities()[0]; // has logo_url
+    it('hasValidLogo returns true when logo_presigned_url exists and is not broken', () => {
+      const community = buildCommunities()[0]; // has logo_presigned_url
       expect(component.hasValidLogo(community)).toBe(true);
     });
 
-    it('hasValidLogo returns false when logo_url is null', () => {
-      const community = buildCommunities()[1]; // logo_url is null
+    it('hasValidLogo returns false when logo_presigned_url is null', () => {
+      const community = buildCommunities()[1]; // logo_presigned_url is null
       expect(component.hasValidLogo(community)).toBe(false);
     });
 
@@ -266,6 +300,13 @@ describe('PublicCommunityList', () => {
         page: 1,
         limit: 50,
       });
+    });
+
+    it('expanding a community calls getCommunityDetail', () => {
+      communityServiceSpy.getCommunityDetail.mockClear();
+      component.toggleAccordion(1);
+
+      expect(communityServiceSpy.getCommunityDetail).toHaveBeenCalledWith(1);
     });
 
     it('collapsing a community does not call getCommunityPublicSharingOperations', () => {
@@ -351,6 +392,54 @@ describe('PublicCommunityList', () => {
         page: 1,
         limit: 50,
       });
+    });
+  });
+
+  // ── Community detail loading ────────────────────────────────────────
+
+  describe('community detail loading', () => {
+    it('marks the community detail as loading while the request is pending', () => {
+      communityServiceSpy.getCommunityDetail.mockReturnValue(NEVER);
+
+      component.toggleAccordion(1);
+
+      expect(component.isLoadingDetail(1)).toBe(true);
+      expect(component.getDetail(1)).toBeUndefined();
+    });
+
+    it('populates communityDetails and clears loading on success', () => {
+      const detail = buildDetail(1, {
+        description: 'Hello world',
+        website_url: 'https://example.com',
+      });
+      communityServiceSpy.getCommunityDetail.mockReturnValue(
+        of(new ApiResponse<CommunityDetailDTO>(detail)),
+      );
+
+      component.toggleAccordion(1);
+
+      expect(component.isLoadingDetail(1)).toBe(false);
+      expect(component.getDetail(1)?.description).toBe('Hello world');
+      expect(component.getDetail(1)?.website_url).toBe('https://example.com');
+    });
+
+    it('clears loading without caching on error', () => {
+      communityServiceSpy.getCommunityDetail.mockReturnValue(throwError(() => new Error('boom')));
+
+      component.toggleAccordion(2);
+
+      expect(component.isLoadingDetail(2)).toBe(false);
+      expect(component.getDetail(2)).toBeUndefined();
+    });
+
+    it('does not refetch detail when the same community is re-expanded', () => {
+      component.toggleAccordion(1); // first expand → fetches
+      communityServiceSpy.getCommunityDetail.mockClear();
+
+      component.toggleAccordion(1); // collapse
+      component.toggleAccordion(1); // expand again
+
+      expect(communityServiceSpy.getCommunityDetail).not.toHaveBeenCalled();
     });
   });
 

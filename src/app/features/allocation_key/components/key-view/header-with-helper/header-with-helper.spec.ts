@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { IHeaderParams } from 'ag-grid-community';
+import { Popover } from 'primeng/popover';
 import { vi } from 'vitest';
 
 import { HeaderWithHelper } from './header-with-helper';
@@ -8,7 +9,6 @@ import { HeaderWithHelper } from './header-with-helper';
 type HeaderWithHelperParams = IHeaderParams & {
   tooltip?: string;
   label?: string;
-  click?: (tooltip: string) => void;
 };
 
 describe('HeaderWithHelper', () => {
@@ -18,6 +18,7 @@ describe('HeaderWithHelper', () => {
   async function createComponent(): Promise<void> {
     fixture = TestBed.createComponent(HeaderWithHelper);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     await fixture.whenStable();
   }
 
@@ -36,6 +37,10 @@ describe('HeaderWithHelper', () => {
 
     it('should create the component', () => {
       expect(component).toBeTruthy();
+    });
+
+    it('should default isOpen to false', () => {
+      expect(component.isOpen()).toBe(false);
     });
   });
 
@@ -61,6 +66,19 @@ describe('HeaderWithHelper', () => {
       } as unknown as HeaderWithHelperParams);
       expect(component.params()?.tooltip).toBe('Help tooltip');
     });
+
+    it('should render the label in the header text', () => {
+      component.agInit({
+        label: 'My Column',
+        tooltip: 'desc',
+      } as unknown as HeaderWithHelperParams);
+      fixture.detectChanges();
+
+      const text = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        '[data-testid="header-helper__label--text"]',
+      );
+      expect(text?.textContent?.trim()).toBe('My Column');
+    });
   });
 
   // ── 3. refresh ──────────────────────────────────────────────────────
@@ -82,30 +100,32 @@ describe('HeaderWithHelper', () => {
       await createComponent();
     });
 
-    it('should call params.click with tooltip when tooltip exists', () => {
-      const clickSpy = vi.fn();
-      component.agInit({
-        tooltip: 'Help text',
-        click: clickSpy,
-      } as unknown as HeaderWithHelperParams);
-      component.onClick();
-      expect(clickSpy).toHaveBeenCalledWith('Help text');
+    it('should toggle the popover when clicked', () => {
+      const toggleSpy = vi.fn();
+      const popoverStub = { toggle: toggleSpy } as unknown as Popover;
+      vi.spyOn(component, 'popover').mockReturnValue(popoverStub);
+
+      const event = new MouseEvent('click');
+      component.onClick(event);
+
+      expect(toggleSpy).toHaveBeenCalledWith(event);
     });
 
-    it('should not call click when tooltip is undefined', () => {
-      const clickSpy = vi.fn();
-      component.agInit({ click: clickSpy } as unknown as HeaderWithHelperParams);
-      component.onClick();
-      expect(clickSpy).not.toHaveBeenCalled();
+    it('should stop event propagation', () => {
+      const popoverStub = { toggle: vi.fn() } as unknown as Popover;
+      vi.spyOn(component, 'popover').mockReturnValue(popoverStub);
+
+      const event = new MouseEvent('click');
+      const stopSpy = vi.spyOn(event, 'stopPropagation');
+
+      component.onClick(event);
+
+      expect(stopSpy).toHaveBeenCalled();
     });
 
-    it('should not throw when click function is undefined', () => {
-      component.agInit({ tooltip: 'text' } as unknown as HeaderWithHelperParams);
-      expect(() => component.onClick()).not.toThrow();
-    });
-
-    it('should not throw when params is undefined', () => {
-      expect(() => component.onClick()).not.toThrow();
+    it('should not throw when popover is undefined', () => {
+      vi.spyOn(component, 'popover').mockReturnValue(undefined);
+      expect(() => component.onClick(new MouseEvent('click'))).not.toThrow();
     });
   });
 });

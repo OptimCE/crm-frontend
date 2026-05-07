@@ -43,6 +43,7 @@ import { StepList } from 'primeng/stepper';
 import { Step } from 'primeng/stepper';
 import { StepPanel } from 'primeng/stepper';
 import { StepPanels } from 'primeng/stepper';
+import { FieldLabelHelper } from '../../../../shared/components/field-label-helper/field-label-helper';
 
 interface ListRadio {
   id: number;
@@ -93,6 +94,7 @@ interface MeterFormValue {
     Step,
     StepPanel,
     StepPanels,
+    FieldLabelHelper,
   ],
   templateUrl: './meter-creation.html',
   styleUrl: './meter-creation.css',

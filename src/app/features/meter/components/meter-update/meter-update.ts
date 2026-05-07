@@ -13,6 +13,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
+import { FieldLabelHelper } from '../../../../shared/components/field-label-helper/field-label-helper';
 
 interface MeterUpdateDialogData {
   meter: MetersDTO;
@@ -47,6 +48,7 @@ interface MeterUpdateFormValue {
     Button,
     TranslatePipe,
     FormErrorSummaryComponent,
+    FieldLabelHelper,
   ],
   templateUrl: './meter-update.html',
   styleUrl: './meter-update.css',

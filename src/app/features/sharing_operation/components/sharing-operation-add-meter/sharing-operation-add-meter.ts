@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
+import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primeng/accordion';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { Pagination } from '../../../../core/dtos/api.response';
@@ -41,6 +42,10 @@ interface SharingOperationAddMeterDialogData {
     FormsModule,
     Select,
     DatePicker,
+    Accordion,
+    AccordionPanel,
+    AccordionHeader,
+    AccordionContent,
   ],
   templateUrl: './sharing-operation-add-meter.html',
   styleUrl: './sharing-operation-add-meter.css',

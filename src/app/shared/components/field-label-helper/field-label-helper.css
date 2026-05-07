@@ -1,3 +1,13 @@
+:host {
+  display: block;
+}
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .helper-trigger {
   display: inline-flex;
   align-items: center;

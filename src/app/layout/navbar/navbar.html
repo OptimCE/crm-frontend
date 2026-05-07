@@ -230,6 +230,20 @@
         <app-language-selector></app-language-selector>
       </div>
     }
+    <a
+      data-testid="navbar__btn--user-guide"
+      href="https://guide.optimce.be"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="sidebar__guide-btn"
+      [pTooltip]="sidebarOpen() ? null : ('NAVBAR.USER_GUIDE' | translate)"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-book"></i>
+      @if (sidebarOpen()) {
+        <span>{{ 'NAVBAR.USER_GUIDE' | translate }}</span>
+      }
+    </a>
     <button
       data-testid="navbar__btn--logout"
       type="button"

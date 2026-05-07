@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
 import {
@@ -9,13 +9,11 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyService } from '../../../../../shared/services/key.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ButtonRenderer } from './button-renderer/button-renderer';
 import { HeaderWithHelper } from '../../key-view/header-with-helper/header-with-helper';
-import { HelperDialog } from '../../key-view/helper-dialog/helper-dialog';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { Ripple } from 'primeng/ripple';
@@ -66,16 +64,14 @@ interface KeyForm {
   ],
   templateUrl: './key-creation-update.html',
   styleUrl: './key-creation-update.css',
-  providers: [DialogService],
 })
-export class KeyCreationUpdate implements OnInit, OnDestroy {
+export class KeyCreationUpdate implements OnInit {
   private route = inject(ActivatedRoute);
   private keyService = inject(KeyService);
   private routing = inject(Router);
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
-  private dialogService = inject(DialogService);
   private destroyRef = inject(DestroyRef);
   private hasPendingConsumers = false;
 
@@ -102,7 +98,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
   });
   readonly errorsAdded = signal<ErrorAdded>({});
   readonly errorsSummaryAdded = signal<ErrorSummaryAdded>({});
-  ref?: DynamicDialogRef | null;
   gridOptions = {
     suppressCellFocus: false, // just to reduce masking
     debug: true, // enables logs
@@ -252,7 +247,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               headerComponentParams: {
                 label: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
                 tooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
-                click: this.openHelper.bind(this),
               },
               headerTooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             },
@@ -276,7 +270,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
               headerComponentParams: {
                 label: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
                 tooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
-                click: this.openHelper.bind(this),
               },
               headerTooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             },
@@ -301,7 +294,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
                   headerComponentParams: {
                     label: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
                     tooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
-                    click: this.openHelper.bind(this),
                   },
                   headerTooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
                 },
@@ -479,17 +471,6 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     } catch (_) {
       return null;
     }
-  }
-
-  openHelper(displayText: string): void {
-    this.ref = this.dialogService.open(HelperDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      data: {
-        displayText: displayText,
-      },
-    });
   }
 
   onSubmit(): void {
@@ -804,11 +785,5 @@ export class KeyCreationUpdate implements OnInit, OnDestroy {
     return {
       form: this.formGroup,
     };
-  }
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.destroy();
-    }
   }
 }

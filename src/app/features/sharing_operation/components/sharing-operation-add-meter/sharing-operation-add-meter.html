@@ -27,9 +27,102 @@
             data-testid="op-add-meter__btn--clear-filter"
           />
         </div>
+
+        <!-- Mobile-only filter strip (hidden at lg+; desktop uses column-header filters) -->
+        <div class="lg:hidden mt-3" data-testid="op-add-meter__filters--mobile">
+          <p-accordion>
+            <p-accordion-panel value="address">
+              <p-accordion-header>{{
+                'SHARING_OPERATION.ADD_METER.ADDRESS_LABEL' | translate
+              }}</p-accordion-header>
+              <p-accordion-content>
+                <div class="flex flex-col gap-2">
+                  <input
+                    pInputText
+                    class="w-full"
+                    placeholder="{{
+                      'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL'
+                        | translate
+                    }}"
+                    [ngModel]="addressFilter().streetName"
+                    (ngModelChange)="updateAddressFilter('streetName', $event)"
+                    data-testid="op-add-meter__input-mobile--street"
+                  />
+                  <input
+                    pInputText
+                    class="w-full"
+                    placeholder="{{
+                      'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL'
+                        | translate
+                    }}"
+                    [ngModel]="addressFilter().postcode"
+                    (ngModelChange)="updateAddressFilter('postcode', $event)"
+                    data-testid="op-add-meter__input-mobile--postal-code"
+                  />
+                  <input
+                    pInputText
+                    class="w-full"
+                    placeholder="{{
+                      'SHARING_OPERATION.ADD_METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate
+                    }}"
+                    [ngModel]="addressFilter().cityName"
+                    (ngModelChange)="updateAddressFilter('cityName', $event)"
+                    data-testid="op-add-meter__input-mobile--city"
+                  />
+                </div>
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <p-accordion-panel value="ean">
+              <p-accordion-header>{{
+                'SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.EAN_LABEL' | translate
+              }}</p-accordion-header>
+              <p-accordion-content>
+                <input
+                  pInputText
+                  class="w-full"
+                  (input)="dt.filter($any($event.target).value, 'EAN', 'contains')"
+                  data-testid="op-add-meter__input-mobile--ean"
+                />
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <p-accordion-panel value="meter-number">
+              <p-accordion-header>{{
+                'SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
+              }}</p-accordion-header>
+              <p-accordion-content>
+                <input
+                  pInputText
+                  class="w-full"
+                  (input)="dt.filter($any($event.target).value, 'meter_number', 'contains')"
+                  data-testid="op-add-meter__input-mobile--meter-number"
+                />
+              </p-accordion-content>
+            </p-accordion-panel>
+
+            <p-accordion-panel value="status">
+              <p-accordion-header>{{
+                'SHARING_OPERATION.ADD_METER.METER.STATUS_LABEL' | translate
+              }}</p-accordion-header>
+              <p-accordion-content>
+                <p-select
+                  styleClass="w-full"
+                  [options]="statutCategory()"
+                  (onChange)="dt.filter($event.value, 'statut', 'equals')"
+                  placeholder="{{
+                    'SHARING_OPERATION.ADD_METER.SELECT_A_STATUS_PLACEHOLDER' | translate
+                  }}"
+                  [showClear]="true"
+                  data-testid="op-add-meter__select-mobile--status"
+                ></p-select>
+              </p-accordion-content>
+            </p-accordion-panel>
+          </p-accordion>
+        </div>
       </ng-template>
       <ng-template pTemplate="header">
-        <tr>
+        <tr class="hidden lg:table-row">
           <th><p-tableHeaderCheckbox data-testid="op-add-meter__checkbox--select-all" /></th>
           <th>
             <div class="flex items-center text-base px-3">
@@ -44,8 +137,8 @@
                 data-testid="op-add-meter__filter--address"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <div class="grid">
-                    <div class="flex">
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <div class="flex flex-col">
                       <label for="streetName">{{
                         'SHARING_OPERATION.ADD_METER.ADDRESS.STREET_NAME_LABEL' | translate
                       }}</label>
@@ -61,7 +154,7 @@
                         data-testid="op-add-meter__input--street"
                       />
                     </div>
-                    <div class="flex">
+                    <div class="flex flex-col">
                       <label for="postcode">{{
                         'SHARING_OPERATION.ADD_METER.ADDRESS.POSTAL_CODE_LABEL' | translate
                       }}</label>
@@ -77,7 +170,7 @@
                         data-testid="op-add-meter__input--postal-code"
                       />
                     </div>
-                    <div class="flex">
+                    <div class="flex flex-col">
                       <label for="city">{{
                         'SHARING_OPERATION.ADD_METER.ADDRESS.CITY_LABEL' | translate
                       }}</label>
@@ -253,7 +346,7 @@
       <ng-template pTemplate="body" let-meter let-rowIndex="rowIndex">
         <tr
           style="cursor: pointer"
-          class="hover-flex flex-wrap -mx-2"
+          class="hidden lg:table-row"
           [attr.data-testid]="'op-add-meter__row--' + rowIndex"
         >
           <td class="text-sm px-3 py-2">
@@ -308,22 +401,87 @@
             }
           </td>
         </tr>
+
+        <!-- Mobile-only card row -->
+        <tr class="lg:hidden" [attr.data-testid]="'op-add-meter__card--' + rowIndex">
+          <td colspan="5">
+            <div class="flex items-start gap-3 p-3 mb-2 border rounded-lg bg-white">
+              <p-tableCheckbox
+                [value]="meter"
+                [attr.data-testid]="'op-add-meter__checkbox-mobile--' + rowIndex"
+              ></p-tableCheckbox>
+              <div class="flex-1 min-w-0 text-sm">
+                <div class="font-medium break-words" [innerHTML]="meter.adresse | address"></div>
+                <div class="text-xs text-gray-600 mt-1">
+                  <span class="font-semibold">EAN:</span> {{ meter.EAN }}
+                </div>
+                <div class="text-xs text-gray-600">
+                  <span class="font-semibold"
+                    >{{
+                      'SHARING_OPERATION.ADD_METER.METER.INFORMATIONS.METER_NUMBER_LABEL'
+                        | translate
+                    }}:</span
+                  >
+                  {{ meter.meterNumber }}
+                </div>
+                <div class="mt-2">
+                  @switch (meter.status) {
+                    @case (MeterStatus.ACTIVE) {
+                      <p-tag
+                        severity="success"
+                        value="{{
+                          'SHARING_OPERATION.ADD_METER.METER.STATUS.ACTIVATED_LABEL' | translate
+                        }}"
+                      ></p-tag>
+                    }
+                    @case (MeterStatus.INACTIVE) {
+                      <p-tag
+                        severity="danger"
+                        value="{{
+                          'SHARING_OPERATION.ADD_METER.METER.STATUS.DEACTIVATED_LABEL' | translate
+                        }}"
+                      ></p-tag>
+                    }
+                    @case (MeterStatus.WAITING_GRD) {
+                      <p-tag
+                        severity="danger"
+                        value="{{
+                          'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
+                            | translate
+                        }}"
+                      ></p-tag>
+                    }
+                    @case (MeterStatus.WAITING_MANAGER) {
+                      <p-tag
+                        severity="danger"
+                        value="{{
+                          'SHARING_OPERATION.ADD_METER.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+                            | translate
+                        }}"
+                      ></p-tag>
+                    }
+                  }
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
       </ng-template>
       <ng-template #emptyMessage pTemplate="emptymessage">
         <tr>
-          <td colspan="6" style="text-align: center" class="text-base">
+          <td colspan="5" style="text-align: center" class="text-base">
             {{ 'SHARING_OPERATION.ADD_METER.NO_METERS_FOUND_LABEL' | translate }}
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
-  <div class="flex flex-wrap -mx-2 pb-3 text-center">
+  <div class="flex justify-center pb-3">
     <span class="text-base">{{
       'SHARING_OPERATION.ADD_METER.START_DATE_METERS_LABEL' | translate
     }}</span>
   </div>
-  <div class="flex flex-wrap -mx-2 pb-3 text-center">
+  <div class="flex justify-center pb-3">
     <p-date-picker
       id="dateStart"
       [ngModel]="dateSelected()"
@@ -333,13 +491,15 @@
       [minDate]="minDate()"
       dateFormat="dd/mm/yy"
       appendTo="body"
+      styleClass="w-full sm:w-auto"
       data-testid="op-add-meter__datepicker--start-date"
     ></p-date-picker>
   </div>
-  <div class="flex flex-wrap -mx-2 text-center pb-3">
+  <div class="flex justify-center pb-3">
     <p-button
       label="{{ 'SHARING_OPERATION.ADD_METER.VALIDATE_BUTTON_LABEL' | translate }}"
       (click)="onValidate()"
+      styleClass="w-full sm:w-auto"
       data-testid="op-add-meter__btn--validate"
     ></p-button>
   </div>

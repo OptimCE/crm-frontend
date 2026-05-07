@@ -27,6 +27,8 @@ export interface PublicCommunityDTO {
   id: number;
   name: string;
   logo_url: string | null;
+  /** Short-lived presigned URL (~15 min) for direct logo display. */
+  logo_presigned_url: string | null;
 }
 
 export interface MyCommunityDTO {
