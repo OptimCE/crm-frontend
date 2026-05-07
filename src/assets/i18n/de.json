@@ -1070,6 +1070,9 @@
       "MUNICIPALITIES_PLACEHOLDER": "Gemeinde suchen…",
       "ADD_BUTTON_LABEL": "Hinzufügen"
     },
+    "EDIT": {
+      "UPDATE_BUTTON_LABEL": "Aktualisieren"
+    },
     "ADD_KEY": {
       "ALLOCATION_KEYS_TITLE": "Verteilungsschlüssel",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
@@ -1118,6 +1121,14 @@
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Als Excel exportieren (CWAPE)",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Typ",
+      "MUNICIPALITIES_LABEL": "Abgedeckte Gemeinden",
+      "EDIT_BUTTON_LABEL": "Bearbeiten",
+      "EDIT_HEADER": "Teilungsoperation bearbeiten",
+      "EDIT_MUNICIPALITIES_HEADER": "Gemeinden bearbeiten",
+      "EDIT_MUNICIPALITIES_HINT": "Suchen und wählen Sie die Gemeinden aus, die von dieser Teilungsoperation abgedeckt werden. Mindestens eine Gemeinde ist erforderlich, um die Operation öffentlich zu machen.",
+      "MUNICIPALITIES_COUNT_LABEL": "{{ count }} ausgewählt",
+      "UPDATE_SUCCESS_LABEL": "Teilungsoperation erfolgreich aktualisiert",
+      "MUNICIPALITIES_UPDATED_SUCCESSFULLY_LABEL": "Gemeinden erfolgreich aktualisiert",
       "ADDRESS_LABEL": "Adresse",
       "ADDRESS": {
         "STREET_NAME_LABEL": "Straße",
@@ -1215,7 +1226,8 @@
         "PUBLIC_LABEL": "Öffentlich",
         "PRIVATE_LABEL": "Privat",
         "SET_PUBLIC_SUCCESS": "Teilungsoperation ist jetzt öffentlich",
-        "SET_PRIVATE_SUCCESS": "Teilungsoperation ist jetzt privat"
+        "SET_PRIVATE_SUCCESS": "Teilungsoperation ist jetzt privat",
+        "MUNICIPALITIES_REQUIRED_HINT": "Fügen Sie mindestens eine Gemeinde hinzu, bevor Sie die Operation öffentlich machen"
       }
     },
     "LIST": {

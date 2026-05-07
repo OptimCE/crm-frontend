@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
@@ -6,20 +6,17 @@ import { Button } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextModule } from 'primeng/inputtext';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MunicipalityService } from '../../../../shared/services/municipality.service';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
-import { CreateSharingOperationDTO } from '../../../../shared/dtos/sharing_operation.dtos';
+import {
+  CreateSharingOperationDTO,
+  SharingOperationDTO,
+  UpdateSharingOperationDTO,
+} from '../../../../shared/dtos/sharing_operation.dtos';
 import { MunicipalityPartialDTO } from '../../../../shared/dtos/municipality.dtos';
 
 interface SharingOperationCategory {
@@ -33,9 +30,8 @@ interface SharingOperationFormValue {
   municipalities: MunicipalityPartialDTO[];
 }
 
-function nonEmptyArrayValidator(control: AbstractControl): ValidationErrors | null {
-  const value = control.value as unknown[] | null | undefined;
-  return Array.isArray(value) && value.length > 0 ? null : { required: true };
+interface SharingOperationCreationUpdateData {
+  operation?: SharingOperationDTO;
 }
 
 @Component({
@@ -57,6 +53,7 @@ function nonEmptyArrayValidator(control: AbstractControl): ValidationErrors | nu
 export class SharingOperationCreationUpdate implements OnInit {
   private sharingOpService = inject(SharingOperationService);
   private municipalityService = inject(MunicipalityService);
+  private config = inject(DynamicDialogConfig, { optional: true });
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
@@ -66,11 +63,22 @@ export class SharingOperationCreationUpdate implements OnInit {
   readonly municipalitySuggestions = signal<MunicipalityPartialDTO[]>([]);
   readonly municipalitySearching = signal<boolean>(false);
 
+  readonly existingOperation = signal<SharingOperationDTO | undefined>(
+    (this.config?.data as SharingOperationCreationUpdateData | undefined)?.operation,
+  );
+  readonly isUpdateMode = computed(() => this.existingOperation() !== undefined);
+  readonly submitLabelKey = computed(() =>
+    this.isUpdateMode()
+      ? 'SHARING_OPERATION.EDIT.UPDATE_BUTTON_LABEL'
+      : 'SHARING_OPERATION.ADD.ADD_BUTTON_LABEL',
+  );
+
   ngOnInit(): void {
+    const op = this.existingOperation();
     this.formAddSharingOp = new FormGroup({
-      name: new FormControl<string | null>(null, Validators.required),
-      type: new FormControl<SharingOperationType | null>(null, Validators.required),
-      municipalities: new FormControl<MunicipalityPartialDTO[]>([], nonEmptyArrayValidator),
+      name: new FormControl<string | null>(op?.name ?? null, Validators.required),
+      type: new FormControl<SharingOperationType | null>(op?.type ?? null, Validators.required),
+      municipalities: new FormControl<MunicipalityPartialDTO[]>(op?.municipalities ?? []),
     });
     this.setupTranslationCategory();
   }
@@ -134,25 +142,32 @@ export class SharingOperationCreationUpdate implements OnInit {
       return;
     }
     const formValue = this.formAddSharingOp.getRawValue() as SharingOperationFormValue;
-    const newSharing: CreateSharingOperationDTO = {
-      name: formValue.name,
-      type: formValue.type,
-      municipality_nis_codes: formValue.municipalities.map((m) => m.nis_code),
-    };
-    this.sharingOpService
-      .createSharingOperation(newSharing)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.ref.close(true);
-          } else {
-            this.errorHandler.handleError(response);
-          }
-        },
-        error: (error) => {
-          this.errorHandler.handleError(error);
-        },
-      });
+    const municipality_nis_codes = formValue.municipalities.map((m) => m.nis_code);
+
+    const op = this.existingOperation();
+    const request$ = op
+      ? this.sharingOpService.updateSharingOperation(op.id, {
+          name: formValue.name,
+          type: formValue.type,
+          municipality_nis_codes,
+        } as UpdateSharingOperationDTO)
+      : this.sharingOpService.createSharingOperation({
+          name: formValue.name,
+          type: formValue.type,
+          municipality_nis_codes,
+        } as CreateSharingOperationDTO);
+
+    request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (response) => {
+        if (response) {
+          this.ref.close(true);
+        } else {
+          this.errorHandler.handleError(response);
+        }
+      },
+      error: (error) => {
+        this.errorHandler.handleError(error);
+      },
+    });
   }
 }

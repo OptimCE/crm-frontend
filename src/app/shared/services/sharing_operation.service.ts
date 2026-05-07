@@ -17,6 +17,7 @@ import {
   SharingOperationMetersQueryType,
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
+  UpdateSharingOperationDTO,
   UpdateSharingOperationMunicipalitiesDTO,
 } from '../dtos/sharing_operation.dtos';
 import { catchError, map, Observable, tap } from 'rxjs';
@@ -211,6 +212,19 @@ export class SharingOperationService extends ServiceBase {
           this.cache.invalidate('community-public-sharing-ops');
         }),
       );
+  }
+
+  updateSharingOperation(
+    id: number,
+    dto: UpdateSharingOperationDTO,
+  ): Observable<ApiResponse<string>> {
+    return this.http.put<ApiResponse<string>>(this.apiAddress + `/${id}`, dto).pipe(
+      tap(() => {
+        this.cache.invalidate('sharing-operation-list');
+        this.cache.invalidate(`sharing-operation:${id}`);
+        this.cache.invalidate('community-public-sharing-ops');
+      }),
+    );
   }
 
   patchVisibility(

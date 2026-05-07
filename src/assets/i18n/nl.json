@@ -1070,6 +1070,9 @@
       "MUNICIPALITIES_PLACEHOLDER": "Zoek een gemeente…",
       "ADD_BUTTON_LABEL": "Toevoegen"
     },
+    "EDIT": {
+      "UPDATE_BUTTON_LABEL": "Bijwerken"
+    },
     "ADD_KEY": {
       "ALLOCATION_KEYS_TITLE": "Verdeelsleutels",
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
@@ -1118,6 +1121,14 @@
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporteren als Excel (CWAPE)",
       "NAME_LABEL": "Naam",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES_LABEL": "Gedekte gemeenten",
+      "EDIT_BUTTON_LABEL": "Bewerken",
+      "EDIT_HEADER": "Deeloperatie bewerken",
+      "EDIT_MUNICIPALITIES_HEADER": "Gemeenten bewerken",
+      "EDIT_MUNICIPALITIES_HINT": "Zoek en selecteer de gemeenten die door deze deeloperatie worden gedekt. Ten minste één gemeente is vereist om de operatie openbaar te maken.",
+      "MUNICIPALITIES_COUNT_LABEL": "{{ count }} geselecteerd",
+      "UPDATE_SUCCESS_LABEL": "Deeloperatie succesvol bijgewerkt",
+      "MUNICIPALITIES_UPDATED_SUCCESSFULLY_LABEL": "Gemeenten succesvol bijgewerkt",
       "ADDRESS_LABEL": "Adres",
       "ADDRESS": {
         "STREET_NAME_LABEL": "Straat",
@@ -1215,7 +1226,8 @@
         "PUBLIC_LABEL": "Openbaar",
         "PRIVATE_LABEL": "Privé",
         "SET_PUBLIC_SUCCESS": "Deeloperatie is nu openbaar",
-        "SET_PRIVATE_SUCCESS": "Deeloperatie is nu privé"
+        "SET_PRIVATE_SUCCESS": "Deeloperatie is nu privé",
+        "MUNICIPALITIES_REQUIRED_HINT": "Voeg minstens één gemeente toe voordat u de operatie openbaar maakt"
       }
     },
     "LIST": {

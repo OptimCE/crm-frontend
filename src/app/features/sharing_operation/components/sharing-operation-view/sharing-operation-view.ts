@@ -46,11 +46,14 @@ import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 import { KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { Tooltip } from 'primeng/tooltip';
 import { SharingOperationMetersList } from './sharing-operation-meters-list/sharing-operation-meters-list';
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
 import { SelectMeterNewKeyDialog } from './dialogs/select-meter-new-key-dialog/select-meter-new-key-dialog';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { SharingOperationConsumptionChart } from './sharing-operation-consumption-chart/sharing-operation-consumption-chart';
+import { SharingOperationCreationUpdate } from '../sharing-operation-creation-update/sharing-operation-creation-update';
+import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-municipalities-update/sharing-operation-municipalities-update';
 
 @Component({
   selector: 'app-sharing-operation-view',
@@ -85,6 +88,7 @@ import { SharingOperationConsumptionChart } from './sharing-operation-consumptio
     TabPanels,
     BackArrow,
     SharingOperationConsumptionChart,
+    Tooltip,
   ],
   templateUrl: './sharing-operation-view.html',
   styleUrl: './sharing-operation-view.css',
@@ -306,6 +310,56 @@ export class SharingOperationView implements OnInit {
     } catch (e) {
       console.error('Error fetching meters partial list ' + String(e));
     }
+  }
+
+  editOperation(): void {
+    const op = this.sharingOperation();
+    if (!op) return;
+    this.ref = this.dialogService.open(SharingOperationCreationUpdate, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      width: '640px',
+      breakpoints: { '768px': '90vw', '480px': '100vw' },
+      styleClass: 'responsive-dialog',
+      header: this.translate.instant('SHARING_OPERATION.VIEW.EDIT_HEADER') as string,
+      data: { operation: op },
+    });
+    this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      if (response) {
+        this.snackbar.openSnackBar(
+          this.translate.instant('SHARING_OPERATION.VIEW.UPDATE_SUCCESS_LABEL') as string,
+          VALIDATION_TYPE,
+        );
+        this.loadOperationSharing(false);
+      }
+    });
+  }
+
+  editMunicipalities(): void {
+    const op = this.sharingOperation();
+    if (!op) return;
+    this.ref = this.dialogService.open(SharingOperationMunicipalitiesUpdate, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      width: '560px',
+      breakpoints: { '768px': '90vw', '480px': '100vw' },
+      styleClass: 'responsive-dialog',
+      header: this.translate.instant('SHARING_OPERATION.VIEW.EDIT_MUNICIPALITIES_HEADER') as string,
+      data: { id: op.id, municipalities: op.municipalities },
+    });
+    this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      if (response) {
+        this.snackbar.openSnackBar(
+          this.translate.instant(
+            'SHARING_OPERATION.VIEW.MUNICIPALITIES_UPDATED_SUCCESSFULLY_LABEL',
+          ) as string,
+          VALIDATION_TYPE,
+        );
+        this.loadOperationSharing(false);
+      }
+    });
   }
 
   addMeter(): void {

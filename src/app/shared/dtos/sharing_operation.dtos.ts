@@ -91,21 +91,35 @@ export interface SharingOpConsumptionDTO {
 }
 
 /**
- * DTO for creating a new sharing operation.
+ * DTO for creating a new sharing operation. Municipalities are optional at
+ * creation; the operation defaults to private and can only be made public
+ * once at least one municipality is attached.
  */
 export interface CreateSharingOperationDTO {
   name: string;
   type: SharingOperationType;
-  /** NIS codes of the Belgian municipalities the operation covers (at least one). */
-  municipality_nis_codes: number[];
+  municipality_nis_codes?: number[];
 }
 
 /**
  * DTO for replacing the full set of municipalities linked to a sharing operation.
+ * Empty arrays are allowed only on private operations — the backend rejects
+ * clearing municipalities on a public operation.
  */
 export interface UpdateSharingOperationMunicipalitiesDTO {
   id_sharing: number;
   municipality_nis_codes: number[];
+}
+
+/**
+ * DTO for updating an existing sharing operation. All fields are optional;
+ * at least one must be provided. When `municipality_nis_codes` is included,
+ * it replaces the existing set.
+ */
+export interface UpdateSharingOperationDTO {
+  name?: string;
+  type?: SharingOperationType;
+  municipality_nis_codes?: number[];
 }
 
 /**

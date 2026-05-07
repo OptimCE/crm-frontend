@@ -1,0 +1,67 @@
+<div class="dialog-content">
+  <p class="text-sm text-surface-500 mb-4">
+    {{ 'SHARING_OPERATION.VIEW.EDIT_MUNICIPALITIES_HINT' | translate }}
+  </p>
+
+  <form [formGroup]="form" (submit)="onSubmitForm()" data-testid="op-muni-update__form">
+    <div class="mb-2">
+      <label for="municipalities" class="field-label mb-2 flex items-center justify-between">
+        <span>{{ 'SHARING_OPERATION.ADD.MUNICIPALITIES_LABEL' | translate }}</span>
+        <span class="text-xs text-surface-500" data-testid="op-muni-update__count">
+          {{
+            'SHARING_OPERATION.VIEW.MUNICIPALITIES_COUNT_LABEL'
+              | translate: { count: selectedCount() }
+          }}
+        </span>
+      </label>
+      <p-autoComplete
+        inputId="municipalities"
+        formControlName="municipalities"
+        [suggestions]="municipalitySuggestions()"
+        (completeMethod)="searchMunicipalities($event)"
+        [multiple]="true"
+        [forceSelection]="true"
+        [delay]="250"
+        dataKey="nis_code"
+        optionLabel="fr_name"
+        styleClass="w-full"
+        appendTo="body"
+        [placeholder]="'SHARING_OPERATION.ADD.MUNICIPALITIES_PLACEHOLDER' | translate"
+        data-testid="op-muni-update__autocomplete--municipalities"
+      >
+        <ng-template let-m #item>
+          <div class="flex flex-col">
+            <span class="text-sm">{{ m.fr_name }}</span>
+            @if (m.postal_codes && m.postal_codes.length > 0) {
+              <span class="text-xs text-surface-500">{{ m.postal_codes.join(', ') }}</span>
+            }
+          </div>
+        </ng-template>
+        <ng-template let-m #selectedItem>
+          <span>{{ municipalityLabel(m) }}</span>
+        </ng-template>
+      </p-autoComplete>
+      <app-error-handler controlName="municipalities"></app-error-handler>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-4 mt-4 border-t border-surface-200">
+      <p-button
+        type="button"
+        severity="secondary"
+        [outlined]="true"
+        [label]="'COMMON.ACTIONS.CANCEL' | translate"
+        (click)="onCancel()"
+        data-testid="op-muni-update__btn--cancel"
+      />
+      <p-button
+        type="submit"
+        [label]="'SHARING_OPERATION.EDIT.UPDATE_BUTTON_LABEL' | translate"
+        icon="pi pi-check"
+        iconPos="right"
+        [loading]="submitting()"
+        [disabled]="!isDirty()"
+        data-testid="op-muni-update__btn--submit"
+      />
+    </div>
+  </form>
+</div>

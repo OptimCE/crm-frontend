@@ -1068,6 +1068,9 @@
       "MUNICIPALITIES_PLACEHOLDER": "Rechercher une commune…",
       "ADD_BUTTON_LABEL": "Ajouter"
     },
+    "EDIT": {
+      "UPDATE_BUTTON_LABEL": "Mettre à jour"
+    },
     "ADD_KEY": {
       "ALLOCATION_KEYS_TITLE": "Clefs de répartition",
       "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
@@ -1116,6 +1119,14 @@
       "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporter sous format excel (CWAPE)",
       "NAME_LABEL": "Nom",
       "TYPE_LABEL": "Type",
+      "MUNICIPALITIES_LABEL": "Communes couvertes",
+      "EDIT_BUTTON_LABEL": "Modifier",
+      "EDIT_HEADER": "Modifier l'opération de partage",
+      "EDIT_MUNICIPALITIES_HEADER": "Modifier les communes",
+      "EDIT_MUNICIPALITIES_HINT": "Recherchez et sélectionnez les communes couvertes par cette opération de partage. Au moins une commune est requise pour rendre l'opération publique.",
+      "MUNICIPALITIES_COUNT_LABEL": "{{ count }} sélectionnée(s)",
+      "UPDATE_SUCCESS_LABEL": "Opération de partage mise à jour avec succès",
+      "MUNICIPALITIES_UPDATED_SUCCESSFULLY_LABEL": "Communes mises à jour avec succès",
       "ADDRESS_LABEL": "Adresse",
       "ADDRESS": {
         "STREET_NAME_LABEL": "Rue",
@@ -1213,7 +1224,8 @@
         "PUBLIC_LABEL": "Public",
         "PRIVATE_LABEL": "Privé",
         "SET_PUBLIC_SUCCESS": "L'opération de partage est désormais publique",
-        "SET_PRIVATE_SUCCESS": "L'opération de partage est désormais privée"
+        "SET_PRIVATE_SUCCESS": "L'opération de partage est désormais privée",
+        "MUNICIPALITIES_REQUIRED_HINT": "Ajoutez au moins une commune avant de rendre l'opération publique"
       }
     },
     "LIST": {

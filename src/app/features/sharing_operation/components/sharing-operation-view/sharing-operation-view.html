@@ -175,6 +175,15 @@
           <p-button
             pRipple
             [outlined]="true"
+            icon="pi pi-pencil"
+            severity="secondary"
+            [label]="'SHARING_OPERATION.VIEW.EDIT_BUTTON_LABEL' | translate"
+            (click)="editOperation()"
+            data-testid="op-view__btn--edit"
+          />
+          <p-button
+            pRipple
+            [outlined]="true"
             [label]="
               (op.is_public
                 ? 'SHARING_OPERATION.VIEW.VISIBILITY.PUBLIC_LABEL'
@@ -184,6 +193,13 @@
             [severity]="op.is_public ? 'success' : 'secondary'"
             [icon]="op.is_public ? 'pi pi-eye' : 'pi pi-eye-slash'"
             [loading]="togglingVisibility()"
+            [disabled]="!op.is_public && (op.municipalities?.length ?? 0) === 0"
+            [pTooltip]="
+              !op.is_public && (op.municipalities?.length ?? 0) === 0
+                ? ('SHARING_OPERATION.VIEW.VISIBILITY.MUNICIPALITIES_REQUIRED_HINT' | translate)
+                : ''
+            "
+            tooltipPosition="bottom"
             (click)="toggleVisibility()"
             data-testid="op-view__btn--toggle-visibility"
           />
@@ -226,6 +242,32 @@
             <div>
               <span class="field-label">{{ 'SHARING_OPERATION.VIEW.TYPE_LABEL' | translate }}</span>
               <span class="field-value">{{ op.type | sharingOperationType }}</span>
+            </div>
+            <div class="md:col-span-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="field-label">
+                  {{ 'SHARING_OPERATION.VIEW.MUNICIPALITIES_LABEL' | translate }}
+                </span>
+                <p-button
+                  pRipple
+                  [text]="true"
+                  [rounded]="true"
+                  size="small"
+                  icon="pi pi-pencil"
+                  [ariaLabel]="'SHARING_OPERATION.VIEW.EDIT_MUNICIPALITIES_HEADER' | translate"
+                  (click)="editMunicipalities()"
+                  data-testid="op-view__btn--edit-municipalities"
+                />
+              </div>
+              @if (op.municipalities && op.municipalities.length > 0) {
+                <div class="flex flex-wrap gap-1 mt-1">
+                  @for (m of op.municipalities; track m.nis_code) {
+                    <p-tag [value]="m.fr_name" severity="info" />
+                  }
+                </div>
+              } @else {
+                <span class="field-empty">--</span>
+              }
             </div>
           </div>
         </p-card>
