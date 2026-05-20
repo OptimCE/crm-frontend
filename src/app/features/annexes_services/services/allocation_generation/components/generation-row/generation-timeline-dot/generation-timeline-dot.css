@@ -1,0 +1,42 @@
+.timeline-dot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+}
+
+.timeline-dot__core {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+.timeline-dot--success .timeline-dot__core {
+  background-color: var(--p-green-500, #22c55e);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+}
+
+.timeline-dot--failed .timeline-dot__core {
+  background-color: var(--p-red-500, #ef4444);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
+}
+
+.timeline-dot--pending .timeline-dot__core {
+  background-color: var(--p-amber-500, #f59e0b);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  animation: timeline-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes timeline-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(245, 158, 11, 0.05);
+  }
+}

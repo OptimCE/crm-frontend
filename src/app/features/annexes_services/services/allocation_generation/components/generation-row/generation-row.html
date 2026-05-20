@@ -1,0 +1,84 @@
+<div
+  class="generation-row rounded-xl border border-primary-100 bg-surface-0 overflow-hidden"
+  [class.generation-row--expanded]="expanded()"
+  [attr.data-testid]="'generation-row--' + generation().id"
+>
+  <button
+    type="button"
+    class="generation-row__header w-full text-left px-4 py-4 flex items-center gap-4 hover:bg-primary-50/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+    (click)="onToggle()"
+    [attr.aria-expanded]="expanded()"
+    [attr.data-testid]="'generation-row__btn--toggle--' + generation().id"
+  >
+    <i
+      class="pi text-primary-600"
+      [class.pi-chevron-right]="!expanded()"
+      [class.pi-chevron-down]="expanded()"
+      aria-hidden="true"
+    ></i>
+
+    <app-generation-timeline-dot [status]="generation().status" [label]="statusKey() | translate" />
+
+    <div class="flex flex-col flex-1 min-w-0 gap-0.5">
+      <span class="text-base font-semibold text-surface-900 truncate">
+        {{ generation().name }}
+      </span>
+      <span class="text-xs text-surface-500">
+        #{{ generation().id }} &middot; {{ statusKey() | translate }}
+      </span>
+    </div>
+
+    <div
+      tabindex="0"
+      role="button"
+      class="flex items-center gap-2"
+      (click)="$event.stopPropagation()"
+    >
+      <p-button
+        icon="pi pi-trash"
+        severity="danger"
+        [outlined]="true"
+        size="small"
+        [pTooltip]="'ALGORITHM_HUB.DELETE_GENERATION' | translate"
+        (onClick)="onDelete($event)"
+        [attr.data-testid]="'generation-row__btn--delete--' + generation().id"
+      />
+    </div>
+  </button>
+
+  @if (expanded()) {
+    <div class="generation-row__detail px-4 pb-4 border-t border-primary-100 bg-surface-50">
+      @if (keysLoading()) {
+        <div class="space-y-2 pt-3" data-testid="generation-row__skeleton">
+          <p-skeleton width="100%" height="2.5rem" />
+          <p-skeleton width="100%" height="2.5rem" />
+          <p-skeleton width="100%" height="2.5rem" />
+        </div>
+      } @else if ((keys()?.length ?? 0) === 0) {
+        <div
+          class="text-center py-8"
+          [attr.data-testid]="'generation-row__empty--' + generation().id"
+        >
+          <i class="pi pi-bolt text-2xl text-primary-300 mb-2 block"></i>
+          <p class="text-sm text-surface-500 m-0">
+            {{ 'ALGORITHM_HUB.NO_KEYS_YET' | translate }}
+          </p>
+        </div>
+      } @else {
+        <div class="space-y-2 pt-3">
+          @for (key of keys(); track key.id) {
+            <app-allocation-key-row
+              [key]="key"
+              [expanded]="isKeyExpanded(key.id)"
+              [detail]="detailFor(key.id)"
+              [detailLoading]="isKeyLoading(key.id)"
+              (toggled)="onToggleKey(key.id)"
+              (save)="onSaveKey(key.id)"
+              (delete)="onDeleteKey(key.id)"
+            />
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

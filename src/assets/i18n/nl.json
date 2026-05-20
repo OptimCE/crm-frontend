@@ -60,6 +60,7 @@
     "MY_COMMUNITIES": "Mijn gemeenschappen",
     "PUBLIC_COMMUNITIES": "Openbare gemeenschappen",
     "COMMUNITY_INFO": "Gemeenschapsinfo",
+    "ANNEXES_SERVICES": "Annexdiensten",
     "COMMUNITY_USERS": "Gebruikers",
     "USER_GUIDE": "Gebruikershandleiding",
     "REPORT_BUG": "Bug melden",
@@ -1285,5 +1286,89 @@
     "FIELD_INVALID_EMAIL": "Het veld \"{{ controlName }}\" bevat een ongeldig e-mailadres.",
     "FIELD_MIN_LENGTH": "Het veld \"{{ controlName }}\" moet minimaal {{ requiredLength }} tekens bevatten (momenteel {{ actualLength }}).",
     "UNKNOWN_ERROR": "Onbekende fout in \"{{ controlName }}\""
+  },
+  "ANNEXES_SERVICES": {
+    "PAGE_TITLE": "Annexdiensten",
+    "PAGE_DESCRIPTION": "Aanvullende modules beschikbaar voor deze gemeenschap.",
+    "EMPTY_STATE": "Er is nog geen annexdienst geactiveerd voor deze gemeenschap.",
+    "ADD_MODULE_BUTTON": "Module toevoegen",
+    "OPEN_BUTTON": "Openen",
+    "SUBSCRIBED_BADGE": "Geactiveerd",
+    "ERROR_LOADING": "Fout bij het laden van de annexdiensten.",
+    "DIALOG": {
+      "TITLE": "Module toevoegen",
+      "DESCRIPTION": "Kies een module om toe te voegen aan uw gemeenschap.",
+      "EMPTY_STATE": "Alle beschikbare modules zijn al geactiveerd.",
+      "ADD_BUTTON": "Toevoegen",
+      "CANCEL_BUTTON": "Annuleren",
+      "SUBSCRIBE_SUCCESS": "Module met succes geactiveerd."
+    },
+    "UNSUBSCRIBE_BUTTON_TOOLTIP": "Deze module uitschakelen",
+    "UNSUBSCRIBE_CONFIRM_HEADER": "Module uitschakelen",
+    "UNSUBSCRIBE_CONFIRM": "{{name}} uitschakelen voor deze gemeenschap? Leden verliezen de toegang tot deze module.",
+    "UNSUBSCRIBE_SUCCESS": "Module uitgeschakeld.",
+    "ALGORITHM": {
+      "NAME": "Generatie van verdeelsleutels",
+      "DESCRIPTION": "Genereert verdeelsleutels op basis van configureerbare algoritmen en bewaart gevalideerde sleutels in de gemeenschap."
+    }
+  },
+  "ALGORITHM_HUB": {
+    "PAGE_TITLE": "Generatie van verdeelsleutels",
+    "PAGE_DESCRIPTION": "Voer een verdelingsalgoritme uit en bewaar de sleutels die u wilt behouden.",
+    "REFRESH_TOOLTIP": "Lijst van generaties vernieuwen",
+    "LAST_REFRESH_LABEL": "Laatst vernieuwd om",
+    "START_PANEL_TITLE": "Start een generatie",
+    "START_FOOTNOTE": "De run staat asynchroon in de wachtrij. Vernieuw om de status te zien.",
+    "ALGORITHM_LABEL": "Algoritme",
+    "ALGORITHM_PLACEHOLDER": "Kies een algoritme",
+    "ALGORITHM_PLACEHOLDER_HINT": "Kies een algoritme om de beschrijving, versie en parameters te zien.",
+    "TIMEOUT_PREFIX": "Tot",
+    "GENERATION_NAME_LABEL": "Naam van de generatie",
+    "GENERATION_NAME_PLACEHOLDER": "Q2 2026 run",
+    "INJECTION_NAME_LABEL": "Naam van de injectiekolom",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Naam van de kolom in het bestand met de geïnjecteerde (productie-) energiewaarden.",
+    "FILE_LABEL": "Bronbestand",
+    "FILE_DROP_PROMPT": "Sleep uw bestand of blader",
+    "FILE_HINT": "CSV of XLSX, tot 25 MB.",
+    "FILE_CLEAR": "Bestand verwijderen",
+    "INPUTS_TITLE": "Parameters van het algoritme",
+    "ADVANCED_OPTIONS": "Geavanceerde opties",
+    "SUBMIT": "Generatie starten",
+    "GENERATIONS_TITLE": "Generaties",
+    "EMPTY_STATE": "Nog geen generaties. Start hierboven uw eerste run.",
+    "NO_KEYS_YET": "Nog geen sleutels geproduceerd. De worker is mogelijk nog bezig.",
+    "KEY_DETAIL_UNAVAILABLE": "Detail is niet beschikbaar voor deze sleutel.",
+    "SURPLUS_LABEL": "Overschot",
+    "SAVE_KEY": "Sleutel opslaan in /keys",
+    "DELETE_KEY": "Sleutel verwijderen",
+    "DELETE_GENERATION": "Generatie verwijderen",
+    "STATUS": {
+      "PENDING": "In behandeling",
+      "SUCCESS": "Geslaagd",
+      "FAILED": "Mislukt"
+    },
+    "CONFIRM": {
+      "SAVE_HEADER": "Sleutel opslaan",
+      "SAVE_MESSAGE": "Deze sleutel opslaan in de sleutelopslag van de gemeenschap?",
+      "DELETE_KEY_HEADER": "Sleutel verwijderen",
+      "DELETE_KEY_MESSAGE": "Deze gegenereerde sleutel wordt permanent verwijderd. Doorgaan?",
+      "DELETE_GEN_HEADER": "Generatie verwijderen",
+      "DELETE_GEN_MESSAGE": "De generatie en al haar gegenereerde sleutels worden verwijderd. Doorgaan?"
+    },
+    "SUCCESS": {
+      "GENERATION_STARTED": "Generatie gestart — vernieuw om de status te zien.",
+      "KEY_SAVED": "Sleutel opgeslagen.",
+      "KEY_DELETED": "Sleutel verwijderd.",
+      "GEN_DELETED": "Generatie verwijderd."
+    },
+    "ERRORS": {
+      "ALGORITHMS_FAILED": "Kan de lijst met algoritmen niet laden.",
+      "GENERATION_NAME_REQUIRED": "Geef deze generatie een naam.",
+      "FILE_REQUIRED": "Selecteer een CSV- of XLSX-bestand.",
+      "FILE_EMPTY": "Het geselecteerde bestand is leeg.",
+      "FILE_TOO_LARGE": "Bestand te groot (max 25 MB).",
+      "FILE_TYPE": "Alleen CSV- en XLSX-bestanden worden aanvaard."
+    }
   }
 }

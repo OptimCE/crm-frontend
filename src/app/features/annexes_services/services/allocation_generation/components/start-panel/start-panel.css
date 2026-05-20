@@ -1,0 +1,11 @@
+.advanced-toggle {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.field-label-block ::ng-deep .p-inputnumber,
+.field-label-block ::ng-deep input.p-inputtext {
+  width: 100%;
+}

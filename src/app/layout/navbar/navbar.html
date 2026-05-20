@@ -146,6 +146,15 @@
           [routerLinkUrl]="'/communities/info'"
           [sidebarOpen]="sidebarOpen()"
         ></li>
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-th-large'"
+          [isRouteActive]="isRouteActive().annexes_services"
+          [name]="'NAVBAR.ANNEXES_SERVICES' | translate"
+          [routerLinkUrl]="'/annexes-services'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
       </ul>
     }
 

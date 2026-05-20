@@ -1,0 +1,20 @@
+.key-row {
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.key-row--expanded {
+  border-color: var(--p-primary-300, #66bb6a);
+  box-shadow: 0 1px 3px rgba(27, 94, 32, 0.06);
+}
+
+.key-row__header {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.key-row__grid {
+  display: block;
+}

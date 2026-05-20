@@ -1,0 +1,87 @@
+<div
+  class="key-row rounded-lg border border-surface-200 bg-surface-0 overflow-hidden"
+  [class.key-row--expanded]="expanded()"
+  [attr.data-testid]="'key-row--' + key().id"
+>
+  <button
+    type="button"
+    class="key-row__header w-full text-left px-4 py-3 flex items-start sm:items-center gap-3 hover:bg-surface-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+    (click)="onToggle()"
+    [attr.aria-expanded]="expanded()"
+    [attr.data-testid]="'key-row__btn--toggle--' + key().id"
+  >
+    <i
+      class="pi text-primary-600"
+      [class.pi-chevron-right]="!expanded()"
+      [class.pi-chevron-down]="expanded()"
+      aria-hidden="true"
+    ></i>
+
+    <div class="flex flex-col flex-1 min-w-0 gap-0.5">
+      <span class="text-sm font-semibold text-surface-900 truncate">
+        {{ key().name }}
+      </span>
+      @if (key().description) {
+        <span class="text-xs text-surface-500 truncate">{{ key().description }}</span>
+      }
+    </div>
+
+    <p-tag
+      severity="info"
+      [value]="('ALGORITHM_HUB.SURPLUS_LABEL' | translate) + ': ' + surplusFormatted()"
+      data-testid="key-row__tag--surplus"
+    />
+
+    <div
+      tabindex="0"
+      role="button"
+      class="flex items-center gap-2 ml-auto"
+      (click)="$event.stopPropagation()"
+    >
+      <p-button
+        icon="pi pi-bookmark"
+        severity="primary"
+        [outlined]="true"
+        size="small"
+        [pTooltip]="'ALGORITHM_HUB.SAVE_KEY' | translate"
+        (onClick)="onSave($event)"
+        [attr.data-testid]="'key-row__btn--save--' + key().id"
+      />
+      <p-button
+        icon="pi pi-trash"
+        severity="danger"
+        [outlined]="true"
+        size="small"
+        [pTooltip]="'ALGORITHM_HUB.DELETE_KEY' | translate"
+        (onClick)="onDelete($event)"
+        [attr.data-testid]="'key-row__btn--delete--' + key().id"
+      />
+    </div>
+  </button>
+
+  @if (expanded()) {
+    <div class="key-row__detail px-4 py-3 border-t border-surface-200 bg-surface-50">
+      @if (detailLoading()) {
+        <div class="space-y-2" data-testid="key-row__skeleton">
+          <p-skeleton width="100%" height="2rem" />
+          <p-skeleton width="100%" height="2rem" />
+          <p-skeleton width="100%" height="2rem" />
+        </div>
+      } @else if (detail()) {
+        <ag-grid-angular
+          class="key-row__grid"
+          style="width: 100%"
+          [rowData]="rowData()"
+          [columnDefs]="colDefs()"
+          [defaultColDef]="defaultColDef"
+          domLayout="autoHeight"
+          [attr.data-testid]="'key-row__grid--' + key().id"
+        />
+      } @else {
+        <p class="text-sm text-surface-500 m-0">
+          {{ 'ALGORITHM_HUB.KEY_DETAIL_UNAVAILABLE' | translate }}
+        </p>
+      }
+    </div>
+  }
+</div>

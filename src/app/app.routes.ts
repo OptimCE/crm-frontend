@@ -55,4 +55,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/community/community.routes').then((m) => m.COMMUNITY_ROUTES),
   },
+  {
+    path: 'annexes-services',
+    canActivate: [canActivateAuth, minRoleGuard],
+    data: { minRole: Role.MEMBER },
+    loadChildren: () =>
+      import('./features/annexes_services/annexes-services.routes').then(
+        (m) => m.ANNEXES_SERVICES_ROUTES,
+      ),
+  },
 ];

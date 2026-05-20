@@ -1,0 +1,5 @@
+.annex-card {
+  cursor: pointer;
+  width: 100%;
+  background: var(--p-surface-0, #ffffff);
+}

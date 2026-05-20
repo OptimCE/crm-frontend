@@ -1,0 +1,146 @@
+<ng-container [formGroup]="inputsForm()">
+  @if (mainFields().length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-testid="algo-form__grid--main">
+      @for (field of mainFields(); track field.key) {
+        <div class="field-label-block flex flex-col gap-1.5">
+          <span class="field-label-text text-sm font-medium text-surface-800">
+            {{ field.prop.title || field.key }}
+            @if (field.required) {
+              <span class="text-danger-500" aria-hidden="true">*</span>
+            }
+          </span>
+
+          @switch (field.prop.type) {
+            @case ('integer') {
+              <p-inputNumber
+                [formControlName]="field.key"
+                [showButtons]="true"
+                mode="decimal"
+                [maxFractionDigits]="0"
+                [min]="field.prop.minimum"
+                [max]="field.prop.maximum"
+                [attr.data-testid]="'algo-form__input--' + field.key"
+              />
+            }
+            @case ('number') {
+              <p-inputNumber
+                [formControlName]="field.key"
+                mode="decimal"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="6"
+                [min]="field.prop.minimum"
+                [max]="field.prop.maximum"
+                [attr.data-testid]="'algo-form__input--' + field.key"
+              />
+            }
+            @case ('boolean') {
+              <p-checkbox
+                [formControlName]="field.key"
+                [binary]="true"
+                [attr.data-testid]="'algo-form__input--' + field.key"
+              />
+            }
+            @default {
+              <input
+                pInputText
+                type="text"
+                [formControlName]="field.key"
+                [attr.data-testid]="'algo-form__input--' + field.key"
+              />
+            }
+          }
+
+          @if (field.prop.description) {
+            <small class="field-help text-xs text-surface-500 leading-snug">
+              {{ field.prop.description }}
+            </small>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (advancedFields().length > 0) {
+    <div class="mt-4">
+      <button
+        type="button"
+        class="advanced-toggle inline-flex items-center gap-2 text-sm font-medium text-primary-700 hover:text-primary-800"
+        (click)="toggleAdvanced()"
+        [attr.aria-expanded]="advancedOpen()"
+        data-testid="algo-form__btn--toggle-advanced"
+      >
+        <span>{{ 'ALGORITHM_HUB.ADVANCED_OPTIONS' | translate }}</span>
+        <i
+          class="pi"
+          [class.pi-chevron-up]="advancedOpen()"
+          [class.pi-chevron-down]="!advancedOpen()"
+          aria-hidden="true"
+        ></i>
+      </button>
+
+      @if (advancedOpen()) {
+        <div
+          class="advanced-grid grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 p-4 rounded-lg bg-surface-50 border border-surface-200"
+          data-testid="algo-form__grid--advanced"
+        >
+          @for (field of advancedFields(); track field.key) {
+            <div class="field-label-block flex flex-col gap-1.5">
+              <span class="field-label-text text-sm font-medium text-surface-800">
+                {{ field.prop.title || field.key }}
+                @if (field.required) {
+                  <span class="text-danger-500" aria-hidden="true">*</span>
+                }
+              </span>
+
+              @switch (field.prop.type) {
+                @case ('integer') {
+                  <p-inputNumber
+                    [formControlName]="field.key"
+                    [showButtons]="true"
+                    mode="decimal"
+                    [maxFractionDigits]="0"
+                    [min]="field.prop.minimum"
+                    [max]="field.prop.maximum"
+                    [attr.data-testid]="'algo-form__input--' + field.key"
+                  />
+                }
+                @case ('number') {
+                  <p-inputNumber
+                    [formControlName]="field.key"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="6"
+                    [min]="field.prop.minimum"
+                    [max]="field.prop.maximum"
+                    [attr.data-testid]="'algo-form__input--' + field.key"
+                  />
+                }
+                @case ('boolean') {
+                  <p-checkbox
+                    [formControlName]="field.key"
+                    [binary]="true"
+                    [attr.data-testid]="'algo-form__input--' + field.key"
+                  />
+                }
+                @default {
+                  <input
+                    pInputText
+                    type="text"
+                    [formControlName]="field.key"
+                    [attr.data-testid]="'algo-form__input--' + field.key"
+                  />
+                }
+              }
+
+              @if (field.prop.description) {
+                <small class="field-help text-xs text-surface-500 leading-snug">
+                  {{ field.prop.description }}
+                </small>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</ng-container>

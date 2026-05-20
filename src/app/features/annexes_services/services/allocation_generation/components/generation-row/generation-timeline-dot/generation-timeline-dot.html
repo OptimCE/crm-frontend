@@ -1,0 +1,10 @@
+<span
+  class="timeline-dot"
+  [class.timeline-dot--success]="variant() === 'success'"
+  [class.timeline-dot--pending]="variant() === 'pending'"
+  [class.timeline-dot--failed]="variant() === 'failed'"
+  [attr.aria-label]="label()"
+  data-testid="generation-timeline-dot"
+>
+  <span class="timeline-dot__core" aria-hidden="true"></span>
+</span>

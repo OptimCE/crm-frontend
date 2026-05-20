@@ -1,0 +1,16 @@
+.generation-row {
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.generation-row--expanded {
+  border-color: var(--p-primary-300, #66bb6a);
+  box-shadow: 0 2px 6px rgba(27, 94, 32, 0.05);
+}
+
+.generation-row__header {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

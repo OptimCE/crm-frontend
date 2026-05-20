@@ -1,0 +1,55 @@
+<div class="add-annex-dialog">
+  <p class="mb-4 text-sm text-primary-600">
+    {{ 'ANNEXES_SERVICES.DIALOG.DESCRIPTION' | translate }}
+  </p>
+
+  @if (available().length === 0) {
+    <div
+      class="rounded-lg border border-primary-100 bg-surface-50 p-6 text-center"
+      data-testid="add-annex-dialog__empty"
+    >
+      <i class="pi pi-check-circle text-2xl text-primary-300 mb-2 block"></i>
+      <p class="text-primary-600">{{ 'ANNEXES_SERVICES.DIALOG.EMPTY_STATE' | translate }}</p>
+    </div>
+  } @else {
+    <ul class="flex flex-col gap-3" data-testid="add-annex-dialog__list">
+      @for (service of available(); track service.feature) {
+        <li
+          class="flex items-start gap-3 rounded-lg border border-primary-100 p-3"
+          [attr.data-testid]="'add-annex-dialog__item--' + service.feature"
+        >
+          <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary-50 text-primary-600"
+          >
+            <i [class]="service.icon"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-sm font-semibold text-primary-800">
+              {{ service.displayKey | translate }}
+            </h4>
+            <p class="mt-1 text-xs text-primary-600">
+              {{ service.descriptionKey | translate }}
+            </p>
+          </div>
+          <p-button
+            size="small"
+            icon="pi pi-plus"
+            [label]="'ANNEXES_SERVICES.DIALOG.ADD_BUTTON' | translate"
+            [disabled]="pendingFeature() !== null"
+            [loading]="pendingFeature() === service.feature"
+            (onClick)="add(service)"
+          />
+        </li>
+      }
+    </ul>
+  }
+
+  <div class="mt-5 flex justify-end gap-2">
+    <p-button
+      severity="secondary"
+      [label]="'ANNEXES_SERVICES.DIALOG.CANCEL_BUTTON' | translate"
+      (onClick)="close()"
+      data-testid="add-annex-dialog__btn--cancel"
+    />
+  </div>
+</div>

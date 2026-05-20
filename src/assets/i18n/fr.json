@@ -60,6 +60,7 @@
     "MY_COMMUNITIES": "Mes communautés",
     "PUBLIC_COMMUNITIES": "Communautés publiques",
     "COMMUNITY_INFO": "Infos communauté",
+    "ANNEXES_SERVICES": "Services annexes",
     "COMMUNITY_USERS": "Utilisateurs",
     "USER_GUIDE": "Guide utilisateur",
     "REPORT_BUG": "Signaler un bug",
@@ -1283,5 +1284,89 @@
     "FIELD_INVALID_EMAIL": "Le champ \"{{ controlName }}\" contient une adresse email invalide.",
     "FIELD_MIN_LENGTH": "Le champ \"{{ controlName }}\" doit contenir au moins {{ requiredLength }} caractères (actuellement {{ actualLength }}).",
     "UNKNOWN_ERROR": "Erreur inconnue sur \"{{ controlName }}\""
+  },
+  "ANNEXES_SERVICES": {
+    "PAGE_TITLE": "Services annexes",
+    "PAGE_DESCRIPTION": "Modules complémentaires disponibles pour cette communauté.",
+    "EMPTY_STATE": "Aucun service annexe n'est encore activé pour cette communauté.",
+    "ADD_MODULE_BUTTON": "Ajouter un module",
+    "OPEN_BUTTON": "Ouvrir",
+    "SUBSCRIBED_BADGE": "Activé",
+    "ERROR_LOADING": "Erreur lors du chargement des services annexes.",
+    "DIALOG": {
+      "TITLE": "Ajouter un module",
+      "DESCRIPTION": "Choisissez un module à ajouter à votre communauté.",
+      "EMPTY_STATE": "Tous les modules disponibles sont déjà activés.",
+      "ADD_BUTTON": "Ajouter",
+      "CANCEL_BUTTON": "Annuler",
+      "SUBSCRIBE_SUCCESS": "Module activé avec succès."
+    },
+    "UNSUBSCRIBE_BUTTON_TOOLTIP": "Désactiver ce module",
+    "UNSUBSCRIBE_CONFIRM_HEADER": "Désactiver le module",
+    "UNSUBSCRIBE_CONFIRM": "Désactiver {{name}} pour cette communauté ? Les membres perdront l'accès à ce module.",
+    "UNSUBSCRIBE_SUCCESS": "Module désactivé.",
+    "ALGORITHM": {
+      "NAME": "Génération de clés de répartition",
+      "DESCRIPTION": "Génère des clés de répartition à partir d'algorithmes paramétrables et enregistre les clés validées dans la communauté."
+    }
+  },
+  "ALGORITHM_HUB": {
+    "PAGE_TITLE": "Génération de clés de répartition",
+    "PAGE_DESCRIPTION": "Lancez un algorithme de répartition et sauvegardez les clés que vous souhaitez conserver.",
+    "REFRESH_TOOLTIP": "Rafraîchir la liste des générations",
+    "LAST_REFRESH_LABEL": "Dernière actualisation à",
+    "START_PANEL_TITLE": "Lancer une génération",
+    "START_FOOTNOTE": "Le calcul est mis en file d'attente. Rafraîchissez pour voir le statut.",
+    "ALGORITHM_LABEL": "Algorithme",
+    "ALGORITHM_PLACEHOLDER": "Choisir un algorithme",
+    "ALGORITHM_PLACEHOLDER_HINT": "Choisissez un algorithme pour voir sa description, sa version et ses paramètres ajustables.",
+    "TIMEOUT_PREFIX": "Jusqu'à",
+    "GENERATION_NAME_LABEL": "Nom de la génération",
+    "GENERATION_NAME_PLACEHOLDER": "Run T2 2026",
+    "INJECTION_NAME_LABEL": "Nom de la colonne d'injection",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Nom de la colonne du fichier qui contient les valeurs d'énergie injectée (production).",
+    "FILE_LABEL": "Fichier source",
+    "FILE_DROP_PROMPT": "Déposez votre fichier ou parcourez",
+    "FILE_HINT": "CSV ou XLSX, jusqu'à 25 Mo.",
+    "FILE_CLEAR": "Retirer le fichier",
+    "INPUTS_TITLE": "Paramètres de l'algorithme",
+    "ADVANCED_OPTIONS": "Options avancées",
+    "SUBMIT": "Lancer la génération",
+    "GENERATIONS_TITLE": "Générations",
+    "EMPTY_STATE": "Aucune génération pour le moment. Lancez la première ci-dessus.",
+    "NO_KEYS_YET": "Aucune clé produite pour l'instant. Le worker est peut-être encore en cours.",
+    "KEY_DETAIL_UNAVAILABLE": "Le détail est indisponible pour cette clé.",
+    "SURPLUS_LABEL": "Surplus",
+    "SAVE_KEY": "Sauvegarder dans /keys",
+    "DELETE_KEY": "Supprimer la clé",
+    "DELETE_GENERATION": "Supprimer la génération",
+    "STATUS": {
+      "PENDING": "En cours",
+      "SUCCESS": "Succès",
+      "FAILED": "Échec"
+    },
+    "CONFIRM": {
+      "SAVE_HEADER": "Sauvegarder la clé",
+      "SAVE_MESSAGE": "Sauvegarder cette clé dans le stockage des clés de la communauté ?",
+      "DELETE_KEY_HEADER": "Supprimer la clé",
+      "DELETE_KEY_MESSAGE": "Cette clé générée sera définitivement supprimée. Continuer ?",
+      "DELETE_GEN_HEADER": "Supprimer la génération",
+      "DELETE_GEN_MESSAGE": "La génération et toutes ses clés générées seront supprimées. Continuer ?"
+    },
+    "SUCCESS": {
+      "GENERATION_STARTED": "Génération démarrée — rafraîchissez pour voir le statut.",
+      "KEY_SAVED": "Clé sauvegardée.",
+      "KEY_DELETED": "Clé supprimée.",
+      "GEN_DELETED": "Génération supprimée."
+    },
+    "ERRORS": {
+      "ALGORITHMS_FAILED": "Impossible de charger la liste des algorithmes.",
+      "GENERATION_NAME_REQUIRED": "Veuillez nommer cette génération.",
+      "FILE_REQUIRED": "Veuillez sélectionner un fichier CSV ou XLSX.",
+      "FILE_EMPTY": "Le fichier sélectionné est vide.",
+      "FILE_TOO_LARGE": "Fichier trop volumineux (max 25 Mo).",
+      "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés."
+    }
   }
 }

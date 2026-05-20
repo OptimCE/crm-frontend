@@ -60,6 +60,7 @@
     "MY_COMMUNITIES": "Meine Gemeinschaften",
     "PUBLIC_COMMUNITIES": "Öffentliche Gemeinschaften",
     "COMMUNITY_INFO": "Gemeinschaftsinfo",
+    "ANNEXES_SERVICES": "Zusatzdienste",
     "COMMUNITY_USERS": "Benutzer",
     "USER_GUIDE": "Benutzerhandbuch",
     "REPORT_BUG": "Fehler melden",
@@ -1285,5 +1286,89 @@
     "FIELD_INVALID_EMAIL": "Das Feld \"{{ controlName }}\" enthält eine ungültige E-Mail-Adresse.",
     "FIELD_MIN_LENGTH": "Das Feld \"{{ controlName }}\" muss mindestens {{ requiredLength }} Zeichen enthalten (aktuell {{ actualLength }}).",
     "UNKNOWN_ERROR": "Unbekannter Fehler in \"{{ controlName }}\""
+  },
+  "ANNEXES_SERVICES": {
+    "PAGE_TITLE": "Zusatzdienste",
+    "PAGE_DESCRIPTION": "Zusätzliche Module, die für diese Gemeinschaft verfügbar sind.",
+    "EMPTY_STATE": "Für diese Gemeinschaft ist noch kein Zusatzdienst aktiviert.",
+    "ADD_MODULE_BUTTON": "Modul hinzufügen",
+    "OPEN_BUTTON": "Öffnen",
+    "SUBSCRIBED_BADGE": "Aktiviert",
+    "ERROR_LOADING": "Fehler beim Laden der Zusatzdienste.",
+    "DIALOG": {
+      "TITLE": "Modul hinzufügen",
+      "DESCRIPTION": "Wählen Sie ein Modul aus, das zu Ihrer Gemeinschaft hinzugefügt werden soll.",
+      "EMPTY_STATE": "Alle verfügbaren Module sind bereits aktiviert.",
+      "ADD_BUTTON": "Hinzufügen",
+      "CANCEL_BUTTON": "Abbrechen",
+      "SUBSCRIBE_SUCCESS": "Modul erfolgreich aktiviert."
+    },
+    "UNSUBSCRIBE_BUTTON_TOOLTIP": "Dieses Modul deaktivieren",
+    "UNSUBSCRIBE_CONFIRM_HEADER": "Modul deaktivieren",
+    "UNSUBSCRIBE_CONFIRM": "{{name}} für diese Gemeinschaft deaktivieren? Die Mitglieder verlieren den Zugriff auf dieses Modul.",
+    "UNSUBSCRIBE_SUCCESS": "Modul deaktiviert.",
+    "ALGORITHM": {
+      "NAME": "Generierung von Verteilschlüsseln",
+      "DESCRIPTION": "Erzeugt Verteilschlüssel auf Basis konfigurierbarer Algorithmen und speichert validierte Schlüssel in der Gemeinschaft."
+    }
+  },
+  "ALGORITHM_HUB": {
+    "PAGE_TITLE": "Generierung von Verteilschlüsseln",
+    "PAGE_DESCRIPTION": "Führen Sie einen Verteilungsalgorithmus aus und speichern Sie die gewünschten Schlüssel.",
+    "REFRESH_TOOLTIP": "Generierungsliste aktualisieren",
+    "LAST_REFRESH_LABEL": "Zuletzt aktualisiert um",
+    "START_PANEL_TITLE": "Generierung starten",
+    "START_FOOTNOTE": "Der Lauf wird asynchron in die Warteschlange gestellt. Zum Anzeigen des Status aktualisieren.",
+    "ALGORITHM_LABEL": "Algorithmus",
+    "ALGORITHM_PLACEHOLDER": "Algorithmus auswählen",
+    "ALGORITHM_PLACEHOLDER_HINT": "Wählen Sie einen Algorithmus, um Beschreibung, Version und Parameter zu sehen.",
+    "TIMEOUT_PREFIX": "Bis zu",
+    "GENERATION_NAME_LABEL": "Name der Generierung",
+    "GENERATION_NAME_PLACEHOLDER": "Q2 2026 Lauf",
+    "INJECTION_NAME_LABEL": "Name der Einspeisespalte",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Name der Spalte in der Datei mit den eingespeisten (Produktions-) Energiewerten.",
+    "FILE_LABEL": "Quelldatei",
+    "FILE_DROP_PROMPT": "Datei hier ablegen oder durchsuchen",
+    "FILE_HINT": "CSV oder XLSX, bis 25 MB.",
+    "FILE_CLEAR": "Datei entfernen",
+    "INPUTS_TITLE": "Algorithmusparameter",
+    "ADVANCED_OPTIONS": "Erweiterte Optionen",
+    "SUBMIT": "Generierung starten",
+    "GENERATIONS_TITLE": "Generierungen",
+    "EMPTY_STATE": "Noch keine Generierungen. Starten Sie oben Ihren ersten Lauf.",
+    "NO_KEYS_YET": "Noch keine Schlüssel erzeugt. Der Worker arbeitet möglicherweise noch.",
+    "KEY_DETAIL_UNAVAILABLE": "Detail ist für diesen Schlüssel nicht verfügbar.",
+    "SURPLUS_LABEL": "Überschuss",
+    "SAVE_KEY": "Schlüssel in /keys speichern",
+    "DELETE_KEY": "Schlüssel löschen",
+    "DELETE_GENERATION": "Generierung löschen",
+    "STATUS": {
+      "PENDING": "Ausstehend",
+      "SUCCESS": "Erfolgreich",
+      "FAILED": "Fehlgeschlagen"
+    },
+    "CONFIRM": {
+      "SAVE_HEADER": "Schlüssel speichern",
+      "SAVE_MESSAGE": "Diesen Schlüssel im Schlüsselspeicher der Gemeinschaft speichern?",
+      "DELETE_KEY_HEADER": "Schlüssel löschen",
+      "DELETE_KEY_MESSAGE": "Dieser generierte Schlüssel wird endgültig gelöscht. Fortfahren?",
+      "DELETE_GEN_HEADER": "Generierung löschen",
+      "DELETE_GEN_MESSAGE": "Die Generierung und alle ihre erzeugten Schlüssel werden gelöscht. Fortfahren?"
+    },
+    "SUCCESS": {
+      "GENERATION_STARTED": "Generierung gestartet — zum Anzeigen des Status aktualisieren.",
+      "KEY_SAVED": "Schlüssel gespeichert.",
+      "KEY_DELETED": "Schlüssel gelöscht.",
+      "GEN_DELETED": "Generierung gelöscht."
+    },
+    "ERRORS": {
+      "ALGORITHMS_FAILED": "Algorithmusliste konnte nicht geladen werden.",
+      "GENERATION_NAME_REQUIRED": "Bitte geben Sie der Generierung einen Namen.",
+      "FILE_REQUIRED": "Bitte wählen Sie eine CSV- oder XLSX-Datei aus.",
+      "FILE_EMPTY": "Die ausgewählte Datei ist leer.",
+      "FILE_TOO_LARGE": "Datei zu groß (max. 25 MB).",
+      "FILE_TYPE": "Nur CSV- und XLSX-Dateien werden akzeptiert."
+    }
   }
 }
