@@ -185,13 +185,18 @@ describe('AnnexesServicesList', () => {
       expect(component.availableToAdd().map((s) => s.feature)).toEqual(['b', 'c']);
     });
 
-    it('canManage should reflect UserContextService.compareWithActiveRole', () => {
+    it('canManage should reflect UserContextService.compareWithActiveRole', async () => {
       userContextSpy.compareWithActiveRole.mockReturnValue(true);
       expect(component.canManage()).toBe(true);
-      userContextSpy.compareWithActiveRole.mockReturnValue(false);
-      // recompute: signal depends on the function reference so we re-call
-      expect(component.canManage()).toBe(false);
       expect(userContextSpy.compareWithActiveRole).toHaveBeenCalledWith(Role.GESTIONNAIRE);
+
+      // `canManage` is a computed signal — its value is memoized until a
+      // reactive dependency changes. The mocked `compareWithActiveRole` is
+      // not a signal, so re-mocking it on the same instance won't trigger a
+      // recompute. Recreate the component to evaluate the new mock value.
+      userContextSpy.compareWithActiveRole.mockReturnValue(false);
+      await createComponent();
+      expect(component.canManage()).toBe(false);
     });
   });
 
