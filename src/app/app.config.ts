@@ -16,6 +16,7 @@ import { includeBearerTokenInterceptor } from 'keycloak-angular';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageService } from './core/services/language/language.service';
 import { communityContextInterceptor } from './core/interceptors/community.context.inteceptor';
+import { acceptLanguageInterceptor } from './core/interceptors/accept-language.interceptor';
 import { RuntimeConfig } from '../environments/environments';
 
 export function initializeLanguage(_languageService: LanguageService) {
@@ -48,7 +49,11 @@ export function getAppConfig(): ApplicationConfig {
     providers: [
       provideKeycloakAngular(),
       provideHttpClient(
-        withInterceptors([includeBearerTokenInterceptor, communityContextInterceptor]),
+        withInterceptors([
+          includeBearerTokenInterceptor,
+          communityContextInterceptor,
+          acceptLanguageInterceptor,
+        ]),
       ),
       provideBrowserGlobalErrorListeners(),
       provideRouter(
