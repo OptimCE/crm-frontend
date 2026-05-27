@@ -193,9 +193,9 @@
             [severity]="op.is_public ? 'success' : 'secondary'"
             [icon]="op.is_public ? 'pi pi-eye' : 'pi pi-eye-slash'"
             [loading]="togglingVisibility()"
-            [disabled]="!op.is_public && op.municipalities.length"
+            [disabled]="!op.is_public && !op.municipalities.length"
             [pTooltip]="
-              !op.is_public && op.municipalities.length
+              !op.is_public && !op.municipalities.length
                 ? ('SHARING_OPERATION.VIEW.VISIBILITY.MUNICIPALITIES_REQUIRED_HINT' | translate)
                 : ''
             "
