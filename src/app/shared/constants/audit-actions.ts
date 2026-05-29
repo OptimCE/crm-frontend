@@ -1,0 +1,51 @@
+/**
+ * Frontend mirror of the backend `AUDIT_ACTIONS` registry
+ * (crm-backend/src/modules/audit_log/domain/audit-log.actions.ts).
+ *
+ * The list is duplicated deliberately: the registry is not exposed at runtime,
+ * and the action <p-select> needs the codes at build time to render the option
+ * list. Keep in sync when the backend adds a new code.
+ */
+export const AUDIT_ACTIONS: readonly string[] = [
+  'crm.community_subscription.created',
+  'crm.community_subscription.reactivated',
+  'crm.community_subscription.unsubscribed',
+  'crm.community.created',
+  'crm.community.updated',
+  'crm.community.deleted',
+  'crm.community_member.kicked',
+  'crm.community_member.left',
+  'crm.community_member.role_updated',
+  'crm.document.created',
+  'crm.document.deleted',
+  'crm.manager_invitation.created',
+  'crm.manager_invitation.deleted',
+  'crm.manager_invitation.accepted',
+  'crm.manager_invitation.refused',
+  'crm.member_invitation.created',
+  'crm.member_invitation.deleted',
+  'crm.member_invitation.accepted',
+  'crm.member_invitation.refused',
+  'crm.allocation_key.created',
+  'crm.allocation_key.updated',
+  'crm.allocation_key.deleted',
+  'crm.member.created',
+  'crm.member.updated',
+  'crm.member.deleted',
+  'crm.member_user_link.invited',
+  'crm.member_user_link.deleted',
+  'crm.meter.created',
+  'crm.meter.updated',
+  'crm.meter.deleted',
+  'crm.meter_data.created',
+  'crm.meter_data.updated',
+  'crm.meter_data.deleted',
+  'crm.meter_data.deactivated',
+  'crm.sharing_operation.created',
+  'crm.sharing_operation.updated',
+  'crm.sharing_operation.deleted',
+  'crm.sharing_operation_key.created',
+  'crm.sharing_operation_key.approved',
+  'crm.sharing_operation_key.rejected',
+  'crm.sharing_op_consumption.uploaded',
+] as const;

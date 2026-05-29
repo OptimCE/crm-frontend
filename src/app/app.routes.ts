@@ -50,6 +50,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'audit-logs',
+    canActivate: [canActivateAuth, minRoleGuard],
+    data: { minRole: Role.GESTIONNAIRE },
+    loadChildren: () =>
+      import('./features/audit_log/audit-log.routes').then((m) => m.AUDIT_LOG_ROUTES),
+  },
+  {
     path: 'communities',
     canActivate: [canActivateAuth],
     loadChildren: () =>
