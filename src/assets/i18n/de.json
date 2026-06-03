@@ -73,7 +73,8 @@
     "COMMUNITY": "Gemeinschaft",
     "MANAGEMENT": "Verwaltung",
     "ERROR_LOADING": "Beim Laden der Daten ist ein Fehler aufgetreten",
-    "RETRY": "Erneut versuchen"
+    "RETRY": "Erneut versuchen",
+    "AUDIT_LOG": "Audit-Protokoll"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -1369,6 +1370,106 @@
       "FILE_EMPTY": "Die ausgewählte Datei ist leer.",
       "FILE_TOO_LARGE": "Datei zu groß (max. 25 MB).",
       "FILE_TYPE": "Nur CSV- und XLSX-Dateien werden akzeptiert."
+    }
+  },
+  "AUDIT": {
+    "LIST": {
+      "TITLE": "Audit-Protokoll",
+      "SUBTITLE": "Verfolgen Sie, wer was innerhalb der Gemeinschaft getan hat",
+      "ACTION_LABEL": "Aktion",
+      "SELECT_AN_ACTION_PLACEHOLDER": "Aktion auswählen",
+      "ENTITY_TYPE_LABEL": "Entitätstyp",
+      "ENTITY_TYPE_PLACEHOLDER": "z. B. Zähler, Mitglied",
+      "ENTITY_ID_LABEL": "Entitäts-ID",
+      "ENTITY_ID_PLACEHOLDER": "Entitätskennung",
+      "USER_ID_LABEL": "Benutzer-ID",
+      "USER_ID_PLACEHOLDER": "Benutzerkennung",
+      "USER_EMAIL_LABEL": "Benutzer",
+      "FROM_LABEL": "Von",
+      "TO_LABEL": "Bis",
+      "SOURCE_LABEL": "Quelle",
+      "TIMESTAMP_LABEL": "Zeitstempel",
+      "PAYLOAD_LABEL": "Nutzdaten",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter zurücksetzen",
+      "NO_AUDIT_LOG_FOUND_LABEL": "Keine Audit-Protokoll-Einträge gefunden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Einträge)"
+    },
+    "EXPORT": {
+      "BUTTON": "CSV exportieren",
+      "TOO_LARGE": "Zu viele Einträge zum Exportieren. Bitte engen Sie Ihre Filter ein und versuchen Sie es erneut."
+    },
+    "ACTIONS": {
+      "crm": {
+        "community_subscription": {
+          "created": "Gemeinschaftsanmeldung erstellt",
+          "reactivated": "Gemeinschaftsanmeldung reaktiviert",
+          "unsubscribed": "Von Gemeinschaft abgemeldet"
+        },
+        "community": {
+          "created": "Gemeinschaft erstellt",
+          "updated": "Gemeinschaft aktualisiert",
+          "deleted": "Gemeinschaft gelöscht"
+        },
+        "community_member": {
+          "kicked": "Mitglied aus Gemeinschaft entfernt",
+          "left": "Mitglied hat Gemeinschaft verlassen",
+          "role_updated": "Mitgliederrolle aktualisiert"
+        },
+        "document": {
+          "created": "Dokument hochgeladen",
+          "deleted": "Dokument gelöscht"
+        },
+        "manager_invitation": {
+          "created": "Verwaltereinladung gesendet",
+          "deleted": "Verwaltereinladung zurückgezogen",
+          "accepted": "Verwaltereinladung angenommen",
+          "refused": "Verwaltereinladung abgelehnt"
+        },
+        "member_invitation": {
+          "created": "Mitgliedereinladung gesendet",
+          "deleted": "Mitgliedereinladung zurückgezogen",
+          "accepted": "Mitgliedereinladung angenommen",
+          "refused": "Mitgliedereinladung abgelehnt"
+        },
+        "allocation_key": {
+          "created": "Verteilungsschlüssel erstellt",
+          "updated": "Verteilungsschlüssel aktualisiert",
+          "deleted": "Verteilungsschlüssel gelöscht"
+        },
+        "member": {
+          "created": "Mitglied hinzugefügt",
+          "updated": "Mitglied aktualisiert",
+          "deleted": "Mitglied gelöscht"
+        },
+        "member_user_link": {
+          "invited": "Benutzer zu Mitgliederkonto eingeladen",
+          "deleted": "Benutzer vom Mitglied getrennt"
+        },
+        "meter": {
+          "created": "Zähler hinzugefügt",
+          "updated": "Zähler aktualisiert",
+          "deleted": "Zähler gelöscht"
+        },
+        "meter_data": {
+          "created": "Zählerdaten hinzugefügt",
+          "updated": "Zählerdaten aktualisiert",
+          "deleted": "Zählerdaten gelöscht",
+          "deactivated": "Zählerdaten deaktiviert"
+        },
+        "sharing_operation": {
+          "created": "Teilungsoperation erstellt",
+          "updated": "Teilungsoperation aktualisiert",
+          "deleted": "Teilungsoperation gelöscht"
+        },
+        "sharing_operation_key": {
+          "created": "Schlüssel der Teilungsoperation eingereicht",
+          "approved": "Schlüssel der Teilungsoperation genehmigt",
+          "rejected": "Schlüssel der Teilungsoperation abgelehnt"
+        },
+        "sharing_op_consumption": {
+          "uploaded": "Verbrauchsdaten hochgeladen"
+        }
+      }
     }
   }
 }

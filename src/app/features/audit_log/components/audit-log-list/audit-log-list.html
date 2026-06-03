@@ -1,0 +1,221 @@
+<div class="container mx-auto my-auto">
+  <!-- Page header -->
+  <app-header-page
+    icon="pi pi-history"
+    [text]="'AUDIT.LIST.TITLE' | translate"
+    [subtitle]="'AUDIT.LIST.SUBTITLE' | translate"
+    class="block mb-4"
+  >
+    <div headerActions class="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
+      <p-button
+        type="button"
+        icon="pi pi-download"
+        severity="primary"
+        label="{{ 'AUDIT.EXPORT.BUTTON' | translate }}"
+        (onClick)="onExport()"
+        data-testid="audit-log-list__btn--export"
+      />
+    </div>
+  </app-header-page>
+
+  <!-- Filter toolbar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      <!-- Action filter -->
+      <div>
+        <span class="field-label">{{ 'AUDIT.LIST.ACTION_LABEL' | translate }}</span>
+        <p-select
+          [options]="actionOptions"
+          [ngModel]="actionFilter()"
+          (onChange)="onActionFilterChange($event.value)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="{{ 'AUDIT.LIST.SELECT_AN_ACTION_PLACEHOLDER' | translate }}"
+          [showClear]="true"
+          [filter]="true"
+          class="w-full"
+          data-testid="audit-log-list__select--action"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <span class="text-sm">{{ option.label | translate }}</span>
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <span class="text-sm">{{ option.label | translate }}</span>
+          </ng-template>
+        </p-select>
+      </div>
+
+      <!-- Entity type filter -->
+      <div>
+        <span class="field-label">{{ 'AUDIT.LIST.ENTITY_TYPE_LABEL' | translate }}</span>
+        <input
+          pInputText
+          type="text"
+          class="w-full"
+          [ngModel]="entityTypeFilter()"
+          (ngModelChange)="onEntityTypeChange($event)"
+          [placeholder]="'AUDIT.LIST.ENTITY_TYPE_PLACEHOLDER' | translate"
+          data-testid="audit-log-list__input--entity-type"
+        />
+      </div>
+
+      <!-- Entity id filter -->
+      <div>
+        <span class="field-label">{{ 'AUDIT.LIST.ENTITY_ID_LABEL' | translate }}</span>
+        <input
+          pInputText
+          type="text"
+          class="w-full"
+          [ngModel]="entityIdFilter()"
+          (ngModelChange)="onEntityIdChange($event)"
+          [placeholder]="'AUDIT.LIST.ENTITY_ID_PLACEHOLDER' | translate"
+          data-testid="audit-log-list__input--entity-id"
+        />
+      </div>
+
+      <!-- User id filter -->
+      <div>
+        <span class="field-label">{{ 'AUDIT.LIST.USER_ID_LABEL' | translate }}</span>
+        <p-inputNumber
+          [ngModel]="userIdFilter()"
+          (ngModelChange)="onUserIdChange($event)"
+          [useGrouping]="false"
+          [showButtons]="false"
+          [placeholder]="'AUDIT.LIST.USER_ID_PLACEHOLDER' | translate"
+          styleClass="w-full"
+          data-testid="audit-log-list__input--user-id"
+        />
+      </div>
+
+      <!-- From date -->
+      <div>
+        <span class="field-label">{{ 'AUDIT.LIST.FROM_LABEL' | translate }}</span>
+        <p-datepicker
+          [ngModel]="fromFilter()"
+          (ngModelChange)="onFromChange($event)"
+          [showTime]="true"
+          [showIcon]="true"
+          [showClear]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+          data-testid="audit-log-list__datepicker--from"
+        />
+      </div>
+
+      <!-- To date -->
+      <div>
+        <span class="field-label">{{ 'AUDIT.LIST.TO_LABEL' | translate }}</span>
+        <p-datepicker
+          [ngModel]="toFilter()"
+          (ngModelChange)="onToChange($event)"
+          [showTime]="true"
+          [showIcon]="true"
+          [showClear]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+          data-testid="audit-log-list__datepicker--to"
+        />
+      </div>
+
+      <!-- Clear filters -->
+      <div class="flex items-end sm:col-span-2 lg:col-span-1">
+        <p-button
+          icon="pi pi-filter-slash"
+          label="{{ 'AUDIT.LIST.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
+          (onClick)="clear(dt)"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+          data-testid="audit-log-list__btn--clear-filters"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
+  <p-table
+    #dt
+    [value]="auditLogs()"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoad($event)"
+    [rows]="paginationInfo().limit"
+    [totalRecords]="paginationInfo().total"
+    [first]="firstRow()"
+    [showCurrentPageReport]="true"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
+    [loading]="loading()"
+    dataKey="id"
+    sortField="timestamp"
+    [sortOrder]="filter().sort_timestamp === 'ASC' ? 1 : -1"
+    data-testid="audit-log-list__table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem"></th>
+        <th class="text-base px-3" pSortableColumn="timestamp">
+          {{ 'AUDIT.LIST.TIMESTAMP_LABEL' | translate }}
+          <p-sortIcon field="timestamp" />
+        </th>
+        <th class="text-base px-3">{{ 'AUDIT.LIST.ACTION_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'AUDIT.LIST.ENTITY_TYPE_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'AUDIT.LIST.ENTITY_ID_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'AUDIT.LIST.USER_EMAIL_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'AUDIT.LIST.SOURCE_LABEL' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+      <tr
+        class="hover:bg-primary-50 cursor-pointer"
+        (click)="toggleRow(row)"
+        [attr.data-testid]="'audit-log-list__row--' + rowIndex"
+      >
+        <td class="text-center">
+          <i
+            class="pi"
+            [class.pi-chevron-down]="isExpanded(row)"
+            [class.pi-chevron-right]="!isExpanded(row)"
+          ></i>
+        </td>
+        <td class="text-sm whitespace-nowrap">
+          {{ row.timestamp | date: 'medium' }}
+        </td>
+        <td class="text-sm">{{ 'AUDIT.ACTIONS.' + row.action | translate }}</td>
+        <td class="text-sm">{{ row.entity_type }}</td>
+        <td class="text-sm font-mono">{{ row.entity_id ?? '—' }}</td>
+        <td class="text-sm">{{ row.user_email ?? '—' }}</td>
+        <td class="text-sm">{{ row.source }}</td>
+      </tr>
+
+      @if (isExpanded(row)) {
+        <tr [attr.data-testid]="'audit-log-list__row-expansion--' + rowIndex">
+          <td colspan="7" class="!bg-surface-50">
+            <div class="p-3">
+              <span class="field-label">{{ 'AUDIT.LIST.PAYLOAD_LABEL' | translate }}</span>
+              <pre
+                class="bg-surface-100 text-xs p-3 rounded overflow-auto max-h-80 whitespace-pre"
+                >{{ row.payload | json }}</pre
+              >
+            </div>
+          </td>
+        </tr>
+      }
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">
+          <div class="py-8 text-center" data-testid="audit-log-list__empty--message">
+            <i class="pi pi-history text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'AUDIT.LIST.NO_AUDIT_LOG_FOUND_LABEL' | translate }}
+            </p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

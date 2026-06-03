@@ -73,7 +73,8 @@
     "COMMUNITY": "Community",
     "MANAGEMENT": "Management",
     "ERROR_LOADING": "An error occurred while loading data",
-    "RETRY": "Retry"
+    "RETRY": "Retry",
+    "AUDIT_LOG": "Audit log"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -1369,6 +1370,106 @@
       "FILE_EMPTY": "The selected file is empty.",
       "FILE_TOO_LARGE": "File is too large (max 25 MB).",
       "FILE_TYPE": "Only CSV and XLSX files are accepted."
+    }
+  },
+  "AUDIT": {
+    "LIST": {
+      "TITLE": "Audit log",
+      "SUBTITLE": "Track who did what across the community",
+      "ACTION_LABEL": "Action",
+      "SELECT_AN_ACTION_PLACEHOLDER": "Select an action",
+      "ENTITY_TYPE_LABEL": "Entity type",
+      "ENTITY_TYPE_PLACEHOLDER": "e.g. meter, member",
+      "ENTITY_ID_LABEL": "Entity ID",
+      "ENTITY_ID_PLACEHOLDER": "Entity identifier",
+      "USER_ID_LABEL": "User ID",
+      "USER_ID_PLACEHOLDER": "User identifier",
+      "USER_EMAIL_LABEL": "User",
+      "FROM_LABEL": "From",
+      "TO_LABEL": "To",
+      "SOURCE_LABEL": "Source",
+      "TIMESTAMP_LABEL": "Timestamp",
+      "PAYLOAD_LABEL": "Payload",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NO_AUDIT_LOG_FOUND_LABEL": "No audit log entries found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} entries)"
+    },
+    "EXPORT": {
+      "BUTTON": "Export CSV",
+      "TOO_LARGE": "Too many entries to export. Please narrow your filters and try again."
+    },
+    "ACTIONS": {
+      "crm": {
+        "community_subscription": {
+          "created": "Community subscription created",
+          "reactivated": "Community subscription reactivated",
+          "unsubscribed": "Unsubscribed from community"
+        },
+        "community": {
+          "created": "Community created",
+          "updated": "Community updated",
+          "deleted": "Community deleted"
+        },
+        "community_member": {
+          "kicked": "Member removed from community",
+          "left": "Member left community",
+          "role_updated": "Member role updated"
+        },
+        "document": {
+          "created": "Document uploaded",
+          "deleted": "Document deleted"
+        },
+        "manager_invitation": {
+          "created": "Manager invitation sent",
+          "deleted": "Manager invitation revoked",
+          "accepted": "Manager invitation accepted",
+          "refused": "Manager invitation declined"
+        },
+        "member_invitation": {
+          "created": "Member invitation sent",
+          "deleted": "Member invitation revoked",
+          "accepted": "Member invitation accepted",
+          "refused": "Member invitation declined"
+        },
+        "allocation_key": {
+          "created": "Allocation key created",
+          "updated": "Allocation key updated",
+          "deleted": "Allocation key deleted"
+        },
+        "member": {
+          "created": "Member added",
+          "updated": "Member updated",
+          "deleted": "Member deleted"
+        },
+        "member_user_link": {
+          "invited": "User invited to member account",
+          "deleted": "User unlinked from member"
+        },
+        "meter": {
+          "created": "Meter added",
+          "updated": "Meter updated",
+          "deleted": "Meter deleted"
+        },
+        "meter_data": {
+          "created": "Meter data added",
+          "updated": "Meter data updated",
+          "deleted": "Meter data deleted",
+          "deactivated": "Meter data deactivated"
+        },
+        "sharing_operation": {
+          "created": "Sharing operation created",
+          "updated": "Sharing operation updated",
+          "deleted": "Sharing operation deleted"
+        },
+        "sharing_operation_key": {
+          "created": "Sharing operation key submitted",
+          "approved": "Sharing operation key approved",
+          "rejected": "Sharing operation key rejected"
+        },
+        "sharing_op_consumption": {
+          "uploaded": "Consumption data uploaded"
+        }
+      }
     }
   }
 }

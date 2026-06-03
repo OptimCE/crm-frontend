@@ -73,7 +73,8 @@
     "COMMUNITY": "Gemeenschap",
     "MANAGEMENT": "Beheer",
     "ERROR_LOADING": "Er is een fout opgetreden bij het laden van de gegevens",
-    "RETRY": "Opnieuw proberen"
+    "RETRY": "Opnieuw proberen",
+    "AUDIT_LOG": "Auditlogboek"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -1369,6 +1370,106 @@
       "FILE_EMPTY": "Het geselecteerde bestand is leeg.",
       "FILE_TOO_LARGE": "Bestand te groot (max 25 MB).",
       "FILE_TYPE": "Alleen CSV- en XLSX-bestanden worden aanvaard."
+    }
+  },
+  "AUDIT": {
+    "LIST": {
+      "TITLE": "Auditlogboek",
+      "SUBTITLE": "Volg wie wat heeft gedaan binnen de gemeenschap",
+      "ACTION_LABEL": "Actie",
+      "SELECT_AN_ACTION_PLACEHOLDER": "Selecteer een actie",
+      "ENTITY_TYPE_LABEL": "Entiteitstype",
+      "ENTITY_TYPE_PLACEHOLDER": "bv. meter, lid",
+      "ENTITY_ID_LABEL": "Entiteits-ID",
+      "ENTITY_ID_PLACEHOLDER": "Identificatie van entiteit",
+      "USER_ID_LABEL": "Gebruikers-ID",
+      "USER_ID_PLACEHOLDER": "Identificatie van gebruiker",
+      "USER_EMAIL_LABEL": "Gebruiker",
+      "FROM_LABEL": "Van",
+      "TO_LABEL": "Tot",
+      "SOURCE_LABEL": "Bron",
+      "TIMESTAMP_LABEL": "Tijdstempel",
+      "PAYLOAD_LABEL": "Payload",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NO_AUDIT_LOG_FOUND_LABEL": "Geen vermeldingen in het auditlogboek gevonden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} vermeldingen)"
+    },
+    "EXPORT": {
+      "BUTTON": "CSV exporteren",
+      "TOO_LARGE": "Te veel vermeldingen om te exporteren. Verfijn uw filters en probeer opnieuw."
+    },
+    "ACTIONS": {
+      "crm": {
+        "community_subscription": {
+          "created": "Gemeenschapsinschrijving aangemaakt",
+          "reactivated": "Gemeenschapsinschrijving heractiveerd",
+          "unsubscribed": "Uitgeschreven van gemeenschap"
+        },
+        "community": {
+          "created": "Gemeenschap aangemaakt",
+          "updated": "Gemeenschap bijgewerkt",
+          "deleted": "Gemeenschap verwijderd"
+        },
+        "community_member": {
+          "kicked": "Lid verwijderd uit gemeenschap",
+          "left": "Lid verliet de gemeenschap",
+          "role_updated": "Rol van lid bijgewerkt"
+        },
+        "document": {
+          "created": "Document geüpload",
+          "deleted": "Document verwijderd"
+        },
+        "manager_invitation": {
+          "created": "Beheerdersuitnodiging verzonden",
+          "deleted": "Beheerdersuitnodiging ingetrokken",
+          "accepted": "Beheerdersuitnodiging aanvaard",
+          "refused": "Beheerdersuitnodiging geweigerd"
+        },
+        "member_invitation": {
+          "created": "Leduitnodiging verzonden",
+          "deleted": "Leduitnodiging ingetrokken",
+          "accepted": "Leduitnodiging aanvaard",
+          "refused": "Leduitnodiging geweigerd"
+        },
+        "allocation_key": {
+          "created": "Verdeelsleutel aangemaakt",
+          "updated": "Verdeelsleutel bijgewerkt",
+          "deleted": "Verdeelsleutel verwijderd"
+        },
+        "member": {
+          "created": "Lid toegevoegd",
+          "updated": "Lid bijgewerkt",
+          "deleted": "Lid verwijderd"
+        },
+        "member_user_link": {
+          "invited": "Gebruiker uitgenodigd voor lidaccount",
+          "deleted": "Gebruiker losgekoppeld van lid"
+        },
+        "meter": {
+          "created": "Meter toegevoegd",
+          "updated": "Meter bijgewerkt",
+          "deleted": "Meter verwijderd"
+        },
+        "meter_data": {
+          "created": "Metergegevens toegevoegd",
+          "updated": "Metergegevens bijgewerkt",
+          "deleted": "Metergegevens verwijderd",
+          "deactivated": "Metergegevens gedeactiveerd"
+        },
+        "sharing_operation": {
+          "created": "Deeloperatie aangemaakt",
+          "updated": "Deeloperatie bijgewerkt",
+          "deleted": "Deeloperatie verwijderd"
+        },
+        "sharing_operation_key": {
+          "created": "Sleutel van deeloperatie ingediend",
+          "approved": "Sleutel van deeloperatie goedgekeurd",
+          "rejected": "Sleutel van deeloperatie afgewezen"
+        },
+        "sharing_op_consumption": {
+          "uploaded": "Verbruiksgegevens geüpload"
+        }
+      }
     }
   }
 }

@@ -18,6 +18,7 @@ interface RouteActiveState {
   members: boolean;
   meters: boolean;
   sharing_operations: boolean;
+  audit_logs: boolean;
   communities_users: boolean;
   communities_managers: boolean;
   communities_public: boolean;
@@ -38,6 +39,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['annexes_services', '/annexes-services'],
   ['users_communities', '/users/communities'],
   ['users_invitations', '/users/invitations'],
+  ['audit_logs', '/audit-logs'],
   ['members', '/members'],
   ['meters', '/meters'],
   ['keys', '/keys'],
@@ -77,6 +79,7 @@ export class Navbar implements OnInit {
     members: false,
     meters: false,
     sharing_operations: false,
+    audit_logs: false,
     communities_users: false,
     communities_managers: false,
     communities_public: false,
@@ -127,6 +130,7 @@ export class Navbar implements OnInit {
           members: false,
           meters: false,
           sharing_operations: false,
+          audit_logs: false,
           communities_users: false,
           communities_managers: false,
           communities_public: false,

@@ -73,7 +73,8 @@
     "COMMUNITY": "Communauté",
     "MANAGEMENT": "Gestion",
     "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
-    "RETRY": "Réessayer"
+    "RETRY": "Réessayer",
+    "AUDIT_LOG": "Journal d'audit"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
@@ -1367,6 +1368,106 @@
       "FILE_EMPTY": "Le fichier sélectionné est vide.",
       "FILE_TOO_LARGE": "Fichier trop volumineux (max 25 Mo).",
       "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés."
+    }
+  },
+  "AUDIT": {
+    "LIST": {
+      "TITLE": "Journal d'audit",
+      "SUBTITLE": "Suivez qui a fait quoi au sein de la communauté",
+      "ACTION_LABEL": "Action",
+      "SELECT_AN_ACTION_PLACEHOLDER": "Sélectionner une action",
+      "ENTITY_TYPE_LABEL": "Type d'entité",
+      "ENTITY_TYPE_PLACEHOLDER": "ex. compteur, membre",
+      "ENTITY_ID_LABEL": "Identifiant d'entité",
+      "ENTITY_ID_PLACEHOLDER": "Identifiant de l'entité",
+      "USER_ID_LABEL": "Identifiant utilisateur",
+      "USER_ID_PLACEHOLDER": "Identifiant de l'utilisateur",
+      "USER_EMAIL_LABEL": "Utilisateur",
+      "FROM_LABEL": "Du",
+      "TO_LABEL": "Au",
+      "SOURCE_LABEL": "Source",
+      "TIMESTAMP_LABEL": "Horodatage",
+      "PAYLOAD_LABEL": "Charge utile",
+      "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
+      "NO_AUDIT_LOG_FOUND_LABEL": "Aucune entrée du journal d'audit trouvée",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} entrées)"
+    },
+    "EXPORT": {
+      "BUTTON": "Exporter en CSV",
+      "TOO_LARGE": "Trop d'entrées à exporter. Veuillez affiner vos filtres et réessayer."
+    },
+    "ACTIONS": {
+      "crm": {
+        "community_subscription": {
+          "created": "Inscription à la communauté créée",
+          "reactivated": "Inscription à la communauté réactivée",
+          "unsubscribed": "Désinscrit de la communauté"
+        },
+        "community": {
+          "created": "Communauté créée",
+          "updated": "Communauté mise à jour",
+          "deleted": "Communauté supprimée"
+        },
+        "community_member": {
+          "kicked": "Membre retiré de la communauté",
+          "left": "Membre a quitté la communauté",
+          "role_updated": "Rôle du membre mis à jour"
+        },
+        "document": {
+          "created": "Document téléversé",
+          "deleted": "Document supprimé"
+        },
+        "manager_invitation": {
+          "created": "Invitation gestionnaire envoyée",
+          "deleted": "Invitation gestionnaire révoquée",
+          "accepted": "Invitation gestionnaire acceptée",
+          "refused": "Invitation gestionnaire refusée"
+        },
+        "member_invitation": {
+          "created": "Invitation membre envoyée",
+          "deleted": "Invitation membre révoquée",
+          "accepted": "Invitation membre acceptée",
+          "refused": "Invitation membre refusée"
+        },
+        "allocation_key": {
+          "created": "Clé de répartition créée",
+          "updated": "Clé de répartition mise à jour",
+          "deleted": "Clé de répartition supprimée"
+        },
+        "member": {
+          "created": "Membre ajouté",
+          "updated": "Membre mis à jour",
+          "deleted": "Membre supprimé"
+        },
+        "member_user_link": {
+          "invited": "Utilisateur invité au compte membre",
+          "deleted": "Utilisateur dissocié du membre"
+        },
+        "meter": {
+          "created": "Compteur ajouté",
+          "updated": "Compteur mis à jour",
+          "deleted": "Compteur supprimé"
+        },
+        "meter_data": {
+          "created": "Données de compteur ajoutées",
+          "updated": "Données de compteur mises à jour",
+          "deleted": "Données de compteur supprimées",
+          "deactivated": "Données de compteur désactivées"
+        },
+        "sharing_operation": {
+          "created": "Opération de partage créée",
+          "updated": "Opération de partage mise à jour",
+          "deleted": "Opération de partage supprimée"
+        },
+        "sharing_operation_key": {
+          "created": "Clé d'opération de partage soumise",
+          "approved": "Clé d'opération de partage approuvée",
+          "rejected": "Clé d'opération de partage rejetée"
+        },
+        "sharing_op_consumption": {
+          "uploaded": "Données de consommation téléversées"
+        }
+      }
     }
   }
 }

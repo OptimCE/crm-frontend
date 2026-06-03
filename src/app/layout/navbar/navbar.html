@@ -205,6 +205,15 @@
           [routerLinkUrl]="'/communities/users'"
           [sidebarOpen]="sidebarOpen()"
         ></li>
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-history'"
+          [isRouteActive]="isRouteActive().audit_logs"
+          [name]="'NAVBAR.AUDIT_LOG' | translate"
+          [routerLinkUrl]="'/audit-logs'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
       </ul>
     }
 
