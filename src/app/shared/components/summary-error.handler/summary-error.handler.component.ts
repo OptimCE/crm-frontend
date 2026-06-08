@@ -1,5 +1,5 @@
 import { Component, DestroyRef, ElementRef, inject, input, OnInit, signal } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
+import { AbstractControl, FormGroup, FormGroupDirective } from '@angular/forms';
 import { merge } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -78,36 +78,51 @@ export class FormErrorSummaryComponent implements OnInit {
   }
 
   private collectErrors(): void {
-    const errors: string[] = [];
-    const form = this.formGroupDirective.control;
-
     if (!this.hasSubmitted() && !this.showBeforeSubmit()) {
       this.errorMessages.set([]);
       return;
     }
 
-    Object.keys(form.controls).forEach((controlName) => {
-      const control = form.get(controlName);
+    const errors: string[] = [];
+    this.collectFrom(this.formGroupDirective.control, errors);
+    this.errorMessages.set(errors);
+  }
+
+  /**
+   * Walk the form tree collecting leaf-control errors. Nested groups
+   * (FormGroup / FormRecord — e.g. schema-driven algorithm inputs) are
+   * recursed into so their required errors surface in the summary too.
+   */
+  private collectFrom(group: AbstractControl, errors: string[]): void {
+    const controls = (group as FormGroup).controls;
+    if (!controls) return;
+
+    Object.keys(controls).forEach((controlName) => {
+      const control = controls[controlName];
+
+      // Recurse into nested groups/records rather than reading their (group-level) errors.
+      if ((control as FormGroup).controls) {
+        this.collectFrom(control, errors);
+        return;
+      }
+
       const controlErrors = control?.errors;
       if (!controlErrors) return;
       const displayName = this.getDisplayName(controlName);
 
-      if (control?.errors) {
-        Object.keys(control.errors).forEach((errorKey) => {
-          const builders = { ...this.defaultErrors, ...this.errorsAdd() };
-          const build = builders[errorKey];
+      Object.keys(controlErrors).forEach((errorKey) => {
+        const builders = { ...this.defaultErrors, ...this.errorsAdd() };
+        const build = builders[errorKey];
 
-          if (build) {
-            errors.push(
-              build(controlErrors[errorKey] as ErrorHandlerParams, controlName, displayName),
-            );
-          } else {
-            errors.push(this.fallbackUnknownError(displayName));
-          }
-        });
-      }
+        if (build) {
+          errors.push(
+            build(controlErrors[errorKey] as ErrorHandlerParams, controlName, displayName),
+          );
+        } else {
+          errors.push(this.fallbackUnknownError(displayName));
+        }
+      });
     });
-    this.errorMessages.set(errors);
   }
   private getDisplayName(controlName: string): string {
     // 1) If provided via input and exists as a translate key, translate it.

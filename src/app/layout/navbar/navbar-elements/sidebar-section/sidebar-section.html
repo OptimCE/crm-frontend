@@ -1,0 +1,12 @@
+@if (sidebarOpen()) {
+  <div [attr.data-testid]="'navbar__section-label--' + key()" class="sidebar__section-label">
+    {{ label() | translate }}
+  </div>
+} @else {
+  <div
+    [attr.data-testid]="'navbar__section-divider--' + key()"
+    class="sidebar__section-divider"
+  ></div>
+}
+
+<ng-content></ng-content>

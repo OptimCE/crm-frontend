@@ -1,0 +1,217 @@
+@if (detail().status === SimulationStatus.FAILED) {
+  <div class="result-state result-state--error" data-testid="simulation-results__failed">
+    <i class="pi pi-times-circle"></i>
+    <div>
+      <p class="result-state__title">{{ 'SIMULATION_HUB.RESULTS.FAILED_TITLE' | translate }}</p>
+      @if (detail().error_message) {
+        <p class="result-state__detail">{{ detail().error_message }}</p>
+      }
+    </div>
+  </div>
+} @else if (detail().status === SimulationStatus.PENDING) {
+  <div class="result-state result-state--pending" data-testid="simulation-results__pending">
+    <i class="pi pi-spin pi-spinner"></i>
+    <p class="result-state__title">{{ 'SIMULATION_HUB.RESULTS.PENDING_TITLE' | translate }}</p>
+  </div>
+} @else if (keyResult(); as result) {
+  <!-- Headline metric cards -->
+  <div class="metrics-grid" data-testid="simulation-results__metrics">
+    <article class="metric-card metric-card--primary">
+      <div class="metric-card__icon"><i class="pi pi-bolt"></i></div>
+      <div class="metric-card__body">
+        <span class="metric-card__label">
+          {{ 'SIMULATION_HUB.RESULTS.METRICS.SELF_CONSUMPTION' | translate }}
+        </span>
+        <span class="metric-card__value">
+          {{ formatEnergy(result.energy_allocated_consumed_total) }}
+          <span class="metric-card__unit">kWh</span>
+        </span>
+      </div>
+    </article>
+
+    <article class="metric-card metric-card--warn">
+      <div class="metric-card__icon"><i class="pi pi-sun"></i></div>
+      <div class="metric-card__body">
+        <span class="metric-card__label">
+          {{ 'SIMULATION_HUB.RESULTS.METRICS.SURPLUS' | translate }}
+        </span>
+        <span class="metric-card__value">
+          {{ formatEnergy(result.surplus_total) }}
+          <span class="metric-card__unit">kWh</span>
+        </span>
+      </div>
+    </article>
+
+    <article class="metric-card metric-card--success">
+      <div
+        class="gauge gauge--success"
+        [style.--pct]="percentValue(result.self_sufficiency_rate_total)"
+      >
+        <span class="gauge__value">{{ formatPercent(result.self_sufficiency_rate_total) }}%</span>
+      </div>
+      <div class="metric-card__body">
+        <span class="metric-card__label">
+          {{ 'SIMULATION_HUB.RESULTS.METRICS.SELF_SUFFICIENCY' | translate }}
+        </span>
+        <span class="metric-card__hint">
+          {{ 'SIMULATION_HUB.RESULTS.METRICS.SELF_SUFFICIENCY_HINT' | translate }}
+        </span>
+      </div>
+    </article>
+
+    <article class="metric-card metric-card--info">
+      <div class="gauge gauge--info" [style.--pct]="percentValue(result.sharing_rate_total)">
+        <span class="gauge__value">{{ formatPercent(result.sharing_rate_total) }}%</span>
+      </div>
+      <div class="metric-card__body">
+        <span class="metric-card__label">
+          {{ 'SIMULATION_HUB.RESULTS.METRICS.SHARING_RATE' | translate }}
+        </span>
+        <span class="metric-card__hint">
+          {{ 'SIMULATION_HUB.RESULTS.METRICS.SHARING_RATE_HINT' | translate }}
+        </span>
+      </div>
+    </article>
+  </div>
+
+  <!-- Per-iteration breakdown with per-consumer detail -->
+  @if (result.iterations.length) {
+    <section class="mt-5">
+      <h4 class="section-title">{{ 'SIMULATION_HUB.RESULTS.ITERATIONS_TITLE' | translate }}</h4>
+      <div class="iteration-panels">
+        @for (iteration of result.iterations; track iteration.number) {
+          <article
+            class="iteration-panel"
+            [class.iteration-panel--open]="isIterationExpanded(iteration.number)"
+          >
+            <button
+              type="button"
+              class="iteration-panel__header"
+              (click)="toggleIteration(iteration.number)"
+              [attr.aria-expanded]="isIterationExpanded(iteration.number)"
+              [attr.data-testid]="'simulation-results__iteration-toggle--' + iteration.number"
+            >
+              <span class="iteration-card__badge">
+                {{
+                  'SIMULATION_HUB.RESULTS.ITERATION_LABEL' | translate: { number: iteration.number }
+                }}
+              </span>
+              <span class="iteration-panel__kpis">
+                <span class="kpi">
+                  <span class="kpi__label">
+                    {{ 'SIMULATION_HUB.RESULTS.METRICS.ALLOCATION' | translate }}
+                  </span>
+                  <span class="kpi__value">
+                    {{ formatPercent(iteration.energy_allocated_percentage) }}%
+                  </span>
+                </span>
+                <span class="kpi">
+                  <span class="kpi__label">
+                    {{ 'SIMULATION_HUB.RESULTS.METRICS.SELF_SUFFICIENCY_SHORT' | translate }}
+                  </span>
+                  <span class="kpi__value">
+                    {{ formatPercent(iteration.self_sufficiency_rate_total) }}%
+                  </span>
+                </span>
+                <span class="kpi">
+                  <span class="kpi__label">
+                    {{ 'SIMULATION_HUB.RESULTS.METRICS.SHARING_SHORT' | translate }}
+                  </span>
+                  <span class="kpi__value">
+                    {{ formatPercent(iteration.sharing_rate_total) }}%
+                  </span>
+                </span>
+                <span class="kpi">
+                  <span class="kpi__label">
+                    {{ 'SIMULATION_HUB.RESULTS.METRICS.SURPLUS' | translate }}
+                  </span>
+                  <span class="kpi__value">{{ formatEnergy(iteration.surplus_total) }}</span>
+                </span>
+              </span>
+              <i
+                class="iteration-panel__chevron pi"
+                [class.pi-chevron-down]="!isIterationExpanded(iteration.number)"
+                [class.pi-chevron-up]="isIterationExpanded(iteration.number)"
+              ></i>
+            </button>
+
+            @if (isIterationExpanded(iteration.number)) {
+              <div class="iteration-panel__body">
+                <div class="consumer-table__scroll">
+                  <table class="consumer-table">
+                    <thead>
+                      <tr>
+                        <th class="consumer-table__col--text">
+                          {{ 'SIMULATION_HUB.RESULTS.TABLE.CONSUMER' | translate }}
+                        </th>
+                        <th>{{ 'SIMULATION_HUB.RESULTS.TABLE.ALLOCATION' | translate }}</th>
+                        <th>{{ 'SIMULATION_HUB.RESULTS.TABLE.CONSUMPTION' | translate }}</th>
+                        <th>{{ 'SIMULATION_HUB.RESULTS.TABLE.SELF_CONSUMED' | translate }}</th>
+                        <th>{{ 'SIMULATION_HUB.RESULTS.TABLE.SURPLUS' | translate }}</th>
+                        <th>{{ 'SIMULATION_HUB.RESULTS.TABLE.RESIDUAL' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (consumer of iteration.consumers; track consumer.name) {
+                        <tr>
+                          <td class="consumer-table__col--text">{{ consumer.name }}</td>
+                          <td>
+                            @if (consumer.energy_allocated_percentage === -1) {
+                              <span class="consumer-table__prorata">
+                                {{ 'SIMULATION_HUB.RESULTS.PRORATA' | translate }}
+                              </span>
+                            } @else {
+                              {{ formatPercent(consumer.energy_allocated_percentage) }}%
+                            }
+                          </td>
+                          <td>{{ formatEnergy(consumer.consumption_total) }}</td>
+                          <td>
+                            <span class="consumer-table__consumed">
+                              <span>{{
+                                formatEnergy(consumer.energy_allocated_consumed_total)
+                              }}</span>
+                              <span class="coverage-bar">
+                                <span
+                                  class="coverage-bar__fill"
+                                  [style.width.%]="consumerCoverage(consumer)"
+                                ></span>
+                              </span>
+                            </span>
+                          </td>
+                          <td>{{ formatEnergy(consumer.surplus_total) }}</td>
+                          <td>{{ formatEnergy(consumer.residual_volume_total) }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            }
+          </article>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- Time-series chart (lazy: chart.js loads only when scrolled into view) -->
+  @if (detail().has_timeseries) {
+    <section class="mt-5">
+      <h4 class="section-title">{{ 'SIMULATION_HUB.RESULTS.CHART.TITLE' | translate }}</h4>
+      @if (timeseriesLoading()) {
+        <p-skeleton width="100%" height="22rem" />
+      } @else if (timeseriesError()) {
+        <p class="text-sm text-danger-500">
+          {{ 'SIMULATION_HUB.ERRORS.TIMESERIES_FAILED' | translate }}
+        </p>
+      } @else if (timeseries(); as ts) {
+        @defer (on viewport) {
+          <app-simulation-timeseries-chart [iterations]="ts.iterations" />
+        } @placeholder {
+          <p-skeleton width="100%" height="22rem" />
+        } @loading {
+          <p-skeleton width="100%" height="22rem" />
+        }
+      }
+    </section>
+  }
+}

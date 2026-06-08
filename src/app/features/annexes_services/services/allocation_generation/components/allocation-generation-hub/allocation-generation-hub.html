@@ -116,15 +116,7 @@
             [placeholder]="'ALGORITHM_HUB.GENERATION_NAME_PLACEHOLDER' | translate"
             data-testid="algorithm-hub__input--generation-name"
           />
-          @if (
-            submitAttempted() &&
-            startForm.controls.generationName.invalid &&
-            startForm.controls.generationName.touched
-          ) {
-            <small class="text-xs text-danger-500">
-              {{ 'ALGORITHM_HUB.ERRORS.GENERATION_NAME_REQUIRED' | translate }}
-            </small>
-          }
+          <app-error-handler controlName="generationName" />
         </label>
 
         <label class="flex flex-col gap-1.5">
@@ -142,6 +134,7 @@
           <small class="text-xs text-surface-500">
             {{ 'ALGORITHM_HUB.INJECTION_NAME_HELP' | translate }}
           </small>
+          <app-error-handler controlName="injectionName" />
         </label>
       </div>
 
@@ -155,7 +148,9 @@
         <label
           class="dropzone block"
           [class.dropzone--filled]="!!file()"
-          [class.dropzone--error]="!!fileError()"
+          [class.dropzone--error]="
+            startForm.controls.file.touched && startForm.controls.file.invalid
+          "
           (dragover)="onDragOver($event)"
           (drop)="onFileDropped($event)"
           data-testid="algorithm-hub__dropzone"
@@ -194,9 +189,7 @@
             </div>
           }
         </label>
-        @if (fileError()) {
-          <small class="text-xs text-danger-500 mt-1 block">{{ fileError() }}</small>
-        }
+        <app-error-handler controlName="file" [errorsAdd]="fileErrors" />
       </div>
 
       <!-- Step 4 — algorithm-specific dynamic inputs -->
@@ -214,6 +207,8 @@
           />
         </div>
       }
+
+      <app-summary-error [errorsAdd]="summaryErrors" [controlLabels]="summaryLabels()" />
 
       <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
         <span class="text-xs text-surface-500">

@@ -50,6 +50,8 @@
             }
           }
 
+          <app-error-handler [controlName]="field.key" [errorsAdd]="fieldErrors" />
+
           @if (field.prop.description) {
             <small class="field-help text-xs text-surface-500 leading-snug">
               {{ field.prop.description }}
@@ -131,6 +133,8 @@
                   />
                 }
               }
+
+              <app-error-handler [controlName]="field.key" [errorsAdd]="fieldErrors" />
 
               @if (field.prop.description) {
                 <small class="field-help text-xs text-surface-500 leading-snug">

@@ -39,8 +39,11 @@ import {
   JsonSchemaProperty,
 } from '../../../../../../shared/dtos/allocation_generation.dtos';
 import { AllocationGenerationService } from '../../../../../../shared/services/allocation_generation.service';
+import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
+import { FormErrorSummaryComponent } from '../../../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { ErrorMessageHandler } from '../../../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../../../shared/services-ui/snackbar.notifcation.service';
+import { ErrorAdded, ErrorSummaryAdded } from '../../../../../../shared/types/error.types';
 import { HeaderPage } from '../../../../../../layout/header-page/header-page';
 import { GenerationRow, KeyExpandState } from '../generation-row/generation-row';
 import { StartPanel } from '../start-panel/start-panel';
@@ -73,6 +76,8 @@ interface AlgorithmOption {
     HeaderPage,
     GenerationRow,
     StartPanel,
+    ErrorHandlerComponent,
+    FormErrorSummaryComponent,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './allocation-generation-hub.html',
@@ -108,11 +113,61 @@ export class AllocationGenerationHub implements OnInit {
       validators: [Validators.required, Validators.minLength(1)],
     }),
     inputs: new FormRecord<AbstractControl>({}),
+    file: new FormControl<File | null>(null, Validators.required),
   });
+
+  /** Mirrors `startForm.controls.file` purely for the dropzone display. */
   readonly file = signal<File | null>(null);
-  readonly fileError = signal<string | null>(null);
   readonly submitting = signal<boolean>(false);
-  readonly submitAttempted = signal<boolean>(false);
+
+  // Friendly field names for the error summary. The top-level fields use i18n keys;
+  // the schema-driven inputs (incl. iterations) are labelled from their schema title.
+  readonly summaryLabels = computed<Record<string, string>>(() => {
+    const labels: Record<string, string> = {
+      algorithmName: 'ALGORITHM_HUB.ALGORITHM_LABEL',
+      generationName: 'ALGORITHM_HUB.GENERATION_NAME_LABEL',
+      injectionName: 'ALGORITHM_HUB.INJECTION_NAME_LABEL',
+      file: 'ALGORITHM_HUB.FILE_LABEL',
+    };
+    const props = this.selectedAlgorithm()?.input_schema.properties ?? {};
+    for (const [key, prop] of Object.entries(props)) {
+      labels[key] = prop.title || key;
+    }
+    return labels;
+  });
+
+  // Per-field error messages for the file dropzone (size/type/required).
+  readonly fileErrors: ErrorAdded = {
+    required: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_REQUIRED') as string,
+    fileEmpty: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_EMPTY') as string,
+    fileTooLarge: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_TOO_LARGE') as string,
+    fileType: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_TYPE') as string,
+  };
+
+  // Named messages for the summary so each missing field is identifiable.
+  readonly summaryErrors: ErrorSummaryAdded = {
+    required: (_params, controlName, displayName) =>
+      this.translate.instant('FORM_ERROR.FIELD_REQUIRED', {
+        controlName: displayName ?? controlName,
+      }) as string,
+    minlength: (params, controlName, displayName) =>
+      this.translate.instant('FORM_ERROR.FIELD_MIN_LENGTH', {
+        controlName: displayName ?? controlName,
+        requiredLength: params['requiredLength'],
+        actualLength: params['actualLength'],
+      }) as string,
+    min: (params, controlName, displayName) =>
+      `${displayName ?? controlName}: ${this.translate.instant('ALGORITHM_HUB.ERRORS.MIN_VALUE', {
+        min: params['min'],
+      })}`,
+    max: (params, controlName, displayName) =>
+      `${displayName ?? controlName}: ${this.translate.instant('ALGORITHM_HUB.ERRORS.MAX_VALUE', {
+        max: params['max'],
+      })}`,
+    fileEmpty: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_EMPTY') as string,
+    fileTooLarge: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_TOO_LARGE') as string,
+    fileType: () => this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_TYPE') as string,
+  };
 
   // ----- generations list ------------------------------------------------
   readonly generations = signal<GenerationPartialDTO[]>([]);
@@ -232,34 +287,41 @@ export class AllocationGenerationHub implements OnInit {
   }
 
   private applyFile(file: File | null): void {
+    const control = this.startForm.controls.file;
     if (!file) {
       this.file.set(null);
-      this.fileError.set(null);
+      control.setValue(null);
       return;
     }
     if (file.size === 0) {
-      this.fileError.set(this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_EMPTY') as string);
-      this.file.set(null);
+      this.rejectFile('fileEmpty');
       return;
     }
     if (file.size > MAX_FILE_BYTES) {
-      this.fileError.set(this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_TOO_LARGE') as string);
-      this.file.set(null);
+      this.rejectFile('fileTooLarge');
       return;
     }
     const lower = file.name.toLowerCase();
     if (!lower.endsWith('.csv') && !lower.endsWith('.xlsx') && !lower.endsWith('.xls')) {
-      this.fileError.set(this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_TYPE') as string);
-      this.file.set(null);
+      this.rejectFile('fileType');
       return;
     }
-    this.fileError.set(null);
     this.file.set(file);
+    control.setValue(file);
+  }
+
+  /** Clears the file value and surfaces a custom validation error on the control. */
+  private rejectFile(errorKey: 'fileEmpty' | 'fileTooLarge' | 'fileType'): void {
+    const control = this.startForm.controls.file;
+    this.file.set(null);
+    control.setValue(null);
+    control.setErrors({ [errorKey]: true });
+    control.markAsTouched();
   }
 
   clearFile(): void {
     this.file.set(null);
-    this.fileError.set(null);
+    this.startForm.controls.file.setValue(null);
   }
 
   formatFileSize(size: number): string {
@@ -271,18 +333,13 @@ export class AllocationGenerationHub implements OnInit {
   // ====== submit =========================================================
 
   submitGeneration(): void {
-    this.submitAttempted.set(true);
     this.startForm.markAllAsTouched();
-    if (!this.file()) {
-      this.fileError.set(this.translate.instant('ALGORITHM_HUB.ERRORS.FILE_REQUIRED') as string);
-    }
-    const file = this.file();
-    if (this.startForm.invalid || !file) return;
+    if (this.startForm.invalid) return;
     const raw = this.startForm.getRawValue();
     const inputs = this.collectInputs(raw.inputs as Record<string, AlgorithmInputValue>);
 
     const payload: CreateGenerationPayload = {
-      file,
+      file: raw.file as File,
       name: raw.generationName,
       injectionName: raw.injectionName,
       algorithmName: raw.algorithmName as string,
@@ -300,10 +357,11 @@ export class AllocationGenerationHub implements OnInit {
             this.translate.instant('ALGORITHM_HUB.SUCCESS.GENERATION_STARTED') as string,
             VALIDATION_TYPE,
           );
-          this.startForm.controls.generationName.reset('');
-          this.startForm.controls.injectionName.reset('');
-          this.clearFile();
-          this.submitAttempted.set(false);
+          // Silent reset: avoid re-triggering the error components on the cleared fields.
+          this.startForm.controls.generationName.reset('', { emitEvent: false });
+          this.startForm.controls.injectionName.reset('', { emitEvent: false });
+          this.startForm.controls.file.reset(null, { emitEvent: false });
+          this.file.set(null);
           this.refreshGenerations();
         },
         error: (error: unknown) => {

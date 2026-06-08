@@ -7,17 +7,16 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 8px;
+  padding: 2px 8px;
   border-radius: 10px;
   color: var(--sidebar-text, #374038);
   cursor: pointer;
   transition: all 200ms ease;
-  min-height: 40px;
+  min-height: 36px;
 }
 
 .sidebar-item--collapsed {
-  justify-content: center;
-  padding: 6px;
+  padding: 2px 8px;
 }
 
 .sidebar-item:hover {
@@ -39,7 +38,7 @@
   align-items: center;
   justify-content: center;
   width: 36px;
-  height: 36px;
+  height: 32px;
   border-radius: 8px;
   flex-shrink: 0;
   transition: transform 200ms ease;
