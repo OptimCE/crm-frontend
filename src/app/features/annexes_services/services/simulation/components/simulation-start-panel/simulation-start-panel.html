@@ -1,0 +1,162 @@
+<section
+  class="start-panel rounded-xl border border-primary-100 bg-surface-0 p-5 md:p-6 mb-6"
+  data-testid="simulation-hub__panel--start"
+>
+  <header class="flex items-center gap-3 mb-5">
+    <i class="pi pi-sliders-h text-primary-600 text-lg"></i>
+    <h2 class="text-base font-semibold text-surface-800 m-0">
+      {{ 'SIMULATION_HUB.START_PANEL_TITLE' | translate }}
+    </h2>
+  </header>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="space-y-5"
+    data-testid="simulation-hub__form--start"
+  >
+    <!-- Step 1 — allocation key picker -->
+    <div class="flex flex-col gap-1.5">
+      <span class="field-label-text text-sm font-medium text-surface-800">
+        {{ 'SIMULATION_HUB.KEY_LABEL' | translate }}
+        <span class="text-danger-500" aria-hidden="true">*</span>
+      </span>
+      <p-select
+        styleClass="w-full"
+        [options]="keyOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [filter]="true"
+        filterBy="label,description"
+        [placeholder]="'SIMULATION_HUB.KEY_PLACEHOLDER' | translate"
+        [loading]="keysLoading()"
+        [disabled]="keysLoading() || keysError() || keyOptions().length === 0"
+        [emptyMessage]="'SIMULATION_HUB.KEY_EMPTY' | translate"
+        formControlName="idKey"
+        data-testid="simulation-hub__select--key"
+      >
+        <ng-template let-option pTemplate="item">
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-surface-800">{{ option.label }}</span>
+            @if (option.description) {
+              <span class="text-xs text-surface-500 truncate">{{ option.description }}</span>
+            }
+          </div>
+        </ng-template>
+      </p-select>
+      @if (keysError()) {
+        <small class="text-xs text-danger-500">{{
+          'SIMULATION_HUB.ERRORS.KEYS_FAILED' | translate
+        }}</small>
+      } @else if (!keysLoading() && keyOptions().length === 0) {
+        <small class="text-xs text-surface-500">{{ 'SIMULATION_HUB.KEY_NONE' | translate }}</small>
+      } @else {
+        <small class="text-xs text-surface-500">{{ 'SIMULATION_HUB.KEY_HINT' | translate }}</small>
+      }
+      <app-error-handler controlName="idKey" />
+    </div>
+
+    <!-- Step 2 — run metadata -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <label class="flex flex-col gap-1.5">
+        <span class="field-label-text text-sm font-medium text-surface-800">
+          {{ 'SIMULATION_HUB.SIMULATION_NAME_LABEL' | translate }}
+          <span class="text-danger-500" aria-hidden="true">*</span>
+        </span>
+        <input
+          pInputText
+          type="text"
+          formControlName="simulationName"
+          [placeholder]="'SIMULATION_HUB.SIMULATION_NAME_PLACEHOLDER' | translate"
+          data-testid="simulation-hub__input--name"
+        />
+        <app-error-handler controlName="simulationName" />
+      </label>
+
+      <label class="flex flex-col gap-1.5">
+        <span class="field-label-text text-sm font-medium text-surface-800">
+          {{ 'SIMULATION_HUB.INJECTION_NAME_LABEL' | translate }}
+          <span class="text-danger-500" aria-hidden="true">*</span>
+        </span>
+        <input
+          pInputText
+          type="text"
+          formControlName="injectionName"
+          [placeholder]="'SIMULATION_HUB.INJECTION_NAME_PLACEHOLDER' | translate"
+          data-testid="simulation-hub__input--injection-name"
+        />
+        <small class="text-xs text-surface-500">
+          {{ 'SIMULATION_HUB.INJECTION_NAME_HELP' | translate }}
+        </small>
+        <app-error-handler controlName="injectionName" />
+      </label>
+    </div>
+
+    <!-- Step 3 — file picker (drop zone) -->
+    <div>
+      <span class="field-label-text text-sm font-medium text-surface-800 block mb-1.5">
+        {{ 'SIMULATION_HUB.FILE_LABEL' | translate }}
+        <span class="text-danger-500" aria-hidden="true">*</span>
+      </span>
+
+      <label
+        class="dropzone block"
+        [class.dropzone--filled]="!!file()"
+        [class.dropzone--error]="form.controls.file.touched && form.controls.file.invalid"
+        (dragover)="onDragOver($event)"
+        (drop)="onFileDropped($event)"
+        data-testid="simulation-hub__dropzone"
+      >
+        <input
+          type="file"
+          accept=".csv,.xlsx,.xls"
+          class="dropzone__input"
+          (change)="onFileSelected($event)"
+          data-testid="simulation-hub__input--file"
+        />
+        @if (!file()) {
+          <div class="dropzone__empty">
+            <i class="pi pi-file-excel text-2xl text-primary-500 mb-1"></i>
+            <span class="dropzone__title">{{ 'SIMULATION_HUB.FILE_DROP_PROMPT' | translate }}</span>
+            <span class="dropzone__hint">{{ 'SIMULATION_HUB.FILE_HINT' | translate }}</span>
+          </div>
+        } @else {
+          <div class="dropzone__filled">
+            <i class="pi pi-check-circle text-2xl text-primary-600"></i>
+            <div class="dropzone__file flex-1 min-w-0">
+              <span class="dropzone__filename truncate">{{ file()!.name }}</span>
+              <span class="dropzone__filesize">{{ formatFileSize(file()!.size) }}</span>
+            </div>
+            <button
+              type="button"
+              class="dropzone__clear"
+              (click)="$event.preventDefault(); clearFile()"
+              [attr.aria-label]="'SIMULATION_HUB.FILE_CLEAR' | translate"
+              data-testid="simulation-hub__btn--clear-file"
+            >
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        }
+      </label>
+      <app-error-handler controlName="file" [errorsAdd]="fileErrors" />
+    </div>
+
+    <app-summary-error [errorsAdd]="summaryErrors" [controlLabels]="summaryLabels" />
+
+    <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
+      <span class="text-xs text-surface-500">
+        {{ 'SIMULATION_HUB.START_FOOTNOTE' | translate }}
+      </span>
+      <p-button
+        type="submit"
+        icon="pi pi-play"
+        [label]="'SIMULATION_HUB.SUBMIT' | translate"
+        severity="primary"
+        [loading]="submitting()"
+        [disabled]="submitting()"
+        data-testid="simulation-hub__btn--submit"
+      />
+    </div>
+  </form>
+</section>

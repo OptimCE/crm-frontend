@@ -76,168 +76,152 @@
   <!-- Navigation -->
   <nav class="sidebar__nav">
     <!-- Section: User -->
-    @if (sidebarOpen()) {
-      <div data-testid="navbar__section-label--profile" class="sidebar__section-label">
-        {{ 'NAVBAR.PROFILE' | translate }}
-      </div>
-    } @else {
-      <div data-testid="navbar__section-divider--profile" class="sidebar__section-divider"></div>
-    }
-
-    <ul data-testid="navbar__menu--profile" class="sidebar__menu">
-      <li
-        appSidebarItem
-        (sidebarClose)="closeSideBar()"
-        [icon]="'pi pi-user'"
-        [isRouteActive]="isRouteActive().users"
-        [name]="'NAVBAR.PROFILE' | translate"
-        [routerLinkUrl]="'/users'"
-        [sidebarOpen]="sidebarOpen()"
-      ></li>
-      <li
-        appSidebarItem
-        (sidebarClose)="closeSideBar()"
-        [icon]="'pi pi-envelope'"
-        [isRouteActive]="isRouteActive().users_invitations"
-        [name]="'NAVBAR.INVITATIONS' | translate"
-        [routerLinkUrl]="'/users/invitations'"
-        [sidebarOpen]="sidebarOpen()"
-      ></li>
-      <li
-        appSidebarItem
-        (sidebarClose)="closeSideBar()"
-        [icon]="'pi pi-briefcase'"
-        [isRouteActive]="isRouteActive().users_communities"
-        [name]="'NAVBAR.MY_COMMUNITIES' | translate"
-        [routerLinkUrl]="'/users/communities'"
-        [sidebarOpen]="sidebarOpen()"
-      ></li>
-      <li
-        appSidebarItem
-        (sidebarClose)="closeSideBar()"
-        [icon]="'pi pi-address-book'"
-        [isRouteActive]="isRouteActive().communities_public"
-        [name]="'NAVBAR.PUBLIC_COMMUNITIES' | translate"
-        [routerLinkUrl]="'/communities/public'"
-        [sidebarOpen]="sidebarOpen()"
-      ></li>
-    </ul>
-
-    <!-- Section: Active community -->
-    @if (userContextService.compareWithActiveRole(Role.MEMBER)) {
-      @if (sidebarOpen()) {
-        <div data-testid="navbar__section-label--community" class="sidebar__section-label">
-          {{ 'NAVBAR.COMMUNITY' | translate }}
-        </div>
-      } @else {
-        <div
-          data-testid="navbar__section-divider--community"
-          class="sidebar__section-divider"
-        ></div>
-      }
-
-      <ul data-testid="navbar__menu--community" class="sidebar__menu">
+    <app-sidebar-section [label]="'NAVBAR.PROFILE'" [key]="'profile'" [sidebarOpen]="sidebarOpen()">
+      <ul data-testid="navbar__menu--profile" class="sidebar__menu">
         <li
           appSidebarItem
           (sidebarClose)="closeSideBar()"
-          [icon]="'pi pi-id-card'"
-          [isRouteActive]="isRouteActive().communities_info"
-          [name]="'NAVBAR.COMMUNITY_INFO' | translate"
-          [routerLinkUrl]="'/communities/info'"
+          [icon]="'pi pi-user'"
+          [isRouteActive]="isRouteActive().users"
+          [name]="'NAVBAR.PROFILE' | translate"
+          [routerLinkUrl]="'/users'"
           [sidebarOpen]="sidebarOpen()"
         ></li>
         <li
           appSidebarItem
           (sidebarClose)="closeSideBar()"
-          [icon]="'pi pi-th-large'"
-          [isRouteActive]="isRouteActive().annexes_services"
-          [name]="'NAVBAR.ANNEXES_SERVICES' | translate"
-          [routerLinkUrl]="'/annexes-services'"
+          [icon]="'pi pi-envelope'"
+          [isRouteActive]="isRouteActive().users_invitations"
+          [name]="'NAVBAR.INVITATIONS' | translate"
+          [routerLinkUrl]="'/users/invitations'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-briefcase'"
+          [isRouteActive]="isRouteActive().users_communities"
+          [name]="'NAVBAR.MY_COMMUNITIES' | translate"
+          [routerLinkUrl]="'/users/communities'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-address-book'"
+          [isRouteActive]="isRouteActive().communities_public"
+          [name]="'NAVBAR.PUBLIC_COMMUNITIES' | translate"
+          [routerLinkUrl]="'/communities/public'"
           [sidebarOpen]="sidebarOpen()"
         ></li>
       </ul>
+    </app-sidebar-section>
+
+    <!-- Section: Active community -->
+    @if (userContextService.compareWithActiveRole(Role.MEMBER)) {
+      <app-sidebar-section
+        [label]="'NAVBAR.COMMUNITY'"
+        [key]="'community'"
+        [sidebarOpen]="sidebarOpen()"
+      >
+        <ul data-testid="navbar__menu--community" class="sidebar__menu">
+          <li
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-id-card'"
+            [isRouteActive]="isRouteActive().communities_info"
+            [name]="'NAVBAR.COMMUNITY_INFO' | translate"
+            [routerLinkUrl]="'/communities/info'"
+            [sidebarOpen]="sidebarOpen()"
+          ></li>
+          <li
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-th-large'"
+            [isRouteActive]="isRouteActive().annexes_services"
+            [name]="'NAVBAR.ANNEXES_SERVICES' | translate"
+            [routerLinkUrl]="'/annexes-services'"
+            [sidebarOpen]="sidebarOpen()"
+          ></li>
+        </ul>
+      </app-sidebar-section>
     }
 
     <!-- Section: Gestionnaire -->
     @if (userContextService.compareWithActiveRole(Role.GESTIONNAIRE)) {
-      @if (sidebarOpen()) {
-        <div data-testid="navbar__section-label--management" class="sidebar__section-label">
-          {{ 'NAVBAR.MANAGEMENT' | translate }}
-        </div>
-      } @else {
-        <div
-          data-testid="navbar__section-divider--management"
-          class="sidebar__section-divider"
-        ></div>
-      }
-
-      <ul data-testid="navbar__menu--management" class="sidebar__menu">
-        <li
-          appSidebarItem
-          [name]="'NAVBAR.KEY_HANDLER' | translate"
-          [icon]="'pi pi-key'"
-          [sidebarOpen]="sidebarOpen()"
-          [isRouteActive]="isRouteActive().keys"
-          (sidebarClose)="closeSideBar()"
-          [routerLinkUrl]="'/keys'"
-        ></li>
-        <li
-          appSidebarMultiItems
-          [name]="'NAVBAR.MEMBRE_HANDLER' | translate"
-          [icon]="'pi pi-users'"
-          [sidebarOpen]="sidebarOpen()"
-          [isRouteActive]="
-            isRouteActive().members || isRouteActive().meters || isRouteActive().sharing_operations
-          "
-          (sidebarClose)="closeSideBar()"
-          [activeSublist]="activeSublist() === 'members'"
-          [links]="memberLinks"
-          tabindex="0"
-          (click)="toggleSublist('members')"
-          (keydown.enter)="toggleSublist('members')"
-        ></li>
-        <li
-          appSidebarItem
-          (sidebarClose)="closeSideBar()"
-          [icon]="'pi pi-users'"
-          [isRouteActive]="isRouteActive().communities_users"
-          [name]="'NAVBAR.COMMUNITY_USERS' | translate"
-          [routerLinkUrl]="'/communities/users'"
-          [sidebarOpen]="sidebarOpen()"
-        ></li>
-        <li
-          appSidebarItem
-          (sidebarClose)="closeSideBar()"
-          [icon]="'pi pi-history'"
-          [isRouteActive]="isRouteActive().audit_logs"
-          [name]="'NAVBAR.AUDIT_LOG' | translate"
-          [routerLinkUrl]="'/audit-logs'"
-          [sidebarOpen]="sidebarOpen()"
-        ></li>
-      </ul>
+      <app-sidebar-section
+        [label]="'NAVBAR.MANAGEMENT'"
+        [key]="'management'"
+        [sidebarOpen]="sidebarOpen()"
+      >
+        <ul data-testid="navbar__menu--management" class="sidebar__menu">
+          <li
+            appSidebarItem
+            [name]="'NAVBAR.KEY_HANDLER' | translate"
+            [icon]="'pi pi-key'"
+            [sidebarOpen]="sidebarOpen()"
+            [isRouteActive]="isRouteActive().keys"
+            (sidebarClose)="closeSideBar()"
+            [routerLinkUrl]="'/keys'"
+          ></li>
+          <li
+            appSidebarMultiItems
+            [name]="'NAVBAR.MEMBRE_HANDLER' | translate"
+            [icon]="'pi pi-users'"
+            [sidebarOpen]="sidebarOpen()"
+            [isRouteActive]="
+              isRouteActive().members ||
+              isRouteActive().meters ||
+              isRouteActive().sharing_operations
+            "
+            (sidebarClose)="closeSideBar()"
+            [activeSublist]="activeSublist() === 'members'"
+            [links]="memberLinks"
+            tabindex="0"
+            (click)="toggleSublist('members')"
+            (keydown.enter)="toggleSublist('members')"
+          ></li>
+          <li
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-users'"
+            [isRouteActive]="isRouteActive().communities_users"
+            [name]="'NAVBAR.COMMUNITY_USERS' | translate"
+            [routerLinkUrl]="'/communities/users'"
+            [sidebarOpen]="sidebarOpen()"
+          ></li>
+          <li
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-history'"
+            [isRouteActive]="isRouteActive().audit_logs"
+            [name]="'NAVBAR.AUDIT_LOG' | translate"
+            [routerLinkUrl]="'/audit-logs'"
+            [sidebarOpen]="sidebarOpen()"
+          ></li>
+        </ul>
+      </app-sidebar-section>
     }
 
     <!-- Section: Member -->
     @if (userContextService.isActiveRole(Role.MEMBER)) {
-      @if (sidebarOpen()) {
-        <div data-testid="navbar__section-label--member" class="sidebar__section-label">
-          {{ 'NAVBAR.COMMUNITY_USERS' | translate }}
-        </div>
-      } @else {
-        <div data-testid="navbar__section-divider--member" class="sidebar__section-divider"></div>
-      }
-
-      <ul data-testid="navbar__menu--member" class="sidebar__menu">
-        <li
-          appSidebarItem
-          (sidebarClose)="closeSideBar()"
-          [icon]="'pi pi-users'"
-          [isRouteActive]="isRouteActive().communities_managers"
-          [name]="'NAVBAR.COMMUNITY_USERS' | translate"
-          [routerLinkUrl]="'/communities/managers'"
-          [sidebarOpen]="sidebarOpen()"
-        ></li>
-      </ul>
+      <app-sidebar-section
+        [label]="'NAVBAR.COMMUNITY_USERS'"
+        [key]="'member'"
+        [sidebarOpen]="sidebarOpen()"
+      >
+        <ul data-testid="navbar__menu--member" class="sidebar__menu">
+          <li
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-users'"
+            [isRouteActive]="isRouteActive().communities_managers"
+            [name]="'NAVBAR.COMMUNITY_USERS' | translate"
+            [routerLinkUrl]="'/communities/managers'"
+            [sidebarOpen]="sidebarOpen()"
+          ></li>
+        </ul>
+      </app-sidebar-section>
     }
   </nav>
 

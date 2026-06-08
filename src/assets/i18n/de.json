@@ -1308,9 +1308,99 @@
     "UNSUBSCRIBE_CONFIRM_HEADER": "Modul deaktivieren",
     "UNSUBSCRIBE_CONFIRM": "{{name}} für diese Gemeinschaft deaktivieren? Die Mitglieder verlieren den Zugriff auf dieses Modul.",
     "UNSUBSCRIBE_SUCCESS": "Modul deaktiviert.",
+    "SIMULATION": {
+      "NAME": "Simulation des Verteilschlüssels",
+      "DESCRIPTION": "Testet einen bestehenden Verteilschlüssel mit echten Verbrauchs- und Produktionsdaten: Überschuss, Eigenverbrauch und Autarkie."
+    },
     "ALGORITHM": {
       "NAME": "Generierung von Verteilschlüsseln",
       "DESCRIPTION": "Erzeugt Verteilschlüssel auf Basis konfigurierbarer Algorithmen und speichert validierte Schlüssel in der Gemeinschaft."
+    }
+  },
+  "SIMULATION_HUB": {
+    "PAGE_TITLE": "Simulation des Verteilschlüssels",
+    "PAGE_DESCRIPTION": "Testen Sie einen bestehenden Verteilschlüssel mit echten Verbrauchs- und Produktionsdaten.",
+    "REFRESH_TOOLTIP": "Liste der Simulationen aktualisieren",
+    "LAST_REFRESH_LABEL": "Zuletzt aktualisiert um",
+    "LIVE_INDICATOR": "Live",
+    "START_PANEL_TITLE": "Eine Simulation starten",
+    "START_FOOTNOTE": "Die Berechnung wird in die Warteschlange gestellt. Die Ergebnisse erscheinen automatisch nach Abschluss.",
+    "KEY_LABEL": "Verteilschlüssel",
+    "KEY_PLACEHOLDER": "Einen Verteilschlüssel auswählen",
+    "KEY_HINT": "Die Simulation verteilt die Produktion aus der Datei auf die Verbraucher dieses Schlüssels.",
+    "KEY_EMPTY": "Kein passender Schlüssel.",
+    "KEY_NONE": "Es existiert noch kein Verteilschlüssel. Erstellen Sie zuerst einen.",
+    "SIMULATION_NAME_LABEL": "Name der Simulation",
+    "SIMULATION_NAME_PLACEHOLDER": "Stresstest Q2 2026",
+    "INJECTION_NAME_LABEL": "Name der Einspeisespalte",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Name der Spalte in der Datei mit den erzeugten (eingespeisten) Energiewerten.",
+    "FILE_LABEL": "Verbrauchs-/Produktionsdatei",
+    "FILE_DROP_PROMPT": "Datei hierher ziehen oder durchsuchen",
+    "FILE_HINT": "CSV oder XLSX, bis zu 25 MB. Eine Spalte pro Verbraucher, benannt wie im Schlüssel.",
+    "FILE_CLEAR": "Datei entfernen",
+    "SUBMIT": "Simulation starten",
+    "RUNS_TITLE": "Simulationen",
+    "EMPTY_STATE": "Noch keine Simulation. Starten Sie oben Ihre erste.",
+    "DELETE_RUN": "Simulation löschen",
+    "STATUS": {
+      "PENDING": "Läuft",
+      "SUCCESS": "Fertig",
+      "FAILED": "Fehlgeschlagen"
+    },
+    "CONFIRM": {
+      "DELETE_HEADER": "Simulation löschen",
+      "DELETE_MESSAGE": "Diese Simulation und ihre Ergebnisse werden dauerhaft gelöscht. Fortfahren?"
+    },
+    "SUCCESS": {
+      "SIMULATION_STARTED": "Simulation gestartet — die Ergebnisse erscheinen nach Abschluss.",
+      "RUN_DELETED": "Simulation gelöscht."
+    },
+    "ERRORS": {
+      "KEYS_FAILED": "Die Verteilschlüssel konnten nicht geladen werden.",
+      "KEY_REQUIRED": "Bitte wählen Sie einen Verteilschlüssel.",
+      "NAME_REQUIRED": "Bitte benennen Sie diese Simulation.",
+      "FILE_REQUIRED": "Bitte wählen Sie eine CSV- oder XLSX-Datei.",
+      "FILE_EMPTY": "Die ausgewählte Datei ist leer.",
+      "FILE_TOO_LARGE": "Datei zu groß (max. 25 MB).",
+      "FILE_TYPE": "Es werden nur CSV- und XLSX-Dateien akzeptiert.",
+      "TIMESERIES_FAILED": "Die Zeitreihendaten konnten nicht geladen werden."
+    },
+    "RESULTS": {
+      "PRORATA": "Anteilig",
+      "TABLE": {
+        "CONSUMER": "Verbraucher",
+        "ALLOCATION": "Verteilung",
+        "CONSUMPTION": "Verbrauch",
+        "SELF_CONSUMED": "Eigenverbraucht",
+        "SURPLUS": "Überschuss",
+        "RESIDUAL": "Netzbezug"
+      },
+      "PENDING_TITLE": "Diese Simulation läuft noch. Die Ergebnisse erscheinen in Kürze.",
+      "FAILED_TITLE": "Diese Simulation ist fehlgeschlagen.",
+      "ITERATIONS_TITLE": "Aufschlüsselung pro Iteration",
+      "ITERATION_LABEL": "Iteration {{number}}",
+      "METRICS": {
+        "ALLOCATION": "Verteilung",
+        "SELF_CONSUMPTION": "Eigenverbrauch",
+        "SURPLUS": "Überschuss",
+        "SELF_SUFFICIENCY": "Autarkie",
+        "SELF_SUFFICIENCY_HINT": "Anteil des Verbrauchs, der durch geteilte Energie gedeckt wird.",
+        "SELF_SUFFICIENCY_SHORT": "Autarkie",
+        "SHARING_RATE": "Teilungsrate",
+        "SHARING_RATE_HINT": "Anteil der verfügbaren Produktion, der tatsächlich verbraucht wird.",
+        "SHARING_SHORT": "Teilung"
+      },
+      "CHART": {
+        "TITLE": "Zeitreihen",
+        "ITERATION_SELECTOR": "Iteration",
+        "X_AXIS": "Zeitschritt",
+        "Y_AXIS": "Energie (kWh)",
+        "CONSUMPTION": "Verbrauch",
+        "SELF_CONSUMED": "Eigenverbraucht",
+        "SURPLUS": "Überschuss",
+        "RESIDUAL": "Netzbezug"
+      }
     }
   },
   "ALGORITHM_HUB": {
@@ -1369,7 +1459,9 @@
       "FILE_REQUIRED": "Bitte wählen Sie eine CSV- oder XLSX-Datei aus.",
       "FILE_EMPTY": "Die ausgewählte Datei ist leer.",
       "FILE_TOO_LARGE": "Datei zu groß (max. 25 MB).",
-      "FILE_TYPE": "Nur CSV- und XLSX-Dateien werden akzeptiert."
+      "FILE_TYPE": "Nur CSV- und XLSX-Dateien werden akzeptiert.",
+      "MIN_VALUE": "Muss mindestens {{ min }} sein.",
+      "MAX_VALUE": "Darf höchstens {{ max }} sein."
     }
   },
   "AUDIT": {
@@ -1468,6 +1560,30 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Verbrauchsdaten hochgeladen"
+        }
+      },
+      "allocation_key_generation": {
+        "generation": {
+          "created": "Aufteilungsschlüssel-Generierung gestartet",
+          "queue_failed": "Aufteilungsschlüssel-Generierung konnte nicht eingereiht werden",
+          "succeeded": "Aufteilungsschlüssel-Generierung abgeschlossen",
+          "failed": "Aufteilungsschlüssel-Generierung fehlgeschlagen",
+          "deleted": "Aufteilungsschlüssel-Generierung gelöscht"
+        },
+        "allocation_key": {
+          "saved": "Generierter Aufteilungsschlüssel gespeichert"
+        },
+        "allocation_key_generated": {
+          "deleted": "Generierter Aufteilungsschlüssel gelöscht"
+        }
+      },
+      "simulation_key": {
+        "simulation": {
+          "created": "Simulation gestartet",
+          "queue_failed": "Simulation konnte nicht eingereiht werden",
+          "succeeded": "Simulation abgeschlossen",
+          "failed": "Simulation fehlgeschlagen",
+          "deleted": "Simulation gelöscht"
         }
       }
     }

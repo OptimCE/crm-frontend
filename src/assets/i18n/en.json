@@ -1308,9 +1308,99 @@
     "UNSUBSCRIBE_CONFIRM_HEADER": "Disable module",
     "UNSUBSCRIBE_CONFIRM": "Disable {{name}} for this community? Members will lose access to this module.",
     "UNSUBSCRIBE_SUCCESS": "Module disabled.",
+    "SIMULATION": {
+      "NAME": "Allocation key simulation",
+      "DESCRIPTION": "Stress-tests an existing allocation key against real consumption and production data, surfacing surplus, self-consumption and self-sufficiency."
+    },
     "ALGORITHM": {
       "NAME": "Allocation key generation",
       "DESCRIPTION": "Generates allocation keys from configurable algorithms and saves validated keys to the community."
+    }
+  },
+  "SIMULATION_HUB": {
+    "PAGE_TITLE": "Allocation key simulation",
+    "PAGE_DESCRIPTION": "Stress-test an existing allocation key against real consumption and production data.",
+    "REFRESH_TOOLTIP": "Refresh the runs list",
+    "LAST_REFRESH_LABEL": "Last refreshed at",
+    "LIVE_INDICATOR": "Live",
+    "START_PANEL_TITLE": "Start a simulation",
+    "START_FOOTNOTE": "The run is queued asynchronously. Results appear automatically once it completes.",
+    "KEY_LABEL": "Allocation key",
+    "KEY_PLACEHOLDER": "Pick an allocation key",
+    "KEY_HINT": "The simulation distributes the file's production across this key's consumers.",
+    "KEY_EMPTY": "No matching key.",
+    "KEY_NONE": "No allocation key exists yet. Create one first.",
+    "SIMULATION_NAME_LABEL": "Run name",
+    "SIMULATION_NAME_PLACEHOLDER": "Q2 2026 stress test",
+    "INJECTION_NAME_LABEL": "Injection column name",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Name of the column in the file that holds the produced (injected) energy values.",
+    "FILE_LABEL": "Consumption / production file",
+    "FILE_DROP_PROMPT": "Drop your data file or browse",
+    "FILE_HINT": "CSV or XLSX, up to 25 MB. One column per consumer, named as in the key.",
+    "FILE_CLEAR": "Remove file",
+    "SUBMIT": "Run simulation",
+    "RUNS_TITLE": "Simulation runs",
+    "EMPTY_STATE": "No simulation yet. Launch your first run above.",
+    "DELETE_RUN": "Delete run",
+    "STATUS": {
+      "PENDING": "Running",
+      "SUCCESS": "Done",
+      "FAILED": "Failed"
+    },
+    "CONFIRM": {
+      "DELETE_HEADER": "Delete simulation",
+      "DELETE_MESSAGE": "This will permanently delete this simulation and its results. Continue?"
+    },
+    "SUCCESS": {
+      "SIMULATION_STARTED": "Simulation started — results will appear once it completes.",
+      "RUN_DELETED": "Simulation deleted."
+    },
+    "ERRORS": {
+      "KEYS_FAILED": "Could not load the allocation keys.",
+      "KEY_REQUIRED": "Please pick an allocation key.",
+      "NAME_REQUIRED": "Please provide a name for this run.",
+      "FILE_REQUIRED": "Please pick a CSV or XLSX file.",
+      "FILE_EMPTY": "The selected file is empty.",
+      "FILE_TOO_LARGE": "File is too large (max 25 MB).",
+      "FILE_TYPE": "Only CSV and XLSX files are accepted.",
+      "TIMESERIES_FAILED": "Could not load the time-series data."
+    },
+    "RESULTS": {
+      "PRORATA": "Prorata",
+      "TABLE": {
+        "CONSUMER": "Consumer",
+        "ALLOCATION": "Allocation",
+        "CONSUMPTION": "Consumption",
+        "SELF_CONSUMED": "Self-consumed",
+        "SURPLUS": "Surplus",
+        "RESIDUAL": "Grid draw"
+      },
+      "PENDING_TITLE": "This simulation is still running. Results will appear shortly.",
+      "FAILED_TITLE": "This simulation failed.",
+      "ITERATIONS_TITLE": "Per-iteration breakdown",
+      "ITERATION_LABEL": "Iteration {{number}}",
+      "METRICS": {
+        "ALLOCATION": "Allocation",
+        "SELF_CONSUMPTION": "Self-consumption",
+        "SURPLUS": "Surplus",
+        "SELF_SUFFICIENCY": "Self-sufficiency",
+        "SELF_SUFFICIENCY_HINT": "Share of consumption covered by shared energy.",
+        "SELF_SUFFICIENCY_SHORT": "Self-suff.",
+        "SHARING_RATE": "Sharing rate",
+        "SHARING_RATE_HINT": "Share of available production actually consumed.",
+        "SHARING_SHORT": "Sharing"
+      },
+      "CHART": {
+        "TITLE": "Time series",
+        "ITERATION_SELECTOR": "Iteration",
+        "X_AXIS": "Timestep",
+        "Y_AXIS": "Energy (kWh)",
+        "CONSUMPTION": "Consumption",
+        "SELF_CONSUMED": "Self-consumed",
+        "SURPLUS": "Surplus",
+        "RESIDUAL": "Grid draw"
+      }
     }
   },
   "ALGORITHM_HUB": {
@@ -1369,7 +1459,9 @@
       "FILE_REQUIRED": "Please pick a CSV or XLSX file.",
       "FILE_EMPTY": "The selected file is empty.",
       "FILE_TOO_LARGE": "File is too large (max 25 MB).",
-      "FILE_TYPE": "Only CSV and XLSX files are accepted."
+      "FILE_TYPE": "Only CSV and XLSX files are accepted.",
+      "MIN_VALUE": "Must be at least {{ min }}.",
+      "MAX_VALUE": "Must be at most {{ max }}."
     }
   },
   "AUDIT": {
@@ -1468,6 +1560,30 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Consumption data uploaded"
+        }
+      },
+      "allocation_key_generation": {
+        "generation": {
+          "created": "Allocation key generation started",
+          "queue_failed": "Allocation key generation could not be queued",
+          "succeeded": "Allocation key generation completed",
+          "failed": "Allocation key generation failed",
+          "deleted": "Allocation key generation deleted"
+        },
+        "allocation_key": {
+          "saved": "Generated allocation key saved"
+        },
+        "allocation_key_generated": {
+          "deleted": "Generated allocation key deleted"
+        }
+      },
+      "simulation_key": {
+        "simulation": {
+          "created": "Simulation started",
+          "queue_failed": "Simulation could not be queued",
+          "succeeded": "Simulation completed",
+          "failed": "Simulation failed",
+          "deleted": "Simulation deleted"
         }
       }
     }

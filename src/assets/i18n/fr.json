@@ -1306,9 +1306,99 @@
     "UNSUBSCRIBE_CONFIRM_HEADER": "Désactiver le module",
     "UNSUBSCRIBE_CONFIRM": "Désactiver {{name}} pour cette communauté ? Les membres perdront l'accès à ce module.",
     "UNSUBSCRIBE_SUCCESS": "Module désactivé.",
+    "SIMULATION": {
+      "NAME": "Simulation de clé de répartition",
+      "DESCRIPTION": "Teste une clé de répartition existante avec des données réelles de consommation et de production : surplus, autoconsommation et autosuffisance."
+    },
     "ALGORITHM": {
       "NAME": "Génération de clés de répartition",
       "DESCRIPTION": "Génère des clés de répartition à partir d'algorithmes paramétrables et enregistre les clés validées dans la communauté."
+    }
+  },
+  "SIMULATION_HUB": {
+    "PAGE_TITLE": "Simulation de clé de répartition",
+    "PAGE_DESCRIPTION": "Testez une clé de répartition existante avec des données réelles de consommation et de production.",
+    "REFRESH_TOOLTIP": "Rafraîchir la liste des simulations",
+    "LAST_REFRESH_LABEL": "Dernière actualisation à",
+    "LIVE_INDICATOR": "En direct",
+    "START_PANEL_TITLE": "Lancer une simulation",
+    "START_FOOTNOTE": "Le calcul est mis en file d'attente. Les résultats s'affichent automatiquement à la fin.",
+    "KEY_LABEL": "Clé de répartition",
+    "KEY_PLACEHOLDER": "Choisir une clé de répartition",
+    "KEY_HINT": "La simulation répartit la production du fichier sur les consommateurs de cette clé.",
+    "KEY_EMPTY": "Aucune clé correspondante.",
+    "KEY_NONE": "Aucune clé de répartition n'existe encore. Créez-en une d'abord.",
+    "SIMULATION_NAME_LABEL": "Nom de la simulation",
+    "SIMULATION_NAME_PLACEHOLDER": "Test T2 2026",
+    "INJECTION_NAME_LABEL": "Nom de la colonne d'injection",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Nom de la colonne du fichier qui contient les valeurs d'énergie produite (injectée).",
+    "FILE_LABEL": "Fichier de consommation / production",
+    "FILE_DROP_PROMPT": "Déposez votre fichier ou parcourez",
+    "FILE_HINT": "CSV ou XLSX, jusqu'à 25 Mo. Une colonne par consommateur, nommée comme dans la clé.",
+    "FILE_CLEAR": "Retirer le fichier",
+    "SUBMIT": "Lancer la simulation",
+    "RUNS_TITLE": "Simulations",
+    "EMPTY_STATE": "Aucune simulation pour le moment. Lancez la première ci-dessus.",
+    "DELETE_RUN": "Supprimer la simulation",
+    "STATUS": {
+      "PENDING": "En cours",
+      "SUCCESS": "Terminée",
+      "FAILED": "Échec"
+    },
+    "CONFIRM": {
+      "DELETE_HEADER": "Supprimer la simulation",
+      "DELETE_MESSAGE": "Cette simulation et ses résultats seront définitivement supprimés. Continuer ?"
+    },
+    "SUCCESS": {
+      "SIMULATION_STARTED": "Simulation démarrée — les résultats s'afficheront à la fin.",
+      "RUN_DELETED": "Simulation supprimée."
+    },
+    "ERRORS": {
+      "KEYS_FAILED": "Impossible de charger les clés de répartition.",
+      "KEY_REQUIRED": "Veuillez choisir une clé de répartition.",
+      "NAME_REQUIRED": "Veuillez nommer cette simulation.",
+      "FILE_REQUIRED": "Veuillez sélectionner un fichier CSV ou XLSX.",
+      "FILE_EMPTY": "Le fichier sélectionné est vide.",
+      "FILE_TOO_LARGE": "Fichier trop volumineux (max 25 Mo).",
+      "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés.",
+      "TIMESERIES_FAILED": "Impossible de charger les séries temporelles."
+    },
+    "RESULTS": {
+      "PRORATA": "Prorata",
+      "TABLE": {
+        "CONSUMER": "Consommateur",
+        "ALLOCATION": "Répartition",
+        "CONSUMPTION": "Consommation",
+        "SELF_CONSUMED": "Autoconsommé",
+        "SURPLUS": "Surplus",
+        "RESIDUAL": "Soutirage réseau"
+      },
+      "PENDING_TITLE": "Cette simulation est encore en cours. Les résultats s'afficheront bientôt.",
+      "FAILED_TITLE": "Cette simulation a échoué.",
+      "ITERATIONS_TITLE": "Détail par itération",
+      "ITERATION_LABEL": "Itération {{number}}",
+      "METRICS": {
+        "ALLOCATION": "Répartition",
+        "SELF_CONSUMPTION": "Autoconsommation",
+        "SURPLUS": "Surplus",
+        "SELF_SUFFICIENCY": "Autosuffisance",
+        "SELF_SUFFICIENCY_HINT": "Part de la consommation couverte par l'énergie partagée.",
+        "SELF_SUFFICIENCY_SHORT": "Autosuff.",
+        "SHARING_RATE": "Taux de partage",
+        "SHARING_RATE_HINT": "Part de la production disponible réellement consommée.",
+        "SHARING_SHORT": "Partage"
+      },
+      "CHART": {
+        "TITLE": "Séries temporelles",
+        "ITERATION_SELECTOR": "Itération",
+        "X_AXIS": "Pas de temps",
+        "Y_AXIS": "Énergie (kWh)",
+        "CONSUMPTION": "Consommation",
+        "SELF_CONSUMED": "Autoconsommé",
+        "SURPLUS": "Surplus",
+        "RESIDUAL": "Soutirage réseau"
+      }
     }
   },
   "ALGORITHM_HUB": {
@@ -1367,7 +1457,9 @@
       "FILE_REQUIRED": "Veuillez sélectionner un fichier CSV ou XLSX.",
       "FILE_EMPTY": "Le fichier sélectionné est vide.",
       "FILE_TOO_LARGE": "Fichier trop volumineux (max 25 Mo).",
-      "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés."
+      "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés.",
+      "MIN_VALUE": "Doit être au moins {{ min }}.",
+      "MAX_VALUE": "Doit être au plus {{ max }}."
     }
   },
   "AUDIT": {
@@ -1466,6 +1558,30 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Données de consommation téléversées"
+        }
+      },
+      "allocation_key_generation": {
+        "generation": {
+          "created": "Génération de clé de répartition lancée",
+          "queue_failed": "La génération de clé de répartition n'a pas pu être mise en file d'attente",
+          "succeeded": "Génération de clé de répartition terminée",
+          "failed": "Échec de la génération de clé de répartition",
+          "deleted": "Génération de clé de répartition supprimée"
+        },
+        "allocation_key": {
+          "saved": "Clé de répartition générée enregistrée"
+        },
+        "allocation_key_generated": {
+          "deleted": "Clé de répartition générée supprimée"
+        }
+      },
+      "simulation_key": {
+        "simulation": {
+          "created": "Simulation lancée",
+          "queue_failed": "La simulation n'a pas pu être mise en file d'attente",
+          "succeeded": "Simulation terminée",
+          "failed": "Échec de la simulation",
+          "deleted": "Simulation supprimée"
         }
       }
     }

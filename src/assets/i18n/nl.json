@@ -1308,9 +1308,99 @@
     "UNSUBSCRIBE_CONFIRM_HEADER": "Module uitschakelen",
     "UNSUBSCRIBE_CONFIRM": "{{name}} uitschakelen voor deze gemeenschap? Leden verliezen de toegang tot deze module.",
     "UNSUBSCRIBE_SUCCESS": "Module uitgeschakeld.",
+    "SIMULATION": {
+      "NAME": "Simulatie van verdeelsleutel",
+      "DESCRIPTION": "Test een bestaande verdeelsleutel met echte verbruiks- en productiegegevens: overschot, zelfverbruik en zelfvoorziening."
+    },
     "ALGORITHM": {
       "NAME": "Generatie van verdeelsleutels",
       "DESCRIPTION": "Genereert verdeelsleutels op basis van configureerbare algoritmen en bewaart gevalideerde sleutels in de gemeenschap."
+    }
+  },
+  "SIMULATION_HUB": {
+    "PAGE_TITLE": "Simulatie van verdeelsleutel",
+    "PAGE_DESCRIPTION": "Test een bestaande verdeelsleutel met echte verbruiks- en productiegegevens.",
+    "REFRESH_TOOLTIP": "Lijst met simulaties vernieuwen",
+    "LAST_REFRESH_LABEL": "Laatst vernieuwd om",
+    "LIVE_INDICATOR": "Live",
+    "START_PANEL_TITLE": "Een simulatie starten",
+    "START_FOOTNOTE": "De berekening wordt in de wachtrij geplaatst. De resultaten verschijnen automatisch na afloop.",
+    "KEY_LABEL": "Verdeelsleutel",
+    "KEY_PLACEHOLDER": "Kies een verdeelsleutel",
+    "KEY_HINT": "De simulatie verdeelt de productie uit het bestand over de verbruikers van deze sleutel.",
+    "KEY_EMPTY": "Geen overeenkomende sleutel.",
+    "KEY_NONE": "Er bestaat nog geen verdeelsleutel. Maak er eerst een aan.",
+    "SIMULATION_NAME_LABEL": "Naam van de simulatie",
+    "SIMULATION_NAME_PLACEHOLDER": "Stresstest K2 2026",
+    "INJECTION_NAME_LABEL": "Naam van de injectiekolom",
+    "INJECTION_NAME_PLACEHOLDER": "production",
+    "INJECTION_NAME_HELP": "Naam van de kolom in het bestand met de geproduceerde (geïnjecteerde) energiewaarden.",
+    "FILE_LABEL": "Verbruiks-/productiebestand",
+    "FILE_DROP_PROMPT": "Sleep uw bestand hierheen of blader",
+    "FILE_HINT": "CSV of XLSX, tot 25 MB. Eén kolom per verbruiker, met dezelfde naam als in de sleutel.",
+    "FILE_CLEAR": "Bestand verwijderen",
+    "SUBMIT": "Simulatie uitvoeren",
+    "RUNS_TITLE": "Simulaties",
+    "EMPTY_STATE": "Nog geen simulatie. Start hierboven uw eerste run.",
+    "DELETE_RUN": "Simulatie verwijderen",
+    "STATUS": {
+      "PENDING": "Bezig",
+      "SUCCESS": "Klaar",
+      "FAILED": "Mislukt"
+    },
+    "CONFIRM": {
+      "DELETE_HEADER": "Simulatie verwijderen",
+      "DELETE_MESSAGE": "Deze simulatie en de resultaten worden definitief verwijderd. Doorgaan?"
+    },
+    "SUCCESS": {
+      "SIMULATION_STARTED": "Simulatie gestart — de resultaten verschijnen na afloop.",
+      "RUN_DELETED": "Simulatie verwijderd."
+    },
+    "ERRORS": {
+      "KEYS_FAILED": "Kan de verdeelsleutels niet laden.",
+      "KEY_REQUIRED": "Kies een verdeelsleutel.",
+      "NAME_REQUIRED": "Geef deze simulatie een naam.",
+      "FILE_REQUIRED": "Selecteer een CSV- of XLSX-bestand.",
+      "FILE_EMPTY": "Het geselecteerde bestand is leeg.",
+      "FILE_TOO_LARGE": "Bestand te groot (max. 25 MB).",
+      "FILE_TYPE": "Alleen CSV- en XLSX-bestanden worden geaccepteerd.",
+      "TIMESERIES_FAILED": "Kan de tijdreeksgegevens niet laden."
+    },
+    "RESULTS": {
+      "PRORATA": "Prorata",
+      "TABLE": {
+        "CONSUMER": "Verbruiker",
+        "ALLOCATION": "Verdeling",
+        "CONSUMPTION": "Verbruik",
+        "SELF_CONSUMED": "Zelf verbruikt",
+        "SURPLUS": "Overschot",
+        "RESIDUAL": "Netafname"
+      },
+      "PENDING_TITLE": "Deze simulatie loopt nog. De resultaten verschijnen binnenkort.",
+      "FAILED_TITLE": "Deze simulatie is mislukt.",
+      "ITERATIONS_TITLE": "Detail per iteratie",
+      "ITERATION_LABEL": "Iteratie {{number}}",
+      "METRICS": {
+        "ALLOCATION": "Verdeling",
+        "SELF_CONSUMPTION": "Zelfverbruik",
+        "SURPLUS": "Overschot",
+        "SELF_SUFFICIENCY": "Zelfvoorziening",
+        "SELF_SUFFICIENCY_HINT": "Aandeel van het verbruik gedekt door gedeelde energie.",
+        "SELF_SUFFICIENCY_SHORT": "Zelfvoorz.",
+        "SHARING_RATE": "Deelpercentage",
+        "SHARING_RATE_HINT": "Aandeel van de beschikbare productie dat daadwerkelijk wordt verbruikt.",
+        "SHARING_SHORT": "Delen"
+      },
+      "CHART": {
+        "TITLE": "Tijdreeksen",
+        "ITERATION_SELECTOR": "Iteratie",
+        "X_AXIS": "Tijdstap",
+        "Y_AXIS": "Energie (kWh)",
+        "CONSUMPTION": "Verbruik",
+        "SELF_CONSUMED": "Zelf verbruikt",
+        "SURPLUS": "Overschot",
+        "RESIDUAL": "Netafname"
+      }
     }
   },
   "ALGORITHM_HUB": {
@@ -1369,7 +1459,9 @@
       "FILE_REQUIRED": "Selecteer een CSV- of XLSX-bestand.",
       "FILE_EMPTY": "Het geselecteerde bestand is leeg.",
       "FILE_TOO_LARGE": "Bestand te groot (max 25 MB).",
-      "FILE_TYPE": "Alleen CSV- en XLSX-bestanden worden aanvaard."
+      "FILE_TYPE": "Alleen CSV- en XLSX-bestanden worden aanvaard.",
+      "MIN_VALUE": "Moet minstens {{ min }} zijn.",
+      "MAX_VALUE": "Mag hoogstens {{ max }} zijn."
     }
   },
   "AUDIT": {
@@ -1468,6 +1560,30 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Verbruiksgegevens geüpload"
+        }
+      },
+      "allocation_key_generation": {
+        "generation": {
+          "created": "Generatie verdeelsleutel gestart",
+          "queue_failed": "Generatie verdeelsleutel kon niet in de wachtrij worden geplaatst",
+          "succeeded": "Generatie verdeelsleutel voltooid",
+          "failed": "Generatie verdeelsleutel mislukt",
+          "deleted": "Generatie verdeelsleutel verwijderd"
+        },
+        "allocation_key": {
+          "saved": "Gegenereerde verdeelsleutel opgeslagen"
+        },
+        "allocation_key_generated": {
+          "deleted": "Gegenereerde verdeelsleutel verwijderd"
+        }
+      },
+      "simulation_key": {
+        "simulation": {
+          "created": "Simulatie gestart",
+          "queue_failed": "Simulatie kon niet in de wachtrij worden geplaatst",
+          "succeeded": "Simulatie voltooid",
+          "failed": "Simulatie mislukt",
+          "deleted": "Simulatie verwijderd"
         }
       }
     }

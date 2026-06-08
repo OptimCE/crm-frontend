@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, FormRecord, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { vi } from 'vitest';
 
@@ -228,6 +228,55 @@ describe('FormErrorSummaryComponent', () => {
 
       // email + minlength errors on same control
       expect(component.errorMessages().length).toBe(2);
+    });
+  });
+
+  // =============================================
+  // 4b. Error Collection — nested groups (recursion)
+  // =============================================
+
+  describe('error collection — nested groups', () => {
+    function setupNested() {
+      formGroup = new FormGroup({
+        name: new FormControl('', Validators.required),
+        inputs: new FormRecord({
+          iterations: new FormControl<number | null>(null, Validators.required),
+        }),
+      });
+      mockFormGroupDirective = new FormGroupDirective([], []);
+      mockFormGroupDirective.form = formGroup;
+      (mockFormGroupDirective as unknown as { ngSubmit: EventEmitter<unknown> }).ngSubmit =
+        new EventEmitter<unknown>();
+
+      return TestBed.configureTestingModule({
+        imports: [FormErrorSummaryComponent, TranslateModule.forRoot()],
+        providers: [{ provide: FormGroupDirective, useValue: mockFormGroupDirective }],
+      })
+        .overrideComponent(FormErrorSummaryComponent, { set: { template: '' } })
+        .compileComponents();
+    }
+
+    it('should collect errors from controls nested in a FormRecord/FormGroup', async () => {
+      await setupNested();
+      createComponent();
+
+      mockFormGroupDirective.ngSubmit.emit();
+
+      // top-level `name` required + nested `iterations` required
+      expect(component.errorMessages().length).toBe(2);
+    });
+
+    it('should clear nested errors once the nested control becomes valid', async () => {
+      await setupNested();
+      createComponent();
+
+      mockFormGroupDirective.ngSubmit.emit();
+      expect(component.errorMessages().length).toBe(2);
+
+      formGroup.get('name')?.setValue('valid');
+      (formGroup.get('inputs') as FormRecord).get('iterations')?.setValue(10);
+
+      expect(component.errorMessages()).toEqual([]);
     });
   });
 

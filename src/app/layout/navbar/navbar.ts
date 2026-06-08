@@ -6,6 +6,7 @@ import { NgClass } from '@angular/common';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SidebarElement } from './navbar-elements/sidebar-element/sidebar-element';
 import { SidebarMultiElements } from './navbar-elements/sidebar-multi-elements/sidebar-multi-elements';
+import { SidebarSection } from './navbar-elements/sidebar-section/sidebar-section';
 import { Links } from './navbar-elements/dtos';
 import { Title } from '@angular/platform-browser';
 import { LanguageSelector } from '../../shared/components/language-selector/language-selector';
@@ -53,6 +54,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
     TranslatePipe,
     SidebarElement,
     SidebarMultiElements,
+    SidebarSection,
     LanguageSelector,
     Tooltip,
   ],

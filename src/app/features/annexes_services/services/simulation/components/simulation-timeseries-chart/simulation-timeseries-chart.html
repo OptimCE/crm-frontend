@@ -1,0 +1,23 @@
+@if (hasMultipleIterations()) {
+  <div class="flex items-center justify-end gap-2 mb-3">
+    <label for="simulation-chart-select" class="text-xs font-medium text-surface-600">
+      {{ 'SIMULATION_HUB.RESULTS.CHART.ITERATION_SELECTOR' | translate }}
+    </label>
+    <p-select
+      id="simulation-chart-select"
+      [options]="iterationOptions()"
+      optionLabel="label"
+      optionValue="value"
+      [ngModel]="selectedIndex()"
+      (onChange)="onIterationChange($event.value)"
+      styleClass="w-44"
+      data-testid="simulation-chart__select--iteration"
+    />
+  </div>
+}
+
+@if (chartData(); as data) {
+  <div style="position: relative; height: 22rem">
+    <p-chart type="line" [data]="data" [options]="options" data-testid="simulation-chart__canvas" />
+  </div>
+}

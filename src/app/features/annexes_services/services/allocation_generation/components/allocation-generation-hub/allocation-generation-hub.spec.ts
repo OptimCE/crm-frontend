@@ -208,9 +208,8 @@ describe('AllocationGenerationHub', () => {
       expect(component.algorithmsError()).toBe(false);
       expect(component.selectedAlgorithm()).toBeUndefined();
       expect(component.file()).toBeNull();
-      expect(component.fileError()).toBeNull();
+      expect(component.startForm.controls.file.value).toBeNull();
       expect(component.submitting()).toBe(false);
-      expect(component.submitAttempted()).toBe(false);
       expect(component.generations()).toEqual([]);
       expect(component.expandedGenerationId()).toBeNull();
       expect(component.expandedKeyId()).toBeNull();
@@ -312,43 +311,43 @@ describe('AllocationGenerationHub', () => {
       const file = makeFile('data.csv', 1024);
       component.onFileSelected(fileInputEvent(file));
       expect(component.file()).toBe(file);
-      expect(component.fileError()).toBeNull();
+      expect(component.startForm.controls.file.value).toBe(file);
+      expect(component.startForm.controls.file.valid).toBe(true);
     });
 
     it('should accept a valid XLSX file', () => {
       const file = makeFile('Data.XLSX', 2048);
       component.onFileSelected(fileInputEvent(file));
       expect(component.file()).toBe(file);
-      expect(component.fileError()).toBeNull();
+      expect(component.startForm.controls.file.valid).toBe(true);
     });
 
-    it('should reject an empty file with FILE_EMPTY error', () => {
+    it('should reject an empty file with fileEmpty error', () => {
       const file = makeFile('empty.csv', 0);
       component.onFileSelected(fileInputEvent(file));
       expect(component.file()).toBeNull();
-      expect(component.fileError()).toBe('ALGORITHM_HUB.ERRORS.FILE_EMPTY');
+      expect(component.startForm.controls.file.errors?.['fileEmpty']).toBeTruthy();
     });
 
-    it('should reject a too-large file with FILE_TOO_LARGE error', () => {
+    it('should reject a too-large file with fileTooLarge error', () => {
       const file = makeFile('huge.csv', 26 * 1024 * 1024);
       component.onFileSelected(fileInputEvent(file));
       expect(component.file()).toBeNull();
-      expect(component.fileError()).toBe('ALGORITHM_HUB.ERRORS.FILE_TOO_LARGE');
+      expect(component.startForm.controls.file.errors?.['fileTooLarge']).toBeTruthy();
     });
 
     it('should reject a file with an invalid extension', () => {
       const file = makeFile('bad.txt', 1024);
       component.onFileSelected(fileInputEvent(file));
       expect(component.file()).toBeNull();
-      expect(component.fileError()).toBe('ALGORITHM_HUB.ERRORS.FILE_TYPE');
+      expect(component.startForm.controls.file.errors?.['fileType']).toBeTruthy();
     });
 
-    it('should clear file and error when no file is provided', () => {
-      component.file.set(makeFile('x.csv', 1024));
-      component.fileError.set('something');
+    it('should clear file when no file is provided', () => {
+      component.onFileSelected(fileInputEvent(makeFile('x.csv', 1024)));
       component.onFileSelected(fileInputEvent(null));
       expect(component.file()).toBeNull();
-      expect(component.fileError()).toBeNull();
+      expect(component.startForm.controls.file.value).toBeNull();
     });
 
     it('should handle drop events and preventDefault', () => {
@@ -357,6 +356,7 @@ describe('AllocationGenerationHub', () => {
       component.onFileDropped(event);
       expect(preventDefault).toHaveBeenCalled();
       expect(component.file()).toBe(file);
+      expect(component.startForm.controls.file.value).toBe(file);
     });
 
     it('onDragOver should preventDefault', () => {
@@ -366,12 +366,11 @@ describe('AllocationGenerationHub', () => {
       expect(preventDefault).toHaveBeenCalled();
     });
 
-    it('clearFile should reset file and fileError', () => {
-      component.file.set(makeFile('x.csv', 1024));
-      component.fileError.set('any');
+    it('clearFile should reset file signal and control', () => {
+      component.onFileSelected(fileInputEvent(makeFile('x.csv', 1024)));
       component.clearFile();
       expect(component.file()).toBeNull();
-      expect(component.fileError()).toBeNull();
+      expect(component.startForm.controls.file.value).toBeNull();
     });
 
     it('formatFileSize should produce human-readable sizes', () => {
@@ -396,23 +395,23 @@ describe('AllocationGenerationHub', () => {
       });
     });
 
-    it('should set submitAttempted and set fileError when no file is picked', () => {
+    it('should not submit and flag the file control as invalid when no file is picked', () => {
       component.submitGeneration();
-      expect(component.submitAttempted()).toBe(true);
-      expect(component.fileError()).toBe('ALGORITHM_HUB.ERRORS.FILE_REQUIRED');
+      expect(component.startForm.controls.file.invalid).toBe(true);
+      expect(component.startForm.controls.file.errors?.['required']).toBeTruthy();
       expect(serviceSpy.startGeneration).not.toHaveBeenCalled();
     });
 
     it('should not call startGeneration when the form is invalid', () => {
       component.startForm.patchValue({ generationName: '' });
-      component.file.set(makeFile('data.csv', 1024));
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
       component.submitGeneration();
       expect(serviceSpy.startGeneration).not.toHaveBeenCalled();
       expect(component.submitting()).toBe(false);
     });
 
     it('should call startGeneration on the happy path and reset form/file', () => {
-      component.file.set(makeFile('data.csv', 1024));
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
       component.submitGeneration();
       expect(serviceSpy.startGeneration).toHaveBeenCalledTimes(1);
       const payload = serviceSpy.startGeneration.mock.calls[0][0] as CreateGenerationPayload;
@@ -425,12 +424,12 @@ describe('AllocationGenerationHub', () => {
         VALIDATION_TYPE,
       );
       expect(component.file()).toBeNull();
+      expect(component.startForm.controls.file.value).toBeNull();
       expect(component.submitting()).toBe(false);
-      expect(component.submitAttempted()).toBe(false);
     });
 
     it('should refresh generations after a successful submit', () => {
-      component.file.set(makeFile('data.csv', 1024));
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
       serviceSpy.listGenerations.mockClear();
       component.submitGeneration();
       expect(serviceSpy.invalidate).toHaveBeenCalled();
@@ -439,7 +438,7 @@ describe('AllocationGenerationHub', () => {
 
     it('should call errorHandler and clear submitting on submit error', () => {
       serviceSpy.startGeneration.mockReturnValue(throwError(() => new Error('fail')));
-      component.file.set(makeFile('data.csv', 1024));
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
       component.submitGeneration();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.submitting()).toBe(false);
@@ -448,7 +447,7 @@ describe('AllocationGenerationHub', () => {
     it('should strip empty optional inputs but keep required ones', () => {
       component.startForm.controls.inputs.controls['threshold'].setValue(70);
       component.startForm.controls.inputs.controls['label'].setValue('');
-      component.file.set(makeFile('data.csv', 1024));
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
       component.submitGeneration();
       const payload = serviceSpy.startGeneration.mock.calls[0][0] as CreateGenerationPayload;
       expect(payload.inputs['threshold']).toBe(70);

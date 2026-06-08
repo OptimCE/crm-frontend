@@ -1,0 +1,60 @@
+<div
+  class="run-row"
+  [class.run-row--expanded]="expanded()"
+  [attr.data-testid]="'simulation-run-row--' + run().id"
+>
+  <button
+    type="button"
+    class="run-row__header"
+    (click)="toggled.emit(run().id)"
+    [attr.aria-expanded]="expanded()"
+    [attr.data-testid]="'simulation-run-row__toggle--' + run().id"
+  >
+    <span class="status-dot status-dot--{{ variant() }}" aria-hidden="true">
+      <span class="status-dot__core"></span>
+    </span>
+
+    <span class="run-row__titles">
+      <span class="run-row__name">{{ run().name }}</span>
+      <span class="run-row__key">
+        <i class="pi pi-key"></i>
+        {{ run().key_name }}
+      </span>
+    </span>
+
+    <span class="run-row__status run-row__status--{{ variant() }}">
+      {{ statusKey() | translate }}
+    </span>
+
+    <p-button
+      icon="pi pi-trash"
+      severity="danger"
+      [text]="true"
+      [rounded]="true"
+      size="small"
+      [pTooltip]="'SIMULATION_HUB.DELETE_RUN' | translate"
+      tooltipPosition="left"
+      (onClick)="$event.stopPropagation(); deleteRun.emit(run().id)"
+      [attr.data-testid]="'simulation-run-row__btn-delete--' + run().id"
+    />
+
+    <i
+      class="run-row__chevron pi"
+      [class.pi-chevron-down]="!expanded()"
+      [class.pi-chevron-up]="expanded()"
+    ></i>
+  </button>
+
+  @if (expanded()) {
+    <div class="run-row__body" data-testid="simulation-run-row__body">
+      @if (detailLoading()) {
+        <div class="space-y-2">
+          <p-skeleton width="100%" height="5rem" />
+          <p-skeleton width="100%" height="12rem" />
+        </div>
+      } @else if (detail(); as runDetail) {
+        <app-simulation-results [detail]="runDetail" />
+      }
+    </div>
+  }
+</div>

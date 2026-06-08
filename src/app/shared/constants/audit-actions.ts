@@ -1,10 +1,13 @@
 /**
- * Frontend mirror of the backend `AUDIT_ACTIONS` registry
- * (crm-backend/src/modules/audit_log/domain/audit-log.actions.ts).
+ * Frontend mirror of the backend audit-action registries:
+ *  - crm-backend            (src/modules/audit_log/domain/audit-log.actions.ts)
+ *  - allocation-key-generation (core/audit_log/actions.py)
+ *  - simulation-key         (core/audit_log/actions.py)
  *
- * The list is duplicated deliberately: the registry is not exposed at runtime,
- * and the action <p-select> needs the codes at build time to render the option
- * list. Keep in sync when the backend adds a new code.
+ * All three services write to the same shared `audit_log` table. The list is
+ * duplicated deliberately: the registries are not exposed at runtime, and the
+ * action <p-select> needs the codes at build time to render the option list.
+ * Keep in sync when any of those services adds a new code.
  */
 export const AUDIT_ACTIONS: readonly string[] = [
   'crm.community_subscription.created',
@@ -48,4 +51,18 @@ export const AUDIT_ACTIONS: readonly string[] = [
   'crm.sharing_operation_key.approved',
   'crm.sharing_operation_key.rejected',
   'crm.sharing_op_consumption.uploaded',
+  // allocation-key-generation service
+  'allocation_key_generation.generation.created',
+  'allocation_key_generation.generation.queue_failed',
+  'allocation_key_generation.generation.succeeded',
+  'allocation_key_generation.generation.failed',
+  'allocation_key_generation.generation.deleted',
+  'allocation_key_generation.allocation_key.saved',
+  'allocation_key_generation.allocation_key_generated.deleted',
+  // simulation-key service
+  'simulation_key.simulation.created',
+  'simulation_key.simulation.queue_failed',
+  'simulation_key.simulation.succeeded',
+  'simulation_key.simulation.failed',
+  'simulation_key.simulation.deleted',
 ] as const;

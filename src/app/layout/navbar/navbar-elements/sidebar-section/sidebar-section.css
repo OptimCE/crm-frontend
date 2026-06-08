@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+/* ---- Section label (expanded drawer) ---- */
+.sidebar__section-label {
+  padding: 8px 12px 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sidebar-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  animation: labelFadeIn 200ms ease forwards;
+  animation-delay: 60ms;
+}
+
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---- Divider (collapsed icon rail) ----
+   Same vertical footprint as the label (≈25px) so the menu icons keep the same
+   Y position whether the sidebar is collapsed or expanded. */
+.sidebar__section-divider {
+  height: 1px;
+  margin: 12px 12px;
+  background: var(--sidebar-border);
+}
