@@ -1,0 +1,26 @@
+<button
+  type="button"
+  class="notif-item"
+  [class.notif-item--unread]="isUnread()"
+  (click)="onClick()"
+  data-testid="notification-item"
+>
+  <span class="notif-item__icon" aria-hidden="true">
+    <i [class]="presentation().icon"></i>
+  </span>
+
+  <span class="notif-item__content">
+    <span class="notif-item__title">{{ titleKey() | translate: notification().data }}</span>
+    <span class="notif-item__meta">
+      <span class="notif-item__time">{{ notification().created_at | timeAgo }}</span>
+      @if (notification().community; as community) {
+        <span class="notif-item__sep" aria-hidden="true">•</span>
+        <span class="notif-item__community">{{ community.name }}</span>
+      }
+    </span>
+  </span>
+
+  @if (isUnread()) {
+    <span class="notif-item__dot" aria-hidden="true"></span>
+  }
+</button>

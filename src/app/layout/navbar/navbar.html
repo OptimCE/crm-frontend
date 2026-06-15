@@ -48,18 +48,21 @@
         <span data-testid="navbar__brand-name" class="sidebar__brand-name">OptimCE</span>
       }
     </div>
-    @if (sidebarOpen() && !mobile()) {
-      <button
-        data-testid="navbar__btn--pin"
-        type="button"
-        class="sidebar__pin-btn"
-        [class.sidebar__pin-btn--active]="pinned()"
-        (click)="togglePin()"
-        [attr.aria-label]="pinned() ? 'Unpin sidebar' : 'Pin sidebar'"
-      >
-        <i class="pi" [ngClass]="pinned() ? 'pi-lock' : 'pi-lock-open'"></i>
-      </button>
-    }
+    <div class="sidebar__header-actions">
+      <app-notification-bell></app-notification-bell>
+      @if (sidebarOpen() && !mobile()) {
+        <button
+          data-testid="navbar__btn--pin"
+          type="button"
+          class="sidebar__pin-btn"
+          [class.sidebar__pin-btn--active]="pinned()"
+          (click)="togglePin()"
+          [attr.aria-label]="pinned() ? 'Unpin sidebar' : 'Pin sidebar'"
+        >
+          <i class="pi" [ngClass]="pinned() ? 'pi-lock' : 'pi-lock-open'"></i>
+        </button>
+      }
+    </div>
     @if (mobile()) {
       <button
         data-testid="navbar__btn--close"

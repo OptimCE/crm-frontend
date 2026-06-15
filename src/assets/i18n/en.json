@@ -46,6 +46,23 @@
       "KEYS_DESC": "Create and manage allocation keys to distribute energy fairly."
     }
   },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "SUBTITLE": "Stay up to date with what's happening across your communities",
+    "MARK_ALL_READ": "Mark all as read",
+    "SEE_ALL": "See all notifications",
+    "EMPTY": "You're all caught up",
+    "JUST_NOW": "Just now",
+    "NEW_TOAST": "You have new notifications",
+    "TYPES": {
+      "document": { "uploaded": { "title": "A new document was uploaded" } },
+      "member": { "updated": { "title": "A member's information was updated" } },
+      "manager_invitation": {
+        "received": { "title": "You have been invited to become a manager" }
+      },
+      "member_invitation": { "received": { "title": "You have been invited to become a member" } }
+    }
+  },
   "NAVBAR": {
     "PROFILE": "Profile",
     "INVITATIONS": "Invitations",

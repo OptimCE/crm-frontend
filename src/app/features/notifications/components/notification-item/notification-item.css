@@ -1,0 +1,110 @@
+:host {
+  display: block;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--p-text-color);
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 160ms ease;
+}
+
+.notif-item:hover {
+  background: var(--p-surface-100);
+}
+
+.notif-item--unread {
+  border-left-color: var(--p-primary-color);
+  background: color-mix(in srgb, var(--p-primary-color) 6%, transparent);
+}
+
+.notif-item--unread:hover {
+  background: color-mix(in srgb, var(--p-primary-color) 12%, transparent);
+}
+
+/* ---- Icon ---- */
+.notif-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--p-surface-100);
+  color: var(--p-text-muted-color);
+}
+
+.notif-item--unread .notif-item__icon {
+  background: var(--p-primary-100);
+  color: var(--p-primary-700);
+}
+
+.notif-item__icon i {
+  font-size: 1rem;
+}
+
+/* ---- Content ---- */
+.notif-item__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.notif-item__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--p-text-color);
+}
+
+.notif-item--unread .notif-item__title {
+  font-weight: 700;
+}
+
+.notif-item__text {
+  font-size: 0.8125rem;
+  color: var(--p-text-muted-color);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notif-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+.notif-item__community {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Unread dot ---- */
+.notif-item__dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--p-primary-color);
+}

@@ -46,6 +46,23 @@
       "KEYS_DESC": "Maak en beheer verdeelsleutels om energie eerlijk te verdelen."
     }
   },
+  "NOTIFICATIONS": {
+    "TITLE": "Meldingen",
+    "SUBTITLE": "Blijf op de hoogte van wat er speelt in uw gemeenschappen",
+    "MARK_ALL_READ": "Alles als gelezen markeren",
+    "SEE_ALL": "Alle meldingen bekijken",
+    "EMPTY": "Je bent helemaal bij",
+    "JUST_NOW": "Zojuist",
+    "NEW_TOAST": "U hebt nieuwe meldingen",
+    "TYPES": {
+      "document": { "uploaded": { "title": "Er is een nieuw document geüpload" } },
+      "member": { "updated": { "title": "De gegevens van een lid zijn bijgewerkt" } },
+      "manager_invitation": {
+        "received": { "title": "U bent uitgenodigd om beheerder te worden" }
+      },
+      "member_invitation": { "received": { "title": "U bent uitgenodigd om lid te worden" } }
+    }
+  },
   "NAVBAR": {
     "PROFILE": "Profiel",
     "INVITATIONS": "Uitnodigingen",

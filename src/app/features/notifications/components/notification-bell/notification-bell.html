@@ -1,0 +1,60 @@
+<button
+  type="button"
+  class="notif-bell"
+  (click)="toggle($event)"
+  [pTooltip]="'NOTIFICATIONS.TITLE' | translate"
+  tooltipPosition="right"
+  [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
+  data-testid="notification-bell__trigger"
+>
+  <p-overlaybadge
+    [value]="badgeValue()"
+    [badgeDisabled]="store.unreadCount() === 0"
+    severity="danger"
+    badgeSize="small"
+  >
+    <i class="pi pi-bell"></i>
+  </p-overlaybadge>
+</button>
+
+<p-popover #op (onShow)="onShow()" appendTo="body" styleClass="notif-popover">
+  <div class="notif-panel" data-testid="notification-bell__panel">
+    <div class="notif-panel__header">
+      <span class="notif-panel__title">{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
+      <button
+        type="button"
+        class="notif-panel__action"
+        (click)="markAll()"
+        [disabled]="store.unreadCount() === 0"
+        data-testid="notification-bell__mark-all"
+      >
+        {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+      </button>
+    </div>
+
+    <div class="notif-panel__list">
+      @if (store.loadingRecent() && store.recent().length === 0) {
+        <div class="notif-panel__state">{{ 'COMMON.LOADING' | translate }}</div>
+      } @else if (store.recent().length === 0) {
+        <div class="notif-panel__state notif-panel__state--empty">
+          <i class="pi pi-inbox"></i>
+          <span>{{ 'NOTIFICATIONS.EMPTY' | translate }}</span>
+        </div>
+      } @else {
+        @for (notification of store.recent(); track notification.id) {
+          <app-notification-item [notification]="notification" (itemClick)="onItemClick($event)" />
+        }
+      }
+    </div>
+
+    <a
+      class="notif-panel__footer"
+      routerLink="/notifications"
+      (click)="op.hide()"
+      data-testid="notification-bell__see-all"
+    >
+      <span>{{ 'NOTIFICATIONS.SEE_ALL' | translate }}</span>
+      <i class="pi pi-arrow-right"></i>
+    </a>
+  </div>
+</p-popover>
