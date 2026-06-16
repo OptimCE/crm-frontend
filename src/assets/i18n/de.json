@@ -46,6 +46,23 @@
       "KEYS_DESC": "Erstellen und verwalten Sie Verteilungsschlüssel, um Energie gerecht zu verteilen."
     }
   },
+  "NOTIFICATIONS": {
+    "TITLE": "Benachrichtigungen",
+    "SUBTITLE": "Bleiben Sie über Ihre Gemeinschaften auf dem Laufenden",
+    "MARK_ALL_READ": "Alle als gelesen markieren",
+    "SEE_ALL": "Alle Benachrichtigungen anzeigen",
+    "EMPTY": "Alles erledigt",
+    "JUST_NOW": "Gerade eben",
+    "NEW_TOAST": "Sie haben neue Benachrichtigungen",
+    "TYPES": {
+      "document": { "uploaded": { "title": "Ein neues Dokument wurde hochgeladen" } },
+      "member": { "updated": { "title": "Die Informationen eines Mitglieds wurden aktualisiert" } },
+      "manager_invitation": {
+        "received": { "title": "Sie wurden eingeladen, Verwalter zu werden" }
+      },
+      "member_invitation": { "received": { "title": "Sie wurden eingeladen, Mitglied zu werden" } }
+    }
+  },
   "NAVBAR": {
     "PROFILE": "Profil",
     "INVITATIONS": "Einladungen",

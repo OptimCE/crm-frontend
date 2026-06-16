@@ -46,6 +46,23 @@
       "KEYS_DESC": "Créez et gérez les clés de répartition pour distribuer l'énergie équitablement."
     }
   },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "SUBTITLE": "Restez informé de ce qui se passe dans vos communautés",
+    "MARK_ALL_READ": "Tout marquer comme lu",
+    "SEE_ALL": "Voir toutes les notifications",
+    "EMPTY": "Vous êtes à jour",
+    "JUST_NOW": "À l'instant",
+    "NEW_TOAST": "Vous avez de nouvelles notifications",
+    "TYPES": {
+      "document": { "uploaded": { "title": "Un nouveau document a été téléversé" } },
+      "member": { "updated": { "title": "Les informations d'un membre ont été mises à jour" } },
+      "manager_invitation": {
+        "received": { "title": "Vous avez été invité à devenir gestionnaire" }
+      },
+      "member_invitation": { "received": { "title": "Vous avez été invité à devenir membre" } }
+    }
+  },
   "NAVBAR": {
     "PROFILE": "Profil",
     "INVITATIONS": "Invitations",

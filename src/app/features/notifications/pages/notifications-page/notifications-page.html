@@ -1,0 +1,58 @@
+<div class="notif-page" data-testid="notifications-page">
+  <app-header-page
+    [icon]="'pi pi-bell'"
+    [text]="'NOTIFICATIONS.TITLE' | translate"
+    [subtitle]="'NOTIFICATIONS.SUBTITLE' | translate"
+  >
+    <button
+      headerActions
+      type="button"
+      class="notif-page__mark-all"
+      (click)="onMarkAll()"
+      [disabled]="!hasUnread()"
+      data-testid="notifications-page__mark-all"
+    >
+      <i class="pi pi-check"></i>
+      <span>{{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}</span>
+    </button>
+  </app-header-page>
+
+  <div class="notif-page__body">
+    @if (loading()) {
+      <div class="notif-page__state">{{ 'COMMON.LOADING' | translate }}</div>
+    } @else if (failed()) {
+      <div class="notif-page__state notif-page__state--error">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>{{ 'COMMON.ERROR_LOADING' | translate }}</span>
+        <button type="button" class="notif-page__retry" (click)="retry()">
+          {{ 'COMMON.RETRY' | translate }}
+        </button>
+      </div>
+    } @else if (isEmpty()) {
+      <div class="notif-page__state notif-page__state--empty">
+        <i class="pi pi-inbox"></i>
+        <span>{{ 'NOTIFICATIONS.EMPTY' | translate }}</span>
+      </div>
+    } @else {
+      <ul class="notif-page__list">
+        @for (notification of items(); track notification.id) {
+          <li>
+            <app-notification-item
+              [notification]="notification"
+              (itemClick)="onItemClick($event)"
+            />
+          </li>
+        }
+      </ul>
+
+      @if (showPaginator()) {
+        <p-paginator
+          [first]="first()"
+          [rows]="rows"
+          [totalRecords]="total()"
+          (onPageChange)="onPageChange($event)"
+        />
+      }
+    }
+  </div>
+</div>

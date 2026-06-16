@@ -13,6 +13,7 @@ import { LanguageSelector } from '../../shared/components/language-selector/lang
 import Keycloak from 'keycloak-js';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
 import { Tooltip } from 'primeng/tooltip';
+import { NotificationBell } from '../../features/notifications/components/notification-bell/notification-bell';
 
 interface RouteActiveState {
   keys: boolean;
@@ -57,6 +58,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
     SidebarSection,
     LanguageSelector,
     Tooltip,
+    NotificationBell,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',

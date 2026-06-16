@@ -63,6 +63,12 @@ export const routes: Routes = [
       import('./features/community/community.routes').then((m) => m.COMMUNITY_ROUTES),
   },
   {
+    path: 'notifications',
+    canActivate: [canActivateAuth],
+    loadChildren: () =>
+      import('./features/notifications/notifications.routes').then((m) => m.NOTIFICATIONS_ROUTES),
+  },
+  {
     path: 'annexes-services',
     canActivate: [canActivateAuth, minRoleGuard],
     data: { minRole: Role.MEMBER },

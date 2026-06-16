@@ -123,6 +123,22 @@
   min-width: 0;
 }
 
+/* Notification bell + pin button cluster on the right of the header. */
+.sidebar__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* Collapsed rail (~36px content width): stack the logo over the bell so the
+   badge stays visible instead of being clipped by the sidebar overflow. */
+.sidebar:not(.sidebar--expanded) .sidebar__header {
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
 .sidebar__logo {
   width: 36px;
   height: 36px;
