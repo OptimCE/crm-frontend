@@ -131,12 +131,13 @@
   flex-shrink: 0;
 }
 
-/* Collapsed rail (~36px content width): stack the logo over the bell so the
-   badge stays visible instead of being clipped by the sidebar overflow. */
-.sidebar:not(.sidebar--expanded) .sidebar__header {
-  flex-direction: column;
-  gap: 10px;
-  justify-content: center;
+/* Collapsed rail (~36px content width): the logo and bell can't fit side by
+   side, so hide the bell here. The unread badge moves onto the logo (see
+   navbar.html) and the header stays a single logo row identical in height and
+   position to the expanded state. The bell stays in the DOM (display:none, not
+   @if) so its unread-count poll keeps running. */
+.sidebar:not(.sidebar--expanded) .sidebar__header-actions {
+  display: none;
 }
 
 .sidebar__logo {
@@ -150,6 +151,7 @@
 .sidebar:hover .sidebar__logo,
 .sidebar--expanded .sidebar__logo {
   transform: scale(1.06);
+  transform-origin: left center;
 }
 
 .sidebar__brand-name {

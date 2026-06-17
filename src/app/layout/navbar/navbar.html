@@ -38,12 +38,19 @@
   <!-- Header: Logo + Pin/Close -->
   <div class="sidebar__header">
     <div data-testid="navbar__logo-wrapper" class="sidebar__logo-wrapper">
-      <img
-        data-testid="navbar__logo"
-        src="assets/images/logo.svg"
-        class="sidebar__logo"
-        alt="OptimCE logo"
-      />
+      <p-overlaybadge
+        [value]="notificationBadge()"
+        [badgeDisabled]="sidebarOpen() || notificationStore.unreadCount() === 0"
+        severity="danger"
+        badgeSize="small"
+      >
+        <img
+          data-testid="navbar__logo"
+          src="assets/images/logo.svg"
+          class="sidebar__logo"
+          alt="OptimCE logo"
+        />
+      </p-overlaybadge>
       @if (sidebarOpen()) {
         <span data-testid="navbar__brand-name" class="sidebar__brand-name">OptimCE</span>
       }

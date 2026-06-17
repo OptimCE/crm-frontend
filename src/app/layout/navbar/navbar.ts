@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
 import { filter } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
 import { Role } from '../../core/dtos/role';
@@ -13,7 +13,9 @@ import { LanguageSelector } from '../../shared/components/language-selector/lang
 import Keycloak from 'keycloak-js';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
 import { Tooltip } from 'primeng/tooltip';
+import { OverlayBadge } from 'primeng/overlaybadge';
 import { NotificationBell } from '../../features/notifications/components/notification-bell/notification-bell';
+import { NotificationStore } from '../../features/notifications/services/notification.store';
 
 interface RouteActiveState {
   keys: boolean;
@@ -58,6 +60,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
     SidebarSection,
     LanguageSelector,
     Tooltip,
+    OverlayBadge,
     NotificationBell,
   ],
   templateUrl: './navbar.html',
@@ -70,8 +73,16 @@ export class Navbar implements OnInit {
   private translateService = inject(TranslateService);
   private readonly keycloak = inject(Keycloak);
   private destroyRef = inject(DestroyRef);
+  protected readonly notificationStore = inject(NotificationStore);
 
   readonly sidebarPinChanged = output<boolean>();
+
+  /** Unread badge shown on the logo while collapsed; capped at 99+, empty when none. */
+  protected readonly notificationBadge = computed(() => {
+    const count = this.notificationStore.unreadCount();
+    if (count <= 0) return '';
+    return count > 99 ? '99+' : String(count);
+  });
 
   readonly sidebarOpen = signal(false);
   readonly mobile = signal(false);
