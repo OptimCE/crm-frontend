@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
@@ -10,6 +11,7 @@ import { ApiResponse } from '../../../../core/dtos/api.response';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { Role } from '../../../../core/dtos/role';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { CommunityAnnex } from '../../../../shared/dtos/annexes_services.dtos';
 import { AnnexesServicesService } from '../../../../shared/services/annexes_services.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -46,9 +48,14 @@ describe('AnnexesServicesList', () => {
   let component: AnnexesServicesList;
   let fixture: ComponentFixture<AnnexesServicesList>;
 
-  let annexesServiceSpy: {
-    getCommunityServices: ReturnType<typeof vi.fn>;
-    unsubscribe: ReturnType<typeof vi.fn>;
+  let annexesServiceSpy: { unsubscribe: ReturnType<typeof vi.fn> };
+  // The component reads its catalog from the shared store (single source of
+  // truth). The store exposes a writable `services` signal plus the
+  // `ensureLoaded`/`reload` fetchers that the component drives loading state off.
+  let storeSpy: {
+    services: WritableSignal<CommunityAnnex[]>;
+    ensureLoaded: ReturnType<typeof vi.fn>;
+    reload: ReturnType<typeof vi.fn>;
   };
   let userContextSpy: { compareWithActiveRole: ReturnType<typeof vi.fn> };
   let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
@@ -65,8 +72,20 @@ describe('AnnexesServicesList', () => {
   }
 
   beforeEach(async () => {
+    const servicesSignal = signal<CommunityAnnex[]>([]);
+    storeSpy = {
+      services: servicesSignal,
+      // Mimic the real store: a fetch publishes the catalog into the signal.
+      ensureLoaded: vi.fn(() => {
+        servicesSignal.set(buildAnnexList());
+        return of(servicesSignal());
+      }),
+      reload: vi.fn(() => {
+        servicesSignal.set(buildAnnexList());
+        return of(servicesSignal());
+      }),
+    };
     annexesServiceSpy = {
-      getCommunityServices: vi.fn().mockReturnValue(of(new ApiResponse(buildAnnexList()))),
       unsubscribe: vi.fn().mockReturnValue(of(new ApiResponse('ok'))),
     };
     userContextSpy = { compareWithActiveRole: vi.fn().mockReturnValue(true) };
@@ -81,6 +100,7 @@ describe('AnnexesServicesList', () => {
       imports: [AnnexesServicesList, TranslateModule.forRoot()],
       providers: [
         { provide: AnnexesServicesService, useValue: annexesServiceSpy },
+        { provide: CommunityServicesStore, useValue: storeSpy },
         { provide: UserContextService, useValue: userContextSpy },
         { provide: Router, useValue: routerSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
@@ -108,51 +128,33 @@ describe('AnnexesServicesList', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should call loadServices on ngOnInit', async () => {
+    it('should load via store.ensureLoaded on ngOnInit', async () => {
       await createComponent();
-      component.ngOnInit();
-      expect(annexesServiceSpy.getCommunityServices).toHaveBeenCalled();
+      expect(storeSpy.ensureLoaded).toHaveBeenCalled();
     });
 
     it('should initialise default signal values before load', () => {
-      annexesServiceSpy.getCommunityServices.mockReturnValueOnce(new Subject());
       fixture = TestBed.createComponent(AnnexesServicesList);
       component = fixture.componentInstance;
-      // Before any subscribe resolves, services should be empty and loading true
+      // Before change detection runs ngOnInit, services is empty and loading true.
       expect(component.services()).toEqual([]);
       expect(component.loading()).toBe(true);
       expect(component.pendingUnsubscribe()).toBeNull();
     });
   });
 
-  // ── 2. loadServices ───────────────────────────────────────────────
+  // ── 2. Loading (ensureLoaded / refresh) ───────────────────────────
 
-  describe('loadServices', () => {
-    beforeEach(async () => {
+  describe('loading', () => {
+    it('should expose the store catalog and clear loading on success', async () => {
       await createComponent();
-      annexesServiceSpy.getCommunityServices.mockClear();
-    });
-
-    it('should populate services and clear loading on success', () => {
-      const list = buildAnnexList();
-      annexesServiceSpy.getCommunityServices.mockReturnValue(of(new ApiResponse(list)));
-      component.loadServices();
-      expect(component.services()).toEqual(list);
+      expect(component.services()).toEqual(buildAnnexList());
       expect(component.loading()).toBe(false);
     });
 
-    it('should default to empty array when response.data is missing', () => {
-      annexesServiceSpy.getCommunityServices.mockReturnValue(
-        of(new ApiResponse(undefined as unknown as CommunityAnnex[])),
-      );
-      component.loadServices();
-      expect(component.services()).toEqual([]);
-      expect(component.loading()).toBe(false);
-    });
-
-    it('should add an error toast and clear loading on error', () => {
-      annexesServiceSpy.getCommunityServices.mockReturnValue(throwError(() => new Error('boom')));
-      component.loadServices();
+    it('should add an error toast and clear loading on error', async () => {
+      storeSpy.ensureLoaded.mockReturnValue(throwError(() => new Error('boom')));
+      await createComponent();
       expect(messageServiceSpy.add).toHaveBeenCalledWith(
         expect.objectContaining({ severity: 'error' }),
       );
@@ -234,18 +236,18 @@ describe('AnnexesServicesList', () => {
       expect(config.modal).toBe(true);
     });
 
-    it('should reload services when the dialog closes with true', () => {
+    it('should reload the store when the dialog closes with true', () => {
       component.openAddDialog();
-      const reloadSpy = vi.spyOn(component, 'loadServices');
+      storeSpy.reload.mockClear();
       onClose.next(true);
-      expect(reloadSpy).toHaveBeenCalled();
+      expect(storeSpy.reload).toHaveBeenCalled();
     });
 
-    it('should NOT reload services when the dialog closes with false', () => {
+    it('should NOT reload the store when the dialog closes with false', () => {
       component.openAddDialog();
-      const reloadSpy = vi.spyOn(component, 'loadServices');
+      storeSpy.reload.mockClear();
       onClose.next(false);
-      expect(reloadSpy).not.toHaveBeenCalled();
+      expect(storeSpy.reload).not.toHaveBeenCalled();
     });
   });
 
@@ -285,10 +287,10 @@ describe('AnnexesServicesList', () => {
       expect(args.acceptButtonProps).toEqual({ severity: 'danger' });
     });
 
-    it('should call service.unsubscribe and reload on confirm-accept success', () => {
+    it('should call service.unsubscribe and reload the store on confirm-accept success', () => {
       const annex = buildAnnex({ unsubscribePath: '/api/unsub' });
       component.unsubscribe(annex, buildEvent().event);
-      const reloadSpy = vi.spyOn(component, 'loadServices');
+      storeSpy.reload.mockClear();
       // simulate accept
       const confirmation = confirmationSpy.confirm.mock.calls[0][0] as Confirmation;
       const accept = confirmation.accept as () => void;
@@ -298,7 +300,7 @@ describe('AnnexesServicesList', () => {
         'ANNEXES_SERVICES.UNSUBSCRIBE_SUCCESS',
         VALIDATION_TYPE,
       );
-      expect(reloadSpy).toHaveBeenCalled();
+      expect(storeSpy.reload).toHaveBeenCalled();
       expect(component.pendingUnsubscribe()).toBeNull();
     });
 

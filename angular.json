@@ -27,7 +27,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "node_modules/primeicons/primeicons.css"]
+            "styles": [
+              "src/styles.css",
+              "node_modules/primeicons/primeicons.css",
+              "src/app/shared/components/markdown-editor/markdown-editor.theme.css"
+            ]
           },
           "configurations": {
             "production": {

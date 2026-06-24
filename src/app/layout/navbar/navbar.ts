@@ -12,6 +12,7 @@ import { Title } from '@angular/platform-browser';
 import { LanguageSelector } from '../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
+import { CommunityServicesStore } from '../../core/services/community-services.store';
 import { Tooltip } from 'primeng/tooltip';
 import { OverlayBadge } from 'primeng/overlaybadge';
 import { NotificationBell } from '../../features/notifications/components/notification-bell/notification-bell';
@@ -28,6 +29,7 @@ interface RouteActiveState {
   communities_public: boolean;
   communities_info: boolean;
   annexes_services: boolean;
+  news: boolean;
   users_communities: boolean;
   users_invitations: boolean;
   users: boolean;
@@ -41,6 +43,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['communities_users', '/communities/users'],
   ['communities_info', '/communities/info'],
   ['annexes_services', '/annexes-services'],
+  ['news', '/news'],
   ['users_communities', '/users/communities'],
   ['users_invitations', '/users/invitations'],
   ['audit_logs', '/audit-logs'],
@@ -69,6 +72,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
 export class Navbar implements OnInit {
   private router = inject(Router);
   protected userContextService = inject(UserContextService);
+  protected readonly communityServicesStore = inject(CommunityServicesStore);
   private titleService = inject(Title);
   private translateService = inject(TranslateService);
   private readonly keycloak = inject(Keycloak);
@@ -100,6 +104,7 @@ export class Navbar implements OnInit {
     communities_public: false,
     communities_info: false,
     annexes_services: false,
+    news: false,
     users_communities: false,
     users_invitations: false,
     users: false,
@@ -151,6 +156,7 @@ export class Navbar implements OnInit {
           communities_public: false,
           communities_info: false,
           annexes_services: false,
+          news: false,
           users_communities: false,
           users_invitations: false,
           users: false,

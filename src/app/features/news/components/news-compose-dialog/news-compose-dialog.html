@@ -1,0 +1,248 @@
+@if (loading()) {
+  <div class="news-compose-loading">
+    <i class="pi pi-spin pi-spinner text-2xl text-primary-400"></i>
+  </div>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()" class="news-compose">
+    <!-- Kind: post vs poll -->
+    <div class="news-seg">
+      <button
+        type="button"
+        class="news-seg__btn"
+        [class.news-seg__btn--active]="kind() === 'post'"
+        [disabled]="isEdit()"
+        (click)="setKind('post')"
+        data-testid="news-compose__kind--post"
+      >
+        <i class="pi pi-align-left"></i> {{ 'NEWS_BOARD.COMPOSE.KIND_POST' | translate }}
+      </button>
+      <button
+        type="button"
+        class="news-seg__btn"
+        [class.news-seg__btn--active]="kind() === 'poll'"
+        [disabled]="isEdit()"
+        (click)="setKind('poll')"
+        data-testid="news-compose__kind--poll"
+      >
+        <i class="pi pi-chart-bar"></i> {{ 'NEWS_BOARD.COMPOSE.KIND_POLL' | translate }}
+      </button>
+    </div>
+
+    <!-- Body (Markdown) -->
+    <div class="news-field">
+      <span class="news-label">
+        {{
+          (isPoll() ? 'NEWS_BOARD.COMPOSE.QUESTION_LABEL' : 'NEWS_BOARD.COMPOSE.BODY_LABEL')
+            | translate
+        }}
+      </span>
+      <app-markdown-editor
+        formControlName="post"
+        data-testid="news-compose__body"
+        [placeholder]="'NEWS_BOARD.COMPOSE.BODY_PLACEHOLDER' | translate"
+      />
+    </div>
+
+    @if (isPoll()) {
+      <!-- Single vs multiple -->
+      <div class="news-field">
+        <span class="news-label">{{ 'NEWS_BOARD.COMPOSE.POLL_TYPE_LABEL' | translate }}</span>
+        <div class="news-seg news-seg--sub">
+          <button
+            type="button"
+            class="news-seg__btn"
+            [class.news-seg__btn--active]="!pollMultiple()"
+            [disabled]="isEdit()"
+            (click)="setPollMultiple(false)"
+            data-testid="news-compose__poll-type--single"
+          >
+            {{ 'NEWS_BOARD.COMPOSE.POLL_SINGLE' | translate }}
+          </button>
+          <button
+            type="button"
+            class="news-seg__btn"
+            [class.news-seg__btn--active]="pollMultiple()"
+            [disabled]="isEdit()"
+            (click)="setPollMultiple(true)"
+            data-testid="news-compose__poll-type--multiple"
+          >
+            {{ 'NEWS_BOARD.COMPOSE.POLL_MULTIPLE' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Options -->
+      <div class="news-field">
+        <span class="news-label">{{ 'NEWS_BOARD.COMPOSE.OPTIONS_LABEL' | translate }}</span>
+        @if (optionsLocked()) {
+          <small class="news-hint news-hint--warn">
+            <i class="pi pi-lock"></i> {{ 'NEWS_BOARD.COMPOSE.OPTIONS_LOCKED' | translate }}
+          </small>
+        }
+        <div formArrayName="options" class="flex flex-col gap-2 mt-1">
+          @for (ctrl of optionsArray.controls; track ctrl; let i = $index) {
+            <div class="flex gap-2 items-center">
+              <input
+                pInputText
+                [formControlName]="i"
+                class="flex-1"
+                [attr.data-testid]="'news-compose__option-input--' + i"
+                [placeholder]="
+                  ('NEWS_BOARD.COMPOSE.OPTION_PLACEHOLDER' | translate) + ' ' + (i + 1)
+                "
+              />
+              <p-button
+                type="button"
+                text
+                rounded
+                severity="secondary"
+                icon="pi pi-times"
+                [disabled]="optionsLocked() || optionsArray.length <= 2"
+                (onClick)="removeOption(i)"
+                [attr.data-testid]="'news-compose__option-remove--' + i"
+                [attr.aria-label]="'NEWS_BOARD.COMPOSE.REMOVE_OPTION' | translate"
+              />
+            </div>
+          }
+        </div>
+        @if (!optionsLocked()) {
+          <p-button
+            type="button"
+            text
+            size="small"
+            icon="pi pi-plus"
+            [label]="'NEWS_BOARD.COMPOSE.ADD_OPTION' | translate"
+            (onClick)="addOption()"
+            data-testid="news-compose__add-option"
+          />
+        }
+      </div>
+
+      <!-- Expiry -->
+      <div class="news-field">
+        <label class="news-label" for="news-expiry">
+          {{ 'NEWS_BOARD.COMPOSE.EXPIRY_LABEL' | translate }}
+        </label>
+        <p-datepicker
+          inputId="news-expiry"
+          formControlName="expires_at"
+          data-testid="news-compose__expiry"
+          [showTime]="true"
+          [showIcon]="true"
+          [minDate]="minDate"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+        />
+      </div>
+
+      <!-- Visibility presets -->
+      <div class="news-field">
+        <span class="news-label">{{ 'NEWS_BOARD.COMPOSE.VISIBILITY_LABEL' | translate }}</span>
+        <div class="news-presets">
+          @for (preset of presets; track preset.key) {
+            <button
+              type="button"
+              class="news-preset"
+              [class.news-preset--active]="selectedPreset() === preset.key"
+              (click)="applyPreset(preset.key)"
+              [attr.data-testid]="'news-compose__preset--' + preset.key"
+            >
+              <span class="news-preset__name">
+                {{ 'NEWS_BOARD.COMPOSE.PRESETS.' + preset.key + '.NAME' | translate }}
+              </span>
+              <span class="news-preset__desc">
+                {{ 'NEWS_BOARD.COMPOSE.PRESETS.' + preset.key + '.DESC' | translate }}
+              </span>
+            </button>
+          }
+        </div>
+        <button
+          type="button"
+          class="news-advanced-toggle"
+          (click)="toggleAdvanced()"
+          data-testid="news-compose__advanced-toggle"
+        >
+          <i
+            class="pi"
+            [class.pi-chevron-right]="!advanced()"
+            [class.pi-chevron-down]="advanced()"
+          ></i>
+          {{ 'NEWS_BOARD.COMPOSE.ADVANCED' | translate }}
+        </button>
+
+        @if (advanced()) {
+          <div class="news-advanced">
+            <div class="news-field">
+              <label class="news-label news-label--sm" for="news-admin-vis">
+                {{ 'NEWS_BOARD.COMPOSE.ADMIN_VIS_LABEL' | translate }}
+              </label>
+              <p-select
+                inputId="news-admin-vis"
+                formControlName="admin_visibility"
+                data-testid="news-compose__admin-vis"
+                [options]="adminOptions"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+                styleClass="w-full"
+              />
+            </div>
+            <div class="news-field">
+              <label class="news-label news-label--sm" for="news-member-vis">
+                {{ 'NEWS_BOARD.COMPOSE.MEMBER_VIS_LABEL' | translate }}
+              </label>
+              <p-select
+                inputId="news-member-vis"
+                formControlName="member_visibility"
+                data-testid="news-compose__member-vis"
+                [options]="memberOptions"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+                styleClass="w-full"
+              />
+            </div>
+            <div class="news-field">
+              <label class="news-label news-label--sm" for="news-member-display">
+                {{ 'NEWS_BOARD.COMPOSE.DISPLAY_LABEL' | translate }}
+              </label>
+              <p-select
+                inputId="news-member-display"
+                formControlName="member_display"
+                data-testid="news-compose__member-display"
+                [options]="displayOptions"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+                styleClass="w-full"
+              />
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (formError()) {
+      <p class="news-form-error"><i class="pi pi-exclamation-circle"></i> {{ formError() }}</p>
+    }
+
+    <div class="news-compose-footer">
+      <p-button
+        type="button"
+        text
+        severity="secondary"
+        [label]="'COMMON.ACTIONS.CANCEL' | translate"
+        [disabled]="submitting()"
+        (onClick)="close()"
+        data-testid="news-compose__btn--cancel"
+      />
+      <p-button
+        type="submit"
+        [label]="(isEdit() ? 'NEWS_BOARD.COMPOSE.SAVE' : 'NEWS_BOARD.COMPOSE.PUBLISH') | translate"
+        [loading]="submitting()"
+        data-testid="news-compose__btn--submit"
+      />
+    </div>
+  </form>
+}

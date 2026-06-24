@@ -1,0 +1,54 @@
+<app-header-page
+  icon="pi pi-megaphone"
+  [text]="'NEWS_BOARD.TITLE' | translate"
+  [subtitle]="'NEWS_BOARD.SUBTITLE' | translate"
+>
+  @if (canManage()) {
+    <p-button
+      headerActions
+      data-testid="news-board__compose"
+      icon="pi pi-pen-to-square"
+      [label]="'NEWS_BOARD.COMPOSE.NEW' | translate"
+      (onClick)="openComposer()"
+    />
+  }
+</app-header-page>
+
+<div class="news-feed mx-auto w-full max-w-3xl mt-5">
+  @if (loading()) {
+    <div class="flex flex-col gap-4">
+      @for (s of skeletons; track s) {
+        <p-skeleton height="9rem" borderRadius="0.85rem" />
+      }
+    </div>
+  } @else if (posts().length === 0) {
+    <div data-testid="news-board__empty" class="news-empty">
+      <i class="pi pi-megaphone text-4xl text-primary-300"></i>
+      <p class="text-surface-500 mt-3">{{ 'NEWS_BOARD.EMPTY' | translate }}</p>
+    </div>
+  } @else {
+    <div class="flex flex-col gap-4">
+      @for (post of posts(); track post.id) {
+        <app-news-post
+          [post]="post"
+          [canManage]="canManage()"
+          (edit)="onEdit($event)"
+          (changed)="reload()"
+        />
+      }
+    </div>
+    @if (hasMore()) {
+      <div class="flex justify-center mt-5">
+        <p-button
+          [text]="true"
+          icon="pi pi-arrow-down"
+          [label]="'NEWS_BOARD.LOAD_MORE' | translate"
+          [loading]="loadingMore()"
+          (onClick)="loadMore()"
+        />
+      </div>
+    }
+  }
+</div>
+
+<p-confirmDialog />

@@ -1,6 +1,7 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { Toast } from 'primeng/toast';
@@ -11,6 +12,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Role } from '../../../../core/dtos/role';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { AnnexesServicesService } from '../../../../shared/services/annexes_services.service';
 import { CommunityAnnex } from '../../../../shared/dtos/annexes_services.dtos';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
@@ -31,6 +33,7 @@ export class AnnexesServicesList implements OnInit {
   protected readonly userContextService = inject(UserContextService);
 
   private readonly annexesService = inject(AnnexesServicesService);
+  private readonly store = inject(CommunityServicesStore);
   private readonly dialogService = inject(DialogService);
   private readonly translate = inject(TranslateService);
   private readonly messageService = inject(MessageService);
@@ -41,7 +44,7 @@ export class AnnexesServicesList implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private dialogRef?: DynamicDialogRef | null;
 
-  readonly services = signal<CommunityAnnex[]>([]);
+  readonly services = this.store.services;
   readonly loading = signal<boolean>(true);
   readonly pendingUnsubscribe = signal<string | null>(null);
   readonly subscribedServices = computed(() => this.services().filter((s) => s.subscribed));
@@ -55,27 +58,21 @@ export class AnnexesServicesList implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadServices();
+    this.refresh(this.store.ensureLoaded());
   }
 
-  loadServices(): void {
+  private refresh(source$: Observable<CommunityAnnex[]> = this.store.reload()): void {
     this.loading.set(true);
-    this.annexesService
-      .getCommunityServices()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.services.set(response.data ?? []);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.loading.set(false);
-          this.messageService.add({
-            severity: 'error',
-            detail: this.translate.instant('ANNEXES_SERVICES.ERROR_LOADING') as string,
-          });
-        },
-      });
+    source$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.messageService.add({
+          severity: 'error',
+          detail: this.translate.instant('ANNEXES_SERVICES.ERROR_LOADING') as string,
+        });
+      },
+    });
   }
 
   openModule(service: CommunityAnnex): void {
@@ -94,7 +91,7 @@ export class AnnexesServicesList implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((added: boolean) => {
         if (added) {
-          this.loadServices();
+          this.refresh();
         }
       });
   }
@@ -124,7 +121,7 @@ export class AnnexesServicesList implements OnInit {
                 VALIDATION_TYPE,
               );
               this.pendingUnsubscribe.set(null);
-              this.loadServices();
+              this.refresh();
             },
             error: (error: unknown) => {
               this.errorHandler.handleError(error);

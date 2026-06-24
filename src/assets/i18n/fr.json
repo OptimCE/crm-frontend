@@ -1,4 +1,18 @@
 {
+  "MARKDOWN_EDITOR": {
+    "MENU": {
+      "TEXT": "Texte",
+      "H1": "Titre 1",
+      "H2": "Titre 2",
+      "H3": "Titre 3"
+    },
+    "LINK": {
+      "EDIT": "Modifier",
+      "REMOVE": "Supprimer",
+      "CONFIRM": "Confirmer",
+      "PLACEHOLDER": "Coller le lien…"
+    }
+  },
   "TITLE": "OptimCE",
   "COMMON": {
     "LANGUAGE_SELECTOR": "Sélecteur de langue",
@@ -55,12 +69,36 @@
     "JUST_NOW": "À l'instant",
     "NEW_TOAST": "Vous avez de nouvelles notifications",
     "TYPES": {
-      "document": { "uploaded": { "title": "Un nouveau document a été téléversé" } },
-      "member": { "updated": { "title": "Les informations d'un membre ont été mises à jour" } },
-      "manager_invitation": {
-        "received": { "title": "Vous avez été invité à devenir gestionnaire" }
+      "document": {
+        "uploaded": {
+          "title": "Un nouveau document a été téléversé"
+        }
       },
-      "member_invitation": { "received": { "title": "Vous avez été invité à devenir membre" } }
+      "member": {
+        "updated": {
+          "title": "Les informations d'un membre ont été mises à jour"
+        }
+      },
+      "manager_invitation": {
+        "received": {
+          "title": "Vous avez été invité à devenir gestionnaire"
+        }
+      },
+      "member_invitation": {
+        "received": {
+          "title": "Vous avez été invité à devenir membre"
+        }
+      },
+      "news_post": {
+        "published": {
+          "title": "Une nouvelle actualité a été publiée"
+        }
+      },
+      "news_poll": {
+        "published": {
+          "title": "Un nouveau sondage a été publié"
+        }
+      }
     }
   },
   "NAVBAR": {
@@ -91,7 +129,8 @@
     "MANAGEMENT": "Gestion",
     "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
     "RETRY": "Réessayer",
-    "AUDIT_LOG": "Journal d'audit"
+    "AUDIT_LOG": "Journal d'audit",
+    "NEWS": "Actualités"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
@@ -1072,7 +1111,6 @@
       "WAITING_MANAGER_LABEL": "En attente d'acceptation du gestionnaire"
     }
   },
-
   "SHARING_OPERATION": {
     "BACK_TO_LIST": "Retour aux opérations de partage",
     "TYPE": {
@@ -1330,6 +1368,10 @@
     "ALGORITHM": {
       "NAME": "Génération de clés de répartition",
       "DESCRIPTION": "Génère des clés de répartition à partir d'algorithmes paramétrables et enregistre les clés validées dans la communauté."
+    },
+    "NEWS": {
+      "NAME": "Actualités",
+      "DESCRIPTION": "Publiez des annonces et des sondages pour toute la communauté."
     }
   },
   "SIMULATION_HUB": {
@@ -1600,6 +1642,100 @@
           "failed": "Échec de la simulation",
           "deleted": "Simulation supprimée"
         }
+      }
+    }
+  },
+  "NEWS_BOARD": {
+    "TITLE": "Actualités",
+    "SUBTITLE": "Publications et sondages de la communauté",
+    "EMPTY": "Aucune publication pour le moment.",
+    "LOAD_MORE": "Voir plus",
+    "UNKNOWN_AUTHOR": "Auteur inconnu",
+    "POLL_TAG": "Sondage",
+    "ACTIONS": {
+      "MORE": "Actions",
+      "EDIT": "Modifier",
+      "DELETE": "Supprimer"
+    },
+    "DELETE": {
+      "HEADER": "Supprimer la publication",
+      "MESSAGE": "Cette publication et ses votes éventuels seront définitivement supprimés. Continuer ?",
+      "SUCCESS": "Publication supprimée."
+    },
+    "POLL": {
+      "LOADING": "Chargement du sondage…",
+      "VOTE": "Voter",
+      "SAVE": "Enregistrer",
+      "RETRACT": "Retirer mon vote",
+      "CHANGE": "Modifier mon vote",
+      "VOTE_SUCCESS": "Votre vote a été enregistré.",
+      "RETRACT_SUCCESS": "Votre vote a été retiré.",
+      "VOTES": "{{count}} voix",
+      "TOTAL_VOTERS": "{{count}} votant·e·s",
+      "CLOSES": "clôture {{when}}",
+      "CLOSED": "Clôturé",
+      "HIDDEN_AFTER_VOTE": "Les résultats seront visibles après votre vote.",
+      "HIDDEN_WHEN_ENDS": "Les résultats seront visibles à la clôture du sondage.",
+      "HIDDEN_DEFAULT": "Les résultats de ce sondage ne sont pas visibles."
+    },
+    "COMPOSE": {
+      "NEW": "Composer",
+      "TITLE_CREATE": "Nouvelle publication",
+      "TITLE_EDIT": "Modifier la publication",
+      "CREATED": "Publication créée.",
+      "UPDATED": "Publication mise à jour.",
+      "PUBLISH": "Publier",
+      "SAVE": "Enregistrer",
+      "KIND_POST": "Publication",
+      "KIND_POLL": "Sondage",
+      "BODY_LABEL": "Message",
+      "QUESTION_LABEL": "Question et message",
+      "BODY_PLACEHOLDER": "Rédigez votre message…",
+      "MARKDOWN_HINT": "Mise en forme Markdown : **gras**, *italique*, listes, liens.",
+      "POLL_TYPE_LABEL": "Type de sondage",
+      "POLL_SINGLE": "Choix unique",
+      "POLL_MULTIPLE": "Choix multiple",
+      "OPTIONS_LABEL": "Options",
+      "OPTION_PLACEHOLDER": "Option",
+      "ADD_OPTION": "Ajouter une option",
+      "REMOVE_OPTION": "Retirer l'option",
+      "OPTIONS_LOCKED": "Les options ne peuvent plus être modifiées : des votes ont déjà été enregistrés.",
+      "EXPIRY_LABEL": "Date de clôture",
+      "VISIBILITY_LABEL": "Visibilité des résultats",
+      "ADVANCED": "Réglages avancés",
+      "ADMIN_VIS_LABEL": "Ce que voient les gestionnaires",
+      "MEMBER_VIS_LABEL": "Ce que voient les membres",
+      "DISPLAY_LABEL": "Quand les membres voient les résultats",
+      "VIS": {
+        "NONE": "Aucun résultat",
+        "AGGREGATE": "Totaux uniquement",
+        "FULL": "Détail par votant·e"
+      },
+      "DISPLAY": {
+        "NEVER": "Jamais",
+        "BEFORE_VOTE": "Avant de voter",
+        "AFTER_VOTE": "Après avoir voté",
+        "WHEN_POLL_ENDS": "À la clôture"
+      },
+      "PRESETS": {
+        "anonymous": {
+          "NAME": "Sentiment anonyme",
+          "DESC": "Les membres voient les totaux après avoir voté ; aucune identité n'est révélée."
+        },
+        "transparent": {
+          "NAME": "Transparent",
+          "DESC": "Tout le monde voit qui a voté quoi, dès le départ."
+        },
+        "on_close": {
+          "NAME": "Résultats à la clôture",
+          "DESC": "Les membres voient les totaux une fois le sondage clôturé."
+        }
+      },
+      "ERRORS": {
+        "POST_REQUIRED": "Le message est requis.",
+        "MIN_OPTIONS": "Ajoutez au moins deux options.",
+        "EXPIRY_REQUIRED": "Choisissez une date de clôture.",
+        "EXPIRY_FUTURE": "La date de clôture doit être dans le futur."
       }
     }
   }

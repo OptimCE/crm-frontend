@@ -1,4 +1,18 @@
 {
+  "MARKDOWN_EDITOR": {
+    "MENU": {
+      "TEXT": "Tekst",
+      "H1": "Kop 1",
+      "H2": "Kop 2",
+      "H3": "Kop 3"
+    },
+    "LINK": {
+      "EDIT": "Bewerken",
+      "REMOVE": "Verwijderen",
+      "CONFIRM": "Bevestigen",
+      "PLACEHOLDER": "Plak de link…"
+    }
+  },
   "TITLE": "OptimCE",
   "COMMON": {
     "LANGUAGE_SELECTOR": "Taalselector",
@@ -55,12 +69,36 @@
     "JUST_NOW": "Zojuist",
     "NEW_TOAST": "U hebt nieuwe meldingen",
     "TYPES": {
-      "document": { "uploaded": { "title": "Er is een nieuw document geüpload" } },
-      "member": { "updated": { "title": "De gegevens van een lid zijn bijgewerkt" } },
-      "manager_invitation": {
-        "received": { "title": "U bent uitgenodigd om beheerder te worden" }
+      "document": {
+        "uploaded": {
+          "title": "Er is een nieuw document geüpload"
+        }
       },
-      "member_invitation": { "received": { "title": "U bent uitgenodigd om lid te worden" } }
+      "member": {
+        "updated": {
+          "title": "De gegevens van een lid zijn bijgewerkt"
+        }
+      },
+      "manager_invitation": {
+        "received": {
+          "title": "U bent uitgenodigd om beheerder te worden"
+        }
+      },
+      "member_invitation": {
+        "received": {
+          "title": "U bent uitgenodigd om lid te worden"
+        }
+      },
+      "news_post": {
+        "published": {
+          "title": "Er is een nieuw bericht gepubliceerd"
+        }
+      },
+      "news_poll": {
+        "published": {
+          "title": "Er is een nieuwe peiling gepubliceerd"
+        }
+      }
     }
   },
   "NAVBAR": {
@@ -91,7 +129,8 @@
     "MANAGEMENT": "Beheer",
     "ERROR_LOADING": "Er is een fout opgetreden bij het laden van de gegevens",
     "RETRY": "Opnieuw proberen",
-    "AUDIT_LOG": "Auditlogboek"
+    "AUDIT_LOG": "Auditlogboek",
+    "NEWS": "Nieuws"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -101,7 +140,16 @@
     "UPDATE_PASSWORD": "Wachtwoord wijzigen",
     "EMAIL_READONLY_HINT": "Beheerd door uw identiteitsprovider",
     "COPY_IBAN": "IBAN kopiëren",
-    "DOCUMENTS": "Documenten",
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Gemeenschap",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
+      "NAME_LABEL": "Naam",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Grootte",
+      "UPLOAD_DATE_LABEL": "Uploaddatum",
+      "NO_DOCUMENT_FOUND_LABEL": "Geen document gevonden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} documenten)"
+    },
     "MY_REPRESENTATIONS": "Mijn vertegenwoordigingen",
     "DISPLAY_NAME": "Naam",
     "DISPLAY_TYPE": "Type",
@@ -138,16 +186,6 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
       "NO_METERS_FOUND_LABEL": "Geen meters gevonden",
       "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} meters)"
-    },
-    "DOCUMENTS": {
-      "COMMUNITY_LABEL": "Gemeenschap",
-      "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
-      "NAME_LABEL": "Naam",
-      "TYPE_LABEL": "Type",
-      "SIZE_LABEL": "Grootte",
-      "UPLOAD_DATE_LABEL": "Uploaddatum",
-      "NO_DOCUMENT_FOUND_LABEL": "Geen document gevonden",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} documenten)"
     },
     "UPDATE_PROFILE": {
       "TITLE": "Profiel bijwerken",
@@ -794,7 +832,6 @@
       "DELETE_DOCUMENT": "Fout bij het verwijderen van het document"
     }
   },
-
   "METER": {
     "METER_LABEL": "Meter",
     "ADDRESS": {
@@ -1074,7 +1111,6 @@
       "WAITING_MANAGER_LABEL": "In afwachting van goedkeuring van de manager"
     }
   },
-
   "SHARING_OPERATION": {
     "BACK_TO_LIST": "Terug naar deeloperaties",
     "TYPE": {
@@ -1332,6 +1368,10 @@
     "ALGORITHM": {
       "NAME": "Generatie van verdeelsleutels",
       "DESCRIPTION": "Genereert verdeelsleutels op basis van configureerbare algoritmen en bewaart gevalideerde sleutels in de gemeenschap."
+    },
+    "NEWS": {
+      "NAME": "Nieuws",
+      "DESCRIPTION": "Publiceer aankondigingen en peilingen voor de hele gemeenschap."
     }
   },
   "SIMULATION_HUB": {
@@ -1602,6 +1642,100 @@
           "failed": "Simulatie mislukt",
           "deleted": "Simulatie verwijderd"
         }
+      }
+    }
+  },
+  "NEWS_BOARD": {
+    "TITLE": "Nieuws",
+    "SUBTITLE": "Berichten en peilingen van de gemeenschap",
+    "EMPTY": "Nog geen berichten.",
+    "LOAD_MORE": "Meer laden",
+    "UNKNOWN_AUTHOR": "Onbekende auteur",
+    "POLL_TAG": "Peiling",
+    "ACTIONS": {
+      "MORE": "Acties",
+      "EDIT": "Bewerken",
+      "DELETE": "Verwijderen"
+    },
+    "DELETE": {
+      "HEADER": "Bericht verwijderen",
+      "MESSAGE": "Dit bericht en eventuele stemmen worden definitief verwijderd. Doorgaan?",
+      "SUCCESS": "Bericht verwijderd."
+    },
+    "POLL": {
+      "LOADING": "Peiling laden…",
+      "VOTE": "Stemmen",
+      "SAVE": "Opslaan",
+      "RETRACT": "Mijn stem intrekken",
+      "CHANGE": "Mijn stem wijzigen",
+      "VOTE_SUCCESS": "Uw stem is geregistreerd.",
+      "RETRACT_SUCCESS": "Uw stem is ingetrokken.",
+      "VOTES": "{{count}} stemmen",
+      "TOTAL_VOTERS": "{{count}} stemmers",
+      "CLOSES": "sluit {{when}}",
+      "CLOSED": "Gesloten",
+      "HIDDEN_AFTER_VOTE": "De resultaten zijn zichtbaar nadat u hebt gestemd.",
+      "HIDDEN_WHEN_ENDS": "De resultaten zijn zichtbaar wanneer de peiling sluit.",
+      "HIDDEN_DEFAULT": "De resultaten van deze peiling zijn niet zichtbaar."
+    },
+    "COMPOSE": {
+      "NEW": "Opstellen",
+      "TITLE_CREATE": "Nieuw bericht",
+      "TITLE_EDIT": "Bericht bewerken",
+      "CREATED": "Bericht aangemaakt.",
+      "UPDATED": "Bericht bijgewerkt.",
+      "PUBLISH": "Publiceren",
+      "SAVE": "Opslaan",
+      "KIND_POST": "Bericht",
+      "KIND_POLL": "Peiling",
+      "BODY_LABEL": "Bericht",
+      "QUESTION_LABEL": "Vraag en bericht",
+      "BODY_PLACEHOLDER": "Schrijf uw bericht…",
+      "MARKDOWN_HINT": "Markdown-opmaak: **vet**, *cursief*, lijsten, links.",
+      "POLL_TYPE_LABEL": "Type peiling",
+      "POLL_SINGLE": "Enkele keuze",
+      "POLL_MULTIPLE": "Meerkeuze",
+      "OPTIONS_LABEL": "Opties",
+      "OPTION_PLACEHOLDER": "Optie",
+      "ADD_OPTION": "Optie toevoegen",
+      "REMOVE_OPTION": "Optie verwijderen",
+      "OPTIONS_LOCKED": "Opties kunnen niet meer worden gewijzigd: er zijn al stemmen uitgebracht.",
+      "EXPIRY_LABEL": "Sluitingsdatum",
+      "VISIBILITY_LABEL": "Zichtbaarheid van resultaten",
+      "ADVANCED": "Geavanceerde instellingen",
+      "ADMIN_VIS_LABEL": "Wat beheerders zien",
+      "MEMBER_VIS_LABEL": "Wat leden zien",
+      "DISPLAY_LABEL": "Wanneer leden de resultaten zien",
+      "VIS": {
+        "NONE": "Geen resultaten",
+        "AGGREGATE": "Alleen totalen",
+        "FULL": "Detail per stemmer"
+      },
+      "DISPLAY": {
+        "NEVER": "Nooit",
+        "BEFORE_VOTE": "Voor het stemmen",
+        "AFTER_VOTE": "Na het stemmen",
+        "WHEN_POLL_ENDS": "Bij sluiting"
+      },
+      "PRESETS": {
+        "anonymous": {
+          "NAME": "Anoniem sentiment",
+          "DESC": "Leden zien totalen na het stemmen; geen identiteiten worden onthuld."
+        },
+        "transparent": {
+          "NAME": "Transparant",
+          "DESC": "Iedereen ziet vanaf het begin wie op wat heeft gestemd."
+        },
+        "on_close": {
+          "NAME": "Resultaten bij sluiting",
+          "DESC": "Leden zien de totalen zodra de peiling is gesloten."
+        }
+      },
+      "ERRORS": {
+        "POST_REQUIRED": "Een bericht is vereist.",
+        "MIN_OPTIONS": "Voeg ten minste twee opties toe.",
+        "EXPIRY_REQUIRED": "Kies een sluitingsdatum.",
+        "EXPIRY_FUTURE": "De sluitingsdatum moet in de toekomst liggen."
       }
     }
   }

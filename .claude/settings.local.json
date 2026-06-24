@@ -1,5 +1,23 @@
 {
   "permissions": {
-    "allow": ["Bash(npx vitest:*)", "Bash(node -e ' *)", "Bash(npm run *)"]
+    "allow": [
+      "Bash(npx vitest:*)",
+      "Bash(node -e ' *)",
+      "Bash(npm run *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\ericp\\\\Desktop\\\\Locomotrice\\\\OptimCE\\\\monorepo\\\\crm-frontend\\\\src\\\\app\\\\features\\\\annexes_services\\\\services\\\\simulation\\\\\" -Recurse -File | Select-Object FullName)",
+      "Bash(grep -E \"\\\\.\\(ts|spec\\\\.ts\\)$\")",
+      "Bash(xargs cat)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\ericp\\\\Desktop\\\\Locomotrice\\\\OptimCE\\\\monorepo\\\\crm-frontend\" -Depth 2)",
+      "Bash(Select-Object FullName)",
+      "Bash(Select-String -Pattern \"sidebar__header|sidebar__logo|flex-direction|justify-content|padding|min-height|align-items\" -Context 0,0)",
+      "Bash(git show *)",
+      "Read(//tmp/**)",
+      "Bash(git -C \"C:/Users/ericp/Desktop/Locomotrice/OptimCE/monorepo/crm-frontend\" log --oneline -8 -- src/app/layout/navbar/navbar.css)",
+      "Bash(xargs grep -l \"activeFeatureGuard\\\\|news.*route\")",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npx eslint *)"
+    ]
   }
 }

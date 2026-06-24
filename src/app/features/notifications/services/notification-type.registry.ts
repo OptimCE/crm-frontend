@@ -25,6 +25,8 @@ const REGISTRY: Record<string, NotificationPresentation> = {
   'manager_invitation.received': { icon: 'pi pi-envelope', route: '/users/invitations' },
   'member.updated': { icon: 'pi pi-user-edit' },
   'document.uploaded': { icon: 'pi pi-file' },
+  'news_post.published': { icon: 'pi pi-megaphone', route: '/news' },
+  'news_poll.published': { icon: 'pi pi-chart-bar', route: '/news' },
 };
 
 /** Resolve presentation for a notification type, falling back to a generic bell. */

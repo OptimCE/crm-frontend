@@ -1,0 +1,77 @@
+/* ============================================================
+   Milkdown Crepe — global theme for the WYSIWYG Markdown editor
+   ------------------------------------------------------------
+   Loaded globally (registered in angular.json `styles[]`) because
+   Crepe builds its DOM imperatively: Angular's component-scoped
+   (Emulated) styles add `_ngcontent` attributes only to template
+   elements, so they never reach the editor's nodes. The same
+   rationale drives the global `.news-prose` block in styles.css.
+
+   Leak safety: every selector below is namespaced under Crepe's
+   own `.crepe` / `.milkdown` roots, so nothing bleeds into the
+   rest of the app. We only remap Crepe's CSS variables to the
+   OptimCE palette + typography — no `!important`, no overrides of
+   Crepe's structural rules.
+   ============================================================ */
+
+/* Vendor base: common reset + the Typora-like "frame" theme. */
+@import '@milkdown/crepe/theme/common/style.css';
+@import '@milkdown/crepe/theme/frame.css';
+
+/* OptimCE token overrides (brand green, surfaces, DM Sans).
+   `.crepe .milkdown` (two classes) outranks the frame theme's
+   single-class defaults, so these win without `!important`. */
+.crepe .milkdown {
+  /* Backgrounds / surfaces */
+  --crepe-color-background: #ffffff; /* surface-0  */
+  --crepe-color-surface: #f8faf8; /* surface-50 */
+  --crepe-color-surface-low: #f0f4f0; /* surface-100 */
+
+  /* Text */
+  --crepe-color-on-background: #181e18; /* text       */
+  --crepe-color-on-surface: #181e18;
+  --crepe-color-on-surface-variant: #6e7e70; /* text-muted */
+
+  /* Accent — brand green */
+  --crepe-color-primary: #43a047; /* brand 500  */
+  --crepe-color-secondary: #e8f5e9; /* brand 50   */
+  --crepe-color-on-secondary: #1b5e20; /* brand 700  */
+
+  /* UI / borders / states */
+  --crepe-color-outline: #e2e8e3; /* surface-200 */
+  --crepe-color-inverse: #252d26; /* surface-800 */
+  --crepe-color-on-inverse: #f0f4f0; /* surface-100 */
+  --crepe-color-inline-code: #2e7d32; /* brand 600  */
+  --crepe-color-error: #dc2626;
+  --crepe-color-hover: #f0f4f0; /* surface-100 */
+  --crepe-color-selected: #e8f5e9; /* brand 50   */
+  --crepe-color-inline-area: #f0f4f0; /* surface-100 */
+
+  /* Typography — match the app (DM Sans everywhere; the frame
+     theme otherwise ships a serif title face). */
+  --crepe-font-title:
+    'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --crepe-font-default:
+    'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --crepe-font-code: 'Fira Code', ui-monospace, Menlo, Monaco, 'Courier New', Courier, monospace;
+
+  /* Shadows — brand-tinted, subtle (match news-compose chrome) */
+  --crepe-shadow-1: 0 1px 2px rgba(27, 94, 32, 0.08);
+  --crepe-shadow-2: 0 2px 6px rgba(27, 94, 32, 0.12);
+}
+
+/* The editing surface is wrapped by our component's host border,
+   so drop the frame theme's own outer padding/shadow to avoid a
+   double frame, and keep comfortable inner padding. */
+.crepe .milkdown .ProseMirror {
+  padding: 0.75rem 0.9rem;
+}
+
+/* Fixed toolbar (TopBar): match the app surface; it sticks to the top of
+   the editor and scrolls with the dialog, so nothing floats / clips. */
+.crepe .milkdown .milkdown-top-bar {
+  border-top-left-radius: 0.55rem;
+  border-top-right-radius: 0.55rem;
+}

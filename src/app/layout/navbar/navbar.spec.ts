@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
@@ -16,6 +16,7 @@ describe('Navbar', () => {
   let routerEvents$: Subject<NavigationEnd>;
 
   let userContextServiceSpy: {
+    activeCommunityId: ReturnType<typeof signal<string | null>>;
     compareWithActiveRole: ReturnType<typeof vi.fn>;
     isActiveRole: ReturnType<typeof vi.fn>;
     logout: ReturnType<typeof vi.fn>;
@@ -47,6 +48,7 @@ describe('Navbar', () => {
     routerEvents$ = new Subject<NavigationEnd>();
 
     userContextServiceSpy = {
+      activeCommunityId: signal<string | null>(null),
       compareWithActiveRole: vi.fn().mockReturnValue(false),
       isActiveRole: vi.fn().mockReturnValue(false),
       logout: vi.fn(),
