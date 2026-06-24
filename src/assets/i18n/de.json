@@ -1,4 +1,18 @@
 {
+  "MARKDOWN_EDITOR": {
+    "MENU": {
+      "TEXT": "Text",
+      "H1": "Überschrift 1",
+      "H2": "Überschrift 2",
+      "H3": "Überschrift 3"
+    },
+    "LINK": {
+      "EDIT": "Bearbeiten",
+      "REMOVE": "Entfernen",
+      "CONFIRM": "Bestätigen",
+      "PLACEHOLDER": "Link einfügen…"
+    }
+  },
   "TITLE": "OptimCE",
   "COMMON": {
     "LANGUAGE_SELECTOR": "Sprachauswahl",
@@ -55,12 +69,36 @@
     "JUST_NOW": "Gerade eben",
     "NEW_TOAST": "Sie haben neue Benachrichtigungen",
     "TYPES": {
-      "document": { "uploaded": { "title": "Ein neues Dokument wurde hochgeladen" } },
-      "member": { "updated": { "title": "Die Informationen eines Mitglieds wurden aktualisiert" } },
-      "manager_invitation": {
-        "received": { "title": "Sie wurden eingeladen, Verwalter zu werden" }
+      "document": {
+        "uploaded": {
+          "title": "Ein neues Dokument wurde hochgeladen"
+        }
       },
-      "member_invitation": { "received": { "title": "Sie wurden eingeladen, Mitglied zu werden" } }
+      "member": {
+        "updated": {
+          "title": "Die Informationen eines Mitglieds wurden aktualisiert"
+        }
+      },
+      "manager_invitation": {
+        "received": {
+          "title": "Sie wurden eingeladen, Verwalter zu werden"
+        }
+      },
+      "member_invitation": {
+        "received": {
+          "title": "Sie wurden eingeladen, Mitglied zu werden"
+        }
+      },
+      "news_post": {
+        "published": {
+          "title": "Ein neuer Beitrag wurde veröffentlicht"
+        }
+      },
+      "news_poll": {
+        "published": {
+          "title": "Eine neue Umfrage wurde veröffentlicht"
+        }
+      }
     }
   },
   "NAVBAR": {
@@ -91,7 +129,8 @@
     "MANAGEMENT": "Verwaltung",
     "ERROR_LOADING": "Beim Laden der Daten ist ein Fehler aufgetreten",
     "RETRY": "Erneut versuchen",
-    "AUDIT_LOG": "Audit-Protokoll"
+    "AUDIT_LOG": "Audit-Protokoll",
+    "NEWS": "Aktuelles"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -101,7 +140,16 @@
     "UPDATE_PASSWORD": "Passwort ändern",
     "EMAIL_READONLY_HINT": "Verwaltet durch Ihren Identitätsanbieter",
     "COPY_IBAN": "IBAN kopieren",
-    "DOCUMENTS": "Dokumente",
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Gemeinschaft",
+      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Typ",
+      "SIZE_LABEL": "Größe",
+      "UPLOAD_DATE_LABEL": "Hochladedatum",
+      "NO_DOCUMENT_FOUND_LABEL": "Kein Dokument gefunden",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Dokumente)"
+    },
     "MY_REPRESENTATIONS": "Meine Vertretungen",
     "DISPLAY_NAME": "Name",
     "DISPLAY_TYPE": "Typ",
@@ -138,16 +186,6 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
       "NO_METERS_FOUND_LABEL": "Keine Zähler gefunden",
       "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Zähler)"
-    },
-    "DOCUMENTS": {
-      "COMMUNITY_LABEL": "Gemeinschaft",
-      "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
-      "NAME_LABEL": "Name",
-      "TYPE_LABEL": "Typ",
-      "SIZE_LABEL": "Größe",
-      "UPLOAD_DATE_LABEL": "Hochladedatum",
-      "NO_DOCUMENT_FOUND_LABEL": "Kein Dokument gefunden",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Dokumente)"
     },
     "UPDATE_PROFILE": {
       "TITLE": "Profil aktualisieren",
@@ -794,7 +832,6 @@
       "DELETE_DOCUMENT": "Fehler beim Löschen des Dokuments"
     }
   },
-
   "METER": {
     "METER_LABEL": "Zähler",
     "ADDRESS": {
@@ -1074,7 +1111,6 @@
       "WAITING_MANAGER_LABEL": "Ausstehende Managergenehmigung"
     }
   },
-
   "SHARING_OPERATION": {
     "BACK_TO_LIST": "Zurück zu Teilungsoperationen",
     "TYPE": {
@@ -1332,6 +1368,10 @@
     "ALGORITHM": {
       "NAME": "Generierung von Verteilschlüsseln",
       "DESCRIPTION": "Erzeugt Verteilschlüssel auf Basis konfigurierbarer Algorithmen und speichert validierte Schlüssel in der Gemeinschaft."
+    },
+    "NEWS": {
+      "NAME": "Aktuelles",
+      "DESCRIPTION": "Veröffentlichen Sie Ankündigungen und Umfragen für die gesamte Gemeinschaft."
     }
   },
   "SIMULATION_HUB": {
@@ -1602,6 +1642,100 @@
           "failed": "Simulation fehlgeschlagen",
           "deleted": "Simulation gelöscht"
         }
+      }
+    }
+  },
+  "NEWS_BOARD": {
+    "TITLE": "Aktuelles",
+    "SUBTITLE": "Beiträge und Umfragen der Gemeinschaft",
+    "EMPTY": "Noch keine Beiträge.",
+    "LOAD_MORE": "Mehr laden",
+    "UNKNOWN_AUTHOR": "Unbekannter Autor",
+    "POLL_TAG": "Umfrage",
+    "ACTIONS": {
+      "MORE": "Aktionen",
+      "EDIT": "Bearbeiten",
+      "DELETE": "Löschen"
+    },
+    "DELETE": {
+      "HEADER": "Beitrag löschen",
+      "MESSAGE": "Dieser Beitrag und alle Stimmen werden dauerhaft gelöscht. Fortfahren?",
+      "SUCCESS": "Beitrag gelöscht."
+    },
+    "POLL": {
+      "LOADING": "Umfrage wird geladen…",
+      "VOTE": "Abstimmen",
+      "SAVE": "Speichern",
+      "RETRACT": "Meine Stimme zurückziehen",
+      "CHANGE": "Meine Stimme ändern",
+      "VOTE_SUCCESS": "Ihre Stimme wurde gespeichert.",
+      "RETRACT_SUCCESS": "Ihre Stimme wurde zurückgezogen.",
+      "VOTES": "{{count}} Stimmen",
+      "TOTAL_VOTERS": "{{count}} Teilnehmende",
+      "CLOSES": "endet {{when}}",
+      "CLOSED": "Beendet",
+      "HIDDEN_AFTER_VOTE": "Die Ergebnisse sind nach Ihrer Stimmabgabe sichtbar.",
+      "HIDDEN_WHEN_ENDS": "Die Ergebnisse sind nach Ende der Umfrage sichtbar.",
+      "HIDDEN_DEFAULT": "Die Ergebnisse dieser Umfrage sind nicht sichtbar."
+    },
+    "COMPOSE": {
+      "NEW": "Verfassen",
+      "TITLE_CREATE": "Neuer Beitrag",
+      "TITLE_EDIT": "Beitrag bearbeiten",
+      "CREATED": "Beitrag erstellt.",
+      "UPDATED": "Beitrag aktualisiert.",
+      "PUBLISH": "Veröffentlichen",
+      "SAVE": "Speichern",
+      "KIND_POST": "Beitrag",
+      "KIND_POLL": "Umfrage",
+      "BODY_LABEL": "Nachricht",
+      "QUESTION_LABEL": "Frage und Nachricht",
+      "BODY_PLACEHOLDER": "Schreiben Sie Ihre Nachricht…",
+      "MARKDOWN_HINT": "Markdown-Formatierung: **fett**, *kursiv*, Listen, Links.",
+      "POLL_TYPE_LABEL": "Umfragetyp",
+      "POLL_SINGLE": "Einzelauswahl",
+      "POLL_MULTIPLE": "Mehrfachauswahl",
+      "OPTIONS_LABEL": "Optionen",
+      "OPTION_PLACEHOLDER": "Option",
+      "ADD_OPTION": "Option hinzufügen",
+      "REMOVE_OPTION": "Option entfernen",
+      "OPTIONS_LOCKED": "Optionen können nicht mehr geändert werden: Es wurden bereits Stimmen abgegeben.",
+      "EXPIRY_LABEL": "Enddatum",
+      "VISIBILITY_LABEL": "Sichtbarkeit der Ergebnisse",
+      "ADVANCED": "Erweiterte Einstellungen",
+      "ADMIN_VIS_LABEL": "Was Verwaltende sehen",
+      "MEMBER_VIS_LABEL": "Was Mitglieder sehen",
+      "DISPLAY_LABEL": "Wann Mitglieder die Ergebnisse sehen",
+      "VIS": {
+        "NONE": "Keine Ergebnisse",
+        "AGGREGATE": "Nur Gesamtzahlen",
+        "FULL": "Details pro Stimme"
+      },
+      "DISPLAY": {
+        "NEVER": "Nie",
+        "BEFORE_VOTE": "Vor der Abstimmung",
+        "AFTER_VOTE": "Nach der Abstimmung",
+        "WHEN_POLL_ENDS": "Bei Umfrageende"
+      },
+      "PRESETS": {
+        "anonymous": {
+          "NAME": "Anonyme Stimmung",
+          "DESC": "Mitglieder sehen nach der Abstimmung die Gesamtzahlen; keine Identitäten werden offengelegt."
+        },
+        "transparent": {
+          "NAME": "Transparent",
+          "DESC": "Alle sehen von Anfang an, wer wofür gestimmt hat."
+        },
+        "on_close": {
+          "NAME": "Ergebnisse bei Ende",
+          "DESC": "Mitglieder sehen die Gesamtzahlen nach Ende der Umfrage."
+        }
+      },
+      "ERRORS": {
+        "POST_REQUIRED": "Eine Nachricht ist erforderlich.",
+        "MIN_OPTIONS": "Fügen Sie mindestens zwei Optionen hinzu.",
+        "EXPIRY_REQUIRED": "Wählen Sie ein Enddatum.",
+        "EXPIRY_FUTURE": "Das Enddatum muss in der Zukunft liegen."
       }
     }
   }

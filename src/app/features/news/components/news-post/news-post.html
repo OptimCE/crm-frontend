@@ -1,0 +1,38 @@
+<article data-testid="news-post" class="news-card">
+  <header class="flex items-start gap-3">
+    <div class="news-avatar" aria-hidden="true">{{ authorInitial() }}</div>
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-sm font-semibold text-surface-900 truncate">
+        {{ post().author_email || ('NEWS_BOARD.UNKNOWN_AUTHOR' | translate) }}
+      </span>
+      <span class="text-xs text-surface-500">{{ authoredAgo() }}</span>
+    </div>
+
+    @if (post().is_poll) {
+      <span class="news-pill">
+        <i class="pi pi-chart-bar" style="font-size: 0.7rem"></i>
+        {{ 'NEWS_BOARD.POLL_TAG' | translate }}
+      </span>
+    }
+
+    @if (canManage()) {
+      <p-button
+        text
+        rounded
+        severity="secondary"
+        size="small"
+        icon="pi pi-ellipsis-h"
+        [disabled]="deleting()"
+        (onClick)="menu.toggle($event)"
+        [attr.aria-label]="'NEWS_BOARD.ACTIONS.MORE' | translate"
+      />
+      <p-menu #menu [model]="menuItems()" [popup]="true" appendTo="body" />
+    }
+  </header>
+
+  <div data-testid="news-post__body" class="news-prose mt-3" [innerHTML]="post().body_html"></div>
+
+  @if (post().is_poll) {
+    <app-news-poll class="block mt-4" [post]="post()" />
+  }
+</article>

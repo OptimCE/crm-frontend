@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Wrapper around Crepe's editing surface. Only the wrapper is styled
+   here (Emulated encapsulation reaches template elements); the editor
+   internals are themed globally in markdown-editor.theme.css. */
+.md-editor-host {
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.6rem;
+  background: var(--p-surface-0);
+  /* Generous authoring surface (fixed toolbar + comfortable text area). */
+  min-height: 14rem;
+  /* visible so the on-selection toolbar / link tooltip aren't clipped; the
+     toolbar's own top corners are rounded in markdown-editor.theme.css. */
+  overflow: visible;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.md-editor-host:focus-within {
+  border-color: var(--p-primary-400);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-focus-ring-color) 45%, transparent);
+}

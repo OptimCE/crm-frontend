@@ -1,0 +1,7 @@
+.news-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.85rem;
+}

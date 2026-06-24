@@ -153,6 +153,17 @@
             [routerLinkUrl]="'/annexes-services'"
             [sidebarOpen]="sidebarOpen()"
           ></li>
+          @if (communityServicesStore.isActive('news')) {
+            <li
+              appSidebarItem
+              (sidebarClose)="closeSideBar()"
+              [icon]="'pi pi-megaphone'"
+              [isRouteActive]="isRouteActive().news"
+              [name]="'NAVBAR.NEWS' | translate"
+              [routerLinkUrl]="'/news'"
+              [sidebarOpen]="sidebarOpen()"
+            ></li>
+          }
         </ul>
       </app-sidebar-section>
     }

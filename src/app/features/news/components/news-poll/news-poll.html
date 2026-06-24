@@ -1,0 +1,122 @@
+@if (loading()) {
+  <div class="news-poll-loading">
+    <i class="pi pi-spin pi-spinner"></i> {{ 'NEWS_BOARD.POLL.LOADING' | translate }}
+  </div>
+} @else if (detail(); as d) {
+  <div data-testid="news-poll" class="news-poll">
+    @if (showVoting()) {
+      <!-- Voting controls -->
+      <div class="flex flex-col gap-2">
+        @for (opt of d.options; track opt.id; let i = $index) {
+          <button
+            type="button"
+            class="news-option"
+            [class.news-option--selected]="isSelected(opt.id)"
+            [disabled]="submitting()"
+            (click)="select(opt.id)"
+            [attr.data-testid]="'news-poll__option--' + i"
+          >
+            <span class="news-option__marker" [class.news-option__marker--multi]="!isSingle()">
+              @if (isSelected(opt.id)) {
+                <i class="pi pi-check" style="font-size: 0.65rem"></i>
+              }
+            </span>
+            <span class="flex-1 text-left">{{ opt.option_value }}</span>
+          </button>
+        }
+      </div>
+      <div class="flex items-center gap-2 mt-3">
+        <p-button
+          size="small"
+          [label]="(hasVoted() ? 'NEWS_BOARD.POLL.SAVE' : 'NEWS_BOARD.POLL.VOTE') | translate"
+          [loading]="submitting()"
+          [disabled]="!canSubmit()"
+          (onClick)="submitVote()"
+          data-testid="news-poll__btn--vote"
+        />
+        @if (editing()) {
+          <p-button
+            size="small"
+            text
+            severity="secondary"
+            [label]="'COMMON.ACTIONS.CANCEL' | translate"
+            [disabled]="submitting()"
+            (onClick)="cancelEdit()"
+            data-testid="news-poll__btn--cancel"
+          />
+          @if (hasVoted()) {
+            <p-button
+              size="small"
+              text
+              severity="danger"
+              [label]="'NEWS_BOARD.POLL.RETRACT' | translate"
+              [disabled]="submitting()"
+              (onClick)="retract()"
+              data-testid="news-poll__btn--retract"
+            />
+          }
+        }
+      </div>
+    } @else if (resultsVisible()) {
+      <!-- Results -->
+      <div class="flex flex-col gap-3">
+        @for (opt of d.options; track opt.id; let i = $index) {
+          <div
+            class="news-result"
+            [class.news-result--mine]="isMine(opt.id)"
+            [attr.data-testid]="'news-poll__result--' + i"
+          >
+            <div class="flex justify-between items-center text-sm mb-1">
+              <span class="font-medium flex items-center gap-1.5">
+                {{ opt.option_value }}
+                @if (isMine(opt.id)) {
+                  <i class="pi pi-check-circle text-primary-500" style="font-size: 0.75rem"></i>
+                }
+              </span>
+              <span class="text-surface-500 text-xs whitespace-nowrap">
+                {{ 'NEWS_BOARD.POLL.VOTES' | translate: { count: countFor(opt.id) } }} ·
+                {{ percentFor(opt.id) }}%
+              </span>
+            </div>
+            <div class="news-bar">
+              <div class="news-bar__fill" [style.width.%]="barWidth(opt.id)"></div>
+            </div>
+            @if (votersFor(opt.id); as voters) {
+              @if (voters.length) {
+                <div class="flex flex-wrap gap-1 mt-1.5">
+                  @for (v of voters; track v.voter_id) {
+                    <span class="news-voter-chip">{{ v.email || v.voter_id }}</span>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    } @else {
+      <!-- Results withheld by the visibility matrix -->
+      <div data-testid="news-poll__hidden" class="news-poll-hidden">
+        <i class="pi pi-lock text-surface-400"></i> {{ hiddenReason() }}
+      </div>
+    }
+
+    <!-- Footer -->
+    <div class="news-poll-footer">
+      <span>{{ 'NEWS_BOARD.POLL.TOTAL_VOTERS' | translate: { count: totalVoters() } }}</span>
+      @if (post().expires_at) {
+        <span class="news-poll-dot">•</span>
+        <span [class.news-poll-closed]="ended()">{{ expiryLabel() }}</span>
+      }
+      @if (!showVoting() && !ended() && hasVoted()) {
+        <button
+          type="button"
+          class="news-poll-edit"
+          (click)="startEdit()"
+          data-testid="news-poll__btn--change"
+        >
+          {{ 'NEWS_BOARD.POLL.CHANGE' | translate }}
+        </button>
+      }
+    </div>
+  </div>
+}

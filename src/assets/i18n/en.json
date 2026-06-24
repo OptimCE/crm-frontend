@@ -1,4 +1,18 @@
 {
+  "MARKDOWN_EDITOR": {
+    "MENU": {
+      "TEXT": "Text",
+      "H1": "Heading 1",
+      "H2": "Heading 2",
+      "H3": "Heading 3"
+    },
+    "LINK": {
+      "EDIT": "Edit",
+      "REMOVE": "Remove",
+      "CONFIRM": "Confirm",
+      "PLACEHOLDER": "Paste link…"
+    }
+  },
   "TITLE": "OptimCE",
   "COMMON": {
     "LANGUAGE_SELECTOR": "Language selector",
@@ -55,12 +69,36 @@
     "JUST_NOW": "Just now",
     "NEW_TOAST": "You have new notifications",
     "TYPES": {
-      "document": { "uploaded": { "title": "A new document was uploaded" } },
-      "member": { "updated": { "title": "A member's information was updated" } },
-      "manager_invitation": {
-        "received": { "title": "You have been invited to become a manager" }
+      "document": {
+        "uploaded": {
+          "title": "A new document was uploaded"
+        }
       },
-      "member_invitation": { "received": { "title": "You have been invited to become a member" } }
+      "member": {
+        "updated": {
+          "title": "A member's information was updated"
+        }
+      },
+      "manager_invitation": {
+        "received": {
+          "title": "You have been invited to become a manager"
+        }
+      },
+      "member_invitation": {
+        "received": {
+          "title": "You have been invited to become a member"
+        }
+      },
+      "news_post": {
+        "published": {
+          "title": "A new post was published"
+        }
+      },
+      "news_poll": {
+        "published": {
+          "title": "A new poll was published"
+        }
+      }
     }
   },
   "NAVBAR": {
@@ -91,7 +129,8 @@
     "MANAGEMENT": "Management",
     "ERROR_LOADING": "An error occurred while loading data",
     "RETRY": "Retry",
-    "AUDIT_LOG": "Audit log"
+    "AUDIT_LOG": "Audit log",
+    "NEWS": "News"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -101,7 +140,16 @@
     "UPDATE_PASSWORD": "Change password",
     "EMAIL_READONLY_HINT": "Managed by your identity provider",
     "COPY_IBAN": "Copy IBAN",
-    "DOCUMENTS": "Documents",
+    "DOCUMENTS": {
+      "COMMUNITY_LABEL": "Community",
+      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
+      "NAME_LABEL": "Name",
+      "TYPE_LABEL": "Type",
+      "SIZE_LABEL": "Size",
+      "UPLOAD_DATE_LABEL": "Upload date",
+      "NO_DOCUMENT_FOUND_LABEL": "No document found",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} documents)"
+    },
     "MY_REPRESENTATIONS": "My representations",
     "DISPLAY_NAME": "Name",
     "DISPLAY_TYPE": "Type",
@@ -138,16 +186,6 @@
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
       "NO_METERS_FOUND_LABEL": "No meters found",
       "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} meters)"
-    },
-    "DOCUMENTS": {
-      "COMMUNITY_LABEL": "Community",
-      "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
-      "NAME_LABEL": "Name",
-      "TYPE_LABEL": "Type",
-      "SIZE_LABEL": "Size",
-      "UPLOAD_DATE_LABEL": "Upload date",
-      "NO_DOCUMENT_FOUND_LABEL": "No document found",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} documents)"
     },
     "UPDATE_PROFILE": {
       "TITLE": "Update profile",
@@ -794,7 +832,6 @@
       "DELETE_DOCUMENT": "Error deleting document"
     }
   },
-
   "METER": {
     "METER_LABEL": "Meter",
     "ADDRESS": {
@@ -1074,7 +1111,6 @@
       "WAITING_MANAGER_LABEL": "Pending manager approval"
     }
   },
-
   "SHARING_OPERATION": {
     "BACK_TO_LIST": "Back to sharing operations",
     "TYPE": {
@@ -1332,6 +1368,10 @@
     "ALGORITHM": {
       "NAME": "Allocation key generation",
       "DESCRIPTION": "Generates allocation keys from configurable algorithms and saves validated keys to the community."
+    },
+    "NEWS": {
+      "NAME": "News",
+      "DESCRIPTION": "Publish announcements and polls for the whole community."
     }
   },
   "SIMULATION_HUB": {
@@ -1602,6 +1642,100 @@
           "failed": "Simulation failed",
           "deleted": "Simulation deleted"
         }
+      }
+    }
+  },
+  "NEWS_BOARD": {
+    "TITLE": "News",
+    "SUBTITLE": "Community posts and polls",
+    "EMPTY": "No posts yet.",
+    "LOAD_MORE": "Load more",
+    "UNKNOWN_AUTHOR": "Unknown author",
+    "POLL_TAG": "Poll",
+    "ACTIONS": {
+      "MORE": "Actions",
+      "EDIT": "Edit",
+      "DELETE": "Delete"
+    },
+    "DELETE": {
+      "HEADER": "Delete post",
+      "MESSAGE": "This post and any votes will be permanently deleted. Continue?",
+      "SUCCESS": "Post deleted."
+    },
+    "POLL": {
+      "LOADING": "Loading poll…",
+      "VOTE": "Vote",
+      "SAVE": "Save",
+      "RETRACT": "Remove my vote",
+      "CHANGE": "Change my vote",
+      "VOTE_SUCCESS": "Your vote has been recorded.",
+      "RETRACT_SUCCESS": "Your vote has been removed.",
+      "VOTES": "{{count}} votes",
+      "TOTAL_VOTERS": "{{count}} voters",
+      "CLOSES": "closes {{when}}",
+      "CLOSED": "Closed",
+      "HIDDEN_AFTER_VOTE": "Results will be visible after you vote.",
+      "HIDDEN_WHEN_ENDS": "Results will be visible when the poll closes.",
+      "HIDDEN_DEFAULT": "The results of this poll are not visible."
+    },
+    "COMPOSE": {
+      "NEW": "Compose",
+      "TITLE_CREATE": "New post",
+      "TITLE_EDIT": "Edit post",
+      "CREATED": "Post created.",
+      "UPDATED": "Post updated.",
+      "PUBLISH": "Publish",
+      "SAVE": "Save",
+      "KIND_POST": "Post",
+      "KIND_POLL": "Poll",
+      "BODY_LABEL": "Message",
+      "QUESTION_LABEL": "Question and message",
+      "BODY_PLACEHOLDER": "Write your message…",
+      "MARKDOWN_HINT": "Markdown formatting: **bold**, *italic*, lists, links.",
+      "POLL_TYPE_LABEL": "Poll type",
+      "POLL_SINGLE": "Single choice",
+      "POLL_MULTIPLE": "Multiple choice",
+      "OPTIONS_LABEL": "Options",
+      "OPTION_PLACEHOLDER": "Option",
+      "ADD_OPTION": "Add option",
+      "REMOVE_OPTION": "Remove option",
+      "OPTIONS_LOCKED": "Options can no longer be changed: votes have already been cast.",
+      "EXPIRY_LABEL": "Closing date",
+      "VISIBILITY_LABEL": "Results visibility",
+      "ADVANCED": "Advanced settings",
+      "ADMIN_VIS_LABEL": "What managers see",
+      "MEMBER_VIS_LABEL": "What members see",
+      "DISPLAY_LABEL": "When members see results",
+      "VIS": {
+        "NONE": "No results",
+        "AGGREGATE": "Totals only",
+        "FULL": "Per-voter detail"
+      },
+      "DISPLAY": {
+        "NEVER": "Never",
+        "BEFORE_VOTE": "Before voting",
+        "AFTER_VOTE": "After voting",
+        "WHEN_POLL_ENDS": "When the poll closes"
+      },
+      "PRESETS": {
+        "anonymous": {
+          "NAME": "Anonymous sentiment",
+          "DESC": "Members see totals after voting; no identities are revealed."
+        },
+        "transparent": {
+          "NAME": "Transparent",
+          "DESC": "Everyone sees who voted for what, from the start."
+        },
+        "on_close": {
+          "NAME": "Results on close",
+          "DESC": "Members see totals once the poll has closed."
+        }
+      },
+      "ERRORS": {
+        "POST_REQUIRED": "A message is required.",
+        "MIN_OPTIONS": "Add at least two options.",
+        "EXPIRY_REQUIRED": "Choose a closing date.",
+        "EXPIRY_FUTURE": "The closing date must be in the future."
       }
     }
   }

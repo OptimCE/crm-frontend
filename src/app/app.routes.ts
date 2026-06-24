@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { rootDispatchGuard } from './core/guards/root_dispatch';
 import { canActivateAuth, minRoleGuard } from './core/guards/can_activate';
+import { activeFeatureGuard } from './core/guards/active-feature.guard';
 import { Role } from './core/dtos/role';
 
 export const routes: Routes = [
@@ -76,5 +77,10 @@ export const routes: Routes = [
       import('./features/annexes_services/annexes-services.routes').then(
         (m) => m.ANNEXES_SERVICES_ROUTES,
       ),
+  },
+  {
+    path: 'news',
+    canActivate: [canActivateAuth, activeFeatureGuard('news')],
+    loadChildren: () => import('./features/news/news.routes').then((m) => m.NEWS_ROUTES),
   },
 ];

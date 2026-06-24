@@ -189,6 +189,119 @@
 }
 
 /* ------------------------------------------------------------------
+   News board — rendered Markdown prose
+   The News service returns server-sanitised HTML bound via [innerHTML];
+   that content lives outside Angular's view encapsulation, so its
+   typography must be declared globally. Scoped under .news-prose.
+   ------------------------------------------------------------------ */
+.news-prose {
+  color: var(--p-text-color);
+  font-size: 0.925rem;
+  line-height: 1.6;
+  word-break: break-word;
+}
+.news-prose > :first-child {
+  margin-top: 0;
+}
+.news-prose > :last-child {
+  margin-bottom: 0;
+}
+.news-prose h1,
+.news-prose h2,
+.news-prose h3,
+.news-prose h4,
+.news-prose h5,
+.news-prose h6 {
+  font-weight: 700;
+  color: var(--p-surface-900);
+  line-height: 1.25;
+  margin: 1rem 0 0.5rem;
+}
+.news-prose h1 {
+  font-size: 1.3rem;
+}
+.news-prose h2 {
+  font-size: 1.12rem;
+}
+.news-prose h3 {
+  font-size: 1rem;
+}
+.news-prose p {
+  margin: 0.6rem 0;
+}
+.news-prose a {
+  color: var(--p-primary-600);
+  text-decoration: underline;
+}
+.news-prose ul,
+.news-prose ol {
+  margin: 0.6rem 0;
+  padding-left: 1.4rem;
+}
+.news-prose ul {
+  list-style: disc;
+}
+.news-prose ol {
+  list-style: decimal;
+}
+.news-prose li {
+  margin: 0.25rem 0;
+}
+.news-prose blockquote {
+  border-left: 3px solid var(--p-primary-200);
+  padding-left: 0.85rem;
+  margin: 0.75rem 0;
+  color: var(--p-text-muted-color);
+}
+.news-prose code {
+  background: var(--p-surface-100);
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
+  font-size: 0.85em;
+}
+.news-prose pre {
+  background: var(--p-surface-100);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+.news-prose pre code {
+  background: transparent;
+  padding: 0;
+}
+.news-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+.news-prose hr {
+  border: 0;
+  border-top: 1px solid var(--p-surface-200);
+  margin: 1rem 0;
+}
+/* GFM strikethrough (~~text~~ -> <s>/<del>). */
+.news-prose del,
+.news-prose s {
+  text-decoration: line-through;
+  color: var(--p-text-muted-color);
+}
+/* GFM task lists: the renderer marks the list with .contains-task-list and each
+   item with .task-list-item (leading disabled checkbox). Drop the bullet and align
+   the checkbox so items don't render as "bullet + checkbox". */
+.news-prose ul.contains-task-list {
+  list-style: none;
+  padding-left: 0;
+}
+.news-prose li.task-list-item {
+  margin: 0.25rem 0;
+}
+.news-prose .task-list-item-checkbox {
+  margin-right: 0.45rem;
+  vertical-align: middle;
+}
+
+/* ------------------------------------------------------------------
    Responsive PrimeNG DynamicDialog
    Apply via DynamicDialogConfig.styleClass: 'responsive-dialog'
    ------------------------------------------------------------------ */
