@@ -3,8 +3,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { Select } from 'primeng/select';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { CommunityDetailDTO, PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import {
+  CommunityDetailDTO,
+  CommunityQueryDTO,
+  PublicCommunityDTO,
+} from '../../../../shared/dtos/community.dtos';
 import {
   SharingOperationPartialDTO,
   SharingOperationPartialQuery,
@@ -12,23 +17,28 @@ import {
 import { MunicipalityPartialDTO } from '../../../../shared/dtos/municipality.dtos';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { MunicipalityService } from '../../../../shared/services/municipality.service';
+import { RegulatorStore } from '../../../../core/services/regulator.store';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 
 @Component({
   selector: 'app-public-community-list',
   standalone: true,
-  imports: [TagModule, AutoComplete, FormsModule, TranslatePipe, HeaderPage],
+  imports: [TagModule, AutoComplete, Select, FormsModule, TranslatePipe, HeaderPage],
   templateUrl: './public-community-list.html',
   styleUrl: './public-community-list.css',
 })
 export class PublicCommunityList {
   private communityService = inject(CommunityService);
   private municipalityService = inject(MunicipalityService);
+  private regulatorStore = inject(RegulatorStore);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
   communities = signal<PublicCommunityDTO[]>([]);
+  /** Active regulator options (localized) + the current filter value (null = all). */
+  regulatorOptions = signal<{ code: string; label: string }[]>([]);
+  selectedRegulator = signal<string | null>(null);
   /**
    * Per-community state for the lazily-loaded public sharing operations list.
    * Map missing → not loaded yet; empty array → loaded, none returned.
@@ -59,11 +69,42 @@ export class PublicCommunityList {
 
   constructor() {
     this.loadPublicCommunities();
+    this.regulatorStore
+      .ensureLoaded()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildRegulatorOptions());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildRegulatorOptions());
+  }
+
+  private buildRegulatorOptions(): void {
+    this.regulatorOptions.set(
+      this.regulatorStore.activeRegulators().map((r) => ({
+        code: r.code,
+        label: this.translate.instant('REGULATORS.' + r.code) as string,
+      })),
+    );
+  }
+
+  onRegulatorChange(code: string | null): void {
+    this.selectedRegulator.set(code ?? null);
+    // Reset per-community caches so expanded panels refetch, then reload the list.
+    this.publicOperations.set(new Map());
+    this.loadingOperations.set(new Set());
+    this.communityDetails.set(new Map());
+    this.expandedCommunityId.set(null);
+    this.loadPublicCommunities();
   }
 
   private loadPublicCommunities(): void {
+    const query: CommunityQueryDTO = { page: 1, limit: 10 };
+    const regulator = this.selectedRegulator();
+    if (regulator) {
+      query.regulator = regulator;
+    }
     this.communityService
-      .getPublicCommunities({ page: 1, limit: 10 })
+      .getPublicCommunities(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {

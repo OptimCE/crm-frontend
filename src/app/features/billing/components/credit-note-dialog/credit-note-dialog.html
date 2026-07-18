@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  <p class="text-sm text-surface-600 m-0">
+    {{ 'BILLING.CREDIT_NOTE_DIALOG.CONFIRM' | translate }}
+  </p>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="credit-note-reason">{{
+      'BILLING.CREDIT_NOTE_DIALOG.REASON' | translate
+    }}</label>
+    <textarea
+      pTextarea
+      id="credit-note-reason"
+      formControlName="reason"
+      rows="3"
+      class="w-full"
+      [placeholder]="'BILLING.CREDIT_NOTE_DIALOG.REASON_PLACEHOLDER' | translate"
+    ></textarea>
+  </div>
+
+  <div class="flex justify-end gap-2 mt-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+    />
+    <p-button
+      type="submit"
+      severity="danger"
+      [label]="'BILLING.CREDIT_NOTE_DIALOG.SUBMIT' | translate"
+      [loading]="submitting()"
+    />
+  </div>
+</form>

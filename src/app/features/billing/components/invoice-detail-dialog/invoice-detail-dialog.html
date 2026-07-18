@@ -1,0 +1,130 @@
+@if (loading()) {
+  <div class="flex flex-col gap-3">
+    <p-skeleton height="2rem" />
+    <p-skeleton height="8rem" />
+  </div>
+} @else if (invoice(); as inv) {
+  <div class="flex flex-col gap-5">
+    <!-- Header summary -->
+    <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
+      <div class="flex flex-col">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.NUMBER' | translate }}</span>
+        <span class="font-medium">{{ inv.number || '—' }}</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.TYPE' | translate }}</span>
+        <span class="font-medium">{{ typeLabelKey(inv) | translate }}</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.STATUS' | translate }}</span>
+        <p-tag [value]="statusLabelKey(inv) | translate" [severity]="statusSeverity(inv)" />
+      </div>
+      <div class="flex flex-col">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.ISSUED_AT' | translate }}</span>
+        <span class="font-medium">{{
+          inv.issued_at ? (inv.issued_at | date: 'dd/MM/yyyy') : '—'
+        }}</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.DUE_DATE' | translate }}</span>
+        <span class="font-medium">{{
+          inv.due_date ? (inv.due_date | date: 'dd/MM/yyyy') : '—'
+        }}</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.OGM' | translate }}</span>
+        <span class="font-medium font-mono">{{ inv.structured_comm || '—' }}</span>
+      </div>
+    </div>
+
+    <!-- Lines -->
+    <div class="flex flex-col gap-2">
+      <h3 class="text-sm font-semibold m-0">{{ 'BILLING.DETAIL.LINES_TITLE' | translate }}</h3>
+      @if (inv.lines && inv.lines.length) {
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="text-left text-surface-500 border-b border-surface-200">
+                <th class="py-1 pr-3">{{ 'BILLING.DETAIL.LINE.EAN' | translate }}</th>
+                <th class="py-1 pr-3">{{ 'BILLING.DETAIL.LINE.DIRECTION' | translate }}</th>
+                <th class="py-1 pr-3">{{ 'BILLING.DETAIL.LINE.MEASURE' | translate }}</th>
+                <th class="py-1 pr-3 text-right">{{ 'BILLING.DETAIL.LINE.QTY' | translate }}</th>
+                <th class="py-1 pr-3 text-right">
+                  {{ 'BILLING.DETAIL.LINE.UNIT_PRICE' | translate }}
+                </th>
+                <th class="py-1 text-right">{{ 'BILLING.DETAIL.LINE.AMOUNT' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (line of inv.lines; track line.id) {
+                <tr class="border-b border-surface-100">
+                  <td class="py-1 pr-3 font-mono">{{ line.ean }}</td>
+                  <td class="py-1 pr-3">{{ directionLabelKey(line.direction) | translate }}</td>
+                  <td class="py-1 pr-3">{{ measureLabelKey(line.measure) | translate }}</td>
+                  <td class="py-1 pr-3 text-right">{{ line.quantity_kwh }}</td>
+                  <td class="py-1 pr-3 text-right">{{ line.unit_price }}</td>
+                  <td class="py-1 text-right">{{ money(line.amount, inv.currency) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="text-surface-500 text-sm m-0">{{ 'BILLING.DETAIL.EMPTY_LINES' | translate }}</p>
+      }
+    </div>
+
+    <!-- Totals -->
+    <div class="flex flex-col items-end gap-1 text-sm">
+      <div class="flex gap-8">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.SUBTOTAL' | translate }}</span>
+        <span>{{ money(inv.subtotal, inv.currency) }}</span>
+      </div>
+      <div class="flex gap-8">
+        <span class="text-surface-500">{{ 'BILLING.DETAIL.VAT' | translate }}</span>
+        <span>{{ money(inv.vat_amount, inv.currency) }}</span>
+      </div>
+      <div class="flex gap-8 font-semibold">
+        <span>{{ 'BILLING.DETAIL.TOTAL' | translate }}</span>
+        <span>{{ money(inv.total, inv.currency) }}</span>
+      </div>
+    </div>
+
+    <!-- Payments -->
+    <div class="flex flex-col gap-2">
+      <h3 class="text-sm font-semibold m-0">{{ 'BILLING.DETAIL.PAYMENTS_TITLE' | translate }}</h3>
+      @if (payments().length) {
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="text-left text-surface-500 border-b border-surface-200">
+                <th class="py-1 pr-3">{{ 'BILLING.DETAIL.PAYMENT.DATE' | translate }}</th>
+                <th class="py-1 pr-3">{{ 'BILLING.DETAIL.PAYMENT.METHOD' | translate }}</th>
+                <th class="py-1 pr-3">{{ 'BILLING.DETAIL.PAYMENT.REFERENCE' | translate }}</th>
+                <th class="py-1 text-right">{{ 'BILLING.DETAIL.PAYMENT.AMOUNT' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (payment of payments(); track payment.id) {
+                <tr class="border-b border-surface-100">
+                  <td class="py-1 pr-3">{{ payment.paid_at | date: 'dd/MM/yyyy' }}</td>
+                  <td class="py-1 pr-3">{{ methodLabelKey(payment.method) | translate }}</td>
+                  <td class="py-1 pr-3">{{ payment.reference || '—' }}</td>
+                  <td class="py-1 text-right">{{ money(payment.amount, payment.currency) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="text-surface-500 text-sm m-0">
+          {{ 'BILLING.DETAIL.EMPTY_PAYMENTS' | translate }}
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="flex justify-end mt-4">
+    <p-button text [label]="'BILLING.DETAIL.CLOSE' | translate" (onClick)="close()" />
+  </div>
+}

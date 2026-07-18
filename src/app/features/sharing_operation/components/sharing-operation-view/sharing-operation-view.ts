@@ -4,13 +4,7 @@ import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Skeleton } from 'primeng/skeleton';
@@ -19,16 +13,17 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmPopup } from 'primeng/confirmpopup';
+import { DatePicker } from 'primeng/datepicker';
 import { CardModule } from 'primeng/card';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
+import { ConsumptionUpload } from '../../../../shared/components/consumption-upload/consumption-upload';
+import { ConsumptionCoverage } from '../../../../shared/components/consumption-coverage/consumption-coverage';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Drawer } from 'primeng/drawer';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import {
-  AddConsumptionDataDTO,
   SharingOperationDTO,
   SharingOperationKeyDTO,
   SharingOperationMetersQueryType,
@@ -42,7 +37,7 @@ import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { SharingOperationAddMeter } from '../sharing-operation-add-meter/sharing-operation-add-meter';
 import { SharingOperationAddKey } from '../sharing-operation-add-key/sharing-operation-add-key';
 import { SharingKeyStatus } from '../../../../shared/types/sharing_operation.types';
-import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { ERROR_TYPE, VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 import { KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
@@ -62,7 +57,6 @@ import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-munic
     Ripple,
     InputTextModule,
     PrimeTemplate,
-    ReactiveFormsModule,
     TableModule,
     TagModule,
     FormsModule,
@@ -72,10 +66,12 @@ import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-munic
     DatePipe,
     ToastModule,
     SplitButtonModule,
-    ConfirmPopupModule,
+    ConfirmPopup,
+    DatePicker,
     CardModule,
     TranslatePipe,
-    ErrorHandlerComponent,
+    ConsumptionUpload,
+    ConsumptionCoverage,
     CheckboxModule,
     Drawer,
     SharingOperationTypePipe,
@@ -129,10 +125,7 @@ export class SharingOperationView implements OnInit {
   readonly currentPageReportTemplate = signal<string>('');
   readonly metersCharts = signal<PartialMeterDTO[]>([]);
   readonly selectedMeterCharts = signal<boolean[]>([]);
-
-  readonly dragging = signal<boolean>(false);
-  readonly fileConsumption = signal<File | null>(null);
-  formGroup!: FormGroup;
+  readonly coverageReload = signal<number>(0);
 
   readonly hasKey = computed(() => !!this.sharingOperation()?.key?.key);
   readonly hasWaitingKey = computed(() => !!this.sharingOperation()?.key_waiting_approval);
@@ -149,14 +142,6 @@ export class SharingOperationView implements OnInit {
       this.loadOperationSharing();
       this.setupStatusCategory();
       this.updatePaginationTranslation();
-      this.formGroup = new FormGroup(
-        {
-          fileConsumption: new FormControl('', [Validators.required]),
-        },
-        {
-          updateOn: 'submit',
-        },
-      );
       this.loadAllMeters();
     }
   }
@@ -280,10 +265,6 @@ export class SharingOperationView implements OnInit {
         },
       });
   }
-  //
-  // exportExcelCWAPe(): void {
-  //   console.log('TO IMPLEMENT');
-  // }
   loadAllMeters(): void {
     try {
       const params: MeterPartialQuery = {
@@ -469,10 +450,16 @@ export class SharingOperationView implements OnInit {
             this.errorHandler.handleError(error);
           },
         });
+    } else {
+      this.snackbar.openSnackBar(
+        this.translate.instant('SHARING_OPERATION.VIEW.KEY.APPROVE_KEY_NO_DATE_ERROR') as string,
+        ERROR_TYPE,
+      );
     }
   }
 
   openDateApprovedKey(event: Event): void {
+    this.dateStartApproved.set(new Date());
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       acceptIcon: 'pi pi-check',
@@ -502,71 +489,11 @@ export class SharingOperationView implements OnInit {
       });
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const selectedFile = input.files?.[0];
-    if (selectedFile) {
-      this.fileConsumption.set(selectedFile);
-      this.formGroup.patchValue({ fileConsumption: this.fileConsumption() });
-      this.formGroup.get('fileConsumption')?.updateValueAndValidity();
-    }
-  }
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.dragging.set(true);
-  }
-
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.dragging.set(false);
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.dragging.set(false);
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      this.fileConsumption.set(files[0]);
-      this.formGroup.patchValue({ fileConsumption: this.fileConsumption() });
-      this.formGroup.get('fileConsumption')?.updateValueAndValidity();
-    }
-  }
-
-  addConsumptionInformations(): void {
-    const op = this.sharingOperation();
-    if (this.formGroup.invalid || !op) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', this.fileConsumption() as File);
-    formData.append('idSharing', op.id.toString());
-    const addConsumption: AddConsumptionDataDTO = {
-      id_sharing_operation: op.id,
-    };
-    this.sharingOperationService
-      .addConsumptionDataToSharing(addConsumption)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.snackbar.openSnackBar(
-              this.translate.instant(
-                'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.UPLOAD_SUCCESS_LABEL',
-              ) as string,
-              VALIDATION_TYPE,
-            );
-          } else {
-            this.errorHandler.handleError(response);
-          }
-        },
-        error: (error) => {
-          this.errorHandler.handleError(error);
-        },
-      });
+  /** Consumption data was uploaded — refresh the month-coverage grid. */
+  onConsumptionUploaded(): void {
+    // The uploader shows its own success toast and the service invalidates the
+    // consumption cache; bump reloadKey so the coverage grid refetches.
+    this.coverageReload.update((n) => n + 1);
   }
 
   protected readonly KeyStatus = SharingKeyStatus;

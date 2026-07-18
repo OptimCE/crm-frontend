@@ -1,0 +1,169 @@
+<div class="flex flex-col gap-4">
+  <!-- Filter bar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      <!-- Status -->
+      <div>
+        <span class="field-label">{{ 'BILLING.FILTERS.STATUS' | translate }}</span>
+        <p-select
+          [options]="statusOptions"
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'BILLING.TRACKING.ALL_STATUSES' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="tracking-board__select--status"
+        />
+      </div>
+
+      <!-- Member -->
+      <div>
+        <span class="field-label">{{ 'BILLING.FILTERS.MEMBER' | translate }}</span>
+        <p-select
+          [options]="memberOptions()"
+          [(ngModel)]="participant"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [filter]="true"
+          [placeholder]="'BILLING.FILTERS.ALL_MEMBERS' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="tracking-board__select--member"
+        />
+      </div>
+
+      <!-- Issued from -->
+      <div>
+        <span class="field-label">{{ 'BILLING.FILTERS.ISSUED_FROM' | translate }}</span>
+        <p-datepicker
+          [(ngModel)]="issuedFrom"
+          (ngModelChange)="applyFilters()"
+          [showIcon]="true"
+          [showClear]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+          data-testid="tracking-board__datepicker--from"
+        />
+      </div>
+
+      <!-- Issued to -->
+      <div>
+        <span class="field-label">{{ 'BILLING.FILTERS.ISSUED_TO' | translate }}</span>
+        <p-datepicker
+          [(ngModel)]="issuedTo"
+          (ngModelChange)="applyFilters()"
+          [showIcon]="true"
+          [showClear]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+          data-testid="tracking-board__datepicker--to"
+        />
+      </div>
+
+      <!-- Sort -->
+      <div class="sm:col-span-2">
+        <span class="field-label">{{ 'BILLING.FILTERS.SORT_BY' | translate }}</span>
+        <div class="flex items-center gap-2">
+          <p-select
+            [options]="sortOptions"
+            [(ngModel)]="sortField"
+            (ngModelChange)="applyFilters()"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            class="w-full"
+            data-testid="tracking-board__select--sort"
+          />
+          <p-button
+            type="button"
+            severity="secondary"
+            [outlined]="true"
+            [icon]="sortOrder === 'asc' ? 'pi pi-sort-amount-up' : 'pi pi-sort-amount-down'"
+            [pTooltip]="
+              (sortOrder === 'asc' ? 'BILLING.SORT.ASC' : 'BILLING.SORT.DESC') | translate
+            "
+            (onClick)="toggleSortOrder()"
+            data-testid="tracking-board__btn--sort-order"
+          />
+        </div>
+      </div>
+
+      <!-- Clear -->
+      <div class="flex items-end sm:col-span-2 lg:col-span-1">
+        <p-button
+          icon="pi pi-filter-slash"
+          [label]="'BILLING.FILTERS.CLEAR' | translate"
+          (onClick)="clearFilters()"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+          data-testid="tracking-board__btn--clear"
+        />
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-2 mt-3">
+      <p-button
+        text
+        icon="pi pi-refresh"
+        [pTooltip]="'BILLING.TRACKING.REFRESH' | translate"
+        (onClick)="refresh()"
+      />
+      <p-button
+        severity="secondary"
+        icon="pi pi-flag"
+        [label]="'BILLING.TRACKING.SWEEP_BTN' | translate"
+        (onClick)="sweep()"
+      />
+    </div>
+  </div>
+
+  <!-- List -->
+  @if (loading()) {
+    <div class="flex flex-col gap-2">
+      <p-skeleton height="4rem" />
+      <p-skeleton height="4rem" />
+      <p-skeleton height="4rem" />
+    </div>
+  } @else if (invoices().length === 0) {
+    <p class="text-surface-500 text-sm">{{ 'BILLING.TRACKING.EMPTY' | translate }}</p>
+  } @else {
+    <app-invoice-list
+      [invoices]="invoices()"
+      [memberNames]="memberNames()"
+      [showMember]="true"
+      (changed)="refresh()"
+    />
+
+    @if (hasMultiplePages()) {
+      <div class="flex items-center justify-center gap-3 mt-2">
+        <p-button
+          text
+          icon="pi pi-chevron-left"
+          [disabled]="pagination().page <= 1"
+          (onClick)="goToPage(pagination().page - 1)"
+        />
+        <span class="text-sm text-surface-500">
+          {{
+            'BILLING.TRACKING.PAGE_INFO'
+              | translate: { page: pagination().page, total: pagination().total_pages }
+          }}
+        </span>
+        <p-button
+          text
+          icon="pi pi-chevron-right"
+          [disabled]="pagination().page >= pagination().total_pages"
+          (onClick)="goToPage(pagination().page + 1)"
+        />
+      </div>
+    }
+  }
+</div>
+
+<p-confirmDialog />

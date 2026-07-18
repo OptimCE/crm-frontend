@@ -17,6 +17,10 @@ import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { SharingOpConsumptionDTO } from '../../../../../shared/dtos/sharing_operation.dtos';
 import { SharingOperationService } from '../../../../../shared/services/sharing_operation.service';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
+import {
+  toLocalDateString,
+  formatBrusselsWallClockDateTime,
+} from '../../../../../shared/utils/date.utils';
 
 interface ChartFormValue {
   dateDeb: string;
@@ -77,6 +81,10 @@ export class SharingOperationConsumptionChart implements OnInit {
         mode: 'index',
         intersect: false,
         callbacks: {
+          title: (items: { label?: string }[]): string => {
+            const label = items[0]?.label;
+            return label ? formatBrusselsWallClockDateTime(label) : '';
+          },
           label: function (tooltipItem: { dataset: { label?: string }; raw: unknown }): string {
             const label = tooltipItem.dataset.label || '';
             const value = tooltipItem.raw as number;
@@ -96,18 +104,7 @@ export class SharingOperationConsumptionChart implements OnInit {
           callback: (_value: unknown, index: number): string => {
             const label = this.data()?.labels?.[index];
             if (!label) return '';
-
-            const date = new Date(label);
-            if (isNaN(date.getTime())) return label;
-
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-
-            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+            return formatBrusselsWallClockDateTime(label);
           },
         },
       },
@@ -138,8 +135,8 @@ export class SharingOperationConsumptionChart implements OnInit {
     const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.sharingOperationService
       .getSharingOperationConsumptions(this.idSharing(), {
-        date_start: formValue.dateDeb,
-        date_end: formValue.dateFin,
+        date_start: toLocalDateString(formValue.dateDeb as unknown as Date),
+        date_end: toLocalDateString(formValue.dateFin as unknown as Date),
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
@@ -191,8 +188,8 @@ export class SharingOperationConsumptionChart implements OnInit {
     const formValue = this.formChart.getRawValue() as ChartFormValue;
     this.sharingOperationService
       .downloadSharingOperationConsumptions(this.idSharing(), {
-        date_start: formValue.dateDeb,
-        date_end: formValue.dateFin,
+        date_start: toLocalDateString(formValue.dateDeb as unknown as Date),
+        date_end: toLocalDateString(formValue.dateFin as unknown as Date),
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

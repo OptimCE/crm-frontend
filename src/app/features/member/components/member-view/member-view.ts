@@ -1,4 +1,5 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Dialog } from 'primeng/dialog';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -21,6 +22,10 @@ import { Avatar } from 'primeng/avatar';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { MemberViewTabs } from './member-view-tabs/member-view-tabs';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+
+/** Backend LocalError code for MEMBER_HAS_ACTIVE_METERS (see crm-backend member.errors.ts). */
+const MEMBER_HAS_ACTIVE_METERS_CODE = 50013;
 
 enum InvitationStatus {
   LOADING = 0,
@@ -55,6 +60,7 @@ export class MemberView implements OnInit {
   private routing = inject(Router);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
+  private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
@@ -228,9 +234,8 @@ export class MemberView implements OnInit {
         }
       }
     }
-    this.memberService
-      .patchMemberStatus({ status: status, id_member: this.id() })
-      .subscribe((response) => {
+    this.memberService.patchMemberStatus({ status: status, id_member: this.id() }).subscribe({
+      next: (response) => {
         if (response) {
           this.snackbar.openSnackBar(
             this.translate.instant('MEMBER.VIEW.MEMBER_STATUS_UPDATE_SUCCESSFULLY_LABEL') as string,
@@ -238,7 +243,19 @@ export class MemberView implements OnInit {
           );
           this.loadMember();
         }
-      });
+      },
+      error: (error: HttpErrorResponse) => {
+        const body = error.error as { error_code?: number; data?: string } | null;
+        if (body?.error_code === MEMBER_HAS_ACTIVE_METERS_CODE) {
+          // Backend blocked the deactivation because the member still has active meters:
+          // surface the existing "cannot deactivate" alert dialog so the manager knows to
+          // deactivate the meters first.
+          this.alertPopupVisible.set(true);
+          return;
+        }
+        this.errorHandler.handleError(body?.data ?? null);
+      },
+    });
   }
 
   invite(manager = false): void {

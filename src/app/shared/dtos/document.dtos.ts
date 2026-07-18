@@ -12,7 +12,6 @@ export interface DocumentQueryDTO extends PaginationQuery {
  */
 export interface UploadDocumentDTO {
   id_member: number;
-  // file: Express.Multer.File; TODO: Fix this
 }
 
 /**

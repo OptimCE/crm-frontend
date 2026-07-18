@@ -130,7 +130,8 @@
     "ERROR_LOADING": "Er is een fout opgetreden bij het laden van de gegevens",
     "RETRY": "Opnieuw proberen",
     "AUDIT_LOG": "Auditlogboek",
-    "NEWS": "Nieuws"
+    "NEWS": "Nieuws",
+    "BILLING": "Facturatie"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -267,6 +268,11 @@
       "NO_INVITATIONS_AVAILABLE": "Geen manageruitnodigingen gevonden"
     }
   },
+  "REGULATORS": {
+    "BE-WAL-CWAPE": "CWaPE (Wallonië)",
+    "BE-BRU-BRUGEL": "Brugel (Brussel)",
+    "BE-VLA-VREG": "VREG (Vlaanderen)"
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Gemeenschapsinfo",
     "SUBTITLE": "Bekijk en beheer de gegevens van uw gemeenschap",
@@ -288,9 +294,20 @@
     "CHOOSE_LOGO": "Logo kiezen",
     "REMOVE_LOGO": "Logo verwijderen",
     "NO_COMMUNITY": "Geen actieve gemeenschap geselecteerd.",
+    "REGULATOR": "Regulator",
+    "REGULATOR_PLACEHOLDER": "Selecteer een regulator",
+    "REGULATOR_CHANGE_CONFIRM_TITLE": "Regulator wijzigen?",
+    "REGULATOR_CHANGE_CONFIRM_MESSAGE": "Het wijzigen van de regulator verandert het facturatieregime en de administratieve documenten van deze gemeenschap. Weet u zeker dat u wilt doorgaan?",
+    "BANK_LEGAL_SECTION": "Bank- en juridische gegevens",
+    "LEGAL_NAME": "Juridische naam",
+    "VAT_NUMBER": "Btw-nummer",
+    "IBAN": "IBAN",
+    "ACCOUNT_HOLDER_NAME": "Rekeninghouder",
+    "ACCOUNT_HOLDER_HINT": "Alleen invullen als de rekening niet op de juridische naam staat",
     "ERRORS": {
       "INVALID_URL": "Voer een geldige URL in die begint met http:// of https://",
-      "PARTIAL_ADDRESS": "Vul alle verplichte adresvelden in of laat ze allemaal leeg"
+      "PARTIAL_ADDRESS": "Vul alle verplichte adresvelden in of laat ze allemaal leeg",
+      "INVALID_IBAN": "Voer een geldig IBAN in"
     }
   },
   "COMMUNITY": {
@@ -316,6 +333,10 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Van gemeenschap wisselen",
       "LEAVE_BUTTON": "Verlaten",
       "LEAVE_BUTTON_TOOLTIP": "Gemeenschap verlaten",
+      "LEAVE_CONFIRM_HEADER": "Gemeenschap verlaten",
+      "LEAVE_CONFIRM_MESSAGE": "Weet u zeker dat u \"{{name}}\" wilt verlaten?",
+      "LEAVE_SUCCESS": "U hebt de gemeenschap verlaten.",
+      "UPDATE_SUCCESS": "Naam van de gemeenschap bijgewerkt.",
       "NO_COMMUNITY_FOUND": "Geen gemeenschap gevonden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
       "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)",
@@ -330,7 +351,9 @@
       "NO_OPERATIONS": "Geen openbare deeloperatie voor deze gemeenschap",
       "MUNICIPALITIES": "Gemeenten",
       "MUNICIPALITY_FILTER_LABEL": "Filter op gemeente",
-      "MUNICIPALITY_FILTER_PLACEHOLDER": "Zoek een gemeente…"
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Zoek een gemeente…",
+      "REGULATOR_FILTER_LABEL": "Filter op regulator",
+      "REGULATOR_FILTER_PLACEHOLDER": "Alle regulatoren"
     },
     "CREATE": {
       "TITLE": "Gemeenschap aanmaken",
@@ -879,6 +902,9 @@
       "PLACEHOLDER": {
         "EAN_LABEL": "1234567890123",
         "METER_NUMBER_LABEL": "1234567890123"
+      },
+      "ERROR": {
+        "INVALID_EAN": "De EAN moet precies 13 cijfers bevatten."
       }
     },
     "CATEGORIES": {
@@ -1173,7 +1199,6 @@
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Deeloperatie",
       "GENERAL_INFO_TITLE": "Algemene informatie",
-      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporteren als Excel (CWAPE)",
       "NAME_LABEL": "Naam",
       "TYPE_LABEL": "Type",
       "MUNICIPALITIES_LABEL": "Gedekte gemeenten",
@@ -1204,7 +1229,9 @@
         "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Sleutel succesvol gewijzigd",
         "WAITING_APPROVAL_KEY_LABEL": "Sleutel in afwachting van goedkeuring",
         "APPROVE_KEY": "Goedkeuren",
-        "REJECT_KEY": "Afwijzen"
+        "REJECT_KEY": "Afwijzen",
+        "APPROVE_KEY_DATE_LABEL": "Startdatum voor de goedgekeurde sleutel",
+        "APPROVE_KEY_NO_DATE_ERROR": "Selecteer een startdatum voordat u de sleutel goedkeurt."
       },
       "METER": {
         "HEADERS": {
@@ -1372,7 +1399,257 @@
     "NEWS": {
       "NAME": "Nieuws",
       "DESCRIPTION": "Publiceer aankondigingen en peilingen voor de hele gemeenschap."
+    },
+    "BILLING": {
+      "NAME": "Facturatie",
+      "DESCRIPTION": "Factureer leden voor hun verbruik uit energiedeling; leden bekijken en betalen hun eigen facturen."
     }
+  },
+  "BILLING": {
+    "TITLE": "Facturatie",
+    "SUBTITLE": "Tarieven, facturatie en betalingsopvolging voor de gemeenschap.",
+    "DRAFT_PLACEHOLDER": "Concept",
+    "TABS": {
+      "TARIFFS": "Tarieven",
+      "GENERATE": "Factuur genereren",
+      "TRACKING": "Overzicht",
+      "MY_INVOICES": "Mijn facturen"
+    },
+    "OPERATION": {
+      "SELECT_LABEL": "Deeloperatie",
+      "SELECT_PLACEHOLDER": "Selecteer een deeloperatie",
+      "NONE_SELECTED": "Selecteer een deeloperatie om de tarieven te beheren."
+    },
+    "TARIFFS": {
+      "ADD": "Nieuw tarief",
+      "EMPTY": "Nog geen tarief gedefinieerd voor deze operatie.",
+      "CREATED": "Tarief aangemaakt.",
+      "DELETED": "Tarief verwijderd.",
+      "DELETE_CONFIRM_HEADER": "Tarief verwijderen",
+      "DELETE_CONFIRM_MESSAGE": "Weet u zeker dat u dit tarief wilt verwijderen?",
+      "COL": {
+        "KIND": "Soort",
+        "SCOPE": "Bereik",
+        "PRICE": "Prijs",
+        "VALIDITY": "Geldigheid",
+        "LABEL": "Label"
+      }
+    },
+    "TARIFF_KIND": {
+      "CONSUMER_SELLING": "Verkoopprijs voor verbruiker",
+      "PRODUCER_BUYBACK": "Terugkoopprijs voor producent"
+    },
+    "TARIFF_SCOPE": {
+      "GLOBAL": "Globaal",
+      "SEGMENT": "Segment",
+      "EAN": "EAN"
+    },
+    "TARIFF_SEGMENT": {
+      "RESIDENTIAL": "Residentieel",
+      "PROFESSIONAL": "Professioneel",
+      "INDUSTRIAL": "Industrieel"
+    },
+    "TARIFF_DIALOG": {
+      "TITLE": "Nieuw tarief",
+      "KIND": "Soort",
+      "SCOPE": "Bereik",
+      "SEGMENT": "Segment",
+      "EAN": "EAN",
+      "PRICE": "Prijs per kWh",
+      "VALID_FROM": "Geldig vanaf",
+      "VALID_TO": "Geldig tot (optioneel)",
+      "LABEL": "Label (optioneel)",
+      "SUBMIT": "Tarief aanmaken",
+      "ERRORS": {
+        "REQUIRED": "Geef een geldige prijs en startdatum op.",
+        "SEGMENT_REQUIRED": "Selecteer een segment voor een tarief per segment.",
+        "EAN_REQUIRED": "Voer een EAN in voor een tarief per EAN.",
+        "VALIDITY_ORDER": "De einddatum moet op of na de startdatum liggen."
+      }
+    },
+    "GENERATE": {
+      "UPLOAD_TITLE": "Verbruiksgegevens",
+      "UPLOAD_SUBTITLE": "Upload het Excel-bestand met meetgegevens voor deze operatie voordat u facturen genereert.",
+      "PERIOD_START": "Periode van",
+      "PERIOD_END": "Periode tot",
+      "GENERATE_BTN": "Genereren",
+      "RECENT_RUNS": "Recente uitvoeringen",
+      "INVOICES_SUFFIX": "facturen",
+      "INVOICES_TITLE": "Facturen",
+      "COMPUTING": "Facturen worden berekend…",
+      "RUN_FAILED": "Deze uitvoering is mislukt. Controleer de periode en de geïmporteerde gegevens en probeer opnieuw.",
+      "EMPTY_INVOICES": "Deze uitvoering heeft geen facturen opgeleverd.",
+      "RUN_CREATED": "Facturatie-uitvoering gestart.",
+      "ERRORS": {
+        "REQUIRED": "Selecteer een operatie en een periode.",
+        "PERIOD_ORDER": "De einddatum moet op of na de startdatum liggen."
+      }
+    },
+    "RUN_STATUS": {
+      "PENDING": "In afwachting",
+      "COMPUTING": "Bezig",
+      "COMPUTED": "Berekend",
+      "FAILED": "Mislukt"
+    },
+    "INVOICE": {
+      "ISSUED_AT": "Uitgereikt",
+      "DUE_DATE": "Vervaldatum"
+    },
+    "INVOICE_STATUS": {
+      "DRAFT": "Concept",
+      "ISSUED": "Uitgereikt",
+      "SENT": "Verzonden",
+      "PAID": "Betaald",
+      "OVERDUE": "Achterstallig",
+      "CANCELLED": "Geannuleerd",
+      "RENDER_FAILED": "Weergave mislukt"
+    },
+    "INVOICE_TYPE": {
+      "INVOICE": "Factuur",
+      "CREDIT_NOTE": "Creditnota",
+      "PRODUCER_STATEMENT": "Producentafrekening"
+    },
+    "ACTIONS": {
+      "VIEW_DETAIL": "Details bekijken",
+      "ISSUE": "Uitreiken",
+      "SEND": "Verzenden",
+      "REGISTER_PAYMENT": "Betaling registreren",
+      "CREDIT_NOTE": "Creditnota",
+      "DOWNLOAD_PDF": "PDF downloaden",
+      "GENERATE_PDF": "PDF genereren",
+      "REGENERATE_PDF": "PDF opnieuw genereren",
+      "DELETE_PDF": "PDF verwijderen"
+    },
+    "ISSUE": {
+      "SUCCESS": "Factuur {{number}} uitgereikt (OGM {{ogm}})."
+    },
+    "SEND": {
+      "SUCCESS": "Factuur verzonden."
+    },
+    "PAYMENT": {
+      "SUCCESS": "Betaling geregistreerd."
+    },
+    "CREDIT_NOTE": {
+      "SUCCESS": "Creditnota aangemaakt."
+    },
+    "PDF": {
+      "DOWNLOAD": "Downloaden",
+      "GENERATING": "Genereren…",
+      "GENERATE_STARTED": "PDF-generatie gestart.",
+      "GENERATE_SUCCESS": "De PDF is gereed.",
+      "GENERATE_FAILED": "PDF-generatie mislukt.",
+      "DELETE_SUCCESS": "PDF verwijderd.",
+      "DOWNLOAD_FAILED": "Kon de PDF niet downloaden."
+    },
+    "PAYMENT_DIALOG": {
+      "TITLE": "Betaling registreren",
+      "AMOUNT": "Bedrag",
+      "METHOD": "Methode",
+      "REFERENCE": "Referentie (optioneel)",
+      "PAID_ON": "Betaald op (optioneel)",
+      "SUBMIT": "Betaling registreren",
+      "ERRORS": {
+        "AMOUNT_REQUIRED": "Voer een geldig bedrag in."
+      }
+    },
+    "PAYMENT_METHOD": {
+      "BANK_TRANSFER": "Overschrijving",
+      "DIRECT_DEBIT": "Domiciliëring",
+      "CASH": "Contant",
+      "OTHER": "Andere"
+    },
+    "CREDIT_NOTE_DIALOG": {
+      "TITLE": "Creditnota aanmaken",
+      "CONFIRM": "Dit maakt een creditnota die de factuur tegenboekt. De oorspronkelijke factuur blijft ongewijzigd.",
+      "REASON": "Reden (optioneel)",
+      "REASON_PLACEHOLDER": "Waarom wordt deze creditnota uitgereikt?",
+      "SUBMIT": "Creditnota aanmaken"
+    },
+    "DETAIL": {
+      "TITLE": "Factuurdetails",
+      "NUMBER": "Nummer",
+      "TYPE": "Type",
+      "STATUS": "Status",
+      "ISSUED_AT": "Uitgereikt op",
+      "DUE_DATE": "Vervaldatum",
+      "OGM": "Gestructureerde mededeling",
+      "LINES_TITLE": "Lijnen",
+      "EMPTY_LINES": "Geen lijnen.",
+      "SUBTOTAL": "Subtotaal",
+      "VAT": "Btw",
+      "TOTAL": "Totaal",
+      "PAYMENTS_TITLE": "Betalingen",
+      "EMPTY_PAYMENTS": "Geen betalingen geregistreerd.",
+      "CLOSE": "Sluiten",
+      "LINE": {
+        "EAN": "EAN",
+        "DIRECTION": "Richting",
+        "MEASURE": "Meting",
+        "QTY": "Hoeveelheid (kWh)",
+        "UNIT_PRICE": "Eenheidsprijs",
+        "AMOUNT": "Bedrag"
+      },
+      "PAYMENT": {
+        "DATE": "Datum",
+        "METHOD": "Methode",
+        "REFERENCE": "Referentie",
+        "AMOUNT": "Bedrag"
+      }
+    },
+    "DIRECTION": {
+      "CONSUMER": "Verbruik",
+      "PRODUCER": "Injectie"
+    },
+    "MEASURE": {
+      "SHARED": "Gedeeld",
+      "INJ_SHARED": "Gedeelde injectie"
+    },
+    "TRACKING": {
+      "ALL_STATUSES": "Alle statussen",
+      "REFRESH": "Vernieuwen",
+      "SWEEP_BTN": "Achterstallige markeren",
+      "EMPTY": "Geen facturen komen overeen met de filter.",
+      "PAGE_INFO": "Pagina {{page}} van {{total}}",
+      "SWEEP_CONFIRM_HEADER": "Achterstallige facturen markeren",
+      "SWEEP_CONFIRM_MESSAGE": "Alle vervallen, onbetaalde facturen als achterstallig markeren?",
+      "SWEEP_DONE": "{{count}} factu(u)r(en) als achterstallig gemarkeerd."
+    },
+    "FILTERS": {
+      "STATUS": "Status",
+      "MEMBER": "Lid",
+      "ALL_MEMBERS": "Alle leden",
+      "ISSUED_FROM": "Uitgereikt vanaf",
+      "ISSUED_TO": "Uitgereikt tot",
+      "SORT_BY": "Sorteren op",
+      "CLEAR": "Filters wissen"
+    },
+    "SORT": {
+      "ISSUED_DATE": "Uitgiftedatum",
+      "DUE_DATE": "Vervaldatum",
+      "AMOUNT": "Bedrag",
+      "NUMBER": "Nummer",
+      "STATUS": "Status",
+      "ASC": "Oplopend",
+      "DESC": "Aflopend"
+    },
+    "MEMBER_VIEW": {
+      "TITLE": "Mijn facturen",
+      "SUBTITLE": "Uw facturen uit energiedeling en hoe u ze betaalt.",
+      "ALL_STATUSES": "Alle statussen",
+      "EMPTY": "U hebt nog geen facturen.",
+      "ISSUED_AT": "Uitgereikt",
+      "DUE_DATE": "Vervaldatum",
+      "OGM_LABEL": "Gestructureerde mededeling",
+      "PAGE_INFO": "Pagina {{page}} van {{total}}"
+    }
+  },
+  "CONSUMPTION_COVERAGE": {
+    "TITLE": "Beschikbare verbruiksgegevens",
+    "EMPTY": "Nog geen verbruiksgegevens geüpload.",
+    "LEGEND_COMPLETE": "Volledig",
+    "LEGEND_PARTIAL": "Gedeeltelijk",
+    "LEGEND_NONE": "Geen gegevens",
+    "POINTS": "{{count}} gegevenspunten ({{pct}}% van de maand)"
   },
   "SIMULATION_HUB": {
     "PAGE_TITLE": "Simulatie van verdeelsleutel",

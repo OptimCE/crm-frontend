@@ -29,6 +29,10 @@ import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { AddressDTO } from '../../../../shared/dtos/address.dtos';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { SharingOperationConsumptionChart } from './sharing-operation-consumption-chart/sharing-operation-consumption-chart';
+import { ConsumptionUpload } from '../../../../shared/components/consumption-upload/consumption-upload';
+import { ConsumptionCoverage } from '../../../../shared/components/consumption-coverage/consumption-coverage';
+import { ConfirmPopup } from 'primeng/confirmpopup';
+import { DatePicker } from 'primeng/datepicker';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -181,6 +185,10 @@ describe('SharingOperationView', () => {
             TabPanel,
             TabPanels,
             SharingOperationConsumptionChart,
+            ConsumptionUpload,
+            ConsumptionCoverage,
+            ConfirmPopup,
+            DatePicker,
           ],
           providers: [DialogService, ConfirmationService, MessageService, ErrorMessageHandler],
         },
@@ -247,12 +255,6 @@ describe('SharingOperationView', () => {
         page: 1,
         limit: 100,
       });
-    });
-
-    it('should initialize formGroup with fileConsumption control', async () => {
-      await createComponent();
-      expect(component.formGroup).toBeTruthy();
-      expect(component.formGroup.contains('fileConsumption')).toBe(true);
     });
 
     it('should set isLoading to false after successful load', async () => {
@@ -612,10 +614,13 @@ describe('SharingOperationView', () => {
       expect(sharingOperationServiceSpy.getSharingOperation).toHaveBeenCalledWith(1);
     });
 
-    it('should not call patchKeyStatus when no date is set', () => {
+    it('should not call patchKeyStatus and warn the user when no date is set', () => {
       sharingOperationServiceSpy.patchKeyStatus.mockClear();
+      snackbarSpy.openSnackBar.mockClear();
       component.approveWaitingKey();
       expect(sharingOperationServiceSpy.patchKeyStatus).not.toHaveBeenCalled();
+      // The guard must surface a visible warning instead of silently returning.
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalled();
     });
 
     it('should not call patchKeyStatus when no waiting key', async () => {
@@ -640,117 +645,54 @@ describe('SharingOperationView', () => {
   });
 
   describe('openDateApprovedKey', () => {
-    it('should call confirmationService.confirm', async () => {
+    beforeEach(async () => {
+      sharingOperationServiceSpy.getSharingOperation.mockReturnValue(
+        of(
+          new ApiResponse<SharingOperationDTO>(
+            buildSharingOperation({
+              key_waiting_approval: buildSharingOperationKey({
+                id: 20,
+                key: { id: 200, name: 'Waiting Key', description: 'desc' },
+                status: SharingKeyStatus.PENDING,
+              }),
+            }),
+          ),
+        ),
+      );
       await createComponent();
+    });
+
+    it('should default the approval date to today and open the confirm popup', () => {
       const mockEvent = { target: document.createElement('button') } as unknown as Event;
       component.openDateApprovedKey(mockEvent);
+      // Production code must supply a date so approveWaitingKey's guard can pass.
+      expect(component.dateStartApproved()).toBeInstanceOf(Date);
       expect(confirmationServiceSpy.confirm).toHaveBeenCalled();
     });
-  });
 
-  // ── 9. File Upload / Drag & Drop ─────────────────────────────────
+    it('should approve the waiting key when the confirm popup is accepted', () => {
+      const mockEvent = { target: document.createElement('button') } as unknown as Event;
+      component.openDateApprovedKey(mockEvent);
 
-  describe('file upload and drag & drop', () => {
-    beforeEach(async () => {
-      await createComponent();
-    });
+      // Drive the real flow: invoke the accept callback the popup would fire.
+      const confirmArgs = confirmationServiceSpy.confirm.mock.calls[0][0] as {
+        accept: () => void;
+      };
+      const approvalDate = component.dateStartApproved();
+      confirmArgs.accept();
 
-    it('onFileSelected should set fileConsumption', () => {
-      const file = new File(['content'], 'test.csv', { type: 'text/csv' });
-      const event = {
-        target: { files: [file] } as unknown as HTMLInputElement,
-      } as unknown as Event;
-      component.onFileSelected(event);
-      expect(component.fileConsumption()).toBe(file);
-    });
-
-    it('onDragOver should set dragging to true', () => {
-      const event = {
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as DragEvent;
-      component.onDragOver(event);
-      expect(component.dragging()).toBe(true);
-    });
-
-    it('onDragLeave should set dragging to false', () => {
-      const event = {
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as DragEvent;
-      component.onDragLeave(event);
-      expect(component.dragging()).toBe(false);
-    });
-
-    it('onDrop should set fileConsumption from dataTransfer', () => {
-      const file = new File(['content'], 'drop.csv', { type: 'text/csv' });
-      const event = {
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-        dataTransfer: { files: [file] as unknown as FileList },
-      } as unknown as DragEvent;
-      component.onDrop(event);
-      expect(component.fileConsumption()).toBe(file);
-      expect(component.dragging()).toBe(false);
-    });
-
-    it('onDrop should not set file when dataTransfer has no files', () => {
-      const event = {
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-        dataTransfer: { files: [] as unknown as FileList },
-      } as unknown as DragEvent;
-      component.onDrop(event);
-      expect(component.fileConsumption()).toBeNull();
-    });
-  });
-
-  describe('addConsumptionInformations', () => {
-    beforeEach(async () => {
-      await createComponent();
-    });
-
-    it('should return early if formGroup is invalid', () => {
-      component.addConsumptionInformations();
-      expect(sharingOperationServiceSpy.addConsumptionDataToSharing).not.toHaveBeenCalled();
-    });
-
-    it('should call service and show snackbar on success when form is valid', () => {
-      const file = new File(['content'], 'test.csv', { type: 'text/csv' });
-      component.fileConsumption.set(file);
-      component.formGroup.patchValue({ fileConsumption: file });
-      component.formGroup.get('fileConsumption')?.updateValueAndValidity();
-      component.addConsumptionInformations();
-      expect(sharingOperationServiceSpy.addConsumptionDataToSharing).toHaveBeenCalledWith(
-        expect.objectContaining({ id_sharing_operation: 1 }),
+      expect(sharingOperationServiceSpy.patchKeyStatus).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id_key: 200,
+          id_sharing: 1,
+          date: approvalDate,
+          status: SharingKeyStatus.APPROVED,
+        }),
       );
-      expect(snackbarSpy.openSnackBar).toHaveBeenCalled();
-    });
-
-    it('should call errorHandler on null response', () => {
-      const file = new File(['content'], 'test.csv', { type: 'text/csv' });
-      component.fileConsumption.set(file);
-      component.formGroup.patchValue({ fileConsumption: file });
-      component.formGroup.get('fileConsumption')?.updateValueAndValidity();
-      sharingOperationServiceSpy.addConsumptionDataToSharing.mockReturnValue(of(null));
-      component.addConsumptionInformations();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalled();
-    });
-
-    it('should call errorHandler on error', () => {
-      const file = new File(['content'], 'test.csv', { type: 'text/csv' });
-      component.fileConsumption.set(file);
-      component.formGroup.patchValue({ fileConsumption: file });
-      component.formGroup.get('fileConsumption')?.updateValueAndValidity();
-      sharingOperationServiceSpy.addConsumptionDataToSharing.mockReturnValue(
-        throwError(() => new Error('fail')),
-      );
-      component.addConsumptionInformations();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
   });
 
-  // ── 10. Key Pagination ────────────────────────────────────────────
+  // ── 9. Key Pagination ────────────────────────────────────────────
 
   describe('loadSharingOperationKey', () => {
     beforeEach(async () => {

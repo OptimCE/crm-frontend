@@ -20,6 +20,7 @@ import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { MapNumberStringPipe } from '../../../../shared/pipes/map-number-string/map-number-string-pipe';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { MeterDataView } from '../../../meter/components/meter-view/meter-data-view/meter-data-view';
+import { MeConsumptionChart } from './me-consumption-chart/me-consumption-chart';
 
 @Component({
   selector: 'app-meter-view-me',
@@ -43,6 +44,7 @@ import { MeterDataView } from '../../../meter/components/meter-view/meter-data-v
     MapNumberStringPipe,
     BackArrow,
     MeterDataView,
+    MeConsumptionChart,
   ],
   templateUrl: './meter-view-me.html',
   styleUrl: './meter-view-me.css',

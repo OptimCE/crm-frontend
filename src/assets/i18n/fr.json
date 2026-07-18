@@ -130,7 +130,8 @@
     "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
     "RETRY": "Réessayer",
     "AUDIT_LOG": "Journal d'audit",
-    "NEWS": "Actualités"
+    "NEWS": "Actualités",
+    "BILLING": "Facturation"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
@@ -267,6 +268,11 @@
       "NO_INVITATIONS_AVAILABLE": "Aucune invitations de manager trouvées"
     }
   },
+  "REGULATORS": {
+    "BE-WAL-CWAPE": "CWaPE (Wallonie)",
+    "BE-BRU-BRUGEL": "Brugel (Bruxelles)",
+    "BE-VLA-VREG": "VREG (Flandre)"
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Infos de la communauté",
     "SUBTITLE": "Consulter et gérer les informations de votre communauté",
@@ -288,9 +294,20 @@
     "CHOOSE_LOGO": "Choisir un logo",
     "REMOVE_LOGO": "Supprimer le logo",
     "NO_COMMUNITY": "Aucune communauté active sélectionnée.",
+    "REGULATOR": "Régulateur",
+    "REGULATOR_PLACEHOLDER": "Sélectionnez un régulateur",
+    "REGULATOR_CHANGE_CONFIRM_TITLE": "Changer de régulateur ?",
+    "REGULATOR_CHANGE_CONFIRM_MESSAGE": "Changer le régulateur modifie le régime de facturation et les documents administratifs de cette communauté. Voulez-vous vraiment continuer ?",
+    "BANK_LEGAL_SECTION": "Informations bancaires et légales",
+    "LEGAL_NAME": "Dénomination légale",
+    "VAT_NUMBER": "Numéro de TVA",
+    "IBAN": "IBAN",
+    "ACCOUNT_HOLDER_NAME": "Titulaire du compte",
+    "ACCOUNT_HOLDER_HINT": "À remplir uniquement si le compte n'est pas au nom de la dénomination légale",
     "ERRORS": {
       "INVALID_URL": "Veuillez saisir une URL valide commençant par http:// ou https://",
-      "PARTIAL_ADDRESS": "Veuillez compléter tous les champs d’adresse requis ou les laisser vides"
+      "PARTIAL_ADDRESS": "Veuillez compléter tous les champs d’adresse requis ou les laisser vides",
+      "INVALID_IBAN": "Veuillez saisir un IBAN valide"
     }
   },
   "COMMUNITY": {
@@ -316,6 +333,10 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Changer de communauté",
       "LEAVE_BUTTON": "Quitter",
       "LEAVE_BUTTON_TOOLTIP": "Quitter la communauté",
+      "LEAVE_CONFIRM_HEADER": "Quitter la communauté",
+      "LEAVE_CONFIRM_MESSAGE": "Êtes-vous sûr de vouloir quitter « {{name}} » ?",
+      "LEAVE_SUCCESS": "Vous avez quitté la communauté.",
+      "UPDATE_SUCCESS": "Nom de la communauté mis à jour.",
       "NO_COMMUNITY_FOUND": "Aucune communauté trouvée",
       "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
       "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} communautés)",
@@ -330,7 +351,9 @@
       "NO_OPERATIONS": "Aucune opération de partage publique pour cette communauté",
       "MUNICIPALITIES": "Communes",
       "MUNICIPALITY_FILTER_LABEL": "Filtrer par commune",
-      "MUNICIPALITY_FILTER_PLACEHOLDER": "Rechercher une commune…"
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Rechercher une commune…",
+      "REGULATOR_FILTER_LABEL": "Filtrer par régulateur",
+      "REGULATOR_FILTER_PLACEHOLDER": "Tous les régulateurs"
     },
     "CREATE": {
       "TITLE": "Créer une communauté",
@@ -879,6 +902,9 @@
       "PLACEHOLDER": {
         "EAN_LABEL": "1234567890123",
         "METER_NUMBER_LABEL": "1234567890123"
+      },
+      "ERROR": {
+        "INVALID_EAN": "L'EAN doit comporter exactement 13 chiffres."
       }
     },
     "CATEGORIES": {
@@ -1173,7 +1199,6 @@
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Opération de partage",
       "GENERAL_INFO_TITLE": "Informations générales",
-      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Exporter sous format excel (CWAPE)",
       "NAME_LABEL": "Nom",
       "TYPE_LABEL": "Type",
       "MUNICIPALITIES_LABEL": "Communes couvertes",
@@ -1204,7 +1229,9 @@
         "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Clé modifiée avec succès",
         "WAITING_APPROVAL_KEY_LABEL": "Clef en attente d'approbation",
         "APPROVE_KEY": "Approuver",
-        "REJECT_KEY": "Rejeter"
+        "REJECT_KEY": "Rejeter",
+        "APPROVE_KEY_DATE_LABEL": "Date de début de la clef approuvée",
+        "APPROVE_KEY_NO_DATE_ERROR": "Veuillez sélectionner une date de début avant d'approuver la clef."
       },
       "METER": {
         "HEADERS": {
@@ -1372,7 +1399,257 @@
     "NEWS": {
       "NAME": "Actualités",
       "DESCRIPTION": "Publiez des annonces et des sondages pour toute la communauté."
+    },
+    "BILLING": {
+      "NAME": "Facturation",
+      "DESCRIPTION": "Facturez aux membres leur consommation issue du partage d'énergie ; les membres consultent et paient leurs propres factures."
     }
+  },
+  "BILLING": {
+    "TITLE": "Facturation",
+    "SUBTITLE": "Tarifs, facturation et suivi des paiements de la communauté.",
+    "DRAFT_PLACEHOLDER": "Brouillon",
+    "TABS": {
+      "TARIFFS": "Tarifs",
+      "GENERATE": "Générer une facture",
+      "TRACKING": "Tableau de suivi",
+      "MY_INVOICES": "Mes factures"
+    },
+    "OPERATION": {
+      "SELECT_LABEL": "Opération de partage",
+      "SELECT_PLACEHOLDER": "Sélectionnez une opération de partage",
+      "NONE_SELECTED": "Sélectionnez une opération de partage pour gérer ses tarifs."
+    },
+    "TARIFFS": {
+      "ADD": "Nouveau tarif",
+      "EMPTY": "Aucun tarif défini pour cette opération.",
+      "CREATED": "Tarif créé.",
+      "DELETED": "Tarif supprimé.",
+      "DELETE_CONFIRM_HEADER": "Supprimer le tarif",
+      "DELETE_CONFIRM_MESSAGE": "Voulez-vous vraiment supprimer ce tarif ?",
+      "COL": {
+        "KIND": "Type",
+        "SCOPE": "Portée",
+        "PRICE": "Prix",
+        "VALIDITY": "Validité",
+        "LABEL": "Libellé"
+      }
+    },
+    "TARIFF_KIND": {
+      "CONSUMER_SELLING": "Prix de vente au consommateur",
+      "PRODUCER_BUYBACK": "Prix de rachat au producteur"
+    },
+    "TARIFF_SCOPE": {
+      "GLOBAL": "Global",
+      "SEGMENT": "Segment",
+      "EAN": "EAN"
+    },
+    "TARIFF_SEGMENT": {
+      "RESIDENTIAL": "Résidentiel",
+      "PROFESSIONAL": "Professionnel",
+      "INDUSTRIAL": "Industriel"
+    },
+    "TARIFF_DIALOG": {
+      "TITLE": "Nouveau tarif",
+      "KIND": "Type",
+      "SCOPE": "Portée",
+      "SEGMENT": "Segment",
+      "EAN": "EAN",
+      "PRICE": "Prix par kWh",
+      "VALID_FROM": "Valable à partir du",
+      "VALID_TO": "Valable jusqu'au (optionnel)",
+      "LABEL": "Libellé (optionnel)",
+      "SUBMIT": "Créer le tarif",
+      "ERRORS": {
+        "REQUIRED": "Veuillez indiquer un prix et une date de début valides.",
+        "SEGMENT_REQUIRED": "Sélectionnez un segment pour un tarif par segment.",
+        "EAN_REQUIRED": "Saisissez un EAN pour un tarif par EAN.",
+        "VALIDITY_ORDER": "La date de fin doit être postérieure ou égale à la date de début."
+      }
+    },
+    "GENERATE": {
+      "UPLOAD_TITLE": "Données de consommation",
+      "UPLOAD_SUBTITLE": "Importez le fichier Excel de relevés pour cette opération avant de générer les factures.",
+      "PERIOD_START": "Début de période",
+      "PERIOD_END": "Fin de période",
+      "GENERATE_BTN": "Générer",
+      "RECENT_RUNS": "Exécutions récentes",
+      "INVOICES_SUFFIX": "factures",
+      "INVOICES_TITLE": "Factures",
+      "COMPUTING": "Calcul des factures…",
+      "RUN_FAILED": "Cette exécution a échoué. Vérifiez la période et les données importées, puis réessayez.",
+      "EMPTY_INVOICES": "Cette exécution n'a produit aucune facture.",
+      "RUN_CREATED": "Exécution de facturation lancée.",
+      "ERRORS": {
+        "REQUIRED": "Sélectionnez une opération et une période.",
+        "PERIOD_ORDER": "La date de fin doit être postérieure ou égale à la date de début."
+      }
+    },
+    "RUN_STATUS": {
+      "PENDING": "En attente",
+      "COMPUTING": "En cours",
+      "COMPUTED": "Calculé",
+      "FAILED": "Échec"
+    },
+    "INVOICE": {
+      "ISSUED_AT": "Émise",
+      "DUE_DATE": "Échéance"
+    },
+    "INVOICE_STATUS": {
+      "DRAFT": "Brouillon",
+      "ISSUED": "Émise",
+      "SENT": "Envoyée",
+      "PAID": "Payée",
+      "OVERDUE": "En retard",
+      "CANCELLED": "Annulée",
+      "RENDER_FAILED": "Échec du rendu"
+    },
+    "INVOICE_TYPE": {
+      "INVOICE": "Facture",
+      "CREDIT_NOTE": "Note de crédit",
+      "PRODUCER_STATEMENT": "Décompte producteur"
+    },
+    "ACTIONS": {
+      "VIEW_DETAIL": "Voir le détail",
+      "ISSUE": "Émettre",
+      "SEND": "Envoyer",
+      "REGISTER_PAYMENT": "Enregistrer un paiement",
+      "CREDIT_NOTE": "Note de crédit",
+      "DOWNLOAD_PDF": "Télécharger le PDF",
+      "GENERATE_PDF": "Générer le PDF",
+      "REGENERATE_PDF": "Régénérer le PDF",
+      "DELETE_PDF": "Supprimer le PDF"
+    },
+    "ISSUE": {
+      "SUCCESS": "Facture {{number}} émise (OGM {{ogm}})."
+    },
+    "SEND": {
+      "SUCCESS": "Facture envoyée."
+    },
+    "PAYMENT": {
+      "SUCCESS": "Paiement enregistré."
+    },
+    "CREDIT_NOTE": {
+      "SUCCESS": "Note de crédit créée."
+    },
+    "PDF": {
+      "DOWNLOAD": "Télécharger",
+      "GENERATING": "Génération…",
+      "GENERATE_STARTED": "Génération du PDF lancée.",
+      "GENERATE_SUCCESS": "Le PDF est prêt.",
+      "GENERATE_FAILED": "Échec de la génération du PDF.",
+      "DELETE_SUCCESS": "PDF supprimé.",
+      "DOWNLOAD_FAILED": "Impossible de télécharger le PDF."
+    },
+    "PAYMENT_DIALOG": {
+      "TITLE": "Enregistrer un paiement",
+      "AMOUNT": "Montant",
+      "METHOD": "Méthode",
+      "REFERENCE": "Référence (optionnel)",
+      "PAID_ON": "Payé le (optionnel)",
+      "SUBMIT": "Enregistrer le paiement",
+      "ERRORS": {
+        "AMOUNT_REQUIRED": "Saisissez un montant valide."
+      }
+    },
+    "PAYMENT_METHOD": {
+      "BANK_TRANSFER": "Virement bancaire",
+      "DIRECT_DEBIT": "Domiciliation",
+      "CASH": "Espèces",
+      "OTHER": "Autre"
+    },
+    "CREDIT_NOTE_DIALOG": {
+      "TITLE": "Créer une note de crédit",
+      "CONFIRM": "Ceci crée une note de crédit qui annule la facture. La facture d'origine reste inchangée.",
+      "REASON": "Motif (optionnel)",
+      "REASON_PLACEHOLDER": "Pourquoi cette note de crédit est-elle émise ?",
+      "SUBMIT": "Créer la note de crédit"
+    },
+    "DETAIL": {
+      "TITLE": "Détail de la facture",
+      "NUMBER": "Numéro",
+      "TYPE": "Type",
+      "STATUS": "Statut",
+      "ISSUED_AT": "Émise le",
+      "DUE_DATE": "Échéance",
+      "OGM": "Communication structurée",
+      "LINES_TITLE": "Lignes",
+      "EMPTY_LINES": "Aucune ligne.",
+      "SUBTOTAL": "Sous-total",
+      "VAT": "TVA",
+      "TOTAL": "Total",
+      "PAYMENTS_TITLE": "Paiements",
+      "EMPTY_PAYMENTS": "Aucun paiement enregistré.",
+      "CLOSE": "Fermer",
+      "LINE": {
+        "EAN": "EAN",
+        "DIRECTION": "Sens",
+        "MEASURE": "Mesure",
+        "QTY": "Quantité (kWh)",
+        "UNIT_PRICE": "Prix unitaire",
+        "AMOUNT": "Montant"
+      },
+      "PAYMENT": {
+        "DATE": "Date",
+        "METHOD": "Méthode",
+        "REFERENCE": "Référence",
+        "AMOUNT": "Montant"
+      }
+    },
+    "DIRECTION": {
+      "CONSUMER": "Consommation",
+      "PRODUCER": "Injection"
+    },
+    "MEASURE": {
+      "SHARED": "Partagé",
+      "INJ_SHARED": "Injection partagée"
+    },
+    "TRACKING": {
+      "ALL_STATUSES": "Tous les statuts",
+      "REFRESH": "Actualiser",
+      "SWEEP_BTN": "Marquer les retards",
+      "EMPTY": "Aucune facture ne correspond au filtre.",
+      "PAGE_INFO": "Page {{page}} sur {{total}}",
+      "SWEEP_CONFIRM_HEADER": "Marquer les factures en retard",
+      "SWEEP_CONFIRM_MESSAGE": "Marquer comme en retard toutes les factures échues et impayées ?",
+      "SWEEP_DONE": "{{count}} facture(s) marquée(s) en retard."
+    },
+    "FILTERS": {
+      "STATUS": "Statut",
+      "MEMBER": "Membre",
+      "ALL_MEMBERS": "Tous les membres",
+      "ISSUED_FROM": "Émise à partir du",
+      "ISSUED_TO": "Émise jusqu'au",
+      "SORT_BY": "Trier par",
+      "CLEAR": "Effacer les filtres"
+    },
+    "SORT": {
+      "ISSUED_DATE": "Date d'émission",
+      "DUE_DATE": "Date d'échéance",
+      "AMOUNT": "Montant",
+      "NUMBER": "Numéro",
+      "STATUS": "Statut",
+      "ASC": "Croissant",
+      "DESC": "Décroissant"
+    },
+    "MEMBER_VIEW": {
+      "TITLE": "Mes factures",
+      "SUBTITLE": "Vos factures de partage d'énergie et comment les payer.",
+      "ALL_STATUSES": "Tous les statuts",
+      "EMPTY": "Vous n'avez pas encore de facture.",
+      "ISSUED_AT": "Émise",
+      "DUE_DATE": "Échéance",
+      "OGM_LABEL": "Communication structurée",
+      "PAGE_INFO": "Page {{page}} sur {{total}}"
+    }
+  },
+  "CONSUMPTION_COVERAGE": {
+    "TITLE": "Données de consommation disponibles",
+    "EMPTY": "Aucune donnée de consommation importée pour l’instant.",
+    "LEGEND_COMPLETE": "Complet",
+    "LEGEND_PARTIAL": "Partiel",
+    "LEGEND_NONE": "Aucune donnée",
+    "POINTS": "{{count}} points de données ({{pct}} % du mois)"
   },
   "SIMULATION_HUB": {
     "PAGE_TITLE": "Simulation de clé de répartition",

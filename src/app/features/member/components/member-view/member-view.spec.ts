@@ -525,6 +525,16 @@ describe('MemberView', () => {
       expect(memberServiceSpy.patchMemberStatus).toHaveBeenCalled();
     });
 
+    it('should show alert popup when backend rejects with MEMBER_HAS_ACTIVE_METERS (409)', () => {
+      component.metersPartialList.set([]);
+      memberServiceSpy.patchMemberStatus.mockReturnValue(
+        throwError(() => ({ status: 409, error: { error_code: 50013, data: 'blocked' } })),
+      );
+      component.setStatus(2);
+      expect(memberServiceSpy.patchMemberStatus).toHaveBeenCalled();
+      expect(component.alertPopupVisible()).toBe(true);
+    });
+
     it('should not check meters when member is not ACTIVE', async () => {
       const ind = buildIndividual({ status: MemberStatus.INACTIVE });
       memberServiceSpy.getMember.mockReturnValue(

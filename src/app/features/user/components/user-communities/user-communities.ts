@@ -11,9 +11,11 @@ import { CommunityQueryDTO, MyCommunityDTO } from '../../../../shared/dtos/commu
 import { CommunityService } from '../../../../shared/services/community.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { Role } from '../../../../core/dtos/role';
 import { CommunityDialog } from './community-dialog/community-dialog';
+import { RenameCommunityDialog } from './rename-community-dialog/rename-community-dialog';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
-import { Pagination } from '../../../../core/dtos/api.response';
+import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import Keycloak from 'keycloak-js';
 
@@ -34,10 +36,13 @@ import Keycloak from 'keycloak-js';
   providers: [DialogService, ConfirmationService, MessageService],
 })
 export class UserCommunities {
+  protected readonly Role = Role;
   private communityService = inject(CommunityService);
   protected userContextService = inject(UserContextService);
   private keycloak = inject(Keycloak);
   private dialogService = inject(DialogService);
+  private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
   readonly communities = signal<MyCommunityDTO[]>([]);
@@ -122,8 +127,28 @@ export class UserCommunities {
     this.userContextService.switchCommunity(community.auth_community_id);
   }
 
-  updateNameCommunity(_community: MyCommunityDTO): void {
-    // TODO: Implement community name update
+  updateNameCommunity(community: MyCommunityDTO): void {
+    this.ref = this.dialogService.open(RenameCommunityDialog, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      header: this.translate.instant('COMMUNITY.CREATE.EDIT_TITLE') as string,
+      data: { currentName: community.name },
+    });
+    this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: boolean) => {
+      if (result) {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translate.instant('COMMUNITY.LIST.UPDATE_SUCCESS') as string,
+        });
+        // Name is propagated to the IAM group: refresh the token + context so the
+        // active community label stays in sync, then reload the list.
+        void this.keycloak.updateToken(-1).then(() => {
+          this.userContextService.refreshUserContext();
+          this.loadCommunities();
+        });
+      }
+    });
   }
 
   createCommunity(): void {
@@ -143,8 +168,43 @@ export class UserCommunities {
     });
   }
 
-  leaveCommunity(_event: Event, _community: MyCommunityDTO): void {
-    // TODO: Implement leave community
+  leaveCommunity(event: Event, community: MyCommunityDTO): void {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      header: this.translate.instant('COMMUNITY.LIST.LEAVE_CONFIRM_HEADER') as string,
+      message: this.translate.instant('COMMUNITY.LIST.LEAVE_CONFIRM_MESSAGE', {
+        name: community.name,
+      }) as string,
+      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
+      acceptButtonProps: { severity: 'danger' },
+      accept: () => {
+        this.communityService
+          .leave(community.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('COMMUNITY.LIST.LEAVE_SUCCESS') as string,
+              });
+              // Membership changed: refresh token + context, then reload the list.
+              void this.keycloak.updateToken(-1).then(() => {
+                this.userContextService.refreshUserContext();
+                this.loadCommunities();
+              });
+            },
+            error: (error: unknown) => {
+              const detail = error instanceof ApiResponse ? (error.data as string) : null;
+              this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant('COMMON.ERRORS.EXCEPTION') as string,
+                detail: detail ?? undefined,
+              });
+            },
+          });
+      },
+    });
   }
 
   pageChange($event: TablePageEvent): void {

@@ -24,6 +24,7 @@ import {
 } from '../dtos/invitation.dtos';
 import { CompanyDTO, IndividualDTO } from '../dtos/member.dtos';
 import { DownloadDocument } from '../dtos/document.dtos';
+import { MeterConsumptionDTO, MeterConsumptionQuery } from '../dtos/meter.dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -81,6 +82,17 @@ export class MeService extends ServiceBase {
     return this.cachedGet<ApiResponse<MeMeterDTO | string>>(
       `me:meter:${id}`,
       this.apiAddress + `/meters/${id}`,
+    );
+  }
+
+  getMeterConsumptions(
+    id: string,
+    query: MeterConsumptionQuery,
+  ): Observable<ApiResponse<MeterConsumptionDTO | string>> {
+    return this.cachedGet<ApiResponse<MeterConsumptionDTO | string>>(
+      `me:meter-consumptions:${id}/${JSON.stringify(query)}`,
+      this.apiAddress + `/meters/${id}/consumptions`,
+      query,
     );
   }
 

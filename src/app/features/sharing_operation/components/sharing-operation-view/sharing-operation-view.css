@@ -18,21 +18,3 @@
 :host ::ng-deep .sharing-tabs .p-tabpanel {
   padding-top: 1.5rem;
 }
-
-.file-upload {
-  border: 2px dashed var(--p-primary-color);
-  border-radius: 5px;
-  padding: 40px;
-  text-align: center;
-  transition: background-color 0.3s;
-  cursor: pointer;
-}
-.file-upload.dragging {
-  background-color: var(--p-primary-50);
-}
-.file-input {
-  display: none;
-}
-.file-upload-message {
-  color: var(--p-primary-color);
-}

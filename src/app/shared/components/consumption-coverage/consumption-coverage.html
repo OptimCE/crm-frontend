@@ -1,0 +1,51 @@
+<div class="mb-3 flex items-center gap-2">
+  <i class="pi pi-calendar text-primary-500"></i>
+  <span class="field-label">{{ 'CONSUMPTION_COVERAGE.TITLE' | translate }}</span>
+</div>
+
+@if (loading()) {
+  <p-skeleton height="3.5rem" />
+} @else if (!hasData()) {
+  <p class="text-surface-500 text-sm m-0" data-testid="consumption-coverage__empty">
+    {{ 'CONSUMPTION_COVERAGE.EMPTY' | translate }}
+  </p>
+} @else {
+  <div class="cov-scroll" data-testid="consumption-coverage__grid">
+    <div class="cov-row cov-header">
+      <span class="cov-year"></span>
+      @for (initial of monthInitials; track $index) {
+        <span class="cov-cell-label">{{ initial }}</span>
+      }
+    </div>
+    @for (row of rows(); track row.year) {
+      <div class="cov-row">
+        <span class="cov-year">{{ row.year }}</span>
+        @for (cell of row.months; track cell.index) {
+          <span
+            class="cov-cell"
+            [class.cov-complete]="cell.state === 'complete'"
+            [class.cov-partial]="cell.state === 'partial'"
+            [class.cov-none]="cell.state === 'none'"
+            [pTooltip]="tooltip(cell, row.year)"
+            tooltipPosition="top"
+          ></span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="cov-legend">
+    <span class="cov-legend-item">
+      <span class="cov-swatch cov-complete"></span>
+      {{ 'CONSUMPTION_COVERAGE.LEGEND_COMPLETE' | translate }}
+    </span>
+    <span class="cov-legend-item">
+      <span class="cov-swatch cov-partial"></span>
+      {{ 'CONSUMPTION_COVERAGE.LEGEND_PARTIAL' | translate }}
+    </span>
+    <span class="cov-legend-item">
+      <span class="cov-swatch cov-none"></span>
+      {{ 'CONSUMPTION_COVERAGE.LEGEND_NONE' | translate }}
+    </span>
+  </div>
+}

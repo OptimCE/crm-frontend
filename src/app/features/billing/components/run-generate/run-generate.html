@@ -1,0 +1,169 @@
+<div class="flex flex-col gap-4">
+  <!-- Generate form -->
+  <div class="rounded-lg border border-surface-200 p-4 flex flex-col gap-3">
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="run-operation">{{
+        'BILLING.OPERATION.SELECT_LABEL' | translate
+      }}</label>
+      @if (operationsLoading()) {
+        <p-skeleton height="2.5rem" />
+      } @else {
+        <p-select
+          inputId="run-operation"
+          [options]="operations()"
+          [ngModel]="selectedOpId()"
+          (ngModelChange)="onOperationChange($event)"
+          optionLabel="name"
+          optionValue="id"
+          [placeholder]="'BILLING.OPERATION.SELECT_PLACEHOLDER' | translate"
+          [filter]="true"
+          filterBy="name"
+          appendTo="body"
+          styleClass="w-full"
+          data-testid="run-generate__select--operation"
+        />
+      }
+    </div>
+
+    @if (selectedOpId() !== null) {
+      <div class="rounded-lg border border-surface-200 bg-surface-50 p-4 flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+          <i class="pi pi-upload text-primary-500"></i>
+          <h4 class="text-sm font-semibold m-0">
+            {{ 'BILLING.GENERATE.UPLOAD_TITLE' | translate }}
+          </h4>
+        </div>
+        <p class="text-xs text-surface-500 m-0">
+          {{ 'BILLING.GENERATE.UPLOAD_SUBTITLE' | translate }}
+        </p>
+        <app-consumption-coverage
+          [operationId]="selectedOpId()!"
+          [reloadKey]="coverageReload()"
+          class="block"
+          data-testid="run-generate__consumption-coverage"
+        />
+        <app-consumption-upload
+          [operationId]="selectedOpId()!"
+          (uploaded)="onConsumptionUploaded()"
+          data-testid="run-generate__consumption-upload"
+        />
+      </div>
+    }
+
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <div class="flex flex-col gap-1 flex-1">
+        <label class="text-sm font-medium" for="run-period-start">{{
+          'BILLING.GENERATE.PERIOD_START' | translate
+        }}</label>
+        <p-datepicker
+          inputId="run-period-start"
+          [(ngModel)]="periodStart"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+          [showIcon]="true"
+          data-testid="run-generate__datepicker--period-start"
+        />
+      </div>
+      <div class="flex flex-col gap-1 flex-1">
+        <label class="text-sm font-medium" for="run-period-end">{{
+          'BILLING.GENERATE.PERIOD_END' | translate
+        }}</label>
+        <p-datepicker
+          inputId="run-period-end"
+          [(ngModel)]="periodEnd"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          styleClass="w-full"
+          [showIcon]="true"
+          data-testid="run-generate__datepicker--period-end"
+        />
+      </div>
+    </div>
+
+    @if (formError()) {
+      <p class="text-red-600 text-sm m-0">
+        <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+      </p>
+    }
+
+    <div>
+      <p-button
+        icon="pi pi-cog"
+        [label]="'BILLING.GENERATE.GENERATE_BTN' | translate"
+        [loading]="generating()"
+        [disabled]="selectedOpId() === null"
+        (onClick)="generate()"
+        data-testid="run-generate__btn--generate"
+      />
+    </div>
+  </div>
+
+  <!-- Recent runs -->
+  @if (runs().length) {
+    <div class="flex flex-col gap-2">
+      <h3 class="text-sm font-semibold m-0">{{ 'BILLING.GENERATE.RECENT_RUNS' | translate }}</h3>
+      <div class="flex flex-col gap-1">
+        @for (run of runs(); track run.id) {
+          <button
+            type="button"
+            class="flex items-center justify-between gap-3 rounded-lg border p-2 text-left text-sm"
+            [class.border-primary-300]="isActiveRun(run)"
+            [class.bg-primary-50]="isActiveRun(run)"
+            [class.border-surface-200]="!isActiveRun(run)"
+            (click)="selectRun(run)"
+          >
+            <span class="text-surface-700">
+              {{ run.period_start }} <span class="text-surface-400">→</span> {{ run.period_end }}
+            </span>
+            <span class="flex items-center gap-2">
+              @if (hasInvoiceCount(run)) {
+                <span class="text-surface-500"
+                  >{{ run.invoice_count }}
+                  {{ 'BILLING.GENERATE.INVOICES_SUFFIX' | translate }}</span
+                >
+              }
+              <p-tag
+                [value]="runStatusLabelKey(run) | translate"
+                [severity]="runStatusSeverity(run)"
+              />
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Active run + its invoices -->
+  @if (activeRun(); as run) {
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center gap-2">
+        <h3 class="text-sm font-semibold m-0">
+          {{ 'BILLING.GENERATE.INVOICES_TITLE' | translate }}
+        </h3>
+        <p-tag [value]="runStatusLabelKey(run) | translate" [severity]="runStatusSeverity(run)" />
+        @if (run.created_at) {
+          <span class="text-xs text-surface-400">{{
+            run.created_at | date: 'dd/MM/yyyy HH:mm'
+          }}</span>
+        }
+      </div>
+
+      @if (run.status === 0 || run.status === 1) {
+        <div class="flex items-center gap-2 text-surface-500 text-sm">
+          <i class="pi pi-spin pi-spinner"></i> {{ 'BILLING.GENERATE.COMPUTING' | translate }}
+        </div>
+      } @else if (run.status === 3) {
+        <p class="text-red-600 text-sm m-0">{{ 'BILLING.GENERATE.RUN_FAILED' | translate }}</p>
+      } @else if (invoicesLoading()) {
+        <p-skeleton height="4rem" />
+      } @else if (runInvoices().length === 0) {
+        <p class="text-surface-500 text-sm m-0">
+          {{ 'BILLING.GENERATE.EMPTY_INVOICES' | translate }}
+        </p>
+      } @else {
+        <app-invoice-list [invoices]="runInvoices()" (changed)="onInvoicesChanged()" />
+      }
+    </div>
+  }
+</div>

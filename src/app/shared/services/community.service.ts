@@ -9,6 +9,7 @@ import {
   MyCommunityDTO,
   PatchRoleUserDTO,
   PublicCommunityDTO,
+  RegulatorDTO,
   UpdateCommunityDTO,
   UploadLogoResponse,
   UsersCommunityDTO,
@@ -55,6 +56,14 @@ export class CommunityService extends ServiceBase {
     return this.cachedGet<ApiResponse<CommunityDetailDTO>>(
       `community-detail:${id}`,
       this.apiAddress + `/${id}`,
+    );
+  }
+
+  /** Static reference list of valid regulators (tenant-agnostic, cached). */
+  getRegulators(): Observable<ApiResponse<RegulatorDTO[]>> {
+    return this.cachedGet<ApiResponse<RegulatorDTO[]>>(
+      'regulators',
+      this.apiAddress + '/regulators',
     );
   }
 

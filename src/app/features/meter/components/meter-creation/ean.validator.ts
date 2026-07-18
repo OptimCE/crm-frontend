@@ -7,7 +7,7 @@ export function eanValidator(): ValidatorFn {
       return null; // No value means no validation error
     }
 
-    const ean = /^[0-9]{13}$/;
+    const ean = /^[0-9]{18}$/;
     const isValid = ean.test(value.trim());
 
     return isValid ? null : { invalidEan: true };

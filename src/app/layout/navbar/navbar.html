@@ -164,6 +164,17 @@
               [sidebarOpen]="sidebarOpen()"
             ></li>
           }
+          @if (communityServicesStore.isActive('billing')) {
+            <li
+              appSidebarItem
+              (sidebarClose)="closeSideBar()"
+              [icon]="'pi pi-credit-card'"
+              [isRouteActive]="isRouteActive().billing"
+              [name]="'NAVBAR.BILLING' | translate"
+              [routerLinkUrl]="'/billing'"
+              [sidebarOpen]="sidebarOpen()"
+            ></li>
+          }
         </ul>
       </app-sidebar-section>
     }

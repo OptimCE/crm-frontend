@@ -1,0 +1,12 @@
+:host ::ng-deep input.p-inputtext {
+  border-color: var(--p-primary-200);
+}
+
+:host ::ng-deep input.p-inputtext:hover {
+  border-color: var(--p-primary-400);
+}
+
+:host ::ng-deep input.p-inputtext:focus {
+  border-color: var(--p-primary-500);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-200) 50%, transparent);
+}

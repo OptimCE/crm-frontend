@@ -63,6 +63,7 @@ describe('UserCommunities', () => {
     activeCommunityId: ReturnType<typeof vi.fn>;
     switchCommunity: ReturnType<typeof vi.fn>;
     refreshUserContext: ReturnType<typeof vi.fn>;
+    compareWithActiveRole: ReturnType<typeof vi.fn>;
   };
 
   let keycloakSpy: {
@@ -82,6 +83,7 @@ describe('UserCommunities', () => {
       activeCommunityId: vi.fn().mockReturnValue('auth-comm-1'),
       switchCommunity: vi.fn(),
       refreshUserContext: vi.fn(),
+      compareWithActiveRole: vi.fn().mockReturnValue(true),
     };
 
     keycloakSpy = {

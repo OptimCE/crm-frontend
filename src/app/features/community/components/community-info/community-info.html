@@ -1,4 +1,5 @@
 <div class="container mx-auto my-auto">
+  <p-confirmDialog />
   <app-header-page
     icon="pi pi-id-card"
     [text]="'COMMUNITY_INFO.TITLE' | translate"
@@ -73,6 +74,16 @@
             </div>
 
             <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.REGULATOR' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--regulator">
+                <p-tag
+                  severity="warn"
+                  [value]="'REGULATORS.' + community()!.regulator | translate"
+                />
+              </span>
+            </div>
+
+            <div>
               <span class="field-label">{{ 'COMMUNITY_INFO.DESCRIPTION' | translate }}</span>
               <span
                 class="field-value whitespace-pre-line"
@@ -113,6 +124,43 @@
               } @else {
                 <span class="field-value">—</span>
               }
+            </div>
+
+            <!-- Bank & legal info -->
+            <div class="border-t border-surface-200 mt-2 pt-4">
+              <h3 class="text-sm font-semibold text-surface-700 m-0">
+                {{ 'COMMUNITY_INFO.BANK_LEGAL_SECTION' | translate }}
+              </h3>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.LEGAL_NAME' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--legal-name">
+                {{ community()!.legal_name || '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.VAT_NUMBER' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--vat-number">
+                {{ community()!.vat_number || '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.IBAN' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--iban">
+                {{ community()!.iban || '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{
+                'COMMUNITY_INFO.ACCOUNT_HOLDER_NAME' | translate
+              }}</span>
+              <span class="field-value" data-testid="community-info__view--account-holder">
+                {{ community()!.account_holder_name || '—' }}
+              </span>
             </div>
           </div>
         </div>
@@ -223,6 +271,25 @@
                 }
               </div>
 
+              <div>
+                <span class="field-label">{{ 'COMMUNITY_INFO.REGULATOR' | translate }} *</span>
+                <p-select
+                  [options]="regulatorOptions()"
+                  formControlName="regulator"
+                  optionLabel="label"
+                  optionValue="code"
+                  appendTo="body"
+                  styleClass="w-full"
+                  [placeholder]="'COMMUNITY_INFO.REGULATOR_PLACEHOLDER' | translate"
+                  data-testid="community-info__select--regulator"
+                />
+                @if (
+                  form.controls.regulator.touched && form.controls.regulator.errors?.['required']
+                ) {
+                  <small class="text-red-600">{{ 'COMMON.ERRORS.REQUIRED' | translate }}</small>
+                }
+              </div>
+
               <div
                 formGroupName="headquarters_address"
                 class="grid grid-cols-1 sm:grid-cols-12 gap-3"
@@ -278,6 +345,63 @@
                     'COMMUNITY_INFO.ERRORS.PARTIAL_ADDRESS' | translate
                   }}</small>
                 }
+              </div>
+
+              <!-- Bank & legal info -->
+              <div class="border-t border-surface-200 mt-2 pt-4">
+                <h3 class="text-sm font-semibold text-surface-700 m-0">
+                  {{ 'COMMUNITY_INFO.BANK_LEGAL_SECTION' | translate }}
+                </h3>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div class="sm:col-span-6">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.LEGAL_NAME' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="legal_name"
+                    class="w-full"
+                    data-testid="community-info__input--legal-name"
+                  />
+                </div>
+                <div class="sm:col-span-6">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.VAT_NUMBER' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="vat_number"
+                    class="w-full"
+                    data-testid="community-info__input--vat-number"
+                  />
+                </div>
+                <div class="sm:col-span-6">
+                  <span class="field-label">{{ 'COMMUNITY_INFO.IBAN' | translate }}</span>
+                  <input
+                    pInputText
+                    formControlName="iban"
+                    class="w-full"
+                    placeholder="BE00 0000 0000 0000"
+                    data-testid="community-info__input--iban"
+                  />
+                  @if (form.controls.iban.touched && form.controls.iban.errors?.['invalidIban']) {
+                    <small class="text-red-600">{{
+                      'COMMUNITY_INFO.ERRORS.INVALID_IBAN' | translate
+                    }}</small>
+                  }
+                </div>
+                <div class="sm:col-span-6">
+                  <span class="field-label">{{
+                    'COMMUNITY_INFO.ACCOUNT_HOLDER_NAME' | translate
+                  }}</span>
+                  <input
+                    pInputText
+                    formControlName="account_holder_name"
+                    class="w-full"
+                    data-testid="community-info__input--account-holder"
+                  />
+                  <small class="text-surface-400 block mt-1">{{
+                    'COMMUNITY_INFO.ACCOUNT_HOLDER_HINT' | translate
+                  }}</small>
+                </div>
               </div>
             </div>
           </div>

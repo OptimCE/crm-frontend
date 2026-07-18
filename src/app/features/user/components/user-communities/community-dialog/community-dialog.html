@@ -14,6 +14,19 @@
       class="w-full"
     />
   </div>
+  <div>
+    <span class="field-label">{{ 'COMMUNITY_INFO.REGULATOR' | translate }}</span>
+    <p-select
+      data-testid="community-dialog__select--regulator"
+      [options]="regulatorOptions()"
+      formControlName="regulator"
+      optionLabel="label"
+      optionValue="code"
+      appendTo="body"
+      styleClass="w-full"
+      [placeholder]="'COMMUNITY_INFO.REGULATOR_PLACEHOLDER' | translate"
+    />
+  </div>
   <p-button
     data-testid="community-dialog__button--submit"
     label="{{ 'COMMUNITY.CREATE.VALIDATE' | translate }}"

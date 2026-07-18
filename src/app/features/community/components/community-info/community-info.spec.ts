@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmationService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -37,11 +38,16 @@ function buildDetail(overrides: Partial<CommunityDetailDTO> = {}): CommunityDeta
     created_at: '2025-01-15T10:00:00Z',
     updated_at: '2025-03-20T14:30:00Z',
     member_count: 10,
+    regulator: 'BE-WAL-CWAPE',
     description: 'A community',
     website_url: 'https://example.com',
     logo_url: 'https://cdn/logo.png',
     logo_presigned_url: 'https://cdn/logo-signed.png',
     headquarters_address: null,
+    vat_number: null,
+    legal_name: null,
+    iban: null,
+    account_holder_name: null,
     ...overrides,
   };
 }
@@ -62,6 +68,7 @@ describe('CommunityInfo', () => {
     updateCommunity: ReturnType<typeof vi.fn>;
     uploadLogo: ReturnType<typeof vi.fn>;
     deleteLogo: ReturnType<typeof vi.fn>;
+    getRegulators: ReturnType<typeof vi.fn>;
   };
   let userContextSpy: {
     activeCommunityId: ReturnType<typeof signal<string | null>>;
@@ -94,6 +101,7 @@ describe('CommunityInfo', () => {
         ),
       ),
       deleteLogo: vi.fn().mockReturnValue(of(new ApiResponse('ok'))),
+      getRegulators: vi.fn().mockReturnValue(of(new ApiResponse([]))),
     };
     errorHandlerSpy = { handleError: vi.fn() };
 
@@ -107,7 +115,10 @@ describe('CommunityInfo', () => {
       .overrideComponent(CommunityInfo, {
         set: {
           schemas: [NO_ERRORS_SCHEMA],
-          providers: [{ provide: ErrorMessageHandler, useValue: errorHandlerSpy }],
+          providers: [
+            { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+            ConfirmationService,
+          ],
         },
       })
       .compileComponents();
@@ -332,6 +343,11 @@ describe('CommunityInfo', () => {
         name: 'Updated',
         description: null, // empty after trim → null
         website_url: 'https://new.example',
+        regulator: 'BE-WAL-CWAPE',
+        vat_number: null,
+        legal_name: null,
+        iban: null,
+        account_holder_name: null,
       });
       expect(component.saving()).toBe(false);
       expect(component.editMode()).toBe(false);
@@ -541,6 +557,87 @@ describe('CommunityInfo', () => {
         supplement: '',
       });
       expect(component.form.controls.headquarters_address.errors).toBeNull();
+    });
+  });
+
+  // ── bank & legal info ─────────────────────────────────────────────
+
+  describe('bank & legal info', () => {
+    beforeEach(async () => {
+      await configure({ isAdmin: true });
+    });
+
+    it('resets the bank/legal controls from the loaded community', () => {
+      communitySpy.getCommunityDetail.mockReturnValue(
+        of(
+          new ApiResponse(
+            buildDetail({
+              vat_number: 'BE0123456789',
+              legal_name: 'Legal SCRL',
+              iban: 'BE68539007547034',
+              account_holder_name: 'Treasury',
+            }),
+          ),
+        ),
+      );
+      create();
+      expect(component.form.controls.vat_number.value).toBe('BE0123456789');
+      expect(component.form.controls.legal_name.value).toBe('Legal SCRL');
+      expect(component.form.controls.iban.value).toBe('BE68539007547034');
+      expect(component.form.controls.account_holder_name.value).toBe('Treasury');
+    });
+
+    it('sends normalized (spaceless, upper-cased) IBAN and bank/legal fields', () => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({
+        name: 'Updated',
+        legal_name: 'Legal SCRL',
+        vat_number: 'BE0123456789',
+        iban: 'be68 5390 0754 7034',
+        account_holder_name: 'Treasury Dept',
+      });
+
+      component.save();
+
+      const payload = communitySpy.updateCommunity.mock.calls[0][0] as {
+        vat_number: string | null;
+        legal_name: string | null;
+        iban: string | null;
+        account_holder_name: string | null;
+      };
+      expect(payload.vat_number).toBe('BE0123456789');
+      expect(payload.legal_name).toBe('Legal SCRL');
+      expect(payload.iban).toBe('BE68539007547034');
+      expect(payload.account_holder_name).toBe('Treasury Dept');
+    });
+
+    it('drops account_holder_name when it equals the legal name (case-insensitive)', () => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({
+        name: 'Updated',
+        legal_name: 'Legal SCRL',
+        account_holder_name: '  legal scrl  ',
+      });
+
+      component.save();
+
+      const payload = communitySpy.updateCommunity.mock.calls[0][0] as {
+        account_holder_name: string | null;
+      };
+      expect(payload.account_holder_name).toBeNull();
+    });
+
+    it('marks the form invalid and skips update on a malformed IBAN', () => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({ name: 'Updated', iban: 'NOT-AN-IBAN' });
+
+      expect(component.form.controls.iban.errors).toEqual({ invalidIban: true });
+
+      component.save();
+      expect(communitySpy.updateCommunity).not.toHaveBeenCalled();
     });
   });
 });

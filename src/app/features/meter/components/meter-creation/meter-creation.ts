@@ -28,6 +28,7 @@ import {
 } from '../../../../shared/types/meter.types';
 import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
+import { eanValidator } from './ean.validator';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { InputText } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
@@ -146,7 +147,7 @@ export class MeterCreation implements OnInit {
       address_postcode: new FormControl('', [Validators.required]),
       address_supplement: new FormControl('', []),
       address_city: new FormControl('', [Validators.required]),
-      EAN: new FormControl('', [Validators.required]),
+      EAN: new FormControl('', [Validators.required, eanValidator()]),
       grd: new FormControl('', [Validators.required]),
       meterNumber: new FormControl('', [Validators.required]),
       tarifGroup: new FormControl('', [Validators.required]),

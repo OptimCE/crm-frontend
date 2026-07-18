@@ -14,16 +14,36 @@ import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Tag } from 'primeng/tag';
+import { Select } from 'primeng/select';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { switchMap } from 'rxjs';
 
 import { Role } from '../../../../core/dtos/role';
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { RegulatorStore } from '../../../../core/services/regulator.store';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { CommunityDetailDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
+import { ibanValidator } from '../../../../shared/validators/iban.validator';
+
+/** Wallonia-only default applied when a community has no regulator yet. */
+const DEFAULT_REGULATOR = 'BE-WAL-CWAPE';
+
+interface CommunityUpdatePayload {
+  name?: string;
+  description?: string | null;
+  website_url?: string | null;
+  regulator?: string;
+  headquarters_address?: CreateAddressDTO;
+  vat_number?: string | null;
+  legal_name?: string | null;
+  iban?: string | null;
+  account_holder_name?: string | null;
+}
 
 interface AddressFormValue {
   street: string;
@@ -37,7 +57,12 @@ interface CommunityInfoFormValue {
   name: string;
   description: string;
   website_url: string;
+  regulator: string;
   headquarters_address: AddressFormValue;
+  vat_number: string;
+  legal_name: string;
+  iban: string;
+  account_holder_name: string;
 }
 
 /**
@@ -59,17 +84,33 @@ function partialAddressValidator(group: AbstractControl): ValidationErrors | nul
 @Component({
   selector: 'app-community-info',
   standalone: true,
-  imports: [Button, Card, InputText, Textarea, Tag, ReactiveFormsModule, TranslatePipe, HeaderPage],
+  imports: [
+    Button,
+    Card,
+    InputText,
+    Textarea,
+    Tag,
+    Select,
+    ConfirmDialog,
+    ReactiveFormsModule,
+    TranslatePipe,
+    HeaderPage,
+  ],
   templateUrl: './community-info.html',
   styleUrl: './community-info.css',
-  providers: [ErrorMessageHandler],
+  providers: [ErrorMessageHandler, ConfirmationService],
 })
 export class CommunityInfo {
   protected userContextService = inject(UserContextService);
   private communityService = inject(CommunityService);
+  private regulatorStore = inject(RegulatorStore);
+  private confirmationService = inject(ConfirmationService);
   private errorHandler = inject(ErrorMessageHandler);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+
+  /** Active regulators with localized labels, for the dropdown. */
+  readonly regulatorOptions = signal<{ code: string; label: string }[]>([]);
 
   readonly community = signal<CommunityDetailDTO | null>(null);
   readonly loading = signal<boolean>(false);
@@ -87,6 +128,10 @@ export class CommunityInfo {
       nonNullable: true,
       validators: [Validators.pattern(/^https?:\/\/[^\s]+$/i)],
     }),
+    regulator: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     headquarters_address: new FormGroup(
       {
         street: new FormControl<string>('', { nonNullable: true }),
@@ -97,12 +142,32 @@ export class CommunityInfo {
       },
       { validators: partialAddressValidator },
     ),
+    vat_number: new FormControl<string>('', { nonNullable: true }),
+    legal_name: new FormControl<string>('', { nonNullable: true }),
+    iban: new FormControl<string>('', { nonNullable: true, validators: [ibanValidator()] }),
+    account_holder_name: new FormControl<string>('', { nonNullable: true }),
   });
 
   protected readonly Role = Role;
 
   constructor() {
     this.loadCommunity();
+    this.regulatorStore
+      .ensureLoaded()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildRegulatorOptions());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildRegulatorOptions());
+  }
+
+  private buildRegulatorOptions(): void {
+    this.regulatorOptions.set(
+      this.regulatorStore.activeRegulators().map((r) => ({
+        code: r.code,
+        label: this.translate.instant('REGULATORS.' + r.code) as string,
+      })),
+    );
   }
 
   loadCommunity(): void {
@@ -171,12 +236,32 @@ export class CommunityInfo {
       this.form.markAllAsTouched();
       return;
     }
+    const payload = this.buildUpdatePayload();
+    const current = this.community()?.regulator;
+    // Changing the regulator re-points billing + administrative documents: confirm first.
+    if (payload.regulator && current && payload.regulator !== current) {
+      this.confirmationService.confirm({
+        header: this.translate.instant('COMMUNITY_INFO.REGULATOR_CHANGE_CONFIRM_TITLE') as string,
+        message: this.translate.instant(
+          'COMMUNITY_INFO.REGULATOR_CHANGE_CONFIRM_MESSAGE',
+        ) as string,
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+        rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
+        accept: () => this.performSave(payload),
+      });
+      return;
+    }
+    this.performSave(payload);
+  }
+
+  private performSave(payload: CommunityUpdatePayload): void {
     this.saving.set(true);
     const file = this.selectedFile();
     const upload$ = file ? this.communityService.uploadLogo(file) : null;
     const finishUpdate = () => {
       this.communityService
-        .updateCommunity(this.buildUpdatePayload())
+        .updateCommunity(payload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
@@ -227,6 +312,7 @@ export class CommunityInfo {
       name: c.name ?? '',
       description: c.description ?? '',
       website_url: c.website_url ?? '',
+      regulator: c.regulator ?? DEFAULT_REGULATOR,
       headquarters_address: {
         street: addr?.street ?? '',
         number: addr?.number ?? null,
@@ -234,25 +320,32 @@ export class CommunityInfo {
         postcode: addr?.postcode ?? '',
         supplement: addr?.supplement ?? '',
       },
+      vat_number: c.vat_number ?? '',
+      legal_name: c.legal_name ?? '',
+      iban: c.iban ?? '',
+      account_holder_name: c.account_holder_name ?? '',
     });
   }
 
-  private buildUpdatePayload(): {
-    name?: string;
-    description?: string | null;
-    website_url?: string | null;
-    headquarters_address?: CreateAddressDTO;
-  } {
+  private buildUpdatePayload(): CommunityUpdatePayload {
     const value = this.form.getRawValue() as CommunityInfoFormValue;
-    const payload: {
-      name?: string;
-      description?: string | null;
-      website_url?: string | null;
-      headquarters_address?: CreateAddressDTO;
-    } = {
+    const legalName = value.legal_name?.trim() || null;
+    const accountHolder = value.account_holder_name?.trim() || null;
+    const payload: CommunityUpdatePayload = {
       name: value.name?.trim(),
       description: value.description?.trim() || null,
       website_url: value.website_url?.trim() || null,
+      regulator: value.regulator,
+      vat_number: value.vat_number?.trim() || null,
+      legal_name: legalName,
+      // Persist the IBAN canonically: no spaces, upper-cased.
+      iban: value.iban?.replace(/\s+/g, '').toUpperCase() || null,
+      // "Bank name" = account holder name: only stored when it differs from the
+      // legal name. If it matches (case-insensitive), we don't persist it.
+      account_holder_name:
+        accountHolder && accountHolder.toLowerCase() === (legalName ?? '').toLowerCase()
+          ? null
+          : accountHolder,
     };
     const a = value.headquarters_address;
     if (a.street && a.number !== null && a.city && a.postcode) {
