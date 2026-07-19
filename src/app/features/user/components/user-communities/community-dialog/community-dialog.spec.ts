@@ -11,7 +11,10 @@ describe('CommunityDialog', () => {
   let component: CommunityDialog;
   let fixture: ComponentFixture<CommunityDialog>;
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
-  let communityServiceSpy: { createCommunity: ReturnType<typeof vi.fn> };
+  let communityServiceSpy: {
+    createCommunity: ReturnType<typeof vi.fn>;
+    getRegulators: ReturnType<typeof vi.fn>;
+  };
 
   function ctrl(name: string) {
     const c = component.form.get(name);
@@ -23,6 +26,7 @@ describe('CommunityDialog', () => {
     dialogRefSpy = { close: vi.fn() };
     communityServiceSpy = {
       createCommunity: vi.fn().mockReturnValue(of(new ApiResponse('ok'))),
+      getRegulators: vi.fn().mockReturnValue(of(new ApiResponse([]))),
     };
 
     await TestBed.configureTestingModule({
@@ -60,7 +64,10 @@ describe('CommunityDialog', () => {
     ctrl('new_name').setValue('My Community');
     component.onSubmit();
 
-    expect(communityServiceSpy.createCommunity).toHaveBeenCalledWith({ name: 'My Community' });
+    expect(communityServiceSpy.createCommunity).toHaveBeenCalledWith({
+      name: 'My Community',
+      regulator: 'BE-WAL-CWAPE',
+    });
     expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
   });
 

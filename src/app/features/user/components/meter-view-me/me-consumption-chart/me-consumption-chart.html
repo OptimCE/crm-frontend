@@ -1,0 +1,42 @@
+<form
+  [formGroup]="formChart"
+  class="flex flex-col sm:flex-row gap-3 items-end mb-4"
+  (submit)="loadChart()"
+>
+  <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+    <label for="dateDeb" class="field-label">{{
+      'METER.FULL.BEGINNING_DATE_LABEL' | translate
+    }}</label>
+    <p-date-picker
+      id="dateDeb"
+      formControlName="dateDeb"
+      dateFormat="dd/mm/yy"
+      [firstDayOfWeek]="1"
+      styleClass="w-full"
+      data-testid="me-consumption-chart__datepicker--date-start"
+    ></p-date-picker>
+    <app-error-handler controlName="dateDeb"></app-error-handler>
+  </div>
+  <div class="flex flex-col gap-1 flex-1 sm:flex-initial">
+    <label for="dateFin" class="field-label">{{ 'METER.FULL.END_DATE_LABEL' | translate }}</label>
+    <p-date-picker
+      id="dateFin"
+      formControlName="dateFin"
+      dateFormat="dd/mm/yy"
+      [firstDayOfWeek]="1"
+      styleClass="w-full"
+      data-testid="me-consumption-chart__datepicker--date-end"
+    ></p-date-picker>
+    <app-error-handler controlName="dateFin"></app-error-handler>
+  </div>
+  <p-button
+    pRipple
+    label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
+    icon="pi pi-search"
+    type="submit"
+    data-testid="me-consumption-chart__btn--search"
+  ></p-button>
+</form>
+<p-card styleClass="mb-4" data-testid="me-consumption-chart__card--chart">
+  <p-chart type="bar" [data]="data()" [options]="options" />
+</p-card>

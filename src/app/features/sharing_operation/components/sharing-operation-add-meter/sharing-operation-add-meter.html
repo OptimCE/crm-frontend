@@ -355,9 +355,9 @@
               [attr.data-testid]="'op-add-meter__checkbox--' + rowIndex"
             ></p-tableCheckbox>
           </td>
-          <td [innerHTML]="meter.adresse | address" class="text-sm"></td>
+          <td [innerHTML]="meter.address | address" class="text-sm"></td>
           <td class="text-sm px-3 py-2">{{ meter.EAN }}</td>
-          <td class="text-sm px-3 py-2">{{ meter.meterNumber }}</td>
+          <td class="text-sm px-3 py-2">{{ meter.meter_number }}</td>
           <td class="text-sm px-3 py-2">
             @switch (meter.status) {
               @case (MeterStatus.ACTIVE) {
@@ -411,7 +411,7 @@
                 [attr.data-testid]="'op-add-meter__checkbox-mobile--' + rowIndex"
               ></p-tableCheckbox>
               <div class="flex-1 min-w-0 text-sm">
-                <div class="font-medium break-words" [innerHTML]="meter.adresse | address"></div>
+                <div class="font-medium break-words" [innerHTML]="meter.address | address"></div>
                 <div class="text-xs text-gray-600 mt-1">
                   <span class="font-semibold">EAN:</span> {{ meter.EAN }}
                 </div>
@@ -422,7 +422,7 @@
                         | translate
                     }}:</span
                   >
-                  {{ meter.meterNumber }}
+                  {{ meter.meter_number }}
                 </div>
                 <div class="mt-2">
                   @switch (meter.status) {

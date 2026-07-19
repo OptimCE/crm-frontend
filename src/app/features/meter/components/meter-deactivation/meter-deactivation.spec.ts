@@ -1,8 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { vi } from 'vitest';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { of, throwError } from 'rxjs';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 import { MeterDeactivation } from './meter-deactivation';
+import { MeterService } from '../../../../shared/services/meter.service';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { ApiResponse } from '../../../../core/dtos/api.response';
 
 // ── Test Suite ─────────────────────────────────────────────────────
 
@@ -14,10 +19,25 @@ describe('MeterDeactivation', () => {
     data: { ean: 'EAN001234567890' },
   };
 
+  const meterServiceSpy = {
+    deactivateMeter: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
+  };
+  const dialogRefSpy = { close: vi.fn() };
+  const errorHandlerSpy = { handleError: vi.fn() };
+
   beforeEach(async () => {
+    meterServiceSpy.deactivateMeter.mockClear();
+    dialogRefSpy.close.mockClear();
+    errorHandlerSpy.handleError.mockClear();
+
     await TestBed.configureTestingModule({
-      imports: [MeterDeactivation],
-      providers: [{ provide: DynamicDialogConfig, useValue: dialogConfigMock }],
+      imports: [MeterDeactivation, TranslateModule.forRoot()],
+      providers: [
+        { provide: DynamicDialogConfig, useValue: dialogConfigMock },
+        { provide: DynamicDialogRef, useValue: dialogRefSpy },
+        { provide: MeterService, useValue: meterServiceSpy },
+        { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MeterDeactivation);
@@ -66,16 +86,32 @@ describe('MeterDeactivation', () => {
     });
   });
 
-  // ── 4. calendarOpen signal ──────────────────────────────────────
+  // ── 4. onSubmit ─────────────────────────────────────────────────
 
-  describe('calendarOpen', () => {
-    it('should default to false', () => {
-      expect(component.calendarOpen()).toBe(false);
+  describe('onSubmit', () => {
+    it('should not call the service when the form is invalid', () => {
+      component.onSubmit();
+      expect(meterServiceSpy.deactivateMeter).not.toHaveBeenCalled();
     });
 
-    it('should be settable', () => {
-      component.calendarOpen.set(true);
-      expect(component.calendarOpen()).toBe(true);
+    it('should call deactivateMeter and close the dialog on success', () => {
+      component.deleteForm.get('date')?.setValue(new Date(2026, 0, 15) as unknown as string);
+      component.onSubmit();
+      expect(meterServiceSpy.deactivateMeter).toHaveBeenCalledWith(
+        'EAN001234567890',
+        expect.any(String),
+      );
+      expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
+    });
+
+    it('should surface the error and not close the dialog on failure', () => {
+      meterServiceSpy.deactivateMeter.mockReturnValueOnce(
+        throwError(() => new ApiResponse('boom')),
+      );
+      component.deleteForm.get('date')?.setValue(new Date(2026, 0, 15) as unknown as string);
+      component.onSubmit();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('boom');
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
     });
   });
 });

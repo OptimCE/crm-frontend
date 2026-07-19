@@ -259,6 +259,9 @@
           <p-tab [value]="2" data-testid="meter-view-me__tab--future">{{
             'METER.FULL.TABS.FUTUR_DATA_HEADER' | translate
           }}</p-tab>
+          <p-tab [value]="3" data-testid="meter-view-me__tab--consumption">{{
+            'METER.FULL.TABS.CONSUMPTION_HEADER' | translate
+          }}</p-tab>
         </p-tablist>
         <p-tabpanels>
           <p-tabpanel [value]="0">
@@ -403,6 +406,17 @@
                   {{ 'METER.FULL.NO_FUTURE_DATA_FOUND_LABEL' | translate }}
                 </p>
               </div>
+            }
+          </p-tabpanel>
+
+          <!-- Consumption Tab (member's own ownership windows only) -->
+          <p-tabpanel [value]="3">
+            @defer (on viewport) {
+              <app-me-consumption-chart [ean]="id" />
+            } @placeholder {
+              <div class="min-h-[20rem]"></div>
+            } @loading (after 100ms; minimum 200ms) {
+              <p-skeleton height="20rem" />
             }
           </p-tabpanel>
         </p-tabpanels>

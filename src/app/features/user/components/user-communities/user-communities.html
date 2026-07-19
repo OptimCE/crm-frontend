@@ -106,7 +106,7 @@
           <div class="flex justify-center gap-2">
             @if (
               userContextService.activeCommunityId() === community.auth_community_id &&
-              community.role >= 1
+              userContextService.compareWithActiveRole(Role.ADMIN)
             ) {
               <p-button
                 [attr.data-testid]="'user-communities__button--update-desktop--' + rowIndex"
@@ -185,7 +185,7 @@
             <div class="flex flex-wrap gap-2 mt-3 pt-2 border-t border-primary-100">
               @if (
                 userContextService.activeCommunityId() === community.auth_community_id &&
-                community.role >= 1
+                userContextService.compareWithActiveRole(Role.ADMIN)
               ) {
                 <p-button
                   [attr.data-testid]="'user-communities__button--update-mobile--' + rowIndex"

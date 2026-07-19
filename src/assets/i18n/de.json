@@ -130,7 +130,8 @@
     "ERROR_LOADING": "Beim Laden der Daten ist ein Fehler aufgetreten",
     "RETRY": "Erneut versuchen",
     "AUDIT_LOG": "Audit-Protokoll",
-    "NEWS": "Aktuelles"
+    "NEWS": "Aktuelles",
+    "BILLING": "Abrechnung"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -267,6 +268,11 @@
       "NO_INVITATIONS_AVAILABLE": "Keine Managereinladungen gefunden"
     }
   },
+  "REGULATORS": {
+    "BE-WAL-CWAPE": "CWaPE (Wallonien)",
+    "BE-BRU-BRUGEL": "Brugel (Brüssel)",
+    "BE-VLA-VREG": "VREG (Flandern)"
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Gemeinschaftsinfo",
     "SUBTITLE": "Anzeigen und Verwalten der Daten Ihrer Gemeinschaft",
@@ -288,9 +294,20 @@
     "CHOOSE_LOGO": "Logo auswählen",
     "REMOVE_LOGO": "Logo entfernen",
     "NO_COMMUNITY": "Keine aktive Gemeinschaft ausgewählt.",
+    "REGULATOR": "Regulierungsbehörde",
+    "REGULATOR_PLACEHOLDER": "Regulierungsbehörde auswählen",
+    "REGULATOR_CHANGE_CONFIRM_TITLE": "Regulierungsbehörde ändern?",
+    "REGULATOR_CHANGE_CONFIRM_MESSAGE": "Das Ändern der Regulierungsbehörde ändert das Abrechnungsregime und die Verwaltungsdokumente dieser Gemeinschaft. Möchten Sie wirklich fortfahren?",
+    "BANK_LEGAL_SECTION": "Bank- und Rechtsinformationen",
+    "LEGAL_NAME": "Rechtlicher Name",
+    "VAT_NUMBER": "USt-IdNr.",
+    "IBAN": "IBAN",
+    "ACCOUNT_HOLDER_NAME": "Kontoinhaber",
+    "ACCOUNT_HOLDER_HINT": "Nur ausfüllen, wenn das Konto nicht auf den rechtlichen Namen lautet",
     "ERRORS": {
       "INVALID_URL": "Bitte geben Sie eine gültige URL ein, die mit http:// oder https:// beginnt",
-      "PARTIAL_ADDRESS": "Bitte vervollständigen Sie alle erforderlichen Adressfelder oder lassen Sie sie leer"
+      "PARTIAL_ADDRESS": "Bitte vervollständigen Sie alle erforderlichen Adressfelder oder lassen Sie sie leer",
+      "INVALID_IBAN": "Bitte geben Sie eine gültige IBAN ein"
     }
   },
   "COMMUNITY": {
@@ -316,6 +333,10 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Gemeinschaft wechseln",
       "LEAVE_BUTTON": "Verlassen",
       "LEAVE_BUTTON_TOOLTIP": "Gemeinschaft verlassen",
+      "LEAVE_CONFIRM_HEADER": "Gemeinschaft verlassen",
+      "LEAVE_CONFIRM_MESSAGE": "Möchten Sie \"{{name}}\" wirklich verlassen?",
+      "LEAVE_SUCCESS": "Sie haben die Gemeinschaft verlassen.",
+      "UPDATE_SUCCESS": "Name der Gemeinschaft aktualisiert.",
       "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
       "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)",
@@ -330,7 +351,9 @@
       "NO_OPERATIONS": "Keine öffentliche Teilungsoperation für diese Gemeinschaft",
       "MUNICIPALITIES": "Gemeinden",
       "MUNICIPALITY_FILTER_LABEL": "Nach Gemeinde filtern",
-      "MUNICIPALITY_FILTER_PLACEHOLDER": "Eine Gemeinde suchen…"
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Eine Gemeinde suchen…",
+      "REGULATOR_FILTER_LABEL": "Nach Regulierungsbehörde filtern",
+      "REGULATOR_FILTER_PLACEHOLDER": "Alle Regulierungsbehörden"
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",
@@ -879,6 +902,9 @@
       "PLACEHOLDER": {
         "EAN_LABEL": "1234567890123",
         "METER_NUMBER_LABEL": "1234567890123"
+      },
+      "ERROR": {
+        "INVALID_EAN": "Der EAN muss genau 13 Ziffern enthalten."
       }
     },
     "CATEGORIES": {
@@ -1173,7 +1199,6 @@
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Teilungsoperation",
       "GENERAL_INFO_TITLE": "Allgemeine Informationen",
-      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Als Excel exportieren (CWAPE)",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Typ",
       "MUNICIPALITIES_LABEL": "Abgedeckte Gemeinden",
@@ -1204,7 +1229,9 @@
         "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Schlüssel erfolgreich bearbeitet",
         "WAITING_APPROVAL_KEY_LABEL": "Schlüssel wartet auf Genehmigung",
         "APPROVE_KEY": "Genehmigen",
-        "REJECT_KEY": "Ablehnen"
+        "REJECT_KEY": "Ablehnen",
+        "APPROVE_KEY_DATE_LABEL": "Startdatum für den genehmigten Schlüssel",
+        "APPROVE_KEY_NO_DATE_ERROR": "Bitte wählen Sie ein Startdatum aus, bevor Sie den Schlüssel genehmigen."
       },
       "METER": {
         "HEADERS": {
@@ -1372,7 +1399,257 @@
     "NEWS": {
       "NAME": "Aktuelles",
       "DESCRIPTION": "Veröffentlichen Sie Ankündigungen und Umfragen für die gesamte Gemeinschaft."
+    },
+    "BILLING": {
+      "NAME": "Abrechnung",
+      "DESCRIPTION": "Rechnen Sie Mitgliedern ihren Verbrauch aus der Energieteilung ab; Mitglieder sehen und bezahlen ihre eigenen Rechnungen."
     }
+  },
+  "BILLING": {
+    "TITLE": "Abrechnung",
+    "SUBTITLE": "Tarife, Rechnungsstellung und Zahlungsverfolgung der Gemeinschaft.",
+    "DRAFT_PLACEHOLDER": "Entwurf",
+    "TABS": {
+      "TARIFFS": "Tarife",
+      "GENERATE": "Rechnung erstellen",
+      "TRACKING": "Übersicht",
+      "MY_INVOICES": "Meine Rechnungen"
+    },
+    "OPERATION": {
+      "SELECT_LABEL": "Teilungsoperation",
+      "SELECT_PLACEHOLDER": "Teilungsoperation auswählen",
+      "NONE_SELECTED": "Wählen Sie eine Teilungsoperation, um deren Tarife zu verwalten."
+    },
+    "TARIFFS": {
+      "ADD": "Neuer Tarif",
+      "EMPTY": "Für diese Operation ist noch kein Tarif definiert.",
+      "CREATED": "Tarif erstellt.",
+      "DELETED": "Tarif gelöscht.",
+      "DELETE_CONFIRM_HEADER": "Tarif löschen",
+      "DELETE_CONFIRM_MESSAGE": "Möchten Sie diesen Tarif wirklich löschen?",
+      "COL": {
+        "KIND": "Art",
+        "SCOPE": "Geltungsbereich",
+        "PRICE": "Preis",
+        "VALIDITY": "Gültigkeit",
+        "LABEL": "Bezeichnung"
+      }
+    },
+    "TARIFF_KIND": {
+      "CONSUMER_SELLING": "Verkaufspreis für Verbraucher",
+      "PRODUCER_BUYBACK": "Rückkaufpreis für Erzeuger"
+    },
+    "TARIFF_SCOPE": {
+      "GLOBAL": "Global",
+      "SEGMENT": "Segment",
+      "EAN": "EAN"
+    },
+    "TARIFF_SEGMENT": {
+      "RESIDENTIAL": "Wohnbereich",
+      "PROFESSIONAL": "Gewerblich",
+      "INDUSTRIAL": "Industriell"
+    },
+    "TARIFF_DIALOG": {
+      "TITLE": "Neuer Tarif",
+      "KIND": "Art",
+      "SCOPE": "Geltungsbereich",
+      "SEGMENT": "Segment",
+      "EAN": "EAN",
+      "PRICE": "Preis pro kWh",
+      "VALID_FROM": "Gültig ab",
+      "VALID_TO": "Gültig bis (optional)",
+      "LABEL": "Bezeichnung (optional)",
+      "SUBMIT": "Tarif erstellen",
+      "ERRORS": {
+        "REQUIRED": "Bitte geben Sie einen gültigen Preis und ein Startdatum an.",
+        "SEGMENT_REQUIRED": "Wählen Sie ein Segment für einen segmentbezogenen Tarif.",
+        "EAN_REQUIRED": "Geben Sie eine EAN für einen EAN-bezogenen Tarif ein.",
+        "VALIDITY_ORDER": "Das Enddatum muss am oder nach dem Startdatum liegen."
+      }
+    },
+    "GENERATE": {
+      "UPLOAD_TITLE": "Verbrauchsdaten",
+      "UPLOAD_SUBTITLE": "Laden Sie die Excel-Messdaten für diesen Vorgang hoch, bevor Sie Rechnungen erstellen.",
+      "PERIOD_START": "Zeitraum von",
+      "PERIOD_END": "Zeitraum bis",
+      "GENERATE_BTN": "Erstellen",
+      "RECENT_RUNS": "Letzte Läufe",
+      "INVOICES_SUFFIX": "Rechnungen",
+      "INVOICES_TITLE": "Rechnungen",
+      "COMPUTING": "Rechnungen werden berechnet…",
+      "RUN_FAILED": "Dieser Lauf ist fehlgeschlagen. Prüfen Sie den Zeitraum und die importierten Daten und versuchen Sie es erneut.",
+      "EMPTY_INVOICES": "Dieser Lauf hat keine Rechnungen erzeugt.",
+      "RUN_CREATED": "Abrechnungslauf gestartet.",
+      "ERRORS": {
+        "REQUIRED": "Wählen Sie eine Operation und einen Zeitraum.",
+        "PERIOD_ORDER": "Das Enddatum muss am oder nach dem Startdatum liegen."
+      }
+    },
+    "RUN_STATUS": {
+      "PENDING": "Ausstehend",
+      "COMPUTING": "Wird berechnet",
+      "COMPUTED": "Berechnet",
+      "FAILED": "Fehlgeschlagen"
+    },
+    "INVOICE": {
+      "ISSUED_AT": "Ausgestellt",
+      "DUE_DATE": "Fällig"
+    },
+    "INVOICE_STATUS": {
+      "DRAFT": "Entwurf",
+      "ISSUED": "Ausgestellt",
+      "SENT": "Versendet",
+      "PAID": "Bezahlt",
+      "OVERDUE": "Überfällig",
+      "CANCELLED": "Storniert",
+      "RENDER_FAILED": "Erstellung fehlgeschlagen"
+    },
+    "INVOICE_TYPE": {
+      "INVOICE": "Rechnung",
+      "CREDIT_NOTE": "Gutschrift",
+      "PRODUCER_STATEMENT": "Erzeugerabrechnung"
+    },
+    "ACTIONS": {
+      "VIEW_DETAIL": "Details anzeigen",
+      "ISSUE": "Ausstellen",
+      "SEND": "Senden",
+      "REGISTER_PAYMENT": "Zahlung erfassen",
+      "CREDIT_NOTE": "Gutschrift",
+      "DOWNLOAD_PDF": "PDF herunterladen",
+      "GENERATE_PDF": "PDF erzeugen",
+      "REGENERATE_PDF": "PDF neu erzeugen",
+      "DELETE_PDF": "PDF löschen"
+    },
+    "ISSUE": {
+      "SUCCESS": "Rechnung {{number}} ausgestellt (OGM {{ogm}})."
+    },
+    "SEND": {
+      "SUCCESS": "Rechnung versendet."
+    },
+    "PAYMENT": {
+      "SUCCESS": "Zahlung erfasst."
+    },
+    "CREDIT_NOTE": {
+      "SUCCESS": "Gutschrift erstellt."
+    },
+    "PDF": {
+      "DOWNLOAD": "Herunterladen",
+      "GENERATING": "Wird erzeugt…",
+      "GENERATE_STARTED": "PDF-Erzeugung gestartet.",
+      "GENERATE_SUCCESS": "Das PDF ist bereit.",
+      "GENERATE_FAILED": "PDF-Erzeugung fehlgeschlagen.",
+      "DELETE_SUCCESS": "PDF gelöscht.",
+      "DOWNLOAD_FAILED": "PDF konnte nicht heruntergeladen werden."
+    },
+    "PAYMENT_DIALOG": {
+      "TITLE": "Zahlung erfassen",
+      "AMOUNT": "Betrag",
+      "METHOD": "Methode",
+      "REFERENCE": "Referenz (optional)",
+      "PAID_ON": "Bezahlt am (optional)",
+      "SUBMIT": "Zahlung erfassen",
+      "ERRORS": {
+        "AMOUNT_REQUIRED": "Geben Sie einen gültigen Betrag ein."
+      }
+    },
+    "PAYMENT_METHOD": {
+      "BANK_TRANSFER": "Banküberweisung",
+      "DIRECT_DEBIT": "Lastschrift",
+      "CASH": "Bar",
+      "OTHER": "Sonstige"
+    },
+    "CREDIT_NOTE_DIALOG": {
+      "TITLE": "Gutschrift erstellen",
+      "CONFIRM": "Dadurch wird eine Gutschrift erstellt, die die Rechnung storniert. Die ursprüngliche Rechnung bleibt unverändert.",
+      "REASON": "Grund (optional)",
+      "REASON_PLACEHOLDER": "Warum wird diese Gutschrift ausgestellt?",
+      "SUBMIT": "Gutschrift erstellen"
+    },
+    "DETAIL": {
+      "TITLE": "Rechnungsdetails",
+      "NUMBER": "Nummer",
+      "TYPE": "Typ",
+      "STATUS": "Status",
+      "ISSUED_AT": "Ausgestellt am",
+      "DUE_DATE": "Fälligkeitsdatum",
+      "OGM": "Strukturierte Mitteilung",
+      "LINES_TITLE": "Positionen",
+      "EMPTY_LINES": "Keine Positionen.",
+      "SUBTOTAL": "Zwischensumme",
+      "VAT": "MwSt.",
+      "TOTAL": "Gesamt",
+      "PAYMENTS_TITLE": "Zahlungen",
+      "EMPTY_PAYMENTS": "Keine Zahlungen erfasst.",
+      "CLOSE": "Schließen",
+      "LINE": {
+        "EAN": "EAN",
+        "DIRECTION": "Richtung",
+        "MEASURE": "Messung",
+        "QTY": "Menge (kWh)",
+        "UNIT_PRICE": "Einzelpreis",
+        "AMOUNT": "Betrag"
+      },
+      "PAYMENT": {
+        "DATE": "Datum",
+        "METHOD": "Methode",
+        "REFERENCE": "Referenz",
+        "AMOUNT": "Betrag"
+      }
+    },
+    "DIRECTION": {
+      "CONSUMER": "Verbrauch",
+      "PRODUCER": "Einspeisung"
+    },
+    "MEASURE": {
+      "SHARED": "Geteilt",
+      "INJ_SHARED": "Geteilte Einspeisung"
+    },
+    "TRACKING": {
+      "ALL_STATUSES": "Alle Status",
+      "REFRESH": "Aktualisieren",
+      "SWEEP_BTN": "Überfällige markieren",
+      "EMPTY": "Keine Rechnungen entsprechen dem Filter.",
+      "PAGE_INFO": "Seite {{page}} von {{total}}",
+      "SWEEP_CONFIRM_HEADER": "Überfällige Rechnungen markieren",
+      "SWEEP_CONFIRM_MESSAGE": "Alle fälligen, unbezahlten Rechnungen als überfällig markieren?",
+      "SWEEP_DONE": "{{count}} Rechnung(en) als überfällig markiert."
+    },
+    "FILTERS": {
+      "STATUS": "Status",
+      "MEMBER": "Mitglied",
+      "ALL_MEMBERS": "Alle Mitglieder",
+      "ISSUED_FROM": "Ausgestellt ab",
+      "ISSUED_TO": "Ausgestellt bis",
+      "SORT_BY": "Sortieren nach",
+      "CLEAR": "Filter zurücksetzen"
+    },
+    "SORT": {
+      "ISSUED_DATE": "Ausstellungsdatum",
+      "DUE_DATE": "Fälligkeitsdatum",
+      "AMOUNT": "Betrag",
+      "NUMBER": "Nummer",
+      "STATUS": "Status",
+      "ASC": "Aufsteigend",
+      "DESC": "Absteigend"
+    },
+    "MEMBER_VIEW": {
+      "TITLE": "Meine Rechnungen",
+      "SUBTITLE": "Ihre Rechnungen aus der Energieteilung und wie Sie sie bezahlen.",
+      "ALL_STATUSES": "Alle Status",
+      "EMPTY": "Sie haben noch keine Rechnungen.",
+      "ISSUED_AT": "Ausgestellt",
+      "DUE_DATE": "Fällig",
+      "OGM_LABEL": "Strukturierte Mitteilung",
+      "PAGE_INFO": "Seite {{page}} von {{total}}"
+    }
+  },
+  "CONSUMPTION_COVERAGE": {
+    "TITLE": "Verfügbare Verbrauchsdaten",
+    "EMPTY": "Noch keine Verbrauchsdaten hochgeladen.",
+    "LEGEND_COMPLETE": "Vollständig",
+    "LEGEND_PARTIAL": "Teilweise",
+    "LEGEND_NONE": "Keine Daten",
+    "POINTS": "{{count}} Datenpunkte ({{pct}} % des Monats)"
   },
   "SIMULATION_HUB": {
     "PAGE_TITLE": "Simulation des Verteilschlüssels",

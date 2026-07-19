@@ -1,0 +1,38 @@
+<div class="mx-auto w-full max-w-5xl">
+  <app-header-page
+    icon="pi pi-credit-card"
+    [text]="'BILLING.TITLE' | translate"
+    [subtitle]="'BILLING.SUBTITLE' | translate"
+  />
+
+  <p-tabs [value]="0" class="block mt-5">
+    <p-tablist>
+      <p-tab [value]="0" data-testid="billing__tab--tariffs">{{
+        'BILLING.TABS.TARIFFS' | translate
+      }}</p-tab>
+      <p-tab [value]="1" data-testid="billing__tab--generate">{{
+        'BILLING.TABS.GENERATE' | translate
+      }}</p-tab>
+      <p-tab [value]="2" data-testid="billing__tab--tracking">{{
+        'BILLING.TABS.TRACKING' | translate
+      }}</p-tab>
+      <p-tab [value]="3" data-testid="billing__tab--my-invoices">{{
+        'BILLING.TABS.MY_INVOICES' | translate
+      }}</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel [value]="0">
+        <app-tariffs-panel />
+      </p-tabpanel>
+      <p-tabpanel [value]="1">
+        <app-run-generate />
+      </p-tabpanel>
+      <p-tabpanel [value]="2">
+        <app-tracking-board />
+      </p-tabpanel>
+      <p-tabpanel [value]="3">
+        <app-billing-member-invoices [showHeader]="false" />
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>

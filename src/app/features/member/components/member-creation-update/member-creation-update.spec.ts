@@ -224,6 +224,40 @@ describe('MemberCreationUpdate', () => {
   });
 
   // =============================================
+  // 1b. IBAN validator wiring
+  // =============================================
+
+  describe('IBAN validation wiring', () => {
+    beforeEach(async () => {
+      await createTestBed(null);
+      fixture = TestBed.createComponent(MemberCreationUpdate);
+      component = fixture.componentInstance;
+      component.ngOnInit();
+      await fixture.whenStable();
+    });
+
+    function ibanControl() {
+      return component.ibanForm.get('iban');
+    }
+
+    it('should accept a valid Belgian IBAN', () => {
+      ibanControl()?.setValue('BE68539007547034');
+      expect(ibanControl()?.hasError('invalidIban')).toBe(false);
+      expect(ibanControl()?.valid).toBe(true);
+    });
+
+    it('should reject an IBAN that fails the mod-97 checksum', () => {
+      ibanControl()?.setValue('BE68539007547035');
+      expect(ibanControl()?.hasError('invalidIban')).toBe(true);
+    });
+
+    it('should reject a structurally malformed IBAN', () => {
+      ibanControl()?.setValue('NOT-AN-IBAN');
+      expect(ibanControl()?.hasError('invalidIban')).toBe(true);
+    });
+  });
+
+  // =============================================
   // 2. Initialization — update mode (Individual)
   // =============================================
 
@@ -604,6 +638,8 @@ describe('MemberCreationUpdate', () => {
       expect(memberServiceSpy.addMember).toHaveBeenCalledTimes(1);
       const dto = memberServiceSpy.addMember.mock.calls[0][0] as CreateMemberDTO;
       expect(dto.member_type).toBe(MemberType.COMPANY);
+      expect(dto.name).toBe('ACME Corp');
+      expect(dto.first_name).toBe('');
       expect(dto.vat_number).toBe('BE0123456789');
       expect(dto.manager).toBeDefined();
       expect(dto.manager?.NRN).toBe('90.01.15-123.45');
@@ -757,6 +793,39 @@ describe('MemberCreationUpdate', () => {
       component.onSubmitEnd();
 
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
+    });
+  });
+
+  // =============================================
+  // 11b. onSubmitEnd — company update (rename)
+  // =============================================
+
+  describe('onSubmitEnd — company update', () => {
+    const company = buildCompanyDTO();
+
+    beforeEach(async () => {
+      await createTestBed({ member: company });
+      fixture = TestBed.createComponent(MemberCreationUpdate);
+      component = fixture.componentInstance;
+      component.ngOnInit();
+      await fixture.whenStable();
+    });
+
+    it('should send the company name in the DTO name field so renames persist', () => {
+      // The company name is edited in the shared `name` control (not `surname`,
+      // which does not exist for companies). Regression guard for the bug where
+      // `name` was built from `surname` and shipped as '' — silently dropping renames.
+      component.formData.patchValue({ name: 'ACME Corp Renamed' });
+      memberServiceSpy.updateMember.mockReturnValue(of(new ApiResponse('ok')));
+
+      component.onSubmitEnd();
+
+      expect(memberServiceSpy.updateMember).toHaveBeenCalledTimes(1);
+      expect(memberServiceSpy.addMember).not.toHaveBeenCalled();
+      const dto = memberServiceSpy.updateMember.mock.calls[0][0] as UpdateMemberDTO;
+      expect(dto.id).toBe(company.id);
+      expect(dto.name).toBe('ACME Corp Renamed');
+      expect(dto.first_name).toBe('');
     });
   });
 

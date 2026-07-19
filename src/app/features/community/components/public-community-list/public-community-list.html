@@ -44,6 +44,29 @@
     </p-autoComplete>
   </div>
 
+  <!-- Regulator filter -->
+  <div class="mb-4">
+    <label
+      for="public-community-list-regulator-filter"
+      class="block text-sm font-medium text-surface-700 mb-1"
+    >
+      {{ 'COMMUNITY.PUBLIC_LIST.REGULATOR_FILTER_LABEL' | translate }}
+    </label>
+    <p-select
+      inputId="public-community-list-regulator-filter"
+      [options]="regulatorOptions()"
+      [ngModel]="selectedRegulator()"
+      (ngModelChange)="onRegulatorChange($event)"
+      optionLabel="label"
+      optionValue="code"
+      [showClear]="true"
+      appendTo="body"
+      styleClass="w-full"
+      [placeholder]="'COMMUNITY.PUBLIC_LIST.REGULATOR_FILTER_PLACEHOLDER' | translate"
+      data-testid="public-community-list__filter--regulator"
+    />
+  </div>
+
   <!-- Community list -->
   @if (communities().length === 0) {
     <div class="py-8 text-center" data-testid="public-community-list__empty--message">
@@ -78,6 +101,12 @@
               </div>
             }
             <span class="flex-1 font-semibold text-sm text-primary-700">{{ community.name }}</span>
+            <p-tag
+              severity="warn"
+              [value]="'REGULATORS.' + community.regulator | translate"
+              styleClass="text-xs"
+              [attr.data-testid]="'public-community-list__tag--regulator--' + $index"
+            />
             <i
               class="pi text-surface-500 transition-transform"
               [class.pi-chevron-down]="!isExpanded(community.id)"

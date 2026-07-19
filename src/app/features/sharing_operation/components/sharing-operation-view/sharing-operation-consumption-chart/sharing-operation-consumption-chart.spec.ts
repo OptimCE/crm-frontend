@@ -119,7 +119,10 @@ describe('SharingOperationConsumptionChart', () => {
     });
 
     it('should call getSharingOperationConsumptions with correct params', () => {
-      component.formChart.setValue({ dateDeb: '2025-01-01', dateFin: '2025-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2025, 0, 1),
+        dateFin: new Date(2025, 11, 31),
+      });
       component.loadChart();
       expect(sharingOperationServiceSpy.getSharingOperationConsumptions).toHaveBeenCalledWith(42, {
         date_start: '2025-01-01',
@@ -128,7 +131,10 @@ describe('SharingOperationConsumptionChart', () => {
     });
 
     it('should set data signal after successful response', () => {
-      component.formChart.setValue({ dateDeb: '2025-01-01', dateFin: '2025-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2025, 0, 1),
+        dateFin: new Date(2025, 11, 31),
+      });
       component.loadChart();
       expect(component.data()).toBeTruthy();
       const chartData = component.data();
@@ -138,9 +144,39 @@ describe('SharingOperationConsumptionChart', () => {
 
     it('should set displayDownloadButton to true after success', () => {
       expect(component.displayDownloadButton()).toBe(false);
-      component.formChart.setValue({ dateDeb: '2025-01-01', dateFin: '2025-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2025, 0, 1),
+        dateFin: new Date(2025, 11, 31),
+      });
       component.loadChart();
       expect(component.displayDownloadButton()).toBe(true);
+    });
+
+    it('should format x-axis ticks in Brussels wall-clock time', () => {
+      sharingOperationServiceSpy.getSharingOperationConsumptions.mockReturnValue(
+        of(
+          new ApiResponse<SharingOpConsumptionDTO>(
+            buildConsumption({
+              timestamps: ['2025-01-31T23:00:00.000Z'],
+              shared: [1],
+              net: [1],
+              inj_net: [0],
+              inj_shared: [0],
+            }),
+          ),
+        ),
+      );
+      component.formChart.setValue({
+        dateDeb: new Date(2025, 1, 1),
+        dateFin: new Date(2025, 1, 28),
+      });
+      component.loadChart();
+
+      const callback = component.options.scales.x.ticks.callback as (
+        value: unknown,
+        index: number,
+      ) => string;
+      expect(callback(null, 0)).toBe('01/02/2025 00:00:00');
     });
 
     it('should reset displayDownloadButton before loading', () => {
@@ -155,7 +191,10 @@ describe('SharingOperationConsumptionChart', () => {
   describe('downloadTotalConsumption', () => {
     beforeEach(async () => {
       await createComponent(42);
-      component.formChart.setValue({ dateDeb: '2025-01-01', dateFin: '2025-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2025, 0, 1),
+        dateFin: new Date(2025, 11, 31),
+      });
     });
 
     it('should call downloadSharingOperationConsumptions with form values', () => {

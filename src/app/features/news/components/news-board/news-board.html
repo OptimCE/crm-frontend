@@ -40,6 +40,7 @@
     @if (hasMore()) {
       <div class="flex justify-center mt-5">
         <p-button
+          data-testid="news-board__btn--load-more"
           [text]="true"
           icon="pi pi-arrow-down"
           [label]="'NEWS_BOARD.LOAD_MORE' | translate"

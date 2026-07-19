@@ -72,6 +72,8 @@ export interface SharingOperationKeyDTO {
  */
 export interface SharingOperationDTO extends SharingOperationPartialDTO {
   is_public: boolean;
+  /** Regulator inherited (read-only) from the parent community. */
+  community_regulator?: string;
   key: SharingOperationKeyDTO;
   key_waiting_approval?: SharingOperationKeyDTO;
 }
@@ -88,6 +90,16 @@ export interface SharingOpConsumptionDTO {
   inj_gross: number[];
   inj_net: number[];
   inj_shared: number[];
+}
+
+/**
+ * Monthly consumption-data coverage for a sharing operation. One entry per month
+ * (Brussels calendar) that has any data; `month` is `'YYYY-MM'`, `count` is the
+ * number of 15-minute rows present that month (a completeness signal).
+ */
+export interface SharingOpConsumptionCoverageDTO {
+  month: string;
+  count: number;
 }
 
 /**
@@ -138,14 +150,6 @@ export interface AddMeterToSharingOperationDTO {
   /** Calendar date `YYYY-MM-DD` — no time/zone. */
   date: string;
   ean_list: string[];
-}
-
-/**
- * DTO for uploading consumption data (file upload).
- */
-export interface AddConsumptionDataDTO {
-  id_sharing_operation: number;
-  // file: Express.Multer.File; TODO: Fix this
 }
 
 /**

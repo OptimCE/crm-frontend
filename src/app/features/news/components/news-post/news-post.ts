@@ -45,11 +45,13 @@ export class NewsPost {
     {
       label: this.translate.instant('NEWS_BOARD.ACTIONS.EDIT') as string,
       icon: 'pi pi-pencil',
+      styleClass: 'news-post__menu-item--edit',
       command: () => this.edit.emit(this.post()),
     },
     {
       label: this.translate.instant('NEWS_BOARD.ACTIONS.DELETE') as string,
       icon: 'pi pi-trash',
+      styleClass: 'news-post__menu-item--delete',
       command: () => this.confirmDelete(),
     },
   ]);

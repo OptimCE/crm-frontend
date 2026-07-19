@@ -13,7 +13,7 @@ import { MemberService } from '../../../../shared/services/member.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ibanValidator } from './iban.validator';
+import { ibanValidator } from '../../../../shared/validators/iban.validator';
 import { numRegistreBeValidator } from './num_registre_nat_be.validator';
 import { AddressDTO } from '../../../../shared/dtos/address.dtos';
 import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
@@ -103,7 +103,7 @@ export class MemberCreationUpdate implements OnInit {
       billing_address_city: new FormControl('', [Validators.required]),
     });
     this.ibanForm = new FormGroup({
-      iban: new FormControl('', [Validators.required, ibanValidator]),
+      iban: new FormControl('', [Validators.required, ibanValidator()]),
     });
     if (this.config.data && this.config.data.member) {
       this.existingMember.set(this.config.data.member);
@@ -136,7 +136,7 @@ export class MemberCreationUpdate implements OnInit {
       name: new FormControl('', [Validators.required]),
     });
     if (this.typeClient() === MemberType.INDIVIDUAL) {
-      // this.formData.controls['id'].addValidators([numRegistreBeValidator]);
+      this.formData.controls['id'].addValidators([numRegistreBeValidator()]);
       // Build form group for individuals
       this.formData.addControl('surname', new FormControl('', [Validators.required]));
       this.formData.addControl(
@@ -274,11 +274,13 @@ export class MemberCreationUpdate implements OnInit {
       return;
     }
 
+    const isCompany = typeClient === MemberType.COMPANY;
+
     const memberToAdd: CreateMemberDTO = {
       NRN: formValue.id,
       billing_address: billingAddress,
       email: formValue.email ?? '',
-      first_name: formValue.name,
+      first_name: isCompany ? '' : formValue.name,
       home_address: homeAddress,
       iban: ibanValue,
       member_type: typeClient,
@@ -286,7 +288,7 @@ export class MemberCreationUpdate implements OnInit {
       social_rate: socialRateValue,
       status: status,
       vat_number: formValue.vatNumber ?? '',
-      name: formValue.surname ?? '',
+      name: isCompany ? formValue.name : (formValue.surname ?? ''),
       manager: manager,
     };
     if (this.typeClient() === MemberType.COMPANY) {
@@ -337,7 +339,7 @@ export class MemberCreationUpdate implements OnInit {
     if (this.gestionnaire()) {
       this.formData.addControl(
         'NRN_manager',
-        new FormControl('', [Validators.required, numRegistreBeValidator]),
+        new FormControl('', [Validators.required, numRegistreBeValidator()]),
       );
       this.formData.addControl('name_manager', new FormControl('', [Validators.required]));
       this.formData.addControl('surname_manager', new FormControl('', [Validators.required]));

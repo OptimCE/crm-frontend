@@ -1,0 +1,98 @@
+<div class="flex flex-col gap-4">
+  <!-- Operation picker -->
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <div class="flex flex-col gap-1 sm:max-w-md sm:flex-1">
+      <label class="text-sm font-medium" for="tariffs-operation">{{
+        'BILLING.OPERATION.SELECT_LABEL' | translate
+      }}</label>
+      @if (operationsLoading()) {
+        <p-skeleton height="2.5rem" />
+      } @else {
+        <p-select
+          inputId="tariffs-operation"
+          [options]="operations()"
+          [ngModel]="selectedOpId()"
+          (ngModelChange)="onOperationChange($event)"
+          optionLabel="name"
+          optionValue="id"
+          [placeholder]="'BILLING.OPERATION.SELECT_PLACEHOLDER' | translate"
+          [filter]="true"
+          filterBy="name"
+          appendTo="body"
+          styleClass="w-full"
+          data-testid="tariffs-panel__select--operation"
+        />
+      }
+    </div>
+    <p-button
+      icon="pi pi-plus"
+      [label]="'BILLING.TARIFFS.ADD' | translate"
+      [disabled]="selectedOpId() === null"
+      (onClick)="openCreate()"
+      data-testid="tariffs-panel__btn--add"
+    />
+  </div>
+
+  <!-- Tariff list -->
+  @if (selectedOpId() === null) {
+    <p class="text-surface-500 text-sm">{{ 'BILLING.OPERATION.NONE_SELECTED' | translate }}</p>
+  } @else if (loading()) {
+    <div class="flex flex-col gap-2">
+      <p-skeleton height="3rem" />
+      <p-skeleton height="3rem" />
+    </div>
+  } @else if (tariffs().length === 0) {
+    <p class="text-surface-500 text-sm">{{ 'BILLING.TARIFFS.EMPTY' | translate }}</p>
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse" data-testid="tariffs-panel__table">
+        <thead>
+          <tr class="text-left text-surface-500 border-b border-surface-200">
+            <th class="py-2 pr-3">{{ 'BILLING.TARIFFS.COL.KIND' | translate }}</th>
+            <th class="py-2 pr-3">{{ 'BILLING.TARIFFS.COL.SCOPE' | translate }}</th>
+            <th class="py-2 pr-3">{{ 'BILLING.TARIFFS.COL.PRICE' | translate }}</th>
+            <th class="py-2 pr-3">{{ 'BILLING.TARIFFS.COL.VALIDITY' | translate }}</th>
+            <th class="py-2 pr-3">{{ 'BILLING.TARIFFS.COL.LABEL' | translate }}</th>
+            <th class="py-2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tariff of tariffs(); track tariff.id) {
+            <tr class="border-b border-surface-100">
+              <td class="py-2 pr-3">{{ kindLabelKey(tariff) | translate }}</td>
+              <td class="py-2 pr-3">
+                {{ scopeLabelKey(tariff) | translate }}
+                @if (tariff.scope === TariffScope.SEGMENT && tariff.scope_segment !== null) {
+                  <span class="text-surface-500"
+                    >· {{ segmentLabelKey(tariff.scope_segment) | translate }}</span
+                  >
+                }
+                @if (tariff.scope === TariffScope.EAN && tariff.scope_ean) {
+                  <span class="text-surface-500 font-mono">· {{ tariff.scope_ean }}</span>
+                }
+              </td>
+              <td class="py-2 pr-3 whitespace-nowrap">{{ price(tariff) }}</td>
+              <td class="py-2 pr-3 whitespace-nowrap">
+                {{ tariff.valid_from }}<span class="text-surface-400"> → </span
+                >{{ tariff.valid_to || '∞' }}
+              </td>
+              <td class="py-2 pr-3">{{ tariff.label || '—' }}</td>
+              <td class="py-2 text-right">
+                <p-button
+                  text
+                  rounded
+                  size="small"
+                  severity="danger"
+                  icon="pi pi-trash"
+                  (onClick)="confirmDelete(tariff)"
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<p-confirmDialog />

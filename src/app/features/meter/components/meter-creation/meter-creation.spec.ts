@@ -38,7 +38,7 @@ function fillFormCompletely(component: MeterCreation): void {
     address_number: '16',
     address_postcode: '1000',
     address_city: 'Brussels',
-    EAN: '5414489196362',
+    EAN: '541448200000000001',
     grd: 'RESA',
     meterNumber: 'MTR-001',
     tarifGroup: { id: 1, name: 'Low Voltage' },
@@ -229,6 +229,20 @@ describe('MeterCreation', () => {
       component.metersForm.get('EAN')?.setValue('');
       expect(component.metersForm.valid).toBe(false);
     });
+
+    it('should reject a malformed EAN through the EAN control', () => {
+      fillFormCompletely(component);
+      component.metersForm.get('EAN')?.setValue('12345');
+      expect(component.metersForm.get('EAN')?.hasError('invalidEan')).toBe(true);
+      expect(component.metersForm.valid).toBe(false);
+    });
+
+    it('should accept a valid 18-digit EAN through the EAN control', () => {
+      fillFormCompletely(component);
+      component.metersForm.get('EAN')?.setValue('541448200000000001');
+      expect(component.metersForm.get('EAN')?.hasError('invalidEan')).toBe(false);
+      expect(component.metersForm.get('EAN')?.valid).toBe(true);
+    });
   });
 
   // ── 4. validateStep1 ──────────────────────────────────────────────
@@ -266,7 +280,7 @@ describe('MeterCreation', () => {
         address_number: '1',
         address_postcode: '1000',
         address_city: 'Brussels',
-        EAN: '5414489196362',
+        EAN: '541448200000000001',
         meterNumber: 'MTR-001',
         tarifGroup: { id: 1, name: 'Low Voltage' },
         phasesNumber: { id: 1, name: 'Single Phase' },
@@ -291,7 +305,7 @@ describe('MeterCreation', () => {
       expect(meterServiceSpy.addMeter).toHaveBeenCalledTimes(1);
 
       const dto = meterServiceSpy.addMeter.mock.calls[0][0] as CreateMeterDTO;
-      expect(dto.EAN).toBe('5414489196362');
+      expect(dto.EAN).toBe('541448200000000001');
       expect(dto.meter_number).toBe('MTR-001');
       expect(dto.address.street).toBe('Rue de la Loi');
       expect(dto.address.number).toBe(16);
@@ -403,13 +417,13 @@ describe('eanValidator', () => {
     expect(validator(ctrl)).toBeNull();
   });
 
-  it('should return null for a valid 13-digit EAN', () => {
-    const ctrl = new FormControl('5414489196362');
+  it('should return null for a valid 18-digit EAN', () => {
+    const ctrl = new FormControl('541448200000000001');
     expect(validator(ctrl)).toBeNull();
   });
 
   it('should return invalidEan error for non-numeric EAN', () => {
-    const ctrl = new FormControl('541448919636A');
+    const ctrl = new FormControl('12345678901234567A');
     expect(validator(ctrl)).toEqual({ invalidEan: true });
   });
 
@@ -418,13 +432,13 @@ describe('eanValidator', () => {
     expect(validator(ctrl)).toEqual({ invalidEan: true });
   });
 
-  it('should return invalidEan error for EAN with 14 digits', () => {
-    const ctrl = new FormControl('54144891963621');
+  it('should return invalidEan error for EAN with 17 digits', () => {
+    const ctrl = new FormControl('54144820000000001');
     expect(validator(ctrl)).toEqual({ invalidEan: true });
   });
 
   it('should trim whitespace and validate', () => {
-    const ctrl = new FormControl('  5414489196362  ');
+    const ctrl = new FormControl('  541448200000000001  ');
     expect(validator(ctrl)).toBeNull();
   });
 });

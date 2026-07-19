@@ -10,7 +10,7 @@ import { ErrorMessageHandler } from '../../../../../../../../shared/services-ui/
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateManagerDTO, CreateMemberDTO } from '../../../../../../../../shared/dtos/member.dtos';
-import { ibanValidator } from '../../../../../../../member/components/member-creation-update/iban.validator';
+import { ibanValidator } from '../../../../../../../../shared/validators/iban.validator';
 import { numRegistreBeValidator } from '../../../../../../../member/components/member-creation-update/num_registre_nat_be.validator';
 import { AddressDTO } from '../../../../../../../../shared/dtos/address.dtos';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
@@ -104,7 +104,7 @@ export class EncodeNewMemberSelfComponent implements OnInit {
       billing_address_city: new FormControl('', [Validators.required]),
     });
     this.ibanForm = new FormGroup({
-      iban: new FormControl('', [Validators.required, ibanValidator]),
+      iban: new FormControl('', [Validators.required, ibanValidator()]),
     });
     this.formData = new FormGroup({});
   }
@@ -112,10 +112,7 @@ export class EncodeNewMemberSelfComponent implements OnInit {
   buildFormGroup(): void {
     if (this.typeClient() === MemberType.INDIVIDUAL) {
       this.formData = new FormGroup({
-        id: new FormControl('', [
-          Validators.required,
-          // numRegistreBeValidator
-        ]),
+        id: new FormControl('', [Validators.required, numRegistreBeValidator()]),
         name: new FormControl('', [Validators.required]),
         surname: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
@@ -256,7 +253,7 @@ export class EncodeNewMemberSelfComponent implements OnInit {
     if (this.gestionnaire()) {
       this.formData.addControl(
         'NRN_manager',
-        new FormControl('', [Validators.required, numRegistreBeValidator]),
+        new FormControl('', [Validators.required, numRegistreBeValidator()]),
       );
       this.formData.addControl('name_manager', new FormControl('', [Validators.required]));
       this.formData.addControl('surname_manager', new FormControl('', [Validators.required]));

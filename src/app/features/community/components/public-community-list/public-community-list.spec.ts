@@ -20,13 +20,21 @@ function buildCommunities(): PublicCommunityDTO[] {
     {
       id: 1,
       name: 'Alpha Community',
+      regulator: 'BE-WAL-CWAPE',
       logo_url: 'communities/1/logo.png',
       logo_presigned_url: 'https://example.com/alpha.png?sig=1',
     },
-    { id: 2, name: 'Beta Community', logo_url: null, logo_presigned_url: null },
+    {
+      id: 2,
+      name: 'Beta Community',
+      regulator: 'BE-WAL-CWAPE',
+      logo_url: null,
+      logo_presigned_url: null,
+    },
     {
       id: 3,
       name: 'Gamma Community',
+      regulator: 'BE-WAL-CWAPE',
       logo_url: 'communities/3/logo.png',
       logo_presigned_url: 'https://example.com/gamma.png?sig=3',
     },
@@ -41,6 +49,7 @@ function buildDetail(id: number, overrides: Partial<CommunityDetailDTO> = {}): C
     created_at: '2024-01-01T00:00:00.000Z',
     updated_at: '2024-01-01T00:00:00.000Z',
     member_count: 0,
+    regulator: 'BE-WAL-CWAPE',
     description: null,
     website_url: null,
     logo_url: null,
@@ -97,6 +106,7 @@ describe('PublicCommunityList', () => {
     getPublicCommunities: ReturnType<typeof vi.fn>;
     getCommunityPublicSharingOperations: ReturnType<typeof vi.fn>;
     getCommunityDetail: ReturnType<typeof vi.fn>;
+    getRegulators: ReturnType<typeof vi.fn>;
   };
   let municipalityServiceSpy: {
     searchMunicipalities: ReturnType<typeof vi.fn>;
@@ -113,6 +123,7 @@ describe('PublicCommunityList', () => {
         .mockImplementation((id: number) =>
           of(new ApiResponse<CommunityDetailDTO>(buildDetail(id))),
         ),
+      getRegulators: vi.fn().mockReturnValue(of(new ApiResponse([]))),
     };
     municipalityServiceSpy = {
       searchMunicipalities: vi

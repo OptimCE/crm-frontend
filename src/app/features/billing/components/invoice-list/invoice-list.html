@@ -1,0 +1,148 @@
+<div class="flex flex-col gap-2">
+  @for (inv of invoices(); track inv.id) {
+    <div
+      class="flex flex-col gap-3 rounded-lg border border-surface-200 p-3 sm:flex-row sm:items-center sm:justify-between"
+      data-testid="invoice-list__row"
+    >
+      <div class="flex flex-col gap-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-medium">{{
+            inv.number || ('BILLING.DRAFT_PLACEHOLDER' | translate)
+          }}</span>
+          @if (isCreditNote(inv)) {
+            <p-tag severity="contrast" [value]="typeLabelKey(inv) | translate" />
+          }
+          <p-tag
+            [value]="statusLabelKey(inv) | translate"
+            [severity]="statusSeverity(inv)"
+            data-testid="invoice-list__tag--status"
+          />
+        </div>
+        <div class="flex items-center gap-3 text-sm text-surface-500 flex-wrap">
+          @if (showMember()) {
+            <span><i class="pi pi-user text-xs"></i> {{ memberName(inv) }}</span>
+          }
+          <span class="font-semibold text-surface-700">{{ money(inv) }}</span>
+          @if (inv.issued_at) {
+            <span
+              >{{ 'BILLING.INVOICE.ISSUED_AT' | translate }}:
+              {{ inv.issued_at | date: 'dd/MM/yyyy' }}</span
+            >
+          }
+          @if (inv.due_date) {
+            <span
+              >{{ 'BILLING.INVOICE.DUE_DATE' | translate }}:
+              {{ inv.due_date | date: 'dd/MM/yyyy' }}</span
+            >
+          }
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1 shrink-0">
+        <p-button
+          text
+          rounded
+          size="small"
+          icon="pi pi-eye"
+          [pTooltip]="'BILLING.ACTIONS.VIEW_DETAIL' | translate"
+          (onClick)="openDetail(inv)"
+        />
+        @if (canIssue(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            icon="pi pi-check-circle"
+            [pTooltip]="'BILLING.ACTIONS.ISSUE' | translate"
+            (onClick)="issue(inv)"
+            data-testid="invoice-list__btn--issue"
+          />
+        }
+        @if (canSend(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            icon="pi pi-send"
+            [pTooltip]="'BILLING.ACTIONS.SEND' | translate"
+            (onClick)="send(inv)"
+          />
+        }
+        @if (canPay(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            icon="pi pi-wallet"
+            [pTooltip]="'BILLING.ACTIONS.REGISTER_PAYMENT' | translate"
+            (onClick)="openPayment(inv)"
+            data-testid="invoice-list__btn--pay"
+          />
+        }
+        @if (canCreditNote(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            severity="secondary"
+            icon="pi pi-file-export"
+            [pTooltip]="'BILLING.ACTIONS.CREDIT_NOTE' | translate"
+            (onClick)="openCreditNote(inv)"
+          />
+        }
+        @if (canDownloadPdf(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            icon="pi pi-download"
+            [pTooltip]="'BILLING.ACTIONS.DOWNLOAD_PDF' | translate"
+            (onClick)="downloadPdf(inv)"
+          />
+        }
+        @if (isGenerating(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            [loading]="true"
+            [disabled]="true"
+            [pTooltip]="'BILLING.PDF.GENERATING' | translate"
+          />
+        } @else if (canGeneratePdf(inv)) {
+          @if (inv.pdf_ready) {
+            <p-button
+              text
+              rounded
+              size="small"
+              severity="secondary"
+              icon="pi pi-refresh"
+              [pTooltip]="'BILLING.ACTIONS.REGENERATE_PDF' | translate"
+              (onClick)="generatePdf(inv, true)"
+            />
+          } @else {
+            <p-button
+              text
+              rounded
+              size="small"
+              icon="pi pi-file-pdf"
+              [pTooltip]="'BILLING.ACTIONS.GENERATE_PDF' | translate"
+              (onClick)="generatePdf(inv, false)"
+            />
+          }
+        }
+        @if (canDeletePdf(inv)) {
+          <p-button
+            text
+            rounded
+            size="small"
+            severity="danger"
+            icon="pi pi-trash"
+            [pTooltip]="'BILLING.ACTIONS.DELETE_PDF' | translate"
+            (onClick)="deletePdf(inv)"
+          />
+        }
+      </div>
+    </div>
+  }
+</div>

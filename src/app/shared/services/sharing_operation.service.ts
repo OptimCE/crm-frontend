@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
 import {
-  AddConsumptionDataDTO,
   AddKeyToSharingOperationDTO,
   AddMeterToSharingOperationDTO,
   CreateSharingOperationDTO,
@@ -9,6 +8,7 @@ import {
   PatchMeterToSharingOperationDTO,
   PatchSharingOperationVisibilityDTO,
   RemoveMeterFromSharingOperationDTO,
+  SharingOpConsumptionCoverageDTO,
   SharingOpConsumptionDTO,
   SharingOperationConsumptionQuery,
   SharingOperationDTO,
@@ -90,8 +90,22 @@ export class SharingOperationService extends ServiceBase {
   ): Observable<ApiResponse<SharingOpConsumptionDTO | string>> {
     return this.cachedGet<ApiResponse<SharingOpConsumptionDTO | string>>(
       `sharing-operation-consumption:${id}/${JSON.stringify(query)}`,
-      this.apiAddress + `/${id}/consumption`,
+      this.apiAddress + `/${id}/consumptions`,
       query,
+    );
+  }
+
+  /**
+   * Which months already have consumption data for an operation (aggregated
+   * server-side). Cache key sits under the `sharing-operation-consumption:${id}`
+   * prefix that `addConsumptionDataToSharing` invalidates, so a new upload clears it.
+   */
+  getSharingOperationConsumptionCoverage(
+    id: number,
+  ): Observable<ApiResponse<SharingOpConsumptionCoverageDTO[]>> {
+    return this.cachedGet<ApiResponse<SharingOpConsumptionCoverageDTO[]>>(
+      `sharing-operation-consumption:${id}/coverage`,
+      this.apiAddress + `/${id}/consumptions/coverage`,
     );
   }
 
@@ -159,20 +173,15 @@ export class SharingOperationService extends ServiceBase {
   }
 
   addConsumptionDataToSharing(
-    upload_consumption_data: AddConsumptionDataDTO,
+    formData: FormData,
+    idSharingOperation: number,
   ): Observable<ApiResponse<string>> {
-    return this.http
-      .post<ApiResponse<string>>(this.apiAddress + '/consumptions', upload_consumption_data)
-      .pipe(
-        tap(() => {
-          this.cache.invalidate(
-            `sharing-operation:${upload_consumption_data.id_sharing_operation}`,
-          );
-          this.cache.invalidate(
-            `sharing-operation-consumption:${upload_consumption_data.id_sharing_operation}`,
-          );
-        }),
-      );
+    return this.http.post<ApiResponse<string>>(this.apiAddress + '/consumptions', formData).pipe(
+      tap(() => {
+        this.cache.invalidate(`sharing-operation:${idSharingOperation}`);
+        this.cache.invalidate(`sharing-operation-consumption:${idSharingOperation}`);
+      }),
+    );
   }
 
   patchKeyStatus(

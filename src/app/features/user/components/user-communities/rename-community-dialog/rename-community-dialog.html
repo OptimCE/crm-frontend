@@ -1,0 +1,25 @@
+<form
+  data-testid="rename-community-dialog__form"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col gap-3"
+>
+  <div>
+    <span class="field-label">{{ 'COMMUNITY.CREATE.NAME' | translate }}</span>
+    <input
+      data-testid="rename-community-dialog__input--name"
+      pInputText
+      placeholder="{{ 'COMMUNITY.CREATE.NAME_PLACEHOLDER' | translate }}"
+      formControlName="name"
+      class="w-full"
+    />
+  </div>
+  <p-button
+    data-testid="rename-community-dialog__button--submit"
+    label="{{ 'COMMUNITY.CREATE.VALIDATE' | translate }}"
+    type="submit"
+    severity="primary"
+    class="w-full"
+    [disabled]="form.invalid"
+  />
+</form>

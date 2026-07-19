@@ -61,8 +61,8 @@
       [attr.data-testid]="'invitation-gestionnaire__row--desktop--' + rowIndex"
       class="max-lg:hidden hover:bg-primary-50"
     >
-      <td class="text-sm px-3">{{ invitation.userEmail }}</td>
-      <td class="text-sm px-3">{{ invitation.communityName }}</td>
+      <td class="text-sm px-3">{{ invitation.user_email }}</td>
+      <td class="text-sm px-3">{{ invitation.community.name }}</td>
       <td class="px-3">
         <div class="flex gap-2">
           <p-button
@@ -97,7 +97,7 @@
         >
           <!-- Card header: email -->
           <div class="flex items-center mb-3 pb-2 border-b border-primary-100">
-            <span class="font-semibold text-sm text-primary-700">{{ invitation.userEmail }}</span>
+            <span class="font-semibold text-sm text-primary-700">{{ invitation.user_email }}</span>
           </div>
 
           <!-- Card body -->
@@ -105,7 +105,7 @@
             <span class="field-label">{{
               'INVITATION.MANAGER.HEADERS.COMMUNITY' | translate
             }}</span>
-            <span class="field-value">{{ invitation.communityName }}</span>
+            <span class="field-value">{{ invitation.community.name }}</span>
           </div>
 
           <!-- Card footer: actions -->

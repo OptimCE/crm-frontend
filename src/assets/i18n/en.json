@@ -130,7 +130,8 @@
     "ERROR_LOADING": "An error occurred while loading data",
     "RETRY": "Retry",
     "AUDIT_LOG": "Audit log",
-    "NEWS": "News"
+    "NEWS": "News",
+    "BILLING": "Billing"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -267,6 +268,11 @@
       "NO_INVITATIONS_AVAILABLE": "No manager invitations found"
     }
   },
+  "REGULATORS": {
+    "BE-WAL-CWAPE": "CWaPE (Wallonia)",
+    "BE-BRU-BRUGEL": "Brugel (Brussels)",
+    "BE-VLA-VREG": "VREG (Flanders)"
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Community info",
     "SUBTITLE": "View and manage your community's details",
@@ -288,9 +294,20 @@
     "CHOOSE_LOGO": "Choose a logo",
     "REMOVE_LOGO": "Remove logo",
     "NO_COMMUNITY": "No active community selected.",
+    "REGULATOR": "Regulator",
+    "REGULATOR_PLACEHOLDER": "Select a regulator",
+    "REGULATOR_CHANGE_CONFIRM_TITLE": "Change the regulator?",
+    "REGULATOR_CHANGE_CONFIRM_MESSAGE": "Changing the regulator re-points this community's billing regime and administrative documents. Are you sure you want to continue?",
+    "BANK_LEGAL_SECTION": "Bank & legal info",
+    "LEGAL_NAME": "Legal name",
+    "VAT_NUMBER": "VAT number",
+    "IBAN": "IBAN",
+    "ACCOUNT_HOLDER_NAME": "Account holder name",
+    "ACCOUNT_HOLDER_HINT": "Only fill in if the account is not held under the legal name",
     "ERRORS": {
       "INVALID_URL": "Please enter a valid URL starting with http:// or https://",
-      "PARTIAL_ADDRESS": "Please complete every required address field or leave them all empty"
+      "PARTIAL_ADDRESS": "Please complete every required address field or leave them all empty",
+      "INVALID_IBAN": "Please enter a valid IBAN"
     }
   },
   "COMMUNITY": {
@@ -316,6 +333,10 @@
       "ACTIVATE_BUTTON_TOOLTIP": "Switch community",
       "LEAVE_BUTTON": "Leave",
       "LEAVE_BUTTON_TOOLTIP": "Leave the community",
+      "LEAVE_CONFIRM_HEADER": "Leave community",
+      "LEAVE_CONFIRM_MESSAGE": "Are you sure you want to leave \"{{name}}\"?",
+      "LEAVE_SUCCESS": "You have left the community.",
+      "UPDATE_SUCCESS": "Community name updated.",
       "NO_COMMUNITY_FOUND": "No community found",
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
       "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)",
@@ -330,7 +351,9 @@
       "NO_OPERATIONS": "No public sharing operation for this community",
       "MUNICIPALITIES": "Municipalities",
       "MUNICIPALITY_FILTER_LABEL": "Filter by municipality",
-      "MUNICIPALITY_FILTER_PLACEHOLDER": "Search a municipality…"
+      "MUNICIPALITY_FILTER_PLACEHOLDER": "Search a municipality…",
+      "REGULATOR_FILTER_LABEL": "Filter by regulator",
+      "REGULATOR_FILTER_PLACEHOLDER": "All regulators"
     },
     "CREATE": {
       "TITLE": "Create a community",
@@ -879,6 +902,9 @@
       "PLACEHOLDER": {
         "EAN_LABEL": "1234567890123",
         "METER_NUMBER_LABEL": "1234567890123"
+      },
+      "ERROR": {
+        "INVALID_EAN": "The EAN must be exactly 13 digits."
       }
     },
     "CATEGORIES": {
@@ -1173,7 +1199,6 @@
     "VIEW": {
       "SHARING_OPERATION_TITLE": "Sharing operation",
       "GENERAL_INFO_TITLE": "General Information",
-      "EXPORT_EXCEL_CWAPE_FORMAT_BUTTON_LABEL": "Export as Excel (CWaPE format)",
       "NAME_LABEL": "Name",
       "TYPE_LABEL": "Type",
       "MUNICIPALITIES_LABEL": "Covered municipalities",
@@ -1204,7 +1229,9 @@
         "KEY_MODIFIED_SUCCESSFULLY_LABEL": "Key successfully modified",
         "WAITING_APPROVAL_KEY_LABEL": "Key pending approval",
         "APPROVE_KEY": "Approve",
-        "REJECT_KEY": "Reject"
+        "REJECT_KEY": "Reject",
+        "APPROVE_KEY_DATE_LABEL": "Start date for the approved key",
+        "APPROVE_KEY_NO_DATE_ERROR": "Please select a start date before approving the key."
       },
       "METER": {
         "HEADERS": {
@@ -1372,7 +1399,257 @@
     "NEWS": {
       "NAME": "News",
       "DESCRIPTION": "Publish announcements and polls for the whole community."
+    },
+    "BILLING": {
+      "NAME": "Billing",
+      "DESCRIPTION": "Invoice members for their energy-sharing consumption; members view and pay their own bills."
     }
+  },
+  "BILLING": {
+    "TITLE": "Billing",
+    "SUBTITLE": "Tariffs, invoicing and payment tracking for the community.",
+    "DRAFT_PLACEHOLDER": "Draft",
+    "TABS": {
+      "TARIFFS": "Tariffs",
+      "GENERATE": "Generate a bill",
+      "TRACKING": "Tracking board",
+      "MY_INVOICES": "My invoices"
+    },
+    "OPERATION": {
+      "SELECT_LABEL": "Sharing operation",
+      "SELECT_PLACEHOLDER": "Select a sharing operation",
+      "NONE_SELECTED": "Select a sharing operation to manage its tariffs."
+    },
+    "TARIFFS": {
+      "ADD": "New tariff",
+      "EMPTY": "No tariff defined for this operation yet.",
+      "CREATED": "Tariff created.",
+      "DELETED": "Tariff deleted.",
+      "DELETE_CONFIRM_HEADER": "Delete tariff",
+      "DELETE_CONFIRM_MESSAGE": "Are you sure you want to delete this tariff?",
+      "COL": {
+        "KIND": "Kind",
+        "SCOPE": "Scope",
+        "PRICE": "Price",
+        "VALIDITY": "Validity",
+        "LABEL": "Label"
+      }
+    },
+    "TARIFF_KIND": {
+      "CONSUMER_SELLING": "Consumer selling price",
+      "PRODUCER_BUYBACK": "Producer buyback price"
+    },
+    "TARIFF_SCOPE": {
+      "GLOBAL": "Global",
+      "SEGMENT": "Segment",
+      "EAN": "EAN"
+    },
+    "TARIFF_SEGMENT": {
+      "RESIDENTIAL": "Residential",
+      "PROFESSIONAL": "Professional",
+      "INDUSTRIAL": "Industrial"
+    },
+    "TARIFF_DIALOG": {
+      "TITLE": "New tariff",
+      "KIND": "Kind",
+      "SCOPE": "Scope",
+      "SEGMENT": "Segment",
+      "EAN": "EAN",
+      "PRICE": "Price per kWh",
+      "VALID_FROM": "Valid from",
+      "VALID_TO": "Valid to (optional)",
+      "LABEL": "Label (optional)",
+      "SUBMIT": "Create tariff",
+      "ERRORS": {
+        "REQUIRED": "Please provide a valid price and start date.",
+        "SEGMENT_REQUIRED": "Select a segment for a segment-scoped tariff.",
+        "EAN_REQUIRED": "Enter an EAN for an EAN-scoped tariff.",
+        "VALIDITY_ORDER": "The end date must be on or after the start date."
+      }
+    },
+    "GENERATE": {
+      "UPLOAD_TITLE": "Consumption data",
+      "UPLOAD_SUBTITLE": "Upload the metering Excel for this operation before generating bills.",
+      "PERIOD_START": "Period start",
+      "PERIOD_END": "Period end",
+      "GENERATE_BTN": "Generate",
+      "RECENT_RUNS": "Recent runs",
+      "INVOICES_SUFFIX": "invoices",
+      "INVOICES_TITLE": "Invoices",
+      "COMPUTING": "Computing invoices…",
+      "RUN_FAILED": "This run failed. Check the period and the imported data, then try again.",
+      "EMPTY_INVOICES": "This run produced no invoices.",
+      "RUN_CREATED": "Billing run started.",
+      "ERRORS": {
+        "REQUIRED": "Select an operation and a period.",
+        "PERIOD_ORDER": "The end date must be on or after the start date."
+      }
+    },
+    "RUN_STATUS": {
+      "PENDING": "Pending",
+      "COMPUTING": "Computing",
+      "COMPUTED": "Computed",
+      "FAILED": "Failed"
+    },
+    "INVOICE": {
+      "ISSUED_AT": "Issued",
+      "DUE_DATE": "Due"
+    },
+    "INVOICE_STATUS": {
+      "DRAFT": "Draft",
+      "ISSUED": "Issued",
+      "SENT": "Sent",
+      "PAID": "Paid",
+      "OVERDUE": "Overdue",
+      "CANCELLED": "Cancelled",
+      "RENDER_FAILED": "Render failed"
+    },
+    "INVOICE_TYPE": {
+      "INVOICE": "Invoice",
+      "CREDIT_NOTE": "Credit note",
+      "PRODUCER_STATEMENT": "Producer statement"
+    },
+    "ACTIONS": {
+      "VIEW_DETAIL": "View details",
+      "ISSUE": "Issue",
+      "SEND": "Send",
+      "REGISTER_PAYMENT": "Register payment",
+      "CREDIT_NOTE": "Credit note",
+      "DOWNLOAD_PDF": "Download PDF",
+      "GENERATE_PDF": "Generate PDF",
+      "REGENERATE_PDF": "Regenerate PDF",
+      "DELETE_PDF": "Delete PDF"
+    },
+    "ISSUE": {
+      "SUCCESS": "Invoice {{number}} issued (OGM {{ogm}})."
+    },
+    "SEND": {
+      "SUCCESS": "Invoice sent."
+    },
+    "PAYMENT": {
+      "SUCCESS": "Payment registered."
+    },
+    "CREDIT_NOTE": {
+      "SUCCESS": "Credit note created."
+    },
+    "PDF": {
+      "DOWNLOAD": "Download",
+      "GENERATING": "Generating…",
+      "GENERATE_STARTED": "PDF generation started.",
+      "GENERATE_SUCCESS": "The PDF is ready.",
+      "GENERATE_FAILED": "PDF generation failed.",
+      "DELETE_SUCCESS": "PDF deleted.",
+      "DOWNLOAD_FAILED": "Could not download the PDF."
+    },
+    "PAYMENT_DIALOG": {
+      "TITLE": "Register a payment",
+      "AMOUNT": "Amount",
+      "METHOD": "Method",
+      "REFERENCE": "Reference (optional)",
+      "PAID_ON": "Paid on (optional)",
+      "SUBMIT": "Register payment",
+      "ERRORS": {
+        "AMOUNT_REQUIRED": "Enter a valid amount."
+      }
+    },
+    "PAYMENT_METHOD": {
+      "BANK_TRANSFER": "Bank transfer",
+      "DIRECT_DEBIT": "Direct debit",
+      "CASH": "Cash",
+      "OTHER": "Other"
+    },
+    "CREDIT_NOTE_DIALOG": {
+      "TITLE": "Create a credit note",
+      "CONFIRM": "This creates a credit note that reverses the invoice. The original invoice stays unchanged.",
+      "REASON": "Reason (optional)",
+      "REASON_PLACEHOLDER": "Why is this credit note being issued?",
+      "SUBMIT": "Create credit note"
+    },
+    "DETAIL": {
+      "TITLE": "Invoice details",
+      "NUMBER": "Number",
+      "TYPE": "Type",
+      "STATUS": "Status",
+      "ISSUED_AT": "Issued at",
+      "DUE_DATE": "Due date",
+      "OGM": "Structured communication",
+      "LINES_TITLE": "Lines",
+      "EMPTY_LINES": "No lines.",
+      "SUBTOTAL": "Subtotal",
+      "VAT": "VAT",
+      "TOTAL": "Total",
+      "PAYMENTS_TITLE": "Payments",
+      "EMPTY_PAYMENTS": "No payments recorded.",
+      "CLOSE": "Close",
+      "LINE": {
+        "EAN": "EAN",
+        "DIRECTION": "Direction",
+        "MEASURE": "Measure",
+        "QTY": "Quantity (kWh)",
+        "UNIT_PRICE": "Unit price",
+        "AMOUNT": "Amount"
+      },
+      "PAYMENT": {
+        "DATE": "Date",
+        "METHOD": "Method",
+        "REFERENCE": "Reference",
+        "AMOUNT": "Amount"
+      }
+    },
+    "DIRECTION": {
+      "CONSUMER": "Consumption",
+      "PRODUCER": "Injection"
+    },
+    "MEASURE": {
+      "SHARED": "Shared",
+      "INJ_SHARED": "Shared injection"
+    },
+    "TRACKING": {
+      "ALL_STATUSES": "All statuses",
+      "REFRESH": "Refresh",
+      "SWEEP_BTN": "Sweep overdue",
+      "EMPTY": "No invoices match the current filter.",
+      "PAGE_INFO": "Page {{page}} of {{total}}",
+      "SWEEP_CONFIRM_HEADER": "Sweep overdue invoices",
+      "SWEEP_CONFIRM_MESSAGE": "Mark all past-due, unpaid invoices as overdue?",
+      "SWEEP_DONE": "{{count}} invoice(s) marked overdue."
+    },
+    "FILTERS": {
+      "STATUS": "Status",
+      "MEMBER": "Member",
+      "ALL_MEMBERS": "All members",
+      "ISSUED_FROM": "Issued from",
+      "ISSUED_TO": "Issued to",
+      "SORT_BY": "Sort by",
+      "CLEAR": "Clear filters"
+    },
+    "SORT": {
+      "ISSUED_DATE": "Issue date",
+      "DUE_DATE": "Due date",
+      "AMOUNT": "Amount",
+      "NUMBER": "Number",
+      "STATUS": "Status",
+      "ASC": "Ascending",
+      "DESC": "Descending"
+    },
+    "MEMBER_VIEW": {
+      "TITLE": "My invoices",
+      "SUBTITLE": "Your energy-sharing bills and how to pay them.",
+      "ALL_STATUSES": "All statuses",
+      "EMPTY": "You have no invoices yet.",
+      "ISSUED_AT": "Issued",
+      "DUE_DATE": "Due",
+      "OGM_LABEL": "Structured communication",
+      "PAGE_INFO": "Page {{page}} of {{total}}"
+    }
+  },
+  "CONSUMPTION_COVERAGE": {
+    "TITLE": "Available consumption data",
+    "EMPTY": "No consumption data uploaded yet.",
+    "LEGEND_COMPLETE": "Complete",
+    "LEGEND_PARTIAL": "Partial",
+    "LEGEND_NONE": "No data",
+    "POINTS": "{{count}} data points ({{pct}}% of the month)"
   },
   "SIMULATION_HUB": {
     "PAGE_TITLE": "Allocation key simulation",

@@ -83,4 +83,9 @@ export const routes: Routes = [
     canActivate: [canActivateAuth, activeFeatureGuard('news')],
     loadChildren: () => import('./features/news/news.routes').then((m) => m.NEWS_ROUTES),
   },
+  {
+    path: 'billing',
+    canActivate: [canActivateAuth, activeFeatureGuard('billing')],
+    loadChildren: () => import('./features/billing/billing.routes').then((m) => m.BILLING_ROUTES),
+  },
 ];

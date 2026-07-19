@@ -109,6 +109,17 @@ export class MeterService extends ServiceBase {
     );
   }
 
+  deactivateMeter(ean: string, date: string): Observable<ApiResponse<string>> {
+    return this.http
+      .patch<ApiResponse<string>>(this.apiAddress + '/data/deactivate', { EAN: ean, date })
+      .pipe(
+        tap(() => {
+          this.cache.invalidate('meters-list');
+          this.cache.invalidate(`meters:${ean}`);
+        }),
+      );
+  }
+
   deleteMeter(id: string): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(this.apiAddress + '/' + id).pipe(
       tap(() => {

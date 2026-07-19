@@ -106,7 +106,13 @@
                     placeholder="{{ 'METER.INFORMATIONS.PLACEHOLDER.EAN_LABEL' | translate }}"
                     data-testid="meter-creation__input--ean"
                   />
-                  <app-error-handler controlName="EAN" [formGroup]="metersForm" />
+                  <app-error-handler
+                    controlName="EAN"
+                    [formGroup]="metersForm"
+                    [customErrors]="{
+                      invalidEan: ('METER.INFORMATIONS.ERROR.INVALID_EAN' | translate),
+                    }"
+                  />
                 </div>
                 <div class="flex flex-col">
                   <label for="meterNumber" class="field-label">

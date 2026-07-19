@@ -111,7 +111,10 @@ describe('MeterConsumptionChart', () => {
     });
 
     it('should call getMeterConsumptions with correct params', () => {
-      component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2024, 0, 1),
+        dateFin: new Date(2024, 11, 31),
+      });
       component.loadChart();
       expect(meterServiceSpy.getMeterConsumptions).toHaveBeenCalledWith('541449000000000001', {
         date_start: '2024-01-01',
@@ -120,7 +123,10 @@ describe('MeterConsumptionChart', () => {
     });
 
     it('should set data signal after successful response', () => {
-      component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2024, 0, 1),
+        dateFin: new Date(2024, 11, 31),
+      });
       component.loadChart();
       expect(component.data()).toBeTruthy();
       const chartData = component.data();
@@ -130,7 +136,10 @@ describe('MeterConsumptionChart', () => {
 
     it('should set displayDownloadButton to true after success', () => {
       expect(component.displayDownloadButton()).toBe(false);
-      component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2024, 0, 1),
+        dateFin: new Date(2024, 11, 31),
+      });
       component.loadChart();
       expect(component.displayDownloadButton()).toBe(true);
     });
@@ -150,7 +159,10 @@ describe('MeterConsumptionChart', () => {
     });
 
     it('should call downloadMeterConsumptions with form values', () => {
-      component.formChart.setValue({ dateDeb: '2024-01-01', dateFin: '2024-12-31' });
+      component.formChart.setValue({
+        dateDeb: new Date(2024, 0, 1),
+        dateFin: new Date(2024, 11, 31),
+      });
       component.downloadTotalConsumption();
       expect(meterServiceSpy.downloadMeterConsumptions).toHaveBeenCalledWith('541449000000000001', {
         date_start: '2024-01-01',
