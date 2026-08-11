@@ -1,0 +1,52 @@
+<app-dashboard-tile
+  data-testid="deadlines-tile"
+  icon="pi pi-calendar-clock"
+  headingId="dashboard-tile-deadlines"
+  [title]="'DASHBOARD.MANAGER.DEADLINES.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  @if (overdue().length) {
+    <p-tag
+      tileBadge
+      severity="danger"
+      icon="pi pi-exclamation-triangle"
+      [value]="'DASHBOARD.MANAGER.DEADLINES.OVERDUE' | translate: { count: overdue().length }"
+    />
+  }
+
+  <p class="text-sm text-surface-700 m-0">
+    {{ 'DASHBOARD.MANAGER.DEADLINES.OPEN_COUNT' | translate: { count: deadlines().length } }}
+  </p>
+
+  <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+    @for (deadline of visible(); track deadline.id) {
+      <li class="flex items-center gap-2 text-sm">
+        <a
+          class="text-primary-500 hover:text-primary-700 underline flex-1 min-w-0 truncate"
+          [routerLink]="['/administrative-document/dossiers', deadline.id_dossier]"
+          data-testid="deadlines-tile__link--dossier"
+          >{{ deadline.deadline_type }}</a
+        >
+        <span class="text-xs text-surface-500 shrink-0">{{
+          formatApiDate(deadline.due_date)
+        }}</span>
+      </li>
+    }
+  </ul>
+
+  <div tileEmpty data-testid="deadlines-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MANAGER.DEADLINES.EMPTY' | translate }}
+    </p>
+  </div>
+
+  <a
+    tileAction
+    class="text-primary-500 hover:text-primary-700 underline text-sm"
+    routerLink="/administrative-document"
+    data-testid="deadlines-tile__link--all"
+  >
+    {{ 'DASHBOARD.MANAGER.DEADLINES.SEE_ALL' | translate }}
+  </a>
+</app-dashboard-tile>

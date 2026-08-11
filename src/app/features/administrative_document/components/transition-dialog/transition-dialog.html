@@ -1,0 +1,143 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  <!-- What is about to be recorded -->
+  <div class="rounded-lg border border-surface-200 bg-surface-50 p-3 text-sm">
+    <div class="font-medium text-surface-800">{{ subjectLabel }}</div>
+    <div class="mt-1 flex items-center gap-2 text-surface-600">
+      <span>{{ fromLabelKey() | translate }}</span>
+      <i class="pi pi-arrow-right text-xs"></i>
+      <span class="font-semibold">{{ toLabelKey() | translate }}</span>
+    </div>
+  </div>
+
+  @if (corrective) {
+    <p-message severity="warn" data-testid="transition-dialog__msg--corrective">
+      {{ 'ADMINISTRATIVE_DOCUMENT.TRANSITION.CORRECTIVE_WARNING' | translate }}
+    </p-message>
+  }
+
+  @if (shows('submission_date')) {
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="transition-submission-date">{{
+        'ADMINISTRATIVE_DOCUMENT.TRANSITION.FIELDS.SUBMISSION_DATE' | translate
+      }}</label>
+      <p-datepicker
+        inputId="transition-submission-date"
+        formControlName="submission_date"
+        dateFormat="dd/mm/yy"
+        appendTo="body"
+        styleClass="w-full"
+        [showIcon]="true"
+        data-testid="transition-dialog__date--submission"
+      />
+    </div>
+  }
+
+  @if (shows('acknowledged_date')) {
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="transition-acknowledged-date">{{
+        'ADMINISTRATIVE_DOCUMENT.TRANSITION.FIELDS.ACKNOWLEDGED_DATE' | translate
+      }}</label>
+      <p-datepicker
+        inputId="transition-acknowledged-date"
+        formControlName="acknowledged_date"
+        dateFormat="dd/mm/yy"
+        appendTo="body"
+        styleClass="w-full"
+        [showIcon]="true"
+        data-testid="transition-dialog__date--acknowledged"
+      />
+    </div>
+  }
+
+  @if (shows('authority_file_ref')) {
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="transition-authority-ref">{{
+        'ADMINISTRATIVE_DOCUMENT.TRANSITION.FIELDS.AUTHORITY_FILE_REF' | translate
+      }}</label>
+      <input
+        pInputText
+        id="transition-authority-ref"
+        formControlName="authority_file_ref"
+        class="w-full"
+        maxlength="128"
+        data-testid="transition-dialog__input--authority-ref"
+      />
+    </div>
+  }
+
+  @if (shows('result')) {
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="transition-result">{{
+        'ADMINISTRATIVE_DOCUMENT.TRANSITION.FIELDS.RESULT' | translate
+      }}</label>
+      <p-select
+        inputId="transition-result"
+        [options]="resultOptions"
+        formControlName="result"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        class="w-full"
+        data-testid="transition-dialog__select--result"
+      />
+    </div>
+  }
+
+  @if (shows('reason')) {
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="transition-reason">{{
+        'ADMINISTRATIVE_DOCUMENT.TRANSITION.FIELDS.REASON' | translate
+      }}</label>
+      <textarea
+        pTextarea
+        id="transition-reason"
+        formControlName="reason"
+        rows="3"
+        class="w-full"
+        maxlength="512"
+        data-testid="transition-dialog__textarea--reason"
+      ></textarea>
+    </div>
+  }
+
+  @if (shows('note')) {
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="transition-note">{{
+        'ADMINISTRATIVE_DOCUMENT.TRANSITION.FIELDS.NOTE' | translate
+      }}</label>
+      <textarea
+        pTextarea
+        id="transition-note"
+        formControlName="note"
+        rows="2"
+        class="w-full"
+        maxlength="512"
+        data-testid="transition-dialog__textarea--note"
+      ></textarea>
+    </div>
+  }
+
+  @if (formError()) {
+    <p class="text-red-600 text-sm m-0" data-testid="transition-dialog__error">
+      <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+    </p>
+  }
+
+  <div class="flex justify-end gap-2 mt-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+      data-testid="transition-dialog__btn--cancel"
+    />
+    <p-button
+      type="submit"
+      [label]="'ADMINISTRATIVE_DOCUMENT.TRANSITION.SUBMIT' | translate"
+      [loading]="submitting()"
+      data-testid="transition-dialog__btn--submit"
+    />
+  </div>
+</form>

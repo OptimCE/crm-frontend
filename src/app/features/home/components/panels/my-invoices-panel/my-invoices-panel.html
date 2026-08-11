@@ -1,0 +1,35 @@
+<app-dashboard-tile
+  data-testid="my-invoices-panel"
+  [title]="'HOME.INVOICES.TITLE' | translate"
+  icon="pi pi-credit-card"
+  [state]="state()"
+  headingId="home-invoices-heading"
+  (retry)="load()"
+>
+  <p tileEmpty class="text-sm text-surface-500 m-0" data-testid="my-invoices-panel__empty">
+    {{ 'HOME.INVOICES.EMPTY' | translate }}
+  </p>
+
+  <ul class="list-none m-0 p-0 flex flex-col gap-2">
+    @for (row of rows(); track row.community.auth_community_id) {
+      <li class="flex flex-col gap-1">
+        <button
+          type="button"
+          class="text-xs uppercase tracking-wide text-primary-700 underline text-left"
+          (click)="openBilling(row.community)"
+          data-testid="my-invoices-panel__btn--open"
+        >
+          {{ 'HOME.INVOICES.OPEN_IN' | translate: { community: row.community.name } }}
+        </button>
+        @for (invoice of row.invoices; track invoice.id) {
+          <span class="flex items-baseline justify-between gap-3 text-sm">
+            <span class="flex-1 min-w-0 truncate">
+              {{ invoice.number ?? ('HOME.INVOICES.DRAFT' | translate) }}
+            </span>
+            <span class="whitespace-nowrap">{{ invoice.total }} {{ invoice.currency }}</span>
+          </span>
+        }
+      </li>
+    }
+  </ul>
+</app-dashboard-tile>

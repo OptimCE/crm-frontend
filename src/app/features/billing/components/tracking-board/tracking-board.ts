@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -19,6 +19,8 @@ import {
   InvoiceStatus,
   SortOrder,
 } from '../../../../shared/dtos/billing.dtos';
+import { Role } from '../../../../core/dtos/role';
+import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 import { BillingService } from '../../../../shared/services/billing.service';
 import { MemberService } from '../../../../shared/services/member.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -65,6 +67,7 @@ const DEFAULT_ORDER: SortOrder = 'desc';
   templateUrl: './tracking-board.html',
 })
 export class TrackingBoard implements OnInit {
+  private readonly userContext = inject(UserContextService);
   private readonly service = inject(BillingService);
   private readonly memberService = inject(MemberService);
   private readonly translate = inject(TranslateService);
@@ -80,6 +83,24 @@ export class TrackingBoard implements OnInit {
 
   statusFilter: InvoiceStatus | null = null;
   participant: number | null = null;
+  /**
+   * Member to preselect, from `/billing?tab=tracking&participant=4`.
+   *
+   * Note the wire name: the invoices endpoint filters by `participant`, not by
+   * `id_member`.
+   */
+  readonly preselectedParticipant = input<number | null>(null);
+
+  /**
+   * Whether the member column may link to `/members/{id}`.
+   *
+   * Bound rather than hardcoded to `true`: `/billing` is subscription-gated only,
+   * so this console can still be mounted while the user switches to a community
+   * where they are a plain MEMBER — and `/members` is minRole GESTIONNAIRE.
+   */
+  readonly canReachMembers = computed(() =>
+    this.userContext.compareWithActiveRole(Role.GESTIONNAIRE),
+  );
   issuedFrom: Date | null = null;
   issuedTo: Date | null = null;
   sortField: InvoiceSortField = DEFAULT_SORT;
@@ -118,6 +139,10 @@ export class TrackingBoard implements OnInit {
       { value: 'number', label: this.translate.instant('BILLING.SORT.NUMBER') as string },
       { value: 'status', label: this.translate.instant('BILLING.SORT.STATUS') as string },
     ];
+
+    // Seeded BEFORE the first load so the deep link does not flash the whole
+    // ledger and then narrow it.
+    this.participant = this.preselectedParticipant();
 
     this.loadMembers();
     this.load(1);

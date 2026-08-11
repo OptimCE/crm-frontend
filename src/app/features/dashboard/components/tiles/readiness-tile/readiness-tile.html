@@ -1,0 +1,53 @@
+<app-dashboard-tile
+  data-testid="readiness-tile"
+  icon="pi pi-verified"
+  headingId="dashboard-tile-readiness"
+  [title]="'DASHBOARD.MANAGER.READINESS.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  @if (items().length) {
+    <p-tag
+      tileBadge
+      [severity]="badgeSeverity()"
+      [value]="'DASHBOARD.MANAGER.READINESS.COUNT' | translate: { count: items().length }"
+    />
+  }
+
+  <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+    @for (item of items(); track item.key + ':' + (item.fieldLabelKey ?? '')) {
+      <li class="flex items-center gap-3 flex-wrap">
+        <!-- Icon AND text label: severity is never encoded by colour alone. -->
+        <i class="{{ item.icon }} text-surface-500" aria-hidden="true"></i>
+        <span class="text-sm text-surface-700 flex-1 min-w-0">
+          {{
+            'DASHBOARD.MANAGER.READINESS.ITEMS.' + item.key
+              | translate
+                : {
+                    count: item.count,
+                    field: item.fieldLabelKey ? (item.fieldLabelKey | translate) : '',
+                  }
+          }}
+        </span>
+        @if (item.link) {
+          <a
+            class="text-primary-500 hover:text-primary-700 underline text-sm shrink-0"
+            [routerLink]="item.link"
+            [queryParams]="item.queryParams"
+            [attr.data-testid]="'readiness-tile__link--' + item.key"
+          >
+            {{ 'DASHBOARD.MANAGER.READINESS.FIX' | translate }}
+          </a>
+        }
+      </li>
+    }
+  </ul>
+
+  <!-- Not a blank card: an empty readiness list is good news and should say so. -->
+  <div tileEmpty class="flex items-center gap-2" data-testid="readiness-tile__empty">
+    <i class="pi pi-check-circle text-primary-600" aria-hidden="true"></i>
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MANAGER.READINESS.ALL_GOOD' | translate }}
+    </p>
+  </div>
+</app-dashboard-tile>

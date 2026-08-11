@@ -29,6 +29,41 @@ export interface UserInterface {
 }
 const ACTIVE_COMMUNITY_STORAGE_KEY = 'activeCommunityId';
 
+/**
+ * Cache key prefixes holding data scoped to ONE community. All of them must be
+ * dropped when the active community changes, or a page renders the previous
+ * community's rows under the new community's name for up to the entry's TTL.
+ *
+ * `CacheService.invalidate` is a plain `startsWith`, so each entry must match the
+ * literal key a service builds — `'sharing-operations'` (plural) matched nothing,
+ * because every key is `sharing-operation-list:`, `sharing-operation-keys:`, etc.
+ *
+ * Deliberately absent: `me:*`, `own-*`, `users`, `regulators` and
+ * `municipalities-search`. The first two are user-scoped and cross-community by
+ * design; the rest are global reference data. Dropping them would only cost a
+ * refetch. `annexes-services` is owned by `CommunityServicesStore`, which
+ * invalidates and refetches it from its own effect.
+ */
+const COMMUNITY_SCOPED_CACHE_PREFIXES = [
+  'communities',
+  'community-',
+  'members',
+  'managers-invitation',
+  'meters',
+  'keys',
+  'sharing-operation',
+  'documents',
+  'audit-logs-list',
+  'dashboard',
+  // Annexe services. Their catalogs are per-community too, and only
+  // `administrative-document` keys its entries by community id today.
+  'billing',
+  'news',
+  'administrative-document',
+  'generation',
+  'simulation',
+] as const;
+
 function highestRole(roles: Role[]): Role | null {
   if (!roles?.length) return null;
   return [...roles].sort((a, b) => (ROLE_HIERARCHY[b] ?? 0) - (ROLE_HIERARCHY[a] ?? 0))[0] ?? null;
@@ -91,14 +126,12 @@ export class UserContextService {
 
   switchCommunity(orgId: string): void {
     const all = this.communitiesById();
-    if (all[orgId]) {
-      this.activeCommunityId.set(orgId);
-      this.storeCommunityId(orgId);
-      this.cache.invalidate('communities');
-      this.cache.invalidate('members');
-      this.cache.invalidate('meters');
-      this.cache.invalidate('keys');
-      this.cache.invalidate('sharing-operations');
+    if (all[orgId]) this.selectCommunity(orgId);
+  }
+
+  private invalidateCommunityScopedCache(): void {
+    for (const prefix of COMMUNITY_SCOPED_CACHE_PREFIXES) {
+      this.cache.invalidate(prefix);
     }
   }
 
@@ -110,10 +143,9 @@ export class UserContextService {
   switchCommunityByPath(orgPath: string): void {
     const all = this.communitiesById();
     const found = Object.values(all).find((c) => c.orgPath === orgPath);
-    if (found) {
-      this.activeCommunityId.set(found.orgId);
-      this.storeCommunityId(found.orgId);
-    }
+    // Delegates so this path cannot drift from switchCommunity's cache
+    // invalidation, which it used to skip entirely.
+    if (found) this.switchCommunity(found.orgId);
   }
 
   getUserInfo(): UserInterface | null {
@@ -129,17 +161,42 @@ export class UserContextService {
     };
   }
 
+  /**
+   * Restores the active community, or picks the only one there is.
+   *
+   * Runs on every `refreshUserContext()`, i.e. on every guarded navigation, so
+   * it must be idempotent and must never widen an existing selection.
+   *
+   * The stored id lives in **sessionStorage**, so it is per TAB, not per login:
+   * without the single-community fallback a user with one community re-enters
+   * the no-active-community state in every new tab, and every request 401s until
+   * they go back to the picker. With two or more we never guess — `Object.keys()`
+   * order is not a user preference, and picking wrong silently shows one
+   * community's data under another's name.
+   */
   private initializeDefaultCommunity(): void {
-    const stored = this.loadStoredCommunityId();
-    if (!stored) return;
-
     const all = this.communitiesById();
-    if (all[stored]) {
-      this.activeCommunityId.set(stored);
-    } else {
+    const stored = this.loadStoredCommunityId();
+
+    if (stored) {
+      if (all[stored]) {
+        this.selectCommunity(stored);
+        return;
+      }
       // stored org no longer available -> clear it
       this.storeCommunityId(null);
     }
+
+    const ids = Object.keys(all);
+    if (ids.length === 1) this.selectCommunity(ids[0]);
+  }
+
+  /** Sets the active community, invalidating caches only on a real change. */
+  private selectCommunity(orgId: string): void {
+    if (this.activeCommunityId() === orgId) return;
+    this.activeCommunityId.set(orgId);
+    this.storeCommunityId(orgId);
+    this.invalidateCommunityScopedCache();
   }
 
   compareWithActiveRole(role: Role): boolean {

@@ -1,15 +1,17 @@
 @if (loading()) {
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-3" data-testid="invoice-detail-dialog__loading">
     <p-skeleton height="2rem" />
     <p-skeleton height="8rem" />
   </div>
 } @else if (invoice(); as inv) {
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-5" data-testid="invoice-detail-dialog__root">
     <!-- Header summary -->
     <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
       <div class="flex flex-col">
         <span class="text-surface-500">{{ 'BILLING.DETAIL.NUMBER' | translate }}</span>
-        <span class="font-medium">{{ inv.number || '—' }}</span>
+        <span class="font-medium" data-testid="invoice-detail-dialog__text--number">{{
+          inv.number || '—'
+        }}</span>
       </div>
       <div class="flex flex-col">
         <span class="text-surface-500">{{ 'BILLING.DETAIL.TYPE' | translate }}</span>
@@ -17,7 +19,11 @@
       </div>
       <div class="flex flex-col">
         <span class="text-surface-500">{{ 'BILLING.DETAIL.STATUS' | translate }}</span>
-        <p-tag [value]="statusLabelKey(inv) | translate" [severity]="statusSeverity(inv)" />
+        <p-tag
+          [value]="statusLabelKey(inv) | translate"
+          [severity]="statusSeverity(inv)"
+          data-testid="invoice-detail-dialog__tag--status"
+        />
       </div>
       <div class="flex flex-col">
         <span class="text-surface-500">{{ 'BILLING.DETAIL.ISSUED_AT' | translate }}</span>
@@ -33,7 +39,11 @@
       </div>
       <div class="flex flex-col">
         <span class="text-surface-500">{{ 'BILLING.DETAIL.OGM' | translate }}</span>
-        <span class="font-medium font-mono">{{ inv.structured_comm || '—' }}</span>
+        <span
+          class="font-medium font-mono"
+          data-testid="invoice-detail-dialog__text--structured-comm"
+          >{{ inv.structured_comm || '—' }}</span
+        >
       </div>
     </div>
 
@@ -42,7 +52,10 @@
       <h3 class="text-sm font-semibold m-0">{{ 'BILLING.DETAIL.LINES_TITLE' | translate }}</h3>
       @if (inv.lines && inv.lines.length) {
         <div class="overflow-x-auto">
-          <table class="w-full text-sm border-collapse">
+          <table
+            class="w-full text-sm border-collapse"
+            data-testid="invoice-detail-dialog__table--lines"
+          >
             <thead>
               <tr class="text-left text-surface-500 border-b border-surface-200">
                 <th class="py-1 pr-3">{{ 'BILLING.DETAIL.LINE.EAN' | translate }}</th>
@@ -57,7 +70,10 @@
             </thead>
             <tbody>
               @for (line of inv.lines; track line.id) {
-                <tr class="border-b border-surface-100">
+                <tr
+                  class="border-b border-surface-100"
+                  [attr.data-testid]="'invoice-detail-dialog__line--' + line.id"
+                >
                   <td class="py-1 pr-3 font-mono">{{ line.ean }}</td>
                   <td class="py-1 pr-3">{{ directionLabelKey(line.direction) | translate }}</td>
                   <td class="py-1 pr-3">{{ measureLabelKey(line.measure) | translate }}</td>
@@ -70,7 +86,9 @@
           </table>
         </div>
       } @else {
-        <p class="text-surface-500 text-sm m-0">{{ 'BILLING.DETAIL.EMPTY_LINES' | translate }}</p>
+        <p class="text-surface-500 text-sm m-0" data-testid="invoice-detail-dialog__empty--lines">
+          {{ 'BILLING.DETAIL.EMPTY_LINES' | translate }}
+        </p>
       }
     </div>
 
@@ -86,7 +104,9 @@
       </div>
       <div class="flex gap-8 font-semibold">
         <span>{{ 'BILLING.DETAIL.TOTAL' | translate }}</span>
-        <span>{{ money(inv.total, inv.currency) }}</span>
+        <span data-testid="invoice-detail-dialog__text--total">{{
+          money(inv.total, inv.currency)
+        }}</span>
       </div>
     </div>
 
@@ -95,7 +115,10 @@
       <h3 class="text-sm font-semibold m-0">{{ 'BILLING.DETAIL.PAYMENTS_TITLE' | translate }}</h3>
       @if (payments().length) {
         <div class="overflow-x-auto">
-          <table class="w-full text-sm border-collapse">
+          <table
+            class="w-full text-sm border-collapse"
+            data-testid="invoice-detail-dialog__table--payments"
+          >
             <thead>
               <tr class="text-left text-surface-500 border-b border-surface-200">
                 <th class="py-1 pr-3">{{ 'BILLING.DETAIL.PAYMENT.DATE' | translate }}</th>
@@ -106,7 +129,10 @@
             </thead>
             <tbody>
               @for (payment of payments(); track payment.id) {
-                <tr class="border-b border-surface-100">
+                <tr
+                  class="border-b border-surface-100"
+                  [attr.data-testid]="'invoice-detail-dialog__payment--' + payment.id"
+                >
                   <td class="py-1 pr-3">{{ payment.paid_at | date: 'dd/MM/yyyy' }}</td>
                   <td class="py-1 pr-3">{{ methodLabelKey(payment.method) | translate }}</td>
                   <td class="py-1 pr-3">{{ payment.reference || '—' }}</td>
@@ -117,7 +143,10 @@
           </table>
         </div>
       } @else {
-        <p class="text-surface-500 text-sm m-0">
+        <p
+          class="text-surface-500 text-sm m-0"
+          data-testid="invoice-detail-dialog__empty--payments"
+        >
           {{ 'BILLING.DETAIL.EMPTY_PAYMENTS' | translate }}
         </p>
       }
@@ -125,6 +154,11 @@
   </div>
 
   <div class="flex justify-end mt-4">
-    <p-button text [label]="'BILLING.DETAIL.CLOSE' | translate" (onClick)="close()" />
+    <p-button
+      text
+      [label]="'BILLING.DETAIL.CLOSE' | translate"
+      (onClick)="close()"
+      data-testid="invoice-detail-dialog__btn--close"
+    />
   </div>
 }

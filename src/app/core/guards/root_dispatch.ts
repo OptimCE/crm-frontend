@@ -7,7 +7,11 @@ export const rootDispatchGuard = createAuthGuard((_route, _state, authData: Auth
   const { authenticated } = authData;
 
   if (authenticated) {
-    return Promise.resolve(router.createUrlTree(['/users']));
+    // `/home`, not `/users` (the profile FORM). This is also where every failed
+    // guard lands, because `minRoleGuard` and `activeFeatureGuard` redirect to
+    // `/` — so the fallback destination is now a page that explains itself and
+    // offers the way back in, rather than an edit form.
+    return Promise.resolve(router.createUrlTree(['/home']));
   }
 
   return Promise.resolve(router.createUrlTree(['/auth']));

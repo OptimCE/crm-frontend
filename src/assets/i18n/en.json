@@ -68,6 +68,18 @@
     "EMPTY": "You're all caught up",
     "JUST_NOW": "Just now",
     "NEW_TOAST": "You have new notifications",
+    "PREFIXES": {
+      "admin_deadline": "Administrative deadlines",
+      "admin_dossier": "Administrative dossiers",
+      "billing_run": "Billing runs",
+      "document": "Documents",
+      "invoice": "Invoices",
+      "manager_invitation": "Manager invitations",
+      "member": "Members",
+      "member_invitation": "Member invitations",
+      "news_poll": "Polls",
+      "news_post": "News posts"
+    },
     "TYPES": {
       "document": {
         "uploaded": {
@@ -98,7 +110,173 @@
         "published": {
           "title": "A new poll was published"
         }
+      },
+      "invoice": {
+        "issued": {
+          "title": "A new invoice is available"
+        },
+        "overdue": {
+          "title": "An invoice is past its due date"
+        }
+      },
+      "billing_run": {
+        "completed": {
+          "title": "A billing run has finished"
+        }
+      },
+      "admin_deadline": {
+        "due_soon": {
+          "title": "An administrative deadline is coming up"
+        },
+        "missed": {
+          "title": "An administrative deadline has been missed"
+        }
+      },
+      "admin_dossier": {
+        "acknowledged": {
+          "title": "An administrative dossier has been acknowledged"
+        }
       }
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "SUBTITLE": "Your community at a glance",
+    "REFRESH": "Refresh",
+    "TILE": {
+      "ERROR": "This information could not be loaded."
+    },
+    "MANAGER": {
+      "READINESS": {
+        "TITLE": "Things to check",
+        "COUNT": "{{count}} to handle",
+        "ALL_GOOD": "Everything we check is in order.",
+        "FIX": "Fix",
+        "ITEMS": {
+          "OPERATIONS_WITHOUT_KEY": "{{count}} sharing operation(s) have no valid allocation key — energy cannot be shared.",
+          "OPERATIONS_KEY_PENDING": "{{count}} allocation key(s) awaiting approval.",
+          "METERS_WAITING_GRD": "{{count}} meter(s) waiting for the grid operator.",
+          "METERS_WAITING_MANAGER": "{{count}} meter(s) waiting for your confirmation.",
+          "METERS_NOT_IN_OPERATION": "{{count}} meter(s) are not part of any sharing operation.",
+          "METERS_WITHOUT_DATA": "{{count}} meter(s) have no active data today.",
+          "MEMBERS_INCOMPLETE": "{{count}} member record(s) are incomplete.",
+          "MEMBERS_PENDING": "{{count}} member(s) awaiting validation.",
+          "COMMUNITY_FIELD_MISSING": "Community information missing: {{field}}."
+        },
+        "FIELDS": {
+          "VAT_NUMBER": "VAT number",
+          "LEGAL_NAME": "legal name",
+          "IBAN": "IBAN",
+          "ACCOUNT_HOLDER_NAME": "account holder",
+          "HEADQUARTERS_ADDRESS": "headquarters address",
+          "REGULATOR": "regulator"
+        }
+      },
+      "ENERGY": {
+        "TITLE": "Energy at a glance",
+        "SHARED": "Shared",
+        "INJECTED_SHARED": "Injected & shared",
+        "PERIOD": "Period: {{month}}",
+        "EMPTY": "No consumption data yet. Upload your readings from a sharing operation."
+      },
+      "OPERATIONS": {
+        "TITLE": "Sharing operations",
+        "EMPTY": "No sharing operation yet. Create one to start sharing energy.",
+        "SEE_ALL": "See all {{count}} operations"
+      },
+      "ONBOARDING": {
+        "TITLE": "People joining",
+        "MEMBER_INVITATIONS": "{{count}} member invitation(s) pending",
+        "TO_BE_ENCODED": "{{count}} member record(s) still to encode",
+        "MANAGER_INVITATIONS": "{{count}} manager invitation(s) pending",
+        "EMPTY": "Nobody is part-way through joining.",
+        "MANAGE": "Manage members"
+      },
+      "ACTIVITY": {
+        "TITLE": "Recent activity",
+        "SYSTEM": "System",
+        "EMPTY": "Nothing has been recorded yet.",
+        "SEE_ALL": "See the full log"
+      },
+      "DEADLINES": {
+        "TITLE": "Administrative deadlines",
+        "OPEN_COUNT": "{{count}} open deadline(s)",
+        "OVERDUE": "{{count}} overdue",
+        "EMPTY": "No open deadline. File your first dossier to generate them.",
+        "SEE_ALL": "See deadlines"
+      },
+      "DOSSIERS": {
+        "TITLE": "Administrative dossiers",
+        "EMPTY": "No dossier yet. Create your first administrative dossier.",
+        "SEE_ALL": "See dossiers"
+      },
+      "INVOICES": {
+        "TITLE": "Billing",
+        "UNPAID_COUNT": "{{count}} unpaid invoice(s)",
+        "LAST_RUN": "Last billing run: {{operation}} up to {{period}}",
+        "NO_RUN_YET": "No billing run yet.",
+        "EMPTY": "Nothing to bill. Run your first billing cycle.",
+        "SEE_ALL": "Open billing"
+      }
+    },
+    "MEMBER": {
+      "ENERGY": {
+        "TITLE": "My energy here",
+        "CONSUMED": "Consumed",
+        "SHARED": "Received from sharing",
+        "PERIOD": "Over the last {{days}} days",
+        "EMPTY": "No consumption data for your meters in this community."
+      },
+      "PARTICIPATION": {
+        "TITLE": "My participation",
+        "PRORATA": "Pro rata of consumption",
+        "NOT_IN_KEY": "Not listed in the allocation key — ask your community manager.",
+        "NO_KEY": "No allocation key in force for this operation.",
+        "HELP_LABEL": "What does this percentage mean?",
+        "HELP": "It is the share of the operation's shared energy allocated to you by the allocation key currently in force.",
+        "EMPTY": "You do not take part in any sharing operation in this community."
+      },
+      "MY_RECORD": {
+        "TITLE": "My member record",
+        "COMPLETE": "Your record is active.",
+        "PENDING": "{{count}} record(s) awaiting validation by a manager.",
+        "EMPTY": "No member record in this community."
+      },
+      "ABOUT": {
+        "TITLE": "About this community",
+        "MEMBER_COUNT": "Members",
+        "REGULATOR": "Regulator",
+        "WEBSITE": "Website",
+        "EMPTY": "Information unavailable.",
+        "SEE_MORE": "See community information"
+      },
+      "DOCUMENTS": {
+        "TITLE": "My documents",
+        "EMPTY": "No document has been shared with you here.",
+        "SEE_ALL": "See my documents"
+      },
+      "INVOICES": {
+        "TITLE": "My invoices",
+        "UNPAID_COUNT": "{{count}} invoice(s) to pay",
+        "EMPTY": "No unpaid invoice.",
+        "SEE_ALL": "See my invoices"
+      }
+    },
+    "NEWS": {
+      "TITLE": "Community news",
+      "ANONYMOUS": "Post",
+      "OPEN_POLLS": "{{count}} poll(s) waiting for your answer",
+      "EMPTY_MANAGER": "No news yet. Publish your first post.",
+      "EMPTY_MEMBER": "No news yet.",
+      "SEE_ALL": "See the news board"
+    },
+    "MODULES": {
+      "TITLE": "Available modules",
+      "SUBTITLE": "These modules are not enabled for this community yet.",
+      "ENABLE": "Enable",
+      "ASK_ADMIN": "Ask your community administrator",
+      "DISMISS_ARIA": "Hide available modules",
+      "SEE_ALL": "See the catalogue"
     }
   },
   "NAVBAR": {
@@ -131,7 +309,10 @@
     "RETRY": "Retry",
     "AUDIT_LOG": "Audit log",
     "NEWS": "News",
-    "BILLING": "Billing"
+    "BILLING": "Billing",
+    "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
+    "DASHBOARD": "Dashboard",
+    "HOME": "Home"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -165,12 +346,24 @@
       "BILLING_ADDRESS": "Billing address",
       "EMAIL": "Email address"
     },
+    "NOTIFICATION_PREFERENCES": {
+      "INTRO": "Choose how you want to be told about each kind of activity.",
+      "TRANSACTIONAL_NOTICE": "Essential messages — invoices, invitations and missed regulatory deadlines — are always delivered and cannot be turned off.",
+      "CATEGORY": "Category",
+      "IN_APP": "In app",
+      "EMAIL": "Email",
+      "DEFAULT_LABEL": "Everything else",
+      "SAVE": "Save preferences",
+      "SAVED": "Preferences saved",
+      "EMPTY": "No categories available"
+    },
     "TABS": {
       "HEADERS": {
         "METERS": "Meters",
         "BANKING_INFORMATIONS": "Banking information",
         "DOCUMENTS": "Documents",
-        "REPRESENTATIONS": "Representations"
+        "REPRESENTATIONS": "Representations",
+        "NOTIFICATIONS": "Notifications"
       },
       "BANKING_INFORMATION": {
         "IBAN": "IBAN"
@@ -326,9 +519,10 @@
         "CREATED_AT": "Created",
         "UPDATED_AT": "Updated"
       },
-      "ACTIVATED": "Activate",
-      "NON_ACTIVATED": "Deactivate",
-      "UPDATE_COMMUNITY": "Update",
+      "ACTIVATED": "Active community",
+      "NON_ACTIVATED": "Not active",
+      "INFO_BUTTON": "Community info",
+      "DASHBOARD_BUTTON": "Dashboard",
       "ACTIVATE_BUTTON": "Activate",
       "ACTIVATE_BUTTON_TOOLTIP": "Switch community",
       "LEAVE_BUTTON": "Leave",
@@ -336,14 +530,11 @@
       "LEAVE_CONFIRM_HEADER": "Leave community",
       "LEAVE_CONFIRM_MESSAGE": "Are you sure you want to leave \"{{name}}\"?",
       "LEAVE_SUCCESS": "You have left the community.",
-      "UPDATE_SUCCESS": "Community name updated.",
       "NO_COMMUNITY_FOUND": "No community found",
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
       "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)",
       "PUBLIC_TITLE": "Available public communities",
       "PUBLIC_LOGO": "Logo",
-      "DETAILS_BUTTON": "Details",
-      "DETAILS_BUTTON_TOOLTIP": "View community details",
       "NO_PUBLIC_COMMUNITY_FOUND": "No public communities available",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Page {{page}} of {{total_pages}} ({{total}} communities)"
     },
@@ -357,7 +548,6 @@
     },
     "CREATE": {
       "TITLE": "Create a community",
-      "EDIT_TITLE": "Update a community",
       "NAME": "Name",
       "NAME_PLACEHOLDER": "My local community",
       "VALIDATE": "Validate"
@@ -718,7 +908,9 @@
         "FIRST_NAME_LABEL": "First name",
         "EMAIL_LABEL": "Email address",
         "PHONE_NUMBER_LABEL": "Phone no."
-      }
+      },
+      "RELATED_METERS": "Their meters",
+      "RELATED_INVOICES": "Their invoices"
     },
     "LIST": {
       "MEMBER_TITLE": "Members",
@@ -1310,7 +1502,10 @@
         "SET_PUBLIC_SUCCESS": "Sharing operation is now public",
         "SET_PRIVATE_SUCCESS": "Sharing operation is now private",
         "MUNICIPALITIES_REQUIRED_HINT": "Add at least one municipality before making the operation public"
-      }
+      },
+      "RELATED_LABEL": "See also:",
+      "RELATED_DOSSIERS": "Its administrative dossiers",
+      "RELATED_BILLING": "Its billing"
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Sharing operation",
@@ -1403,6 +1598,10 @@
     "BILLING": {
       "NAME": "Billing",
       "DESCRIPTION": "Invoice members for their energy-sharing consumption; members view and pay their own bills."
+    },
+    "ADMINISTRATIVE_DOCUMENT": {
+      "NAME": "Administrative documents",
+      "DESCRIPTION": "Track the regulatory dossiers filed with the CWaPE and the grid operator: statuses, derived deadlines, and every version of every document sent."
     }
   },
   "BILLING": {
@@ -2014,6 +2213,483 @@
         "EXPIRY_REQUIRED": "Choose a closing date.",
         "EXPIRY_FUTURE": "The closing date must be in the future."
       }
+    }
+  },
+  "ADMINISTRATIVE_DOCUMENT": {
+    "TITLE": "Administrative documents",
+    "SUBTITLE": "Track the dossiers filed with the CWaPE and the grid operator: statuses, deadlines and every version sent.",
+    "TABS": {
+      "DOSSIERS": "Dossiers",
+      "DEADLINES": "Deadlines"
+    },
+    "DOSSIER_TYPE": {
+      "CREATION_NOTIFICATION": "Creation notification",
+      "MODIFICATION": "Modification",
+      "ANNUAL_REPORT": "Annual reporting",
+      "SHARING_AUTHORIZATION": "Sharing authorisation",
+      "SHARING_MODIFICATION": "Sharing modification",
+      "CESSATION": "Cessation of activities"
+    },
+    "DOSSIER_STATUS": {
+      "IN_PREPARATION": "In preparation",
+      "SUBMITTED": "Submitted",
+      "COMPLETE": "Complete",
+      "CLOSED": "Closed",
+      "LAPSED": "Lapsed"
+    },
+    "DOCUMENT_STATUS": {
+      "DRAFT": "Draft",
+      "READY": "Ready",
+      "SENT": "Sent",
+      "ACKNOWLEDGED": "Acknowledged",
+      "OBSOLETE": "Obsolete"
+    },
+    "DOC_ORIGIN": {
+      "GENERATED": "Generated",
+      "UPLOADED": "Uploaded"
+    },
+    "RENDER_STATE": {
+      "PENDING": "Generating",
+      "FAILED": "Generation failed"
+    },
+    "DEADLINE_STATUS": {
+      "OPEN": "Open",
+      "MET": "Met",
+      "MISSED": "Missed",
+      "CANCELLED": "Cancelled"
+    },
+    "REGION": {
+      "WAL": "Wallonia (CWaPE)",
+      "BRU": "Brussels (Brugel)",
+      "VLA": "Flanders (VREG)"
+    },
+    "ACK_RESULT": {
+      "COMPLETE": "Complete dossier",
+      "INCOMPLETE": "Incomplete dossier"
+    },
+    "DOC_TYPE": {
+      "ANNEX6_NOTIFICATION": "Annex 6 — community notification",
+      "ANNEX6_SHARING_FORM": "Annex 6 — sharing form",
+      "ANNEX8_SWORN_DECLARATION": "Annex 8 — sworn declaration",
+      "DSO_AGREEMENT_COMMUNITY": "DSO agreement — community",
+      "DSO_AGREEMENT_BUILDING": "DSO agreement — same building",
+      "ANNUAL_PARTICIPANT_LIST": "Participant / installation lists",
+      "COMMUNITY_NOTIFICATION": "Community notification form",
+      "COMMUNITY_MODIFICATION": "Community modification form",
+      "SHARING_NOTIFICATION": "Sharing notification form",
+      "SHARING_MODIFICATION": "Sharing modification form",
+      "ANNEX7_LEGAL_ENTITY": "Annex 7 - Companies and associations"
+    },
+    "DEADLINE_TYPE": {
+      "COMPLETENESS_CHECK": "Completeness check",
+      "LAPSE": "Lapse",
+      "MODIFICATION_NOTIFICATION": "Modification notification",
+      "ANNUAL_REPORT": "Annual reporting"
+    },
+    "SORT": {
+      "CREATED_AT": "Creation date",
+      "UPDATED_AT": "Last update",
+      "SUBMITTED_AT": "Submission date",
+      "STATUS": "Status",
+      "TYPE": "Type",
+      "DUE_DATE": "Due date"
+    },
+    "LIST": {
+      "INTRO": "Every dossier is filed for one sharing operation.",
+      "CREATE": "New dossier",
+      "EMPTY": "No dossier yet. Create one to start tracking a filing.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} dossiers)",
+      "FILTERS": {
+        "OPERATION": "Sharing operation",
+        "ALL_OPERATIONS": "All operations",
+        "TYPE": "Type",
+        "ALL_TYPES": "All types",
+        "STATUS": "Status",
+        "ALL_STATUSES": "All statuses",
+        "SORT": "Sort by",
+        "TOGGLE_ORDER": "Reverse sort order",
+        "CLEAR": "Clear"
+      },
+      "COL": {
+        "TYPE": "Type",
+        "TITLE": "Title",
+        "OPERATION": "Sharing operation",
+        "STATUS": "Status",
+        "EXTERNAL_REF": "File reference",
+        "SUBMITTED_AT": "Submitted"
+      }
+    },
+    "DETAIL": {
+      "BACK": "Back to dossiers",
+      "EDIT": "Edit",
+      "OPERATION": "Sharing operation",
+      "EXTERNAL_REF": "File reference",
+      "REGION": "Region",
+      "SUBMITTED_AT": "Submitted on",
+      "CREATED_AT": "Created on",
+      "NOT_SET": "Not set",
+      "ACTIONS": "Actions",
+      "NO_FURTHER_ACTION": "This dossier is closed — no further action is possible.",
+      "NOT_FOUND": "Dossier not found.",
+      "TABS": {
+        "DOCUMENTS": "Documents",
+        "DEADLINES": "Deadlines",
+        "TIMELINE": "History"
+      }
+    },
+    "DOCUMENTS": {
+      "ADD": "Add document",
+      "EMPTY": "No document in this dossier yet.",
+      "VERSIONS": "versions",
+      "NO_VERSION": "No version yet",
+      "UPLOAD": "Upload a version",
+      "DETAIL": "View versions",
+      "DOWNLOAD": "Download",
+      "NO_FURTHER_ACTION": "No further action possible.",
+      "CONFIRM_HEADER": "Confirm status change",
+      "CONFIRM_MESSAGE": "Change this document to \"{{status}}\"? The change is recorded in the history.",
+      "STATUS_CHANGED": "Status updated",
+      "COL": {
+        "TYPE": "Document",
+        "STATUS": "Status",
+        "VERSIONS": "Versions",
+        "UPDATED_AT": "Updated",
+        "ACTIONS": "Actions"
+      },
+      "GENERATE": "Generate",
+      "REGENERATE": "Regenerate",
+      "RENDER_DONE": "Document generated",
+      "RENDER_FAILED": "Document generation failed"
+    },
+    "DEADLINES": {
+      "INTRO": "Deadlines are derived automatically from the status changes you record.",
+      "EMPTY": "No deadline matches these filters.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} deadlines)",
+      "SWEEP": "Refresh overdue",
+      "SWEEP_CONFIRM_HEADER": "Refresh overdue deadlines",
+      "SWEEP_CONFIRM_MESSAGE": "Mark every past-due deadline as missed and schedule the next recurring occurrences?",
+      "SWEEP_DONE": "{{missed}} deadline(s) marked missed, {{rolled}} rescheduled.",
+      "RESOLVED": "Deadline updated",
+      "MARK_MET": "Mark as met",
+      "MARK_MET_CONFIRM_HEADER": "Mark deadline as met",
+      "MARK_MET_CONFIRM_MESSAGE": "Confirm this obligation has been fulfilled? A recurring deadline will be rescheduled.",
+      "CANCEL": "Cancel deadline",
+      "CANCEL_CONFIRM_HEADER": "Cancel deadline",
+      "CANCEL_CONFIRM_MESSAGE": "Cancel this deadline? It stays on record but is no longer expected.",
+      "OVERDUE": "Overdue",
+      "RECURRING": "Recurring",
+      "FILTERS": {
+        "STATUS": "Status",
+        "ALL_STATUSES": "All statuses",
+        "TYPE": "Type",
+        "ALL_TYPES": "All types",
+        "OPERATION": "Sharing operation",
+        "ALL_OPERATIONS": "All operations",
+        "CLEAR": "Clear"
+      },
+      "COL": {
+        "DUE_DATE": "Due date",
+        "TYPE": "Type",
+        "DOSSIER": "Dossier",
+        "STATUS": "Status",
+        "ACTIONS": "Actions"
+      }
+    },
+    "TIMELINE": {
+      "TITLE": "History",
+      "INTRO": "Every status change is recorded permanently. Corrections are added, never erased.",
+      "EMPTY": "No history yet.",
+      "CREATED": "Created",
+      "CORRECTIVE": "Correction",
+      "SYSTEM": "System",
+      "SHOW_RAW": "Show details",
+      "HIDE_RAW": "Hide details",
+      "NEWEST_FIRST": "Newest first",
+      "OLDEST_FIRST": "Oldest first",
+      "ENTRY_COUNT": "{{count}} entries",
+      "CONTEXT": {
+        "SUBMISSION_DATE": "Submission date",
+        "ACKNOWLEDGED_DATE": "Acknowledgment date",
+        "AUTHORITY_FILE_REF": "File reference",
+        "RESULT": "Result",
+        "REASON": "Reason",
+        "NOTE": "Note"
+      }
+    },
+    "TRANSITION": {
+      "HEADER": "Change status",
+      "TO_STATUS": "New status",
+      "SUBMIT": "Record",
+      "SUCCESS": "Status recorded",
+      "CORRECTIVE_WARNING": "This is a correction. It is added to the history with your reason — the earlier entry is not erased.",
+      "FIELDS": {
+        "SUBMISSION_DATE": "Submission date",
+        "ACKNOWLEDGED_DATE": "Acknowledgment date",
+        "AUTHORITY_FILE_REF": "CWaPE / DSO file reference",
+        "RESULT": "Result",
+        "REASON": "Reason for the correction",
+        "NOTE": "Note (optional)"
+      },
+      "ERRORS": {
+        "FIELD_REQUIRED": "\"{{field}}\" is required for this status change."
+      }
+    },
+    "DIALOGS": {
+      "CREATE_DOSSIER": {
+        "TITLE": "New dossier",
+        "TYPE": "Dossier type",
+        "TYPE_PLACEHOLDER": "Select a type",
+        "OPERATION": "Sharing operation",
+        "OPERATION_PLACEHOLDER": "Select an operation",
+        "OPERATION_HINT": "Fixed once the dossier is created.",
+        "TITLE_FIELD": "Title (optional)",
+        "EXTERNAL_REF": "File reference (optional)",
+        "EXTERNAL_REF_HINT": "The CWaPE or DSO reference, once you have it.",
+        "NO_OPERATIONS": "This community has no sharing operation yet. Create one before filing a dossier.",
+        "SUBMIT": "Create",
+        "SUCCESS": "Dossier created",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Select a dossier type.",
+          "OPERATION_REQUIRED": "Select the sharing operation this dossier is filed for."
+        }
+      },
+      "EDIT_DOSSIER": {
+        "TITLE": "Edit dossier",
+        "SUBMIT": "Save",
+        "SUCCESS": "Dossier updated",
+        "OPERATION_LOCKED": "The sharing operation cannot be changed after creation."
+      },
+      "CREATE_DOCUMENT": {
+        "TITLE": "Add document",
+        "DOC_TYPE": "Document type",
+        "DOC_TYPE_PLACEHOLDER": "Select a document type",
+        "TITLE_FIELD": "Title (optional)",
+        "SUBMIT": "Add",
+        "SUCCESS": "Document added",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Select a document type."
+        }
+      },
+      "UPLOAD_VERSION": {
+        "TITLE": "Upload a version",
+        "DROP_HINT": "Drag a file here, or click to choose one.",
+        "IMMUTABLE_HINT": "Each upload is stored as a new, permanent version. Nothing is overwritten.",
+        "SUBMIT": "Upload",
+        "SUCCESS": "Version stored",
+        "ERRORS": {
+          "FILE_REQUIRED": "Choose a file to upload.",
+          "NOT_ALLOWED": "This document has already been sent. Roll it back before adding a version."
+        }
+      },
+      "DOCUMENT_DETAIL": {
+        "TITLE": "Document versions",
+        "CURRENT": "Current",
+        "DOWNLOAD": "Download",
+        "DOWNLOAD_FAILED": "Download failed",
+        "EMPTY": "No version stored yet.",
+        "COL": {
+          "VERSION": "Version",
+          "FILENAME": "File",
+          "SIZE": "Size",
+          "CHECKSUM": "Checksum",
+          "CREATED_AT": "Stored on"
+        },
+        "SNAPSHOT": "View frozen data",
+        "SNAPSHOT_HINT": "The exact data this version was generated from."
+      },
+      "GENERATE": {
+        "TITLE": "Generate the document",
+        "REVIEW_HINT": "The data comes from the CRM. Correct it if needed: what you approve here is what gets filed.",
+        "SUBMIT": "Generate",
+        "QUEUED": "Generation started",
+        "ERRORS": {
+          "NOT_ALLOWED": "This document has already been sent. Roll it back before regenerating it."
+        }
+      }
+    },
+    "PREFILL": {
+      "IDENTITY": "Identity",
+      "ADD_ROW": "Add a row",
+      "EMPTY_TABLE": "No rows.",
+      "FIELDS": {
+        "COMMUNITY_NAME": "Community name",
+        "COMMUNITY_LEGAL_NAME": "Legal name",
+        "COMMUNITY_VAT_NUMBER": "Enterprise / VAT number",
+        "COMMUNITY_STREET": "Street",
+        "COMMUNITY_NUMBER": "Number",
+        "COMMUNITY_POSTCODE": "Postcode",
+        "COMMUNITY_CITY": "City",
+        "COMMUNITY_ADDRESS": "Address",
+        "OPERATION_NAME": "Sharing operation",
+        "PARTICIPANT_COUNT": "Number of participants",
+        "INSTALLATION_COUNT": "Number of installations",
+        "CATEGORIE": "Category",
+        "SOUS_CATEGORIE": "Sub-category",
+        "NOM": "Last name",
+        "PRENOM": "First name",
+        "DENOMINATION": "Legal name",
+        "NUMERO_ENTREPRISE": "Enterprise number",
+        "RUE": "Street",
+        "NUMERO": "Number",
+        "CODE_POSTAL": "Postcode",
+        "LOCALITE": "City",
+        "DROITS_DE_VOTE": "Voting rights",
+        "EAN": "EAN",
+        "METER_NUMBER": "Meter number",
+        "GRD": "Grid operator",
+        "CLIENT_RESIDENTIEL": "Residential client",
+        "PART_ALLOUEE": "Allocated %",
+        "STATUT_PRODUCTEUR": "Producer status",
+        "STATUT_INSTALLATION": "Installation status",
+        "DATE_MISE_EN_SERVICE": "Commissioning date",
+        "PUISSANCE_KVA": "Capacity (kVA)",
+        "FILIERE": "Production type",
+        "PART_INJECTEE": "Shared injection %",
+        "CONFIGURATION": "Configuration"
+      },
+      "TABLES": {
+        "MEMBERS": "Members and shareholders",
+        "PARTICIPANTS": "Delivery points",
+        "INSTALLATIONS": "Production installations",
+        "STORAGE": "Storage installations"
+      },
+      "WARNINGS": {
+        "COUNT": "{{count}} issue(s) to fix before filing",
+        "FIX": "Fix in the CRM",
+        "RELOAD": "Reload from the CRM",
+        "RELOAD_BLOCKED": "You have edited the form — reloading would discard your corrections.",
+        "CODES": {
+          "meter": {
+            "no_member_attribution": "Delivery point {{subject}} is not attributed to any member, so it cannot be listed under a name."
+          },
+          "community": {
+            "field_missing": "Community information is missing: {{field}}. The form will be filed without it."
+          },
+          "member": {
+            "field_missing": "Member information is missing: {{field}}."
+          }
+        }
+      }
+    },
+    "MY_FILINGS": {
+      "PAGE_TITLE": "What has been filed about me",
+      "PAGE_SUBTITLE": "The information about you that your community sent to the regulator.",
+      "TITLE": "My filings",
+      "SUBTITLE": "You appear in the documents below, with the values that were submitted.",
+      "AS_OF": "Filed on {{date}}",
+      "REFERENCE": "Dossier reference: {{reference}}",
+      "EMPTY": "No official document mentions you at the moment.",
+      "EMPTY_HINT": "If you think this is wrong, contact your community manager.",
+      "FOOTNOTE": "These are the values as submitted on the date shown. They do not change if your details are corrected afterwards.",
+      "BLOCKS": {
+        "MEMBERS": "You, as a member",
+        "PARTICIPANTS": "Your supply points",
+        "INSTALLATIONS": "Your production units",
+        "STORAGE": "Your storage units"
+      },
+      "FIELDS": {
+        "EAN": "Meter (EAN code)",
+        "METER_NUMBER": "Meter number",
+        "GRD": "Grid operator",
+        "NOM": "Name",
+        "PRENOM": "First name",
+        "DENOMINATION": "Company name",
+        "CATEGORIE": "Category",
+        "SOUS_CATEGORIE": "Sub-category",
+        "NUMERO_ENTREPRISE": "Company number",
+        "RUE": "Street",
+        "NUMERO": "Number",
+        "CODE_POSTAL": "Postcode",
+        "LOCALITE": "Town",
+        "CLIENT_RESIDENTIEL": "Client type",
+        "PART_ALLOUEE": "Allocated share",
+        "STATUT_PRODUCTEUR": "Producer status",
+        "STATUT_INSTALLATION": "Installation status",
+        "DATE_MISE_EN_SERVICE": "Commissioning date",
+        "PUISSANCE_KVA": "Capacity (kVA)",
+        "FILIERE": "Technology",
+        "PART_INJECTEE": "Injected share",
+        "DROITS_DE_VOTE": "Voting rights"
+      }
+    }
+  },
+  "HOME": {
+    "GREETING": "Hello {{name}}",
+    "GREETING_ANON": "Hello",
+    "SUBTITLE": "Here is where things stand today.",
+    "NEEDS_YOU": {
+      "TITLE": "{{count}} thing(s) need you",
+      "ALL_CLEAR": "Nothing needs you right now. Everything is in order.",
+      "INVITATION": "You are invited to join “{{community}}”",
+      "MANAGER_INVITATION": "You are invited to manage “{{community}}”",
+      "INVITATION_ACTION": "View invitation",
+      "RECORD_ONE": "{{field}} is missing from your record in “{{community}}”",
+      "RECORD_MANY": "{{field}} and {{others}} more detail(s) are missing from your record in “{{community}}”",
+      "RECORD_ACTION": "Complete",
+      "UNREAD": "You have {{count}} unread notification(s)",
+      "UNREAD_ACTION": "Read"
+    },
+    "COMMUNITIES": {
+      "TITLE": "My communities",
+      "YOUR_ROLE": "You are: {{role}}",
+      "ENTER": "Enter",
+      "OPEN": "Open my community",
+      "MANAGE": "Manage my communities (create, rename, leave)",
+      "EMPTY": "You are not part of any community yet.",
+      "EMPTY_HINT": "As soon as a community invites you, the invitation will appear here.",
+      "EMPTY_ACTION": "Find communities near me"
+    },
+    "ENERGY": {
+      "TITLE": "My energy",
+      "HEADLINE": "You used {{consumed}} kWh, of which {{shared}} kWh shared by your community.",
+      "INJECTED": "You injected {{injected}} kWh, of which {{shared}} kWh shared with the community.",
+      "METER": "Meter {{number}}",
+      "NO_READING": "no reading yet",
+      "EMPTY": "No readings for this month. They will appear here as soon as they are available."
+    },
+    "DOCUMENTS": {
+      "TITLE": "My documents",
+      "EMPTY": "No document has been shared with you yet.",
+      "MORE": "and {{count}} more"
+    },
+    "INVOICES": {
+      "TITLE": "My invoices to pay",
+      "EMPTY": "You have no invoice awaiting payment.",
+      "DRAFT": "Invoice being prepared",
+      "OPEN_IN": "View in “{{community}}”"
+    },
+    "FILINGS": {
+      "TITLE": "What has been filed about me",
+      "INTRO": "Official documents sent to the regulator that mention you.",
+      "EMPTY": "No official document mentions you at the moment.",
+      "OPEN_IN": "See the detail in “{{community}}”"
+    },
+    "FIELDS": {
+      "NAME": "your name",
+      "IBAN": "your IBAN",
+      "NRN": "your national register number",
+      "EMAIL": "your email address",
+      "VAT_NUMBER": "your VAT number",
+      "HOME_ADDRESS": "your address",
+      "BILLING_ADDRESS": "your billing address",
+      "SUB_TYPE_ROW": "details of your record"
+    },
+    "A11Y": {
+      "SKIP_TO_CONTENT": "Skip to main content"
+    },
+    "MONTHS": {
+      "01": "January",
+      "02": "February",
+      "03": "March",
+      "04": "April",
+      "05": "May",
+      "06": "June",
+      "07": "July",
+      "08": "August",
+      "09": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
     }
   }
 }

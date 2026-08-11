@@ -1,0 +1,40 @@
+<app-dashboard-tile
+  data-testid="unpaid-invoices-tile"
+  icon="pi pi-credit-card"
+  headingId="dashboard-tile-invoices"
+  [title]="'DASHBOARD.MANAGER.INVOICES.TITLE' | translate"
+  [state]="state()"
+  (retry)="load(operations())"
+>
+  <p class="text-sm text-surface-700 m-0">
+    {{ 'DASHBOARD.MANAGER.INVOICES.UNPAID_COUNT' | translate: { count: unpaidCount() ?? 0 } }}
+  </p>
+
+  @if (lastRun(); as last) {
+    <p class="text-xs text-surface-500 m-0">
+      {{
+        'DASHBOARD.MANAGER.INVOICES.LAST_RUN'
+          | translate: { operation: last.operation.name, period: last.run.period_end }
+      }}
+    </p>
+  } @else {
+    <p class="text-xs text-surface-500 m-0">
+      {{ 'DASHBOARD.MANAGER.INVOICES.NO_RUN_YET' | translate }}
+    </p>
+  }
+
+  <div tileEmpty data-testid="unpaid-invoices-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MANAGER.INVOICES.EMPTY' | translate }}
+    </p>
+  </div>
+
+  <a
+    tileAction
+    class="text-primary-500 hover:text-primary-700 underline text-sm"
+    routerLink="/billing"
+    data-testid="unpaid-invoices-tile__link--billing"
+  >
+    {{ 'DASHBOARD.MANAGER.INVOICES.SEE_ALL' | translate }}
+  </a>
+</app-dashboard-tile>

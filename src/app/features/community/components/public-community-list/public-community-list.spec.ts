@@ -225,41 +225,6 @@ describe('PublicCommunityList', () => {
   // ── Logo handling ───────────────────────────────────────────────────
 
   describe('logo handling', () => {
-    it('hasValidLogo returns true when logo_presigned_url exists and is not broken', () => {
-      const community = buildCommunities()[0]; // has logo_presigned_url
-      expect(component.hasValidLogo(community)).toBe(true);
-    });
-
-    it('hasValidLogo returns false when logo_presigned_url is null', () => {
-      const community = buildCommunities()[1]; // logo_presigned_url is null
-      expect(component.hasValidLogo(community)).toBe(false);
-    });
-
-    it('hasValidLogo returns false after onLogoError marks it broken', () => {
-      const community = buildCommunities()[0];
-      expect(component.hasValidLogo(community)).toBe(true);
-
-      component.onLogoError(community.id);
-
-      expect(component.hasValidLogo(community)).toBe(false);
-    });
-
-    it('onLogoError adds the community id to brokenLogos', () => {
-      expect(component.brokenLogos().has(5)).toBe(false);
-
-      component.onLogoError(5);
-
-      expect(component.brokenLogos().has(5)).toBe(true);
-    });
-
-    it('onLogoError preserves previously broken ids', () => {
-      component.onLogoError(1);
-      component.onLogoError(2);
-
-      expect(component.brokenLogos().has(1)).toBe(true);
-      expect(component.brokenLogos().has(2)).toBe(true);
-    });
-
     it('should render an img element for communities with valid logos', () => {
       const imgs = el.querySelectorAll('.accordion-header img');
       expect(imgs.length).toBe(2); // communities 1 and 3 have logos
@@ -268,6 +233,17 @@ describe('PublicCommunityList', () => {
     it('should render a fallback icon for communities without logos', () => {
       const fallbacks = el.querySelectorAll('.accordion-header .pi-building');
       expect(fallbacks.length).toBe(1); // community 2 has null logo
+    });
+
+    it('should fall back to the icon when a presigned URL fails to load', () => {
+      // The URLs expire in ~15 min while `cachedGet` keeps serving the payload,
+      // so a 403 on a valid-looking URL is routine here.
+      const img = el.querySelector<HTMLImageElement>('.accordion-header img');
+      img?.dispatchEvent(new Event('error'));
+      fixture.detectChanges();
+
+      expect(el.querySelectorAll('.accordion-header img').length).toBe(1);
+      expect(el.querySelectorAll('.accordion-header .pi-building').length).toBe(2);
     });
   });
 

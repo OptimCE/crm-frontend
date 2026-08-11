@@ -1,0 +1,102 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (hasNoOperations()) {
+    <p class="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3 m-0">
+      <i class="pi pi-exclamation-triangle"></i>
+      {{ 'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.NO_OPERATIONS' | translate }}
+    </p>
+  }
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="dossier-type">{{
+      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TYPE' | translate
+    }}</label>
+    <p-select
+      inputId="dossier-type"
+      [options]="typeOptions"
+      formControlName="dossier_type"
+      optionLabel="label"
+      optionValue="value"
+      appendTo="body"
+      class="w-full"
+      [placeholder]="'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TYPE_PLACEHOLDER' | translate"
+      data-testid="dossier-create-dialog__select--type"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="dossier-operation">{{
+      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION' | translate
+    }}</label>
+    <p-select
+      inputId="dossier-operation"
+      [options]="operationOptions()"
+      formControlName="id_sharing_operation"
+      optionLabel="label"
+      optionValue="value"
+      appendTo="body"
+      class="w-full"
+      [placeholder]="
+        'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION_PLACEHOLDER' | translate
+      "
+      data-testid="dossier-create-dialog__select--operation"
+    />
+    <small class="text-surface-500">{{
+      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION_HINT' | translate
+    }}</small>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="dossier-title">{{
+      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TITLE_FIELD' | translate
+    }}</label>
+    <input
+      pInputText
+      id="dossier-title"
+      formControlName="title"
+      class="w-full"
+      maxlength="255"
+      data-testid="dossier-create-dialog__input--title"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="dossier-external-ref">{{
+      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.EXTERNAL_REF' | translate
+    }}</label>
+    <input
+      pInputText
+      id="dossier-external-ref"
+      formControlName="external_ref"
+      class="w-full"
+      maxlength="128"
+      data-testid="dossier-create-dialog__input--external-ref"
+    />
+    <small class="text-surface-500">{{
+      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.EXTERNAL_REF_HINT' | translate
+    }}</small>
+  </div>
+
+  @if (formError()) {
+    <p class="text-red-600 text-sm m-0" data-testid="dossier-create-dialog__error">
+      <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+    </p>
+  }
+
+  <div class="flex justify-end gap-2 mt-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+      data-testid="dossier-create-dialog__btn--cancel"
+    />
+    <p-button
+      type="submit"
+      [label]="'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.SUBMIT' | translate"
+      [loading]="submitting()"
+      data-testid="dossier-create-dialog__btn--submit"
+    />
+  </div>
+</form>

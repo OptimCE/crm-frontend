@@ -57,4 +57,26 @@ describe('NotificationService', () => {
     expect(req.request.method).toBe('PATCH');
     req.flush({ data: 'success', error_code: 0 });
   });
+
+  it('reads preferences with an uncached GET', () => {
+    // Uncached on purpose: the tab reads it once on open and must reflect a save
+    // immediately, so the short-TTL cache the list uses would only get in the way.
+    service.preferences().subscribe();
+    const req = httpMock.expectOne(`${base}/preferences`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ data: { type_prefixes: ['invoice'], preferences: [] }, error_code: 0 });
+  });
+
+  it('replaces preferences with a PUT carrying the whole set', () => {
+    // PUT, not PATCH, and the body is `{ preferences: [...] }` — the endpoint
+    // replaces the set wholesale, which is how "reset to default" is expressed.
+    // A delta here would silently re-enable whatever it omitted.
+    service.savePreferences([{ type_prefix: 'invoice', channel: 2, mode: 3 }]).subscribe();
+    const req = httpMock.expectOne(`${base}/preferences`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({
+      preferences: [{ type_prefix: 'invoice', channel: 2, mode: 3 }],
+    });
+    req.flush({ data: { type_prefixes: ['invoice'], preferences: [] }, error_code: 0 });
+  });
 });

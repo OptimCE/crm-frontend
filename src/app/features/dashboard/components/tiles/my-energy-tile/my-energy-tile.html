@@ -1,0 +1,51 @@
+<app-dashboard-tile
+  data-testid="my-energy-tile"
+  icon="pi pi-bolt"
+  headingId="dashboard-tile-my-energy"
+  [title]="'DASHBOARD.MEMBER.ENERGY.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  <div class="flex flex-wrap gap-x-6 gap-y-2">
+    <span class="flex flex-col">
+      <span class="text-xs uppercase text-surface-500">{{
+        'DASHBOARD.MEMBER.ENERGY.CONSUMED' | translate
+      }}</span>
+      <span class="text-lg font-semibold text-surface-900"
+        >{{ totalConsumed() | number: '1.0-1' }} kWh</span
+      >
+    </span>
+    <span class="flex flex-col">
+      <span class="text-xs uppercase text-surface-500">{{
+        'DASHBOARD.MEMBER.ENERGY.SHARED' | translate
+      }}</span>
+      <span class="text-lg font-semibold text-primary-700"
+        >{{ totalShared() | number: '1.0-1' }} kWh</span
+      >
+    </span>
+  </div>
+
+  <p class="text-xs text-surface-400 m-0">
+    {{ 'DASHBOARD.MEMBER.ENERGY.PERIOD' | translate: { days: windowDays } }}
+  </p>
+
+  <ul class="flex flex-col gap-1 m-0 p-0 list-none">
+    @for (row of volumes(); track row.meter.EAN) {
+      <li class="flex items-center gap-2 text-sm">
+        <a
+          class="text-primary-500 hover:text-primary-700 underline flex-1 min-w-0 truncate"
+          [routerLink]="['/users/me/meters', row.meter.EAN]"
+          data-testid="my-energy-tile__link--meter"
+          >{{ row.meter.meter_number }}</a
+        >
+        <span class="text-xs text-surface-500 shrink-0"
+          >{{ row.sharedKwh | number: '1.0-1' }} kWh</span
+        >
+      </li>
+    }
+  </ul>
+
+  <div tileEmpty data-testid="my-energy-tile__empty">
+    <p class="text-sm text-surface-600 m-0">{{ 'DASHBOARD.MEMBER.ENERGY.EMPTY' | translate }}</p>
+  </div>
+</app-dashboard-tile>

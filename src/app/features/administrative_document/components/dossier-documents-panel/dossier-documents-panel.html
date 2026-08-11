@@ -1,0 +1,158 @@
+<div class="flex flex-col gap-3 mt-4">
+  <div class="flex justify-end">
+    <p-button
+      icon="pi pi-plus"
+      [label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.ADD' | translate"
+      size="small"
+      (onClick)="openCreate()"
+      data-testid="dossier-documents-panel__btn--add"
+    />
+  </div>
+
+  @if (documents().length === 0) {
+    <div class="py-8 text-center" data-testid="dossier-documents-panel__empty--message">
+      <i class="pi pi-file text-3xl text-surface-300 mb-2"></i>
+      <p class="text-surface-400 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.EMPTY' | translate }}
+      </p>
+    </div>
+  } @else {
+    @for (document of documents(); track document.id; let i = $index) {
+      <div
+        class="rounded-lg border border-surface-200 p-3 flex flex-col gap-2"
+        [attr.data-testid]="'dossier-documents-panel__row--' + i"
+      >
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div class="flex flex-col gap-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-sm font-medium text-surface-800">
+                {{ document.title ?? (docTypeKey(document) | translate) }}
+              </span>
+              <p-tag
+                [value]="statusLabelKey(document) | translate"
+                [severity]="statusSeverity(document)"
+                data-testid="dossier-documents-panel__tag--status"
+              />
+              <!-- Render state is separate from status on purpose: generating is
+                   a technical step and never moves the regulatory lifecycle. -->
+              @if (renderState(document); as state) {
+                <p-tag
+                  [value]="renderLabelKey(state) | translate"
+                  [severity]="renderSeverity(state)"
+                  [icon]="isRendering(document) ? 'pi pi-spin pi-spinner' : 'pi pi-times-circle'"
+                  [attr.data-testid]="'dossier-documents-panel__tag--render-' + document.id"
+                />
+              }
+            </div>
+            <span class="text-xs text-surface-500">
+              @if (document.title) {
+                {{ docTypeKey(document) | translate }} &middot;
+              }
+              @if (document.version_count > 0) {
+                {{ document.version_count }}
+                {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.VERSIONS' | translate }}
+              } @else {
+                {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_VERSION' | translate }}
+              }
+              &middot; {{ document.updated_at | date: 'short' }}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <p-button
+              icon="pi pi-list"
+              text
+              rounded
+              size="small"
+              severity="secondary"
+              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DETAIL' | translate"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DETAIL' | translate"
+              (onClick)="openDetail(document)"
+              [attr.data-testid]="'dossier-documents-panel__btn--detail-' + document.id"
+            />
+            @if (canUpload(document)) {
+              <!-- Same rule as upload: only while the document is still editable.
+                   A registered template is the backend's business (422 if none),
+                   so the action is offered and the error explains. -->
+              <p-button
+                [icon]="document.version_count > 0 ? 'pi pi-refresh' : 'pi pi-sparkles'"
+                text
+                rounded
+                size="small"
+                [pTooltip]="
+                  (document.version_count > 0
+                    ? 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.REGENERATE'
+                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
+                  ) | translate
+                "
+                [attr.aria-label]="
+                  (document.version_count > 0
+                    ? 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.REGENERATE'
+                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
+                  ) | translate
+                "
+                [disabled]="isBusy(document) || isRendering(document)"
+                (onClick)="openGenerate(document)"
+                [attr.data-testid]="'dossier-documents-panel__btn--generate-' + document.id"
+              />
+              <p-button
+                icon="pi pi-upload"
+                text
+                rounded
+                size="small"
+                [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
+                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
+                [disabled]="isBusy(document)"
+                (onClick)="openUpload(document)"
+                [attr.data-testid]="'dossier-documents-panel__btn--upload-' + document.id"
+              />
+            }
+            <!-- Last in the action group, and deliberately OUTSIDE the editable
+                 guard above: a sent or acknowledged document can no longer be
+                 regenerated, but downloading what was filed is exactly when you
+                 need it most. -->
+            @if (canDownload(document)) {
+              <p-button
+                icon="pi pi-download"
+                text
+                rounded
+                size="small"
+                [loading]="isDownloading(document)"
+                [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
+                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
+                (onClick)="download(document)"
+                [attr.data-testid]="'dossier-documents-panel__btn--download-' + document.id"
+              />
+            }
+          </div>
+        </div>
+
+        <!-- Only legal transitions are rendered; the backend 409 is the backstop. -->
+        <div class="flex flex-wrap items-center gap-2 border-t border-surface-100 pt-2">
+          @if (isTerminalDocument(document)) {
+            <span class="text-xs text-surface-400">
+              {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_FURTHER_ACTION' | translate }}
+            </span>
+          } @else {
+            @for (target of targets(document); track target) {
+              <p-button
+                [icon]="targetIcon(document, target)"
+                [label]="targetLabelKey(target) | translate"
+                size="small"
+                [outlined]="true"
+                [severity]="targetSeverity(document, target)"
+                [disabled]="isBusy(document)"
+                (onClick)="transition(document, target)"
+                [attr.data-testid]="
+                  'dossier-documents-panel__btn--transition-' + document.id + '-' + target
+                "
+              />
+            }
+          }
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<p-confirmDialog />

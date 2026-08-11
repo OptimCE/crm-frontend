@@ -9,8 +9,15 @@
 
 /** Source community of a notification, surfaced for display. */
 export interface NotificationCommunity {
+  /** Internal CRM id. NOT the value `X-Community-ID` carries. */
   id: number;
   name: string;
+  /**
+   * Keycloak org id — the one `UserContextService.activeCommunityId()` holds.
+   * Needed to tell whether a notification belongs to the active community before
+   * following its link.
+   */
+  auth_community_id: string;
 }
 
 /** A single notification row as returned by the list endpoint. */
@@ -45,4 +52,40 @@ export interface UnreadCountDTO {
 export interface NotificationListQuery {
   page?: number;
   limit?: number;
+}
+
+/** Delivery channels, matching the backend encoding. Never renumber. */
+export enum NotificationChannel {
+  INAPP = 1,
+  EMAIL = 2,
+}
+
+/**
+ * What the recipient wants for a (type prefix, channel) pair.
+ *
+ * `2 DAILY_DIGEST` is reserved in the encoding but has no runner, so the backend
+ * rejects it and it is deliberately not declared here either.
+ */
+export enum PreferenceMode {
+  IMMEDIATE = 1,
+  OFF = 3,
+}
+
+/** One stored preference. `type_prefix` is `''` for the catch-all default. */
+export interface NotificationPreferenceDTO {
+  type_prefix: string;
+  channel: NotificationChannel;
+  mode: PreferenceMode;
+}
+
+/**
+ * Output of `GET /notifications/preferences`.
+ *
+ * `type_prefixes` is served by the backend, derived from its notification
+ * taxonomy, so this app never hardcodes a list that could drift from it. It
+ * excludes `''`, which the UI presents separately as the catch-all default.
+ */
+export interface NotificationPreferencesDTO {
+  type_prefixes: string[];
+  preferences: NotificationPreferenceDTO[];
 }

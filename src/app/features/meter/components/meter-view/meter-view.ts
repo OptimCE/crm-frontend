@@ -12,7 +12,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { Card } from 'primeng/card';
 import { MetersDataDTO, MetersDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { MeterUpdate } from '../meter-update/meter-update';
@@ -31,6 +31,7 @@ import { MeterConsumptionChart } from './meter-consumption-chart/meter-consumpti
   selector: 'app-meter-view',
   standalone: true,
   imports: [
+    RouterLink,
     Button,
     FormsModule,
     AddressPipe,
@@ -90,7 +91,9 @@ export class MeterView implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id === null) {
       console.error('No id provided');
-      void this.router.navigate(['/members/meter']);
+      // Back to the meters list. `/members/meter` resolved to MemberView with
+      // `id = 'meter'`, which becomes NaN and requests `/members/NaN`.
+      void this.router.navigate(['/meters']);
       return;
     }
     this.id = id;

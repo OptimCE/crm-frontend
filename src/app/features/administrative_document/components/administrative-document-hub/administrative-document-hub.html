@@ -1,0 +1,39 @@
+<div class="mx-auto w-full max-w-5xl">
+  @if (userContext.compareWithActiveRole(Role.GESTIONNAIRE)) {
+    <app-header-page
+      icon="pi pi-folder-open"
+      [text]="'ADMINISTRATIVE_DOCUMENT.TITLE' | translate"
+      [subtitle]="'ADMINISTRATIVE_DOCUMENT.SUBTITLE' | translate"
+    />
+
+    <p-tabs [value]="0" class="block mt-5">
+      <p-tablist>
+        <p-tab [value]="0" data-testid="administrative-document-hub__tab--dossiers">{{
+          'ADMINISTRATIVE_DOCUMENT.TABS.DOSSIERS' | translate
+        }}</p-tab>
+        <p-tab [value]="1" data-testid="administrative-document-hub__tab--deadlines">{{
+          'ADMINISTRATIVE_DOCUMENT.TABS.DEADLINES' | translate
+        }}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <app-dossier-list />
+        </p-tabpanel>
+        <p-tabpanel [value]="1">
+          <app-deadline-dashboard />
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  } @else {
+    <!-- The member branch. Instantiated INSTEAD of the console, not alongside
+         it, so none of the manager-gated reads is ever issued. -->
+    <app-header-page
+      icon="pi pi-folder-open"
+      [text]="'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.PAGE_TITLE' | translate"
+      [subtitle]="'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.PAGE_SUBTITLE' | translate"
+    />
+    <div class="mt-5">
+      <app-my-filings />
+    </div>
+  }
+</div>

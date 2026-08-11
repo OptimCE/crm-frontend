@@ -4,6 +4,7 @@ import { Carousel } from 'primeng/carousel';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSelector } from '../../../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
+import { LanguageService } from '../../../../core/services/language/language.service';
 
 interface Slide {
   icon: string;
@@ -22,6 +23,7 @@ interface Slide {
 })
 export class AuthPage {
   private readonly keycloak = inject(Keycloak);
+  private readonly languageService = inject(LanguageService);
 
   slides: Slide[] = [
     {
@@ -54,7 +56,19 @@ export class AuthPage {
     },
   ];
 
+  /**
+   * `locale` is forwarded by keycloak-js as the OIDC `ui_locales` parameter.
+   *
+   * Keycloak needs it: it renders the login theme server-side and bakes the
+   * resolved messages into the page, so a language the server doesn't know
+   * about can no longer be corrected in the browser. It also stores the choice
+   * in the KEYCLOAK_LOCALE cookie, which keeps the rest of the flow
+   * (registration, password reset) in the same language.
+   */
   login(): void {
-    void this.keycloak.login({ redirectUri: window.location.origin + '/' });
+    void this.keycloak.login({
+      redirectUri: window.location.origin + '/',
+      locale: this.languageService.getCurrentLanguage() ?? undefined,
+    });
   }
 }

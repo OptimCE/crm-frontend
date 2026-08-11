@@ -13,6 +13,9 @@
       <p-tab data-testid="profile-tabs__tab--representations" [value]="3">{{
         'PROFILE.TABS.HEADERS.REPRESENTATIONS' | translate
       }}</p-tab>
+      <p-tab data-testid="profile-tabs__tab--notifications" [value]="4">{{
+        'PROFILE.TABS.HEADERS.NOTIFICATIONS' | translate
+      }}</p-tab>
     </p-tablist>
 
     <p-tabpanels>
@@ -30,6 +33,10 @@
 
       <p-tabpanel [value]="3">
         <app-representations-user></app-representations-user>
+      </p-tabpanel>
+
+      <p-tabpanel [value]="4">
+        <app-notification-preferences-user></app-notification-preferences-user>
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>

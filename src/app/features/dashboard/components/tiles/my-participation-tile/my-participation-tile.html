@@ -1,0 +1,59 @@
+<app-dashboard-tile
+  data-testid="my-participation-tile"
+  icon="pi pi-percentage"
+  headingId="dashboard-tile-participation"
+  [title]="'DASHBOARD.MEMBER.PARTICIPATION.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  <ul class="flex flex-col gap-3 m-0 p-0 list-none">
+    @for (row of rows(); track row.sharing_operation.id + ':' + row.ean) {
+      <li class="flex flex-col gap-0.5">
+        <span class="text-sm text-surface-800 truncate">{{ row.sharing_operation.name }}</span>
+        <span class="text-xs text-surface-400">{{ row.ean }}</span>
+
+        @switch (shareDisplay(row)) {
+          @case ('share') {
+            <span class="text-base font-semibold text-primary-700">
+              {{ row.effective_share | percent: '1.0-2' }}
+            </span>
+          }
+          @case ('prorata') {
+            <span class="text-sm text-surface-700 flex items-center gap-1">
+              <i class="pi pi-sliders-h text-surface-500" aria-hidden="true"></i>
+              {{ 'DASHBOARD.MEMBER.PARTICIPATION.PRORATA' | translate }}
+            </span>
+          }
+          @case ('unmatched') {
+            <!-- NOT "0 %": the key does not name this meter, which is a fact about
+                 the key, not a statement that the member receives nothing. -->
+            <span class="text-sm text-surface-600 flex items-center gap-1">
+              <i class="pi pi-question-circle text-surface-500" aria-hidden="true"></i>
+              {{ 'DASHBOARD.MEMBER.PARTICIPATION.NOT_IN_KEY' | translate }}
+            </span>
+          }
+          @default {
+            <span class="text-sm text-surface-600 flex items-center gap-1">
+              <i class="pi pi-exclamation-circle text-surface-500" aria-hidden="true"></i>
+              {{ 'DASHBOARD.MEMBER.PARTICIPATION.NO_KEY' | translate }}
+            </span>
+          }
+        }
+      </li>
+    }
+  </ul>
+
+  @if (rows().length) {
+    <!-- "Key fraction" is jargon. Gloss it rather than assume it lands. -->
+    <app-field-label-helper
+      [label]="'DASHBOARD.MEMBER.PARTICIPATION.HELP_LABEL' | translate"
+      [tooltip]="'DASHBOARD.MEMBER.PARTICIPATION.HELP' | translate"
+    />
+  }
+
+  <div tileEmpty data-testid="my-participation-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MEMBER.PARTICIPATION.EMPTY' | translate }}
+    </p>
+  </div>
+</app-dashboard-tile>

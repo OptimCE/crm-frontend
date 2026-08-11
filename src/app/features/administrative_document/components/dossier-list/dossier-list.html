@@ -1,0 +1,180 @@
+<div class="flex flex-col gap-4 mt-4">
+  <!-- Header row -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <p class="text-sm text-surface-500 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.LIST.INTRO' | translate }}
+    </p>
+    <p-button
+      icon="pi pi-plus"
+      [label]="'ADMINISTRATIVE_DOCUMENT.LIST.CREATE' | translate"
+      (onClick)="openCreate()"
+      data-testid="dossier-list__btn--create"
+    />
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div>
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.OPERATION' | translate
+        }}</span>
+        <p-select
+          [options]="operationOptions()"
+          [(ngModel)]="operationFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.ALL_OPERATIONS' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="dossier-list__select--operation"
+        />
+      </div>
+
+      <div>
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.TYPE' | translate
+        }}</span>
+        <p-select
+          [options]="typeOptions"
+          [(ngModel)]="typeFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.ALL_TYPES' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="dossier-list__select--type"
+        />
+      </div>
+
+      <div>
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.STATUS' | translate
+        }}</span>
+        <p-select
+          [options]="statusOptions"
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.ALL_STATUSES' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="dossier-list__select--status"
+        />
+      </div>
+
+      <div class="sm:col-span-2">
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.SORT' | translate
+        }}</span>
+        <div class="flex gap-2">
+          <p-select
+            [options]="sortOptions"
+            [(ngModel)]="sortField"
+            (ngModelChange)="applyFilters()"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            class="flex-1"
+            data-testid="dossier-list__select--sort"
+          />
+          <p-button
+            [icon]="sortOrder === 'asc' ? 'pi pi-sort-amount-up' : 'pi pi-sort-amount-down'"
+            [outlined]="true"
+            severity="secondary"
+            (onClick)="toggleSortOrder()"
+            [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.TOGGLE_ORDER' | translate"
+            data-testid="dossier-list__btn--sort-order"
+          />
+        </div>
+      </div>
+
+      <div class="flex items-end">
+        <p-button
+          icon="pi pi-filter-slash"
+          [label]="'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.CLEAR' | translate"
+          (onClick)="clearFilters()"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+          data-testid="dossier-list__btn--clear-filters"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
+  <p-table
+    [value]="dossiers()"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoad($event)"
+    [rows]="pagination().limit"
+    [totalRecords]="pagination().total"
+    [first]="firstRow()"
+    [showCurrentPageReport]="true"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
+    [loading]="loading()"
+    dataKey="id"
+    data-testid="dossier-list__table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-base px-3">{{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.TYPE' | translate }}</th>
+        <th class="text-base px-3">{{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.TITLE' | translate }}</th>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.OPERATION' | translate }}
+        </th>
+        <th class="text-base px-3">{{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.STATUS' | translate }}</th>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.EXTERNAL_REF' | translate }}
+        </th>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.SUBMITTED_AT' | translate }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+      <tr
+        class="hover:bg-primary-50 cursor-pointer"
+        (click)="openDossier(row)"
+        [attr.data-testid]="'dossier-list__row--' + rowIndex"
+      >
+        <td class="text-sm">{{ typeLabelKey(row) | translate }}</td>
+        <td class="text-sm">{{ row.title ?? '—' }}</td>
+        <td class="text-sm">{{ operationName(row) }}</td>
+        <td class="text-sm">
+          <p-tag
+            [value]="statusLabelKey(row) | translate"
+            [severity]="statusSeverity(row)"
+            data-testid="dossier-list__tag--status"
+          />
+        </td>
+        <td class="text-sm font-mono">{{ row.external_ref ?? '—' }}</td>
+        <td class="text-sm whitespace-nowrap">
+          {{ row.submitted_at ? (row.submitted_at | date: 'short') : '—' }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6">
+          <div class="py-8 text-center" data-testid="dossier-list__empty--message">
+            <i class="pi pi-folder-open text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'ADMINISTRATIVE_DOCUMENT.LIST.EMPTY' | translate }}
+            </p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

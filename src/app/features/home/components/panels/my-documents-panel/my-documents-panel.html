@@ -1,0 +1,35 @@
+<app-dashboard-tile
+  data-testid="my-documents-panel"
+  [title]="'HOME.DOCUMENTS.TITLE' | translate"
+  icon="pi pi-file"
+  [state]="state()"
+  headingId="home-documents-heading"
+  (retry)="load()"
+>
+  <p tileEmpty class="text-sm text-surface-500 m-0" data-testid="my-documents-panel__empty">
+    {{ 'HOME.DOCUMENTS.EMPTY' | translate }}
+  </p>
+
+  <ul class="list-none m-0 p-0 flex flex-col gap-1" data-testid="my-documents-panel__list">
+    @for (document of visible(); track document.id) {
+      <li
+        class="flex items-baseline justify-between gap-3 text-sm"
+        [attr.data-testid]="'my-documents-panel__row--' + document.id"
+      >
+        <span class="flex-1 min-w-0 truncate">
+          {{ document.file_name }}
+          <span class="text-surface-500">· {{ document.community.name }}</span>
+        </span>
+        <span class="text-surface-500 whitespace-nowrap">
+          {{ document.upload_date | timeAgo }}
+        </span>
+      </li>
+    }
+  </ul>
+
+  @if (hiddenCount() > 0) {
+    <span tileAction class="text-xs text-surface-500" data-testid="my-documents-panel__more">
+      {{ 'HOME.DOCUMENTS.MORE' | translate: { count: hiddenCount() } }}
+    </span>
+  }
+</app-dashboard-tile>

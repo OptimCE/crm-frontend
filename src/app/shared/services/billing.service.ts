@@ -1,10 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, tap } from 'rxjs';
 
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
 import { defineTTL } from '../../core/services/cache/cache.helper';
+import { COMMUNITY_ID } from '../../core/interceptors/community.context.inteceptor';
 import {
   BillingRunOut,
   BillingRunRequest,
@@ -112,6 +113,29 @@ export class BillingService extends ServiceBase {
       `${CACHE_PREFIX}:invoices:${JSON.stringify(query)}`,
       `${this.apiAddress}/invoices`,
       query,
+    );
+  }
+
+  /**
+   * The same caller-scoped listing, for an EXPLICIT community.
+   *
+   * `/invoices/mine` is member-scoped but still community-scoped — it resolves
+   * its tenant from `X-Community-ID` — so the user dashboard, which renders
+   * before any community is active, has to ask each community in turn. The
+   * `COMMUNITY_ID` context token pins the header (the interceptor would
+   * otherwise stamp the active community, or none at all), and the cache key
+   * embeds the same id so two communities cannot share one entry.
+   */
+  listMyInvoicesForCommunity(
+    communityId: string,
+    query: MyInvoiceQuery,
+  ): Observable<ApiResponsePaginated<InvoiceOut[]>> {
+    return this.cachedGet<ApiResponsePaginated<InvoiceOut[]>>(
+      `${CACHE_PREFIX}:invoices-mine:${communityId}:${JSON.stringify(query)}`,
+      `${this.apiAddress}/invoices/mine`,
+      query,
+      undefined,
+      { context: new HttpContext().set(COMMUNITY_ID, communityId) },
     );
   }
 

@@ -318,3 +318,39 @@
     overflow-x: hidden;
   }
 }
+
+/* ------------------------------------------------------------------
+   Accessibility helpers
+   ------------------------------------------------------------------ */
+
+/* Visible to screen readers, invisible on screen. Lived only in
+   dashboard-tile.css until the user dashboard needed it too — a page that
+   redeclares it silently gets none, so it belongs here. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: off-screen until focused, then pinned to the top-left so a
+   keyboard user's first Tab reaches the page content instead of the sidebar. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1100;
+  padding: 0.6rem 1rem;
+  background: var(--p-primary-color);
+  color: #fff;
+  border-radius: 0 0 0.5rem 0;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 0;
+}

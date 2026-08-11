@@ -1,0 +1,48 @@
+<app-dashboard-tile
+  data-testid="energy-glance-tile"
+  icon="pi pi-bolt"
+  headingId="dashboard-tile-energy"
+  [title]="'DASHBOARD.MANAGER.ENERGY.TITLE' | translate"
+  [state]="state()"
+  (retry)="retry.emit()"
+>
+  <ul class="flex flex-col gap-3 m-0 p-0 list-none">
+    @for (row of volumes(); track row.operation.id) {
+      <li class="flex flex-col gap-1">
+        <a
+          class="text-primary-500 hover:text-primary-700 underline text-sm truncate"
+          [routerLink]="['/sharing_operations', row.operation.id]"
+          data-testid="energy-glance-tile__link--operation"
+          >{{ row.operation.name }}</a
+        >
+        <div class="flex flex-wrap gap-x-4 gap-y-1">
+          <span class="flex flex-col">
+            <span class="text-xs uppercase text-surface-500">{{
+              'DASHBOARD.MANAGER.ENERGY.SHARED' | translate
+            }}</span>
+            <span class="text-sm font-semibold text-surface-800"
+              >{{ row.sharedKwh | number: '1.0-1' }} kWh</span
+            >
+          </span>
+          <span class="flex flex-col">
+            <span class="text-xs uppercase text-surface-500">{{
+              'DASHBOARD.MANAGER.ENERGY.INJECTED_SHARED' | translate
+            }}</span>
+            <span class="text-sm font-semibold text-surface-800"
+              >{{ row.injectedSharedKwh | number: '1.0-1' }} kWh</span
+            >
+          </span>
+        </div>
+        <span class="text-xs text-surface-400">
+          {{ 'DASHBOARD.MANAGER.ENERGY.PERIOD' | translate: { month: row.month } }}
+        </span>
+      </li>
+    }
+  </ul>
+
+  <div tileEmpty data-testid="energy-glance-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MANAGER.ENERGY.EMPTY' | translate }}
+    </p>
+  </div>
+</app-dashboard-tile>

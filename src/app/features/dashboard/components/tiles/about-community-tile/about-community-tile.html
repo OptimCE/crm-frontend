@@ -1,0 +1,57 @@
+<app-dashboard-tile
+  data-testid="about-community-tile"
+  icon="pi pi-users"
+  headingId="dashboard-tile-about"
+  [title]="'DASHBOARD.MEMBER.ABOUT.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  @if (community(); as community) {
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 m-0">
+      <div class="flex flex-col">
+        <dt class="text-xs uppercase text-surface-500">
+          {{ 'DASHBOARD.MEMBER.ABOUT.MEMBER_COUNT' | translate }}
+        </dt>
+        <dd class="text-sm text-surface-800 m-0">{{ community.member_count }}</dd>
+      </div>
+      <div class="flex flex-col">
+        <dt class="text-xs uppercase text-surface-500">
+          {{ 'DASHBOARD.MEMBER.ABOUT.REGULATOR' | translate }}
+        </dt>
+        <dd class="text-sm text-surface-800 m-0">
+          {{ 'REGULATORS.' + community.regulator | translate }}
+        </dd>
+      </div>
+      @if (community.website_url) {
+        <div class="flex flex-col sm:col-span-2">
+          <dt class="text-xs uppercase text-surface-500">
+            {{ 'DASHBOARD.MEMBER.ABOUT.WEBSITE' | translate }}
+          </dt>
+          <dd class="text-sm m-0 truncate">
+            <a
+              class="text-primary-500 hover:text-primary-700 underline"
+              [href]="community.website_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="about-community-tile__link--website"
+              >{{ community.website_url }}</a
+            >
+          </dd>
+        </div>
+      }
+    </dl>
+  }
+
+  <div tileEmpty data-testid="about-community-tile__empty">
+    <p class="text-sm text-surface-600 m-0">{{ 'DASHBOARD.MEMBER.ABOUT.EMPTY' | translate }}</p>
+  </div>
+
+  <a
+    tileAction
+    class="text-primary-500 hover:text-primary-700 underline text-sm"
+    routerLink="/communities/info"
+    data-testid="about-community-tile__link--info"
+  >
+    {{ 'DASHBOARD.MEMBER.ABOUT.SEE_MORE' | translate }}
+  </a>
+</app-dashboard-tile>

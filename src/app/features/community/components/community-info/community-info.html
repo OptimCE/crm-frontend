@@ -40,21 +40,14 @@
       <p-card data-testid="community-info__card--view">
         <div class="flex flex-col md:flex-row gap-6">
           <div class="flex flex-col items-center md:items-start md:w-48 gap-3">
-            @if (community()!.logo_presigned_url) {
-              <img
-                [src]="community()!.logo_presigned_url"
-                [alt]="community()!.name"
-                class="w-40 h-40 object-contain rounded-xl border border-primary-100 bg-surface-0"
-                data-testid="community-info__img--logo"
-              />
-            } @else {
-              <div
-                class="w-40 h-40 rounded-xl border border-dashed border-primary-200 flex items-center justify-center text-surface-300"
-                data-testid="community-info__img--logo-placeholder"
-              >
-                <i class="pi pi-image text-4xl"></i>
-              </div>
-            }
+            <app-community-logo
+              [src]="community()!.logo_presigned_url"
+              [alt]="community()!.name"
+              imgClass="w-40 h-40 object-contain rounded-xl border border-primary-100 bg-surface-0"
+              fallbackClass="w-40 h-40 rounded-xl border border-dashed border-primary-200 flex items-center justify-center text-surface-300"
+              iconClass="pi pi-building text-4xl"
+              testId="community-info__img--logo"
+            />
             <p-tag
               severity="info"
               icon="pi pi-users"
@@ -178,20 +171,14 @@
         <p-card>
           <div class="flex flex-col md:flex-row gap-6">
             <div class="flex flex-col items-center md:items-start md:w-48 gap-3">
-              @if (logoSource(); as src) {
-                <img
-                  [src]="src"
-                  alt="logo preview"
-                  class="w-40 h-40 object-contain rounded-xl border border-primary-100 bg-surface-0"
-                  data-testid="community-info__img--logo-preview"
-                />
-              } @else {
-                <div
-                  class="w-40 h-40 rounded-xl border border-dashed border-primary-200 flex items-center justify-center text-surface-300"
-                >
-                  <i class="pi pi-image text-4xl"></i>
-                </div>
-              }
+              <app-community-logo
+                [src]="logoSource()"
+                alt="logo preview"
+                imgClass="w-40 h-40 object-contain rounded-xl border border-primary-100 bg-surface-0"
+                fallbackClass="w-40 h-40 rounded-xl border border-dashed border-primary-200 flex items-center justify-center text-surface-300"
+                iconClass="pi pi-building text-4xl"
+                testId="community-info__img--logo-preview"
+              />
               <label class="w-full">
                 <input
                   type="file"

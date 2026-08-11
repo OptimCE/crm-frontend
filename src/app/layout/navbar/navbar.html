@@ -88,6 +88,19 @@
     <!-- Section: User -->
     <app-sidebar-section [label]="'NAVBAR.PROFILE'" [key]="'profile'" [sidebarOpen]="sidebarOpen()">
       <ul data-testid="navbar__menu--profile" class="sidebar__menu">
+        <!-- First item overall: /home is the post-login landing and the only way
+             back when there is no active community, so it must be reachable from
+             every page including the ones a failed guard bounces off. Outside the
+             "Active community" section, which is gated on having one. -->
+        <li
+          appSidebarItem
+          (sidebarClose)="closeSideBar()"
+          [icon]="'pi pi-compass'"
+          [isRouteActive]="isRouteActive().home"
+          [name]="'NAVBAR.HOME' | translate"
+          [routerLinkUrl]="'/home'"
+          [sidebarOpen]="sidebarOpen()"
+        ></li>
         <li
           appSidebarItem
           (sidebarClose)="closeSideBar()"
@@ -135,6 +148,19 @@
         [sidebarOpen]="sidebarOpen()"
       >
         <ul data-testid="navbar__menu--community" class="sidebar__menu">
+          <!-- First item of this section on purpose: the dashboard is the landing
+               page for "inside a community", and this section is gated on exactly
+               the condition activeCommunityGuard checks (any role in an active
+               community), so the link is never rendered where it would bounce. -->
+          <li
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-home'"
+            [isRouteActive]="isRouteActive().dashboard"
+            [name]="'NAVBAR.DASHBOARD' | translate"
+            [routerLinkUrl]="'/dashboard'"
+            [sidebarOpen]="sidebarOpen()"
+          ></li>
           <li
             appSidebarItem
             (sidebarClose)="closeSideBar()"
@@ -172,6 +198,21 @@
               [isRouteActive]="isRouteActive().billing"
               [name]="'NAVBAR.BILLING' | translate"
               [routerLinkUrl]="'/billing'"
+              [sidebarOpen]="sidebarOpen()"
+            ></li>
+          }
+          <!-- In the COMMUNITY section, not Management: members have their own
+               view here now ("what has been filed about me"), and the hub
+               branches on role. `isActive` rather than `canReach` for the same
+               reason billing uses it — the catalogue minRole is MEMBER. -->
+          @if (communityServicesStore.isActive('administrative-document')) {
+            <li
+              appSidebarItem
+              (sidebarClose)="closeSideBar()"
+              [icon]="'pi pi-folder-open'"
+              [isRouteActive]="isRouteActive().administrative_document"
+              [name]="'NAVBAR.ADMINISTRATIVE_DOCUMENT' | translate"
+              [routerLinkUrl]="'/administrative-document'"
               [sidebarOpen]="sidebarOpen()"
             ></li>
           }

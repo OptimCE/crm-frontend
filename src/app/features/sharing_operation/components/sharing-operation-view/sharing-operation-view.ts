@@ -30,6 +30,7 @@ import {
 } from '../../../../shared/dtos/sharing_operation.dtos';
 import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -92,6 +93,8 @@ import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-munic
 })
 export class SharingOperationView implements OnInit {
   private sharingOperationService = inject(SharingOperationService);
+  /** Gates the cross-module links in the template. Synchronous, no extra request. */
+  protected readonly services = inject(CommunityServicesStore);
   private routing = inject(Router);
   private route = inject(ActivatedRoute);
   private metersService = inject(MeterService);

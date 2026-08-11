@@ -19,17 +19,30 @@
 
   <div class="notif-page__body">
     @if (loading()) {
-      <div class="notif-page__state">{{ 'COMMON.LOADING' | translate }}</div>
+      <div class="notif-page__state" data-testid="notifications-page__loading">
+        {{ 'COMMON.LOADING' | translate }}
+      </div>
     } @else if (failed()) {
-      <div class="notif-page__state notif-page__state--error">
+      <div
+        class="notif-page__state notif-page__state--error"
+        data-testid="notifications-page__error"
+      >
         <i class="pi pi-exclamation-triangle"></i>
         <span>{{ 'COMMON.ERROR_LOADING' | translate }}</span>
-        <button type="button" class="notif-page__retry" (click)="retry()">
+        <button
+          type="button"
+          class="notif-page__retry"
+          (click)="retry()"
+          data-testid="notifications-page__btn--retry"
+        >
           {{ 'COMMON.RETRY' | translate }}
         </button>
       </div>
     } @else if (isEmpty()) {
-      <div class="notif-page__state notif-page__state--empty">
+      <div
+        class="notif-page__state notif-page__state--empty"
+        data-testid="notifications-page__empty"
+      >
         <i class="pi pi-inbox"></i>
         <span>{{ 'NOTIFICATIONS.EMPTY' | translate }}</span>
       </div>
@@ -40,6 +53,7 @@
             <app-notification-item
               [notification]="notification"
               (itemClick)="onItemClick($event)"
+              [attr.data-testid]="'notification-item--' + notification.id"
             />
           </li>
         }

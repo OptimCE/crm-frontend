@@ -1,0 +1,38 @@
+<div class="mx-auto w-full max-w-3xl flex flex-col gap-4">
+  <app-header-page icon="pi pi-home" [text]="'DASHBOARD.TITLE' | translate" [subtitle]="subtitle()">
+    <p-button
+      headerActions
+      icon="pi pi-refresh"
+      severity="secondary"
+      [outlined]="true"
+      [label]="'DASHBOARD.REFRESH' | translate"
+      (onClick)="refresh()"
+      data-testid="member-dashboard__btn--refresh"
+    />
+  </app-header-page>
+
+  <!-- Core spine. Every one of these reads /me/* or GET /communities/:id, which
+       carry no role check — a member with zero subscriptions still gets a page
+       worth opening. -->
+  <app-my-energy-tile [reloadKey]="reloadKey()" />
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <app-my-participation-tile [reloadKey]="reloadKey()" />
+    <app-my-member-record-tile [reloadKey]="reloadKey()" />
+    <app-about-community-tile [reloadKey]="reloadKey()" />
+    <app-my-documents-tile [reloadKey]="reloadKey()" />
+  </div>
+
+  @if (annexes(); as annex) {
+    @if (annex.billing || annex.news) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @if (annex.billing) {
+          <app-my-invoices-tile [reloadKey]="reloadKey()" />
+        }
+        @if (annex.news) {
+          <app-news-tile [reloadKey]="reloadKey()" />
+        }
+      </div>
+    }
+  }
+</div>

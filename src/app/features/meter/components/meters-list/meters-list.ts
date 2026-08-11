@@ -4,7 +4,7 @@ import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/mete
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { MeterService } from '../../../../shared/services/meter.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
@@ -46,6 +46,7 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
 export class MetersList {
   private metersService = inject(MeterService);
   private routing = inject(Router);
+  private route = inject(ActivatedRoute);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarNotification);
   private translate = inject(TranslateService);
@@ -63,7 +64,16 @@ export class MetersList {
   readonly searchField = signal<string>('EAN');
   readonly searchText = signal<string>('');
   readonly statusFilter = signal<MeterDataStatus | null>(null);
-  readonly hasActiveFilters = computed(() => !!this.searchText() || this.statusFilter() !== null);
+  /**
+   * Holder to restrict the list to, arriving as `?holder_id=`.
+   *
+   * The backend parameter is `holder_id` and it matches the member on the
+   * meter_data row in force, so this is "meters this member currently holds".
+   */
+  readonly holderFilter = signal<number | null>(null);
+  readonly hasActiveFilters = computed(
+    () => !!this.searchText() || this.statusFilter() !== null || this.holderFilter() !== null,
+  );
   readonly firstRow = computed(
     () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
   );
@@ -101,6 +111,24 @@ export class MetersList {
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
     this.updatePaginationTranslation();
+
+    // Deep links land here: `/meters?holder_id=4` from a member, and
+    // `/meters?status=3` from the dashboard readiness tile. The table's `[lazy]`
+    // binding fires its own first load, so this subscription both seeds the
+    // filters and reloads with them applied.
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const holder = Number(params.get('holder_id'));
+      this.holderFilter.set(Number.isInteger(holder) && holder > 0 ? holder : null);
+
+      // Narrowed against the real options rather than cast blindly: `?status=`
+      // is caller-supplied and an unknown value must fall back to "no filter",
+      // not to a status the backend will reject.
+      const status = Number(params.get('status'));
+      const known = this.statusOptions.find((option) => (option.value as number) === status);
+      this.statusFilter.set(known ? known.value : null);
+
+      this.applyFilters();
+    });
   }
 
   updatePaginationTranslation(): void {
@@ -156,6 +184,12 @@ export class MetersList {
     const status = this.statusFilter();
     if (status !== null) {
       current.status = status;
+    }
+    // Rebuilt from scratch above, so the deep-linked holder has to be re-seeded
+    // here or it would be dropped by the first search the user types.
+    const holder = this.holderFilter();
+    if (holder !== null) {
+      current.holder_id = holder;
     }
     this.filter.set(current);
     this.loadMeters();
@@ -226,6 +260,7 @@ export class MetersList {
     this.searchText.set('');
     this.searchField.set('EAN');
     this.statusFilter.set(null);
+    this.holderFilter.set(null);
     this.filter.set({ page: 1, limit: 10 });
     this.loadMeters();
   }

@@ -1,0 +1,74 @@
+<app-dashboard-tile
+  data-testid="my-energy-panel"
+  [title]="'HOME.ENERGY.TITLE' | translate"
+  icon="pi pi-bolt"
+  [state]="state()"
+  headingId="home-energy-heading"
+  (retry)="load()"
+>
+  <span tileBadge class="text-xs text-surface-500">
+    @if (monthKey(); as month) {
+      {{ month | translate }} {{ year() }}
+    }
+  </span>
+
+  <p tileEmpty class="text-sm text-surface-500 m-0" data-testid="my-energy-panel__empty">
+    {{ 'HOME.ENERGY.EMPTY' | translate }}
+  </p>
+
+  @if (totals(); as totals) {
+    <!-- One sentence first, numbers second. "312 kWh consommés, dont 96 partagés"
+         is the whole story for a member; the per-meter rows below are detail. -->
+    <p class="text-sm m-0">
+      {{
+        'HOME.ENERGY.HEADLINE'
+          | translate
+            : {
+                consumed: totals.gross_kwh | number: '1.0-1',
+                shared: totals.shared_kwh | number: '1.0-1',
+              }
+      }}
+    </p>
+
+    @if (totals.inj_gross_kwh > 0) {
+      <p class="text-sm text-surface-500 m-0">
+        {{
+          'HOME.ENERGY.INJECTED'
+            | translate
+              : {
+                  injected: totals.inj_gross_kwh | number: '1.0-1',
+                  shared: totals.inj_shared_kwh | number: '1.0-1',
+                }
+        }}
+      </p>
+    }
+
+    <ul class="list-none m-0 p-0 flex flex-col gap-1 mt-1">
+      @for (meter of meters(); track meter.ean) {
+        <li class="flex items-baseline justify-between gap-3 text-sm">
+          <a
+            [routerLink]="['/users/me/meters', meter.ean]"
+            class="text-primary-700 underline flex-1 min-w-0 truncate"
+            data-testid="my-energy-panel__link--meter"
+          >
+            <!-- "Compteur", never a bare EAN: the code is the secondary
+                 identifier, not the name of the thing. -->
+            {{ 'HOME.ENERGY.METER' | translate: { number: meter.meter_number ?? meter.ean } }}
+            <span class="text-surface-500">· {{ meter.community.name }}</span>
+          </a>
+          @if (meter.has_data) {
+            <span class="whitespace-nowrap"
+              >{{ meter.totals.gross_kwh | number: '1.0-1' }} kWh</span
+            >
+          } @else {
+            <!-- NOT "0 kWh": we have no reading, which is a different statement
+                 from "you consumed nothing". -->
+            <span class="whitespace-nowrap text-surface-400 italic">
+              {{ 'HOME.ENERGY.NO_READING' | translate }}
+            </span>
+          }
+        </li>
+      }
+    </ul>
+  }
+</app-dashboard-tile>

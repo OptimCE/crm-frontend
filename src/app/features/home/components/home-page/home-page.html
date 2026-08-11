@@ -1,0 +1,41 @@
+<!-- The app's first skip link. Off-screen until focused, so a keyboard user's
+     first Tab reaches the page instead of the sidebar's twenty items. -->
+<a class="skip-link" href="#home-main">{{ 'HOME.A11Y.SKIP_TO_CONTENT' | translate }}</a>
+
+<main
+  #main
+  id="home-main"
+  tabindex="-1"
+  class="mx-auto w-full max-w-3xl flex flex-col gap-6 outline-none"
+>
+  <header class="flex flex-col gap-1">
+    <h1 class="text-2xl font-semibold m-0">
+      {{ greetingKey() | translate: { name: firstName() } }}
+    </h1>
+    <p class="text-surface-500 m-0">{{ 'HOME.SUBTITLE' | translate }}</p>
+  </header>
+
+  <!-- First, because the only question a member reliably arrives with is
+       "do I have to do something?". Renders nothing at all when the answer
+       is no — the band itself decides, so there is no empty box here. -->
+  <app-needs-you-band />
+
+  <app-community-picker
+    [communities]="communities()"
+    [loading]="communitiesLoading()"
+    [failed]="communitiesFailed()"
+    [returnUrl]="returnUrl()"
+    (retry)="load()"
+  />
+
+  @if (hasCommunities()) {
+    <app-my-energy-panel />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-my-documents-panel />
+      <app-my-invoices-panel [communities]="communities()" />
+    </div>
+
+    <app-my-filings-panel [communities]="communities()" />
+  }
+</main>

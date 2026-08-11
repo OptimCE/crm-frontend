@@ -10,8 +10,7 @@ import {
 import { environments } from '../../../environments/environments';
 import { EnvironmentProviders } from '@angular/core';
 
-export const provideKeycloakAngular = (): EnvironmentProviders =>
-{
+export const provideKeycloakAngular = (): EnvironmentProviders => {
   const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
     urlPattern: environments.keycloak.urlPattern,
   });

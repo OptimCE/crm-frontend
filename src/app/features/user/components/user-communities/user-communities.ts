@@ -1,4 +1,6 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { safeReturnUrl } from '../../../../core/guards/active-community.guard';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -13,7 +15,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 import { Role } from '../../../../core/dtos/role';
 import { CommunityDialog } from './community-dialog/community-dialog';
-import { RenameCommunityDialog } from './rename-community-dialog/rename-community-dialog';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
@@ -36,10 +37,10 @@ import Keycloak from 'keycloak-js';
   providers: [DialogService, ConfirmationService, MessageService],
 })
 export class UserCommunities {
-  protected readonly Role = Role;
   private communityService = inject(CommunityService);
   protected userContextService = inject(UserContextService);
   private keycloak = inject(Keycloak);
+  private router = inject(Router);
   private dialogService = inject(DialogService);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
@@ -55,6 +56,14 @@ export class UserCommunities {
 
   readonly searchText = signal<string>('');
   readonly hasActiveFilters = computed(() => !!this.searchText());
+
+  /**
+   * Where `activeCommunityGuard` was headed when it bounced the user here.
+   * Bound from `?returnUrl=` by `withComponentInputBinding()` (app.config.ts).
+   */
+  readonly returnUrl = input<string | undefined>();
+  /** auth_community_id currently being entered, for the button's spinner. */
+  readonly entering = signal<string | null>(null);
 
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
@@ -123,32 +132,54 @@ export class UserCommunities {
     this.loadCommunities();
   }
 
+  /**
+   * Enters a community and goes somewhere.
+   *
+   * This used to switch the context and navigate nowhere: the sidebar changed
+   * under you and you stayed on the same page, which is the dead end that made
+   * the community dashboard unreachable.
+   *
+   * Navigation is deliberately NOT awaited on the annexe catalogue.
+   * `switchCommunity` only flips a signal; `CommunityServicesStore` then fetches.
+   * Blocking the most important click in the app on that request would cost
+   * several hundred ms of dead UI and would still be wrong if it failed — the
+   * store resolves per community id instead, so the dashboard's own tiles wait
+   * on `ensureLoaded()` and show a skeleton rather than a wrong answer.
+   */
   joinCommunity(community: MyCommunityDTO): void {
+    this.entering.set(community.auth_community_id);
     this.userContextService.switchCommunity(community.auth_community_id);
+    void this.router.navigateByUrl(safeReturnUrl(this.returnUrl()) ?? '/dashboard');
   }
 
-  updateNameCommunity(community: MyCommunityDTO): void {
-    this.ref = this.dialogService.open(RenameCommunityDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      header: this.translate.instant('COMMUNITY.CREATE.EDIT_TITLE') as string,
-      data: { currentName: community.name },
-    });
-    this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: boolean) => {
-      if (result) {
-        this.messageService.add({
-          severity: 'success',
-          summary: this.translate.instant('COMMUNITY.LIST.UPDATE_SUCCESS') as string,
-        });
-        // Name is propagated to the IAM group: refresh the token + context so the
-        // active community label stays in sync, then reload the list.
-        void this.keycloak.updateToken(-1).then(() => {
-          this.userContextService.refreshUserContext();
-          this.loadCommunities();
-        });
-      }
-    });
+  /** Is this row the community the session is currently working inside? */
+  isActiveCommunity(community: MyCommunityDTO): boolean {
+    return this.userContextService.activeCommunityId() === community.auth_community_id;
+  }
+
+  /**
+   * An ADMIN cannot leave the community they are working inside: they are the
+   * only role that can administer it, so walking out would orphan it. Every
+   * other case — any role on another community, MEMBER/MANAGER on this one —
+   * keeps the button.
+   */
+  canLeave(community: MyCommunityDTO): boolean {
+    return (
+      !this.isActiveCommunity(community) ||
+      !this.userContextService.compareWithActiveRole(Role.ADMIN)
+    );
+  }
+
+  /**
+   * Both destinations below resolve the community from the session context, not
+   * from a route param, so they are only ever rendered on the active row.
+   */
+  goToCommunityInfo(): void {
+    void this.router.navigateByUrl('/communities/info');
+  }
+
+  goToDashboard(): void {
+    void this.router.navigateByUrl('/dashboard');
   }
 
   createCommunity(): void {

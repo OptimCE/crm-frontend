@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import {
   from,
@@ -47,7 +47,7 @@ export class ServiceBase {
     url: string,
     params?: object,
     ttl = defineTTL(5),
-    options?: { timeout?: number; retries?: number },
+    options?: { timeout?: number; retries?: number; context?: HttpContext },
   ): Observable<T> {
     const ms = options?.timeout ?? 10_000;
     const retries = options?.retries ?? 2;
@@ -65,7 +65,7 @@ export class ServiceBase {
       : undefined;
 
     const request$ = this.withTimeoutAndRetry(
-      this.http.get<T>(url, { params: httpParams }),
+      this.http.get<T>(url, { params: httpParams, context: options?.context }),
       ms,
       retries,
     ).pipe(

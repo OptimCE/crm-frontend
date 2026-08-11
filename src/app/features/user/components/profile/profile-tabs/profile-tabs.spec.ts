@@ -8,6 +8,7 @@ import { MetersComponent } from './tabs/meters/meters.component';
 import { BankingInfoComponent } from './tabs/banking-info/banking-info.component';
 import { DocumentsComponent } from './tabs/documents/documents.component';
 import { RepresentationsComponent } from './tabs/representations/representations.component';
+import { NotificationPreferencesComponent } from './tabs/notification-preferences/notification-preferences.component';
 
 // ── Stubs ──────────────────────────────────────────────────────────
 
@@ -22,6 +23,12 @@ class DocumentsStub {}
 
 @Component({ selector: 'app-representations-user', standalone: true, template: '' })
 class RepresentationsStub {}
+
+// Stubbed like its siblings, and it matters more here: the real component
+// calls the notification API from its constructor, so leaving it in would
+// need an HttpClient this spec has no reason to provide.
+@Component({ selector: 'app-notification-preferences-user', standalone: true, template: '' })
+class NotificationPreferencesStub {}
 
 // ── Tests ──────────────────────────────────────────────────────────
 
@@ -40,6 +47,7 @@ describe('ProfileTabs', () => {
             BankingInfoComponent,
             DocumentsComponent,
             RepresentationsComponent,
+            NotificationPreferencesComponent,
             Tabs,
             TabList,
             TabPanels,
@@ -48,7 +56,13 @@ describe('ProfileTabs', () => {
           ],
         },
         add: {
-          imports: [MetersStub, BankingInfoStub, DocumentsStub, RepresentationsStub],
+          imports: [
+            MetersStub,
+            BankingInfoStub,
+            DocumentsStub,
+            RepresentationsStub,
+            NotificationPreferencesStub,
+          ],
           schemas: [NO_ERRORS_SCHEMA],
         },
       })

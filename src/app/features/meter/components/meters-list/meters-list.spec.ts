@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
@@ -69,6 +69,8 @@ describe('MetersList', () => {
     await TestBed.configureTestingModule({
       imports: [MetersList, TranslateModule.forRoot()],
       providers: [
+        // Deep links (?holder_id=, ?status=) are read on construction now.
+        { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap({})) } },
         { provide: MeterService, useValue: meterServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },

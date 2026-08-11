@@ -20,7 +20,22 @@
         </div>
         <div class="flex items-center gap-3 text-sm text-surface-500 flex-wrap">
           @if (showMember()) {
-            <span><i class="pi pi-user text-xs"></i> {{ memberName(inv) }}</span>
+            <span>
+              <i class="pi pi-user text-xs"></i>
+              <!-- `/members/{id}` is minRole GESTIONNAIRE, while `/billing` is
+                   subscription-gated only — a pure member reaches this component
+                   too. The host decides, so the link never 403s. -->
+              @if (linkMember()) {
+                <a
+                  [routerLink]="['/members', inv.id_member]"
+                  class="text-primary-500 hover:text-primary-700 underline"
+                  data-testid="invoice-list__link--member"
+                  >{{ memberName(inv) }}</a
+                >
+              } @else {
+                {{ memberName(inv) }}
+              }
+            </span>
           }
           <span class="font-semibold text-surface-700">{{ money(inv) }}</span>
           @if (inv.issued_at) {
@@ -38,6 +53,12 @@
         </div>
       </div>
 
+      <!-- Every action here is icon-only and labelled by a pTooltip, which is a
+           lazy overlay rather than an accessible name — the testid is the only
+           stable handle. They are keyed by invoice id because several buttons
+           can render on the same row and several rows on the same screen.
+           `--issue` and `--pay` stay unkeyed on purpose: existing e2e scenarios
+           select them exactly. -->
       <div class="flex items-center gap-1 shrink-0">
         <p-button
           text
@@ -46,6 +67,7 @@
           icon="pi pi-eye"
           [pTooltip]="'BILLING.ACTIONS.VIEW_DETAIL' | translate"
           (onClick)="openDetail(inv)"
+          [attr.data-testid]="'invoice-list__btn--view-' + inv.id"
         />
         @if (canIssue(inv)) {
           <p-button
@@ -66,6 +88,7 @@
             icon="pi pi-send"
             [pTooltip]="'BILLING.ACTIONS.SEND' | translate"
             (onClick)="send(inv)"
+            [attr.data-testid]="'invoice-list__btn--send-' + inv.id"
           />
         }
         @if (canPay(inv)) {
@@ -88,6 +111,7 @@
             icon="pi pi-file-export"
             [pTooltip]="'BILLING.ACTIONS.CREDIT_NOTE' | translate"
             (onClick)="openCreditNote(inv)"
+            [attr.data-testid]="'invoice-list__btn--credit-note-' + inv.id"
           />
         }
         @if (canDownloadPdf(inv)) {
@@ -98,6 +122,7 @@
             icon="pi pi-download"
             [pTooltip]="'BILLING.ACTIONS.DOWNLOAD_PDF' | translate"
             (onClick)="downloadPdf(inv)"
+            [attr.data-testid]="'invoice-list__btn--download-pdf-' + inv.id"
           />
         }
         @if (isGenerating(inv)) {
@@ -108,6 +133,7 @@
             [loading]="true"
             [disabled]="true"
             [pTooltip]="'BILLING.PDF.GENERATING' | translate"
+            [attr.data-testid]="'invoice-list__btn--generating-' + inv.id"
           />
         } @else if (canGeneratePdf(inv)) {
           @if (inv.pdf_ready) {
@@ -119,6 +145,7 @@
               icon="pi pi-refresh"
               [pTooltip]="'BILLING.ACTIONS.REGENERATE_PDF' | translate"
               (onClick)="generatePdf(inv, true)"
+              [attr.data-testid]="'invoice-list__btn--regenerate-pdf-' + inv.id"
             />
           } @else {
             <p-button
@@ -128,6 +155,7 @@
               icon="pi pi-file-pdf"
               [pTooltip]="'BILLING.ACTIONS.GENERATE_PDF' | translate"
               (onClick)="generatePdf(inv, false)"
+              [attr.data-testid]="'invoice-list__btn--generate-pdf-' + inv.id"
             />
           }
         }
@@ -140,6 +168,7 @@
             icon="pi pi-trash"
             [pTooltip]="'BILLING.ACTIONS.DELETE_PDF' | translate"
             (onClick)="deletePdf(inv)"
+            [attr.data-testid]="'invoice-list__btn--delete-pdf-' + inv.id"
           />
         }
       </div>

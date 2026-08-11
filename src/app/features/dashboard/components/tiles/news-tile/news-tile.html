@@ -1,0 +1,51 @@
+<app-dashboard-tile
+  data-testid="news-tile"
+  icon="pi pi-megaphone"
+  headingId="dashboard-tile-news"
+  [title]="'DASHBOARD.NEWS.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+    @for (post of posts(); track post.id) {
+      <li class="flex flex-col gap-0.5">
+        <div class="flex items-center gap-2">
+          @if (post.is_poll) {
+            <i class="pi pi-chart-bar text-surface-500 text-xs" aria-hidden="true"></i>
+          }
+          <a
+            class="text-primary-500 hover:text-primary-700 underline text-sm flex-1 min-w-0 truncate"
+            [routerLink]="['/news']"
+            data-testid="news-tile__link--post"
+            >{{ post.author_email ?? ('DASHBOARD.NEWS.ANONYMOUS' | translate) }}</a
+          >
+          <span class="text-xs text-surface-400 shrink-0">{{ post.created_at | timeAgo }}</span>
+        </div>
+      </li>
+    }
+  </ul>
+
+  @if (openPolls().length) {
+    <p class="text-xs text-surface-600 m-0">
+      <i class="pi pi-chart-bar" aria-hidden="true"></i>
+      {{ 'DASHBOARD.NEWS.OPEN_POLLS' | translate: { count: openPolls().length } }}
+    </p>
+  }
+
+  <div tileEmpty data-testid="news-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{
+        (canPublish() ? 'DASHBOARD.NEWS.EMPTY_MANAGER' : 'DASHBOARD.NEWS.EMPTY_MEMBER') | translate
+      }}
+    </p>
+  </div>
+
+  <a
+    tileAction
+    class="text-primary-500 hover:text-primary-700 underline text-sm"
+    routerLink="/news"
+    data-testid="news-tile__link--all"
+  >
+    {{ 'DASHBOARD.NEWS.SEE_ALL' | translate }}
+  </a>
+</app-dashboard-tile>

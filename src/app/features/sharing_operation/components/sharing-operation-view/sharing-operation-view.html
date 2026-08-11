@@ -227,6 +227,41 @@
         </div>
       </div>
 
+      <!-- Related modules. Each link is conditioned on the annexe being both
+           subscribed AND reachable by the active role: activeFeatureGuard and
+           minRoleGuard both redirect to `/` (then `/users`), so an unconditioned
+           link silently teleports the user away — worse than no link at all. -->
+      @if (services.canReach('administrative-document') || services.canReach('billing')) {
+        <div class="flex flex-wrap items-center gap-4 mb-4" data-testid="op-view__related">
+          <span class="text-sm text-surface-500">
+            {{ 'SHARING_OPERATION.VIEW.RELATED_LABEL' | translate }}
+          </span>
+          @if (services.canReach('administrative-document')) {
+            <a
+              class="text-primary-500 hover:text-primary-700 underline text-sm"
+              routerLink="/administrative-document"
+              [queryParams]="{ id_sharing_operation: op.id }"
+              data-testid="op-view__link--dossiers"
+            >
+              {{ 'SHARING_OPERATION.VIEW.RELATED_DOSSIERS' | translate }}
+            </a>
+          }
+          @if (services.canReach('billing')) {
+            <!-- The billing runs, not the invoices: `GET /billing/invoices` has no
+                 sharing-operation filter, and the run screen already lists an
+                 operation's runs and their invoices. -->
+            <a
+              class="text-primary-500 hover:text-primary-700 underline text-sm"
+              routerLink="/billing"
+              [queryParams]="{ tab: 'generate', operation: op.id }"
+              data-testid="op-view__link--billing"
+            >
+              {{ 'SHARING_OPERATION.VIEW.RELATED_BILLING' | translate }}
+            </a>
+          }
+        </div>
+      }
+
       <!-- Information Cards -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Card 1: General Info -->

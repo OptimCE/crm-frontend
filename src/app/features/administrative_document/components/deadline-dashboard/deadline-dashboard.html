@@ -1,0 +1,203 @@
+<div class="flex flex-col gap-4 mt-4">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <p class="text-sm text-surface-500 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.INTRO' | translate }}
+    </p>
+    <p-button
+      icon="pi pi-refresh"
+      [label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.SWEEP' | translate"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="sweep()"
+      data-testid="deadline-dashboard__btn--sweep"
+    />
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar rounded-xl p-4 border border-primary-100">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div>
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.STATUS' | translate
+        }}</span>
+        <p-select
+          [options]="statusOptions"
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.ALL_STATUSES' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="deadline-dashboard__select--status"
+        />
+      </div>
+
+      <div>
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.TYPE' | translate
+        }}</span>
+        <p-select
+          [options]="typeOptions"
+          [(ngModel)]="typeFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.ALL_TYPES' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="deadline-dashboard__select--type"
+        />
+      </div>
+
+      <div>
+        <span class="field-label">{{
+          'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.OPERATION' | translate
+        }}</span>
+        <p-select
+          [options]="operationOptions()"
+          [(ngModel)]="operationFilter"
+          (ngModelChange)="applyFilters()"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.ALL_OPERATIONS' | translate"
+          appendTo="body"
+          class="w-full"
+          data-testid="deadline-dashboard__select--operation"
+        />
+      </div>
+
+      <div class="flex items-end">
+        <p-button
+          icon="pi pi-filter-slash"
+          [label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.CLEAR' | translate"
+          (onClick)="clearFilters()"
+          [outlined]="!hasActiveFilters()"
+          severity="primary"
+          data-testid="deadline-dashboard__btn--clear-filters"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
+  <p-table
+    [value]="deadlines()"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoad($event)"
+    [rows]="pagination().limit"
+    [totalRecords]="pagination().total"
+    [first]="firstRow()"
+    [showCurrentPageReport]="true"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
+    [loading]="loading()"
+    dataKey="id"
+    data-testid="deadline-dashboard__table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.COL.DUE_DATE' | translate }}
+        </th>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.COL.TYPE' | translate }}
+        </th>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.COL.DOSSIER' | translate }}
+        </th>
+        <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.COL.STATUS' | translate }}
+        </th>
+        <th class="text-base px-3 text-right">
+          {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.COL.ACTIONS' | translate }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+      <tr
+        [class.border-l-4]="isLate(row)"
+        [class.border-red-500]="isLate(row)"
+        [attr.data-testid]="'deadline-dashboard__row--' + rowIndex"
+      >
+        <td class="text-sm whitespace-nowrap font-medium">
+          {{ dueDate(row) }}
+          @if (isLate(row)) {
+            <i
+              class="pi pi-exclamation-triangle text-red-500 ml-1"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.OVERDUE' | translate"
+            ></i>
+          }
+        </td>
+        <td class="text-sm">
+          {{ typeLabelKey(row) | translate }}
+          @if (row.recurring) {
+            <i
+              class="pi pi-replay text-surface-400 ml-1"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.RECURRING' | translate"
+            ></i>
+          }
+        </td>
+        <td class="text-sm">
+          <a
+            class="text-primary-600 hover:underline"
+            [routerLink]="['/administrative-document/dossiers', row.id_dossier]"
+            [attr.data-testid]="'deadline-dashboard__link--dossier-' + row.id_dossier"
+            >#{{ row.id_dossier }}</a
+          >
+        </td>
+        <td class="text-sm">
+          <p-tag [value]="statusLabelKey(row) | translate" [severity]="statusSeverity(row)" />
+        </td>
+        <td class="text-right whitespace-nowrap">
+          @if (isOpen(row)) {
+            <p-button
+              icon="pi pi-check"
+              text
+              rounded
+              size="small"
+              severity="success"
+              [disabled]="isBusy(row)"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.MARK_MET' | translate"
+              (onClick)="markMet(row)"
+              [attr.data-testid]="'deadline-dashboard__btn--met-' + row.id"
+            />
+            <p-button
+              icon="pi pi-ban"
+              text
+              rounded
+              size="small"
+              severity="secondary"
+              [disabled]="isBusy(row)"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.CANCEL' | translate"
+              (onClick)="cancel(row)"
+              [attr.data-testid]="'deadline-dashboard__btn--cancel-' + row.id"
+            />
+          } @else {
+            <span class="text-xs text-surface-400">—</span>
+          }
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">
+          <div class="py-8 text-center" data-testid="deadline-dashboard__empty--message">
+            <i class="pi pi-calendar-clock text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.EMPTY' | translate }}
+            </p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-confirmDialog />

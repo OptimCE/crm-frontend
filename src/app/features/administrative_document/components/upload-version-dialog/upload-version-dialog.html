@@ -1,0 +1,62 @@
+<div class="flex flex-col gap-4">
+  <p class="text-sm text-surface-500 m-0">
+    {{ 'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.IMMUTABLE_HINT' | translate }}
+  </p>
+
+  <!-- Drop zone -->
+  <button
+    type="button"
+    class="rounded-xl border-2 border-dashed p-6 text-center transition-colors w-full"
+    [class.border-primary-400]="dragging()"
+    [class.bg-primary-50]="dragging()"
+    [class.border-surface-300]="!dragging()"
+    (click)="pickFile()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    data-testid="upload-version-dialog__dropzone"
+  >
+    <i class="pi pi-cloud-upload text-3xl text-primary-300 mb-2 block"></i>
+    @if (selectedFile(); as file) {
+      <span class="text-sm font-medium text-surface-800 block">{{ file.name }}</span>
+      <span class="text-xs text-surface-500">{{ fileSize() }}</span>
+    } @else {
+      <span class="text-sm text-surface-500">
+        {{ 'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.DROP_HINT' | translate }}
+      </span>
+    }
+  </button>
+
+  <input
+    #fileInput
+    type="file"
+    class="hidden"
+    (change)="onFileSelected($event)"
+    data-testid="upload-version-dialog__input--file"
+  />
+
+  @if (formError()) {
+    <p class="text-red-600 text-sm m-0" data-testid="upload-version-dialog__error">
+      <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+    </p>
+  }
+
+  <div class="flex justify-end gap-2 mt-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+      data-testid="upload-version-dialog__btn--cancel"
+    />
+    <p-button
+      type="button"
+      [label]="'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.SUBMIT' | translate"
+      [loading]="submitting()"
+      (onClick)="submit()"
+      data-testid="upload-version-dialog__btn--submit"
+    />
+  </div>
+</div>

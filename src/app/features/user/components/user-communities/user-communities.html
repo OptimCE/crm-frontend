@@ -88,7 +88,7 @@
         <td class="text-sm">{{ community.name }}</td>
         <td class="text-sm">{{ community.role }}</td>
         <td class="text-center">
-          @if (userContextService.activeCommunityId() === community.auth_community_id) {
+          @if (isActiveCommunity(community)) {
             <p-tag
               value="{{ 'COMMUNITY.LIST.ACTIVATED' | translate }}"
               severity="success"
@@ -104,33 +104,40 @@
         </td>
         <td class="text-center">
           <div class="flex justify-center gap-2">
-            @if (
-              userContextService.activeCommunityId() === community.auth_community_id &&
-              userContextService.compareWithActiveRole(Role.ADMIN)
-            ) {
+            @if (isActiveCommunity(community)) {
               <p-button
-                [attr.data-testid]="'user-communities__button--update-desktop--' + rowIndex"
+                [attr.data-testid]="'user-communities__button--info-desktop--' + rowIndex"
                 type="button"
-                icon="pi pi-pencil"
-                label="{{ 'COMMUNITY.LIST.UPDATE_COMMUNITY' | translate }}"
-                (click)="updateNameCommunity(community)"
+                icon="pi pi-id-card"
+                label="{{ 'COMMUNITY.LIST.INFO_BUTTON' | translate }}"
+                (click)="goToCommunityInfo()"
+                [outlined]="true"
+                severity="primary"
+                size="small"
+              />
+              <p-button
+                [attr.data-testid]="'user-communities__button--dashboard-desktop--' + rowIndex"
+                type="button"
+                icon="pi pi-home"
+                label="{{ 'COMMUNITY.LIST.DASHBOARD_BUTTON' | translate }}"
+                (click)="goToDashboard()"
                 [outlined]="true"
                 severity="primary"
                 size="small"
               />
             } @else {
-              @if (userContextService.activeCommunityId() !== community.auth_community_id) {
-                <p-button
-                  [attr.data-testid]="'user-communities__button--activate-desktop--' + rowIndex"
-                  type="button"
-                  icon="pi pi-check"
-                  label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
-                  (click)="joinCommunity(community)"
-                  [outlined]="true"
-                  severity="primary"
-                  size="small"
-                />
-              }
+              <p-button
+                [attr.data-testid]="'user-communities__button--activate-desktop--' + rowIndex"
+                type="button"
+                icon="pi pi-check"
+                label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
+                (click)="joinCommunity(community)"
+                [outlined]="true"
+                severity="primary"
+                size="small"
+              />
+            }
+            @if (canLeave(community)) {
               <p-button
                 [attr.data-testid]="'user-communities__button--leave-desktop--' + rowIndex"
                 type="button"
@@ -158,7 +165,7 @@
             <!-- Card header: name + status -->
             <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
               <span class="font-semibold text-sm text-primary-700">{{ community.name }}</span>
-              @if (userContextService.activeCommunityId() === community.auth_community_id) {
+              @if (isActiveCommunity(community)) {
                 <p-tag
                   value="{{ 'COMMUNITY.LIST.ACTIVATED' | translate }}"
                   severity="success"
@@ -183,33 +190,40 @@
 
             <!-- Card footer: actions -->
             <div class="flex flex-wrap gap-2 mt-3 pt-2 border-t border-primary-100">
-              @if (
-                userContextService.activeCommunityId() === community.auth_community_id &&
-                userContextService.compareWithActiveRole(Role.ADMIN)
-              ) {
+              @if (isActiveCommunity(community)) {
                 <p-button
-                  [attr.data-testid]="'user-communities__button--update-mobile--' + rowIndex"
+                  [attr.data-testid]="'user-communities__button--info-mobile--' + rowIndex"
                   type="button"
-                  icon="pi pi-pencil"
-                  label="{{ 'COMMUNITY.LIST.UPDATE_COMMUNITY' | translate }}"
-                  (click)="updateNameCommunity(community)"
+                  icon="pi pi-id-card"
+                  label="{{ 'COMMUNITY.LIST.INFO_BUTTON' | translate }}"
+                  (click)="goToCommunityInfo()"
+                  [outlined]="true"
+                  severity="primary"
+                  size="small"
+                />
+                <p-button
+                  [attr.data-testid]="'user-communities__button--dashboard-mobile--' + rowIndex"
+                  type="button"
+                  icon="pi pi-home"
+                  label="{{ 'COMMUNITY.LIST.DASHBOARD_BUTTON' | translate }}"
+                  (click)="goToDashboard()"
                   [outlined]="true"
                   severity="primary"
                   size="small"
                 />
               } @else {
-                @if (userContextService.activeCommunityId() !== community.auth_community_id) {
-                  <p-button
-                    [attr.data-testid]="'user-communities__button--activate-mobile--' + rowIndex"
-                    type="button"
-                    icon="pi pi-check"
-                    label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
-                    (click)="joinCommunity(community)"
-                    [outlined]="true"
-                    severity="primary"
-                    size="small"
-                  />
-                }
+                <p-button
+                  [attr.data-testid]="'user-communities__button--activate-mobile--' + rowIndex"
+                  type="button"
+                  icon="pi pi-check"
+                  label="{{ 'COMMUNITY.LIST.ACTIVATE_BUTTON' | translate }}"
+                  (click)="joinCommunity(community)"
+                  [outlined]="true"
+                  severity="primary"
+                  size="small"
+                />
+              }
+              @if (canLeave(community)) {
                 <p-button
                   [attr.data-testid]="'user-communities__button--leave-mobile--' + rowIndex"
                   type="button"

@@ -19,6 +19,7 @@ import { NotificationBell } from '../../features/notifications/components/notifi
 import { NotificationStore } from '../../features/notifications/services/notification.store';
 
 interface RouteActiveState {
+  dashboard: boolean;
   keys: boolean;
   members: boolean;
   meters: boolean;
@@ -31,19 +32,23 @@ interface RouteActiveState {
   annexes_services: boolean;
   news: boolean;
   billing: boolean;
+  administrative_document: boolean;
   users_communities: boolean;
   users_invitations: boolean;
   users: boolean;
+  home: boolean;
 }
 
 /** Map each state key to its actual route prefix. Ordered longest-first for correct matching. */
 const ROUTE_MAP: [keyof RouteActiveState, string][] = [
+  ['dashboard', '/dashboard'],
   ['sharing_operations', '/sharing_operations'],
   ['communities_managers', '/communities/managers'],
   ['communities_public', '/communities/public'],
   ['communities_users', '/communities/users'],
   ['communities_info', '/communities/info'],
   ['annexes_services', '/annexes-services'],
+  ['administrative_document', '/administrative-document'],
   ['news', '/news'],
   ['billing', '/billing'],
   ['users_communities', '/users/communities'],
@@ -53,6 +58,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['meters', '/meters'],
   ['keys', '/keys'],
   ['users', '/users'],
+  ['home', '/home'],
 ];
 
 @Component({
@@ -96,6 +102,7 @@ export class Navbar implements OnInit {
   readonly activeSublist = signal<string | null>(null);
   readonly pinned = signal(false);
   readonly isRouteActive = signal<RouteActiveState>({
+    dashboard: false,
     keys: false,
     members: false,
     meters: false,
@@ -108,9 +115,11 @@ export class Navbar implements OnInit {
     annexes_services: false,
     news: false,
     billing: false,
+    administrative_document: false,
     users_communities: false,
     users_invitations: false,
     users: false,
+    home: false,
   });
 
   private hoverTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -149,6 +158,7 @@ export class Navbar implements OnInit {
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => {
         const newState: RouteActiveState = {
+          dashboard: false,
           keys: false,
           members: false,
           meters: false,
@@ -161,9 +171,11 @@ export class Navbar implements OnInit {
           annexes_services: false,
           news: false,
           billing: false,
+          administrative_document: false,
           users_communities: false,
           users_invitations: false,
           users: false,
+          home: false,
         };
 
         for (const [stateKey, routePrefix] of ROUTE_MAP) {

@@ -260,8 +260,10 @@
                       <i class="pi pi-building text-sm text-primary-500"></i>
                     }
                   }
+                  <!-- routerLink, not href: a raw href reloads the whole document
+                       and re-runs the Keycloak init for an in-app navigation. -->
                   <a
-                    href="/members/{{ meter()!.holder!.id }}"
+                    [routerLink]="['/members', meter()!.holder!.id]"
                     class="text-primary-500 hover:text-primary-700 text-sm font-medium underline"
                     data-testid="meter-view__link--holder"
                   >

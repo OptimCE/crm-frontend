@@ -1,0 +1,153 @@
+<div class="mx-auto w-full max-w-5xl">
+  <app-back-arrow
+    url="/administrative-document"
+    [text]="'ADMINISTRATIVE_DOCUMENT.DETAIL.BACK' | translate"
+  />
+
+  @if (loading()) {
+    <p class="text-sm text-surface-400 mt-4">…</p>
+  } @else if (dossier(); as d) {
+    <!-- Summary -->
+    <div class="rounded-xl border border-primary-100 p-4 md:p-5 mt-4">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+        <div class="flex flex-col gap-2 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="text-lg font-semibold text-surface-900 m-0">
+              {{ d.title ?? (typeLabelKey(d) | translate) }}
+            </h2>
+            <p-tag
+              [value]="statusLabelKey(d) | translate"
+              [severity]="statusSeverity(d)"
+              data-testid="dossier-detail__tag--status"
+            />
+          </div>
+          @if (d.title) {
+            <span class="text-sm text-surface-500">{{ typeLabelKey(d) | translate }}</span>
+          }
+        </div>
+
+        <p-button
+          icon="pi pi-pencil"
+          [label]="'ADMINISTRATIVE_DOCUMENT.DETAIL.EDIT' | translate"
+          size="small"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="openEdit()"
+          data-testid="dossier-detail__btn--edit"
+        />
+      </div>
+
+      <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4 m-0">
+        <div>
+          <dt class="field-label">
+            {{ 'ADMINISTRATIVE_DOCUMENT.DETAIL.OPERATION' | translate }}
+          </dt>
+          <!-- A dossier is REQUIRED to belong to a sharing operation, yet this
+               was plain text: the one relation the module could always link. -->
+          <dd class="field-value m-0">
+            @if (operationId(); as opId) {
+              <a
+                [routerLink]="['/sharing_operations', opId]"
+                class="text-primary-500 hover:text-primary-700 underline"
+                data-testid="dossier-detail__link--operation"
+                >{{ operationName() }}</a
+              >
+            } @else {
+              {{ operationName() }}
+            }
+          </dd>
+        </div>
+        <div>
+          <dt class="field-label">
+            {{ 'ADMINISTRATIVE_DOCUMENT.DETAIL.EXTERNAL_REF' | translate }}
+          </dt>
+          <dd class="field-value m-0 font-mono">
+            {{ d.external_ref ?? ('ADMINISTRATIVE_DOCUMENT.DETAIL.NOT_SET' | translate) }}
+          </dd>
+        </div>
+        <div>
+          <dt class="field-label">{{ 'ADMINISTRATIVE_DOCUMENT.DETAIL.REGION' | translate }}</dt>
+          <dd class="field-value m-0">{{ regionKey(d) | translate }}</dd>
+        </div>
+        <div>
+          <dt class="field-label">
+            {{ 'ADMINISTRATIVE_DOCUMENT.DETAIL.SUBMITTED_AT' | translate }}
+          </dt>
+          <dd class="field-value m-0">
+            {{
+              d.submitted_at
+                ? (d.submitted_at | date: 'short')
+                : ('ADMINISTRATIVE_DOCUMENT.DETAIL.NOT_SET' | translate)
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Only legal transitions render; the backend 409 is the backstop. -->
+      <div class="flex flex-wrap items-center gap-2 border-t border-surface-100 pt-3 mt-4">
+        @if (isTerminalDossier()) {
+          <span class="text-xs text-surface-400">
+            {{ 'ADMINISTRATIVE_DOCUMENT.DETAIL.NO_FURTHER_ACTION' | translate }}
+          </span>
+        } @else {
+          @for (target of targets(); track target) {
+            <p-button
+              [icon]="targetIcon(target)"
+              [label]="targetLabelKey(target) | translate"
+              size="small"
+              [outlined]="true"
+              [severity]="targetSeverity(target)"
+              [disabled]="busy()"
+              (onClick)="transition(target)"
+              [attr.data-testid]="'dossier-detail__btn--transition-' + target"
+            />
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <p-tabs [value]="0" class="block mt-5">
+      <p-tablist>
+        <p-tab [value]="0" data-testid="dossier-detail__tab--documents">{{
+          'ADMINISTRATIVE_DOCUMENT.DETAIL.TABS.DOCUMENTS' | translate
+        }}</p-tab>
+        <p-tab [value]="1" data-testid="dossier-detail__tab--deadlines">{{
+          'ADMINISTRATIVE_DOCUMENT.DETAIL.TABS.DEADLINES' | translate
+        }}</p-tab>
+        <p-tab [value]="2" data-testid="dossier-detail__tab--timeline">{{
+          'ADMINISTRATIVE_DOCUMENT.DETAIL.TABS.TIMELINE' | translate
+        }}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <app-dossier-documents-panel
+            [documents]="d.documents"
+            [dossierId]="d.id"
+            (changed)="refresh()"
+          />
+        </p-tabpanel>
+        <p-tabpanel [value]="1">
+          <app-dossier-deadlines-panel [deadlines]="d.deadlines" (changed)="refresh()" />
+        </p-tabpanel>
+        <p-tabpanel [value]="2">
+          <app-dossier-timeline
+            [events]="timeline()"
+            [documentsById]="documentsById()"
+            [dossierLabel]="dossierLabel()"
+            [loading]="timelineLoading()"
+          />
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  } @else {
+    <div class="py-10 text-center" data-testid="dossier-detail__not-found">
+      <i class="pi pi-exclamation-circle text-3xl text-surface-300 mb-2"></i>
+      <p class="text-surface-400 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.DETAIL.NOT_FOUND' | translate }}
+      </p>
+    </div>
+  }
+</div>
+
+<p-confirmDialog />

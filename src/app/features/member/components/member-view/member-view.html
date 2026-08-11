@@ -131,6 +131,30 @@
             }
           </p>
         </div>
+        <!-- Cross-module links. `/meters` is core so it is always shown; the
+             billing one is gated on the annexe being subscribed AND reachable by
+             the active role, or the click would bounce off activeFeatureGuard. -->
+        <div class="flex flex-wrap items-center gap-4 mb-3" data-testid="member-view__related">
+          <a
+            class="text-primary-500 hover:text-primary-700 underline text-sm"
+            routerLink="/meters"
+            [queryParams]="{ holder_id: id() }"
+            data-testid="member-view__link--meters"
+          >
+            {{ 'MEMBER.VIEW.RELATED_METERS' | translate }}
+          </a>
+          @if (services.canReach('billing')) {
+            <a
+              class="text-primary-500 hover:text-primary-700 underline text-sm"
+              routerLink="/billing"
+              [queryParams]="{ tab: 'tracking', participant: id() }"
+              data-testid="member-view__link--invoices"
+            >
+              {{ 'MEMBER.VIEW.RELATED_INVOICES' | translate }}
+            </a>
+          }
+        </div>
+
         <div class="flex flex-wrap gap-2">
           @if (status() !== MemberStatus.ACTIVE) {
             <p-button
