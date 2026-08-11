@@ -29,6 +29,7 @@ import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { CommunityDetailDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { ibanValidator } from '../../../../shared/validators/iban.validator';
+import { CommunityLogo } from '../../../../shared/components/community-logo/community-logo';
 
 /** Wallonia-only default applied when a community has no regulator yet. */
 const DEFAULT_REGULATOR = 'BE-WAL-CWAPE';
@@ -95,6 +96,7 @@ function partialAddressValidator(group: AbstractControl): ValidationErrors | nul
     ReactiveFormsModule,
     TranslatePipe,
     HeaderPage,
+    CommunityLogo,
   ],
   templateUrl: './community-info.html',
   styleUrl: './community-info.css',

@@ -1,0 +1,27 @@
+.dash-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.75rem;
+  background: var(--p-surface-0);
+  /* Tiles resolve at different times. Without a floor the grid reflows as each
+     one lands, which is disorienting on a page that is mostly waiting. */
+  min-height: 11rem;
+}
+
+.dash-tile__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.dash-tile__foot:empty {
+  display: none;
+}
+
+/* Visually hidden but announced — used for the loading status live region. */
+/* `.sr-only` now lives in src/styles.css — it is needed by more than one page
+   and a component stylesheet cannot be reached from another feature. */

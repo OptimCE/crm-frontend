@@ -1,0 +1,13 @@
+@if (showImage()) {
+  <img
+    [src]="src()"
+    [alt]="alt()"
+    [class]="imgClass()"
+    (error)="onError()"
+    [attr.data-testid]="testId()"
+  />
+} @else {
+  <span [class]="fallbackClass()" [attr.data-testid]="placeholderTestId()" aria-hidden="true">
+    <i [class]="iconClass()"></i>
+  </span>
+}

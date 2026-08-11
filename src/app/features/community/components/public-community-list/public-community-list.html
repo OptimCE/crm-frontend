@@ -88,18 +88,12 @@
             [attr.aria-expanded]="isExpanded(community.id)"
             [attr.data-testid]="'public-community-list__btn--accordion--' + $index"
           >
-            @if (hasValidLogo(community)) {
-              <img
-                [src]="community.logo_presigned_url"
-                alt=""
-                class="w-8 h-8 object-contain rounded"
-                (error)="onLogoError(community.id)"
-              />
-            } @else {
-              <div class="w-8 h-8 bg-primary-50 rounded flex items-center justify-center">
-                <i class="pi pi-building text-primary-400"></i>
-              </div>
-            }
+            <app-community-logo
+              [src]="community.logo_presigned_url"
+              imgClass="w-8 h-8 object-contain rounded"
+              fallbackClass="w-8 h-8 bg-primary-50 rounded flex items-center justify-center"
+              iconClass="pi pi-building text-primary-400"
+            />
             <span class="flex-1 font-semibold text-sm text-primary-700">{{ community.name }}</span>
             <p-tag
               severity="warn"

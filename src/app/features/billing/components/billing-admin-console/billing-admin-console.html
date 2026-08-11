@@ -1,11 +1,11 @@
-<div class="mx-auto w-full max-w-5xl">
+<div class="mx-auto w-full max-w-5xl" data-testid="billing-admin-console">
   <app-header-page
     icon="pi pi-credit-card"
     [text]="'BILLING.TITLE' | translate"
     [subtitle]="'BILLING.SUBTITLE' | translate"
   />
 
-  <p-tabs [value]="0" class="block mt-5">
+  <p-tabs [value]="activeTab()" class="block mt-5" data-testid="billing__tabs">
     <p-tablist>
       <p-tab [value]="0" data-testid="billing__tab--tariffs">{{
         'BILLING.TABS.TARIFFS' | translate
@@ -25,10 +25,10 @@
         <app-tariffs-panel />
       </p-tabpanel>
       <p-tabpanel [value]="1">
-        <app-run-generate />
+        <app-run-generate [operation]="operation()" />
       </p-tabpanel>
       <p-tabpanel [value]="2">
-        <app-tracking-board />
+        <app-tracking-board [preselectedParticipant]="participant()" />
       </p-tabpanel>
       <p-tabpanel [value]="3">
         <app-billing-member-invoices [showHeader]="false" />

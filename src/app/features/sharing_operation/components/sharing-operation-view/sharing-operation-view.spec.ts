@@ -1,10 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { ActivatedRoute, convertToParamMap, Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { of, Subject, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { SharingOperationView } from './sharing-operation-view';
@@ -120,7 +121,12 @@ describe('SharingOperationView', () => {
   let meterServiceSpy: {
     getMetersList: ReturnType<typeof vi.fn>;
   };
-  let routerSpy: { navigate: ReturnType<typeof vi.fn> };
+  let routerSpy: {
+    navigate: ReturnType<typeof vi.fn>;
+    events: Observable<unknown>;
+    createUrlTree: ReturnType<typeof vi.fn>;
+    serializeUrl: ReturnType<typeof vi.fn>;
+  };
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
   let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
@@ -154,7 +160,14 @@ describe('SharingOperationView', () => {
       getMetersList: vi.fn().mockReturnValue(of(buildPaginatedMeterResponse())),
     };
 
-    routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
+    routerSpy = {
+      navigate: vi.fn().mockResolvedValue(true),
+      // RouterLink subscribes to `events` and calls `createUrlTree`/`serializeUrl`
+      // on init; the templates now carry real cross-module links.
+      events: of(),
+      createUrlTree: vi.fn().mockReturnValue({}),
+      serializeUrl: vi.fn().mockReturnValue(''),
+    };
     snackbarSpy = { openSnackBar: vi.fn() };
     errorHandlerSpy = { handleError: vi.fn() };
     dialogServiceSpy = { open: vi.fn() };
@@ -164,6 +177,11 @@ describe('SharingOperationView', () => {
     await TestBed.configureTestingModule({
       imports: [SharingOperationView, TranslateModule.forRoot()],
       providers: [
+        // Gates the new cross-module links; nothing is reachable in tests.
+        {
+          provide: CommunityServicesStore,
+          useValue: { canReach: () => false, isActive: () => false, ensureLoaded: () => of([]) },
+        },
         { provide: SharingOperationService, useValue: sharingOperationServiceSpy },
         { provide: MeterService, useValue: meterServiceSpy },
         { provide: Router, useValue: routerSpy },

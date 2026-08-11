@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -38,7 +39,7 @@ const PDF_POLL_MAX_ATTEMPTS = 15;
 @Component({
   selector: 'app-invoice-list',
   standalone: true,
-  imports: [DatePipe, TranslatePipe, Button, Tag, Tooltip],
+  imports: [RouterLink, DatePipe, TranslatePipe, Button, Tag, Tooltip],
   providers: [DialogService],
   templateUrl: './invoice-list.html',
 })
@@ -54,6 +55,15 @@ export class InvoiceList {
   readonly invoices = input<InvoiceOut[]>([]);
   readonly memberNames = input<ReadonlyMap<number, string> | null>(null);
   readonly showMember = input<boolean>(false);
+  /**
+   * Whether the member name links to `/members/{id}`.
+   *
+   * Off by default: this component renders in the member view too, and that route
+   * is `minRole GESTIONNAIRE`. The host binds the role check rather than the
+   * component reading it, so a MANAGER→MEMBER community switch takes the link
+   * away with the console.
+   */
+  readonly linkMember = input<boolean>(false);
 
   readonly changed = output<void>();
 

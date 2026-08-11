@@ -1,0 +1,41 @@
+@if (loading()) {
+  <p class="text-sm text-surface-500 m-0" role="status">{{ 'COMMON.LOADING' | translate }}</p>
+} @else if (isClear()) {
+  <!-- One line, not a card. "Nothing is waiting" is good news and should read
+       like it, rather than looking like a panel that failed to fill. -->
+  <p class="text-sm text-surface-500 m-0 flex items-center gap-2" data-testid="needs-you__clear">
+    <i class="pi pi-check-circle text-primary-600" aria-hidden="true"></i>
+    {{ 'HOME.NEEDS_YOU.ALL_CLEAR' | translate }}
+  </p>
+} @else {
+  <section
+    class="rounded-xl border border-primary-200 bg-primary-50 p-4 flex flex-col gap-3"
+    aria-labelledby="needs-you-heading"
+    data-testid="needs-you__band"
+  >
+    <h2 id="needs-you-heading" class="text-base font-semibold m-0" aria-live="polite">
+      {{ 'HOME.NEEDS_YOU.TITLE' | translate: { count: count() } }}
+    </h2>
+
+    <ul class="list-none m-0 p-0 flex flex-col gap-2">
+      @for (item of items(); track item.id) {
+        <li class="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <!-- Icon AND text: never colour or shape alone. -->
+          <i [class]="item.icon" class="text-primary-700" aria-hidden="true"></i>
+          <span class="text-sm flex-1 min-w-0">
+            {{ item.labelKey | translate: item.params }}
+          </span>
+          <!-- A real link, so it is reachable by keyboard and announced as a
+               link. Every one lands somewhere that can actually fix the thing. -->
+          <a
+            [routerLink]="item.route"
+            class="text-sm text-primary-700 underline whitespace-nowrap"
+            data-testid="needs-you__action"
+          >
+            {{ item.actionKey | translate }}
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+}

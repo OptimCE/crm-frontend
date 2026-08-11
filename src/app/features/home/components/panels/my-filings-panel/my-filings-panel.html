@@ -1,0 +1,45 @@
+<app-dashboard-tile
+  data-testid="my-filings-panel"
+  [title]="'HOME.FILINGS.TITLE' | translate"
+  icon="pi pi-folder-open"
+  [state]="state()"
+  headingId="home-filings-heading"
+  (retry)="load()"
+>
+  <!-- Not "no data": a member who appears in nothing has a complete answer, and
+       the wording has to say so without sounding like a failure. -->
+  <p tileEmpty class="text-sm text-surface-500 m-0" data-testid="my-filings-panel__empty">
+    {{ 'HOME.FILINGS.EMPTY' | translate }}
+  </p>
+
+  <p class="text-sm text-surface-500 m-0">{{ 'HOME.FILINGS.INTRO' | translate }}</p>
+
+  <ul class="list-none m-0 p-0 flex flex-col gap-2">
+    @for (row of rows(); track row.community.auth_community_id) {
+      <li class="flex flex-col gap-1">
+        <button
+          type="button"
+          class="text-xs uppercase tracking-wide text-primary-700 underline text-left"
+          (click)="openFilings(row.community)"
+          data-testid="my-filings-panel__btn--open"
+        >
+          {{ 'HOME.FILINGS.OPEN_IN' | translate: { community: row.community.name } }}
+        </button>
+        @for (filing of row.filings; track filing.version.id) {
+          <span class="flex items-baseline justify-between gap-3 text-sm">
+            <span class="flex-1 min-w-0 truncate">
+              {{
+                filing.template_label ??
+                  ('ADMINISTRATIVE_DOCUMENT.DOC_TYPE.' + filing.document.doc_type.toUpperCase()
+                    | translate)
+              }}
+            </span>
+            <span class="text-surface-500 whitespace-nowrap">
+              {{ formatApiDate(filing.version.created_at) }}
+            </span>
+          </span>
+        }
+      </li>
+    }
+  </ul>
+</app-dashboard-tile>

@@ -1,5 +1,12 @@
 @if (userContext.compareWithActiveRole(Role.GESTIONNAIRE)) {
-  <app-billing-admin-console />
+  <app-billing-admin-console
+    [tab]="tab()"
+    [participant]="participant()"
+    [operation]="operation()"
+    data-testid="billing-hub__admin-console"
+  />
 } @else {
-  <app-billing-member-invoices />
+  <!-- No params forwarded: a member's list is already scoped to them server-side,
+       and passing `participant` here would suggest otherwise. -->
+  <app-billing-member-invoices data-testid="billing-hub__member-invoices" />
 }

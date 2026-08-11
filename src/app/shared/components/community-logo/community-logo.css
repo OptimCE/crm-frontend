@@ -1,0 +1,8 @@
+/*
+ * The host box has to disappear so the <img> (or the placeholder) stays a direct
+ * child of the flex container it is dropped into — every call site relies on
+ * `shrink-0`, `items-center` and friends applying to the image itself.
+ */
+:host {
+  display: contents;
+}

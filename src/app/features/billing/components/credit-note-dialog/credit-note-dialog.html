@@ -1,4 +1,9 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="flex flex-col gap-4"
+  data-testid="credit-note-dialog__form"
+>
   <p class="text-sm text-surface-600 m-0">
     {{ 'BILLING.CREDIT_NOTE_DIALOG.CONFIRM' | translate }}
   </p>
@@ -14,6 +19,7 @@
       rows="3"
       class="w-full"
       [placeholder]="'BILLING.CREDIT_NOTE_DIALOG.REASON_PLACEHOLDER' | translate"
+      data-testid="credit-note-dialog__textarea--reason"
     ></textarea>
   </div>
 
@@ -25,12 +31,14 @@
       [label]="'COMMON.ACTIONS.CANCEL' | translate"
       [disabled]="submitting()"
       (onClick)="close()"
+      data-testid="credit-note-dialog__btn--cancel"
     />
     <p-button
       type="submit"
       severity="danger"
       [label]="'BILLING.CREDIT_NOTE_DIALOG.SUBMIT' | translate"
       [loading]="submitting()"
+      data-testid="credit-note-dialog__btn--submit"
     />
   </div>
 </form>

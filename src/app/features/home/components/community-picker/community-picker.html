@@ -1,0 +1,76 @@
+<section class="flex flex-col gap-3" aria-labelledby="home-communities-heading">
+  <h2 id="home-communities-heading" class="text-lg font-semibold m-0">
+    {{ 'HOME.COMMUNITIES.TITLE' | translate }}
+  </h2>
+
+  @if (loading()) {
+    <p class="text-sm text-surface-500 m-0" role="status">{{ 'COMMON.LOADING' | translate }}</p>
+  } @else if (failed()) {
+    <div class="flex flex-col items-start gap-2">
+      <p class="text-sm text-surface-500 m-0">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <p-button
+        size="small"
+        [text]="true"
+        icon="pi pi-refresh"
+        [label]="'COMMON.RETRY' | translate"
+        (onClick)="retry.emit()"
+        data-testid="community-picker__btn--retry"
+      />
+    </div>
+  } @else if (isEmpty()) {
+    <!-- A real state, not an edge case: this is what a brand-new account sees.
+         An empty grid here would read as a broken page. -->
+    <div
+      class="rounded-xl border border-surface-200 bg-surface-0 p-5 flex flex-col gap-2 items-start"
+      data-testid="community-picker__empty"
+    >
+      <p class="m-0 font-medium">{{ 'HOME.COMMUNITIES.EMPTY' | translate }}</p>
+      <p class="m-0 text-sm text-surface-500">{{ 'HOME.COMMUNITIES.EMPTY_HINT' | translate }}</p>
+      <a routerLink="/communities/public" class="text-sm text-primary-700 underline">
+        {{ 'HOME.COMMUNITIES.EMPTY_ACTION' | translate }}
+      </a>
+    </div>
+  } @else {
+    <ul class="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      @for (community of communities(); track community.auth_community_id) {
+        <li
+          class="rounded-xl border border-surface-200 bg-surface-0 p-4 flex flex-col gap-3"
+          data-testid="community-picker__card"
+        >
+          <div class="flex items-center gap-3 min-w-0">
+            <app-community-logo
+              [src]="community.logo_presigned_url"
+              imgClass="w-12 h-12 rounded-full object-cover border border-surface-200 shrink-0"
+              fallbackClass="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center shrink-0"
+              iconClass="pi pi-building text-primary-700"
+            />
+            <div class="flex flex-col min-w-0">
+              <h3 class="text-base font-semibold m-0 truncate">{{ community.name }}</h3>
+              <span class="text-sm text-surface-500">
+                {{
+                  'HOME.COMMUNITIES.YOUR_ROLE' | translate: { role: roleKey(community) | translate }
+                }}
+              </span>
+            </div>
+          </div>
+
+          <p-button
+            styleClass="w-full"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            [label]="
+              (isOnlyCommunity() ? 'HOME.COMMUNITIES.OPEN' : 'HOME.COMMUNITIES.ENTER') | translate
+            "
+            [loading]="entering() === community.auth_community_id"
+            (onClick)="enter(community)"
+            [attr.data-testid]="'community-picker__btn--enter'"
+          />
+        </li>
+      }
+    </ul>
+
+    <a routerLink="/users/communities" class="text-sm text-primary-700 underline self-start">
+      {{ 'HOME.COMMUNITIES.MANAGE' | translate }}
+    </a>
+  }
+</section>

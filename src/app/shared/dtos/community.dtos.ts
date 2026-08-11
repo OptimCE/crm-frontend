@@ -50,6 +50,14 @@ export interface MyCommunityDTO {
   name: string;
   role: Role;
   logo_url?: string | null;
+  /**
+   * Time-limited URL for the logo, or null when there is none.
+   *
+   * Not `logo_url`: that column holds a raw storage key, so rendering it gives a
+   * broken image. Presigning can fail per row, hence nullable — the picker falls
+   * back to the community's initials.
+   */
+  logo_presigned_url?: string | null;
 }
 
 export interface CommunityDetailDTO {

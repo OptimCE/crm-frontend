@@ -1,0 +1,64 @@
+<div class="mx-auto w-full max-w-5xl flex flex-col gap-4">
+  <app-header-page icon="pi pi-home" [text]="'DASHBOARD.TITLE' | translate" [subtitle]="subtitle()">
+    <p-button
+      headerActions
+      icon="pi pi-refresh"
+      severity="secondary"
+      [outlined]="true"
+      [label]="'DASHBOARD.REFRESH' | translate"
+      (onClick)="refresh()"
+      data-testid="manager-dashboard__btn--refresh"
+    />
+  </app-header-page>
+
+  <!-- Core spine. Never gated: this is what makes the page worth opening for a
+       community that has subscribed to nothing. -->
+  <app-readiness-tile [reloadKey]="reloadKey()" />
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <app-energy-glance-tile
+      [operations]="operations()"
+      [operationsLoading]="operationsLoading()"
+      [operationsFailed]="operationsFailed()"
+      [reloadKey]="reloadKey()"
+      (retry)="retryOperations()"
+    />
+    <app-sharing-operations-tile
+      [operations]="operations()"
+      [operationsLoading]="operationsLoading()"
+      [operationsFailed]="operationsFailed()"
+      [reloadKey]="reloadKey()"
+      (retry)="retryOperations()"
+    />
+    <app-onboarding-funnel-tile [reloadKey]="reloadKey()" />
+    <app-recent-activity-tile [reloadKey]="reloadKey()" />
+  </div>
+
+  <!-- Additive annexe tiles. Each one is INSTANTIATED only when the annexe is
+       reachable, so an unsubscribed feature issues zero requests rather than a
+       swallowed 403. `annexes()` is null until the catalogue lands. -->
+  @if (annexes(); as annex) {
+    @if (annex.administrativeDocument || annex.billing || annex.news) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        @if (annex.administrativeDocument) {
+          <app-deadlines-tile [reloadKey]="reloadKey()" />
+          <app-dossiers-tile [reloadKey]="reloadKey()" />
+        }
+        @if (annex.billing) {
+          <app-unpaid-invoices-tile
+            [operations]="operations()"
+            [operationsLoading]="operationsLoading()"
+            [reloadKey]="reloadKey()"
+          />
+        }
+        @if (annex.news) {
+          <app-news-tile [canPublish]="true" [reloadKey]="reloadKey()" />
+        }
+      </div>
+    }
+
+    <!-- One collapsed strip, not four half-empty cards scattered through the
+         grid. Role-aware inside: only an ADMIN can actually subscribe. -->
+    <app-module-discovery-strip />
+  }
+</div>

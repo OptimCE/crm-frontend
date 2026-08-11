@@ -4,6 +4,7 @@
   [class.notif-item--unread]="isUnread()"
   (click)="onClick()"
   data-testid="notification-item"
+  [attr.data-notification-type]="notification().type"
 >
   <span class="notif-item__icon" aria-hidden="true">
     <i [class]="presentation().icon"></i>
@@ -21,6 +22,12 @@
   </span>
 
   @if (isUnread()) {
-    <span class="notif-item__dot" aria-hidden="true"></span>
+    <!-- The only rendered trace of the read state; carrying a testid makes
+         "this row got marked read" assertable without reading class lists. -->
+    <span
+      class="notif-item__dot"
+      aria-hidden="true"
+      data-testid="notification-item__dot--unread"
+    ></span>
   }
 </button>

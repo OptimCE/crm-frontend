@@ -7,7 +7,8 @@ import { Ripple } from 'primeng/ripple';
 import { CompanyDTO, IndividualDTO, MemberLinkDTO } from '../../../../shared/dtos/member.dtos';
 import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { MemberService } from '../../../../shared/services/member.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
@@ -39,6 +40,7 @@ enum InvitationStatus {
   imports: [
     Dialog,
     TranslatePipe,
+    RouterLink,
     Button,
     Ripple,
     Tag,
@@ -55,6 +57,8 @@ enum InvitationStatus {
 })
 export class MemberView implements OnInit {
   private route = inject(ActivatedRoute);
+  /** Gates the cross-module links in the template. Synchronous, no extra request. */
+  protected readonly services = inject(CommunityServicesStore);
   private memberService = inject(MemberService);
   private invitationService = inject(InvitationService);
   private routing = inject(Router);

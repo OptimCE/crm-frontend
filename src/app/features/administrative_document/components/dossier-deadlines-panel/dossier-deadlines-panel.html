@@ -1,0 +1,74 @@
+<div class="flex flex-col gap-2 mt-4">
+  @if (deadlines().length === 0) {
+    <div class="py-8 text-center" data-testid="dossier-deadlines-panel__empty--message">
+      <i class="pi pi-calendar-clock text-3xl text-surface-300 mb-2"></i>
+      <p class="text-surface-400 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.EMPTY' | translate }}
+      </p>
+    </div>
+  } @else {
+    @for (deadline of deadlines(); track deadline.id; let i = $index) {
+      <div
+        class="rounded-lg border border-surface-200 p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+        [class.border-l-4]="isLate(deadline)"
+        [class.border-red-500]="isLate(deadline)"
+        [attr.data-testid]="'dossier-deadlines-panel__row--' + i"
+      >
+        <div class="flex flex-col gap-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-medium text-surface-800">{{
+              typeLabelKey(deadline) | translate
+            }}</span>
+            <p-tag
+              [value]="statusLabelKey(deadline) | translate"
+              [severity]="statusSeverity(deadline)"
+            />
+            @if (deadline.recurring) {
+              <i
+                class="pi pi-replay text-surface-400"
+                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.RECURRING' | translate"
+              ></i>
+            }
+          </div>
+          <span class="text-sm text-surface-600">
+            {{ dueDate(deadline) }}
+            @if (isLate(deadline)) {
+              <span class="text-red-600 font-medium">
+                — {{ 'ADMINISTRATIVE_DOCUMENT.DEADLINES.OVERDUE' | translate }}
+              </span>
+            }
+          </span>
+        </div>
+
+        <div class="flex items-center gap-1 shrink-0">
+          @if (isOpen(deadline)) {
+            <p-button
+              icon="pi pi-check"
+              text
+              rounded
+              size="small"
+              severity="success"
+              [disabled]="isBusy(deadline)"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.MARK_MET' | translate"
+              (onClick)="markMet(deadline)"
+              [attr.data-testid]="'dossier-deadlines-panel__btn--met-' + deadline.id"
+            />
+            <p-button
+              icon="pi pi-ban"
+              text
+              rounded
+              size="small"
+              severity="secondary"
+              [disabled]="isBusy(deadline)"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DEADLINES.CANCEL' | translate"
+              (onClick)="cancel(deadline)"
+              [attr.data-testid]="'dossier-deadlines-panel__btn--cancel-' + deadline.id"
+            />
+          }
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<p-confirmDialog />

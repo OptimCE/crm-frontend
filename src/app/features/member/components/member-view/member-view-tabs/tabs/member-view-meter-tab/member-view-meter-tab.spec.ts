@@ -399,9 +399,12 @@ describe('MemberViewMeterTab', () => {
     });
 
     it('should navigate to meter detail page', () => {
+      // Was `/members/meter/{EAN}`, which matched no route at all (MEMBER_ROUTES
+      // declares only '' and ':id', and there is no wildcard) — the click did
+      // nothing. The meter detail lives under `/meters/{EAN}`.
       const meter = buildMeters()[0];
       component.onRowClick(meter);
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/members/meter/' + meter.EAN]);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/meters', meter.EAN]);
     });
   });
 

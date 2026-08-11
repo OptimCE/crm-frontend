@@ -42,7 +42,11 @@
         </div>
       } @else {
         @for (notification of store.recent(); track notification.id) {
-          <app-notification-item [notification]="notification" (itemClick)="onItemClick($event)" />
+          <app-notification-item
+            [notification]="notification"
+            (itemClick)="onItemClick($event)"
+            [attr.data-testid]="'notification-item--' + notification.id"
+          />
         }
       }
     </div>

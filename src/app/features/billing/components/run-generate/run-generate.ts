@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { interval } from 'rxjs';
@@ -63,6 +63,8 @@ export class RunGenerate implements OnInit {
   readonly operations = signal<SharingOperationPartialDTO[]>([]);
   readonly operationsLoading = signal<boolean>(true);
   readonly selectedOpId = signal<number | null>(null);
+  /** Operation to preselect, from `/billing?tab=generate&operation=2`. */
+  readonly operation = input<number | null>(null);
 
   periodStart: Date | null = null;
   periodEnd: Date | null = null;
@@ -98,8 +100,16 @@ export class RunGenerate implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          this.operations.set(Array.isArray(res.data) ? res.data : []);
+          const operations = Array.isArray(res.data) ? res.data : [];
+          this.operations.set(operations);
           this.operationsLoading.set(false);
+
+          // Applied only once the list is in, and only if the deep-linked id is
+          // actually one of this community's operations.
+          const preselected = this.operation();
+          if (preselected != null && operations.some((op) => op.id === preselected)) {
+            this.onOperationChange(preselected);
+          }
         },
         error: (error: unknown) => {
           this.operationsLoading.set(false);

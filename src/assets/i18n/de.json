@@ -68,6 +68,18 @@
     "EMPTY": "Alles erledigt",
     "JUST_NOW": "Gerade eben",
     "NEW_TOAST": "Sie haben neue Benachrichtigungen",
+    "PREFIXES": {
+      "admin_deadline": "Verwaltungsfristen",
+      "admin_dossier": "Verwaltungsdossiers",
+      "billing_run": "Abrechnungsläufe",
+      "document": "Dokumente",
+      "invoice": "Rechnungen",
+      "manager_invitation": "Verwalter-Einladungen",
+      "member": "Mitglieder",
+      "member_invitation": "Mitglieder-Einladungen",
+      "news_poll": "Umfragen",
+      "news_post": "Beiträge"
+    },
     "TYPES": {
       "document": {
         "uploaded": {
@@ -98,7 +110,173 @@
         "published": {
           "title": "Eine neue Umfrage wurde veröffentlicht"
         }
+      },
+      "invoice": {
+        "issued": {
+          "title": "Eine neue Rechnung ist verfügbar"
+        },
+        "overdue": {
+          "title": "Eine Rechnung ist überfällig"
+        }
+      },
+      "billing_run": {
+        "completed": {
+          "title": "Ein Abrechnungslauf wurde abgeschlossen"
+        }
+      },
+      "admin_deadline": {
+        "due_soon": {
+          "title": "Eine Verwaltungsfrist steht bevor"
+        },
+        "missed": {
+          "title": "Eine Verwaltungsfrist wurde versäumt"
+        }
+      },
+      "admin_dossier": {
+        "acknowledged": {
+          "title": "Ein Verwaltungsdossier wurde bestätigt"
+        }
       }
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Übersicht",
+    "SUBTITLE": "Ihre Gemeinschaft auf einen Blick",
+    "REFRESH": "Aktualisieren",
+    "TILE": {
+      "ERROR": "Diese Informationen konnten nicht geladen werden."
+    },
+    "MANAGER": {
+      "READINESS": {
+        "TITLE": "Zu prüfende Punkte",
+        "COUNT": "{{count}} zu bearbeiten",
+        "ALL_GOOD": "Alles, was wir prüfen, ist in Ordnung.",
+        "FIX": "Beheben",
+        "ITEMS": {
+          "OPERATIONS_WITHOUT_KEY": "{{count}} Teilungsvorgang/-vorgänge ohne gültigen Verteilschlüssel — Energie kann nicht verteilt werden.",
+          "OPERATIONS_KEY_PENDING": "{{count}} Verteilschlüssel warten auf Genehmigung.",
+          "METERS_WAITING_GRD": "{{count}} Zähler warten auf den Netzbetreiber.",
+          "METERS_WAITING_MANAGER": "{{count}} Zähler warten auf Ihre Bestätigung.",
+          "METERS_NOT_IN_OPERATION": "{{count}} Zähler gehören zu keinem Teilungsvorgang.",
+          "METERS_WITHOUT_DATA": "{{count}} Zähler haben heute keine aktiven Daten.",
+          "MEMBERS_INCOMPLETE": "{{count}} Mitgliederdatensatz/-sätze sind unvollständig.",
+          "MEMBERS_PENDING": "{{count}} Mitglied(er) warten auf Freigabe.",
+          "COMMUNITY_FIELD_MISSING": "Fehlende Angabe zur Gemeinschaft: {{field}}."
+        },
+        "FIELDS": {
+          "VAT_NUMBER": "USt-IdNr.",
+          "LEGAL_NAME": "juristischer Name",
+          "IBAN": "IBAN",
+          "ACCOUNT_HOLDER_NAME": "Kontoinhaber",
+          "HEADQUARTERS_ADDRESS": "Sitzadresse",
+          "REGULATOR": "Regulierungsbehörde"
+        }
+      },
+      "ENERGY": {
+        "TITLE": "Energie auf einen Blick",
+        "SHARED": "Geteilt",
+        "INJECTED_SHARED": "Eingespeist und geteilt",
+        "PERIOD": "Zeitraum: {{month}}",
+        "EMPTY": "Noch keine Verbrauchsdaten. Laden Sie Ihre Messwerte aus einem Teilungsvorgang hoch."
+      },
+      "OPERATIONS": {
+        "TITLE": "Teilungsvorgänge",
+        "EMPTY": "Noch kein Teilungsvorgang. Erstellen Sie einen, um Energie zu teilen.",
+        "SEE_ALL": "Alle {{count}} Vorgänge ansehen"
+      },
+      "ONBOARDING": {
+        "TITLE": "Neuzugänge",
+        "MEMBER_INVITATIONS": "{{count}} Mitgliedseinladung(en) offen",
+        "TO_BE_ENCODED": "{{count}} Mitgliederdatensatz/-sätze noch zu erfassen",
+        "MANAGER_INVITATIONS": "{{count}} Verwaltereinladung(en) offen",
+        "EMPTY": "Niemand ist gerade im Beitrittsprozess.",
+        "MANAGE": "Mitglieder verwalten"
+      },
+      "ACTIVITY": {
+        "TITLE": "Letzte Aktivität",
+        "SYSTEM": "System",
+        "EMPTY": "Es wurde noch nichts erfasst.",
+        "SEE_ALL": "Vollständiges Protokoll ansehen"
+      },
+      "DEADLINES": {
+        "TITLE": "Verwaltungsfristen",
+        "OPEN_COUNT": "{{count}} offene Frist(en)",
+        "OVERDUE": "{{count}} überfällig",
+        "EMPTY": "Keine offene Frist. Reichen Sie ein erstes Dossier ein, um welche zu erzeugen.",
+        "SEE_ALL": "Fristen ansehen"
+      },
+      "DOSSIERS": {
+        "TITLE": "Verwaltungsdossiers",
+        "EMPTY": "Noch kein Dossier. Erstellen Sie Ihr erstes Verwaltungsdossier.",
+        "SEE_ALL": "Dossiers ansehen"
+      },
+      "INVOICES": {
+        "TITLE": "Abrechnung",
+        "UNPAID_COUNT": "{{count}} offene Rechnung(en)",
+        "LAST_RUN": "Letzte Abrechnung: {{operation}} bis {{period}}",
+        "NO_RUN_YET": "Noch keine Abrechnung durchgeführt.",
+        "EMPTY": "Nichts abzurechnen. Starten Sie Ihren ersten Abrechnungslauf.",
+        "SEE_ALL": "Abrechnung öffnen"
+      }
+    },
+    "MEMBER": {
+      "ENERGY": {
+        "TITLE": "Meine Energie hier",
+        "CONSUMED": "Verbraucht",
+        "SHARED": "Aus Teilung erhalten",
+        "PERIOD": "In den letzten {{days}} Tagen",
+        "EMPTY": "Keine Verbrauchsdaten für Ihre Zähler in dieser Gemeinschaft."
+      },
+      "PARTICIPATION": {
+        "TITLE": "Meine Beteiligung",
+        "PRORATA": "Anteilig zum Verbrauch",
+        "NOT_IN_KEY": "Nicht im Verteilschlüssel aufgeführt — fragen Sie Ihren Verwalter.",
+        "NO_KEY": "Kein gültiger Verteilschlüssel für diesen Vorgang.",
+        "HELP_LABEL": "Was bedeutet dieser Prozentsatz?",
+        "HELP": "Es ist der Anteil der geteilten Energie des Vorgangs, der Ihnen durch den geltenden Verteilschlüssel zugewiesen wird.",
+        "EMPTY": "Sie nehmen an keinem Teilungsvorgang dieser Gemeinschaft teil."
+      },
+      "MY_RECORD": {
+        "TITLE": "Mein Mitgliederdatensatz",
+        "COMPLETE": "Ihr Datensatz ist aktiv.",
+        "PENDING": "{{count}} Datensatz/Datensätze warten auf Freigabe durch einen Verwalter.",
+        "EMPTY": "Kein Mitgliederdatensatz in dieser Gemeinschaft."
+      },
+      "ABOUT": {
+        "TITLE": "Über diese Gemeinschaft",
+        "MEMBER_COUNT": "Mitglieder",
+        "REGULATOR": "Regulierungsbehörde",
+        "WEBSITE": "Website",
+        "EMPTY": "Informationen nicht verfügbar.",
+        "SEE_MORE": "Informationen ansehen"
+      },
+      "DOCUMENTS": {
+        "TITLE": "Meine Dokumente",
+        "EMPTY": "Es wurde hier kein Dokument mit Ihnen geteilt.",
+        "SEE_ALL": "Meine Dokumente ansehen"
+      },
+      "INVOICES": {
+        "TITLE": "Meine Rechnungen",
+        "UNPAID_COUNT": "{{count}} zu zahlende Rechnung(en)",
+        "EMPTY": "Keine offene Rechnung.",
+        "SEE_ALL": "Meine Rechnungen ansehen"
+      }
+    },
+    "NEWS": {
+      "TITLE": "Neuigkeiten",
+      "ANONYMOUS": "Beitrag",
+      "OPEN_POLLS": "{{count}} Umfrage(n) warten auf Ihre Antwort",
+      "EMPTY_MANAGER": "Noch keine Neuigkeiten. Veröffentlichen Sie Ihren ersten Beitrag.",
+      "EMPTY_MEMBER": "Noch keine Neuigkeiten.",
+      "SEE_ALL": "Nachrichtenbrett ansehen"
+    },
+    "MODULES": {
+      "TITLE": "Verfügbare Module",
+      "SUBTITLE": "Diese Module sind für diese Gemeinschaft noch nicht aktiviert.",
+      "ENABLE": "Aktivieren",
+      "ASK_ADMIN": "Fragen Sie Ihren Gemeinschaftsadministrator",
+      "DISMISS_ARIA": "Verfügbare Module ausblenden",
+      "SEE_ALL": "Katalog ansehen"
     }
   },
   "NAVBAR": {
@@ -131,7 +309,10 @@
     "RETRY": "Erneut versuchen",
     "AUDIT_LOG": "Audit-Protokoll",
     "NEWS": "Aktuelles",
-    "BILLING": "Abrechnung"
+    "BILLING": "Abrechnung",
+    "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
+    "DASHBOARD": "Übersicht",
+    "HOME": "Start"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -165,12 +346,24 @@
       "BILLING_ADDRESS": "Rechnungsadresse",
       "EMAIL": "E-Mail-Adresse"
     },
+    "NOTIFICATION_PREFERENCES": {
+      "INTRO": "Wählen Sie, wie Sie über die jeweilige Art von Aktivität informiert werden möchten.",
+      "TRANSACTIONAL_NOTICE": "Wesentliche Nachrichten — Rechnungen, Einladungen und versäumte regulatorische Fristen — werden immer zugestellt und können nicht abgeschaltet werden.",
+      "CATEGORY": "Kategorie",
+      "IN_APP": "In der App",
+      "EMAIL": "E-Mail",
+      "DEFAULT_LABEL": "Alles Übrige",
+      "SAVE": "Einstellungen speichern",
+      "SAVED": "Einstellungen gespeichert",
+      "EMPTY": "Keine Kategorien verfügbar"
+    },
     "TABS": {
       "HEADERS": {
         "METERS": "Zähler",
         "BANKING_INFORMATIONS": "Bankdaten",
         "DOCUMENTS": "Dokumente",
-        "REPRESENTATIONS": "Vertretungen"
+        "REPRESENTATIONS": "Vertretungen",
+        "NOTIFICATIONS": "Benachrichtigungen"
       },
       "BANKING_INFORMATION": {
         "IBAN": "IBAN"
@@ -326,9 +519,10 @@
         "CREATED_AT": "Erstellt",
         "UPDATED_AT": "Aktualisiert"
       },
-      "ACTIVATED": "Aktivieren",
-      "NON_ACTIVATED": "Deaktivieren",
-      "UPDATE_COMMUNITY": "Aktualisieren",
+      "ACTIVATED": "Aktive Gemeinschaft",
+      "NON_ACTIVATED": "Nicht aktiv",
+      "INFO_BUTTON": "Gemeinschaftsinfo",
+      "DASHBOARD_BUTTON": "Übersicht",
       "ACTIVATE_BUTTON": "Aktivieren",
       "ACTIVATE_BUTTON_TOOLTIP": "Gemeinschaft wechseln",
       "LEAVE_BUTTON": "Verlassen",
@@ -336,14 +530,11 @@
       "LEAVE_CONFIRM_HEADER": "Gemeinschaft verlassen",
       "LEAVE_CONFIRM_MESSAGE": "Möchten Sie \"{{name}}\" wirklich verlassen?",
       "LEAVE_SUCCESS": "Sie haben die Gemeinschaft verlassen.",
-      "UPDATE_SUCCESS": "Name der Gemeinschaft aktualisiert.",
       "NO_COMMUNITY_FOUND": "Keine Gemeinschaft gefunden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
       "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)",
       "PUBLIC_TITLE": "Verfügbare öffentliche Gemeinschaften",
       "PUBLIC_LOGO": "Logo",
-      "DETAILS_BUTTON": "Details",
-      "DETAILS_BUTTON_TOOLTIP": "Gemeinschaftsdetails anzeigen",
       "NO_PUBLIC_COMMUNITY_FOUND": "Keine öffentlichen Gemeinschaften verfügbar",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Gemeinschaften)"
     },
@@ -357,7 +548,6 @@
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",
-      "EDIT_TITLE": "Gemeinschaft aktualisieren",
       "NAME": "Name",
       "NAME_PLACEHOLDER": "Meine lokale Gemeinschaft",
       "VALIDATE": "Bestätigen"
@@ -718,7 +908,9 @@
         "FIRST_NAME_LABEL": "Vorname",
         "EMAIL_LABEL": "E-Mail-Adresse",
         "PHONE_NUMBER_LABEL": "Telefonnummer"
-      }
+      },
+      "RELATED_METERS": "Seine Zähler",
+      "RELATED_INVOICES": "Seine Rechnungen"
     },
     "LIST": {
       "MEMBER_TITLE": "Mitglieder",
@@ -1310,7 +1502,10 @@
         "SET_PUBLIC_SUCCESS": "Teilungsoperation ist jetzt öffentlich",
         "SET_PRIVATE_SUCCESS": "Teilungsoperation ist jetzt privat",
         "MUNICIPALITIES_REQUIRED_HINT": "Fügen Sie mindestens eine Gemeinde hinzu, bevor Sie die Operation öffentlich machen"
-      }
+      },
+      "RELATED_LABEL": "Siehe auch:",
+      "RELATED_DOSSIERS": "Seine Verwaltungsdossiers",
+      "RELATED_BILLING": "Seine Abrechnung"
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Teilungsoperation",
@@ -1403,6 +1598,10 @@
     "BILLING": {
       "NAME": "Abrechnung",
       "DESCRIPTION": "Rechnen Sie Mitgliedern ihren Verbrauch aus der Energieteilung ab; Mitglieder sehen und bezahlen ihre eigenen Rechnungen."
+    },
+    "ADMINISTRATIVE_DOCUMENT": {
+      "NAME": "Verwaltungsdokumente",
+      "DESCRIPTION": "Verfolgen Sie die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers: Status, abgeleitete Fristen und jede Version jedes übermittelten Dokuments."
     }
   },
   "BILLING": {
@@ -2014,6 +2213,483 @@
         "EXPIRY_REQUIRED": "Wählen Sie ein Enddatum.",
         "EXPIRY_FUTURE": "Das Enddatum muss in der Zukunft liegen."
       }
+    }
+  },
+  "ADMINISTRATIVE_DOCUMENT": {
+    "TITLE": "Verwaltungsdokumente",
+    "SUBTITLE": "Verfolgen Sie die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers: Status, Fristen und jede übermittelte Version.",
+    "TABS": {
+      "DOSSIERS": "Dossiers",
+      "DEADLINES": "Fristen"
+    },
+    "DOSSIER_TYPE": {
+      "CREATION_NOTIFICATION": "Gründungsmeldung",
+      "MODIFICATION": "Änderung",
+      "ANNUAL_REPORT": "Jährliche Berichterstattung",
+      "SHARING_AUTHORIZATION": "Teilungsgenehmigung",
+      "SHARING_MODIFICATION": "Änderung der Teilung",
+      "CESSATION": "Einstellung der Tätigkeit"
+    },
+    "DOSSIER_STATUS": {
+      "IN_PREPARATION": "In Vorbereitung",
+      "SUBMITTED": "Eingereicht",
+      "COMPLETE": "Vollständig",
+      "CLOSED": "Abgeschlossen",
+      "LAPSED": "Verfallen"
+    },
+    "DOCUMENT_STATUS": {
+      "DRAFT": "Entwurf",
+      "READY": "Bereit",
+      "SENT": "Übermittelt",
+      "ACKNOWLEDGED": "Bestätigt",
+      "OBSOLETE": "Veraltet"
+    },
+    "DOC_ORIGIN": {
+      "GENERATED": "Generiert",
+      "UPLOADED": "Hochgeladen"
+    },
+    "RENDER_STATE": {
+      "PENDING": "Wird erzeugt",
+      "FAILED": "Erzeugung fehlgeschlagen"
+    },
+    "DEADLINE_STATUS": {
+      "OPEN": "Offen",
+      "MET": "Erfüllt",
+      "MISSED": "Versäumt",
+      "CANCELLED": "Storniert"
+    },
+    "REGION": {
+      "WAL": "Wallonien (CWaPE)",
+      "BRU": "Brüssel (Brugel)",
+      "VLA": "Flandern (VREG)"
+    },
+    "ACK_RESULT": {
+      "COMPLETE": "Vollständiges Dossier",
+      "INCOMPLETE": "Unvollständiges Dossier"
+    },
+    "DOC_TYPE": {
+      "ANNEX6_NOTIFICATION": "Anlage 6 — Meldung der Gemeinschaft",
+      "ANNEX6_SHARING_FORM": "Anlage 6 — Teilungsformular",
+      "ANNEX8_SWORN_DECLARATION": "Anlage 8 — eidesstattliche Erklärung",
+      "DSO_AGREEMENT_COMMUNITY": "Netzbetreibervertrag — Gemeinschaft",
+      "DSO_AGREEMENT_BUILDING": "Netzbetreibervertrag — selbes Gebäude",
+      "ANNUAL_PARTICIPANT_LIST": "Listen Teilnehmer / Anlagen",
+      "COMMUNITY_NOTIFICATION": "Meldeformular Gemeinschaft",
+      "COMMUNITY_MODIFICATION": "Änderungsformular Gemeinschaft",
+      "SHARING_NOTIFICATION": "Meldeformular Sharing",
+      "SHARING_MODIFICATION": "Änderungsformular Sharing",
+      "ANNEX7_LEGAL_ENTITY": "Anlage 7 - Gesellschaften und Vereinigungen"
+    },
+    "DEADLINE_TYPE": {
+      "COMPLETENESS_CHECK": "Vollständigkeitsprüfung",
+      "LAPSE": "Verfall",
+      "MODIFICATION_NOTIFICATION": "Änderungsmeldung",
+      "ANNUAL_REPORT": "Jährliche Berichterstattung"
+    },
+    "SORT": {
+      "CREATED_AT": "Erstellungsdatum",
+      "UPDATED_AT": "Letzte Änderung",
+      "SUBMITTED_AT": "Einreichungsdatum",
+      "STATUS": "Status",
+      "TYPE": "Typ",
+      "DUE_DATE": "Fälligkeitsdatum"
+    },
+    "LIST": {
+      "INTRO": "Jedes Dossier wird für genau eine Teilungsoperation eingereicht.",
+      "CREATE": "Neues Dossier",
+      "EMPTY": "Noch kein Dossier. Legen Sie eines an, um mit der Verfolgung zu beginnen.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Dossiers)",
+      "FILTERS": {
+        "OPERATION": "Teilungsoperation",
+        "ALL_OPERATIONS": "Alle Operationen",
+        "TYPE": "Typ",
+        "ALL_TYPES": "Alle Typen",
+        "STATUS": "Status",
+        "ALL_STATUSES": "Alle Status",
+        "SORT": "Sortieren nach",
+        "TOGGLE_ORDER": "Sortierreihenfolge umkehren",
+        "CLEAR": "Zurücksetzen"
+      },
+      "COL": {
+        "TYPE": "Typ",
+        "TITLE": "Bezeichnung",
+        "OPERATION": "Teilungsoperation",
+        "STATUS": "Status",
+        "EXTERNAL_REF": "Aktenzeichen",
+        "SUBMITTED_AT": "Eingereicht am"
+      }
+    },
+    "DETAIL": {
+      "BACK": "Zurück zu den Dossiers",
+      "EDIT": "Bearbeiten",
+      "OPERATION": "Teilungsoperation",
+      "EXTERNAL_REF": "Aktenzeichen",
+      "REGION": "Region",
+      "SUBMITTED_AT": "Eingereicht am",
+      "CREATED_AT": "Erstellt am",
+      "NOT_SET": "Nicht angegeben",
+      "ACTIONS": "Aktionen",
+      "NO_FURTHER_ACTION": "Dieses Dossier ist abgeschlossen — weitere Aktionen sind nicht möglich.",
+      "NOT_FOUND": "Dossier nicht gefunden.",
+      "TABS": {
+        "DOCUMENTS": "Dokumente",
+        "DEADLINES": "Fristen",
+        "TIMELINE": "Verlauf"
+      }
+    },
+    "DOCUMENTS": {
+      "ADD": "Dokument hinzufügen",
+      "EMPTY": "Noch kein Dokument in diesem Dossier.",
+      "VERSIONS": "Versionen",
+      "NO_VERSION": "Noch keine Version",
+      "UPLOAD": "Version hochladen",
+      "DETAIL": "Versionen ansehen",
+      "DOWNLOAD": "Herunterladen",
+      "NO_FURTHER_ACTION": "Keine weitere Aktion möglich.",
+      "CONFIRM_HEADER": "Statusänderung bestätigen",
+      "CONFIRM_MESSAGE": "Dieses Dokument auf „{{status}}\" setzen? Die Änderung wird im Verlauf festgehalten.",
+      "STATUS_CHANGED": "Status aktualisiert",
+      "COL": {
+        "TYPE": "Dokument",
+        "STATUS": "Status",
+        "VERSIONS": "Versionen",
+        "UPDATED_AT": "Aktualisiert",
+        "ACTIONS": "Aktionen"
+      },
+      "GENERATE": "Erzeugen",
+      "REGENERATE": "Neu erzeugen",
+      "RENDER_DONE": "Dokument erzeugt",
+      "RENDER_FAILED": "Die Dokumenterzeugung ist fehlgeschlagen"
+    },
+    "DEADLINES": {
+      "INTRO": "Fristen werden automatisch aus den erfassten Statusänderungen abgeleitet.",
+      "EMPTY": "Keine Frist entspricht diesen Filtern.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Fristen)",
+      "SWEEP": "Überfällige aktualisieren",
+      "SWEEP_CONFIRM_HEADER": "Überfällige Fristen aktualisieren",
+      "SWEEP_CONFIRM_MESSAGE": "Alle überfälligen Fristen als versäumt markieren und die nächsten wiederkehrenden Termine einplanen?",
+      "SWEEP_DONE": "{{missed}} Frist(en) als versäumt markiert, {{rolled}} neu geplant.",
+      "RESOLVED": "Frist aktualisiert",
+      "MARK_MET": "Als erfüllt markieren",
+      "MARK_MET_CONFIRM_HEADER": "Frist als erfüllt markieren",
+      "MARK_MET_CONFIRM_MESSAGE": "Bestätigen, dass diese Verpflichtung erfüllt wurde? Eine wiederkehrende Frist wird neu geplant.",
+      "CANCEL": "Frist stornieren",
+      "CANCEL_CONFIRM_HEADER": "Frist stornieren",
+      "CANCEL_CONFIRM_MESSAGE": "Diese Frist stornieren? Sie bleibt erfasst, wird aber nicht mehr erwartet.",
+      "OVERDUE": "Überfällig",
+      "RECURRING": "Wiederkehrend",
+      "FILTERS": {
+        "STATUS": "Status",
+        "ALL_STATUSES": "Alle Status",
+        "TYPE": "Typ",
+        "ALL_TYPES": "Alle Typen",
+        "OPERATION": "Teilungsoperation",
+        "ALL_OPERATIONS": "Alle Operationen",
+        "CLEAR": "Zurücksetzen"
+      },
+      "COL": {
+        "DUE_DATE": "Fälligkeit",
+        "TYPE": "Typ",
+        "DOSSIER": "Dossier",
+        "STATUS": "Status",
+        "ACTIONS": "Aktionen"
+      }
+    },
+    "TIMELINE": {
+      "TITLE": "Verlauf",
+      "INTRO": "Jede Statusänderung wird dauerhaft festgehalten. Korrekturen werden ergänzt, nie gelöscht.",
+      "EMPTY": "Noch kein Verlauf.",
+      "CREATED": "Erstellt",
+      "CORRECTIVE": "Korrektur",
+      "SYSTEM": "System",
+      "SHOW_RAW": "Details anzeigen",
+      "HIDE_RAW": "Details ausblenden",
+      "NEWEST_FIRST": "Neueste zuerst",
+      "OLDEST_FIRST": "Älteste zuerst",
+      "ENTRY_COUNT": "{{count}} Einträge",
+      "CONTEXT": {
+        "SUBMISSION_DATE": "Übermittlungsdatum",
+        "ACKNOWLEDGED_DATE": "Datum der Bestätigung",
+        "AUTHORITY_FILE_REF": "Aktenzeichen",
+        "RESULT": "Ergebnis",
+        "REASON": "Grund",
+        "NOTE": "Notiz"
+      }
+    },
+    "TRANSITION": {
+      "HEADER": "Status ändern",
+      "TO_STATUS": "Neuer Status",
+      "SUBMIT": "Erfassen",
+      "SUCCESS": "Status erfasst",
+      "CORRECTIVE_WARNING": "Dies ist eine Korrektur. Sie wird mit Ihrer Begründung dem Verlauf hinzugefügt — der frühere Eintrag bleibt erhalten.",
+      "FIELDS": {
+        "SUBMISSION_DATE": "Übermittlungsdatum",
+        "ACKNOWLEDGED_DATE": "Datum der Bestätigung",
+        "AUTHORITY_FILE_REF": "Aktenzeichen CWaPE / Netzbetreiber",
+        "RESULT": "Ergebnis",
+        "REASON": "Grund der Korrektur",
+        "NOTE": "Notiz (optional)"
+      },
+      "ERRORS": {
+        "FIELD_REQUIRED": "„{{field}}\" ist für diese Statusänderung erforderlich."
+      }
+    },
+    "DIALOGS": {
+      "CREATE_DOSSIER": {
+        "TITLE": "Neues Dossier",
+        "TYPE": "Dossiertyp",
+        "TYPE_PLACEHOLDER": "Typ auswählen",
+        "OPERATION": "Teilungsoperation",
+        "OPERATION_PLACEHOLDER": "Operation auswählen",
+        "OPERATION_HINT": "Nach dem Anlegen des Dossiers unveränderlich.",
+        "TITLE_FIELD": "Bezeichnung (optional)",
+        "EXTERNAL_REF": "Aktenzeichen (optional)",
+        "EXTERNAL_REF_HINT": "Das Aktenzeichen der CWaPE oder des Netzbetreibers, sobald bekannt.",
+        "NO_OPERATIONS": "Diese Gemeinschaft hat noch keine Teilungsoperation. Legen Sie eine an, bevor Sie ein Dossier einreichen.",
+        "SUBMIT": "Anlegen",
+        "SUCCESS": "Dossier angelegt",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Wählen Sie einen Dossiertyp.",
+          "OPERATION_REQUIRED": "Wählen Sie die Teilungsoperation, für die dieses Dossier eingereicht wird."
+        }
+      },
+      "EDIT_DOSSIER": {
+        "TITLE": "Dossier bearbeiten",
+        "SUBMIT": "Speichern",
+        "SUCCESS": "Dossier aktualisiert",
+        "OPERATION_LOCKED": "Die Teilungsoperation kann nach dem Anlegen nicht mehr geändert werden."
+      },
+      "CREATE_DOCUMENT": {
+        "TITLE": "Dokument hinzufügen",
+        "DOC_TYPE": "Dokumenttyp",
+        "DOC_TYPE_PLACEHOLDER": "Dokumenttyp auswählen",
+        "TITLE_FIELD": "Bezeichnung (optional)",
+        "SUBMIT": "Hinzufügen",
+        "SUCCESS": "Dokument hinzugefügt",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Wählen Sie einen Dokumenttyp."
+        }
+      },
+      "UPLOAD_VERSION": {
+        "TITLE": "Version hochladen",
+        "DROP_HINT": "Datei hierher ziehen oder klicken, um eine auszuwählen.",
+        "IMMUTABLE_HINT": "Jeder Upload wird als neue, dauerhafte Version gespeichert. Nichts wird überschrieben.",
+        "SUBMIT": "Hochladen",
+        "SUCCESS": "Version gespeichert",
+        "ERRORS": {
+          "FILE_REQUIRED": "Wählen Sie eine Datei zum Hochladen.",
+          "NOT_ALLOWED": "Dieses Dokument wurde bereits übermittelt. Nehmen Sie eine Korrektur vor, bevor Sie eine Version hinzufügen."
+        }
+      },
+      "DOCUMENT_DETAIL": {
+        "TITLE": "Dokumentversionen",
+        "CURRENT": "Aktuell",
+        "DOWNLOAD": "Herunterladen",
+        "DOWNLOAD_FAILED": "Download fehlgeschlagen",
+        "EMPTY": "Noch keine Version gespeichert.",
+        "COL": {
+          "VERSION": "Version",
+          "FILENAME": "Datei",
+          "SIZE": "Größe",
+          "CHECKSUM": "Prüfsumme",
+          "CREATED_AT": "Gespeichert am"
+        },
+        "SNAPSHOT": "Eingefrorene Daten anzeigen",
+        "SNAPSHOT_HINT": "Die genauen Daten, aus denen diese Version erzeugt wurde."
+      },
+      "GENERATE": {
+        "TITLE": "Dokument erzeugen",
+        "REVIEW_HINT": "Die Daten stammen aus dem CRM. Korrigieren Sie sie bei Bedarf: Was Sie hier freigeben, wird eingereicht.",
+        "SUBMIT": "Erzeugen",
+        "QUEUED": "Erzeugung gestartet",
+        "ERRORS": {
+          "NOT_ALLOWED": "Dieses Dokument wurde bereits übermittelt. Nehmen Sie eine Korrektur vor, bevor Sie es neu erzeugen."
+        }
+      }
+    },
+    "PREFILL": {
+      "IDENTITY": "Identität",
+      "ADD_ROW": "Zeile hinzufügen",
+      "EMPTY_TABLE": "Keine Zeilen.",
+      "FIELDS": {
+        "COMMUNITY_NAME": "Name der Gemeinschaft",
+        "COMMUNITY_LEGAL_NAME": "Rechtlicher Name",
+        "COMMUNITY_VAT_NUMBER": "Unternehmens-/USt-Nummer",
+        "COMMUNITY_STREET": "Straße",
+        "COMMUNITY_NUMBER": "Nr.",
+        "COMMUNITY_POSTCODE": "Postleitzahl",
+        "COMMUNITY_CITY": "Ort",
+        "COMMUNITY_ADDRESS": "Adresse",
+        "OPERATION_NAME": "Sharing-Vorgang",
+        "PARTICIPANT_COUNT": "Anzahl Teilnehmer",
+        "INSTALLATION_COUNT": "Anzahl Anlagen",
+        "CATEGORIE": "Kategorie",
+        "SOUS_CATEGORIE": "Unterkategorie",
+        "NOM": "Name",
+        "PRENOM": "Vorname",
+        "DENOMINATION": "Bezeichnung",
+        "NUMERO_ENTREPRISE": "Unternehmensnummer",
+        "RUE": "Straße",
+        "NUMERO": "Nr.",
+        "CODE_POSTAL": "Postleitzahl",
+        "LOCALITE": "Ort",
+        "DROITS_DE_VOTE": "Stimmrechte",
+        "EAN": "EAN",
+        "METER_NUMBER": "Zählernummer",
+        "GRD": "Netzbetreiber",
+        "CLIENT_RESIDENTIEL": "Haushaltskunde",
+        "PART_ALLOUEE": "Zugewiesener %",
+        "STATUT_PRODUCTEUR": "Status des Erzeugers",
+        "STATUT_INSTALLATION": "Status der Anlage",
+        "DATE_MISE_EN_SERVICE": "Inbetriebnahmedatum",
+        "PUISSANCE_KVA": "Leistung (kVA)",
+        "FILIERE": "Erzeugungsart",
+        "PART_INJECTEE": "Geteilter Einspeise-%",
+        "CONFIGURATION": "Konfiguration"
+      },
+      "TABLES": {
+        "MEMBERS": "Mitglieder und Anteilseigner",
+        "PARTICIPANTS": "Entnahmestellen",
+        "INSTALLATIONS": "Erzeugungsanlagen",
+        "STORAGE": "Speicheranlagen"
+      },
+      "WARNINGS": {
+        "COUNT": "{{count}} Punkt(e) vor der Einreichung zu korrigieren",
+        "FIX": "Im CRM korrigieren",
+        "RELOAD": "Aus dem CRM neu laden",
+        "RELOAD_BLOCKED": "Sie haben das Formular bearbeitet — Neuladen würde Ihre Korrekturen verwerfen.",
+        "CODES": {
+          "meter": {
+            "no_member_attribution": "Der Lieferpunkt {{subject}} ist keinem Mitglied zugeordnet und kann daher nicht unter einem Namen aufgeführt werden."
+          },
+          "community": {
+            "field_missing": "Fehlende Angabe zur Gemeinschaft: {{field}}. Das Formular wird ohne sie eingereicht."
+          },
+          "member": {
+            "field_missing": "Fehlende Angabe zu einem Mitglied: {{field}}."
+          }
+        }
+      }
+    },
+    "MY_FILINGS": {
+      "PAGE_TITLE": "Was über mich eingereicht wurde",
+      "PAGE_SUBTITLE": "Die Angaben zu Ihnen, die Ihre Gemeinschaft an die Regulierungsbehörde übermittelt hat.",
+      "TITLE": "Meine Meldungen",
+      "SUBTITLE": "Sie erscheinen in den folgenden Dokumenten, mit den übermittelten Werten.",
+      "AS_OF": "Eingereicht am {{date}}",
+      "REFERENCE": "Aktenzeichen: {{reference}}",
+      "EMPTY": "Derzeit nennt Sie kein offizielles Dokument.",
+      "EMPTY_HINT": "Wenn das nicht stimmt, wenden Sie sich an die Verwaltung Ihrer Gemeinschaft.",
+      "FOOTNOTE": "Dies sind die Werte, wie sie zum angegebenen Datum übermittelt wurden. Sie ändern sich nicht, wenn Ihre Daten später korrigiert werden.",
+      "BLOCKS": {
+        "MEMBERS": "Sie als Mitglied",
+        "PARTICIPANTS": "Ihre Entnahmestellen",
+        "INSTALLATIONS": "Ihre Erzeugungsanlagen",
+        "STORAGE": "Ihre Speicheranlagen"
+      },
+      "FIELDS": {
+        "EAN": "Zähler (EAN-Code)",
+        "METER_NUMBER": "Zählernummer",
+        "GRD": "Netzbetreiber",
+        "NOM": "Name",
+        "PRENOM": "Vorname",
+        "DENOMINATION": "Firmenname",
+        "CATEGORIE": "Kategorie",
+        "SOUS_CATEGORIE": "Unterkategorie",
+        "NUMERO_ENTREPRISE": "Unternehmensnummer",
+        "RUE": "Straße",
+        "NUMERO": "Nummer",
+        "CODE_POSTAL": "Postleitzahl",
+        "LOCALITE": "Ort",
+        "CLIENT_RESIDENTIEL": "Kundentyp",
+        "PART_ALLOUEE": "Zugeteilter Anteil",
+        "STATUT_PRODUCTEUR": "Status des Erzeugers",
+        "STATUT_INSTALLATION": "Status der Anlage",
+        "DATE_MISE_EN_SERVICE": "Inbetriebnahmedatum",
+        "PUISSANCE_KVA": "Leistung (kVA)",
+        "FILIERE": "Technologie",
+        "PART_INJECTEE": "Eingespeister Anteil",
+        "DROITS_DE_VOTE": "Stimmrechte"
+      }
+    }
+  },
+  "HOME": {
+    "GREETING": "Hallo {{name}}",
+    "GREETING_ANON": "Hallo",
+    "SUBTITLE": "So sieht es heute bei Ihnen aus.",
+    "NEEDS_YOU": {
+      "TITLE": "{{count}} Sache(n) warten auf Sie",
+      "ALL_CLEAR": "Im Moment wartet nichts auf Sie. Alles ist in Ordnung.",
+      "INVITATION": "Sie sind eingeladen, „{{community}}“ beizutreten",
+      "MANAGER_INVITATION": "Sie sind eingeladen, „{{community}}“ zu verwalten",
+      "INVITATION_ACTION": "Einladung ansehen",
+      "RECORD_ONE": "{{field}} fehlt in Ihrem Datensatz von „{{community}}“",
+      "RECORD_MANY": "{{field}} und {{others}} weitere Angabe(n) fehlen in Ihrem Datensatz von „{{community}}“",
+      "RECORD_ACTION": "Vervollständigen",
+      "UNREAD": "Sie haben {{count}} ungelesene Benachrichtigung(en)",
+      "UNREAD_ACTION": "Lesen"
+    },
+    "COMMUNITIES": {
+      "TITLE": "Meine Gemeinschaften",
+      "YOUR_ROLE": "Sie sind hier: {{role}}",
+      "ENTER": "Betreten",
+      "OPEN": "Meine Gemeinschaft öffnen",
+      "MANAGE": "Meine Gemeinschaften verwalten (anlegen, umbenennen, verlassen)",
+      "EMPTY": "Sie gehören noch keiner Gemeinschaft an.",
+      "EMPTY_HINT": "Sobald eine Gemeinschaft Sie einlädt, erscheint die Einladung hier.",
+      "EMPTY_ACTION": "Gemeinschaften in meiner Nähe entdecken"
+    },
+    "ENERGY": {
+      "TITLE": "Meine Energie",
+      "HEADLINE": "Sie haben {{consumed}} kWh verbraucht, davon {{shared}} kWh von Ihrer Gemeinschaft geteilt.",
+      "INJECTED": "Sie haben {{injected}} kWh eingespeist, davon {{shared}} kWh mit der Gemeinschaft geteilt.",
+      "METER": "Zähler {{number}}",
+      "NO_READING": "noch kein Zählerstand",
+      "EMPTY": "Keine Zählerstände für diesen Monat. Sie erscheinen hier, sobald sie vorliegen."
+    },
+    "DOCUMENTS": {
+      "TITLE": "Meine Dokumente",
+      "EMPTY": "Es wurde noch kein Dokument mit Ihnen geteilt.",
+      "MORE": "und {{count}} weitere"
+    },
+    "INVOICES": {
+      "TITLE": "Meine offenen Rechnungen",
+      "EMPTY": "Sie haben keine offene Rechnung.",
+      "DRAFT": "Rechnung in Vorbereitung",
+      "OPEN_IN": "In „{{community}}“ ansehen"
+    },
+    "FILINGS": {
+      "TITLE": "Was über mich eingereicht wurde",
+      "INTRO": "Offizielle Dokumente an die Regulierungsbehörde, in denen Sie genannt werden.",
+      "EMPTY": "Derzeit nennt Sie kein offizielles Dokument.",
+      "OPEN_IN": "Details in „{{community}}“ ansehen"
+    },
+    "FIELDS": {
+      "NAME": "Ihr Name",
+      "IBAN": "Ihre IBAN",
+      "NRN": "Ihre Nationalregisternummer",
+      "EMAIL": "Ihre E-Mail-Adresse",
+      "VAT_NUMBER": "Ihre USt-IdNr.",
+      "HOME_ADDRESS": "Ihre Adresse",
+      "BILLING_ADDRESS": "Ihre Rechnungsadresse",
+      "SUB_TYPE_ROW": "Angaben zu Ihrem Datensatz"
+    },
+    "A11Y": {
+      "SKIP_TO_CONTENT": "Zum Hauptinhalt springen"
+    },
+    "MONTHS": {
+      "01": "Januar",
+      "02": "Februar",
+      "03": "März",
+      "04": "April",
+      "05": "Mai",
+      "06": "Juni",
+      "07": "Juli",
+      "08": "August",
+      "09": "September",
+      "10": "Oktober",
+      "11": "November",
+      "12": "Dezember"
     }
   }
 }

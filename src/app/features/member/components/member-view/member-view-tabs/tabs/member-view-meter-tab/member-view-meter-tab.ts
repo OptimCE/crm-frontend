@@ -194,7 +194,10 @@ export class MemberViewMeterTab implements OnInit {
   }
 
   onRowClick(meter: PartialMeterDTO): void {
-    void this.routing.navigate(['/members/meter/' + meter.EAN]);
+    // `/members/meter/{EAN}` matched no route — MEMBER_ROUTES declares only `''`
+    // and `':id'`, and there is no `**` wildcard — so this click silently did
+    // nothing. The meter detail lives under `/meters/{EAN}`.
+    void this.routing.navigate(['/meters', meter.EAN]);
   }
 
   toAddMeter(): void {

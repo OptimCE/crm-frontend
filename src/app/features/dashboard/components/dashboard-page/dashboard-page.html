@@ -1,0 +1,5 @@
+@if (userContext.compareWithActiveRole(Role.GESTIONNAIRE)) {
+  <app-manager-dashboard />
+} @else {
+  <app-member-dashboard />
+}

@@ -1,0 +1,39 @@
+<app-dashboard-tile
+  data-testid="my-member-record-tile"
+  icon="pi pi-id-card"
+  headingId="dashboard-tile-my-record"
+  [title]="'DASHBOARD.MEMBER.MY_RECORD.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+    @for (member of members(); track member.id) {
+      <li class="flex items-center gap-2 text-sm">
+        <a
+          class="text-primary-500 hover:text-primary-700 underline flex-1 min-w-0 truncate"
+          [routerLink]="['/users/me/members', member.id]"
+          data-testid="my-member-record-tile__link--member"
+          >{{ member.name }}</a
+        >
+      </li>
+    }
+  </ul>
+
+  @if (needsAttention().length) {
+    <p class="text-sm text-surface-700 m-0 flex items-center gap-2">
+      <i class="pi pi-hourglass text-surface-500" aria-hidden="true"></i>
+      {{ 'DASHBOARD.MEMBER.MY_RECORD.PENDING' | translate: { count: needsAttention().length } }}
+    </p>
+  } @else {
+    <p class="text-sm text-surface-600 m-0 flex items-center gap-2">
+      <i class="pi pi-check-circle text-primary-600" aria-hidden="true"></i>
+      {{ 'DASHBOARD.MEMBER.MY_RECORD.COMPLETE' | translate }}
+    </p>
+  }
+
+  <div tileEmpty data-testid="my-member-record-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MEMBER.MY_RECORD.EMPTY' | translate }}
+    </p>
+  </div>
+</app-dashboard-tile>

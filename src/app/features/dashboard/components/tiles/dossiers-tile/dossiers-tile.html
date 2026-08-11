@@ -1,0 +1,32 @@
+<app-dashboard-tile
+  data-testid="dossiers-tile"
+  icon="pi pi-folder-open"
+  headingId="dashboard-tile-dossiers"
+  [title]="'DASHBOARD.MANAGER.DOSSIERS.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+    @for (entry of nonEmpty(); track entry.status) {
+      <li class="flex items-center justify-between gap-2 text-sm text-surface-700">
+        <span class="truncate">{{ dossierStatusLabelKey(entry.status) | translate }}</span>
+        <span class="font-semibold text-surface-800 shrink-0">{{ entry.count }}</span>
+      </li>
+    }
+  </ul>
+
+  <div tileEmpty data-testid="dossiers-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MANAGER.DOSSIERS.EMPTY' | translate }}
+    </p>
+  </div>
+
+  <a
+    tileAction
+    class="text-primary-500 hover:text-primary-700 underline text-sm"
+    routerLink="/administrative-document"
+    data-testid="dossiers-tile__link--all"
+  >
+    {{ 'DASHBOARD.MANAGER.DOSSIERS.SEE_ALL' | translate }}
+  </a>
+</app-dashboard-tile>

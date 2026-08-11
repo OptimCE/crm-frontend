@@ -1,0 +1,68 @@
+@if (visible()) {
+  <section
+    class="rounded-xl border border-surface-200 p-4 flex flex-col gap-3"
+    aria-labelledby="dashboard-modules-heading"
+    data-testid="module-discovery-strip"
+  >
+    <header class="flex items-center gap-2">
+      <i class="pi pi-th-large text-primary-600" aria-hidden="true"></i>
+      <h2
+        id="dashboard-modules-heading"
+        class="text-base font-semibold text-surface-900 m-0 flex-1"
+      >
+        {{ 'DASHBOARD.MODULES.TITLE' | translate }}
+      </h2>
+      <p-button
+        icon="pi pi-times"
+        severity="secondary"
+        [text]="true"
+        [rounded]="true"
+        [attr.aria-label]="'DASHBOARD.MODULES.DISMISS_ARIA' | translate"
+        (onClick)="dismiss()"
+        data-testid="module-discovery-strip__btn--dismiss"
+      />
+    </header>
+
+    <p class="text-sm text-surface-600 m-0">{{ 'DASHBOARD.MODULES.SUBTITLE' | translate }}</p>
+
+    <ul class="flex flex-col gap-3 m-0 p-0 list-none">
+      @for (annex of available(); track annex.feature) {
+        <li class="flex items-start gap-3 flex-wrap">
+          <i class="{{ annex.icon }} text-surface-500 mt-1" aria-hidden="true"></i>
+          <div class="flex flex-col flex-1 min-w-0">
+            <span class="text-sm font-medium text-surface-800">{{
+              annex.displayKey | translate
+            }}</span>
+            <span class="text-xs text-surface-500">{{ annex.descriptionKey | translate }}</span>
+          </div>
+          @if (canSubscribe()) {
+            <p-button
+              size="small"
+              [label]="'DASHBOARD.MODULES.ENABLE' | translate"
+              [loading]="busy() === annex.feature"
+              (onClick)="enable(annex)"
+              [attr.data-testid]="'module-discovery-strip__btn--enable-' + annex.feature"
+            />
+          } @else {
+            <!-- A sentence, not a disabled button: only an ADMIN can subscribe, and
+                 a dead control is worse than an explanation for a keyboard user. -->
+            <span
+              class="text-xs text-surface-500 shrink-0"
+              data-testid="module-discovery-strip__ask-admin"
+            >
+              {{ 'DASHBOARD.MODULES.ASK_ADMIN' | translate }}
+            </span>
+          }
+        </li>
+      }
+    </ul>
+
+    <a
+      class="text-primary-500 hover:text-primary-700 underline text-sm"
+      routerLink="/annexes-services"
+      data-testid="module-discovery-strip__link--catalogue"
+    >
+      {{ 'DASHBOARD.MODULES.SEE_ALL' | translate }}
+    </a>
+  </section>
+}

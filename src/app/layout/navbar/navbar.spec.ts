@@ -192,6 +192,7 @@ describe('Navbar', () => {
       ['users_communities', '/users/communities'],
       ['users_invitations', '/users/invitations'],
       ['users', '/users'],
+      ['home', '/home'],
     ];
 
     routeTests.forEach(([stateKey, routeUrl]) => {

@@ -1,0 +1,92 @@
+<section class="flex flex-col gap-4" aria-labelledby="my-filings-heading">
+  <header class="flex flex-col gap-1">
+    <h2 id="my-filings-heading" class="text-lg font-semibold m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.TITLE' | translate }}
+    </h2>
+    <p class="text-sm text-surface-500 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.SUBTITLE' | translate }}
+    </p>
+  </header>
+
+  @if (loading()) {
+    <p class="text-sm text-surface-500" role="status">{{ 'COMMON.LOADING' | translate }}</p>
+  } @else if (failed()) {
+    <div class="flex flex-col items-start gap-2">
+      <p class="text-sm text-surface-500 m-0">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <button
+        type="button"
+        class="text-sm text-primary-700 underline"
+        (click)="load()"
+        data-testid="my-filings__btn--retry"
+      >
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (isEmpty()) {
+    <!-- Not "no data": a member who appears in nothing needs to know that is a
+         complete answer, and who to ask if they expected otherwise. -->
+    <div class="rounded-xl border border-surface-200 bg-surface-0 p-4">
+      <p class="text-sm m-0">{{ 'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.EMPTY' | translate }}</p>
+      <p class="text-sm text-surface-500 m-0 mt-1">
+        {{ 'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.EMPTY_HINT' | translate }}
+      </p>
+    </div>
+  } @else {
+    <ul class="list-none m-0 p-0 flex flex-col gap-4">
+      @for (filing of filings(); track filing.version.id) {
+        <li class="rounded-xl border border-surface-200 bg-surface-0 p-4 flex flex-col gap-3">
+          <div class="flex flex-col gap-1">
+            <h3 class="text-base font-semibold m-0" data-testid="my-filings__doc-type">
+              {{
+                filing.template_label ??
+                  ('ADMINISTRATIVE_DOCUMENT.DOC_TYPE.' + filing.document.doc_type.toUpperCase()
+                    | translate)
+              }}
+            </h3>
+            <p class="text-xs text-surface-500 m-0">
+              {{
+                'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.AS_OF'
+                  | translate: { date: formatApiDate(filing.version.created_at) }
+              }}
+            </p>
+            @if (filing.dossier.external_ref) {
+              <p class="text-xs text-surface-500 m-0">
+                {{
+                  'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.REFERENCE'
+                    | translate: { reference: filing.dossier.external_ref }
+                }}
+              </p>
+            }
+          </div>
+
+          @for (section of sections(filing); track section.labelKey) {
+            <div class="flex flex-col gap-2">
+              <h4 class="text-xs uppercase tracking-wide text-surface-500 m-0">
+                {{ section.labelKey | translate }}
+              </h4>
+              @for (row of section.rows; track $index) {
+                <dl
+                  class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 m-0 rounded-lg bg-surface-50 p-3"
+                  data-testid="my-filings__row"
+                >
+                  @for (field of row; track field.key) {
+                    <div class="flex flex-col">
+                      <dt class="field-label">
+                        {{ field.labelKey | translate: { key: field.key } }}
+                      </dt>
+                      <dd class="field-value m-0">{{ field.value }}</dd>
+                    </div>
+                  }
+                </dl>
+              }
+            </div>
+          }
+        </li>
+      }
+    </ul>
+
+    <p class="text-xs text-surface-500 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.FOOTNOTE' | translate }}
+    </p>
+  }
+</section>

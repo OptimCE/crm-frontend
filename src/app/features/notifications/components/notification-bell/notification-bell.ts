@@ -13,7 +13,10 @@ import { Popover } from 'primeng/popover';
 import { Tooltip } from 'primeng/tooltip';
 
 import { NotificationDTO } from '../../dtos/notification.dto';
-import { presentationFor } from '../../services/notification-type.registry';
+import { routeFor } from '../../services/notification-type.registry';
+import { canNavigate } from '../../services/notification-navigation';
+import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { NotificationStore } from '../../services/notification.store';
 import { NotificationItem } from '../notification-item/notification-item';
 
@@ -30,6 +33,8 @@ import { NotificationItem } from '../notification-item/notification-item';
 })
 export class NotificationBell implements OnInit {
   private readonly router = inject(Router);
+  private readonly userContext = inject(UserContextService);
+  private readonly services = inject(CommunityServicesStore);
   protected readonly store = inject(NotificationStore);
   private readonly popover = viewChild.required<Popover>('op');
 
@@ -52,11 +57,27 @@ export class NotificationBell implements OnInit {
     this.store.refreshRecent();
   }
 
+  /**
+   * Mark read always; navigate only when the destination is actually reachable.
+   *
+   * Otherwise the row is marked read and the user is bounced to `/users` with no
+   * explanation — the notification they clicked simply disappears. See
+   * `canNavigate` for the two ways that happens.
+   */
   protected onItemClick(notification: NotificationDTO): void {
     this.store.markRead(notification.id);
     this.popover().hide();
-    const route = presentationFor(notification.type).route;
-    if (route) void this.router.navigateByUrl(route);
+
+    const route = routeFor(notification);
+    if (!route) return;
+    if (
+      !canNavigate(notification, this.userContext.activeCommunityId(), (feature) =>
+        this.services.canReach(feature),
+      )
+    ) {
+      return;
+    }
+    void this.router.navigateByUrl(route);
   }
 
   protected markAll(): void {

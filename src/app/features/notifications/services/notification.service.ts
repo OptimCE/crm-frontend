@@ -5,7 +5,13 @@ import { environments } from '../../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../../core/dtos/api.response';
 import { defineTTL } from '../../../core/services/cache/cache.helper';
 import { ServiceBase } from '../../../shared/services/service.base';
-import { NotificationDTO, NotificationListQuery, UnreadCountDTO } from '../dtos/notification.dto';
+import {
+  NotificationDTO,
+  NotificationListQuery,
+  NotificationPreferenceDTO,
+  NotificationPreferencesDTO,
+  UnreadCountDTO,
+} from '../dtos/notification.dto';
 
 const CACHE_PREFIX = 'notifications';
 
@@ -53,6 +59,29 @@ export class NotificationService extends ServiceBase {
     return this.http
       .patch<ApiResponse<string>>(`${this.apiAddress}/read-all`, {})
       .pipe(tap(() => this.cache.invalidate(CACHE_PREFIX)));
+  }
+
+  /**
+   * The current user's channel preferences, plus the type prefixes the backend
+   * recognises. Uncached: it is read once when the tab opens and must reflect a
+   * save immediately.
+   */
+  preferences(): Observable<ApiResponse<NotificationPreferencesDTO>> {
+    return this.http.get<ApiResponse<NotificationPreferencesDTO>>(`${this.apiAddress}/preferences`);
+  }
+
+  /**
+   * Replace the preference set wholesale and get the new state back. Rows absent
+   * from `preferences` are deleted, which is how "reset to default" is
+   * expressed — so always send the complete set, never a delta.
+   */
+  savePreferences(
+    preferences: NotificationPreferenceDTO[],
+  ): Observable<ApiResponse<NotificationPreferencesDTO>> {
+    return this.http.put<ApiResponse<NotificationPreferencesDTO>>(
+      `${this.apiAddress}/preferences`,
+      { preferences },
+    );
   }
 
   /** Drop the cached lists (call after a mutation outside this service). */

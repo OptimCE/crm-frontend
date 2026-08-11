@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { of, Subject, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { MeterView } from './meter-view';
@@ -98,7 +98,12 @@ describe('MeterView', () => {
   let meterServiceSpy: {
     getMeter: ReturnType<typeof vi.fn>;
   };
-  let routerSpy: { navigate: ReturnType<typeof vi.fn> };
+  let routerSpy: {
+    navigate: ReturnType<typeof vi.fn>;
+    events: Observable<unknown>;
+    createUrlTree: ReturnType<typeof vi.fn>;
+    serializeUrl: ReturnType<typeof vi.fn>;
+  };
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
   let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
   let activatedRouteMock: { snapshot: { paramMap: ReturnType<typeof convertToParamMap> } };
@@ -120,7 +125,14 @@ describe('MeterView', () => {
       getMeter: vi.fn().mockReturnValue(of(new ApiResponse<MetersDTO>(buildMeter()))),
     };
 
-    routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
+    routerSpy = {
+      navigate: vi.fn().mockResolvedValue(true),
+      // RouterLink subscribes to `events` and calls `createUrlTree`/`serializeUrl`
+      // on init; the templates now carry real cross-module links.
+      events: of(),
+      createUrlTree: vi.fn().mockReturnValue({}),
+      serializeUrl: vi.fn().mockReturnValue(''),
+    };
     snackbarSpy = { openSnackBar: vi.fn() };
     dialogServiceSpy = { open: vi.fn() };
 
@@ -178,7 +190,10 @@ describe('MeterView', () => {
     it('should navigate away when route has no id', async () => {
       activatedRouteMock.snapshot.paramMap = convertToParamMap({});
       await createComponent();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/members/meter']);
+      // Was `/members/meter`, which resolved to MemberView with id = 'meter';
+      // that becomes NaN and requests `/members/NaN`. The meters list is the
+      // meaningful fallback for a meter route with no id.
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/meters']);
     });
 
     it('should set isLoading then clear after getMeter response', async () => {

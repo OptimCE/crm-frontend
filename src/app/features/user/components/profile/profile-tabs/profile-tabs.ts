@@ -6,6 +6,7 @@ import { MetersComponent } from './tabs/meters/meters.component';
 import { BankingInfoComponent } from './tabs/banking-info/banking-info.component';
 import { DocumentsComponent } from './tabs/documents/documents.component';
 import { RepresentationsComponent } from './tabs/representations/representations.component';
+import { NotificationPreferencesComponent } from './tabs/notification-preferences/notification-preferences.component';
 
 @Component({
   selector: 'app-profile-tabs',
@@ -20,6 +21,7 @@ import { RepresentationsComponent } from './tabs/representations/representations
     BankingInfoComponent,
     DocumentsComponent,
     RepresentationsComponent,
+    NotificationPreferencesComponent,
   ],
   templateUrl: './profile-tabs.html',
   styleUrl: './profile-tabs.css',

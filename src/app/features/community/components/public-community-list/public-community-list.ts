@@ -20,11 +20,12 @@ import { MunicipalityService } from '../../../../shared/services/municipality.se
 import { RegulatorStore } from '../../../../core/services/regulator.store';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
+import { CommunityLogo } from '../../../../shared/components/community-logo/community-logo';
 
 @Component({
   selector: 'app-public-community-list',
   standalone: true,
-  imports: [TagModule, AutoComplete, Select, FormsModule, TranslatePipe, HeaderPage],
+  imports: [TagModule, AutoComplete, Select, FormsModule, TranslatePipe, HeaderPage, CommunityLogo],
   templateUrl: './public-community-list.html',
   styleUrl: './public-community-list.css',
 })
@@ -49,23 +50,12 @@ export class PublicCommunityList {
   communityDetails = signal<Map<number, CommunityDetailDTO>>(new Map());
   loadingDetails = signal<Set<number>>(new Set());
   expandedCommunityId = signal<number | null>(null);
-  brokenLogos = signal<Set<number>>(new Set());
 
   /** Active municipality filter applied to every community's operations fetch. */
   selectedMunicipalities = signal<MunicipalityPartialDTO[]>([]);
   municipalitySuggestions = signal<MunicipalityPartialDTO[]>([]);
 
   readonly SharingOperationType = SharingOperationType;
-
-  onLogoError(communityId: number): void {
-    const updated = new Set(this.brokenLogos());
-    updated.add(communityId);
-    this.brokenLogos.set(updated);
-  }
-
-  hasValidLogo(community: PublicCommunityDTO): boolean {
-    return !!community.logo_presigned_url && !this.brokenLogos().has(community.id);
-  }
 
   constructor() {
     this.loadPublicCommunities();

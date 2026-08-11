@@ -68,6 +68,18 @@
     "EMPTY": "Je bent helemaal bij",
     "JUST_NOW": "Zojuist",
     "NEW_TOAST": "U hebt nieuwe meldingen",
+    "PREFIXES": {
+      "admin_deadline": "Administratieve deadlines",
+      "admin_dossier": "Administratieve dossiers",
+      "billing_run": "Facturatierondes",
+      "document": "Documenten",
+      "invoice": "Facturen",
+      "manager_invitation": "Beheerdersuitnodigingen",
+      "member": "Leden",
+      "member_invitation": "Ledenuitnodigingen",
+      "news_poll": "Peilingen",
+      "news_post": "Nieuwsberichten"
+    },
     "TYPES": {
       "document": {
         "uploaded": {
@@ -98,7 +110,173 @@
         "published": {
           "title": "Er is een nieuwe peiling gepubliceerd"
         }
+      },
+      "invoice": {
+        "issued": {
+          "title": "Er is een nieuwe factuur beschikbaar"
+        },
+        "overdue": {
+          "title": "Een factuur is over de vervaldatum"
+        }
+      },
+      "billing_run": {
+        "completed": {
+          "title": "Een facturatieronde is voltooid"
+        }
+      },
+      "admin_deadline": {
+        "due_soon": {
+          "title": "Een administratieve deadline komt eraan"
+        },
+        "missed": {
+          "title": "Een administratieve deadline is verstreken"
+        }
+      },
+      "admin_dossier": {
+        "acknowledged": {
+          "title": "Een administratief dossier heeft een ontvangstbevestiging gekregen"
+        }
       }
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "SUBTITLE": "Uw gemeenschap in één oogopslag",
+    "REFRESH": "Vernieuwen",
+    "TILE": {
+      "ERROR": "Deze informatie kon niet worden geladen."
+    },
+    "MANAGER": {
+      "READINESS": {
+        "TITLE": "Aandachtspunten",
+        "COUNT": "{{count}} te behandelen",
+        "ALL_GOOD": "Alles wat wij controleren is in orde.",
+        "FIX": "Oplossen",
+        "ITEMS": {
+          "OPERATIONS_WITHOUT_KEY": "{{count}} deelbewerking(en) zonder geldige verdeelsleutel — energie kan niet worden verdeeld.",
+          "OPERATIONS_KEY_PENDING": "{{count}} verdeelsleutel(s) wachten op goedkeuring.",
+          "METERS_WAITING_GRD": "{{count}} meter(s) wachten op de netbeheerder.",
+          "METERS_WAITING_MANAGER": "{{count}} meter(s) wachten op uw bevestiging.",
+          "METERS_NOT_IN_OPERATION": "{{count}} meter(s) maken geen deel uit van een deelbewerking.",
+          "METERS_WITHOUT_DATA": "{{count}} meter(s) hebben vandaag geen actieve gegevens.",
+          "MEMBERS_INCOMPLETE": "{{count}} ledenfiche(s) zijn onvolledig.",
+          "MEMBERS_PENDING": "{{count}} lid/leden wachten op validatie.",
+          "COMMUNITY_FIELD_MISSING": "Ontbrekende informatie voor de gemeenschap: {{field}}."
+        },
+        "FIELDS": {
+          "VAT_NUMBER": "btw-nummer",
+          "LEGAL_NAME": "juridische naam",
+          "IBAN": "IBAN",
+          "ACCOUNT_HOLDER_NAME": "rekeninghouder",
+          "HEADQUARTERS_ADDRESS": "adres van de zetel",
+          "REGULATOR": "regulator"
+        }
+      },
+      "ENERGY": {
+        "TITLE": "Energie in één oogopslag",
+        "SHARED": "Gedeeld",
+        "INJECTED_SHARED": "Geïnjecteerd en gedeeld",
+        "PERIOD": "Periode: {{month}}",
+        "EMPTY": "Nog geen verbruiksgegevens. Laad uw meetgegevens op vanuit een deelbewerking."
+      },
+      "OPERATIONS": {
+        "TITLE": "Deelbewerkingen",
+        "EMPTY": "Nog geen deelbewerking. Maak er een aan om energie te beginnen delen.",
+        "SEE_ALL": "Bekijk alle {{count}} bewerkingen"
+      },
+      "ONBOARDING": {
+        "TITLE": "Nieuwe deelnemers",
+        "MEMBER_INVITATIONS": "{{count}} ledenuitnodiging(en) in behandeling",
+        "TO_BE_ENCODED": "{{count}} ledenfiche(s) nog in te vullen",
+        "MANAGER_INVITATIONS": "{{count}} beheerdersuitnodiging(en) in behandeling",
+        "EMPTY": "Er is niemand bezig met aansluiten.",
+        "MANAGE": "Leden beheren"
+      },
+      "ACTIVITY": {
+        "TITLE": "Recente activiteit",
+        "SYSTEM": "Systeem",
+        "EMPTY": "Er is nog niets geregistreerd.",
+        "SEE_ALL": "Volledig logboek bekijken"
+      },
+      "DEADLINES": {
+        "TITLE": "Administratieve deadlines",
+        "OPEN_COUNT": "{{count}} openstaande deadline(s)",
+        "OVERDUE": "{{count}} te laat",
+        "EMPTY": "Geen openstaande deadline. Dien een eerste dossier in om ze te genereren.",
+        "SEE_ALL": "Deadlines bekijken"
+      },
+      "DOSSIERS": {
+        "TITLE": "Administratieve dossiers",
+        "EMPTY": "Nog geen dossier. Maak uw eerste administratieve dossier aan.",
+        "SEE_ALL": "Dossiers bekijken"
+      },
+      "INVOICES": {
+        "TITLE": "Facturatie",
+        "UNPAID_COUNT": "{{count}} onbetaalde factu(u)r(en)",
+        "LAST_RUN": "Laatste facturatie: {{operation}} tot {{period}}",
+        "NO_RUN_YET": "Nog geen facturatie uitgevoerd.",
+        "EMPTY": "Niets te factureren. Start uw eerste facturatiecyclus.",
+        "SEE_ALL": "Facturatie openen"
+      }
+    },
+    "MEMBER": {
+      "ENERGY": {
+        "TITLE": "Mijn energie hier",
+        "CONSUMED": "Verbruikt",
+        "SHARED": "Ontvangen uit delen",
+        "PERIOD": "Over de laatste {{days}} dagen",
+        "EMPTY": "Geen verbruiksgegevens voor uw meters in deze gemeenschap."
+      },
+      "PARTICIPATION": {
+        "TITLE": "Mijn deelname",
+        "PRORATA": "Pro rata van het verbruik",
+        "NOT_IN_KEY": "Niet opgenomen in de verdeelsleutel — vraag het aan uw beheerder.",
+        "NO_KEY": "Geen geldige verdeelsleutel voor deze bewerking.",
+        "HELP_LABEL": "Wat betekent dit percentage?",
+        "HELP": "Het is het deel van de gedeelde energie van de bewerking dat u wordt toegewezen door de geldende verdeelsleutel.",
+        "EMPTY": "U neemt aan geen enkele deelbewerking in deze gemeenschap deel."
+      },
+      "MY_RECORD": {
+        "TITLE": "Mijn ledenfiche",
+        "COMPLETE": "Uw fiche is actief.",
+        "PENDING": "{{count}} fiche(s) wachten op validatie door een beheerder.",
+        "EMPTY": "Geen ledenfiche in deze gemeenschap."
+      },
+      "ABOUT": {
+        "TITLE": "Over deze gemeenschap",
+        "MEMBER_COUNT": "Leden",
+        "REGULATOR": "Regulator",
+        "WEBSITE": "Website",
+        "EMPTY": "Informatie niet beschikbaar.",
+        "SEE_MORE": "Informatie bekijken"
+      },
+      "DOCUMENTS": {
+        "TITLE": "Mijn documenten",
+        "EMPTY": "Er is hier geen document met u gedeeld.",
+        "SEE_ALL": "Mijn documenten bekijken"
+      },
+      "INVOICES": {
+        "TITLE": "Mijn facturen",
+        "UNPAID_COUNT": "{{count}} te betalen factu(u)r(en)",
+        "EMPTY": "Geen onbetaalde factuur.",
+        "SEE_ALL": "Mijn facturen bekijken"
+      }
+    },
+    "NEWS": {
+      "TITLE": "Nieuws",
+      "ANONYMOUS": "Bericht",
+      "OPEN_POLLS": "{{count}} peiling(en) wachten op uw antwoord",
+      "EMPTY_MANAGER": "Nog geen nieuws. Publiceer uw eerste bericht.",
+      "EMPTY_MEMBER": "Nog geen nieuws.",
+      "SEE_ALL": "Nieuwsbord bekijken"
+    },
+    "MODULES": {
+      "TITLE": "Beschikbare modules",
+      "SUBTITLE": "Deze modules zijn nog niet geactiveerd voor deze gemeenschap.",
+      "ENABLE": "Activeren",
+      "ASK_ADMIN": "Vraag het aan uw gemeenschapsbeheerder",
+      "DISMISS_ARIA": "Beschikbare modules verbergen",
+      "SEE_ALL": "Catalogus bekijken"
     }
   },
   "NAVBAR": {
@@ -131,7 +309,10 @@
     "RETRY": "Opnieuw proberen",
     "AUDIT_LOG": "Auditlogboek",
     "NEWS": "Nieuws",
-    "BILLING": "Facturatie"
+    "BILLING": "Facturatie",
+    "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
+    "DASHBOARD": "Dashboard",
+    "HOME": "Start"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -165,12 +346,24 @@
       "BILLING_ADDRESS": "Factuuradres",
       "EMAIL": "E-mailadres"
     },
+    "NOTIFICATION_PREFERENCES": {
+      "INTRO": "Kies hoe u op de hoogte wilt worden gebracht van elk soort activiteit.",
+      "TRANSACTIONAL_NOTICE": "Essentiële berichten — facturen, uitnodigingen en gemiste regelgevende deadlines — worden altijd verzonden en kunnen niet worden uitgeschakeld.",
+      "CATEGORY": "Categorie",
+      "IN_APP": "In de app",
+      "EMAIL": "E-mail",
+      "DEFAULT_LABEL": "Al het overige",
+      "SAVE": "Voorkeuren opslaan",
+      "SAVED": "Voorkeuren opgeslagen",
+      "EMPTY": "Geen categorieën beschikbaar"
+    },
     "TABS": {
       "HEADERS": {
         "METERS": "Meters",
         "BANKING_INFORMATIONS": "Bankgegevens",
         "DOCUMENTS": "Documenten",
-        "REPRESENTATIONS": "Vertegenwoordigingen"
+        "REPRESENTATIONS": "Vertegenwoordigingen",
+        "NOTIFICATIONS": "Meldingen"
       },
       "BANKING_INFORMATION": {
         "IBAN": "IBAN"
@@ -326,9 +519,10 @@
         "CREATED_AT": "Gemaakt",
         "UPDATED_AT": "Bijgewerkt"
       },
-      "ACTIVATED": "Activeren",
-      "NON_ACTIVATED": "Deactiveren",
-      "UPDATE_COMMUNITY": "Bijwerken",
+      "ACTIVATED": "Actieve gemeenschap",
+      "NON_ACTIVATED": "Niet actief",
+      "INFO_BUTTON": "Gemeenschapsinfo",
+      "DASHBOARD_BUTTON": "Dashboard",
       "ACTIVATE_BUTTON": "Activeren",
       "ACTIVATE_BUTTON_TOOLTIP": "Van gemeenschap wisselen",
       "LEAVE_BUTTON": "Verlaten",
@@ -336,14 +530,11 @@
       "LEAVE_CONFIRM_HEADER": "Gemeenschap verlaten",
       "LEAVE_CONFIRM_MESSAGE": "Weet u zeker dat u \"{{name}}\" wilt verlaten?",
       "LEAVE_SUCCESS": "U hebt de gemeenschap verlaten.",
-      "UPDATE_SUCCESS": "Naam van de gemeenschap bijgewerkt.",
       "NO_COMMUNITY_FOUND": "Geen gemeenschap gevonden",
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
       "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)",
       "PUBLIC_TITLE": "Beschikbare openbare gemeenschappen",
       "PUBLIC_LOGO": "Logo",
-      "DETAILS_BUTTON": "Details",
-      "DETAILS_BUTTON_TOOLTIP": "Details van de gemeenschap bekijken",
       "NO_PUBLIC_COMMUNITY_FOUND": "Geen openbare gemeenschappen beschikbaar",
       "PAGE_REPORT_TEMPLATE_PUBLIC_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} gemeenschappen)"
     },
@@ -357,7 +548,6 @@
     },
     "CREATE": {
       "TITLE": "Gemeenschap aanmaken",
-      "EDIT_TITLE": "Gemeenschap bijwerken",
       "NAME": "Naam",
       "NAME_PLACEHOLDER": "Mijn lokale gemeenschap",
       "VALIDATE": "Bevestigen"
@@ -718,7 +908,9 @@
         "FIRST_NAME_LABEL": "Voornaam",
         "EMAIL_LABEL": "E-mailadres",
         "PHONE_NUMBER_LABEL": "Telefoonnummer"
-      }
+      },
+      "RELATED_METERS": "Hun meters",
+      "RELATED_INVOICES": "Hun facturen"
     },
     "LIST": {
       "MEMBER_TITLE": "Leden",
@@ -1310,7 +1502,10 @@
         "SET_PUBLIC_SUCCESS": "Deeloperatie is nu openbaar",
         "SET_PRIVATE_SUCCESS": "Deeloperatie is nu privé",
         "MUNICIPALITIES_REQUIRED_HINT": "Voeg minstens één gemeente toe voordat u de operatie openbaar maakt"
-      }
+      },
+      "RELATED_LABEL": "Zie ook:",
+      "RELATED_DOSSIERS": "Haar administratieve dossiers",
+      "RELATED_BILLING": "Haar facturatie"
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Deeloperatie",
@@ -1403,6 +1598,10 @@
     "BILLING": {
       "NAME": "Facturatie",
       "DESCRIPTION": "Factureer leden voor hun verbruik uit energiedeling; leden bekijken en betalen hun eigen facturen."
+    },
+    "ADMINISTRATIVE_DOCUMENT": {
+      "NAME": "Administratieve documenten",
+      "DESCRIPTION": "Volg de reglementaire dossiers bij de CWaPE en de netbeheerder: statussen, afgeleide termijnen en elke versie van elk ingediend document."
     }
   },
   "BILLING": {
@@ -2014,6 +2213,483 @@
         "EXPIRY_REQUIRED": "Kies een sluitingsdatum.",
         "EXPIRY_FUTURE": "De sluitingsdatum moet in de toekomst liggen."
       }
+    }
+  },
+  "ADMINISTRATIVE_DOCUMENT": {
+    "TITLE": "Administratieve documenten",
+    "SUBTITLE": "Volg de dossiers bij de CWaPE en de netbeheerder: statussen, termijnen en elke ingediende versie.",
+    "TABS": {
+      "DOSSIERS": "Dossiers",
+      "DEADLINES": "Termijnen"
+    },
+    "DOSSIER_TYPE": {
+      "CREATION_NOTIFICATION": "Kennisgeving van oprichting",
+      "MODIFICATION": "Wijziging",
+      "ANNUAL_REPORT": "Jaarlijkse rapportering",
+      "SHARING_AUTHORIZATION": "Deelmachtiging",
+      "SHARING_MODIFICATION": "Wijziging van de deling",
+      "CESSATION": "Stopzetting van de activiteiten"
+    },
+    "DOSSIER_STATUS": {
+      "IN_PREPARATION": "In voorbereiding",
+      "SUBMITTED": "Ingediend",
+      "COMPLETE": "Volledig",
+      "CLOSED": "Afgesloten",
+      "LAPSED": "Vervallen"
+    },
+    "DOCUMENT_STATUS": {
+      "DRAFT": "Concept",
+      "READY": "Gereed",
+      "SENT": "Verzonden",
+      "ACKNOWLEDGED": "Ontvangst bevestigd",
+      "OBSOLETE": "Verouderd"
+    },
+    "DOC_ORIGIN": {
+      "GENERATED": "Gegenereerd",
+      "UPLOADED": "Geüpload"
+    },
+    "RENDER_STATE": {
+      "PENDING": "Bezig met genereren",
+      "FAILED": "Genereren mislukt"
+    },
+    "DEADLINE_STATUS": {
+      "OPEN": "Open",
+      "MET": "Nagekomen",
+      "MISSED": "Overschreden",
+      "CANCELLED": "Geannuleerd"
+    },
+    "REGION": {
+      "WAL": "Wallonië (CWaPE)",
+      "BRU": "Brussel (Brugel)",
+      "VLA": "Vlaanderen (VREG)"
+    },
+    "ACK_RESULT": {
+      "COMPLETE": "Volledig dossier",
+      "INCOMPLETE": "Onvolledig dossier"
+    },
+    "DOC_TYPE": {
+      "ANNEX6_NOTIFICATION": "Bijlage 6 — kennisgeving gemeenschap",
+      "ANNEX6_SHARING_FORM": "Bijlage 6 — deelformulier",
+      "ANNEX8_SWORN_DECLARATION": "Bijlage 8 — verklaring op erewoord",
+      "DSO_AGREEMENT_COMMUNITY": "Overeenkomst netbeheerder — gemeenschap",
+      "DSO_AGREEMENT_BUILDING": "Overeenkomst netbeheerder — zelfde gebouw",
+      "ANNUAL_PARTICIPANT_LIST": "Lijsten deelnemers / installaties",
+      "COMMUNITY_NOTIFICATION": "Kennisgevingsformulier gemeenschap",
+      "COMMUNITY_MODIFICATION": "Wijzigingsformulier gemeenschap",
+      "SHARING_NOTIFICATION": "Kennisgevingsformulier delen",
+      "SHARING_MODIFICATION": "Wijzigingsformulier delen",
+      "ANNEX7_LEGAL_ENTITY": "Bijlage 7 - Vennootschappen en verenigingen"
+    },
+    "DEADLINE_TYPE": {
+      "COMPLETENESS_CHECK": "Volledigheidscontrole",
+      "LAPSE": "Verval",
+      "MODIFICATION_NOTIFICATION": "Kennisgeving van wijziging",
+      "ANNUAL_REPORT": "Jaarlijkse rapportering"
+    },
+    "SORT": {
+      "CREATED_AT": "Aanmaakdatum",
+      "UPDATED_AT": "Laatste wijziging",
+      "SUBMITTED_AT": "Indieningsdatum",
+      "STATUS": "Status",
+      "TYPE": "Type",
+      "DUE_DATE": "Vervaldatum"
+    },
+    "LIST": {
+      "INTRO": "Elk dossier wordt ingediend voor één deelverrichting.",
+      "CREATE": "Nieuw dossier",
+      "EMPTY": "Nog geen dossier. Maak er een aan om de opvolging te starten.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} dossiers)",
+      "FILTERS": {
+        "OPERATION": "Deelverrichting",
+        "ALL_OPERATIONS": "Alle verrichtingen",
+        "TYPE": "Type",
+        "ALL_TYPES": "Alle types",
+        "STATUS": "Status",
+        "ALL_STATUSES": "Alle statussen",
+        "SORT": "Sorteren op",
+        "TOGGLE_ORDER": "Sorteervolgorde omkeren",
+        "CLEAR": "Wissen"
+      },
+      "COL": {
+        "TYPE": "Type",
+        "TITLE": "Titel",
+        "OPERATION": "Deelverrichting",
+        "STATUS": "Status",
+        "EXTERNAL_REF": "Dossierreferentie",
+        "SUBMITTED_AT": "Ingediend op"
+      }
+    },
+    "DETAIL": {
+      "BACK": "Terug naar dossiers",
+      "EDIT": "Bewerken",
+      "OPERATION": "Deelverrichting",
+      "EXTERNAL_REF": "Dossierreferentie",
+      "REGION": "Regio",
+      "SUBMITTED_AT": "Ingediend op",
+      "CREATED_AT": "Aangemaakt op",
+      "NOT_SET": "Niet ingevuld",
+      "ACTIONS": "Acties",
+      "NO_FURTHER_ACTION": "Dit dossier is afgesloten — verdere actie is niet mogelijk.",
+      "NOT_FOUND": "Dossier niet gevonden.",
+      "TABS": {
+        "DOCUMENTS": "Documenten",
+        "DEADLINES": "Termijnen",
+        "TIMELINE": "Historiek"
+      }
+    },
+    "DOCUMENTS": {
+      "ADD": "Document toevoegen",
+      "EMPTY": "Nog geen document in dit dossier.",
+      "VERSIONS": "versies",
+      "NO_VERSION": "Nog geen versie",
+      "UPLOAD": "Versie uploaden",
+      "DETAIL": "Versies bekijken",
+      "DOWNLOAD": "Downloaden",
+      "NO_FURTHER_ACTION": "Geen verdere actie mogelijk.",
+      "CONFIRM_HEADER": "Statuswijziging bevestigen",
+      "CONFIRM_MESSAGE": "Dit document naar \"{{status}}\" zetten? De wijziging wordt in de historiek vastgelegd.",
+      "STATUS_CHANGED": "Status bijgewerkt",
+      "COL": {
+        "TYPE": "Document",
+        "STATUS": "Status",
+        "VERSIONS": "Versies",
+        "UPDATED_AT": "Bijgewerkt",
+        "ACTIONS": "Acties"
+      },
+      "GENERATE": "Genereren",
+      "REGENERATE": "Opnieuw genereren",
+      "RENDER_DONE": "Document gegenereerd",
+      "RENDER_FAILED": "Genereren van het document is mislukt"
+    },
+    "DEADLINES": {
+      "INTRO": "Termijnen worden automatisch afgeleid uit de geregistreerde statuswijzigingen.",
+      "EMPTY": "Geen termijn voldoet aan deze filters.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} termijnen)",
+      "SWEEP": "Achterstand bijwerken",
+      "SWEEP_CONFIRM_HEADER": "Verlopen termijnen bijwerken",
+      "SWEEP_CONFIRM_MESSAGE": "Alle verlopen termijnen als overschreden markeren en de volgende terugkerende termijnen inplannen?",
+      "SWEEP_DONE": "{{missed}} termijn(en) als overschreden gemarkeerd, {{rolled}} opnieuw ingepland.",
+      "RESOLVED": "Termijn bijgewerkt",
+      "MARK_MET": "Als nagekomen markeren",
+      "MARK_MET_CONFIRM_HEADER": "Termijn als nagekomen markeren",
+      "MARK_MET_CONFIRM_MESSAGE": "Bevestigen dat deze verplichting is nagekomen? Een terugkerende termijn wordt opnieuw ingepland.",
+      "CANCEL": "Termijn annuleren",
+      "CANCEL_CONFIRM_HEADER": "Termijn annuleren",
+      "CANCEL_CONFIRM_MESSAGE": "Deze termijn annuleren? Hij blijft geregistreerd maar wordt niet meer verwacht.",
+      "OVERDUE": "Te laat",
+      "RECURRING": "Terugkerend",
+      "FILTERS": {
+        "STATUS": "Status",
+        "ALL_STATUSES": "Alle statussen",
+        "TYPE": "Type",
+        "ALL_TYPES": "Alle types",
+        "OPERATION": "Deelverrichting",
+        "ALL_OPERATIONS": "Alle verrichtingen",
+        "CLEAR": "Wissen"
+      },
+      "COL": {
+        "DUE_DATE": "Vervaldatum",
+        "TYPE": "Type",
+        "DOSSIER": "Dossier",
+        "STATUS": "Status",
+        "ACTIONS": "Acties"
+      }
+    },
+    "TIMELINE": {
+      "TITLE": "Historiek",
+      "INTRO": "Elke statuswijziging wordt definitief vastgelegd. Correcties worden toegevoegd, nooit gewist.",
+      "EMPTY": "Nog geen historiek.",
+      "CREATED": "Aangemaakt",
+      "CORRECTIVE": "Correctie",
+      "SYSTEM": "Systeem",
+      "SHOW_RAW": "Details tonen",
+      "HIDE_RAW": "Details verbergen",
+      "NEWEST_FIRST": "Nieuwste eerst",
+      "OLDEST_FIRST": "Oudste eerst",
+      "ENTRY_COUNT": "{{count}} vermeldingen",
+      "CONTEXT": {
+        "SUBMISSION_DATE": "Datum van indiening",
+        "ACKNOWLEDGED_DATE": "Datum ontvangstbevestiging",
+        "AUTHORITY_FILE_REF": "Dossierreferentie",
+        "RESULT": "Resultaat",
+        "REASON": "Reden",
+        "NOTE": "Notitie"
+      }
+    },
+    "TRANSITION": {
+      "HEADER": "Status wijzigen",
+      "TO_STATUS": "Nieuwe status",
+      "SUBMIT": "Vastleggen",
+      "SUCCESS": "Status vastgelegd",
+      "CORRECTIVE_WARNING": "Dit is een correctie. Ze wordt met uw reden aan de historiek toegevoegd — de eerdere vermelding blijft bestaan.",
+      "FIELDS": {
+        "SUBMISSION_DATE": "Datum van indiening",
+        "ACKNOWLEDGED_DATE": "Datum ontvangstbevestiging",
+        "AUTHORITY_FILE_REF": "Referentie CWaPE / netbeheerder",
+        "RESULT": "Resultaat",
+        "REASON": "Reden van de correctie",
+        "NOTE": "Notitie (optioneel)"
+      },
+      "ERRORS": {
+        "FIELD_REQUIRED": "\"{{field}}\" is vereist voor deze statuswijziging."
+      }
+    },
+    "DIALOGS": {
+      "CREATE_DOSSIER": {
+        "TITLE": "Nieuw dossier",
+        "TYPE": "Type dossier",
+        "TYPE_PLACEHOLDER": "Kies een type",
+        "OPERATION": "Deelverrichting",
+        "OPERATION_PLACEHOLDER": "Kies een verrichting",
+        "OPERATION_HINT": "Ligt vast zodra het dossier is aangemaakt.",
+        "TITLE_FIELD": "Titel (optioneel)",
+        "EXTERNAL_REF": "Dossierreferentie (optioneel)",
+        "EXTERNAL_REF_HINT": "De referentie van de CWaPE of de netbeheerder, zodra u ze kent.",
+        "NO_OPERATIONS": "Deze gemeenschap heeft nog geen deelverrichting. Maak er een aan voordat u een dossier indient.",
+        "SUBMIT": "Aanmaken",
+        "SUCCESS": "Dossier aangemaakt",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Kies een type dossier.",
+          "OPERATION_REQUIRED": "Kies de deelverrichting waarvoor dit dossier wordt ingediend."
+        }
+      },
+      "EDIT_DOSSIER": {
+        "TITLE": "Dossier bewerken",
+        "SUBMIT": "Opslaan",
+        "SUCCESS": "Dossier bijgewerkt",
+        "OPERATION_LOCKED": "De deelverrichting kan na aanmaak niet meer worden gewijzigd."
+      },
+      "CREATE_DOCUMENT": {
+        "TITLE": "Document toevoegen",
+        "DOC_TYPE": "Documenttype",
+        "DOC_TYPE_PLACEHOLDER": "Kies een documenttype",
+        "TITLE_FIELD": "Titel (optioneel)",
+        "SUBMIT": "Toevoegen",
+        "SUCCESS": "Document toegevoegd",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Kies een documenttype."
+        }
+      },
+      "UPLOAD_VERSION": {
+        "TITLE": "Versie uploaden",
+        "DROP_HINT": "Sleep een bestand hierheen of klik om er een te kiezen.",
+        "IMMUTABLE_HINT": "Elke upload wordt bewaard als een nieuwe, definitieve versie. Er wordt niets overschreven.",
+        "SUBMIT": "Uploaden",
+        "SUCCESS": "Versie opgeslagen",
+        "ERRORS": {
+          "FILE_REQUIRED": "Kies een bestand om te uploaden.",
+          "NOT_ALLOWED": "Dit document is al verzonden. Voer een correctie uit voordat u een versie toevoegt."
+        }
+      },
+      "DOCUMENT_DETAIL": {
+        "TITLE": "Documentversies",
+        "CURRENT": "Huidig",
+        "DOWNLOAD": "Downloaden",
+        "DOWNLOAD_FAILED": "Downloaden mislukt",
+        "EMPTY": "Nog geen versie opgeslagen.",
+        "COL": {
+          "VERSION": "Versie",
+          "FILENAME": "Bestand",
+          "SIZE": "Grootte",
+          "CHECKSUM": "Controlesom",
+          "CREATED_AT": "Opgeslagen op"
+        },
+        "SNAPSHOT": "Vastgelegde gegevens tonen",
+        "SNAPSHOT_HINT": "De exacte gegevens waaruit deze versie is gegenereerd."
+      },
+      "GENERATE": {
+        "TITLE": "Document genereren",
+        "REVIEW_HINT": "De gegevens komen uit de CRM. Corrigeer ze indien nodig: wat u hier goedkeurt, wordt ingediend.",
+        "SUBMIT": "Genereren",
+        "QUEUED": "Genereren gestart",
+        "ERRORS": {
+          "NOT_ALLOWED": "Dit document is al verzonden. Voer eerst een correctie uit voordat u het opnieuw genereert."
+        }
+      }
+    },
+    "PREFILL": {
+      "IDENTITY": "Identiteit",
+      "ADD_ROW": "Rij toevoegen",
+      "EMPTY_TABLE": "Geen rijen.",
+      "FIELDS": {
+        "COMMUNITY_NAME": "Naam van de gemeenschap",
+        "COMMUNITY_LEGAL_NAME": "Juridische naam",
+        "COMMUNITY_VAT_NUMBER": "Ondernemings-/btw-nummer",
+        "COMMUNITY_STREET": "Straat",
+        "COMMUNITY_NUMBER": "Nr.",
+        "COMMUNITY_POSTCODE": "Postcode",
+        "COMMUNITY_CITY": "Gemeente",
+        "COMMUNITY_ADDRESS": "Adres",
+        "OPERATION_NAME": "Deelactiviteit",
+        "PARTICIPANT_COUNT": "Aantal deelnemers",
+        "INSTALLATION_COUNT": "Aantal installaties",
+        "CATEGORIE": "Categorie",
+        "SOUS_CATEGORIE": "Subcategorie",
+        "NOM": "Naam",
+        "PRENOM": "Voornaam",
+        "DENOMINATION": "Benaming",
+        "NUMERO_ENTREPRISE": "Ondernemingsnummer",
+        "RUE": "Straat",
+        "NUMERO": "Nr.",
+        "CODE_POSTAL": "Postcode",
+        "LOCALITE": "Gemeente",
+        "DROITS_DE_VOTE": "Stemrechten",
+        "EAN": "EAN",
+        "METER_NUMBER": "Meternummer",
+        "GRD": "Netbeheerder",
+        "CLIENT_RESIDENTIEL": "Residentiële klant",
+        "PART_ALLOUEE": "Toegewezen %",
+        "STATUT_PRODUCTEUR": "Status van de producent",
+        "STATUT_INSTALLATION": "Status van de installatie",
+        "DATE_MISE_EN_SERVICE": "Datum van indienststelling",
+        "PUISSANCE_KVA": "Vermogen (kVA)",
+        "FILIERE": "Productietype",
+        "PART_INJECTEE": "Gedeeld injectie-%",
+        "CONFIGURATION": "Configuratie"
+      },
+      "TABLES": {
+        "MEMBERS": "Leden en aandeelhouders",
+        "PARTICIPANTS": "Afnamepunten",
+        "INSTALLATIONS": "Productie-installaties",
+        "STORAGE": "Opslaginstallaties"
+      },
+      "WARNINGS": {
+        "COUNT": "{{count}} punt(en) te corrigeren voor indiening",
+        "FIX": "Corrigeren in het CRM",
+        "RELOAD": "Opnieuw laden uit het CRM",
+        "RELOAD_BLOCKED": "U hebt het formulier gewijzigd — opnieuw laden wist uw correcties.",
+        "CODES": {
+          "meter": {
+            "no_member_attribution": "Leveringspunt {{subject}} is aan geen enkel lid toegewezen en kan dus niet onder een naam worden vermeld."
+          },
+          "community": {
+            "field_missing": "Ontbrekende informatie voor de gemeenschap: {{field}}. Het formulier wordt zonder deze gegevens ingediend."
+          },
+          "member": {
+            "field_missing": "Ontbrekende informatie voor een lid: {{field}}."
+          }
+        }
+      }
+    },
+    "MY_FILINGS": {
+      "PAGE_TITLE": "Wat er over mij is ingediend",
+      "PAGE_SUBTITLE": "De informatie over u die uw gemeenschap aan de regulator heeft bezorgd.",
+      "TITLE": "Mijn aangiften",
+      "SUBTITLE": "U komt voor in onderstaande documenten, met de waarden die zijn ingediend.",
+      "AS_OF": "Ingediend op {{date}}",
+      "REFERENCE": "Dossierreferentie: {{reference}}",
+      "EMPTY": "Op dit moment vermeldt geen enkel officieel document u.",
+      "EMPTY_HINT": "Denkt u dat dit niet klopt? Neem contact op met de beheerder van uw gemeenschap.",
+      "FOOTNOTE": "Dit zijn de waarden zoals ingediend op de vermelde datum. Ze veranderen niet als uw gegevens nadien worden gecorrigeerd.",
+      "BLOCKS": {
+        "MEMBERS": "U, als lid",
+        "PARTICIPANTS": "Uw afnamepunten",
+        "INSTALLATIONS": "Uw productie-installaties",
+        "STORAGE": "Uw opslaginstallaties"
+      },
+      "FIELDS": {
+        "EAN": "Meter (EAN-code)",
+        "METER_NUMBER": "Meternummer",
+        "GRD": "Netbeheerder",
+        "NOM": "Naam",
+        "PRENOM": "Voornaam",
+        "DENOMINATION": "Bedrijfsnaam",
+        "CATEGORIE": "Categorie",
+        "SOUS_CATEGORIE": "Subcategorie",
+        "NUMERO_ENTREPRISE": "Ondernemingsnummer",
+        "RUE": "Straat",
+        "NUMERO": "Nummer",
+        "CODE_POSTAL": "Postcode",
+        "LOCALITE": "Gemeente",
+        "CLIENT_RESIDENTIEL": "Type klant",
+        "PART_ALLOUEE": "Toegekend aandeel",
+        "STATUT_PRODUCTEUR": "Status van de producent",
+        "STATUT_INSTALLATION": "Status van de installatie",
+        "DATE_MISE_EN_SERVICE": "Datum van indienststelling",
+        "PUISSANCE_KVA": "Vermogen (kVA)",
+        "FILIERE": "Technologie",
+        "PART_INJECTEE": "Geïnjecteerd aandeel",
+        "DROITS_DE_VOTE": "Stemrechten"
+      }
+    }
+  },
+  "HOME": {
+    "GREETING": "Hallo {{name}}",
+    "GREETING_ANON": "Hallo",
+    "SUBTITLE": "Dit is de stand van zaken vandaag.",
+    "NEEDS_YOU": {
+      "TITLE": "{{count}} ding(en) vragen uw aandacht",
+      "ALL_CLEAR": "Er wacht niets op u. Alles is in orde.",
+      "INVITATION": "U bent uitgenodigd om lid te worden van “{{community}}”",
+      "MANAGER_INVITATION": "U bent uitgenodigd om “{{community}}” te beheren",
+      "INVITATION_ACTION": "Uitnodiging bekijken",
+      "RECORD_ONE": "{{field}} ontbreekt in uw fiche van “{{community}}”",
+      "RECORD_MANY": "{{field}} en {{others}} ander(e) gegeven(s) ontbreken in uw fiche van “{{community}}”",
+      "RECORD_ACTION": "Aanvullen",
+      "UNREAD": "U hebt {{count}} ongelezen melding(en)",
+      "UNREAD_ACTION": "Lezen"
+    },
+    "COMMUNITIES": {
+      "TITLE": "Mijn gemeenschappen",
+      "YOUR_ROLE": "U bent hier: {{role}}",
+      "ENTER": "Binnengaan",
+      "OPEN": "Mijn gemeenschap openen",
+      "MANAGE": "Mijn gemeenschappen beheren (aanmaken, hernoemen, verlaten)",
+      "EMPTY": "U maakt nog geen deel uit van een gemeenschap.",
+      "EMPTY_HINT": "Zodra een gemeenschap u uitnodigt, verschijnt de uitnodiging hier.",
+      "EMPTY_ACTION": "Gemeenschappen in mijn buurt ontdekken"
+    },
+    "ENERGY": {
+      "TITLE": "Mijn energie",
+      "HEADLINE": "U verbruikte {{consumed}} kWh, waarvan {{shared}} kWh gedeeld door uw gemeenschap.",
+      "INJECTED": "U injecteerde {{injected}} kWh, waarvan {{shared}} kWh gedeeld met de gemeenschap.",
+      "METER": "Meter {{number}}",
+      "NO_READING": "nog geen meterstand",
+      "EMPTY": "Geen meterstanden voor deze maand. Ze verschijnen hier zodra ze beschikbaar zijn."
+    },
+    "DOCUMENTS": {
+      "TITLE": "Mijn documenten",
+      "EMPTY": "Er is nog geen document met u gedeeld.",
+      "MORE": "en {{count}} andere"
+    },
+    "INVOICES": {
+      "TITLE": "Mijn te betalen facturen",
+      "EMPTY": "U hebt geen openstaande factuur.",
+      "DRAFT": "Factuur in voorbereiding",
+      "OPEN_IN": "Bekijken in “{{community}}”"
+    },
+    "FILINGS": {
+      "TITLE": "Wat er over mij is ingediend",
+      "INTRO": "Officiële documenten aan de regulator waarin u wordt vermeld.",
+      "EMPTY": "Op dit moment vermeldt geen enkel officieel document u.",
+      "OPEN_IN": "Details bekijken in “{{community}}”"
+    },
+    "FIELDS": {
+      "NAME": "uw naam",
+      "IBAN": "uw IBAN",
+      "NRN": "uw rijksregisternummer",
+      "EMAIL": "uw e-mailadres",
+      "VAT_NUMBER": "uw btw-nummer",
+      "HOME_ADDRESS": "uw adres",
+      "BILLING_ADDRESS": "uw facturatieadres",
+      "SUB_TYPE_ROW": "gegevens van uw fiche"
+    },
+    "A11Y": {
+      "SKIP_TO_CONTENT": "Naar de hoofdinhoud"
+    },
+    "MONTHS": {
+      "01": "januari",
+      "02": "februari",
+      "03": "maart",
+      "04": "april",
+      "05": "mei",
+      "06": "juni",
+      "07": "juli",
+      "08": "augustus",
+      "09": "september",
+      "10": "oktober",
+      "11": "november",
+      "12": "december"
     }
   }
 }

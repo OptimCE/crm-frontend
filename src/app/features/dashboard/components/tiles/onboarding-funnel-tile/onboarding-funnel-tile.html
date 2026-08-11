@@ -1,0 +1,54 @@
+<app-dashboard-tile
+  data-testid="onboarding-funnel-tile"
+  icon="pi pi-user-plus"
+  headingId="dashboard-tile-onboarding"
+  [title]="'DASHBOARD.MANAGER.ONBOARDING.TITLE' | translate"
+  [state]="state()"
+  (retry)="load()"
+>
+  @if (counts(); as counts) {
+    <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+      @if (counts.memberInvitations > 0) {
+        <li class="flex items-center gap-2 text-sm text-surface-700">
+          <i class="pi pi-envelope text-surface-500" aria-hidden="true"></i>
+          {{
+            'DASHBOARD.MANAGER.ONBOARDING.MEMBER_INVITATIONS'
+              | translate: { count: counts.memberInvitations }
+          }}
+        </li>
+      }
+      @if (counts.toBeEncoded > 0) {
+        <li class="flex items-center gap-2 text-sm text-surface-700">
+          <i class="pi pi-pencil text-surface-500" aria-hidden="true"></i>
+          {{
+            'DASHBOARD.MANAGER.ONBOARDING.TO_BE_ENCODED' | translate: { count: counts.toBeEncoded }
+          }}
+        </li>
+      }
+      @if (counts.managerInvitations > 0) {
+        <li class="flex items-center gap-2 text-sm text-surface-700">
+          <i class="pi pi-shield text-surface-500" aria-hidden="true"></i>
+          {{
+            'DASHBOARD.MANAGER.ONBOARDING.MANAGER_INVITATIONS'
+              | translate: { count: counts.managerInvitations }
+          }}
+        </li>
+      }
+    </ul>
+  }
+
+  <div tileEmpty data-testid="onboarding-funnel-tile__empty">
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'DASHBOARD.MANAGER.ONBOARDING.EMPTY' | translate }}
+    </p>
+  </div>
+
+  <a
+    tileAction
+    class="text-primary-500 hover:text-primary-700 underline text-sm"
+    routerLink="/members"
+    data-testid="onboarding-funnel-tile__link--members"
+  >
+    {{ 'DASHBOARD.MANAGER.ONBOARDING.MANAGE' | translate }}
+  </a>
+</app-dashboard-tile>

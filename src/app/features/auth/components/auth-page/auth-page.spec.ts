@@ -88,7 +88,24 @@ describe('AuthPage', () => {
     component.login();
     expect(keycloakMock.login).toHaveBeenCalledWith({
       redirectUri: window.location.origin + '/',
+      locale: 'en',
     });
+  });
+
+  it('should forward the stored language as the ui_locales hint', () => {
+    TestBed.inject(LanguageService).getCurrentLanguage = vi.fn().mockReturnValue('nl');
+
+    component.login();
+
+    expect(keycloakMock.login).toHaveBeenCalledWith(expect.objectContaining({ locale: 'nl' }));
+  });
+
+  it('should omit the locale when no language has been stored yet', () => {
+    TestBed.inject(LanguageService).getCurrentLanguage = vi.fn().mockReturnValue(null);
+
+    component.login();
+
+    expect(keycloakMock.login).toHaveBeenCalledWith(expect.objectContaining({ locale: undefined }));
   });
 
   it('should render the carousel', () => {

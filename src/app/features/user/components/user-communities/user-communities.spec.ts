@@ -1,5 +1,6 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { of, Subject, throwError } from 'rxjs';
@@ -74,6 +75,10 @@ describe('UserCommunities', () => {
     open: ReturnType<typeof vi.fn>;
   };
 
+  let routerSpy: {
+    navigateByUrl: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(async () => {
     communityServiceSpy = {
       getMyCommunities: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
@@ -92,12 +97,15 @@ describe('UserCommunities', () => {
 
     dialogServiceSpy = { open: vi.fn() };
 
+    routerSpy = { navigateByUrl: vi.fn().mockResolvedValue(true) };
+
     await TestBed.configureTestingModule({
       imports: [UserCommunities, TranslateModule.forRoot()],
       providers: [
         { provide: CommunityService, useValue: communityServiceSpy },
         { provide: UserContextService, useValue: userContextServiceSpy },
         { provide: Keycloak, useValue: keycloakSpy },
+        { provide: Router, useValue: routerSpy },
       ],
     })
       .overrideComponent(UserCommunities, {
@@ -362,6 +370,73 @@ describe('UserCommunities', () => {
       component.joinCommunity(community);
 
       expect(userContextServiceSpy.switchCommunity).toHaveBeenCalledWith('abc-123');
+    });
+
+    it('should navigate to the dashboard when there is no returnUrl', () => {
+      component.joinCommunity(buildCommunity({ auth_community_id: 'abc-123' }));
+
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/dashboard');
+    });
+  });
+
+  // ── Active community shortcuts ─────────────────────────────────
+
+  describe('goToCommunityInfo', () => {
+    it('should navigate to the community info page', () => {
+      component.goToCommunityInfo();
+
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/communities/info');
+    });
+  });
+
+  describe('goToDashboard', () => {
+    it('should navigate to the dashboard', () => {
+      component.goToDashboard();
+
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/dashboard');
+    });
+  });
+
+  // ── isActiveCommunity / canLeave ───────────────────────────────
+
+  describe('isActiveCommunity', () => {
+    it('should be true when the row matches the session active community', () => {
+      userContextServiceSpy.activeCommunityId.mockReturnValue('auth-comm-1');
+
+      expect(
+        component.isActiveCommunity(buildCommunity({ auth_community_id: 'auth-comm-1' })),
+      ).toBe(true);
+    });
+
+    it('should be false for any other community', () => {
+      userContextServiceSpy.activeCommunityId.mockReturnValue('auth-comm-1');
+
+      expect(component.isActiveCommunity(buildCommunity({ auth_community_id: 'other' }))).toBe(
+        false,
+      );
+    });
+  });
+
+  describe('canLeave', () => {
+    it('should be false for an ADMIN of the active community', () => {
+      userContextServiceSpy.activeCommunityId.mockReturnValue('auth-comm-1');
+      userContextServiceSpy.compareWithActiveRole.mockReturnValue(true);
+
+      expect(component.canLeave(buildCommunity({ auth_community_id: 'auth-comm-1' }))).toBe(false);
+    });
+
+    it('should be true for a non-ADMIN of the active community', () => {
+      userContextServiceSpy.activeCommunityId.mockReturnValue('auth-comm-1');
+      userContextServiceSpy.compareWithActiveRole.mockReturnValue(false);
+
+      expect(component.canLeave(buildCommunity({ auth_community_id: 'auth-comm-1' }))).toBe(true);
+    });
+
+    it('should be true on a non-active community even for an ADMIN', () => {
+      userContextServiceSpy.activeCommunityId.mockReturnValue('auth-comm-1');
+      userContextServiceSpy.compareWithActiveRole.mockReturnValue(true);
+
+      expect(component.canLeave(buildCommunity({ auth_community_id: 'other' }))).toBe(true);
     });
   });
 

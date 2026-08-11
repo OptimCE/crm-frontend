@@ -1,0 +1,46 @@
+<section
+  class="dash-tile"
+  [attr.aria-labelledby]="headingId()"
+  [attr.aria-busy]="state() === 'loading'"
+  data-testid="dashboard-tile"
+>
+  <header class="flex items-center gap-2">
+    <i class="{{ icon() }} text-primary-600" aria-hidden="true"></i>
+    <h2 [id]="headingId()" class="text-base font-semibold text-surface-900 m-0 flex-1 min-w-0">
+      {{ title() }}
+    </h2>
+    <ng-content select="[tileBadge]" />
+  </header>
+
+  <div class="dash-tile__body">
+    @switch (state()) {
+      @case ('loading') {
+        @for (s of skeletons; track s) {
+          <p-skeleton height="1.15rem" [width]="s === 1 ? '100%' : s === 2 ? '70%' : '45%'" />
+        }
+        <span class="sr-only" role="status">{{ 'COMMON.LOADING' | translate }}</span>
+      }
+      @case ('error') {
+        <p class="text-surface-500 text-sm m-0">{{ 'DASHBOARD.TILE.ERROR' | translate }}</p>
+        <p-button
+          size="small"
+          [text]="true"
+          icon="pi pi-refresh"
+          [label]="'COMMON.RETRY' | translate"
+          (onClick)="retry.emit()"
+          data-testid="dashboard-tile__btn--retry"
+        />
+      }
+      @case ('empty') {
+        <ng-content select="[tileEmpty]" />
+      }
+      @default {
+        <ng-content />
+      }
+    }
+  </div>
+
+  <footer class="dash-tile__foot">
+    <ng-content select="[tileAction]" />
+  </footer>
+</section>

@@ -1,0 +1,131 @@
+<div class="flex flex-col gap-3 mt-4">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <p class="text-sm text-surface-500 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.TIMELINE.INTRO' | translate }}
+    </p>
+    @if (entries().length > 0) {
+      <p-button
+        [icon]="newestFirst() ? 'pi pi-sort-amount-down' : 'pi pi-sort-amount-up'"
+        [label]="
+          (newestFirst()
+            ? 'ADMINISTRATIVE_DOCUMENT.TIMELINE.NEWEST_FIRST'
+            : 'ADMINISTRATIVE_DOCUMENT.TIMELINE.OLDEST_FIRST'
+          ) | translate
+        "
+        size="small"
+        text
+        severity="secondary"
+        (onClick)="toggleOrder()"
+        data-testid="dossier-timeline__btn--toggle-order"
+      />
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="text-sm text-surface-400 m-0">…</p>
+  } @else if (entries().length === 0) {
+    <div class="py-8 text-center" data-testid="dossier-timeline__empty--message">
+      <i class="pi pi-history text-3xl text-surface-300 mb-2"></i>
+      <p class="text-surface-400 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.TIMELINE.EMPTY' | translate }}
+      </p>
+    </div>
+  } @else {
+    <ol class="relative border-l-2 border-surface-200 ml-3 pl-6 list-none m-0">
+      @for (entry of entries(); track entry.id) {
+        <li
+          class="relative mb-4 rounded-lg border p-3"
+          [class.border-surface-200]="!entry.isCorrective"
+          [class.bg-surface-0]="!entry.isCorrective"
+          [class.border-l-4]="entry.isCorrective"
+          [class.border-amber-500]="entry.isCorrective"
+          [class.bg-amber-50]="entry.isCorrective"
+          [attr.data-testid]="'dossier-timeline__entry--' + entry.id"
+        >
+          <!-- rail marker -->
+          <span
+            class="absolute -left-[33px] top-4 flex h-4 w-4 items-center justify-center rounded-full border-2 border-surface-0"
+            [class.bg-amber-500]="entry.isCorrective"
+            [class.bg-primary-400]="!entry.isCorrective"
+            aria-hidden="true"
+          ></span>
+
+          <div class="flex items-center gap-2 text-sm font-medium text-surface-800">
+            <i [class]="entry.subjectIcon" class="text-surface-400" aria-hidden="true"></i>
+            <span>{{
+              entry.subjectLabelIsKey ? (entry.subjectLabel | translate) : entry.subjectLabel
+            }}</span>
+          </div>
+
+          <div class="mt-1 flex flex-wrap items-center gap-2 text-sm">
+            @if (entry.fromLabelKey) {
+              <span class="text-surface-500">{{ entry.fromLabelKey | translate }}</span>
+              <i class="pi pi-arrow-right text-xs text-surface-400" aria-hidden="true"></i>
+            } @else {
+              <span class="text-surface-500">{{
+                'ADMINISTRATIVE_DOCUMENT.TIMELINE.CREATED' | translate
+              }}</span>
+              <i class="pi pi-arrow-right text-xs text-surface-400" aria-hidden="true"></i>
+            }
+            <p-tag [value]="entry.toLabelKey | translate" [severity]="entry.severity" />
+            @if (entry.isCorrective) {
+              <p-tag
+                [value]="'ADMINISTRATIVE_DOCUMENT.TIMELINE.CORRECTIVE' | translate"
+                severity="warn"
+                icon="pi pi-undo"
+              />
+            }
+          </div>
+
+          <div class="mt-1 text-xs text-surface-500">
+            {{ entry.occurredAt | date: 'medium' }}
+            &middot;
+            @if (entry.actor) {
+              <span class="font-mono" [title]="entry.actor">{{ entry.actor.slice(0, 12) }}</span>
+            } @else {
+              <span>{{ 'ADMINISTRATIVE_DOCUMENT.TIMELINE.SYSTEM' | translate }}</span>
+            }
+          </div>
+
+          @if (entry.facts.length > 0) {
+            <dl class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 m-0">
+              @for (fact of entry.facts; track fact.labelKey) {
+                <div class="text-sm">
+                  <dt class="inline text-surface-500">{{ fact.labelKey | translate }}:</dt>
+                  <dd
+                    class="inline ml-1 m-0"
+                    [class.font-semibold]="fact.emphasis"
+                    [class.text-amber-800]="fact.emphasis"
+                  >
+                    {{ fact.value }}
+                  </dd>
+                </div>
+              }
+            </dl>
+          }
+
+          @if (hasRawContext(entry)) {
+            <p-button
+              [label]="
+                (isRawOpen(entry)
+                  ? 'ADMINISTRATIVE_DOCUMENT.TIMELINE.HIDE_RAW'
+                  : 'ADMINISTRATIVE_DOCUMENT.TIMELINE.SHOW_RAW'
+                ) | translate
+              "
+              size="small"
+              text
+              severity="secondary"
+              (onClick)="toggleRaw(entry)"
+              [attr.data-testid]="'dossier-timeline__btn--raw-' + entry.id"
+            />
+            @if (isRawOpen(entry)) {
+              <pre class="bg-surface-100 text-xs p-3 rounded overflow-auto max-h-80 mt-1">{{
+                entry.rawContext | json
+              }}</pre>
+            }
+          }
+        </li>
+      }
+    </ol>
+  }
+</div>
