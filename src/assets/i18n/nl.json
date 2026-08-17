@@ -1840,7 +1840,9 @@
       "DUE_DATE": "Vervaldatum",
       "OGM_LABEL": "Gestructureerde mededeling",
       "PAGE_INFO": "Pagina {{page}} van {{total}}"
-    }
+    },
+    "RUN_TOAST_FINISHED": "De facturatieberekening is voltooid.",
+    "RUN_TOAST_FAILED": "De facturatieberekening is mislukt."
   },
   "CONSUMPTION_COVERAGE": {
     "TITLE": "Beschikbare verbruiksgegevens",
@@ -1934,7 +1936,9 @@
         "SURPLUS": "Overschot",
         "RESIDUAL": "Netafname"
       }
-    }
+    },
+    "TOAST_FINISHED": "Een simulatie is voltooid.",
+    "TOAST_FAILED": "Een simulatie is mislukt."
   },
   "ALGORITHM_HUB": {
     "PAGE_TITLE": "Generatie van verdeelsleutels",
@@ -1995,7 +1999,9 @@
       "FILE_TYPE": "Alleen CSV- en XLSX-bestanden worden aanvaard.",
       "MIN_VALUE": "Moet minstens {{ min }} zijn.",
       "MAX_VALUE": "Mag hoogstens {{ max }} zijn."
-    }
+    },
+    "TOAST_FINISHED": "Een generatie van een verdeelsleutel is voltooid.",
+    "TOAST_FAILED": "Een generatie van een verdeelsleutel is mislukt."
   },
   "AUDIT": {
     "LIST": {
