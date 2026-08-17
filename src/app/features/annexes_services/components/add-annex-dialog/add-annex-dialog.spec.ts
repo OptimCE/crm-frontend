@@ -1,14 +1,16 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { of, throwError } from 'rxjs';
+import { signal } from '@angular/core';
 import { vi } from 'vitest';
 
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { Role } from '../../../../core/dtos/role';
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { CommunityAnnex } from '../../../../shared/dtos/annexes_services.dtos';
+import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { AnnexesServicesService } from '../../../../shared/services/annexes_services.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -38,7 +40,10 @@ describe('AddAnnexDialog', () => {
   let fixture: ComponentFixture<AddAnnexDialog>;
 
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
-  let dialogConfigStub: DynamicDialogConfig<{ available: CommunityAnnex[] }>;
+  // A live signal, not a snapshot: the component derives `available` from the
+  // store so that opening before GET /annexes-services/ resolves cannot render
+  // the terminal "already activated" empty state. See AddAnnexDialog.available.
+  let storeStub: { services: ReturnType<typeof signal<CommunityAnnex[]>> };
   let annexesServiceSpy: { subscribe: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
@@ -51,9 +56,12 @@ describe('AddAnnexDialog', () => {
 
   beforeEach(() => {
     dialogRefSpy = { close: vi.fn() };
-    dialogConfigStub = {
-      data: { available: [buildAnnex({ feature: 'a' }), buildAnnex({ feature: 'b' })] },
-    } as DynamicDialogConfig<{ available: CommunityAnnex[] }>;
+    storeStub = {
+      services: signal<CommunityAnnex[]>([
+        buildAnnex({ feature: 'a' }),
+        buildAnnex({ feature: 'b' }),
+      ]),
+    };
     annexesServiceSpy = { subscribe: vi.fn().mockReturnValue(of(new ApiResponse('ok'))) };
     errorHandlerSpy = { handleError: vi.fn() };
     snackbarSpy = { openSnackBar: vi.fn() };
@@ -64,7 +72,7 @@ describe('AddAnnexDialog', () => {
       imports: [AddAnnexDialog, TranslateModule.forRoot()],
       providers: [
         { provide: DynamicDialogRef, useValue: dialogRefSpy },
-        { provide: DynamicDialogConfig, useValue: dialogConfigStub },
+        { provide: CommunityServicesStore, useValue: storeStub },
         { provide: AnnexesServicesService, useValue: annexesServiceSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
@@ -78,19 +86,37 @@ describe('AddAnnexDialog', () => {
   // ── 1. Creation & initialization ────────────────────────────────────
 
   describe('initialization', () => {
-    it('should create with the available list from dialog config data', async () => {
+    it('should derive the available list from the store, excluding subscribed', async () => {
+      storeStub.services.set([
+        buildAnnex({ feature: 'a', subscribed: false }),
+        buildAnnex({ feature: 'b', subscribed: false }),
+        buildAnnex({ feature: 'already', subscribed: true }),
+      ]);
       await configureModule();
       await createComponent();
       expect(component).toBeTruthy();
-      expect(component.available()).toHaveLength(2);
-      expect(component.available()[0].feature).toBe('a');
+      expect(component.available().map((a) => a.feature)).toEqual(['a', 'b']);
     });
 
-    it('should default to an empty available list when config data is missing', async () => {
-      dialogConfigStub = {} as DynamicDialogConfig<{ available: CommunityAnnex[] }>;
+    it('is empty when the store is empty', async () => {
+      storeStub.services.set([]);
       await configureModule();
       await createComponent();
       expect(component.available()).toEqual([]);
+    });
+
+    it('FILLS IN when the catalogue resolves after the dialog opened', async () => {
+      // The regression guard. `available` used to be a snapshot of dialog data
+      // taken at open time and never written again, so opening before
+      // GET /annexes-services/ landed showed "everything is already activated"
+      // on a community with nothing activated — and it never recovered.
+      storeStub.services.set([]);
+      await configureModule();
+      await createComponent();
+      expect(component.available()).toEqual([]);
+
+      storeStub.services.set([buildAnnex({ feature: 'late', subscribed: false })]);
+      expect(component.available().map((a) => a.feature)).toEqual(['late']);
     });
 
     it('should default pendingFeature to null', async () => {

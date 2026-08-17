@@ -1840,7 +1840,9 @@
       "DUE_DATE": "Échéance",
       "OGM_LABEL": "Communication structurée",
       "PAGE_INFO": "Page {{page}} sur {{total}}"
-    }
+    },
+    "RUN_TOAST_FINISHED": "Le calcul de facturation est terminé.",
+    "RUN_TOAST_FAILED": "Le calcul de facturation a échoué."
   },
   "CONSUMPTION_COVERAGE": {
     "TITLE": "Données de consommation disponibles",
@@ -1934,7 +1936,9 @@
         "SURPLUS": "Surplus",
         "RESIDUAL": "Soutirage réseau"
       }
-    }
+    },
+    "TOAST_FINISHED": "Une simulation est terminée.",
+    "TOAST_FAILED": "Une simulation a échoué."
   },
   "ALGORITHM_HUB": {
     "PAGE_TITLE": "Génération de clés de répartition",
@@ -1995,7 +1999,9 @@
       "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés.",
       "MIN_VALUE": "Doit être au moins {{ min }}.",
       "MAX_VALUE": "Doit être au plus {{ max }}."
-    }
+    },
+    "TOAST_FINISHED": "Une génération de clé de répartition est terminée.",
+    "TOAST_FAILED": "Une génération de clé de répartition a échoué."
   },
   "AUDIT": {
     "LIST": {

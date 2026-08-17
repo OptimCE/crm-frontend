@@ -9,6 +9,20 @@ interface RuntimeKeycloakConfig {
 export interface RuntimeConfig {
   apiUrl: string;
   basePath: string;
+  /**
+   * Absolute or root-relative URL of the SSE stream.
+   *
+   * Deliberately its OWN key rather than derived from `apiUrl`: this is the one
+   * endpoint that bypasses the API gateway, and string-surgery on `apiUrl` is
+   * exactly how such a URL ends up pointed somewhere unintended. Keeping it
+   * explicit also makes the requirement checkable — it must NOT match
+   * `keycloak.urlPattern`, because EventSource cannot send a bearer token and an
+   * interceptor trying to attach one would be misleading.
+   *
+   * Rendered from the same `WEB_REALTIME_PATH` as the nginx location, so the two
+   * cannot drift.
+   */
+  realtimeUrl: string;
   keycloak: RuntimeKeycloakConfig;
 }
 
@@ -16,6 +30,12 @@ export interface RuntimeConfig {
 const DEFAULT_CONFIG: RuntimeConfig = {
   apiUrl: 'http://localhost:8080',
   basePath: 'http://localhost:4200',
+  // Root-relative on purpose. An absolute http://localhost:8089 default would be
+  // cross-origin from `ng serve` on :4200, and crm-backend has CORS disabled, so
+  // the EventSource would fail with no diagnostic at all. Relative means it works
+  // through the reverse proxy in Docker, and under `ng serve` it needs the
+  // /realtime proxy entry in proxy.conf.json.
+  realtimeUrl: '/realtime/stream',
   keycloak: {
     realm: 'optimce-realm',
     url: 'http://localhost:8081',
@@ -46,6 +66,9 @@ export const environments = {
   },
   get basePath(): string {
     return currentConfig.basePath;
+  },
+  get realtimeUrl(): string {
+    return currentConfig.realtimeUrl;
   },
   get keycloak(): {
     realm: string;

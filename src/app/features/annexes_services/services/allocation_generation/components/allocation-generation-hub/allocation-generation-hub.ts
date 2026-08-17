@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormControl,
@@ -22,9 +22,12 @@ import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 import { Toast } from 'primeng/toast';
 import { Tooltip } from 'primeng/tooltip';
+import { interval, switchMap } from 'rxjs';
 
 import { ApiResponse, Pagination } from '../../../../../../core/dtos/api.response';
 import { VALIDATION_TYPE } from '../../../../../../core/dtos/notification';
+import { RealtimeService } from '../../../../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS } from '../../../../../../core/services/realtime/realtime.types';
 import {
   AlgorithmInputValue,
   AlgorithmMetadata,
@@ -55,6 +58,17 @@ interface AlgorithmOption {
   value: string;
   meta: AlgorithmMetadata;
 }
+
+// Until now this hub had NO poller at all: after starting a generation the user
+// had to hit refresh by hand, indefinitely. Realtime is the fast path, and these
+// mirror the simulation hub so that when realtime is unavailable the behaviour is
+// the same as its sibling rather than the old manual-only one.
+//
+// The poll is SLOWED when the stream is live, never stopped: `live()` proves the
+// socket is healthy, not that events are being published, so a gated-off poller
+// would never converge if one service were missing REALTIME_REDIS_URL.
+const POLL_INTERVAL_MS = 4000;
+const SAFETY_POLL_INTERVAL_MS = 20_000;
 
 @Component({
   selector: 'app-allocation-generation-hub',
@@ -187,9 +201,48 @@ export class AllocationGenerationHub implements OnInit {
   readonly keysByGeneration = signal<ReadonlyMap<number, AllocationKeyPartialDTO[]>>(new Map());
   readonly keysLoadingId = signal<number | null>(null);
 
+  private readonly realtime = inject(RealtimeService);
+
+  /**
+   * Status of each generation as of the previous list read, so a PENDING ->
+   * terminal transition is observed exactly once.
+   *
+   * Toasting from the observed DELTA rather than from event arrival makes a
+   * double toast impossible (both paths funnel into silentRefresh) and keeps the
+   * toast working when realtime is down.
+   */
+  private lastStatusById = new Map<number, GenerationStatus>();
+
+  readonly hasPending = computed(() =>
+    this.generations().some((generation) => generation.status === GenerationStatus.PENDING),
+  );
+
   readonly expandedKeyId = signal<number | null>(null);
   readonly keyDetailById = signal<ReadonlyMap<number, AllocationKeyDetailDTO>>(new Map());
   readonly keyDetailLoadingId = signal<number | null>(null);
+
+  constructor() {
+    toObservable(this.realtime.live)
+      .pipe(
+        switchMap((live) => interval(live ? SAFETY_POLL_INTERVAL_MS : POLL_INTERVAL_MS)),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        if (this.hasPending() && !document.hidden) {
+          this.silentRefresh();
+        }
+      });
+
+    // The fast path. `realtime.reconnected` is included automatically, so a
+    // dropped event heals on the next connect. Never trust the payload as data:
+    // refetch and let the list be the truth.
+    this.realtime
+      .on(REALTIME_TOPICS.GENERATION_FINISHED)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        if (!document.hidden) this.silentRefresh();
+      });
+  }
 
   ngOnInit(): void {
     this.loadAlgorithms();
@@ -407,12 +460,65 @@ export class AllocationGenerationHub implements OnInit {
           this.generationsPagination.set(response.pagination);
           this.lastRefreshedAt.set(Date.now());
           this.generationsLoading.set(false);
+          // Seed only: an explicit load must never toast about work that
+          // finished before the user got here.
+          this.snapshotStatuses(data);
         },
         error: (error: unknown) => {
           this.generationsLoading.set(false);
           this.handleApiError(error);
         },
       });
+  }
+
+  /** Background refresh: no spinner, and toasts any terminal transition once. */
+  private silentRefresh(): void {
+    this.service.invalidate();
+    this.service
+      .listGenerations(this.generationsFilter())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const data = Array.isArray(response.data) ? response.data : [];
+          this.toastTerminalTransitions(data);
+          this.generations.set(data);
+          this.generationsPagination.set(response.pagination);
+          this.lastRefreshedAt.set(Date.now());
+        },
+        error: () => {
+          /* silent — the next manual refresh surfaces persistent errors */
+        },
+      });
+  }
+
+  /**
+   * Toast once per generation that just left PENDING, then re-snapshot.
+   *
+   * Text comes from the i18n bundle keyed on the observed status, never from a
+   * realtime payload: anything holding the Redis password can publish, so
+   * rendering payload strings would make a compromised service a text-injection
+   * channel into every browser.
+   */
+  private toastTerminalTransitions(data: readonly GenerationPartialDTO[]): void {
+    for (const generation of data) {
+      const before = this.lastStatusById.get(generation.id);
+      if (before !== GenerationStatus.PENDING || generation.status === GenerationStatus.PENDING) {
+        continue;
+      }
+      this.snackbar.openSnackBar(
+        this.translate.instant(
+          generation.status === GenerationStatus.SUCCESS
+            ? 'ALGORITHM_HUB.TOAST_FINISHED'
+            : 'ALGORITHM_HUB.TOAST_FAILED',
+        ) as string,
+        VALIDATION_TYPE,
+      );
+    }
+    this.snapshotStatuses(data);
+  }
+
+  private snapshotStatuses(data: readonly GenerationPartialDTO[]): void {
+    this.lastStatusById = new Map(data.map((generation) => [generation.id, generation.status]));
   }
 
   goToPage(page: number): void {

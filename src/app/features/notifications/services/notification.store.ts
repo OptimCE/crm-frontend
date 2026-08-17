@@ -1,16 +1,28 @@
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef, inject, Injectable, Injector, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
-import { fromEvent, merge, Subject, timer } from 'rxjs';
-import { filter, switchMap } from 'rxjs';
+import { EMPTY, fromEvent, merge, Subject, timer } from 'rxjs';
+import { catchError, filter, switchMap } from 'rxjs';
 
 import { ERROR_TYPE, VALIDATION_TYPE } from '../../../core/dtos/notification';
+import { RealtimeService } from '../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS } from '../../../core/services/realtime/realtime.types';
 import { SnackbarNotification } from '../../../shared/services-ui/snackbar.notifcation.service';
 import { NotificationDTO } from '../dtos/notification.dto';
 import { NotificationService } from './notification.service';
 
-/** How often the unread badge is polled (backend has no realtime channel). */
+/** Poll cadence when realtime is NOT delivering. Unchanged from before SSE. */
 const POLL_INTERVAL_MS = 30_000;
+/**
+ * Poll cadence while the realtime stream is live.
+ *
+ * The poll KEEPS RUNNING when live — it is a durability backstop, not a fallback.
+ * SSE is at-most-once, and the bell has no "pending" state to re-check, so this
+ * is the only thing that can heal a dropped `notification.created`. It also
+ * covers the nastiest failure mode: a perfectly healthy stream that delivers
+ * nothing because one service is missing REALTIME_REDIS_URL.
+ */
+const SAFETY_POLL_INTERVAL_MS = 120_000;
 /** How many recent items the bell popover shows. */
 const RECENT_LIMIT = 8;
 
@@ -28,6 +40,9 @@ export class NotificationStore {
   private readonly snackbar = inject(SnackbarNotification);
   private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly realtime = inject(RealtimeService);
+  /** toObservable() needs an injection context; startPolling runs outside one. */
+  private readonly injector = inject(Injector);
 
   readonly unreadCount = signal(0);
   readonly recent = signal<NotificationDTO[]>([]);
@@ -38,27 +53,74 @@ export class NotificationStore {
   private polling = false;
   private readonly refresh$ = new Subject<void>();
 
-  /** Start the unread-count poll. Idempotent — safe to call once from the shell. */
+  /**
+   * Start the unread-count feed. Idempotent — safe to call once from the shell.
+   *
+   * Also owns the realtime connection's lifecycle, because the bell is the one
+   * component guaranteed to be mounted for the whole session (see
+   * layout/navbar/navbar.css, which hides it with display:none rather than @if
+   * specifically so this keeps running).
+   */
   startPolling(): void {
     if (this.polling) return;
     this.polling = true;
+
+    this.realtime.connect();
 
     const visibleAgain$ = fromEvent(document, 'visibilitychange').pipe(
       filter(() => !document.hidden),
     );
 
-    merge(timer(0, POLL_INTERVAL_MS), visibleAgain$, this.refresh$)
-      .pipe(
+    merge(
+      // The `!document.hidden` filter belongs HERE, on the timer alone. It used
+      // to sit on the merged pipe, which also gated `refresh$` — and would now
+      // silently swallow every realtime event in a hidden tab, defeating the
+      // whole point of keeping the stream open while hidden.
+      toObservable(this.realtime.live, { injector: this.injector }).pipe(
+        switchMap((live) => timer(0, live ? SAFETY_POLL_INTERVAL_MS : POLL_INTERVAL_MS)),
         filter(() => !document.hidden),
-        switchMap(() => this.service.unreadCount()),
+      ),
+      visibleAgain$,
+      this.refresh$,
+      // A hint, never data: it triggers the same authoritative refetch a timer
+      // tick does. `realtime.reconnected` is included automatically, so a
+      // dropped event heals on the next connect.
+      this.realtime.on(REALTIME_TOPICS.NOTIFICATION_CREATED),
+    )
+      .pipe(
+        // catchError sits INSIDE switchMap, on the inner request, and that
+        // placement is the whole point. An error allowed to escape switchMap
+        // terminates this merged subscription — and with it the timer, the
+        // visibility trigger, refresh$ AND the realtime handler, because all four
+        // are merged into it. A single failed request (a deploy, a DB hiccup, one
+        // dropped request on flaky wifi) used to freeze the badge until a full
+        // document reload: there is no "next tick" once the stream is finished.
+        //
+        // That inverted invariant 7 — the poller was not slowed, it was
+        // destroyed. An outer `error:` handler cannot fix it; a terminated
+        // observable cannot be resumed. EMPTY makes the failed fetch a no-op and
+        // leaves every trigger alive for the next one.
+        switchMap(() => this.service.unreadCount().pipe(catchError(() => EMPTY))),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe({
-        next: (res) => this.applyCount(res.data.count),
-        // Swallow transient poll errors; the next tick retries.
-        error: () => undefined,
+      // No `error:` handler on purpose: nothing can reach it now, and having one
+      // here is what made the bug above look handled.
+      .subscribe((res) => this.applyCount(res.data.count));
+
+    // Keep the popover's slice fresh too, but only while it is actually open —
+    // otherwise every event costs a paginated list request nobody looks at.
+    this.realtime
+      .on(REALTIME_TOPICS.NOTIFICATION_CREATED)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        if (!this.popoverOpen()) return;
+        this.service.invalidate();
+        this.refreshRecent();
       });
   }
+
+  /** Set by the bell so realtime knows whether the popover slice is on screen. */
+  readonly popoverOpen = signal(false);
 
   /** Force an immediate unread-count refresh (e.g. after navigating). */
   refreshUnread(): void {

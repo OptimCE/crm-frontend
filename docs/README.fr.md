@@ -7,6 +7,7 @@
 [![Site web](https://img.shields.io/badge/Site%20web-optimce.be-2e7d32.svg)](https://www.optimce.be/fr/)
 [![Licence](https://img.shields.io/badge/Licence-Apache%202.0-blue.svg)](../LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-21-dd0031.svg)](https://angular.dev)
+[![État des traductions](https://hosted.weblate.org/widgets/optimce/-/svg-badge.svg)](https://hosted.weblate.org/engage/optimce/)
 [![en](https://img.shields.io/badge/lang-en-lightgrey.svg)](../README.md)
 [![fr](https://img.shields.io/badge/lang-fr-43a047.svg)](README.fr.md)
 [![de](https://img.shields.io/badge/lang-de-lightgrey.svg)](README.de.md)
@@ -149,6 +150,26 @@ Les tests unitaires s'exécutent avec le test runner [Vitest](https://vitest.dev
 | `features/` | Modules fonctionnels, chargés à la demande et découpés par domaine métier        |
 | `layout/`   | Composants de mise en page qui encadrent les pages de l'application              |
 | `assets/`   | Traductions (`i18n/`), configuration d'exécution (`config/`) et images           |
+
+## Traductions
+
+L'interface est disponible en **français, anglais, néerlandais et allemand**.
+Les catalogues sont les fichiers JSON imbriqués de `src/assets/i18n/`
+(`fr.json`, `en.json`, `nl.json`, `de.json`), chargés à l'exécution par
+[ngx-translate](https://github.com/ngx-translate/core) ; le français est la
+langue source.
+
+Les traductions sont gérées sur [Weblate](https://weblate.org/), une plateforme
+libre de localisation continue basée sur le web, qui héberge ce projet
+gratuitement dans le cadre de son offre Libre pour les logiciels libres. Nul
+besoin de toucher aux fichiers JSON ni d'ouvrir une pull request pour aider :
+
+**[Traduire OptimCE sur Weblate →](https://hosted.weblate.org/engage/optimce/)**
+
+Weblate renvoie les traductions validées vers ce dépôt sous forme de commits :
+merci d'effectuer les changements de traduction là-bas plutôt que de modifier
+`src/assets/i18n/*.json` à la main. L'ajout de nouvelles clés passe toujours par
+une pull request, avec le code qui les utilise et leur chaîne source française.
 
 ## Contribuer
 

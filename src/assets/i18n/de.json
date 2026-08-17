@@ -1840,7 +1840,9 @@
       "DUE_DATE": "Fällig",
       "OGM_LABEL": "Strukturierte Mitteilung",
       "PAGE_INFO": "Seite {{page}} von {{total}}"
-    }
+    },
+    "RUN_TOAST_FINISHED": "Die Abrechnungsberechnung ist abgeschlossen.",
+    "RUN_TOAST_FAILED": "Die Abrechnungsberechnung ist fehlgeschlagen."
   },
   "CONSUMPTION_COVERAGE": {
     "TITLE": "Verfügbare Verbrauchsdaten",
@@ -1934,7 +1936,9 @@
         "SURPLUS": "Überschuss",
         "RESIDUAL": "Netzbezug"
       }
-    }
+    },
+    "TOAST_FINISHED": "Eine Simulation ist abgeschlossen.",
+    "TOAST_FAILED": "Eine Simulation ist fehlgeschlagen."
   },
   "ALGORITHM_HUB": {
     "PAGE_TITLE": "Generierung von Verteilschlüsseln",
@@ -1995,7 +1999,9 @@
       "FILE_TYPE": "Nur CSV- und XLSX-Dateien werden akzeptiert.",
       "MIN_VALUE": "Muss mindestens {{ min }} sein.",
       "MAX_VALUE": "Darf höchstens {{ max }} sein."
-    }
+    },
+    "TOAST_FINISHED": "Eine Erzeugung eines Verteilschlüssels ist abgeschlossen.",
+    "TOAST_FAILED": "Eine Erzeugung eines Verteilschlüssels ist fehlgeschlagen."
   },
   "AUDIT": {
     "LIST": {

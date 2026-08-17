@@ -187,6 +187,35 @@ describe('AnnexesServicesList', () => {
       expect(component.availableToAdd().map((s) => s.feature)).toEqual(['b', 'c']);
     });
 
+    // ── catalogueReady: the guard on the add-module trigger ──────────────
+    //
+    // The dialog's empty state ("everything is already activated") is terminal
+    // and cannot distinguish "unresolved" from "genuinely empty", so the trigger
+    // must not open it until the catalogue has actually arrived.
+
+    it('catalogueReady is false while loading', () => {
+      component.loading.set(true);
+      component.services.set([buildAnnex({ feature: 'a', subscribed: false })]);
+      expect(component.catalogueReady()).toBe(false);
+    });
+
+    it('catalogueReady is false when the fetch FAILED', () => {
+      // refresh()'s error handler also sets loading false, so `!loading()` alone
+      // let a failed fetch re-open the lie with an empty store. Verified in the
+      // browser by stopping crm-backend and reloading.
+      component.loading.set(false);
+      component.services.set([]);
+      expect(component.catalogueReady()).toBe(false);
+    });
+
+    it('catalogueReady is true once the catalogue has arrived', () => {
+      component.loading.set(false);
+      component.services.set([buildAnnex({ feature: 'a', subscribed: true })]);
+      // True even with everything subscribed: THAT is when the dialog's empty
+      // state is the honest answer.
+      expect(component.catalogueReady()).toBe(true);
+    });
+
     it('canManage should reflect UserContextService.compareWithActiveRole', async () => {
       userContextSpy.compareWithActiveRole.mockReturnValue(true);
       expect(component.canManage()).toBe(true);
@@ -224,15 +253,19 @@ describe('AnnexesServicesList', () => {
       await createComponent();
     });
 
-    it('should open the dialog with the currently available services', () => {
-      const available: CommunityAnnex[] = [buildAnnex({ feature: 'avail', subscribed: false })];
-      component.services.set([...available, buildAnnex({ feature: 'subbed', subscribed: true })]);
+    it('should open the dialog WITHOUT a snapshot of the available services', () => {
+      // The dialog derives its list from CommunityServicesStore. Passing a
+      // snapshot is what made it claim "everything is already activated" when
+      // opened before GET /annexes-services/ resolved, with no recovery — so the
+      // absence of `data` here is the contract, not an omission.
+      component.services.set([
+        buildAnnex({ feature: 'avail', subscribed: false }),
+        buildAnnex({ feature: 'subbed', subscribed: true }),
+      ]);
       component.openAddDialog();
       expect(dialogServiceSpy.open).toHaveBeenCalledTimes(1);
-      const config = dialogServiceSpy.open.mock.calls[0][1] as DynamicDialogConfig<{
-        available: CommunityAnnex[];
-      }>;
-      expect(config.data?.available.map((a) => a.feature)).toEqual(['avail']);
+      const config = dialogServiceSpy.open.mock.calls[0][1] as DynamicDialogConfig<unknown>;
+      expect(config.data).toBeUndefined();
       expect(config.modal).toBe(true);
     });
 

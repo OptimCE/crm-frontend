@@ -49,6 +49,22 @@ export class AnnexesServicesList implements OnInit {
   readonly pendingUnsubscribe = signal<string | null>(null);
   readonly subscribedServices = computed(() => this.services().filter((s) => s.subscribed));
   readonly availableToAdd = computed(() => this.services().filter((s) => !s.subscribed));
+
+  /**
+   * Gates the add-module trigger. Both halves are load-bearing.
+   *
+   * `!loading()` alone lets the dialog open before the catalogue resolves, which
+   * used to render the terminal "everything is already activated" state on a
+   * community with nothing activated. But `loading` is *also* set false by the
+   * error handler in `refresh()`, so a FAILED fetch re-opened the same lie with
+   * an empty store — verified by stopping crm-backend and reloading.
+   *
+   * `services().length > 0` closes both, and cannot wrongly disable: the
+   * catalogue is a fixed platform-wide list, so an empty one means unresolved or
+   * failed, never "there is nothing to add". The error toast from `refresh()`
+   * explains the disabled button in the failure case.
+   */
+  readonly catalogueReady = computed(() => !this.loading() && this.services().length > 0);
   readonly canManage = computed(() =>
     this.userContextService.compareWithActiveRole(Role.GESTIONNAIRE),
   );
@@ -85,7 +101,8 @@ export class AnnexesServicesList implements OnInit {
       closable: true,
       closeOnEscape: true,
       header: this.translate.instant('ANNEXES_SERVICES.DIALOG.TITLE') as string,
-      data: { available: this.availableToAdd() },
+      // No `data` payload: the dialog derives its list from CommunityServicesStore
+      // so it cannot hold a stale snapshot. See AddAnnexDialog.available.
     });
     this.dialogRef?.onClose
       .pipe(takeUntilDestroyed(this.destroyRef))

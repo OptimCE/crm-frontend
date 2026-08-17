@@ -135,7 +135,9 @@
    side, so hide the bell here. The unread badge moves onto the logo (see
    navbar.html) and the header stays a single logo row identical in height and
    position to the expanded state. The bell stays in the DOM (display:none, not
-   @if) so its unread-count poll keeps running. */
+   @if) so its unread-count poll keeps running — and, since the bell's ngOnInit
+   also opens the realtime SSE stream, so does live delivery for the whole app.
+   Swapping this for @if would silently kill both. */
 .sidebar:not(.sidebar--expanded) .sidebar__header-actions {
   display: none;
 }

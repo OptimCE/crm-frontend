@@ -7,17 +7,24 @@
   [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
   data-testid="notification-bell__trigger"
 >
+  <!-- `pt.pcBadge.root` is PrimeNG's pass-through: it puts the attribute on the
+       inner p-badge host, which is where the count actually renders. Without it
+       the only handle on the number is `.p-badge`, and an e2e suite that watches
+       this badge move is the one thing that observes SSE delivery in a browser.
+       Note the element is always in the DOM — `badgeDisabled` only sets
+       `display: none` — so assert on its TEXT, not on visibility. -->
   <p-overlaybadge
     [value]="badgeValue()"
     [badgeDisabled]="store.unreadCount() === 0"
     severity="danger"
     badgeSize="small"
+    [pt]="{ pcBadge: { root: { 'data-testid': 'notification-bell__badge' } } }"
   >
     <i class="pi pi-bell"></i>
   </p-overlaybadge>
 </button>
 
-<p-popover #op (onShow)="onShow()" appendTo="body" styleClass="notif-popover">
+<p-popover #op (onShow)="onShow()" (onHide)="onHide()" appendTo="body" styleClass="notif-popover">
   <div class="notif-panel" data-testid="notification-bell__panel">
     <div class="notif-panel__header">
       <span class="notif-panel__title">{{ 'NOTIFICATIONS.TITLE' | translate }}</span>

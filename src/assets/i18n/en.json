@@ -1840,7 +1840,9 @@
       "DUE_DATE": "Due",
       "OGM_LABEL": "Structured communication",
       "PAGE_INFO": "Page {{page}} of {{total}}"
-    }
+    },
+    "RUN_TOAST_FINISHED": "The billing run has finished.",
+    "RUN_TOAST_FAILED": "The billing run has failed."
   },
   "CONSUMPTION_COVERAGE": {
     "TITLE": "Available consumption data",
@@ -1934,7 +1936,9 @@
         "SURPLUS": "Surplus",
         "RESIDUAL": "Grid draw"
       }
-    }
+    },
+    "TOAST_FINISHED": "A simulation has finished.",
+    "TOAST_FAILED": "A simulation has failed."
   },
   "ALGORITHM_HUB": {
     "PAGE_TITLE": "Allocation key generation",
@@ -1995,7 +1999,9 @@
       "FILE_TYPE": "Only CSV and XLSX files are accepted.",
       "MIN_VALUE": "Must be at least {{ min }}.",
       "MAX_VALUE": "Must be at most {{ max }}."
-    }
+    },
+    "TOAST_FINISHED": "An allocation key generation has finished.",
+    "TOAST_FAILED": "An allocation key generation has failed."
   },
   "AUDIT": {
     "LIST": {

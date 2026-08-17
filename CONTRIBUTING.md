@@ -11,8 +11,8 @@ for the OptimCE platform. The backend API and the supporting microservices live
 in their own repositories under the
 [OptimCE organization](https://github.com/OptimCE):
 
-- **Frontend changes** — UI, components, feature modules, translations — belong
-  here.
+- **Frontend changes** — UI, components, and feature modules — belong here.
+  Translations are handled on Weblate; see [Translations](#translations) below.
 - **Backend or other services** should be reported or fixed in their respective
   repositories. To run the whole platform locally, see the
   [OptimCE monorepo](https://github.com/OptimCE/monorepo).
@@ -60,6 +60,20 @@ For security vulnerabilities, **do not open a public issue**; follow the
 
 Small documentation fixes are welcome as direct pull requests; for larger
 changes, opening an issue first to discuss the approach can save you time.
+
+## Translations
+
+The interface strings in `src/assets/i18n/` are translated on
+[Weblate](https://hosted.weblate.org/engage/optimce/), which hosts OptimCE free
+of charge as a free software project. Weblate commits approved translations back
+to this repository automatically.
+
+- **Translating, or fixing a wording** — do it on Weblate, not in a pull
+  request. Pull requests that only change translated values may be closed with a
+  pointer to Weblate, so that the two do not drift apart.
+- **Adding or renaming a key** — that belongs in a pull request here, together
+  with the code that uses it and its French source string in `fr.json`. Weblate
+  picks the new key up on its next sync and offers it to translators.
 
 ## Commit Messages
 

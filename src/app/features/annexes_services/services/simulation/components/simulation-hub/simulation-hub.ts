@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
@@ -8,10 +8,12 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Skeleton } from 'primeng/skeleton';
 import { Toast } from 'primeng/toast';
 import { Tooltip } from 'primeng/tooltip';
-import { interval } from 'rxjs';
+import { interval, switchMap } from 'rxjs';
 
 import { ApiResponse, Pagination } from '../../../../../../core/dtos/api.response';
 import { VALIDATION_TYPE } from '../../../../../../core/dtos/notification';
+import { RealtimeService } from '../../../../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS } from '../../../../../../core/services/realtime/realtime.types';
 import {
   SimulationDetailDTO,
   SimulationPartialDTO,
@@ -29,6 +31,13 @@ import { SimulationStartPanel } from '../simulation-start-panel/simulation-start
 // terminal state without the user hitting refresh. Stops automatically once
 // nothing is pending, and skips work when the tab is hidden.
 const POLL_INTERVAL_MS = 4000;
+// Cadence while the realtime stream is live. The poll is SLOWED, never stopped:
+// a live stream proves the socket is healthy, not that events are being
+// published — one service missing REALTIME_REDIS_URL yields a perfectly healthy
+// stream that delivers nothing, and a gated-off poller would then never
+// converge. This also keeps the terminal-transition toast below on a single code
+// path, so the realtime and poll routes cannot double-toast.
+const SAFETY_POLL_INTERVAL_MS = 20_000;
 
 @Component({
   selector: 'app-simulation-hub',
@@ -63,6 +72,18 @@ export class SimulationHub implements OnInit {
   readonly filter = signal<SimulationQuery>({ page: 1, page_size: 20, sort_id: 'DESC' });
   readonly lastRefreshedAt = signal<number | null>(null);
 
+  /**
+   * Status of each run as of the previous list read, so a PENDING -> terminal
+   * transition can be observed exactly once.
+   *
+   * Toasting from the observed DELTA rather than from event arrival is what makes
+   * a double toast impossible: the realtime path and the poll path both funnel
+   * into silentRefresh(), so whichever wins the race the other sees no change.
+   * It is the same principle as the notification store's `lastCount = -1` guard,
+   * and it means the toast still fires when realtime is down.
+   */
+  private lastStatusById = new Map<number, SimulationStatus>();
+
   readonly expandedId = signal<number | null>(null);
   readonly detailById = signal<ReadonlyMap<number, SimulationDetailDTO>>(new Map());
   readonly detailLoadingId = signal<number | null>(null);
@@ -74,13 +95,28 @@ export class SimulationHub implements OnInit {
 
   protected readonly SimulationStatus = SimulationStatus;
 
+  private readonly realtime = inject(RealtimeService);
+
   constructor() {
-    interval(POLL_INTERVAL_MS)
-      .pipe(takeUntilDestroyed())
+    toObservable(this.realtime.live)
+      .pipe(
+        switchMap((live) => interval(live ? SAFETY_POLL_INTERVAL_MS : POLL_INTERVAL_MS)),
+        takeUntilDestroyed(),
+      )
       .subscribe(() => {
         if (this.hasPending() && !document.hidden) {
           this.silentRefresh();
         }
+      });
+
+    // The fast path. `realtime.reconnected` comes along for free, so a dropped
+    // event heals on the next connect instead of needing a replay buffer.
+    // Never trust the payload as data — refetch and let the list be the truth.
+    this.realtime
+      .on(REALTIME_TOPICS.SIMULATION_FINISHED)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        if (!document.hidden) this.silentRefresh();
       });
   }
 
@@ -99,10 +135,14 @@ export class SimulationHub implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.runs.set(Array.isArray(response.data) ? response.data : []);
+          const data = Array.isArray(response.data) ? response.data : [];
+          this.runs.set(data);
           this.pagination.set(response.pagination);
           this.lastRefreshedAt.set(Date.now());
           this.runsLoading.set(false);
+          // Seed only: an explicit load must never toast about work that
+          // finished before the user got here.
+          this.snapshotStatuses(data);
         },
         error: (error: unknown) => {
           this.runsLoading.set(false);
@@ -125,6 +165,34 @@ export class SimulationHub implements OnInit {
     this.refresh();
   }
 
+  /**
+   * Toast once per run that just left PENDING, then re-snapshot.
+   *
+   * Text comes from the i18n bundle keyed on the observed status — never from a
+   * realtime payload. Anything holding the Redis password can publish, so
+   * rendering payload strings would make a compromised service a text-injection
+   * channel into every browser.
+   */
+  private toastTerminalTransitions(data: readonly SimulationPartialDTO[]): void {
+    for (const run of data) {
+      const before = this.lastStatusById.get(run.id);
+      if (before !== SimulationStatus.PENDING || run.status === SimulationStatus.PENDING) continue;
+      this.snackbar.openSnackBar(
+        this.translate.instant(
+          run.status === SimulationStatus.SUCCESS
+            ? 'SIMULATION_HUB.TOAST_FINISHED'
+            : 'SIMULATION_HUB.TOAST_FAILED',
+        ) as string,
+        VALIDATION_TYPE,
+      );
+    }
+    this.snapshotStatuses(data);
+  }
+
+  private snapshotStatuses(data: readonly SimulationPartialDTO[]): void {
+    this.lastStatusById = new Map(data.map((run) => [run.id, run.status]));
+  }
+
   /** Background poll: refresh the list (and the open detail) without spinners. */
   private silentRefresh(): void {
     this.service.invalidate();
@@ -134,6 +202,7 @@ export class SimulationHub implements OnInit {
       .subscribe({
         next: (response) => {
           const data = Array.isArray(response.data) ? response.data : [];
+          this.toastTerminalTransitions(data);
           this.runs.set(data);
           this.pagination.set(response.pagination);
           this.lastRefreshedAt.set(Date.now());
