@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { interval } from 'rxjs';
+import { interval, switchMap } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
@@ -28,10 +28,17 @@ import {
 import { ConsumptionCoverage } from '../../../../shared/components/consumption-coverage/consumption-coverage';
 import { ConsumptionUpload } from '../../../../shared/components/consumption-upload/consumption-upload';
 import { InvoiceList } from '../invoice-list/invoice-list';
+import { RealtimeService } from '../../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS } from '../../../../core/services/realtime/realtime.types';
 
 const OPERATIONS_PAGE_LIMIT = 100;
 // Poll the active run while it computes so the UI converges without a manual refresh.
 const POLL_INTERVAL_MS = 4000;
+// Cadence while the realtime stream is live. SLOWED, not stopped: a live stream
+// proves the socket is healthy, not that events are being published, and this
+// poller is also the only code path that loads the invoices and refreshes the run
+// list when a run finishes.
+const SAFETY_POLL_INTERVAL_MS = 20_000;
 
 @Component({
   selector: 'app-run-generate',
@@ -78,8 +85,25 @@ export class RunGenerate implements OnInit {
   readonly invoicesLoading = signal<boolean>(false);
   readonly coverageReload = signal<number>(0);
 
+  private readonly realtime = inject(RealtimeService);
+
   constructor() {
-    interval(POLL_INTERVAL_MS)
+    toObservable(this.realtime.live)
+      .pipe(
+        switchMap((live) => interval(live ? SAFETY_POLL_INTERVAL_MS : POLL_INTERVAL_MS)),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        const run = this.activeRun();
+        if (run && isRunPending(run.status) && !document.hidden) {
+          this.pollRun(run.id);
+        }
+      });
+
+    // The fast path — same handler as the poll, so there is one code path and no
+    // way to double-fire. `realtime.reconnected` comes along for free.
+    this.realtime
+      .on(REALTIME_TOPICS.BILLING_RUN_FINISHED)
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
         const run = this.activeRun();
@@ -176,6 +200,12 @@ export class RunGenerate implements OnInit {
   }
 
   private pollRun(id: number): void {
+    // INVALIDATE FIRST. getBillingRun is a cachedGet with a 1-minute TTL, and
+    // ServiceBase also keeps an in-flight map handing back the same
+    // shareReplay(1) observable — so without this the 4s poll was served from
+    // cache and the real status granularity was ~60s. It also meant a
+    // realtime-triggered refetch would silently do nothing at all.
+    this.service.invalidate();
     this.service
       .getBillingRun(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -185,7 +215,7 @@ export class RunGenerate implements OnInit {
           this.activeRun.set(run);
           if (!isRunPending(run.status)) {
             this.loadRunInvoices(run.id);
-            this.service.invalidate();
+            // Already invalidated above; refreshRuns() just needs to miss the cache.
             this.refreshRuns();
           }
         },

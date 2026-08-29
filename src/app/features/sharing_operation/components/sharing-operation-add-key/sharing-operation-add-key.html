@@ -21,13 +21,21 @@
   (selectionChange)="selectedKey.set($event)"
 >
   <ng-template pTemplate="caption">
-    <div class="flex content-between">
+    <div class="flex flex-wrap items-center justify-between gap-2">
       <p-button
         [outlined]="true"
         icon="pi pi-filter-slash"
         label="{{ 'SHARING_OPERATION.ADD_KEY.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
         (onClick)="clear(dt)"
         data-testid="op-add-key__btn--clear-filter"
+      ></p-button>
+      <p-button
+        icon="pi pi-plus"
+        [outlined]="true"
+        label="{{ 'SHARING_OPERATION.ADD_KEY.CREATE_KEY_BUTTON_LABEL' | translate }}"
+        pTooltip="{{ 'SHARING_OPERATION.ADD_KEY.CREATE_KEY_BUTTON_TOOLTIP' | translate }}"
+        (onClick)="createKey()"
+        data-testid="op-add-key__btn--create-key"
       ></p-button>
     </div>
   </ng-template>

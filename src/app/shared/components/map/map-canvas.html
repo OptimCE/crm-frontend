@@ -1,0 +1,71 @@
+<div
+  class="app-map"
+  [attr.aria-label]="ariaLabel() || ('MAP.REGION_ARIA' | translate)"
+  role="region"
+>
+  @if (failed(); as kind) {
+    <div class="app-map__overlay" data-testid="map-canvas__error">
+      <i class="pi pi-map text-3xl text-surface-400 mb-3"></i>
+      <p class="font-medium text-surface-900 m-0">{{ 'MAP.UNAVAILABLE_TITLE' | translate }}</p>
+      <p class="text-sm text-surface-500 mt-1 mb-3 max-w-sm text-center">
+        @if (kind === 'webgl') {
+          {{ 'MAP.UNAVAILABLE_WEBGL' | translate }}
+        } @else {
+          {{ 'MAP.UNAVAILABLE_LOAD' | translate }}
+        }
+      </p>
+      @if (kind === 'load') {
+        <button
+          type="button"
+          class="app-map__btn"
+          (click)="retry()"
+          data-testid="map-canvas__btn--retry"
+        >
+          {{ 'MAP.RETRY' | translate }}
+        </button>
+      }
+    </div>
+  } @else {
+    @if (!ready()) {
+      <div class="app-map__overlay" data-testid="map-canvas__loading">
+        <i class="pi pi-spinner pi-spin text-2xl text-surface-400"></i>
+        <p class="text-sm text-surface-500 mt-2 m-0">{{ 'MAP.LOADING' | translate }}</p>
+      </div>
+    }
+
+    <!-- Our own controls rather than MapLibre's NavigationControl, whose button
+         titles are hard-coded English with no i18n hook. Real buttons are also
+         keyboard-reachable and satisfy the template a11y rules structurally. -->
+    <div class="app-map__controls">
+      <button
+        type="button"
+        class="app-map__control"
+        [attr.aria-label]="'MAP.ZOOM_IN' | translate"
+        (click)="zoomIn()"
+        data-testid="map-canvas__btn--zoom-in"
+      >
+        <i class="pi pi-plus text-xs"></i>
+      </button>
+      <button
+        type="button"
+        class="app-map__control"
+        [attr.aria-label]="'MAP.ZOOM_OUT' | translate"
+        (click)="zoomOut()"
+        data-testid="map-canvas__btn--zoom-out"
+      >
+        <i class="pi pi-minus text-xs"></i>
+      </button>
+      <button
+        type="button"
+        class="app-map__control"
+        [attr.aria-label]="'MAP.RESET_VIEW' | translate"
+        (click)="resetView()"
+        data-testid="map-canvas__btn--reset"
+      >
+        <i class="pi pi-compass text-xs"></i>
+      </button>
+    </div>
+  }
+
+  <div #mapHost class="app-map__canvas" data-testid="map-canvas__host"></div>
+</div>

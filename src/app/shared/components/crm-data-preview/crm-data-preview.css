@@ -1,0 +1,138 @@
+/* Pre-flight panel for the CRM data source.
+   Three states, distinguished by colour AND by icon + wording, so the meaning
+   does not depend on colour perception alone. */
+
+.crm-preview {
+  border: 1px solid var(--p-surface-300, #d4d4d8);
+  border-left-width: 4px;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  background: var(--p-surface-50, #fafafa);
+  font-size: 0.875rem;
+}
+
+.crm-preview--loading {
+  border-left-color: var(--p-surface-300, #d4d4d8);
+}
+
+.crm-preview--ok {
+  border-left-color: var(--p-primary-500, #43a047);
+  background: var(--p-primary-50, #f1f8f2);
+}
+
+.crm-preview--warn {
+  border-left-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.crm-preview--error {
+  border-left-color: var(--p-red-500, #ef4444);
+  background: var(--p-red-50, #fef2f2);
+}
+
+.crm-preview__headline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--p-surface-800, #27272a);
+}
+
+.crm-preview--ok .crm-preview__headline i {
+  color: var(--p-primary-600, #388e3c);
+}
+
+.crm-preview--warn .crm-preview__headline i {
+  color: #b45309;
+}
+
+.crm-preview--error .crm-preview__headline i,
+.crm-preview--error > i {
+  color: var(--p-red-600, #dc2626);
+}
+
+.crm-preview__period {
+  margin-top: 0.25rem;
+  color: var(--p-surface-600, #52525b);
+}
+
+.crm-preview__totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.crm-preview__totals dt {
+  color: var(--p-surface-500, #71717a);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.crm-preview__totals dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--p-surface-800, #27272a);
+}
+
+.crm-preview__participants,
+.crm-preview__warnings,
+.crm-preview__blockers {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--p-surface-200, #e4e4e7);
+}
+
+.crm-preview__matched {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--p-primary-700, #2e7d32);
+}
+
+.crm-preview__unmatched {
+  margin-top: 0.5rem;
+  color: var(--p-red-700, #b91c1c);
+}
+
+.crm-preview__warnings > p:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #b45309;
+  font-weight: 600;
+}
+
+.crm-preview__unmatched ul,
+.crm-preview__warnings ul {
+  margin: 0.375rem 0 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+/* EANs are long digit strings — keep them readable and prevent overflow. */
+.crm-preview__unmatched li {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  word-break: break-all;
+}
+
+.crm-preview__hint {
+  margin-top: 0.5rem;
+  color: var(--p-surface-600, #52525b);
+  font-size: 0.8125rem;
+}
+
+.crm-preview__blocker + .crm-preview__blocker {
+  margin-top: 0.5rem;
+}
+
+.crm-preview__blocker-message {
+  font-weight: 600;
+  color: var(--p-red-700, #b91c1c);
+}
+
+.crm-preview__blocker-detail {
+  color: var(--p-surface-700, #3f3f46);
+  word-break: break-word;
+}

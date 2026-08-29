@@ -7,6 +7,7 @@
 [![Website](https://img.shields.io/badge/Website-optimce.be-2e7d32.svg)](https://www.optimce.be/de/)
 [![Lizenz](https://img.shields.io/badge/Lizenz-Apache%202.0-blue.svg)](../LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-21-dd0031.svg)](https://angular.dev)
+[![Übersetzungsstatus](https://hosted.weblate.org/widgets/optimce/-/svg-badge.svg)](https://hosted.weblate.org/engage/optimce/)
 [![en](https://img.shields.io/badge/lang-en-lightgrey.svg)](../README.md)
 [![fr](https://img.shields.io/badge/lang-fr-lightgrey.svg)](README.fr.md)
 [![de](https://img.shields.io/badge/lang-de-43a047.svg)](README.de.md)
@@ -146,6 +147,28 @@ Die Unit-Tests laufen mit dem Test-Runner [Vitest](https://vitest.dev).
 | `features/` | Fachmodule, bedarfsweise geladen und nach Geschäftsdomäne aufgeteilt       |
 | `layout/`   | Layout-Komponenten, die die Anwendungsseiten umschließen                   |
 | `assets/`   | Übersetzungen (`i18n/`), Laufzeitkonfiguration (`config/`) und Bilder      |
+
+## Übersetzungen
+
+Die Oberfläche ist auf **Französisch, Englisch, Niederländisch und Deutsch**
+verfügbar. Die Kataloge sind die verschachtelten JSON-Dateien in
+`src/assets/i18n/` (`fr.json`, `en.json`, `nl.json`, `de.json`), die zur
+Laufzeit von [ngx-translate](https://github.com/ngx-translate/core) geladen
+werden; Französisch ist die Ausgangssprache.
+
+Die Übersetzungen werden auf [Weblate](https://weblate.org/) gepflegt, einer
+freien webbasierten Plattform für kontinuierliche Lokalisierung, die dieses
+Projekt im Rahmen ihres Libre-Tarifs für freie Software kostenlos hostet. Sie
+müssen weder die JSON-Dateien anfassen noch einen Pull Request öffnen, um zu
+helfen:
+
+**[OptimCE auf Weblate übersetzen →](https://hosted.weblate.org/engage/optimce/)**
+
+Weblate committet freigegebene Übersetzungen zurück in dieses Repository. Bitte
+nehmen Sie reine Übersetzungsänderungen daher dort vor, statt
+`src/assets/i18n/*.json` von Hand zu bearbeiten. Neue Schlüssel kommen weiterhin
+per Pull Request hinzu — zusammen mit dem Code, der sie verwendet, und ihrer
+französischen Ausgangszeichenkette.
 
 ## Mitwirken
 

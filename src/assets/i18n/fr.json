@@ -447,6 +447,16 @@
         "ADDRESSES": "Adresses",
         "HOUSE_ADDRESS": "Adresse de résidence",
         "BILLING_ADDRESS": "Adresse de facturation"
+      },
+      "PREFILL": {
+        "CTA": "Gagnez du temps : remplissez ce formulaire avec les données de votre profil.",
+        "BUTTON": "Utiliser les données de mon profil",
+        "ARMED": "Votre profil sera utilisé dès que vous aurez choisi un type de membre.",
+        "APPLIED": "{{count}} champ(s) rempli(s) depuis votre profil. Vérifiez-les et complétez le reste.",
+        "EMPTY": "Votre profil ne contient pas encore de données réutilisables.",
+        "GO_TO_PROFILE": "Compléter mon profil",
+        "ERROR": "Votre profil n'a pas pu être chargé.",
+        "RETRY": "Réessayer"
       }
     },
     "MANAGER": {
@@ -673,7 +683,37 @@
       "FINALISATION": "Finalisation",
       "STEP_CONSUMERS_COUNT": "Consommateurs",
       "STEP_CONSUMER_NAMES": "Noms",
-      "STEP_ITERATIONS": "Itérations"
+      "STEP_ITERATIONS": "Itérations",
+      "PARTICIPANTS_SOURCE": {
+        "LEGEND": "Comment définir les participants ?",
+        "MANUAL": "Manuellement",
+        "MANUAL_HINT": "Indiquez le nombre de participants, puis nommez-les.",
+        "OPERATION": "Depuis une opération de partage",
+        "OPERATION_HINT": "Choisissez une opération et une date : ses compteurs deviennent les participants.",
+        "CHOOSE_METERS": "Choisir les compteurs",
+        "IMPORTED": "{{ count }} participant(s) importé(s)",
+        "CHANGE": "Modifier"
+      }
+    },
+    "CREATE_MODE": {
+      "HEADER": "Comment voulez-vous créer la clef ?",
+      "SUBTITLE": "Les deux méthodes aboutissent à la même clef — choisissez celle qui vous convient.",
+      "FULL": {
+        "TITLE": "Création complète",
+        "DESCRIPTION": "Le tableau complet sur une seule page : itérations, participants et pourcentages. Idéal si vous savez déjà ce que vous voulez encoder.",
+        "ACTION": "Ouvrir l'éditeur"
+      },
+      "STEP": {
+        "TITLE": "Création pas à pas",
+        "DESCRIPTION": "Un assistant qui vous guide : participants, itérations, puis finalisation. Vous relisez le tableau complet avant d'enregistrer.",
+        "ACTION": "Démarrer l'assistant"
+      }
+    },
+    "IMPORT_FROM_SHARING_OPERATION": {
+      "BUTTON_LABEL": "Importer depuis une opération",
+      "HEADER": "Importer les compteurs d'une opération de partage",
+      "IMPORTED": "{{ added }} participant(s) importé(s)",
+      "IMPORTED_WITH_SKIPPED": "{{ added }} participant(s) importé(s), {{ skipped }} déjà présent(s)"
     },
     "TABLE": {
       "COLUMNS": {
@@ -708,7 +748,6 @@
       "SUBTITLE": "Configurez la manière dont l'énergie est partagée entre les consommateurs",
       "ERASE_FILTERS_BUTTON_LABEL": "Effacer les filtres",
       "ADD_BUTTON_LABEL": "Ajouter",
-      "ADD_STANDARD_KEY_BUTTON_LABEL": "Ajouter une clef standard",
       "NAME_LABEL": "Nom",
       "DESCRIPTION_LABEL": "Description",
       "PAGINATED_TEMPLATE_LIST": "Page {{ page }} sur {{ total_pages }} ({{ total }} clefs)",
@@ -1353,7 +1392,9 @@
       "DESCRIPTION_LABEL": "Description",
       "NO_ALLOCATION_KEYS_FOUND_LABEL": "Aucune clef trouvée",
       "ADD_BUTTON_LABEL": "Ajouter",
-      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} clefs)"
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Page {{ page }} sur {{ total_pages }} ({{ total }} clefs)",
+      "CREATE_KEY_BUTTON_LABEL": "Créer une clef",
+      "CREATE_KEY_BUTTON_TOOLTIP": "Créer une nouvelle clef à partir des compteurs de l'opération à une date donnée"
     },
     "ADD_METER": {
       "CLEAR_FILTER_BUTTON_LABEL": "Effacer les filtres",
@@ -1423,7 +1464,8 @@
         "APPROVE_KEY": "Approuver",
         "REJECT_KEY": "Rejeter",
         "APPROVE_KEY_DATE_LABEL": "Date de début de la clef approuvée",
-        "APPROVE_KEY_NO_DATE_ERROR": "Veuillez sélectionner une date de début avant d'approuver la clef."
+        "APPROVE_KEY_NO_DATE_ERROR": "Veuillez sélectionner une date de début avant d'approuver la clef.",
+        "SELECT_METERS_NEW_KEY_HEADER": "Compteurs à inclure dans la nouvelle clef"
       },
       "METER": {
         "HEADERS": {
@@ -1493,6 +1535,7 @@
         "STATUS_LABEL": "Statut",
         "APPROVED_LABEL": "Approuvée",
         "DENIED_LABEL": "Refusée",
+        "PENDING_LABEL": "En attente d'approbation",
         "NO_HISTORY_KEY_FOUND_LABEL": "Aucun historique de clé trouvé",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Aucun historique de clé disponible"
       },
@@ -1521,23 +1564,6 @@
       "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Opération de partage ajoutée avec succès",
       "SELECT_A_TYPE_PLACEHOLDER": "Sélectionner un type"
     },
-    "SELECT_METER_NEW_KEY": {
-      "NOW": "Maintenant",
-      "FUTURE": "A venir",
-      "METERS_SELECTED": "{{ count }} compteur{{ count > 1 ? 's' : '' }} sélectionné{{ count > 1 ? 's' : '' }}",
-      "CLEAR_ALL": "Tout effacer",
-      "SELECT_ALL_NOW": "Séelctionner tous les compteurs présent",
-      "SELECT_ALL_FUTURE": "Sélectionner tous les compteurs à venir",
-      "CLEAN_FILTERS": "Effacer les filtres",
-      "TABLE": {
-        "ADDRESS": "Adresse",
-        "EAN": "EAN",
-        "METER_NUMBER": "Numéro de compteur",
-        "STATUS": "Statut",
-        "HOLDER": "Propriétaire",
-        "NO_METERS_FOUND": "Aucun compteur trouvé"
-      }
-    },
     "ERRORS": {
       "GET_SHARING_OPERATION_PARTIAL_LIST": "Erreur lors de la récupération des partages partiels",
       "GET_FULL_SHARING_OPERATION": "Erreur lors de la récupération complète du partage",
@@ -1551,6 +1577,30 @@
       "GET_METER_CONSUMPTION": "Erreur lors de la récupération de la consommation du compteur",
       "DOWNLOAD_METER_CONSUMPTION": "Erreur lors du téléchargement de la consommation du compteur",
       "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Erreur lors du téléchargement de la consommation des compteurs partagés"
+    }
+  },
+  "IMPORT_SHARING_OPERATION_METERS": {
+    "OPERATION_LABEL": "Opération de partage",
+    "OPERATION_PLACEHOLDER": "Choisissez une opération",
+    "DATE_LABEL": "À la date du",
+    "HINT": "Les compteurs enregistrés dans l'opération à cette date sont listés ci-dessous. Les consommateurs sont cochés par défaut, les points d'injection ne le sont pas.",
+    "SELECT_ALL": "Tout sélectionner",
+    "CLEAN_FILTERS": "Effacer les filtres",
+    "METERS_SELECTED": "{{ count }} compteur(s) sélectionné(s)",
+    "CLEAR_ALL": "Tout effacer",
+    "CONFIRM": "Importer ({{ count }})",
+    "NO_METERS_FOUND": "Aucun compteur dans l'opération à cette date",
+    "ROLE": {
+      "CONSUMER": "Consommateur",
+      "INJECTION": "Injection"
+    },
+    "TABLE": {
+      "ADDRESS": "Adresse",
+      "EAN": "EAN",
+      "METER_NUMBER": "N° de compteur",
+      "ROLE": "Rôle",
+      "STATUS": "Statut",
+      "HOLDER": "Titulaire"
     }
   },
   "FORM_ERROR": {
@@ -1840,7 +1890,9 @@
       "DUE_DATE": "Échéance",
       "OGM_LABEL": "Communication structurée",
       "PAGE_INFO": "Page {{page}} sur {{total}}"
-    }
+    },
+    "RUN_TOAST_FINISHED": "Le calcul de facturation est terminé.",
+    "RUN_TOAST_FAILED": "Le calcul de facturation a échoué."
   },
   "CONSUMPTION_COVERAGE": {
     "TITLE": "Données de consommation disponibles",
@@ -1934,7 +1986,9 @@
         "SURPLUS": "Surplus",
         "RESIDUAL": "Soutirage réseau"
       }
-    }
+    },
+    "TOAST_FINISHED": "Une simulation est terminée.",
+    "TOAST_FAILED": "Une simulation a échoué."
   },
   "ALGORITHM_HUB": {
     "PAGE_TITLE": "Génération de clés de répartition",
@@ -1995,7 +2049,9 @@
       "FILE_TYPE": "Seuls les fichiers CSV et XLSX sont acceptés.",
       "MIN_VALUE": "Doit être au moins {{ min }}.",
       "MAX_VALUE": "Doit être au plus {{ max }}."
-    }
+    },
+    "TOAST_FINISHED": "Une génération de clé de répartition est terminée.",
+    "TOAST_FAILED": "Une génération de clé de répartition a échoué."
   },
   "AUDIT": {
     "LIST": {
@@ -2690,6 +2746,78 @@
       "10": "octobre",
       "11": "novembre",
       "12": "décembre"
+    }
+  },
+  "CRM_DATA_SOURCE": {
+    "SOURCE_LEGEND": "D'où viennent les données de consommation ?",
+    "SOURCE_FILE": "Importer un fichier",
+    "SOURCE_FILE_HINT": "Le fichier CSV ou Excel fourni par votre gestionnaire de réseau.",
+    "SOURCE_CRM": "Utiliser les données déjà enregistrées",
+    "SOURCE_CRM_HINT": "Les relevés de comptage déjà présents dans OptimCE, pour la période de votre choix.",
+    "SOURCE_CRM_SIM_HINT": "Les relevés de comptage déjà présents dans OptimCE. Les participants de la clé doivent correspondre aux codes EAN des compteurs.",
+    "OPERATION_LABEL": "Opération de partage",
+    "OPERATION_PLACEHOLDER": "Choisissez une opération de partage",
+    "PERIOD_START_LABEL": "Du",
+    "PERIOD_END_LABEL": "Au",
+    "PERIOD_HELP": "Les deux dates sont incluses. Nous utilisons les relevés bruts (avant partage) de tous les compteurs de l'opération.",
+    "PERIOD_HELP_SIM": "Les deux dates sont incluses. Nous utilisons les relevés bruts (avant partage) des compteurs correspondant aux participants de la clé.",
+    "PREVIEW": {
+      "FAILED": "Impossible de vérifier les données pour le moment. Réessayez dans un instant.",
+      "SUMMARY": "{{meters}} compteur(s) · {{readings}} relevé(s)",
+      "PERIOD_COVERED": "Données disponibles du {{from}} au {{to}}",
+      "TOTAL_CONSUMPTION": "Consommation totale",
+      "TOTAL_INJECTION": "Injection totale",
+      "PARTICIPANTS_MATCHED": "{{count}} participant(s) de la clé correspondent à un compteur",
+      "PARTICIPANTS_UNMATCHED": "{{count}} participant(s) de la clé ne correspondent à aucun compteur :",
+      "PARTICIPANTS_UNMATCHED_HINT": "Les participants de la clé doivent porter le code EAN du compteur. Corrigez la clé, ou choisissez une autre opération de partage ou période.",
+      "INCOMPLETE_TITLE": "{{count}} compteur(s) n'ont pas de relevés sur toute la période :",
+      "INCOMPLETE_METER": "{{ean}} — {{missing}} relevé(s) manquant(s) sur {{expected}}",
+      "INCOMPLETE_HINT": "Les relevés manquants seront comptés comme une consommation nulle. Le calcul reste possible, mais le résultat sera moins représentatif pour ces compteurs."
+    }
+  },
+  "MAP": {
+    "MAP_VIEW_LABEL": "Carte",
+    "LIST_VIEW_LABEL": "Liste",
+    "VIEW_SWITCH_ARIA": "Basculer entre la vue liste et la vue carte",
+    "REGION_ARIA": "Carte interactive",
+    "LOADING": "Chargement de la carte…",
+    "ZOOM_IN": "Zoomer",
+    "ZOOM_OUT": "Dézoomer",
+    "RESET_VIEW": "Recentrer",
+    "RETRY": "Réessayer",
+    "UNAVAILABLE_TITLE": "Carte indisponible",
+    "UNAVAILABLE_WEBGL": "Votre navigateur ne prend pas en charge WebGL 2, nécessaire à l'affichage de la carte. La vue liste reste disponible.",
+    "UNAVAILABLE_LOAD": "La carte n'a pas pu être chargée. Vérifiez votre connexion, puis réessayez.",
+    "EMPTY_TITLE": "Rien à afficher sur la carte",
+    "EMPTY_METERS": "Aucun compteur correspondant à ces filtres n'a encore de coordonnées géographiques.",
+    "EMPTY_COMMUNITIES": "Aucune communauté publique ne couvre de commune localisable.",
+    "PARTIAL_COORDINATES": "{{ plotted }} compteur(s) affiché(s) sur {{ total }} : {{ missing }} n'ont pas encore de coordonnées.",
+    "CAPPED": "Seuls les {{ limit }} premiers résultats sont affichés. Affinez vos filtres pour tout voir.",
+    "LEGEND": {
+      "TITLE": "Légende",
+      "PRECISION_ADDRESS": "Position exacte",
+      "PRECISION_MUNICIPALITY": "Position approximative (centre de la commune)",
+      "CLUSTER": "Groupe de repères — cliquer pour agrandir"
+    },
+    "POPUP": {
+      "TITLE_POINTS": "À cet endroit",
+      "TITLE_METERS": "Compteurs à cette adresse",
+      "TITLE_ZONES": "Communautés sur cette commune",
+      "COUNT": "{{ count }} résultat(s)",
+      "CLOSE": "Fermer",
+      "PREVIOUS": "Précédent",
+      "NEXT": "Suivant",
+      "PAGE": "{{ page }} / {{ total }}",
+      "OPEN_DETAIL": "Ouvrir la fiche",
+      "APPROXIMATE_NOTICE": "Position approximative : centre de la commune.",
+      "HOLDER": "Titulaire",
+      "NO_HOLDER": "Aucun titulaire",
+      "OPERATION": "Opération de partage",
+      "NO_OPERATION": "Aucune opération",
+      "COMMUNITY": "Communauté",
+      "MUNICIPALITIES": "Communes",
+      "REGULATOR": "Régulateur",
+      "OPERATIONS_COUNT": "{{ count }} opération(s) publique(s)"
     }
   }
 }

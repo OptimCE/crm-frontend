@@ -132,7 +132,12 @@ describe('SharingOperationView', () => {
   let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
   let confirmationServiceSpy: { confirm: ReturnType<typeof vi.fn> };
   let meterEventServiceSpy: { notifyMeterAdded: ReturnType<typeof vi.fn> };
-  let activatedRouteMock: { snapshot: { paramMap: ReturnType<typeof convertToParamMap> } };
+  let activatedRouteMock: {
+    snapshot: {
+      paramMap: ReturnType<typeof convertToParamMap>;
+      queryParamMap: ReturnType<typeof convertToParamMap>;
+    };
+  };
 
   async function createComponent(preInitFn?: () => void): Promise<void> {
     fixture = TestBed.createComponent(SharingOperationView);
@@ -145,7 +150,12 @@ describe('SharingOperationView', () => {
   }
 
   beforeEach(async () => {
-    activatedRouteMock = { snapshot: { paramMap: convertToParamMap({ id: '1' }) } };
+    activatedRouteMock = {
+      snapshot: {
+        paramMap: convertToParamMap({ id: '1' }),
+        queryParamMap: convertToParamMap({}),
+      },
+    };
 
     sharingOperationServiceSpy = {
       getSharingOperation: vi
@@ -396,6 +406,46 @@ describe('SharingOperationView', () => {
     });
   });
 
+  // ── 4b. Key card rendering ────────────────────────────────────────
+
+  describe('key card', () => {
+    it('shows a pending proposal even when an approved key is already active', async () => {
+      sharingOperationServiceSpy.getSharingOperation.mockReturnValue(
+        of(
+          new ApiResponse<SharingOperationDTO>(
+            buildSharingOperation({
+              key_waiting_approval: buildSharingOperationKey({
+                id: 20,
+                key: { id: 200, name: 'Proposed key', description: 'Waiting for approval' },
+                status: SharingKeyStatus.PENDING,
+              }),
+            }),
+          ),
+        ),
+      );
+      await createComponent();
+      fixture.detectChanges();
+      const element = fixture.nativeElement as HTMLElement;
+
+      // The two states are independent on the DTO, so the card has to show both.
+      // Chaining them as `@if / @else if` made every operation that already ran a
+      // key hide the proposal, and with it the only way to approve or reject it.
+      expect(element.querySelector('[data-testid="op-view__link--key"]')).not.toBeNull();
+      expect(element.querySelector('[data-testid="op-view__btn--approve-key"]')).not.toBeNull();
+      expect(element.querySelector('[data-testid="op-view__btn--reject-key"]')).not.toBeNull();
+      expect(element.textContent).toContain('Proposed key');
+    });
+
+    it('offers no approve or reject when nothing is waiting', async () => {
+      await createComponent();
+      fixture.detectChanges();
+      const element = fixture.nativeElement as HTMLElement;
+
+      expect(element.querySelector('[data-testid="op-view__link--key"]')).not.toBeNull();
+      expect(element.querySelector('[data-testid="op-view__btn--approve-key"]')).toBeNull();
+    });
+  });
+
   // ── 5. setupStatusCategory() ──────────────────────────────────────
 
   describe('setupStatusCategory', () => {
@@ -489,44 +539,142 @@ describe('SharingOperationView', () => {
       expect(snackbarSpy.openSnackBar).not.toHaveBeenCalled();
       expect(sharingOperationServiceSpy.getSharingOperation).not.toHaveBeenCalled();
     });
+
+    it('should forward a name to seed the dialog filter', () => {
+      component.editKey('Key from March');
+      const config = dialogServiceSpy.open.mock.calls.at(-1)?.[1] as {
+        data: { prefillName?: string };
+      };
+      expect(config.data.prefillName).toBe('Key from March');
+    });
+
+    it('should start the create-a-key flow instead of claiming a key was attached', () => {
+      sharingOperationServiceSpy.getSharingOperation.mockClear();
+      const newKeySpy = vi.spyOn(component, 'newKey').mockImplementation(() => undefined);
+
+      component.editKey();
+      dialogCloseSubject.next({ action: 'create' });
+
+      expect(newKeySpy).toHaveBeenCalled();
+      expect(snackbarSpy.openSnackBar).not.toHaveBeenCalled();
+      expect(sharingOperationServiceSpy.getSharingOperation).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('returning from key creation', () => {
+    it('reopens the add-key dialog filtered on the freshly created key', async () => {
+      dialogServiceSpy.open.mockReturnValue({
+        onClose: new Subject().asObservable(),
+        destroy: vi.fn(),
+      } as unknown as DynamicDialogRef);
+
+      await createComponent(() => {
+        activatedRouteMock.snapshot.queryParamMap = convertToParamMap({
+          add_key: '1',
+          key_name: 'Key from March',
+        });
+      });
+      await fixture.whenStable();
+
+      // The params are stripped first so a refresh does not reopen the dialog.
+      expect(routerSpy.navigate).toHaveBeenCalledWith([], {
+        relativeTo: activatedRouteMock,
+        queryParams: {},
+        replaceUrl: true,
+      });
+      const config = dialogServiceSpy.open.mock.calls.at(-1)?.[1] as {
+        data: { prefillName?: string };
+      };
+      expect(config.data.prefillName).toBe('Key from March');
+    });
+
+    it('does not open anything on a normal visit', async () => {
+      await createComponent();
+      expect(dialogServiceSpy.open).not.toHaveBeenCalled();
+    });
   });
 
   describe('newKey', () => {
-    let dialogCloseSubject: Subject<string[] | null>;
+    let modeClose: Subject<'full' | 'step' | null>;
+    let metersClose: Subject<string[] | null>;
+
+    /** Answers the mode dialog, then hands back the meter dialog's close subject. */
+    function chooseMode(mode: 'full' | 'step'): void {
+      component.newKey();
+      modeClose.next(mode);
+    }
 
     beforeEach(async () => {
       await createComponent();
-      dialogCloseSubject = new Subject();
-      dialogServiceSpy.open.mockReturnValue({
-        onClose: dialogCloseSubject.asObservable(),
-        destroy: vi.fn(),
-      } as unknown as DynamicDialogRef);
+      modeClose = new Subject();
+      metersClose = new Subject();
+      // The mode dialog opens first, the meter picker second.
+      dialogServiceSpy.open
+        .mockReturnValueOnce({
+          onClose: modeClose.asObservable(),
+          destroy: vi.fn(),
+        } as unknown as DynamicDialogRef)
+        .mockReturnValueOnce({
+          onClose: metersClose.asObservable(),
+          destroy: vi.fn(),
+        } as unknown as DynamicDialogRef);
+      routerSpy.navigate.mockClear();
     });
 
-    it('should open SelectMeterNewKeyDialog', () => {
+    it('should ask for the creation mode before anything else', () => {
       component.newKey();
-      expect(dialogServiceSpy.open).toHaveBeenCalled();
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(1);
     });
 
-    it('should navigate to /keys/add with selected EANs on close', () => {
+    it('should not open the meter picker when the mode dialog is dismissed', () => {
       component.newKey();
-      dialogCloseSubject.next(['EAN1', 'EAN2']);
+      modeClose.next(null);
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(1);
+      expect(routerSpy.navigate).not.toHaveBeenCalled();
+    });
+
+    it('should then open the meter import dialog scoped to this operation', () => {
+      chooseMode('full');
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(2);
+      const config = dialogServiceSpy.open.mock.calls.at(-1)?.[1] as {
+        data: { idSharing: number };
+      };
+      expect(config.data.idSharing).toBe(component.id());
+    });
+
+    it('should navigate to the full creator with the selected EANs and a return URL', () => {
+      chooseMode('full');
+      metersClose.next(['EAN1', 'EAN2']);
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys/add'], {
+        queryParams: {
+          returnUrl: `/sharing_operations/${component.id()}`,
+          idSharing: component.id(),
+        },
         state: { consumers: ['EAN1', 'EAN2'] },
       });
     });
 
-    it('should not navigate when dialog closes with null', () => {
-      routerSpy.navigate.mockClear();
-      component.newKey();
-      dialogCloseSubject.next(null);
+    it('should navigate to the wizard when the step-by-step mode is chosen', () => {
+      chooseMode('step');
+      metersClose.next(['EAN1', 'EAN2']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys/add/step'], {
+        queryParams: {
+          returnUrl: `/sharing_operations/${component.id()}`,
+          idSharing: component.id(),
+        },
+        state: { consumers: ['EAN1', 'EAN2'] },
+      });
+    });
+
+    it('should not navigate when the meter dialog closes with null', () => {
+      chooseMode('full');
+      metersClose.next(null);
       expect(routerSpy.navigate).not.toHaveBeenCalled();
     });
 
-    it('should not navigate when dialog closes with empty array', () => {
-      routerSpy.navigate.mockClear();
-      component.newKey();
-      dialogCloseSubject.next([]);
+    it('should not navigate when the meter dialog closes with an empty array', () => {
+      chooseMode('full');
+      metersClose.next([]);
       expect(routerSpy.navigate).not.toHaveBeenCalled();
     });
   });

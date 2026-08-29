@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsumerDTO, IterationDTO, KeyDTO } from '../../../../../shared/dtos/key.dtos';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventBusService } from '../../../../../core/services/event_bus/eventbus.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { InputNumber } from 'primeng/inputnumber';
 import { Button } from 'primeng/button';
@@ -11,11 +12,16 @@ import { RadioButton } from 'primeng/radiobutton';
 import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
 import { Textarea } from 'primeng/textarea';
 import { SnackbarNotification } from '../../../../../shared/services-ui/snackbar.notifcation.service';
-import { ERROR_TYPE } from '../../../../../core/dtos/notification';
+import { ERROR_TYPE, VALIDATION_TYPE } from '../../../../../core/dtos/notification';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
 import { Card } from 'primeng/card';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
+import { ImportSharingOperationMeters } from '../../../../../shared/components/import-sharing-operation-meters/import-sharing-operation-meters';
+import { sanitizeReturnUrl } from '../../../../../shared/utils/navigation.utils';
+/** Where the participant list comes from at step 0. */
+type ParticipantSource = 'manual' | 'operation';
+
 interface FirstStepValue {
   nb_consumers: number;
 }
@@ -56,11 +62,31 @@ interface IterationFormValue {
 export class KeyCreationStepByStep implements OnInit {
   private eventBus = inject(EventBusService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private snackbar = inject(SnackbarNotification);
+  private dialogService = inject(DialogService);
+  private destroyRef = inject(DestroyRef);
   formFirstStep!: FormGroup;
   readonly secondStep = signal(false);
   nbConsumers = -1;
+
+  /** Manual count, or the meters of a sharing operation. Drives what step 0 shows. */
+  readonly participantSource = signal<ParticipantSource>('manual');
+  /** EANs pulled from a sharing operation, index-aligned with the `consumer_name_i` controls. */
+  readonly participantNames = signal<string[]>([]);
+  /**
+   * Set when the wizard was opened from a sharing operation's page: the meter dialog then stays
+   * scoped to that operation instead of asking which one again.
+   */
+  private fixedIdSharing: number | null = null;
+  /**
+   * Where to go once the key is saved. The wizard does not save — it hands the draft to the full
+   * creator — so this has to be forwarded there, or the round-trip back to the caller is lost.
+   */
+  readonly returnUrl = signal<string | null>(null);
+  /** Back-arrow target: whoever sent us here, else the keys list. */
+  readonly backUrl = computed(() => this.returnUrl() ?? '/keys');
 
   formSecondStep!: FormGroup;
   consumers: ConsumerDTO[] = [];
@@ -74,12 +100,102 @@ export class KeyCreationStepByStep implements OnInit {
 
   ngOnInit(): void {
     this.formFirstStep = new FormGroup({
-      nb_consumers: new FormControl('', [Validators.required, Validators.min(1)]),
+      inputSource: new FormControl<ParticipantSource>('manual'),
+      // `null`, not `''`: p-inputNumber renders its model through
+      // `Intl.NumberFormat.format()`, which turns an empty string into a `0` the
+      // user then has to clear. Only null/undefined render as a blank field.
+      nb_consumers: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
     });
     this.lastForm = new FormGroup({
       key_name: new FormControl('', [Validators.required]),
       key_description: new FormControl('', [Validators.required]),
     });
+
+    const params = this.route.snapshot.queryParamMap;
+    this.returnUrl.set(sanitizeReturnUrl(params.get('returnUrl')));
+    const idSharing = Number(params.get('idSharing'));
+    this.fixedIdSharing = Number.isInteger(idSharing) && idSharing > 0 ? idSharing : null;
+
+    // Arriving from a sharing operation: its meters were already picked, so land on a step 0 that
+    // is filled in rather than asking for a count the caller has already answered.
+    const state = history.state as { consumers?: string[] } | null;
+    const transferred = state?.consumers;
+    if (transferred?.length) {
+      this.onParticipantSourceChange('operation');
+      this.applyImportedParticipants(transferred, false);
+    }
+  }
+
+  /** Step 0's source radio — switching back to a manual count drops the imported names. */
+  onParticipantSourceChange(source: ParticipantSource): void {
+    this.participantSource.set(source);
+    this.formFirstStep.get('inputSource')?.setValue(source);
+    if (source === 'manual' && this.participantNames().length > 0) {
+      this.participantNames.set([]);
+      this.resetParticipants(0);
+    }
+  }
+
+  /**
+   * Picks the meters of a sharing operation and turns them into the participant list.
+   *
+   * Reuses the very dialog the full creator opens, so both entry points import the same way: the
+   * operation is fixed when the wizard was opened from an operation's page, and chosen in the
+   * dialog otherwise.
+   */
+  importFromSharingOperation(): void {
+    const ref = this.dialogService.open(ImportSharingOperationMeters, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      header: this.translate.instant('KEY.IMPORT_FROM_SHARING_OPERATION.HEADER') as string,
+      width: '900px',
+      data: this.fixedIdSharing ? { idSharing: this.fixedIdSharing } : {},
+    });
+
+    ref?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((selectedEANs: string[] | null) => {
+        if (!selectedEANs?.length) return;
+        this.applyImportedParticipants(selectedEANs, true);
+      });
+  }
+
+  /**
+   * Makes the imported EANs the participants: they set the count *and* pre-fill the names, so
+   * `nb_consumers` stays the single source of truth every later step already reads.
+   */
+  private applyImportedParticipants(eans: string[], notify: boolean): void {
+    const names = [...new Set(eans.map((ean) => ean.trim()).filter((ean) => ean !== ''))];
+    if (names.length === 0) return;
+
+    this.participantNames.set(names);
+    this.resetParticipants(names.length);
+
+    if (notify) {
+      this.snackbar.openSnackBar(
+        this.translate.instant('KEY.IMPORT_FROM_SHARING_OPERATION.IMPORTED', {
+          added: names.length,
+        }) as string,
+        VALIDATION_TYPE,
+      );
+    }
+  }
+
+  /**
+   * Rebuilds step 1 from scratch for a new participant count. `submitFirstForm` only grows or
+   * shrinks the existing controls, so the previous names have to be cleared out first or an import
+   * would leave stale ones behind.
+   */
+  private resetParticipants(count: number): void {
+    // See `ngOnInit`: blanking the field means `null`, an empty string shows a `0`.
+    this.formFirstStep.patchValue({ nb_consumers: count > 0 ? count : null });
+    this.secondStep.set(false);
+    this.nbConsumers = -1;
+    this.consumers = [];
+    if (count > 0) {
+      this.submitFirstForm();
+    }
   }
 
   submitFirstForm(): void {
@@ -91,7 +207,7 @@ export class KeyCreationStepByStep implements OnInit {
         for (let i = 0; i < this.nbConsumers; i++) {
           this.formSecondStep.addControl(
             'consumer_name_' + i,
-            new FormControl('', [Validators.required]),
+            new FormControl(this.participantNames()[i] ?? '', [Validators.required]),
           );
         }
         this.secondStep.set(true);
@@ -102,7 +218,7 @@ export class KeyCreationStepByStep implements OnInit {
             for (let i = this.nbConsumers; i < firstStepValue.nb_consumers; i++) {
               this.formSecondStep.addControl(
                 'consumer_name_' + i,
-                new FormControl('', [Validators.required]),
+                new FormControl(this.participantNames()[i] ?? '', [Validators.required]),
               );
             }
           } else {
@@ -328,7 +444,9 @@ export class KeyCreationStepByStep implements OnInit {
         iterations: this.iterations,
       };
       this.eventBus.emit('keyStepByStep', key);
+      const returnUrl = this.returnUrl();
       void this.router.navigate(['/keys/add'], {
+        queryParams: returnUrl ? { returnUrl } : {},
         state: { keyData: key },
       });
     }

@@ -1,0 +1,19 @@
+{
+  "//": "Dev-server proxy, used only by `ng serve`. The Docker image is a plain nginx serving the built bundle and proxies nothing — there the reverse-proxy container owns all of this.",
+  "//realtime": "The SSE stream bypasses the API gateway and is served by crm-backend directly. `environments.realtimeUrl` defaults to the root-relative /realtime/stream so this entry is what makes it reachable from :4200; an absolute localhost:8089 default would be cross-origin, and crm-backend has CORS disabled, so the EventSource would fail with no diagnostic. Buffering must stay off or the stream never flushes.",
+  "/realtime": {
+    "target": "http://localhost:8089",
+    "secure": false,
+    "changeOrigin": false,
+    "ws": false,
+    "buffer": false,
+    "timeout": 3600000,
+    "proxyTimeout": 3600000
+  },
+  "//api": "Everything else still goes through KrakenD via the reverse proxy, so the JWT is validated and the x-user-* headers are injected. Keep this pointed at 8087, NOT at crm-backend: bypassing the gateway for normal API calls would mean no authentication at all.",
+  "/api": {
+    "target": "http://localhost:8087",
+    "secure": false,
+    "changeOrigin": false
+  }
+}

@@ -49,3 +49,19 @@ export enum PhaseCategory {
   SINGLE = 1,
   THREE = 3,
 }
+
+/**
+ * How good a meter's stored coordinate is. Mirrors the backend
+ * `AddressGeoPrecision`.
+ *
+ * Ordered best-to-worst, so `precision <= STREET` reads as "good enough to
+ * treat as exact". `MUNICIPALITY` means the pin is a commune centroid, i.e.
+ * every un-geocoded meter in that commune sits on the same point — the map
+ * renders those weaker and says so.
+ */
+export enum MeterGeoPrecision {
+  MANUAL = 1,
+  ROOFTOP = 2,
+  STREET = 3,
+  MUNICIPALITY = 4,
+}

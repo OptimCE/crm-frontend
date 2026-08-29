@@ -1,0 +1,207 @@
+<div class="flex flex-col gap-3">
+  <!-- SNAPSHOT SELECTORS -->
+  <div class="flex flex-wrap items-end gap-4">
+    @if (needsOperationChoice) {
+      <div class="flex flex-col gap-1">
+        <label for="importOperation" class="text-sm font-semibold">
+          {{ 'IMPORT_SHARING_OPERATION_METERS.OPERATION_LABEL' | translate }}
+        </label>
+        <p-select
+          inputId="importOperation"
+          [options]="operations()"
+          optionLabel="name"
+          optionValue="id"
+          [ngModel]="selectedOperationId()"
+          (ngModelChange)="onOperationChange($event)"
+          [loading]="loadingOperations()"
+          [filter]="true"
+          filterBy="name"
+          appendTo="body"
+          styleClass="w-72"
+          placeholder="{{ 'IMPORT_SHARING_OPERATION_METERS.OPERATION_PLACEHOLDER' | translate }}"
+          data-testid="import-so-meters__select--operation"
+        />
+      </div>
+    }
+
+    <div class="flex flex-col gap-1">
+      <label for="importDate" class="text-sm font-semibold">
+        {{ 'IMPORT_SHARING_OPERATION_METERS.DATE_LABEL' | translate }}
+      </label>
+      <p-date-picker
+        inputId="importDate"
+        [ngModel]="date()"
+        (ngModelChange)="onDateChange($event)"
+        [showIcon]="true"
+        [showOnFocus]="true"
+        dateFormat="dd/mm/yy"
+        appendTo="body"
+        data-testid="import-so-meters__datepicker--at"
+      />
+    </div>
+  </div>
+
+  <p class="text-xs text-gray-500" data-testid="import-so-meters__hint">
+    {{ 'IMPORT_SHARING_OPERATION_METERS.HINT' | translate }}
+  </p>
+
+  <!-- METERS TABLE -->
+  @if (selectedOperationId() !== null) {
+    <p-table
+      #dt
+      data-testid="import-so-meters__table"
+      [value]="meters()"
+      [lazy]="true"
+      (onLazyLoad)="lazyLoad($event)"
+      [loading]="loading()"
+      [rows]="pagination().limit"
+      [totalRecords]="pagination().total"
+      [first]="(pagination().page - 1) * pagination().limit"
+      [paginator]="pagination().total_pages > 1"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template #caption>
+        <div class="flex gap-2">
+          <p-button
+            size="small"
+            [outlined]="true"
+            icon="pi pi-check-square"
+            label="{{ 'IMPORT_SHARING_OPERATION_METERS.SELECT_ALL' | translate }}"
+            (onClick)="selectAll()"
+            data-testid="import-so-meters__btn--select-all"
+          />
+          <p-button
+            size="small"
+            [outlined]="true"
+            severity="danger"
+            icon="pi pi-filter-slash"
+            label="{{ 'IMPORT_SHARING_OPERATION_METERS.CLEAN_FILTERS' | translate }}"
+            (onClick)="dt.clear()"
+            data-testid="import-so-meters__btn--clean-filters"
+          />
+        </div>
+      </ng-template>
+
+      <ng-template #header>
+        <tr>
+          <th style="width: 3rem">
+            <!-- Deliberately not `…__checkbox--select-page`: the row checkboxes below
+                 are `…__checkbox--<rowIndex>`, so a shared `--` prefix makes every
+                 `^=` count of ticked meters off by one. -->
+            <p-checkbox
+              [binary]="true"
+              [ngModel]="isPageFullySelected()"
+              (ngModelChange)="togglePage($event)"
+              data-testid="import-so-meters__checkbox-all"
+            />
+          </th>
+          <th>{{ 'IMPORT_SHARING_OPERATION_METERS.TABLE.ADDRESS' | translate }}</th>
+          <th>
+            {{ 'IMPORT_SHARING_OPERATION_METERS.TABLE.EAN' | translate }}
+            <p-columnFilter
+              type="text"
+              field="EAN"
+              [showMatchModes]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              data-testid="import-so-meters__filter--ean"
+            />
+          </th>
+          <th>{{ 'IMPORT_SHARING_OPERATION_METERS.TABLE.METER_NUMBER' | translate }}</th>
+          <th>{{ 'IMPORT_SHARING_OPERATION_METERS.TABLE.ROLE' | translate }}</th>
+          <th>{{ 'IMPORT_SHARING_OPERATION_METERS.TABLE.STATUS' | translate }}</th>
+          <th>{{ 'IMPORT_SHARING_OPERATION_METERS.TABLE.HOLDER' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-meter let-rowIndex="rowIndex">
+        <tr
+          [class.bg-blue-50]="isSelected(meter.EAN)"
+          class="cursor-pointer hover:bg-gray-50"
+          (click)="toggleMeter(meter.EAN)"
+          [attr.data-testid]="'import-so-meters__row--' + rowIndex"
+        >
+          <td (click)="$event.stopPropagation()">
+            <p-checkbox
+              [binary]="true"
+              [ngModel]="isSelected(meter.EAN)"
+              (ngModelChange)="toggleMeter(meter.EAN)"
+              [attr.data-testid]="'import-so-meters__checkbox--' + rowIndex"
+            />
+          </td>
+          <td class="text-sm" [innerHTML]="meter.address | address"></td>
+          <td class="text-sm font-mono">{{ meter.EAN }}</td>
+          <td class="text-sm">{{ meter.meter_number }}</td>
+          <td>
+            <p-tag
+              [value]="
+                (isConsumerMeter(meter)
+                  ? 'IMPORT_SHARING_OPERATION_METERS.ROLE.CONSUMER'
+                  : 'IMPORT_SHARING_OPERATION_METERS.ROLE.INJECTION'
+                ) | translate
+              "
+              [severity]="isConsumerMeter(meter) ? 'success' : 'warn'"
+              [attr.data-testid]="'import-so-meters__tag--role--' + rowIndex"
+            />
+          </td>
+          <td>
+            <p-tag
+              [value]="getStatusLabel(meter.status) | translate"
+              [severity]="getStatusSeverity(meter.status)"
+              [attr.data-testid]="'import-so-meters__tag--status--' + rowIndex"
+            />
+          </td>
+          <td class="text-sm">{{ meter.holder?.name ?? '—' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="7" class="text-center">
+            {{ 'IMPORT_SHARING_OPERATION_METERS.NO_METERS_FOUND' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+
+  <!-- SELECTION SUMMARY -->
+  @if (selectedEans().size) {
+    <div class="border-t pt-3" data-testid="import-so-meters__selected-summary">
+      <div class="flex items-center justify-between">
+        <span class="font-semibold text-sm">
+          {{
+            'IMPORT_SHARING_OPERATION_METERS.METERS_SELECTED'
+              | translate: { count: selectedEans().size }
+          }}
+        </span>
+        <p-button
+          label="{{ 'IMPORT_SHARING_OPERATION_METERS.CLEAR_ALL' | translate }}"
+          size="small"
+          [text]="true"
+          severity="danger"
+          (onClick)="clearAll()"
+          data-testid="import-so-meters__btn--clear-all"
+        />
+      </div>
+    </div>
+  }
+
+  <!-- FOOTER -->
+  <div class="flex justify-end gap-2 border-t pt-3">
+    <p-button
+      label="{{ 'COMMON.ACTIONS.CANCEL' | translate }}"
+      [outlined]="true"
+      (onClick)="cancel()"
+      data-testid="import-so-meters__btn--cancel"
+    />
+    <p-button
+      label="{{
+        'IMPORT_SHARING_OPERATION_METERS.CONFIRM' | translate: { count: selectedEans().size }
+      }}"
+      [disabled]="!selectedEans().size"
+      (onClick)="confirm()"
+      data-testid="import-so-meters__btn--confirm"
+    />
+  </div>
+</div>

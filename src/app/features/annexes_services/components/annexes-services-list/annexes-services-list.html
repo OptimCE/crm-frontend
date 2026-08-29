@@ -14,6 +14,7 @@
         icon="pi pi-plus"
         [label]="'ANNEXES_SERVICES.ADD_MODULE_BUTTON' | translate"
         severity="primary"
+        [disabled]="!catalogueReady()"
         (onClick)="openAddDialog()"
         data-testid="annexes-services-list__btn--add"
       />

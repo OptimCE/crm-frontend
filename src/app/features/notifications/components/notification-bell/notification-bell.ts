@@ -54,7 +54,14 @@ export class NotificationBell implements OnInit {
   }
 
   protected onShow(): void {
+    // Let the store know the slice is on screen, so a realtime event refetches
+    // the list too instead of only the badge count.
+    this.store.popoverOpen.set(true);
     this.store.refreshRecent();
+  }
+
+  protected onHide(): void {
+    this.store.popoverOpen.set(false);
   }
 
   /**

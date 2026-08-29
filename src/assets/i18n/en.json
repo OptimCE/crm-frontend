@@ -447,6 +447,16 @@
         "ADDRESSES": "Addresses",
         "HOUSE_ADDRESS": "Home address",
         "BILLING_ADDRESS": "Billing address"
+      },
+      "PREFILL": {
+        "CTA": "Speed this up: fill this form with the data from your profile.",
+        "BUTTON": "Use my profile data",
+        "ARMED": "Your profile will be used as soon as you choose a member type.",
+        "APPLIED": "{{count}} field(s) filled from your profile. Please check them and complete the rest.",
+        "EMPTY": "Your profile does not hold any data that can be reused yet.",
+        "GO_TO_PROFILE": "Complete my profile",
+        "ERROR": "Your profile could not be loaded.",
+        "RETRY": "Try again"
       }
     },
     "MANAGER": {
@@ -673,7 +683,37 @@
       "FINALISATION": "Finalization",
       "STEP_CONSUMERS_COUNT": "Consumers",
       "STEP_CONSUMER_NAMES": "Names",
-      "STEP_ITERATIONS": "Iterations"
+      "STEP_ITERATIONS": "Iterations",
+      "PARTICIPANTS_SOURCE": {
+        "LEGEND": "How do you want to define the participants?",
+        "MANUAL": "Manually",
+        "MANUAL_HINT": "Enter how many participants there are, then name them.",
+        "OPERATION": "From a sharing operation",
+        "OPERATION_HINT": "Pick an operation and a date: its meters become the participants.",
+        "CHOOSE_METERS": "Choose the meters",
+        "IMPORTED": "{{ count }} participant(s) imported",
+        "CHANGE": "Change"
+      }
+    },
+    "CREATE_MODE": {
+      "HEADER": "How do you want to create the key?",
+      "SUBTITLE": "Both methods produce the same key — pick whichever suits you.",
+      "FULL": {
+        "TITLE": "Full creation",
+        "DESCRIPTION": "The whole table on one page: iterations, participants and percentages. Best when you already know what to encode.",
+        "ACTION": "Open the editor"
+      },
+      "STEP": {
+        "TITLE": "Step-by-step creation",
+        "DESCRIPTION": "A wizard that guides you: participants, iterations, then finalisation. You review the full table before saving.",
+        "ACTION": "Start the wizard"
+      }
+    },
+    "IMPORT_FROM_SHARING_OPERATION": {
+      "BUTTON_LABEL": "Import from an operation",
+      "HEADER": "Import the meters of a sharing operation",
+      "IMPORTED": "{{ added }} participant(s) imported",
+      "IMPORTED_WITH_SKIPPED": "{{ added }} participant(s) imported, {{ skipped }} already present"
     },
     "TABLE": {
       "COLUMNS": {
@@ -708,7 +748,6 @@
       "SUBTITLE": "Configure how energy is shared between consumers",
       "ERASE_FILTERS_BUTTON_LABEL": "Clear filters",
       "ADD_BUTTON_LABEL": "Add",
-      "ADD_STANDARD_KEY_BUTTON_LABEL": "Add a standard key",
       "NAME_LABEL": "Name",
       "DESCRIPTION_LABEL": "Description",
       "PAGINATED_TEMPLATE_LIST": "Page {{ page }} of {{ total_pages }} ({{ total }} keys)",
@@ -1353,7 +1392,9 @@
       "DESCRIPTION_LABEL": "Description",
       "NO_ALLOCATION_KEYS_FOUND_LABEL": "No key found",
       "ADD_BUTTON_LABEL": "Add",
-      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} keys)"
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Page {{ page }} of {{ total_pages }} ({{ total }} keys)",
+      "CREATE_KEY_BUTTON_LABEL": "Create a key",
+      "CREATE_KEY_BUTTON_TOOLTIP": "Create a new key from the operation's meters on a given date"
     },
     "ADD_METER": {
       "CLEAR_FILTER_BUTTON_LABEL": "Clear filters",
@@ -1423,7 +1464,8 @@
         "APPROVE_KEY": "Approve",
         "REJECT_KEY": "Reject",
         "APPROVE_KEY_DATE_LABEL": "Start date for the approved key",
-        "APPROVE_KEY_NO_DATE_ERROR": "Please select a start date before approving the key."
+        "APPROVE_KEY_NO_DATE_ERROR": "Please select a start date before approving the key.",
+        "SELECT_METERS_NEW_KEY_HEADER": "Meters to include in the new key"
       },
       "METER": {
         "HEADERS": {
@@ -1493,6 +1535,7 @@
         "STATUS_LABEL": "Status",
         "APPROVED_LABEL": "Approved",
         "DENIED_LABEL": "Rejected",
+        "PENDING_LABEL": "Pending approval",
         "NO_HISTORY_KEY_FOUND_LABEL": "No key history found",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "No key history available"
       },
@@ -1521,23 +1564,6 @@
       "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Sharing operation successfully added",
       "SELECT_A_TYPE_PLACEHOLDER": "Select a type"
     },
-    "SELECT_METER_NEW_KEY": {
-      "NOW": "Now",
-      "FUTURE": "Upcoming",
-      "METERS_SELECTED": "{{ count }} meter{{ count > 1 ? 's' : '' }} selected",
-      "CLEAR_ALL": "Clear all",
-      "SELECT_ALL_NOW": "Select all current meters",
-      "SELECT_ALL_FUTURE": "Select all upcoming meters",
-      "CLEAN_FILTERS": "Clear filters",
-      "TABLE": {
-        "ADDRESS": "Address",
-        "EAN": "EAN",
-        "METER_NUMBER": "Meter number",
-        "STATUS": "Status",
-        "HOLDER": "Owner",
-        "NO_METERS_FOUND": "No meter found"
-      }
-    },
     "ERRORS": {
       "GET_SHARING_OPERATION_PARTIAL_LIST": "Error fetching partial sharing operations",
       "GET_FULL_SHARING_OPERATION": "Error fetching full sharing operation details",
@@ -1551,6 +1577,30 @@
       "GET_METER_CONSUMPTION": "Error fetching meter consumption",
       "DOWNLOAD_METER_CONSUMPTION": "Error downloading meter consumption",
       "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Error downloading shared meter consumption"
+    }
+  },
+  "IMPORT_SHARING_OPERATION_METERS": {
+    "OPERATION_LABEL": "Sharing operation",
+    "OPERATION_PLACEHOLDER": "Choose an operation",
+    "DATE_LABEL": "As of",
+    "HINT": "The meters registered in the operation on this date are listed below. Consumers are ticked by default, injection points are not.",
+    "SELECT_ALL": "Select all",
+    "CLEAN_FILTERS": "Clear filters",
+    "METERS_SELECTED": "{{ count }} meter(s) selected",
+    "CLEAR_ALL": "Clear all",
+    "CONFIRM": "Import ({{ count }})",
+    "NO_METERS_FOUND": "No meter in the operation on this date",
+    "ROLE": {
+      "CONSUMER": "Consumer",
+      "INJECTION": "Injection"
+    },
+    "TABLE": {
+      "ADDRESS": "Address",
+      "EAN": "EAN",
+      "METER_NUMBER": "Meter number",
+      "ROLE": "Role",
+      "STATUS": "Status",
+      "HOLDER": "Owner"
     }
   },
   "FORM_ERROR": {
@@ -1840,7 +1890,9 @@
       "DUE_DATE": "Due",
       "OGM_LABEL": "Structured communication",
       "PAGE_INFO": "Page {{page}} of {{total}}"
-    }
+    },
+    "RUN_TOAST_FINISHED": "The billing run has finished.",
+    "RUN_TOAST_FAILED": "The billing run has failed."
   },
   "CONSUMPTION_COVERAGE": {
     "TITLE": "Available consumption data",
@@ -1934,7 +1986,9 @@
         "SURPLUS": "Surplus",
         "RESIDUAL": "Grid draw"
       }
-    }
+    },
+    "TOAST_FINISHED": "A simulation has finished.",
+    "TOAST_FAILED": "A simulation has failed."
   },
   "ALGORITHM_HUB": {
     "PAGE_TITLE": "Allocation key generation",
@@ -1995,7 +2049,9 @@
       "FILE_TYPE": "Only CSV and XLSX files are accepted.",
       "MIN_VALUE": "Must be at least {{ min }}.",
       "MAX_VALUE": "Must be at most {{ max }}."
-    }
+    },
+    "TOAST_FINISHED": "An allocation key generation has finished.",
+    "TOAST_FAILED": "An allocation key generation has failed."
   },
   "AUDIT": {
     "LIST": {
@@ -2690,6 +2746,78 @@
       "10": "October",
       "11": "November",
       "12": "December"
+    }
+  },
+  "CRM_DATA_SOURCE": {
+    "SOURCE_LEGEND": "Where does the consumption data come from?",
+    "SOURCE_FILE": "Upload a file",
+    "SOURCE_FILE_HINT": "The CSV or Excel file supplied by your grid operator.",
+    "SOURCE_CRM": "Use the data already recorded",
+    "SOURCE_CRM_HINT": "The meter readings already held in OptimCE, for the period you choose.",
+    "SOURCE_CRM_SIM_HINT": "The meter readings already held in OptimCE. The key's participants must match the meters' EAN codes.",
+    "OPERATION_LABEL": "Sharing operation",
+    "OPERATION_PLACEHOLDER": "Choose a sharing operation",
+    "PERIOD_START_LABEL": "From",
+    "PERIOD_END_LABEL": "To",
+    "PERIOD_HELP": "Both dates are included. We use the gross readings (before sharing) of every meter in the operation.",
+    "PERIOD_HELP_SIM": "Both dates are included. We use the gross readings (before sharing) of the meters matching the key's participants.",
+    "PREVIEW": {
+      "FAILED": "The data could not be checked right now. Please try again in a moment.",
+      "SUMMARY": "{{meters}} meter(s) · {{readings}} reading(s)",
+      "PERIOD_COVERED": "Data available from {{from}} to {{to}}",
+      "TOTAL_CONSUMPTION": "Total consumption",
+      "TOTAL_INJECTION": "Total injection",
+      "PARTICIPANTS_MATCHED": "{{count}} of the key's participants match a meter",
+      "PARTICIPANTS_UNMATCHED": "{{count}} of the key's participants match no meter:",
+      "PARTICIPANTS_UNMATCHED_HINT": "A key's participants must carry the meter's EAN code. Correct the key, or pick another sharing operation or period.",
+      "INCOMPLETE_TITLE": "{{count}} meter(s) have no readings for part of the period:",
+      "INCOMPLETE_METER": "{{ean}} — {{missing}} reading(s) missing out of {{expected}}",
+      "INCOMPLETE_HINT": "Missing readings will count as zero consumption. The calculation can still run, but the result will be less representative for those meters."
+    }
+  },
+  "MAP": {
+    "MAP_VIEW_LABEL": "Map",
+    "LIST_VIEW_LABEL": "List",
+    "VIEW_SWITCH_ARIA": "Switch between list and map view",
+    "REGION_ARIA": "Interactive map",
+    "LOADING": "Loading the map…",
+    "ZOOM_IN": "Zoom in",
+    "ZOOM_OUT": "Zoom out",
+    "RESET_VIEW": "Recentre",
+    "RETRY": "Try again",
+    "UNAVAILABLE_TITLE": "Map unavailable",
+    "UNAVAILABLE_WEBGL": "Your browser does not support WebGL 2, which the map requires. The list view is still available.",
+    "UNAVAILABLE_LOAD": "The map could not be loaded. Check your connection and try again.",
+    "EMPTY_TITLE": "Nothing to show on the map",
+    "EMPTY_METERS": "No meter matching these filters has geographic coordinates yet.",
+    "EMPTY_COMMUNITIES": "No public community covers a locatable municipality.",
+    "PARTIAL_COORDINATES": "Showing {{ plotted }} of {{ total }} meters: {{ missing }} have no coordinates yet.",
+    "CAPPED": "Only the first {{ limit }} results are shown. Narrow your filters to see everything.",
+    "LEGEND": {
+      "TITLE": "Legend",
+      "PRECISION_ADDRESS": "Exact position",
+      "PRECISION_MUNICIPALITY": "Approximate position (municipality centre)",
+      "CLUSTER": "Group of markers — click to expand"
+    },
+    "POPUP": {
+      "TITLE_POINTS": "At this location",
+      "TITLE_METERS": "Meters at this address",
+      "TITLE_ZONES": "Communities in this municipality",
+      "COUNT": "{{ count }} result(s)",
+      "CLOSE": "Close",
+      "PREVIOUS": "Previous",
+      "NEXT": "Next",
+      "PAGE": "{{ page }} / {{ total }}",
+      "OPEN_DETAIL": "Open details",
+      "APPROXIMATE_NOTICE": "Approximate position: municipality centre.",
+      "HOLDER": "Holder",
+      "NO_HOLDER": "No holder",
+      "OPERATION": "Sharing operation",
+      "NO_OPERATION": "No operation",
+      "COMMUNITY": "Community",
+      "MUNICIPALITIES": "Municipalities",
+      "REGULATOR": "Regulator",
+      "OPERATIONS_COUNT": "{{ count }} public operation(s)"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -16,6 +16,10 @@ import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/err
 import { AddressPipe } from '../../../../../../../shared/pipes/address/address-pipe';
 import { Pagination } from '../../../../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { ViewToggle } from '../../../../../../../shared/components/view-toggle/view-toggle';
+import { MetersMap } from '../../../../../../meter/components/meters-list/meters-map/meters-map';
+import type { MapViewMode } from '../../../../../../../shared/components/map/map.types';
+import type { MeterMapQuery } from '../../../../../../../shared/dtos/meter.dtos';
 
 @Component({
   selector: 'app-meters-user',
@@ -30,6 +34,8 @@ import { DebouncedPInputComponent } from '../../../../../../../shared/components
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
+    ViewToggle,
+    MetersMap,
   ],
   templateUrl: './meters.component.html',
   styleUrl: './meters.component.css',
@@ -65,6 +71,26 @@ export class MetersComponent {
 
   readonly paginationInfo = signal<Pagination>({ page: 1, limit: 10, total: 0, total_pages: 1 });
   readonly filter = signal<MeMetersPartialQuery>({ page: 1, limit: 10 });
+
+  /**
+   * List or map. Local state rather than a `?view=` param, unlike /meters and
+   * /communities/public: this is a tab inside the profile page, whose own tab
+   * selection already owns the query string, and a member with two meters gains
+   * little from a shareable map link.
+   */
+  readonly view = signal<MapViewMode>('list');
+
+  /** Filters for the map, without pagination — the map is capped, not paged. */
+  readonly mapQuery = computed<MeterMapQuery>(() => {
+    const { page: _page, limit: _limit, community_name: _community, ...rest } = this.filter();
+    return rest;
+  });
+
+  /**
+   * Resolved through a view query: the clear button sits in the toolbar shared
+   * by both views, while `#dt` only exists inside the list branch.
+   */
+  private readonly table = viewChild<Table>('dt');
   readonly currentPageReportTemplate = signal<string>('');
   readonly firstRow = computed(
     () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
@@ -166,8 +192,8 @@ export class MetersComponent {
     this.loadMeters();
   }
 
-  clear(table: Table): void {
-    table.clear();
+  clear(): void {
+    this.table()?.clear();
     this.searchText.set('');
     this.statusFilter.set(null);
     this.searchField.set('community_name');

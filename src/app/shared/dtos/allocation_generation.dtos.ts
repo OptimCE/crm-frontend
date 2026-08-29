@@ -1,4 +1,5 @@
 import { Sort } from './query.dtos';
+import { IncompleteMeterDTO, PreviewBlockerDTO } from './crm_data_source.dtos';
 
 export type UiSection = 'main' | 'advanced';
 
@@ -106,4 +107,36 @@ export interface CreateGenerationResponse {
 
 export interface SaveKeyPayload {
   id_key: number;
+}
+
+/**
+ * Start a generation from the meter readings already in OptimCE.
+ *
+ * No `file` and no `injectionName`: the production profile is summed from the
+ * meters themselves, which is why this path asks the manager for less than the
+ * upload one does.
+ */
+export interface CreateGenerationFromCrmPayload {
+  name: string;
+  algorithmName: string;
+  inputs: Record<string, AlgorithmInputValue>;
+  idSharingOperation: number;
+  /** `YYYY-MM-DD`, inclusive. */
+  periodStart: string;
+  periodEnd: string;
+}
+
+/** Response of `GET /generation/crm-data-preview`. */
+export interface CrmGenerationPreviewDTO {
+  /** The single flag the submit button binds to. */
+  can_generate: boolean;
+  /** Meters that drew energy and will therefore be participants in the key. */
+  meter_count: number;
+  reading_count: number;
+  first_timestamp: string | null;
+  last_timestamp: string | null;
+  total_consumption_kwh: number;
+  total_injection_kwh: number;
+  incomplete_meters: IncompleteMeterDTO[];
+  blockers: PreviewBlockerDTO[];
 }

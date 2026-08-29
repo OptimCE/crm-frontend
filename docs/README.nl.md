@@ -7,6 +7,7 @@
 [![Website](https://img.shields.io/badge/Website-optimce.be-2e7d32.svg)](https://www.optimce.be/nl/)
 [![Licentie](https://img.shields.io/badge/Licentie-Apache%202.0-blue.svg)](../LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-21-dd0031.svg)](https://angular.dev)
+[![Vertaalstatus](https://hosted.weblate.org/widgets/optimce/-/svg-badge.svg)](https://hosted.weblate.org/engage/optimce/)
 [![en](https://img.shields.io/badge/lang-en-lightgrey.svg)](../README.md)
 [![fr](https://img.shields.io/badge/lang-fr-lightgrey.svg)](README.fr.md)
 [![de](https://img.shields.io/badge/lang-de-lightgrey.svg)](README.de.md)
@@ -143,6 +144,26 @@ De unittests draaien met de testrunner [Vitest](https://vitest.dev).
 | `features/` | Functiemodules, lazy-loaded en opgesplitst per businessdomein             |
 | `layout/`   | Layoutcomponenten die de pagina's van de toepassing omhullen              |
 | `assets/`   | Vertalingen (`i18n/`), runtimeconfiguratie (`config/`) en afbeeldingen    |
+
+## Vertalingen
+
+De interface is beschikbaar in het **Frans, Engels, Nederlands en Duits**. De
+catalogi zijn de geneste JSON-bestanden in `src/assets/i18n/` (`fr.json`,
+`en.json`, `nl.json`, `de.json`), die tijdens runtime worden geladen door
+[ngx-translate](https://github.com/ngx-translate/core); het Frans is de brontaal.
+
+De vertalingen worden beheerd op [Weblate](https://weblate.org/), een vrij
+webgebaseerd platform voor continue lokalisatie, dat dit project gratis host
+binnen zijn Libre-plan voor vrije software. Je hoeft de JSON-bestanden niet aan
+te raken en geen pull request te openen om te helpen:
+
+**[OptimCE vertalen op Weblate →](https://hosted.weblate.org/engage/optimce/)**
+
+Weblate commit goedgekeurde vertalingen terug naar deze repository. Breng
+wijzigingen die alleen vertalingen betreffen dus daar aan in plaats van
+`src/assets/i18n/*.json` handmatig te bewerken. Nieuwe sleutels komen nog steeds
+via een pull request binnen, samen met de code die ze gebruikt en hun Franse
+bronstring.
 
 ## Bijdragen
 

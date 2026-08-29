@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormControl,
@@ -17,14 +17,19 @@ import { Card } from 'primeng/card';
 import { Chip } from 'primeng/chip';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputText } from 'primeng/inputtext';
+import { DatePicker } from 'primeng/datepicker';
+import { RadioButton } from 'primeng/radiobutton';
 import { Select } from 'primeng/select';
 import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 import { Toast } from 'primeng/toast';
 import { Tooltip } from 'primeng/tooltip';
+import { debounceTime, distinctUntilChanged, interval, map, Observable, switchMap } from 'rxjs';
 
 import { ApiResponse, Pagination } from '../../../../../../core/dtos/api.response';
 import { VALIDATION_TYPE } from '../../../../../../core/dtos/notification';
+import { RealtimeService } from '../../../../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS } from '../../../../../../core/services/realtime/realtime.types';
 import {
   AlgorithmInputValue,
   AlgorithmMetadata,
@@ -32,13 +37,22 @@ import {
   AllocationKeyPartialDTO,
   AllocationKeyQuery,
   CreateGenerationPayload,
+  CreateGenerationResponse,
   GenerationPartialDTO,
   GenerationQuery,
   GenerationStatus,
   JsonSchemaObject,
   JsonSchemaProperty,
 } from '../../../../../../shared/dtos/allocation_generation.dtos';
+import { InputSourceChoice } from '../../../../../../shared/dtos/crm_data_source.dtos';
+import { SharingOperationPartialDTO } from '../../../../../../shared/dtos/sharing_operation.dtos';
 import { AllocationGenerationService } from '../../../../../../shared/services/allocation_generation.service';
+import { SharingOperationService } from '../../../../../../shared/services/sharing_operation.service';
+import {
+  CrmDataPreview,
+  CrmPreviewView,
+} from '../../../../../../shared/components/crm-data-preview/crm-data-preview';
+import { toLocalDateString } from '../../../../../../shared/utils/date.utils';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
 import { FormErrorSummaryComponent } from '../../../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { ErrorMessageHandler } from '../../../../../../shared/services-ui/error.message.handler';
@@ -50,11 +64,42 @@ import { StartPanel } from '../start-panel/start-panel';
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024; // 25 MB
 
+// Give the manager time to finish picking a date before we ask the backend what
+// is in it. Long enough that clicking through a datepicker fires one request,
+// short enough that the answer feels immediate.
+const PREVIEW_DEBOUNCE_MS = 350;
+
+/** Operations are few per community; one page covers every realistic case. */
+const OPERATION_PAGE_SIZE = 200;
+
+interface SharingOperationOption {
+  label: string;
+  value: number;
+}
+
+/** What the CRM source needs before a preview can be requested. */
+interface CrmSelection {
+  idSharingOperation: number;
+  periodStart: string;
+  periodEnd: string;
+}
+
 interface AlgorithmOption {
   label: string;
   value: string;
   meta: AlgorithmMetadata;
 }
+
+// Until now this hub had NO poller at all: after starting a generation the user
+// had to hit refresh by hand, indefinitely. Realtime is the fast path, and these
+// mirror the simulation hub so that when realtime is unavailable the behaviour is
+// the same as its sibling rather than the old manual-only one.
+//
+// The poll is SLOWED when the stream is live, never stopped: `live()` proves the
+// socket is healthy, not that events are being published, so a gated-off poller
+// would never converge if one service were missing REALTIME_REDIS_URL.
+const POLL_INTERVAL_MS = 4000;
+const SAFETY_POLL_INTERVAL_MS = 20_000;
 
 @Component({
   selector: 'app-allocation-generation-hub',
@@ -68,7 +113,9 @@ interface AlgorithmOption {
     Button,
     Card,
     Chip,
+    DatePicker,
     InputText,
+    RadioButton,
     Select,
     Skeleton,
     Tag,
@@ -78,6 +125,7 @@ interface AlgorithmOption {
     StartPanel,
     ErrorHandlerComponent,
     FormErrorSummaryComponent,
+    CrmDataPreview,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './allocation-generation-hub.html',
@@ -85,6 +133,7 @@ interface AlgorithmOption {
 })
 export class AllocationGenerationHub implements OnInit {
   private readonly service = inject(AllocationGenerationService);
+  private readonly sharingOperations = inject(SharingOperationService);
   private readonly translate = inject(TranslateService);
   private readonly snackbar = inject(SnackbarNotification);
   private readonly errorHandler = inject(ErrorMessageHandler);
@@ -114,11 +163,44 @@ export class AllocationGenerationHub implements OnInit {
     }),
     inputs: new FormRecord<AbstractControl>({}),
     file: new FormControl<File | null>(null, Validators.required),
+
+    // ----- input source ---------------------------------------------------
+    // 'file' keeps the historical behaviour and stays the default. Switching to
+    // 'crm' moves the required-ness from file/injectionName onto the operation
+    // and period, via applySourceValidators() — leaving a hidden control
+    // required is the classic way to end up with a submit button that silently
+    // does nothing.
+    inputSource: new FormControl<InputSourceChoice>('file', { nonNullable: true }),
+    idSharingOperation: new FormControl<number | null>(null),
+    periodStart: new FormControl<Date | null>(null),
+    periodEnd: new FormControl<Date | null>(null),
   });
 
   /** Mirrors `startForm.controls.file` purely for the dropzone display. */
   readonly file = signal<File | null>(null);
   readonly submitting = signal<boolean>(false);
+
+  // ----- CRM data source -------------------------------------------------
+  readonly inputSource = signal<InputSourceChoice>('file');
+  readonly operations = signal<SharingOperationPartialDTO[]>([]);
+  readonly operationsLoading = signal<boolean>(false);
+  readonly crmPreview = signal<CrmPreviewView | null>(null);
+  readonly crmPreviewLoading = signal<boolean>(false);
+  readonly crmPreviewFailed = signal<boolean>(false);
+
+  readonly operationOptions = computed<SharingOperationOption[]>(() =>
+    this.operations().map((o) => ({ label: o.name, value: o.id })),
+  );
+
+  readonly usingCrmSource = computed(() => this.inputSource() === 'crm');
+
+  /**
+   * The submit gate for the CRM source. A pre-flight that has not run yet, or
+   * that found a blocker, must not be launchable — the backend re-checks
+   * anyway, but letting the click through would turn an explainable red panel
+   * into an opaque toast.
+   */
+  readonly crmReady = computed(() => this.crmPreview()?.ok === true);
 
   // Friendly field names for the error summary. The top-level fields use i18n keys;
   // the schema-driven inputs (incl. iterations) are labelled from their schema title.
@@ -128,6 +210,9 @@ export class AllocationGenerationHub implements OnInit {
       generationName: 'ALGORITHM_HUB.GENERATION_NAME_LABEL',
       injectionName: 'ALGORITHM_HUB.INJECTION_NAME_LABEL',
       file: 'ALGORITHM_HUB.FILE_LABEL',
+      idSharingOperation: 'CRM_DATA_SOURCE.OPERATION_LABEL',
+      periodStart: 'CRM_DATA_SOURCE.PERIOD_START_LABEL',
+      periodEnd: 'CRM_DATA_SOURCE.PERIOD_END_LABEL',
     };
     const props = this.selectedAlgorithm()?.input_schema.properties ?? {};
     for (const [key, prop] of Object.entries(props)) {
@@ -187,13 +272,226 @@ export class AllocationGenerationHub implements OnInit {
   readonly keysByGeneration = signal<ReadonlyMap<number, AllocationKeyPartialDTO[]>>(new Map());
   readonly keysLoadingId = signal<number | null>(null);
 
+  private readonly realtime = inject(RealtimeService);
+
+  /**
+   * Status of each generation as of the previous list read, so a PENDING ->
+   * terminal transition is observed exactly once.
+   *
+   * Toasting from the observed DELTA rather than from event arrival makes a
+   * double toast impossible (both paths funnel into silentRefresh) and keeps the
+   * toast working when realtime is down.
+   */
+  private lastStatusById = new Map<number, GenerationStatus>();
+
+  readonly hasPending = computed(() =>
+    this.generations().some((generation) => generation.status === GenerationStatus.PENDING),
+  );
+
   readonly expandedKeyId = signal<number | null>(null);
   readonly keyDetailById = signal<ReadonlyMap<number, AllocationKeyDetailDTO>>(new Map());
   readonly keyDetailLoadingId = signal<number | null>(null);
 
+  constructor() {
+    toObservable(this.realtime.live)
+      .pipe(
+        switchMap((live) => interval(live ? SAFETY_POLL_INTERVAL_MS : POLL_INTERVAL_MS)),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        if (this.hasPending() && !document.hidden) {
+          this.silentRefresh();
+        }
+      });
+
+    // The fast path. `realtime.reconnected` is included automatically, so a
+    // dropped event heals on the next connect. Never trust the payload as data:
+    // refetch and let the list be the truth.
+    this.realtime
+      .on(REALTIME_TOPICS.GENERATION_FINISHED)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        if (!document.hidden) this.silentRefresh();
+      });
+
+    // Re-run the pre-flight whenever the operation or the period changes.
+    // distinctUntilChanged before the debounce keeps unrelated edits (the run
+    // name, an algorithm parameter) from firing a request at all.
+    this.startForm.valueChanges
+      .pipe(
+        map(() => this.crmSelection()),
+        distinctUntilChanged(
+          (previous, current) => JSON.stringify(previous) === JSON.stringify(current),
+        ),
+        debounceTime(PREVIEW_DEBOUNCE_MS),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.requestPreview());
+  }
+
   ngOnInit(): void {
     this.loadAlgorithms();
     this.loadGenerations();
+    this.applyDefaultPeriod();
+  }
+
+  // ====== CRM data source =================================================
+
+  /**
+   * Default to the last complete month.
+   *
+   * The overwhelmingly common request is "last month", and the DSO feed for the
+   * current month is partial by definition, so pre-filling it would put every
+   * manager one click away from an amber gap warning.
+   */
+  private applyDefaultPeriod(): void {
+    const now = new Date();
+    const firstOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthEnd = new Date(firstOfThisMonth.getTime() - 86_400_000);
+    const lastMonthStart = new Date(lastMonthEnd.getFullYear(), lastMonthEnd.getMonth(), 1);
+    this.startForm.controls.periodStart.setValue(lastMonthStart, { emitEvent: false });
+    this.startForm.controls.periodEnd.setValue(lastMonthEnd, { emitEvent: false });
+  }
+
+  onSourceChange(source: InputSourceChoice): void {
+    this.inputSource.set(source);
+    // The radio also writes this control through `formControlName`, but the signal
+    // alone is not enough: `crmSelection()` and `submitGeneration()` read the control,
+    // so a programmatic call here would leave the visible panel and the submitted
+    // branch disagreeing. Keep this handler the single writer of the choice.
+    this.startForm.controls.inputSource.setValue(source, { emitEvent: false });
+    this.applySourceValidators(source);
+    if (source === 'crm') {
+      if (!this.operations().length) this.loadOperations();
+      this.requestPreview();
+    } else {
+      this.crmPreview.set(null);
+      this.crmPreviewFailed.set(false);
+    }
+  }
+
+  /**
+   * Move required-ness between the two source shapes.
+   *
+   * Both directions matter: a leftover `required` on the hidden `file` control
+   * blocks submit with no visible error, and a leftover one on `periodStart`
+   * would do the same after switching back.
+   */
+  private applySourceValidators(source: InputSourceChoice): void {
+    const { file, injectionName, idSharingOperation, periodStart, periodEnd } =
+      this.startForm.controls;
+
+    if (source === 'crm') {
+      file.clearValidators();
+      injectionName.clearValidators();
+      idSharingOperation.setValidators(Validators.required);
+      periodStart.setValidators(Validators.required);
+      periodEnd.setValidators(Validators.required);
+    } else {
+      file.setValidators(Validators.required);
+      injectionName.setValidators([Validators.required, Validators.minLength(1)]);
+      idSharingOperation.clearValidators();
+      periodStart.clearValidators();
+      periodEnd.clearValidators();
+    }
+
+    for (const control of [file, injectionName, idSharingOperation, periodStart, periodEnd]) {
+      control.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private loadOperations(): void {
+    this.operationsLoading.set(true);
+    this.sharingOperations
+      .getSharingOperationList({ page: 1, limit: OPERATION_PAGE_SIZE, sort_name: 'ASC' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const list = Array.isArray(response.data) ? response.data : [];
+          this.operations.set(list);
+          this.operationsLoading.set(false);
+          // One operation is the common case; choosing it for the manager
+          // removes a decision that has only one possible answer.
+          if (list.length === 1 && !this.startForm.controls.idSharingOperation.value) {
+            this.startForm.controls.idSharingOperation.setValue(list[0].id);
+          }
+        },
+        error: (error: unknown) => {
+          this.operationsLoading.set(false);
+          this.handleApiError(error);
+        },
+      });
+  }
+
+  /** The selection, or null while it is still incomplete. */
+  private crmSelection(): CrmSelection | null {
+    if (this.startForm.controls.inputSource.value !== 'crm') return null;
+    const id = this.startForm.controls.idSharingOperation.value;
+    const start = this.startForm.controls.periodStart.value;
+    const end = this.startForm.controls.periodEnd.value;
+    if (!id || !start || !end) return null;
+    // toLocalDateString, not toISOString: the picker hands back local midnight
+    // and UTC conversion would shift the day for anyone east of Greenwich.
+    return {
+      idSharingOperation: id,
+      periodStart: toLocalDateString(start),
+      periodEnd: toLocalDateString(end),
+    };
+  }
+
+  private requestPreview(): void {
+    const selection = this.crmSelection();
+    if (!selection) {
+      this.crmPreview.set(null);
+      this.crmPreviewFailed.set(false);
+      return;
+    }
+    if (selection.periodStart > selection.periodEnd) {
+      // Answered locally so the manager is not made to wait on a round trip for
+      // something the form can see.
+      this.crmPreview.set(null);
+      this.crmPreviewFailed.set(false);
+      return;
+    }
+
+    this.crmPreviewLoading.set(true);
+    this.crmPreviewFailed.set(false);
+    this.service
+      .previewCrmData({
+        id_sharing_operation: selection.idSharingOperation,
+        period_start: selection.periodStart,
+        period_end: selection.periodEnd,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.crmPreviewLoading.set(false);
+          const data = response.data;
+          if (!data || typeof data === 'string') {
+            this.crmPreviewFailed.set(true);
+            this.crmPreview.set(null);
+            return;
+          }
+          this.crmPreview.set({
+            ok: data.can_generate,
+            meterCount: data.meter_count,
+            readingCount: data.reading_count,
+            firstTimestamp: data.first_timestamp,
+            lastTimestamp: data.last_timestamp,
+            totalConsumptionKwh: data.total_consumption_kwh,
+            totalInjectionKwh: data.total_injection_kwh,
+            incompleteMeters: data.incomplete_meters,
+            blockers: data.blockers,
+          });
+        },
+        error: () => {
+          // Deliberately not routed through handleApiError: a failed pre-flight
+          // is shown inside the panel, not as a toast the manager must dismiss.
+          this.crmPreviewLoading.set(false);
+          this.crmPreviewFailed.set(true);
+          this.crmPreview.set(null);
+        },
+      });
   }
 
   // ====== algorithms =====================================================
@@ -338,6 +636,24 @@ export class AllocationGenerationHub implements OnInit {
     const raw = this.startForm.getRawValue();
     const inputs = this.collectInputs(raw.inputs as Record<string, AlgorithmInputValue>);
 
+    if (raw.inputSource === 'crm') {
+      const selection = this.crmSelection();
+      // Belt and braces: the button is already disabled while the pre-flight is
+      // not green, and the backend re-runs the same checks server-side.
+      if (!selection || !this.crmReady()) return;
+      this.startRun(
+        this.service.startGenerationFromCrm({
+          name: raw.generationName,
+          algorithmName: raw.algorithmName as string,
+          inputs,
+          idSharingOperation: selection.idSharingOperation,
+          periodStart: selection.periodStart,
+          periodEnd: selection.periodEnd,
+        }),
+      );
+      return;
+    }
+
     const payload: CreateGenerationPayload = {
       file: raw.file as File,
       name: raw.generationName,
@@ -345,30 +661,34 @@ export class AllocationGenerationHub implements OnInit {
       algorithmName: raw.algorithmName as string,
       inputs,
     };
+    this.startRun(this.service.startGeneration(payload));
+  }
 
+  /** Shared tail of both submit paths: toast, silent reset, refresh. */
+  private startRun(request: Observable<ApiResponse<CreateGenerationResponse>>): void {
     this.submitting.set(true);
-    this.service
-      .startGeneration(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.submitting.set(false);
-          this.snackbar.openSnackBar(
-            this.translate.instant('ALGORITHM_HUB.SUCCESS.GENERATION_STARTED') as string,
-            VALIDATION_TYPE,
-          );
-          // Silent reset: avoid re-triggering the error components on the cleared fields.
-          this.startForm.controls.generationName.reset('', { emitEvent: false });
-          this.startForm.controls.injectionName.reset('', { emitEvent: false });
-          this.startForm.controls.file.reset(null, { emitEvent: false });
-          this.file.set(null);
-          this.refreshGenerations();
-        },
-        error: (error: unknown) => {
-          this.submitting.set(false);
-          this.handleApiError(error);
-        },
-      });
+    request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        this.snackbar.openSnackBar(
+          this.translate.instant('ALGORITHM_HUB.SUCCESS.GENERATION_STARTED') as string,
+          VALIDATION_TYPE,
+        );
+        // Silent reset: avoid re-triggering the error components on the cleared fields.
+        this.startForm.controls.generationName.reset('', { emitEvent: false });
+        this.startForm.controls.injectionName.reset('', { emitEvent: false });
+        this.startForm.controls.file.reset(null, { emitEvent: false });
+        this.file.set(null);
+        // The period and operation are deliberately kept: a manager who just
+        // ran February is far more likely to run February with another
+        // algorithm than to start from scratch.
+        this.refreshGenerations();
+      },
+      error: (error: unknown) => {
+        this.submitting.set(false);
+        this.handleApiError(error);
+      },
+    });
   }
 
   private collectInputs(
@@ -407,12 +727,65 @@ export class AllocationGenerationHub implements OnInit {
           this.generationsPagination.set(response.pagination);
           this.lastRefreshedAt.set(Date.now());
           this.generationsLoading.set(false);
+          // Seed only: an explicit load must never toast about work that
+          // finished before the user got here.
+          this.snapshotStatuses(data);
         },
         error: (error: unknown) => {
           this.generationsLoading.set(false);
           this.handleApiError(error);
         },
       });
+  }
+
+  /** Background refresh: no spinner, and toasts any terminal transition once. */
+  private silentRefresh(): void {
+    this.service.invalidate();
+    this.service
+      .listGenerations(this.generationsFilter())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const data = Array.isArray(response.data) ? response.data : [];
+          this.toastTerminalTransitions(data);
+          this.generations.set(data);
+          this.generationsPagination.set(response.pagination);
+          this.lastRefreshedAt.set(Date.now());
+        },
+        error: () => {
+          /* silent — the next manual refresh surfaces persistent errors */
+        },
+      });
+  }
+
+  /**
+   * Toast once per generation that just left PENDING, then re-snapshot.
+   *
+   * Text comes from the i18n bundle keyed on the observed status, never from a
+   * realtime payload: anything holding the Redis password can publish, so
+   * rendering payload strings would make a compromised service a text-injection
+   * channel into every browser.
+   */
+  private toastTerminalTransitions(data: readonly GenerationPartialDTO[]): void {
+    for (const generation of data) {
+      const before = this.lastStatusById.get(generation.id);
+      if (before !== GenerationStatus.PENDING || generation.status === GenerationStatus.PENDING) {
+        continue;
+      }
+      this.snackbar.openSnackBar(
+        this.translate.instant(
+          generation.status === GenerationStatus.SUCCESS
+            ? 'ALGORITHM_HUB.TOAST_FINISHED'
+            : 'ALGORITHM_HUB.TOAST_FAILED',
+        ) as string,
+        VALIDATION_TYPE,
+      );
+    }
+    this.snapshotStatuses(data);
+  }
+
+  private snapshotStatuses(data: readonly GenerationPartialDTO[]): void {
+    this.lastStatusById = new Map(data.map((generation) => [generation.id, generation.status]));
   }
 
   goToPage(page: number): void {

@@ -124,6 +124,18 @@
                   data-testid="key-update__btn--add-consumer"
                 ></p-button>
               }
+
+              @if (isCreationMode()) {
+                <p-button
+                  pRipple
+                  [outlined]="true"
+                  icon="pi pi-download"
+                  label="{{ 'KEY.IMPORT_FROM_SHARING_OPERATION.BUTTON_LABEL' | translate }}"
+                  severity="secondary"
+                  (click)="importFromSharingOperation()"
+                  data-testid="key-update__btn--import-sharing-operation"
+                ></p-button>
+              }
             </div>
           </div>
 

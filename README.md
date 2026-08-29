@@ -7,6 +7,7 @@
 [![Website](https://img.shields.io/badge/Website-optimce.be-2e7d32.svg)](https://www.optimce.be/en/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-21-dd0031.svg)](https://angular.dev)
+[![Translation status](https://hosted.weblate.org/widgets/optimce/-/svg-badge.svg)](https://hosted.weblate.org/engage/optimce/)
 [![en](https://img.shields.io/badge/lang-en-43a047.svg)](README.md)
 [![fr](https://img.shields.io/badge/lang-fr-lightgrey.svg)](docs/README.fr.md)
 [![de](https://img.shields.io/badge/lang-de-lightgrey.svg)](docs/README.de.md)
@@ -139,6 +140,26 @@ Unit tests run with the [Vitest](https://vitest.dev) test runner.
 | `features/` | Feature modules, lazy-loaded and split by business domain           |
 | `layout/`   | Layout components that wrap application pages                       |
 | `assets/`   | Translations (`i18n/`), runtime config (`config/`), and images      |
+
+## Translations
+
+The interface is available in **French, English, Dutch, and German**. The
+catalogs are the nested JSON files in `src/assets/i18n/` (`fr.json`, `en.json`,
+`nl.json`, `de.json`), loaded at runtime by
+[ngx-translate](https://github.com/ngx-translate/core); French is the source
+language.
+
+Translations are managed on [Weblate](https://weblate.org/), a libre web-based
+continuous localization platform that hosts this project free of charge under
+its Libre plan for free software. You do not need to touch the JSON files or
+open a pull request to help:
+
+**[Translate OptimCE on Weblate →](https://hosted.weblate.org/engage/optimce/)**
+
+Weblate commits approved translations back to this repository, so please make
+translation-only changes there rather than editing `src/assets/i18n/*.json` by
+hand. New keys are still added in a pull request, together with the code that
+uses them and their French source string.
 
 ## Contributing
 

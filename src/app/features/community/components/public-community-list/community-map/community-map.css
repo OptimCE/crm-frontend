@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+.community-map__canvas {
+  height: 70vh;
+  min-height: 24rem;
+}

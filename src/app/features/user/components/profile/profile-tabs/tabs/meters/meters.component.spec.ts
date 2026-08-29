@@ -2,7 +2,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { Table, TableLazyLoadEvent } from 'primeng/table';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -355,19 +355,17 @@ describe('MetersComponent', () => {
       meServiceSpy.getMeters.mockClear();
     });
 
-    it('should call table.clear(), reset all filters and call loadMeters', () => {
-      const mockTable = { clear: vi.fn() } as unknown as Table;
-
+    it('should reset all filters and call loadMeters', () => {
       // Set some filters first
       component.searchText.set('test');
       component.statusFilter.set(MeterDataStatus.ACTIVE);
       component.searchField.set('EAN');
       component.filter.set({ page: 3, limit: 10, EAN: 'test' });
 
-      component.clear(mockTable);
+      // The table is resolved through a view query now, and is absent in map
+      // view — clear() must cope with that, which is why it optional-chains.
+      component.clear();
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(mockTable.clear).toHaveBeenCalled();
       expect(component.searchText()).toBe('');
       expect(component.statusFilter()).toBeNull();
       expect(component.searchField()).toBe('community_name');

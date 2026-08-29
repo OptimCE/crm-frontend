@@ -1,5 +1,6 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
@@ -21,11 +22,24 @@ import { RegulatorStore } from '../../../../core/services/regulator.store';
 import { SharingOperationType } from '../../../../shared/types/sharing_operation.types';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { CommunityLogo } from '../../../../shared/components/community-logo/community-logo';
+import { ViewToggle } from '../../../../shared/components/view-toggle/view-toggle';
+import { CommunityMap } from './community-map/community-map';
+import type { MapViewMode } from '../../../../shared/components/map/map.types';
 
 @Component({
   selector: 'app-public-community-list',
   standalone: true,
-  imports: [TagModule, AutoComplete, Select, FormsModule, TranslatePipe, HeaderPage, CommunityLogo],
+  imports: [
+    TagModule,
+    AutoComplete,
+    Select,
+    FormsModule,
+    TranslatePipe,
+    HeaderPage,
+    CommunityLogo,
+    ViewToggle,
+    CommunityMap,
+  ],
   templateUrl: './public-community-list.html',
   styleUrl: './public-community-list.css',
 })
@@ -34,6 +48,8 @@ export class PublicCommunityList {
   private municipalityService = inject(MunicipalityService);
   private regulatorStore = inject(RegulatorStore);
   private translate = inject(TranslateService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
   communities = signal<PublicCommunityDTO[]>([]);
@@ -57,7 +73,17 @@ export class PublicCommunityList {
 
   readonly SharingOperationType = SharingOperationType;
 
+  /** List or map, mirrored in `?view=` so a map link can be shared. */
+  readonly view = signal<MapViewMode>('list');
+
+  /** NIS codes of the municipality filter, narrowed client-side on the map. */
+  readonly selectedNisCodes = computed(() => this.selectedMunicipalities().map((m) => m.nis_code));
+
   constructor() {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.view.set(params.get('view') === 'map' ? 'map' : 'list');
+    });
+
     this.loadPublicCommunities();
     this.regulatorStore
       .ensureLoaded()
@@ -75,6 +101,17 @@ export class PublicCommunityList {
         label: this.translate.instant('REGULATORS.' + r.code) as string,
       })),
     );
+  }
+
+  setView(next: MapViewMode): void {
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      // null removes the param entirely for the default view, so a shared
+      // /communities/public link stays clean.
+      queryParams: { view: next === 'map' ? 'map' : null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   onRegulatorChange(code: string | null): void {

@@ -120,176 +120,193 @@
         data-testid="meters__button--clear-filters"
         icon="pi pi-filter-slash"
         label="{{ 'PROFILE.METERS.CLEAR_FILTER_BUTTON_LABEL' | translate }}"
-        (onClick)="clear(dt)"
+        (onClick)="clear()"
         [outlined]="!hasActiveFilters()"
         severity="primary"
+      />
+    </div>
+
+    <!-- List / map switch -->
+    <div class="flex items-end">
+      <app-view-toggle
+        [value]="view()"
+        (valueChange)="view.set($event)"
+        data-testid="meters__toggle--view"
       />
     </div>
   </div>
 </div>
 
-<!-- Data table -->
-<p-table
-  data-testid="meters__table"
-  #dt
-  [value]="metersPartialList()"
-  [lazy]="true"
-  (onLazyLoad)="lazyLoadMeters($event)"
-  [rows]="paginationInfo().limit"
-  [totalRecords]="paginationInfo().total"
-  [first]="firstRow()"
-  [showCurrentPageReport]="true"
-  [currentPageReportTemplate]="currentPageReportTemplate()"
-  (onPage)="pageChange($event)"
-  [paginator]="showPaginator()"
->
-  <!-- Desktop header -->
-  <ng-template pTemplate="header">
-    <tr class="max-lg:hidden">
-      <th class="text-base px-3">{{ 'PROFILE.METERS.COMMUNITY_LABEL' | translate }}</th>
-      <th class="text-base px-3">{{ 'COMMON.ADDRESS' | translate }}</th>
-      <th class="text-base px-3">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</th>
-      <th class="text-base px-3">{{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}</th>
-      <th class="text-base px-3">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</th>
-      <th class="text-base px-3">{{ 'METER.INFORMATIONS.STATUS_LABEL' | translate }}</th>
-    </tr>
-  </ng-template>
+@if (view() === 'list') {
+  <!-- Data table -->
+  <p-table
+    data-testid="meters__table"
+    #dt
+    [value]="metersPartialList()"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoadMeters($event)"
+    [rows]="paginationInfo().limit"
+    [totalRecords]="paginationInfo().total"
+    [first]="firstRow()"
+    [showCurrentPageReport]="true"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+    (onPage)="pageChange($event)"
+    [paginator]="showPaginator()"
+  >
+    <!-- Desktop header -->
+    <ng-template pTemplate="header">
+      <tr class="max-lg:hidden">
+        <th class="text-base px-3">{{ 'PROFILE.METERS.COMMUNITY_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'COMMON.ADDRESS' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</th>
+        <th class="text-base px-3">{{ 'METER.INFORMATIONS.STATUS_LABEL' | translate }}</th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="body" let-meter let-rowIndex="rowIndex">
-    <!-- Desktop row -->
-    <tr
-      [attr.data-testid]="'meters__row--desktop--' + rowIndex"
-      (click)="onRowClick(meter)"
-      class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
-    >
-      <td class="text-sm">{{ meter.community.name }}</td>
-      <td class="text-sm"><span [innerHTML]="meter.address | address"></span></td>
-      <td class="text-sm">{{ meter.EAN }}</td>
-      <td class="text-sm">{{ meter.meter_number }}</td>
-      <td class="text-sm">{{ meter.holder ? meter.holder.name : '/' }}</td>
-      <td>
-        @if (!meter.status) {
-          <p-tag severity="danger" value="/" class="text-sm"></p-tag>
-        } @else {
-          @switch (meter.status) {
-            @case (MeterDataStatus.ACTIVE) {
-              <p-tag
-                severity="success"
-                value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MeterDataStatus.INACTIVE) {
-              <p-tag
-                severity="danger"
-                value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MeterDataStatus.WAITING_GRD) {
-              <p-tag
-                severity="danger"
-                value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MeterDataStatus.WAITING_MANAGER) {
-              <p-tag
-                severity="danger"
-                value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-          }
-        }
-      </td>
-    </tr>
-
-    <!-- Mobile card -->
-    <tr
-      [attr.data-testid]="'meters__row--mobile--' + rowIndex"
-      class="lg:hidden !border-0 !bg-transparent"
-      (click)="onRowClick(meter)"
-    >
-      <td colspan="6" class="!p-0 !pb-3">
-        <div
-          class="meter-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
-        >
-          <!-- Card header: community + status -->
-          <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
-            <span class="font-semibold text-sm text-primary-700">{{ meter.community.name }}</span>
-            @if (!meter.status) {
-              <p-tag severity="danger" value="/" class="text-xs"></p-tag>
-            } @else {
-              @switch (meter.status) {
-                @case (MeterDataStatus.ACTIVE) {
-                  <p-tag
-                    severity="success"
-                    value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
-                @case (MeterDataStatus.INACTIVE) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
-                @case (MeterDataStatus.WAITING_GRD) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
-                @case (MeterDataStatus.WAITING_MANAGER) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
+    <ng-template pTemplate="body" let-meter let-rowIndex="rowIndex">
+      <!-- Desktop row -->
+      <tr
+        [attr.data-testid]="'meters__row--desktop--' + rowIndex"
+        (click)="onRowClick(meter)"
+        class="max-lg:hidden hover:bg-primary-50 cursor-pointer"
+      >
+        <td class="text-sm">{{ meter.community.name }}</td>
+        <td class="text-sm"><span [innerHTML]="meter.address | address"></span></td>
+        <td class="text-sm">{{ meter.EAN }}</td>
+        <td class="text-sm">{{ meter.meter_number }}</td>
+        <td class="text-sm">{{ meter.holder ? meter.holder.name : '/' }}</td>
+        <td>
+          @if (!meter.status) {
+            <p-tag severity="danger" value="/" class="text-sm"></p-tag>
+          } @else {
+            @switch (meter.status) {
+              @case (MeterDataStatus.ACTIVE) {
+                <p-tag
+                  severity="success"
+                  value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
+              @case (MeterDataStatus.INACTIVE) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
+              @case (MeterDataStatus.WAITING_GRD) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
+              @case (MeterDataStatus.WAITING_MANAGER) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
               }
             }
-          </div>
+          }
+        </td>
+      </tr>
 
-          <!-- Card body: field grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div>
-              <span class="field-label">{{ 'COMMON.ADDRESS' | translate }}</span>
-              <span class="field-value" [innerHTML]="meter.address | address"></span>
+      <!-- Mobile card -->
+      <tr
+        [attr.data-testid]="'meters__row--mobile--' + rowIndex"
+        class="lg:hidden !border-0 !bg-transparent"
+        (click)="onRowClick(meter)"
+      >
+        <td colspan="6" class="!p-0 !pb-3">
+          <div
+            class="meter-card bg-surface-0 border border-primary-100 rounded-xl p-4 shadow-sm cursor-pointer hover:border-primary-400 transition-colors"
+          >
+            <!-- Card header: community + status -->
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
+              <span class="font-semibold text-sm text-primary-700">{{ meter.community.name }}</span>
+              @if (!meter.status) {
+                <p-tag severity="danger" value="/" class="text-xs"></p-tag>
+              } @else {
+                @switch (meter.status) {
+                  @case (MeterDataStatus.ACTIVE) {
+                    <p-tag
+                      severity="success"
+                      value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                  @case (MeterDataStatus.INACTIVE) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                  @case (MeterDataStatus.WAITING_GRD) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                  @case (MeterDataStatus.WAITING_MANAGER) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                }
+              }
             </div>
-            <div>
-              <span class="field-label">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</span>
-              <span class="field-value">{{ meter.EAN }}</span>
-            </div>
-            <div>
-              <span class="field-label">{{
-                'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
-              }}</span>
-              <span class="field-value">{{ meter.meter_number }}</span>
-            </div>
-            <div>
-              <span class="field-label">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</span>
-              <span class="field-value">{{ meter.holder ? meter.holder.name : '/' }}</span>
+
+            <!-- Card body: field grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <span class="field-label">{{ 'COMMON.ADDRESS' | translate }}</span>
+                <span class="field-value" [innerHTML]="meter.address | address"></span>
+              </div>
+              <div>
+                <span class="field-label">{{ 'METER.INFORMATIONS.EAN_LABEL' | translate }}</span>
+                <span class="field-value">{{ meter.EAN }}</span>
+              </div>
+              <div>
+                <span class="field-label">{{
+                  'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate
+                }}</span>
+                <span class="field-value">{{ meter.meter_number }}</span>
+              </div>
+              <div>
+                <span class="field-label">{{ 'METER.INFORMATIONS.OWNER_LABEL' | translate }}</span>
+                <span class="field-value">{{ meter.holder ? meter.holder.name : '/' }}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
+        </td>
+      </tr>
+    </ng-template>
 
-  <ng-template #emptyMessage pTemplate="emptymessage">
-    <tr>
-      <td colspan="6">
-        <div class="py-8 text-center">
-          <i class="pi pi-gauge text-3xl text-surface-300 mb-2"></i>
-          <p class="text-surface-400 m-0">
-            {{ 'PROFILE.METERS.NO_METERS_FOUND_LABEL' | translate }}
-          </p>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+    <ng-template #emptyMessage pTemplate="emptymessage">
+      <tr>
+        <td colspan="6">
+          <div class="py-8 text-center">
+            <i class="pi pi-gauge text-3xl text-surface-300 mb-2"></i>
+            <p class="text-surface-400 m-0">
+              {{ 'PROFILE.METERS.NO_METERS_FOUND_LABEL' | translate }}
+            </p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+} @else {
+  @defer (on immediate) {
+    <app-meters-map [query]="mapQuery()" scope="me" />
+  } @placeholder {
+    <div class="h-[70vh]"></div>
+  }
+}

@@ -1,11 +1,10 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Table, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
-import { MenuItemCommandEvent } from 'primeng/api';
 
 import { KeysList } from './keys-list';
 import { KeyService } from '../../../../shared/services/key.service';
@@ -14,7 +13,8 @@ import { ApiResponse, ApiResponsePaginated, Pagination } from '../../../../core/
 import { KeyPartialDTO } from '../../../../shared/dtos/key.dtos';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { Toast } from 'primeng/toast';
-import { SplitButton } from 'primeng/splitbutton';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Subject } from 'rxjs';
 
 // ── Stubs ──────────────────────────────────────────────────────────
 
@@ -23,9 +23,6 @@ class DebouncedPInputStub {}
 
 @Component({ selector: 'app-toast-stub', standalone: true, template: '' })
 class ToastStub {}
-
-@Component({ selector: 'app-split-button-stub', standalone: true, template: '' })
-class SplitButtonStub {}
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -61,6 +58,7 @@ describe('KeysList', () => {
   let keyServiceSpy: { getKeysList: ReturnType<typeof vi.fn> };
   let routerSpy: { navigateByUrl: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
+  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
 
   async function createComponent(): Promise<void> {
     fixture = TestBed.createComponent(KeysList);
@@ -74,6 +72,7 @@ describe('KeysList', () => {
     };
     routerSpy = { navigateByUrl: vi.fn().mockResolvedValue(true) };
     errorHandlerSpy = { handleError: vi.fn() };
+    dialogServiceSpy = { open: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [KeysList, TranslateModule.forRoot()],
@@ -81,13 +80,16 @@ describe('KeysList', () => {
         { provide: KeyService, useValue: keyServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+        { provide: DialogService, useValue: dialogServiceSpy },
         { provide: ActivatedRoute, useValue: {} },
       ],
     })
       .overrideComponent(KeysList, {
-        remove: { imports: [DebouncedPInputComponent, Toast, SplitButton] },
+        // The component provides DialogService itself, which would shadow the module-level spy.
+        remove: { imports: [DebouncedPInputComponent, Toast], providers: [DialogService] },
         add: {
-          imports: [DebouncedPInputStub, ToastStub, SplitButtonStub],
+          imports: [DebouncedPInputStub, ToastStub],
+          providers: [{ provide: DialogService, useValue: dialogServiceSpy }],
           schemas: [NO_ERRORS_SCHEMA],
         },
       })
@@ -456,28 +458,42 @@ describe('KeysList', () => {
     });
   });
 
-  // ── 11. Constructor / translations ──────────────────────────────
+  // ── 11. Creation-mode dialog ────────────────────────────────────
 
-  describe('translations', () => {
-    it('should set optionsSplitButton label from translate', async () => {
-      const translateService = TestBed.inject(TranslateService);
-      translateService.setTranslation('en', {
-        'KEY.LIST.ADD_STANDARD_KEY_BUTTON_LABEL': 'Add standard key',
-      });
-      translateService.use('en');
+  describe('openCreationMode', () => {
+    let dialogClose: Subject<'full' | 'step' | null>;
+
+    beforeEach(async () => {
       await createComponent();
-      // The label may or may not be set depending on translation timing;
-      // at minimum, the menu item should exist
-      expect(component.optionsSplitButton.length).toBe(1);
+      dialogClose = new Subject();
+      dialogServiceSpy.open.mockReturnValue({
+        onClose: dialogClose.asObservable(),
+        destroy: vi.fn(),
+      } as unknown as DynamicDialogRef);
+      routerSpy.navigateByUrl.mockClear();
     });
 
-    it('should have optionsSplitButton with command that calls addStepByStepKey', async () => {
-      await createComponent();
-      const spy = vi.spyOn(component, 'addStepByStepKey').mockImplementation(() => {
-        /* noop */
-      });
-      component.optionsSplitButton[0].command?.({} as MenuItemCommandEvent);
-      expect(spy).toHaveBeenCalled();
+    it('should open the mode dialog', () => {
+      component.openCreationMode();
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(1);
+    });
+
+    it('should navigate to the full creator when "full" is chosen', () => {
+      component.openCreationMode();
+      dialogClose.next('full');
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/keys/add');
+    });
+
+    it('should navigate to the wizard when "step" is chosen', () => {
+      component.openCreationMode();
+      dialogClose.next('step');
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/keys/add/step');
+    });
+
+    it('should not navigate when the dialog is dismissed', () => {
+      component.openCreationMode();
+      dialogClose.next(null);
+      expect(routerSpy.navigateByUrl).not.toHaveBeenCalled();
     });
   });
 });

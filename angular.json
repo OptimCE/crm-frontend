@@ -25,6 +25,21 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "maplibre-gl-worker.mjs",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "maplibre"
+              },
+              {
+                "glob": "maplibre-gl-shared.mjs",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "maplibre"
+              },
+              {
+                "glob": "maplibre-gl.css",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "maplibre"
               }
             ],
             "styles": [
@@ -59,6 +74,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "crm-frontend:build:production"
@@ -66,8 +84,7 @@
             "development": {
               "buildTarget": "crm-frontend:build:development"
             }
-          },
-          "defaultConfiguration": "development"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test",

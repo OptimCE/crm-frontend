@@ -1,0 +1,53 @@
+<div class="key-creation-mode">
+  <p class="mb-4 text-sm text-surface-500">
+    {{ 'KEY.CREATE_MODE.SUBTITLE' | translate }}
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    @for (option of options; track option.mode) {
+      <!--
+        The whole card is the control: one tab stop, one activation path. An inner p-button would
+        bubble into this handler and close the dialog twice.
+      -->
+      <div
+        role="button"
+        tabindex="0"
+        class="mode-card flex flex-col gap-3 rounded-lg border border-surface-200 p-4 cursor-pointer transition-all duration-200 hover:border-primary-500 hover:bg-primary-50 hover:shadow-sm"
+        [attr.data-testid]="'key-creation-mode__card--' + option.mode"
+        (click)="choose(option.mode)"
+        (keydown.enter)="choose(option.mode)"
+        (keydown.space)="choose(option.mode); $event.preventDefault()"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary-50 text-primary-600"
+          >
+            <i [class]="option.icon"></i>
+          </div>
+          <h4 class="text-sm font-semibold text-surface-800 m-0">
+            {{ option.titleKey | translate }}
+          </h4>
+        </div>
+
+        <p class="text-xs text-surface-500 m-0 flex-1">
+          {{ option.descriptionKey | translate }}
+        </p>
+
+        <span class="mode-card__action text-sm font-medium text-primary-600">
+          {{ option.actionKey | translate }}
+          <i class="pi pi-arrow-right text-xs"></i>
+        </span>
+      </div>
+    }
+  </div>
+
+  <div class="mt-5 flex justify-end">
+    <p-button
+      [text]="true"
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      (onClick)="close()"
+      data-testid="key-creation-mode__btn--cancel"
+    />
+  </div>
+</div>
