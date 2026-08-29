@@ -138,6 +138,13 @@
                       class="text-sm px-3 py-2"
                     />
                   }
+                  @case (KeyStatus.PENDING) {
+                    <p-tag
+                      value="{{ 'SHARING_OPERATION.VIEW.HISTORY_KEY.PENDING_LABEL' | translate }}"
+                      severity="warn"
+                      class="text-sm px-3 py-2"
+                    />
+                  }
                 }
               </td>
             </tr>
@@ -346,47 +353,52 @@
               <span class="field-label">{{
                 'SHARING_OPERATION.VIEW.KEY.ACTUAL_KEY_LABEL' | translate
               }}</span>
-              @if (op.key && op.key.key) {
+              @if (op.key?.key; as activeKey) {
                 <a
                   class="field-value text-primary-500 hover:text-primary-700 underline"
-                  routerLink="/keys/{{ op.key.key.id }}"
+                  routerLink="/keys/{{ activeKey.id }}"
                   data-testid="op-view__link--key"
                 >
-                  {{ op.key.key.name }}
+                  {{ activeKey.name }}
                 </a>
-              } @else if (op.key_waiting_approval) {
-                <div class="flex flex-col gap-2 mt-1">
-                  <span class="text-sm text-surface-500">
-                    {{ 'SHARING_OPERATION.VIEW.KEY.WAITING_APPROVAL_KEY_LABEL' | translate }}
-                  </span>
-                  <span class="field-value font-semibold">{{
-                    op.key_waiting_approval.key.name
-                  }}</span>
-                  <div class="flex flex-wrap gap-2">
-                    <p-button
-                      icon="pi pi-check"
-                      severity="success"
-                      size="small"
-                      label="{{ 'SHARING_OPERATION.VIEW.KEY.APPROVE_KEY' | translate }}"
-                      (click)="openDateApprovedKey($event)"
-                      data-testid="op-view__btn--approve-key"
-                    />
-                    <p-button
-                      icon="pi pi-times"
-                      severity="danger"
-                      size="small"
-                      label="{{ 'SHARING_OPERATION.VIEW.KEY.REJECT_KEY' | translate }}"
-                      (click)="revokeWaitingKey()"
-                      data-testid="op-view__btn--reject-key"
-                    />
-                  </div>
-                </div>
               } @else {
                 <span class="field-empty">
                   {{ 'SHARING_OPERATION.VIEW.KEY.NO_ACTUAL_KEY_LABEL' | translate }}
                 </span>
               }
             </div>
+
+            <!-- A sibling block, deliberately not an `@else if` on the active key:
+                 the backend fills `key` and `key_waiting_approval` independently, so
+                 an operation that already runs a key can still have a proposal
+                 waiting. Chaining the two hid the proposal - and the only
+                 Approve/Reject buttons there are - on every such operation. -->
+            @if (op.key_waiting_approval; as pendingKey) {
+              <div class="flex flex-col gap-2" data-testid="op-view__pending-key">
+                <span class="text-sm text-surface-500">
+                  {{ 'SHARING_OPERATION.VIEW.KEY.WAITING_APPROVAL_KEY_LABEL' | translate }}
+                </span>
+                <span class="field-value font-semibold">{{ pendingKey.key.name }}</span>
+                <div class="flex flex-wrap gap-2">
+                  <p-button
+                    icon="pi pi-check"
+                    severity="success"
+                    size="small"
+                    label="{{ 'SHARING_OPERATION.VIEW.KEY.APPROVE_KEY' | translate }}"
+                    (click)="openDateApprovedKey($event)"
+                    data-testid="op-view__btn--approve-key"
+                  />
+                  <p-button
+                    icon="pi pi-times"
+                    severity="danger"
+                    size="small"
+                    label="{{ 'SHARING_OPERATION.VIEW.KEY.REJECT_KEY' | translate }}"
+                    (click)="revokeWaitingKey()"
+                    data-testid="op-view__btn--reject-key"
+                  />
+                </div>
+              </div>
+            }
             <div class="flex flex-wrap gap-2 pt-2 border-t border-surface-200">
               <p-button
                 pRipple
@@ -454,7 +466,7 @@
       </div>
 
       <!-- Meters Tabs -->
-      <p-tabs [value]="1" class="sharing-tabs" data-testid="op-view__tabs--meters">
+      <p-tabs [(value)]="meterTab" class="sharing-tabs" data-testid="op-view__tabs--meters">
         <p-tablist>
           <p-tab [value]="0" data-testid="op-view__tab--past">
             {{ 'SHARING_OPERATION.VIEW.METER.HEADERS.PAST' | translate }}
@@ -464,6 +476,9 @@
           </p-tab>
           <p-tab [value]="2" data-testid="op-view__tab--future">
             {{ 'SHARING_OPERATION.VIEW.METER.HEADERS.FUTURE' | translate }}
+          </p-tab>
+          <p-tab [value]="3" data-testid="op-view__tab--map">
+            {{ 'MAP.MAP_VIEW_LABEL' | translate }}
           </p-tab>
         </p-tablist>
         <p-tabpanels>
@@ -484,6 +499,18 @@
               [id_sharing]="id()"
               [type]="SharingOperationMetersQueryType.FUTURE"
             ></app-sharing-operation-meters-list>
+          </p-tabpanel>
+          <p-tabpanel [value]="3">
+            <!-- @if-gated inside the panel: p-tabpanel only HIDES a deactivated
+                 panel, and a hidden WebGL canvas is 0x0 with no lifecycle hook
+                 to resize it on. Destroying it is simpler and cheaper. -->
+            @if (meterTab() === 3) {
+              @defer (on immediate) {
+                <app-meters-map [query]="mapQuery()" />
+              } @placeholder {
+                <div class="h-[70vh]"></div>
+              }
+            }
           </p-tabpanel>
         </p-tabpanels>
       </p-tabs>

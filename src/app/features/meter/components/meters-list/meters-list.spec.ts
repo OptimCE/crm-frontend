@@ -1,13 +1,13 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, type ParamMap, Router, convertToParamMap } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Table } from 'primeng/table';
-import { of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { MetersList } from './meters-list';
+import { MetersMap } from './meters-map/meters-map';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
@@ -49,6 +49,7 @@ describe('MetersList', () => {
 
   let meterServiceSpy: { getMetersList: ReturnType<typeof vi.fn> };
   let routerSpy: { navigate: ReturnType<typeof vi.fn> };
+  let routeParams: BehaviorSubject<ParamMap>;
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
   let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
 
@@ -63,6 +64,7 @@ describe('MetersList', () => {
       getMetersList: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
     };
     routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
+    routeParams = new BehaviorSubject<ParamMap>(convertToParamMap({}));
     snackbarSpy = { openSnackBar: vi.fn() };
     dialogServiceSpy = { open: vi.fn() };
 
@@ -70,7 +72,7 @@ describe('MetersList', () => {
       imports: [MetersList, TranslateModule.forRoot()],
       providers: [
         // Deep links (?holder_id=, ?status=) are read on construction now.
-        { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap({})) } },
+        { provide: ActivatedRoute, useValue: { queryParamMap: routeParams } },
         { provide: MeterService, useValue: meterServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
@@ -79,6 +81,11 @@ describe('MetersList', () => {
       .overrideComponent(MetersList, {
         remove: {
           providers: [DialogService],
+          // NO_ERRORS_SCHEMA below only tolerates UNKNOWN elements — a
+          // genuinely imported standalone component still instantiates. Removing
+          // MetersMap from `imports` is what stops the map (and its endpoint)
+          // from booting inside this spec.
+          imports: [MetersMap],
         },
         add: {
           providers: [{ provide: DialogService, useValue: dialogServiceSpy }],
@@ -437,11 +444,11 @@ describe('MetersList', () => {
       meterServiceSpy.getMetersList.mockClear();
       meterServiceSpy.getMetersList.mockReturnValue(of(buildPaginatedResponse()));
 
-      const clearFn = vi.fn();
-      const mockTable = { clear: clearFn } as unknown as Table;
-      component.clear(mockTable);
+      // The table is resolved through a view query now, and is simply absent
+      // in map view — clear() must cope with that, which is the point of the
+      // optional chain it uses.
+      component.clear();
 
-      expect(clearFn).toHaveBeenCalled();
       expect(component.searchText()).toBe('');
       expect(component.searchField()).toBe('EAN');
       expect(component.statusFilter()).toBeNull();
@@ -520,6 +527,71 @@ describe('MetersList', () => {
 
       // TranslateService.get returns an observable; with forRoot() default, returns the key
       expect(component.currentPageReportTemplate()).toBeTruthy();
+    });
+  });
+
+  // ── 10. List / map view toggle ─────────────────────────────────
+
+  describe('view toggle', () => {
+    it('should default to the list view with no ?view param', async () => {
+      await createComponent();
+
+      expect(component.view()).toBe('list');
+    });
+
+    it('should read ?view=map from the query params', async () => {
+      routeParams.next(convertToParamMap({ view: 'map' }));
+      await createComponent();
+
+      expect(component.view()).toBe('map');
+    });
+
+    it('should not render the table in map view', async () => {
+      routeParams.next(convertToParamMap({ view: 'map' }));
+      await createComponent();
+
+      expect(
+        (fixture.nativeElement as HTMLElement).querySelector(
+          '[data-testid="meters-list__table--meters"]',
+        ),
+      ).toBeNull();
+    });
+
+    it('should write ?view=map and drop it again for the list', async () => {
+      await createComponent();
+
+      component.setView('map');
+      expect(routerSpy.navigate).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { view: 'map' }, queryParamsHandling: 'merge' }),
+      );
+
+      component.setView('list');
+      expect(routerSpy.navigate).toHaveBeenLastCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { view: null } }),
+      );
+    });
+
+    it('should NOT reset the page when only ?view changes', async () => {
+      await createComponent();
+      component.filter.set({ page: 3, limit: 10 });
+      meterServiceSpy.getMetersList.mockClear();
+
+      // setView navigates, which re-fires the queryParamMap subscription. Without
+      // the guard in the component this would call applyFilters() and silently
+      // send a user on page 3 back to page 1.
+      routeParams.next(convertToParamMap({ view: 'map' }));
+
+      expect(component.filter().page).toBe(3);
+      expect(meterServiceSpy.getMetersList).not.toHaveBeenCalled();
+    });
+
+    it('should drop pagination from the map query', async () => {
+      await createComponent();
+      component.filter.set({ page: 4, limit: 25, EAN: '5414' });
+
+      expect(component.mapQuery()).toEqual({ EAN: '5414' });
     });
   });
 });

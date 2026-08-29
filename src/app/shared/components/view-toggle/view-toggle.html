@@ -1,0 +1,29 @@
+<div
+  class="view-toggle"
+  role="group"
+  [attr.aria-label]="'MAP.VIEW_SWITCH_ARIA' | translate"
+  data-testid="view-toggle__group"
+>
+  <button
+    type="button"
+    class="view-toggle__btn"
+    [class.view-toggle__btn--active]="value() === 'list'"
+    [attr.aria-pressed]="value() === 'list'"
+    (click)="select('list')"
+    data-testid="view-toggle__btn--list"
+  >
+    <i class="pi pi-list text-xs"></i>
+    <span>{{ 'MAP.LIST_VIEW_LABEL' | translate }}</span>
+  </button>
+  <button
+    type="button"
+    class="view-toggle__btn"
+    [class.view-toggle__btn--active]="value() === 'map'"
+    [attr.aria-pressed]="value() === 'map'"
+    (click)="select('map')"
+    data-testid="view-toggle__btn--map"
+  >
+    <i class="pi pi-map-marker text-xs"></i>
+    <span>{{ 'MAP.MAP_VIEW_LABEL' | translate }}</span>
+  </button>
+</div>

@@ -19,6 +19,11 @@ export enum SharingOperationMetersQueryType {
   PAST = 1,
   NOW = 2,
   FUTURE = 3,
+  /**
+   * Point-in-time snapshot: the meters registered in the operation on an arbitrary date,
+   * past or future. Driven by `at`.
+   */
+  AT_DATE = 4,
 }
 
 export interface SharingOperationMetersQuery extends PaginationQuery {
@@ -37,6 +42,11 @@ export interface SharingOperationMetersQuery extends PaginationQuery {
   end_date_to?: string;
   /** FUTURE tab snapshot date (`YYYY-MM-DD`). Defaults to tomorrow on the backend. */
   future_at?: string;
+  /**
+   * AT_DATE snapshot date (`YYYY-MM-DD`). Defaults to today on the backend.
+   * Both window bounds are inclusive, so a meter leaving the operation on this date is still returned.
+   */
+  at?: string;
   type: SharingOperationMetersQueryType;
 }
 

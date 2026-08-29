@@ -447,6 +447,16 @@
         "ADDRESSES": "Adressen",
         "HOUSE_ADDRESS": "Woonadres",
         "BILLING_ADDRESS": "Factuuradres"
+      },
+      "PREFILL": {
+        "CTA": "Ga sneller: vul dit formulier in met de gegevens uit uw profiel.",
+        "BUTTON": "Mijn profielgegevens gebruiken",
+        "ARMED": "Uw profiel wordt gebruikt zodra u een ledentype hebt gekozen.",
+        "APPLIED": "{{count}} veld(en) ingevuld vanuit uw profiel. Controleer ze en vul de rest aan.",
+        "EMPTY": "Uw profiel bevat nog geen herbruikbare gegevens.",
+        "GO_TO_PROFILE": "Mijn profiel vervolledigen",
+        "ERROR": "Uw profiel kon niet worden geladen.",
+        "RETRY": "Opnieuw proberen"
       }
     },
     "MANAGER": {
@@ -673,7 +683,37 @@
       "FINALISATION": "Afsluiting",
       "STEP_CONSUMERS_COUNT": "Verbruikers",
       "STEP_CONSUMER_NAMES": "Namen",
-      "STEP_ITERATIONS": "Iteraties"
+      "STEP_ITERATIONS": "Iteraties",
+      "PARTICIPANTS_SOURCE": {
+        "LEGEND": "Hoe wilt u de deelnemers bepalen?",
+        "MANUAL": "Handmatig",
+        "MANUAL_HINT": "Geef het aantal deelnemers op en benoem ze daarna.",
+        "OPERATION": "Vanuit een deeloperatie",
+        "OPERATION_HINT": "Kies een operatie en een datum: haar meters worden de deelnemers.",
+        "CHOOSE_METERS": "Meters kiezen",
+        "IMPORTED": "{{ count }} deelnemer(s) geïmporteerd",
+        "CHANGE": "Wijzigen"
+      }
+    },
+    "CREATE_MODE": {
+      "HEADER": "Hoe wilt u de sleutel aanmaken?",
+      "SUBTITLE": "Beide methoden leveren dezelfde sleutel op — kies wat u het beste past.",
+      "FULL": {
+        "TITLE": "Volledige aanmaak",
+        "DESCRIPTION": "De volledige tabel op één pagina: iteraties, deelnemers en percentages. Ideaal als u al weet wat u wilt invoeren.",
+        "ACTION": "Editor openen"
+      },
+      "STEP": {
+        "TITLE": "Stap-voor-stap aanmaak",
+        "DESCRIPTION": "Een wizard die u begeleidt: deelnemers, iteraties en daarna afronding. U controleert de volledige tabel voor het opslaan.",
+        "ACTION": "Wizard starten"
+      }
+    },
+    "IMPORT_FROM_SHARING_OPERATION": {
+      "BUTTON_LABEL": "Importeren uit een operatie",
+      "HEADER": "De meters van een deeloperatie importeren",
+      "IMPORTED": "{{ added }} deelnemer(s) geïmporteerd",
+      "IMPORTED_WITH_SKIPPED": "{{ added }} deelnemer(s) geïmporteerd, {{ skipped }} al aanwezig"
     },
     "TABLE": {
       "COLUMNS": {
@@ -708,7 +748,6 @@
       "SUBTITLE": "Configureer hoe energie wordt verdeeld tussen verbruikers",
       "ERASE_FILTERS_BUTTON_LABEL": "Filters wissen",
       "ADD_BUTTON_LABEL": "Toevoegen",
-      "ADD_STANDARD_KEY_BUTTON_LABEL": "Standaardsleutel toevoegen",
       "NAME_LABEL": "Naam",
       "DESCRIPTION_LABEL": "Beschrijving",
       "PAGINATED_TEMPLATE_LIST": "Pagina {{ page }} van {{ total_pages }} ({{ total }} sleutels)",
@@ -1353,7 +1392,9 @@
       "DESCRIPTION_LABEL": "Beschrijving",
       "NO_ALLOCATION_KEYS_FOUND_LABEL": "Geen sleutel gevonden",
       "ADD_BUTTON_LABEL": "Toevoegen",
-      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} sleutels)"
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Pagina {{ page }} van {{ total_pages }} ({{ total }} sleutels)",
+      "CREATE_KEY_BUTTON_LABEL": "Een sleutel aanmaken",
+      "CREATE_KEY_BUTTON_TOOLTIP": "Maak een nieuwe sleutel op basis van de meters van de operatie op een bepaalde datum"
     },
     "ADD_METER": {
       "CLEAR_FILTER_BUTTON_LABEL": "Filters wissen",
@@ -1423,7 +1464,8 @@
         "APPROVE_KEY": "Goedkeuren",
         "REJECT_KEY": "Afwijzen",
         "APPROVE_KEY_DATE_LABEL": "Startdatum voor de goedgekeurde sleutel",
-        "APPROVE_KEY_NO_DATE_ERROR": "Selecteer een startdatum voordat u de sleutel goedkeurt."
+        "APPROVE_KEY_NO_DATE_ERROR": "Selecteer een startdatum voordat u de sleutel goedkeurt.",
+        "SELECT_METERS_NEW_KEY_HEADER": "Meters op te nemen in de nieuwe sleutel"
       },
       "METER": {
         "HEADERS": {
@@ -1493,6 +1535,7 @@
         "STATUS_LABEL": "Status",
         "APPROVED_LABEL": "Goedgekeurd",
         "DENIED_LABEL": "Geweigerd",
+        "PENDING_LABEL": "In afwachting van goedkeuring",
         "NO_HISTORY_KEY_FOUND_LABEL": "Geen sleutelgeschiedenis gevonden",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Geen sleutelgeschiedenis beschikbaar"
       },
@@ -1521,23 +1564,6 @@
       "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Deeloperatie succesvol toegevoegd",
       "SELECT_A_TYPE_PLACEHOLDER": "Selecteer een type"
     },
-    "SELECT_METER_NEW_KEY": {
-      "NOW": "Nu",
-      "FUTURE": "Toekomstig",
-      "METERS_SELECTED": "{{ count }} meter{{ count > 1 ? 's' : '' }} geselecteerd",
-      "CLEAR_ALL": "Alles wissen",
-      "SELECT_ALL_NOW": "Alle huidige meters selecteren",
-      "SELECT_ALL_FUTURE": "Alle toekomstige meters selecteren",
-      "CLEAN_FILTERS": "Filters wissen",
-      "TABLE": {
-        "ADDRESS": "Adres",
-        "EAN": "EAN",
-        "METER_NUMBER": "Meternummer",
-        "STATUS": "Status",
-        "HOLDER": "Houder",
-        "NO_METERS_FOUND": "Geen meter gevonden"
-      }
-    },
     "ERRORS": {
       "GET_SHARING_OPERATION_PARTIAL_LIST": "Fout bij het ophalen van de gedeeltelijke deellijst",
       "GET_FULL_SHARING_OPERATION": "Fout bij het ophalen van de volledige deelgegevens",
@@ -1551,6 +1577,30 @@
       "GET_METER_CONSUMPTION": "Fout bij het ophalen van het meterverbruik",
       "DOWNLOAD_METER_CONSUMPTION": "Fout bij het downloaden van het meterverbruik",
       "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Fout bij het downloaden van het verbruik van de gedeelde meters"
+    }
+  },
+  "IMPORT_SHARING_OPERATION_METERS": {
+    "OPERATION_LABEL": "Deeloperatie",
+    "OPERATION_PLACEHOLDER": "Kies een operatie",
+    "DATE_LABEL": "Op datum",
+    "HINT": "De meters die op deze datum in de operatie zijn geregistreerd, staan hieronder. Verbruikers zijn standaard aangevinkt, injectiepunten niet.",
+    "SELECT_ALL": "Alles selecteren",
+    "CLEAN_FILTERS": "Filters wissen",
+    "METERS_SELECTED": "{{ count }} meter(s) geselecteerd",
+    "CLEAR_ALL": "Alles wissen",
+    "CONFIRM": "Importeren ({{ count }})",
+    "NO_METERS_FOUND": "Geen meter in de operatie op deze datum",
+    "ROLE": {
+      "CONSUMER": "Verbruiker",
+      "INJECTION": "Injectie"
+    },
+    "TABLE": {
+      "ADDRESS": "Adres",
+      "EAN": "EAN",
+      "METER_NUMBER": "Meternummer",
+      "ROLE": "Rol",
+      "STATUS": "Status",
+      "HOLDER": "Houder"
     }
   },
   "FORM_ERROR": {
@@ -2696,6 +2746,78 @@
       "10": "oktober",
       "11": "november",
       "12": "december"
+    }
+  },
+  "CRM_DATA_SOURCE": {
+    "SOURCE_LEGEND": "Waar komen de verbruiksgegevens vandaan?",
+    "SOURCE_FILE": "Een bestand importeren",
+    "SOURCE_FILE_HINT": "Het CSV- of Excel-bestand van uw netbeheerder.",
+    "SOURCE_CRM": "De reeds opgeslagen gegevens gebruiken",
+    "SOURCE_CRM_HINT": "De meetgegevens die al in OptimCE staan, voor de periode die u kiest.",
+    "SOURCE_CRM_SIM_HINT": "De meetgegevens die al in OptimCE staan. De deelnemers van de sleutel moeten overeenkomen met de EAN-codes van de meters.",
+    "OPERATION_LABEL": "Deeloperatie",
+    "OPERATION_PLACEHOLDER": "Kies een deeloperatie",
+    "PERIOD_START_LABEL": "Van",
+    "PERIOD_END_LABEL": "Tot",
+    "PERIOD_HELP": "Beide datums zijn inbegrepen. We gebruiken de brutometingen (vóór deling) van alle meters van de operatie.",
+    "PERIOD_HELP_SIM": "Beide datums zijn inbegrepen. We gebruiken de brutometingen (vóór deling) van de meters die overeenkomen met de deelnemers van de sleutel.",
+    "PREVIEW": {
+      "FAILED": "De gegevens konden nu niet worden gecontroleerd. Probeer het zo dadelijk opnieuw.",
+      "SUMMARY": "{{meters}} meter(s) · {{readings}} meetwaarde(n)",
+      "PERIOD_COVERED": "Gegevens beschikbaar van {{from}} tot {{to}}",
+      "TOTAL_CONSUMPTION": "Totaal verbruik",
+      "TOTAL_INJECTION": "Totale injectie",
+      "PARTICIPANTS_MATCHED": "{{count}} deelnemer(s) van de sleutel komen overeen met een meter",
+      "PARTICIPANTS_UNMATCHED": "{{count}} deelnemer(s) van de sleutel komen met geen enkele meter overeen:",
+      "PARTICIPANTS_UNMATCHED_HINT": "De deelnemers van een sleutel moeten de EAN-code van de meter dragen. Corrigeer de sleutel, of kies een andere deeloperatie of periode.",
+      "INCOMPLETE_TITLE": "{{count}} meter(s) hebben geen meetwaarden voor een deel van de periode:",
+      "INCOMPLETE_METER": "{{ean}} — {{missing}} van de {{expected}} meetwaarden ontbreken",
+      "INCOMPLETE_HINT": "Ontbrekende meetwaarden tellen als nulverbruik. De berekening kan doorgaan, maar het resultaat is voor die meters minder representatief."
+    }
+  },
+  "MAP": {
+    "MAP_VIEW_LABEL": "Kaart",
+    "LIST_VIEW_LABEL": "Lijst",
+    "VIEW_SWITCH_ARIA": "Wisselen tussen lijst- en kaartweergave",
+    "REGION_ARIA": "Interactieve kaart",
+    "LOADING": "De kaart wordt geladen…",
+    "ZOOM_IN": "Inzoomen",
+    "ZOOM_OUT": "Uitzoomen",
+    "RESET_VIEW": "Opnieuw centreren",
+    "RETRY": "Opnieuw proberen",
+    "UNAVAILABLE_TITLE": "Kaart niet beschikbaar",
+    "UNAVAILABLE_WEBGL": "Uw browser ondersteunt geen WebGL 2, dat de kaart nodig heeft. De lijstweergave blijft beschikbaar.",
+    "UNAVAILABLE_LOAD": "De kaart kon niet worden geladen. Controleer uw verbinding en probeer het opnieuw.",
+    "EMPTY_TITLE": "Niets te tonen op de kaart",
+    "EMPTY_METERS": "Geen enkele meter die aan deze filters voldoet heeft al geografische coördinaten.",
+    "EMPTY_COMMUNITIES": "Geen enkele publieke gemeenschap dekt een lokaliseerbare gemeente.",
+    "PARTIAL_COORDINATES": "{{ plotted }} van {{ total }} meters weergegeven: {{ missing }} hebben nog geen coördinaten.",
+    "CAPPED": "Alleen de eerste {{ limit }} resultaten worden getoond. Verfijn uw filters om alles te zien.",
+    "LEGEND": {
+      "TITLE": "Legende",
+      "PRECISION_ADDRESS": "Exacte positie",
+      "PRECISION_MUNICIPALITY": "Bij benadering (centrum van de gemeente)",
+      "CLUSTER": "Groep markeringen — klik om uit te vouwen"
+    },
+    "POPUP": {
+      "TITLE_POINTS": "Op deze locatie",
+      "TITLE_METERS": "Meters op dit adres",
+      "TITLE_ZONES": "Gemeenschappen in deze gemeente",
+      "COUNT": "{{ count }} resulta(a)t(en)",
+      "CLOSE": "Sluiten",
+      "PREVIOUS": "Vorige",
+      "NEXT": "Volgende",
+      "PAGE": "{{ page }} / {{ total }}",
+      "OPEN_DETAIL": "Details openen",
+      "APPROXIMATE_NOTICE": "Positie bij benadering: centrum van de gemeente.",
+      "HOLDER": "Houder",
+      "NO_HOLDER": "Geen houder",
+      "OPERATION": "Deelverrichting",
+      "NO_OPERATION": "Geen verrichting",
+      "COMMUNITY": "Gemeenschap",
+      "MUNICIPALITIES": "Gemeenten",
+      "REGULATOR": "Regulator",
+      "OPERATIONS_COUNT": "{{ count }} publieke verrichting(en)"
     }
   }
 }

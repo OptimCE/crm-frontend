@@ -3,13 +3,16 @@ import { Observable, tap } from 'rxjs';
 
 import { environments } from '../../../environments/environments';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
+import { CrmDataPreviewQuery } from '../dtos/crm_data_source.dtos';
 import {
   AlgorithmMetadata,
   AllocationKeyDetailDTO,
   AllocationKeyPartialDTO,
   AllocationKeyQuery,
+  CreateGenerationFromCrmPayload,
   CreateGenerationPayload,
   CreateGenerationResponse,
+  CrmGenerationPreviewDTO,
   GenerationPartialDTO,
   GenerationQuery,
   SaveKeyPayload,
@@ -84,6 +87,42 @@ export class AllocationGenerationService extends ServiceBase {
 
     return this.http
       .post<ApiResponse<CreateGenerationResponse>>(`${this.apiAddress}/`, fd)
+      .pipe(tap(() => this.cache.invalidate(CACHE_PREFIX)));
+  }
+
+  /**
+   * What the CRM holds for a sharing operation over a period.
+   *
+   * Deliberately NOT routed through `cachedGet`: a cached pre-flight is a
+   * misleading pre-flight — an import can land between two looks, and this is
+   * the screen the manager trusts before committing to a run.
+   */
+  previewCrmData(query: CrmDataPreviewQuery): Observable<ApiResponse<CrmGenerationPreviewDTO>> {
+    return this.http.get<ApiResponse<CrmGenerationPreviewDTO>>(
+      `${this.apiAddress}/crm-data-preview`,
+      {
+        params: {
+          id_sharing_operation: query.id_sharing_operation,
+          period_start: query.period_start,
+          period_end: query.period_end,
+        },
+      },
+    );
+  }
+
+  /** Start a generation from the meter readings already in OptimCE (JSON, no upload). */
+  startGenerationFromCrm(
+    payload: CreateGenerationFromCrmPayload,
+  ): Observable<ApiResponse<CreateGenerationResponse>> {
+    return this.http
+      .post<ApiResponse<CreateGenerationResponse>>(`${this.apiAddress}/from-crm`, {
+        name: payload.name,
+        algorithm_name: payload.algorithmName,
+        inputs: payload.inputs,
+        id_sharing_operation: payload.idSharingOperation,
+        period_start: payload.periodStart,
+        period_end: payload.periodEnd,
+      })
       .pipe(tap(() => this.cache.invalidate(CACHE_PREFIX)));
   }
 

@@ -18,10 +18,13 @@ import {
   CreateGenerationPayload,
   GenerationPartialDTO,
   GenerationQuery,
+  CrmGenerationPreviewDTO,
   GenerationStatus,
   JsonSchemaObject,
 } from '../../../../../../shared/dtos/allocation_generation.dtos';
+import { SharingOperationPartialDTO } from '../../../../../../shared/dtos/sharing_operation.dtos';
 import { AllocationGenerationService } from '../../../../../../shared/services/allocation_generation.service';
+import { SharingOperationService } from '../../../../../../shared/services/sharing_operation.service';
 import { ErrorMessageHandler } from '../../../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../../../shared/services-ui/snackbar.notifcation.service';
 import { AllocationGenerationHub } from './allocation-generation-hub';
@@ -68,6 +71,29 @@ function buildKeyDetail(id: number): AllocationKeyDetailDTO {
   return { ...buildKey(id), iterations: [] };
 }
 
+function buildOperation(
+  overrides: Partial<SharingOperationPartialDTO> = {},
+): SharingOperationPartialDTO {
+  return { id: 7, name: 'Public Solar Sharing', type: 1, municipalities: [], ...overrides };
+}
+
+function previewResponse(
+  overrides: Partial<CrmGenerationPreviewDTO> = {},
+): ApiResponse<CrmGenerationPreviewDTO> {
+  return new ApiResponse({
+    can_generate: true,
+    meter_count: 2,
+    reading_count: 2880,
+    first_timestamp: '2025-02-01T00:00:00Z',
+    last_timestamp: '2025-02-28T23:45:00Z',
+    total_consumption_kwh: 1234.5,
+    total_injection_kwh: 987.6,
+    incomplete_meters: [],
+    blockers: [],
+    ...overrides,
+  });
+}
+
 function makeFile(name: string, size: number): File {
   const blob = new Blob([new Uint8Array(Math.min(size, 8))], { type: 'text/csv' });
   const file = new File([blob], name, { type: 'text/csv' });
@@ -105,11 +131,14 @@ describe('AllocationGenerationHub', () => {
     getGenerationKeys: ReturnType<typeof vi.fn>;
     getKey: ReturnType<typeof vi.fn>;
     startGeneration: ReturnType<typeof vi.fn>;
+    startGenerationFromCrm: ReturnType<typeof vi.fn>;
+    previewCrmData: ReturnType<typeof vi.fn>;
     saveKey: ReturnType<typeof vi.fn>;
     deleteKey: ReturnType<typeof vi.fn>;
     deleteGeneration: ReturnType<typeof vi.fn>;
     invalidate: ReturnType<typeof vi.fn>;
   };
+  let sharingOperationServiceSpy: { getSharingOperationList: ReturnType<typeof vi.fn> };
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
   let confirmationSpy: { confirm: ReturnType<typeof vi.fn> };
@@ -146,10 +175,21 @@ describe('AllocationGenerationHub', () => {
       startGeneration: vi
         .fn()
         .mockReturnValue(of(new ApiResponse({ id: 99, status: GenerationStatus.PENDING }))),
+      startGenerationFromCrm: vi
+        .fn()
+        .mockReturnValue(of(new ApiResponse({ id: 100, status: GenerationStatus.PENDING }))),
+      previewCrmData: vi.fn().mockReturnValue(of(previewResponse())),
       saveKey: vi.fn().mockReturnValue(of(new ApiResponse('ok'))),
       deleteKey: vi.fn().mockReturnValue(of(new ApiResponse('ok'))),
       deleteGeneration: vi.fn().mockReturnValue(of(new ApiResponse('ok'))),
       invalidate: vi.fn(),
+    };
+    sharingOperationServiceSpy = {
+      getSharingOperationList: vi
+        .fn()
+        .mockReturnValue(
+          of(new ApiResponsePaginated([buildOperation()], new Pagination(1, 200, 1, 1))),
+        ),
     };
     snackbarSpy = { openSnackBar: vi.fn() };
     errorHandlerSpy = { handleError: vi.fn() };
@@ -166,6 +206,7 @@ describe('AllocationGenerationHub', () => {
       imports: [AllocationGenerationHub],
       providers: [
         { provide: AllocationGenerationService, useValue: serviceSpy },
+        { provide: SharingOperationService, useValue: sharingOperationServiceSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
         { provide: TranslateService, useValue: translateSpy },
@@ -685,6 +726,178 @@ describe('AllocationGenerationHub', () => {
       expect(state.expandedKeyId).toBe(42);
       expect(state.loadingId).toBeNull();
       expect(state.detailById).toBeInstanceOf(Map);
+    });
+  });
+
+  // ── CRM data source ────────────────────────────────────────────────
+  //
+  // The source toggle moves required-ness between two sets of controls. The
+  // failure mode worth pinning is an invisible required control silently
+  // blocking submit, so most of these assert on form validity rather than on
+  // what the (blanked) template renders.
+
+  describe('CRM data source', () => {
+    /** Switch to the CRM source and fill everything it needs. */
+    function selectCrmSource(): void {
+      component.onSourceChange('crm');
+      component.startForm.patchValue({
+        algorithmName: 'brute_force',
+        generationName: 'February run',
+        idSharingOperation: 7,
+        periodStart: new Date(2025, 1, 1),
+        periodEnd: new Date(2025, 1, 28),
+      });
+    }
+
+    it('should default to the file source', async () => {
+      await createComponent();
+      expect(component.usingCrmSource()).toBe(false);
+      expect(component.startForm.controls.inputSource.value).toBe('file');
+    });
+
+    it('should default the period to the last complete month', async () => {
+      await createComponent();
+      const start = component.startForm.controls.periodStart.value;
+      const end = component.startForm.controls.periodEnd.value;
+      if (!start || !end) throw new Error('the default period was not applied');
+      // Whatever "today" is, the default window must sit entirely in the past
+      // and start on the 1st — the current month is partial by definition.
+      expect(start.getDate()).toBe(1);
+      expect(end.getTime()).toBeLessThan(new Date().getTime());
+    });
+
+    it('should stop requiring the file once the CRM source is chosen', async () => {
+      await createComponent();
+      selectCrmSource();
+      expect(component.startForm.controls.file.valid).toBe(true);
+      expect(component.startForm.controls.injectionName.valid).toBe(true);
+      expect(component.startForm.valid).toBe(true);
+    });
+
+    it('should require the operation and period on the CRM source', async () => {
+      await createComponent();
+      component.onSourceChange('crm');
+      component.startForm.patchValue({
+        algorithmName: 'brute_force',
+        generationName: 'February run',
+        idSharingOperation: null,
+        periodStart: null,
+        periodEnd: null,
+      });
+      expect(component.startForm.valid).toBe(false);
+    });
+
+    it('should restore the file requirement when switching back', async () => {
+      // The reverse direction matters just as much: a leftover required on
+      // periodStart would block the file path with no visible error.
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('file');
+      expect(component.startForm.controls.file.valid).toBe(false);
+      component.startForm.patchValue({ injectionName: 'production' });
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 2048)));
+      expect(component.startForm.valid).toBe(true);
+    });
+
+    it('should load the sharing operations and auto-select a lone one', async () => {
+      await createComponent();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+      expect(sharingOperationServiceSpy.getSharingOperationList).toHaveBeenCalled();
+      expect(component.startForm.controls.idSharingOperation.value).toBe(7);
+    });
+
+    it('should map a clean preview into the view model', async () => {
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+      expect(component.crmPreview()?.ok).toBe(true);
+      expect(component.crmPreview()?.meterCount).toBe(2);
+      expect(component.crmReady()).toBe(true);
+    });
+
+    it('should expose gaps as warnings while staying submittable', async () => {
+      // "Warn but allow": an incomplete meter must not disable the button.
+      serviceSpy.previewCrmData.mockReturnValue(
+        of(
+          previewResponse({
+            incomplete_meters: [
+              { ean: '541448000000000001', readings: 2000, expected: 2880, missing: 880 },
+            ],
+          }),
+        ),
+      );
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+
+      expect(component.crmPreview()?.incompleteMeters.length).toBe(1);
+      expect(component.crmReady()).toBe(true);
+    });
+
+    it('should block submission when the period is rejected', async () => {
+      serviceSpy.previewCrmData.mockReturnValue(
+        of(
+          previewResponse({
+            can_generate: false,
+            blockers: [{ error_code: 2019, message: 'duplicates', detail: 'imported twice' }],
+          }),
+        ),
+      );
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+
+      expect(component.crmReady()).toBe(false);
+      component.submitGeneration();
+      expect(serviceSpy.startGenerationFromCrm).not.toHaveBeenCalled();
+    });
+
+    it('should send local dates, never UTC-shifted ones', async () => {
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+      component.submitGeneration();
+
+      expect(serviceSpy.startGenerationFromCrm).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'February run',
+          algorithmName: 'brute_force',
+          idSharingOperation: 7,
+          // 1 February local midnight must not become 31 January.
+          periodStart: '2025-02-01',
+          periodEnd: '2025-02-28',
+        }),
+      );
+      expect(serviceSpy.startGeneration).not.toHaveBeenCalled();
+    });
+
+    it('should surface a failed preview in the panel rather than as a toast', async () => {
+      serviceSpy.previewCrmData.mockReturnValue(throwError(() => new Error('offline')));
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+
+      expect(component.crmPreviewFailed()).toBe(true);
+      expect(component.crmPreview()).toBeNull();
+      expect(errorHandlerSpy.handleError).not.toHaveBeenCalled();
+    });
+
+    it('should clear the preview when switching back to the file source', async () => {
+      await createComponent();
+      selectCrmSource();
+      component.onSourceChange('crm');
+      await fixture.whenStable();
+      expect(component.crmPreview()).not.toBeNull();
+
+      component.onSourceChange('file');
+      expect(component.crmPreview()).toBeNull();
+      expect(component.crmPreviewFailed()).toBe(false);
     });
   });
 });

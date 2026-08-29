@@ -1,12 +1,10 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Toast } from 'primeng/toast';
-import { SplitButton } from 'primeng/splitbutton';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { KeyService } from '../../../../shared/services/key.service';
 import { Router, RouterLink } from '@angular/router';
-import { MenuItem } from 'primeng/api';
 import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Button } from 'primeng/button';
@@ -17,13 +15,17 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import {
+  KeyCreationMode,
+  KeyCreationModeDialog,
+} from '../../../../shared/components/key-creation-mode-dialog/key-creation-mode-dialog';
 
 @Component({
   selector: 'app-keys-list',
   standalone: true,
   imports: [
     Toast,
-    SplitButton,
     TranslatePipe,
     TableModule,
     Button,
@@ -37,6 +39,7 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
   ],
   templateUrl: './keys-list.html',
   styleUrl: './keys-list.css',
+  providers: [DialogService],
 })
 export class KeysList {
   private keyService = inject(KeyService);
@@ -44,6 +47,7 @@ export class KeysList {
   private errorHandler = inject(ErrorMessageHandler);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
+  private dialogService = inject(DialogService);
 
   readonly keysList = signal<KeyPartialDTO[]>([]);
   readonly loading = signal<boolean>(true);
@@ -62,20 +66,10 @@ export class KeysList {
     { label: 'KEY.LIST.DESCRIPTION_LABEL', value: 'description' },
   ];
 
-  optionsSplitButton: MenuItem[] = [
-    {
-      label: '',
-      command: (): void => {
-        this.addStepByStepKey();
-      },
-    },
-  ];
-
   lazy = true;
 
   constructor() {
     this.updatePaginationTranslation();
-    this.initializeTranslations();
   }
 
   loadKeys(): void {
@@ -137,15 +131,6 @@ export class KeysList {
     }
   }
 
-  initializeTranslations(): void {
-    this.translate
-      .get('KEY.LIST.ADD_STANDARD_KEY_BUTTON_LABEL')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((translatedText: string) => {
-        this.optionsSplitButton[0].label = translatedText;
-      });
-  }
-
   updatePaginationTranslation(): void {
     const p = this.paginated();
     this.translate
@@ -173,6 +158,28 @@ export class KeysList {
     this.searchField.set('name');
     this.filter.set({ page: 1, limit: 10 });
     this.loadKeys();
+  }
+
+  /**
+   * Both creation modes reach the same key — so ask which one instead of hiding the wizard in a
+   * dropdown whose visible half looked like it could not build a standard key.
+   */
+  openCreationMode(): void {
+    const ref = this.dialogService.open(KeyCreationModeDialog, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      width: '34rem',
+      styleClass: 'responsive-dialog',
+      header: this.translate.instant('KEY.CREATE_MODE.HEADER') as string,
+    });
+
+    ref?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((mode: KeyCreationMode | null) => {
+        if (mode === 'full') this.addKey();
+        else if (mode === 'step') this.addStepByStepKey();
+      });
   }
 
   addKey(): void {

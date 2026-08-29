@@ -17,10 +17,25 @@ import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { InvitationService } from '../../../../../../../../shared/services/invitation.service';
 import { MeService } from '../../../../../../../../shared/services/me.service';
+import { UserService } from '../../../../../../../../shared/services/user.service';
+import { UserDTO } from '../../../../../../../../shared/dtos/user.dtos';
+import { Router } from '@angular/router';
+import { Button } from 'primeng/button';
+import { buildProfilePrefill, countPatched, envelopeData } from './encode-new-member-prefill';
 
 interface EncodeNewMemberDialogData {
   invitationID: number;
 }
+
+/**
+ * What the prefill banner is currently saying.
+ *
+ * `armed` is the state that exists only because of the wizard's shape: the
+ * button sits above the stepper, so it is normally pressed on step 0 — before a
+ * member type is chosen, which means before the step-1 controls exist and before
+ * we know whether the address even applies. The profile is held until then.
+ */
+type PrefillState = 'idle' | 'loading' | 'armed' | 'applied' | 'empty' | 'error';
 
 interface EncodeMemberFormValue {
   id: string;
@@ -54,6 +69,7 @@ interface EncodeMemberAddressFormValue {
 @Component({
   selector: 'app-encode-new-member',
   imports: [
+    Button,
     NewMemberAddress,
     NewMemberBankingInfo,
     NewMemberInformations,
@@ -72,6 +88,8 @@ interface EncodeMemberAddressFormValue {
 export class EncodeNewMemberSelfComponent implements OnInit {
   private invitationService = inject(InvitationService);
   private meService = inject(MeService);
+  private userService = inject(UserService);
+  private router = inject(Router);
   private config = inject(DynamicDialogConfig);
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
@@ -82,6 +100,20 @@ export class EncodeNewMemberSelfComponent implements OnInit {
   ibanForm!: FormGroup;
   readonly gestionnaire = signal<boolean>(false);
   invitationID!: number;
+
+  readonly prefillState = signal<PrefillState>('idle');
+  readonly prefilledCount = signal<number>(0);
+  private readonly profile = signal<UserDTO | null>(null);
+  /**
+   * What this dialog wrote, as `group:control` to the value written.
+   *
+   * The value matters, not just the key: a member-type switch rebuilds the
+   * step-1 controls, and `id` and `name` exist for both types. Counting them
+   * by name alone would keep counting a control that came back empty.
+   */
+  private readonly prefilled = new Map<string, string>();
+  /** The address block is settled once; re-deciding would fight the user. */
+  private addressApplied = false;
 
   ngOnInit(): void {
     const data = this.config.data as EncodeNewMemberDialogData;
@@ -272,6 +304,137 @@ export class EncodeNewMemberSelfComponent implements OnInit {
         this.formData.removeControl('phone_manager');
       }
     }
+    // The control set just changed. `buildFormGroup()` ends here too, so this is
+    // the one place that has to re-apply the profile.
+    this.applyPrefill();
+  }
+
+  /**
+   * Fetch the signed-in user's profile and use it to fill the wizard.
+   *
+   * Opt-in: nothing is read or written until the user presses the button.
+   */
+  useMyProfile(): void {
+    if (this.prefillState() === 'loading') {
+      return;
+    }
+    this.prefillState.set('loading');
+    this.userService
+      .getUserInfo()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const user = envelopeData<UserDTO>(response);
+          if (!user) {
+            this.prefillState.set('error');
+            return;
+          }
+          this.profile.set(user);
+          this.applyPrefill();
+        },
+        error: () => {
+          this.prefillState.set('error');
+        },
+      });
+  }
+
+  /** Leave for the profile page so the user can fill in what is missing. */
+  goToProfile(): void {
+    this.ref.close(false);
+    void this.router.navigate(['/users']);
+  }
+
+  /**
+   * Copy whatever of the stored profile applies to the current member type.
+   *
+   * Safe to call repeatedly: it only ever writes into controls that are still
+   * empty, so it can never overwrite something the user typed, and re-running it
+   * after a type change simply fills the controls that were just created.
+   */
+  private applyPrefill(): void {
+    const user = this.profile();
+    if (!user) {
+      return;
+    }
+    const type = this.typeClient();
+    if (type === -1) {
+      this.prefillState.set('armed');
+      return;
+    }
+
+    const prefill = buildProfilePrefill(user, type, this.gestionnaire());
+
+    // Settle the address question once, the first time we see a type that has
+    // one. Re-deciding on every type change would put the checkbox back after
+    // the user had unticked it.
+    if (type === MemberType.INDIVIDUAL && !this.addressApplied) {
+      if (prefill.sameAddress) {
+        // The array shape is load-bearing: the checkbox is a non-binary
+        // `p-checkbox [value]="true"`, whose view ticks only when the model
+        // *contains* that value. A scalar `true` leaves the box looking
+        // unticked while the form says otherwise.
+        // Before patching: the toggle removes the billing controls, so the
+        // billing half of the patch is then skipped as non-existent.
+        this.addressForm.get('same_address')?.setValue([true]);
+        this.toggleSameAddress({} as CheckboxChangeEvent);
+      }
+      this.addressApplied = true;
+    }
+
+    this.patchEmpty(this.formData, 'info', prefill.informations);
+    this.patchEmpty(this.addressForm, 'address', prefill.address);
+    if (prefill.iban !== null) {
+      this.patchEmpty(this.ibanForm, 'iban', { iban: prefill.iban });
+    }
+
+    this.prefilledCount.set(this.countLivePrefilled());
+    // Keyed on what the profile *offered*, not on what was written: a user who
+    // had already typed everything gets nothing written, and telling them their
+    // profile is empty would be wrong.
+    this.prefillState.set(countPatched(prefill) > 0 ? 'applied' : 'empty');
+  }
+
+  /** Write `values` into `group`, skipping every control that already has one. */
+  private patchEmpty(group: FormGroup, groupId: string, values: Record<string, string>): void {
+    for (const [name, value] of Object.entries(values)) {
+      const control = group.get(name);
+      if (!control) {
+        continue;
+      }
+      const current: unknown = control.value;
+      if (typeof current === 'string' && current.trim() !== '') {
+        continue;
+      }
+      control.setValue(value);
+      // Surfaces the field error straight away when the profile holds something
+      // the member form rejects — a malformed national number, say.
+      control.markAsDirty();
+      this.prefilled.set(`${groupId}:${name}`, value);
+    }
+  }
+
+  /**
+   * How many controls still hold the value this dialog put there.
+   *
+   * Recomputed rather than accumulated: switching member type destroys and
+   * rebuilds the step-1 controls, so a running total would drift. Comparing the
+   * value rather than the mere existence of the control is what stops a control
+   * that came back empty — or that the user has since edited — from counting.
+   */
+  private countLivePrefilled(): number {
+    const groups: Record<string, FormGroup> = {
+      info: this.formData,
+      address: this.addressForm,
+      iban: this.ibanForm,
+    };
+    let total = 0;
+    for (const [key, written] of this.prefilled) {
+      const [groupId, name] = key.split(':');
+      if (groups[groupId]?.get(name)?.value === written) {
+        total++;
+      }
+    }
+    return total;
   }
 
   gestionnaireChange($event: CheckboxChangeEvent): void {

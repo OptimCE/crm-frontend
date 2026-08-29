@@ -132,3 +132,71 @@
   border-top: 1px dashed var(--p-surface-200, #eeeeee);
   padding-top: 1.25rem;
 }
+
+/* ---- Input source picker --------------------------------------------------
+   Two cards rather than a bare radio pair: the choice between "upload a file"
+   and "use the data already here" is the first decision on the page, and each
+   option needs a line of explanation for a manager who has only ever uploaded.
+   No p-selectButton exists anywhere in this app, so this follows the
+   radio-plus-label-card pattern used by the member-type step. */
+
+.source-picker {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.source-picker__options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .source-picker__options {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.source-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--p-surface-300, #d4d4d8);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.source-option--active {
+  border-color: var(--p-primary-500, #43a047);
+  background: var(--p-primary-50, #f1f8f2);
+}
+
+.source-option label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  cursor: pointer;
+}
+
+.source-option__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--p-surface-800, #27272a);
+}
+
+.source-option__hint {
+  font-size: 0.75rem;
+  color: var(--p-surface-500, #71717a);
+}
+
+.crm-source {
+  border: 1px solid var(--p-surface-200, #e4e4e7);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background: var(--p-surface-0, #ffffff);
+}

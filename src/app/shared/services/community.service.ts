@@ -9,6 +9,8 @@ import {
   MyCommunityDTO,
   PatchRoleUserDTO,
   PublicCommunityDTO,
+  PublicCommunityMapDTO,
+  PublicCommunityMapQuery,
   RegulatorDTO,
   UpdateCommunityDTO,
   UploadLogoResponse,
@@ -48,6 +50,23 @@ export class CommunityService extends ServiceBase {
     return this.cachedGet<ApiResponsePaginated<PublicCommunityDTO[] | string>>(
       `communities-public:${JSON.stringify(query)}`,
       this.apiAddress,
+      query,
+    );
+  }
+
+  /**
+   * Every public community as a map zone, with the NIS codes it covers.
+   *
+   * Unpaginated, unlike getPublicCommunities — the map draws the whole set, and
+   * this endpoint deliberately skips the per-row logo presign that makes the
+   * list version expensive.
+   */
+  getPublicCommunityMap(
+    query: PublicCommunityMapQuery,
+  ): Observable<ApiResponse<PublicCommunityMapDTO[] | string>> {
+    return this.cachedGet<ApiResponse<PublicCommunityMapDTO[] | string>>(
+      `communities-public-map:${JSON.stringify(query)}`,
+      this.apiAddress + '/map',
       query,
     );
   }

@@ -1,5 +1,5 @@
 <div class="container mx-auto my-auto">
-  <app-back-arrow url="/keys" [text]="'KEY.VIEW.BACK_TO_LIST' | translate"></app-back-arrow>
+  <app-back-arrow [url]="backUrl()" [text]="'KEY.VIEW.BACK_TO_LIST' | translate"></app-back-arrow>
 
   <div class="space-y-4 mt-3">
     <!-- Hero Section -->
@@ -41,19 +41,106 @@
               </div>
 
               <form [formGroup]="formFirstStep" class="form-section">
-                <div class="flex flex-col gap-1 max-w-md">
-                  <label for="nb_consumers" class="field-label">
-                    {{ 'KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL' | translate }} *
-                  </label>
-                  <p-inputNumber
-                    class="w-full"
-                    formControlName="nb_consumers"
-                    [min]="1"
-                    inputId="nb_consumers"
-                    data-testid="key-creation__input--nb-consumers"
-                  ></p-inputNumber>
-                  <app-error-handler controlName="nb_consumers"></app-error-handler>
-                </div>
+                <!-- Where the participant list comes from -->
+                <fieldset class="source-picker mb-4">
+                  <legend class="field-label mb-2 block">
+                    {{ 'KEY.CREATE.PARTICIPANTS_SOURCE.LEGEND' | translate }}
+                  </legend>
+
+                  <div class="source-picker__options">
+                    <div
+                      class="source-option"
+                      [class.source-option--active]="participantSource() === 'manual'"
+                    >
+                      <p-radioButton
+                        inputId="participants-source-manual"
+                        value="manual"
+                        formControlName="inputSource"
+                        (onClick)="onParticipantSourceChange('manual')"
+                        data-testid="key-creation__radio--source-manual"
+                      />
+                      <label for="participants-source-manual">
+                        <span class="source-option__title">
+                          {{ 'KEY.CREATE.PARTICIPANTS_SOURCE.MANUAL' | translate }}
+                        </span>
+                        <span class="source-option__hint">
+                          {{ 'KEY.CREATE.PARTICIPANTS_SOURCE.MANUAL_HINT' | translate }}
+                        </span>
+                      </label>
+                    </div>
+
+                    <div
+                      class="source-option"
+                      [class.source-option--active]="participantSource() === 'operation'"
+                    >
+                      <p-radioButton
+                        inputId="participants-source-operation"
+                        value="operation"
+                        formControlName="inputSource"
+                        (onClick)="onParticipantSourceChange('operation')"
+                        data-testid="key-creation__radio--source-operation"
+                      />
+                      <label for="participants-source-operation">
+                        <span class="source-option__title">
+                          {{ 'KEY.CREATE.PARTICIPANTS_SOURCE.OPERATION' | translate }}
+                        </span>
+                        <span class="source-option__hint">
+                          {{ 'KEY.CREATE.PARTICIPANTS_SOURCE.OPERATION_HINT' | translate }}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                @if (participantSource() === 'manual') {
+                  <div class="flex flex-col gap-1 max-w-md">
+                    <label for="nb_consumers" class="field-label">
+                      {{ 'KEY.CREATE.HOW_MANY_CONSUMERS_IN_YOUR_KEY_LABEL' | translate }} *
+                    </label>
+                    <p-inputNumber
+                      class="w-full"
+                      formControlName="nb_consumers"
+                      [min]="1"
+                      inputId="nb_consumers"
+                      data-testid="key-creation__input--nb-consumers"
+                    ></p-inputNumber>
+                    <app-error-handler controlName="nb_consumers"></app-error-handler>
+                  </div>
+                } @else {
+                  <!-- The import writes nb_consumers, so the count stays the single source of truth. -->
+                  @if (participantNames().length === 0) {
+                    <p-button
+                      [outlined]="true"
+                      icon="pi pi-download"
+                      severity="secondary"
+                      label="{{ 'KEY.CREATE.PARTICIPANTS_SOURCE.CHOOSE_METERS' | translate }}"
+                      (click)="importFromSharingOperation()"
+                      data-testid="key-creation__btn--choose-meters"
+                    ></p-button>
+                  } @else {
+                    <div
+                      class="flex flex-wrap items-center gap-3 rounded-lg border border-primary-200 bg-primary-50 p-3"
+                      data-testid="key-creation__summary--imported"
+                    >
+                      <i class="pi pi-users text-primary-600"></i>
+                      <span class="text-sm text-surface-800 flex-1">
+                        {{
+                          'KEY.CREATE.PARTICIPANTS_SOURCE.IMPORTED'
+                            | translate: { count: participantNames().length }
+                        }}
+                      </span>
+                      <p-button
+                        [text]="true"
+                        size="small"
+                        icon="pi pi-pencil"
+                        severity="primary"
+                        label="{{ 'KEY.CREATE.PARTICIPANTS_SOURCE.CHANGE' | translate }}"
+                        (click)="importFromSharingOperation()"
+                        data-testid="key-creation__btn--change-meters"
+                      ></p-button>
+                    </div>
+                  }
+                }
               </form>
             </p-card>
 

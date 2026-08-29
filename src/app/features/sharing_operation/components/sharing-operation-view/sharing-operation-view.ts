@@ -36,16 +36,25 @@ import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { SharingOperationAddMeter } from '../sharing-operation-add-meter/sharing-operation-add-meter';
-import { SharingOperationAddKey } from '../sharing-operation-add-key/sharing-operation-add-key';
+import {
+  SharingOperationAddKey,
+  SharingOperationAddKeyResult,
+} from '../sharing-operation-add-key/sharing-operation-add-key';
 import { SharingKeyStatus } from '../../../../shared/types/sharing_operation.types';
 import { ERROR_TYPE, VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { SharingOperationTypePipe } from '../../../../shared/pipes/sharing-operation-type/sharing-operation-type-pipe';
 import { KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { MetersMap } from '../../../meter/components/meters-list/meters-map/meters-map';
+import type { MeterMapQuery } from '../../../../shared/dtos/meter.dtos';
 import { Tooltip } from 'primeng/tooltip';
 import { SharingOperationMetersList } from './sharing-operation-meters-list/sharing-operation-meters-list';
 import { SharingOperationMeterEventService } from './sharing-operation.meter.subjet';
-import { SelectMeterNewKeyDialog } from './dialogs/select-meter-new-key-dialog/select-meter-new-key-dialog';
+import { ImportSharingOperationMeters } from '../../../../shared/components/import-sharing-operation-meters/import-sharing-operation-meters';
+import {
+  KeyCreationMode,
+  KeyCreationModeDialog,
+} from '../../../../shared/components/key-creation-mode-dialog/key-creation-mode-dialog';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { SharingOperationConsumptionChart } from './sharing-operation-consumption-chart/sharing-operation-consumption-chart';
 import { SharingOperationCreationUpdate } from '../sharing-operation-creation-update/sharing-operation-creation-update';
@@ -78,6 +87,7 @@ import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-munic
     SharingOperationTypePipe,
     Button,
     Tabs,
+    MetersMap,
     TabList,
     Tab,
     SharingOperationMetersList,
@@ -110,6 +120,17 @@ export class SharingOperationView implements OnInit {
   readonly hasError = signal<boolean>(false);
   readonly togglingVisibility = signal<boolean>(false);
   readonly id = signal<number>(0);
+
+  /**
+   * Which meters tab is open. Tracked explicitly so the map tab can be
+   * `@if`-gated: p-tabpanel keeps `hidden` on a deactivated panel and latches
+   * `hasBeenRendered`, so a map left inside one would sit at 0x0 with a live
+   * WebGL context for the rest of the page's life.
+   */
+  readonly meterTab = signal<number>(1);
+
+  /** The operation's current perimeter, as map filters. */
+  readonly mapQuery = computed<MeterMapQuery>(() => ({ sharing_operation_id: this.id() }));
   readonly sharingOperation = signal<SharingOperationDTO | undefined>(undefined);
   readonly sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
   readonly loadingSharingOperationKeys = signal<boolean>(true);
@@ -146,7 +167,28 @@ export class SharingOperationView implements OnInit {
       this.setupStatusCategory();
       this.updatePaginationTranslation();
       this.loadAllMeters();
+      this.reopenAddKeyAfterCreation();
     }
+  }
+
+  /**
+   * Coming back from key creation (`?add_key=1&key_name=…`), reopen the add-key dialog filtered on
+   * the key that was just created, so it can be attached without hunting for it in the list.
+   *
+   * The params are stripped afterwards so refreshing the page does not reopen the dialog.
+   */
+  private reopenAddKeyAfterCreation(): void {
+    const params = this.route.snapshot.queryParamMap;
+    if (params.get('add_key') !== '1') return;
+
+    const keyName = params.get('key_name') ?? undefined;
+    void this.routing
+      .navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        replaceUrl: true,
+      })
+      .then(() => this.editKey(keyName));
   }
 
   updatePaginationTranslation(): void {
@@ -374,7 +416,13 @@ export class SharingOperationView implements OnInit {
     }
   }
 
-  editKey(): void {
+  /**
+   * Opens the "pick a key to attach" dialog.
+   *
+   * @param prefillName seeds the dialog's name filter — used when coming back from key creation,
+   * so the key that was just created is the one listed.
+   */
+  editKey(prefillName?: string): void {
     this.ref = this.dialogService.open(SharingOperationAddKey, {
       modal: true,
       closable: true,
@@ -382,20 +430,27 @@ export class SharingOperationView implements OnInit {
       header: this.translate.instant('SHARING_OPERATION.VIEW.KEY.MODIFY_KEY_HEADER') as string,
       data: {
         id: this.id(),
+        prefillName,
       },
     });
     if (this.ref) {
-      this.ref.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-        if (response) {
-          this.snackbar.openSnackBar(
-            this.translate.instant(
-              'SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL',
-            ) as string,
-            VALIDATION_TYPE,
-          );
-          this.loadOperationSharing();
-        }
-      });
+      this.ref.onClose
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((response: SharingOperationAddKeyResult) => {
+          // The dialog closes with `true` when a key was attached, and with a `create` action when
+          // the user asked for a brand-new key instead. Anything else is a plain dismissal.
+          if (response === true) {
+            this.snackbar.openSnackBar(
+              this.translate.instant(
+                'SHARING_OPERATION.VIEW.KEY.KEY_MODIFIED_SUCCESSFULLY_LABEL',
+              ) as string,
+              VALIDATION_TYPE,
+            );
+            this.loadOperationSharing();
+          } else if (response && typeof response === 'object' && response.action === 'create') {
+            this.newKey();
+          }
+        });
     }
   }
 
@@ -475,10 +530,38 @@ export class SharingOperationView implements OnInit {
     });
   }
 
+  /**
+   * Asks how the key should be built before asking which meters go in it — the same two modes the
+   * keys list offers, so this page is not silently a shortcut to the full creator.
+   */
   newKey(): void {
-    this.ref = this.dialogService.open(SelectMeterNewKeyDialog, {
-      header: 'Select meters for new key',
-      width: '800px',
+    this.ref = this.dialogService.open(KeyCreationModeDialog, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      width: '34rem',
+      styleClass: 'responsive-dialog',
+      header: this.translate.instant('KEY.CREATE_MODE.HEADER') as string,
+    });
+
+    this.ref?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((mode: KeyCreationMode | null) => {
+        if (!mode) return;
+        this.pickMetersForNewKey(mode);
+      });
+  }
+
+  /** Picks the operation's meters, then opens the editor the user chose, pre-filled with them. */
+  private pickMetersForNewKey(mode: KeyCreationMode): void {
+    this.ref = this.dialogService.open(ImportSharingOperationMeters, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      header: this.translate.instant(
+        'SHARING_OPERATION.VIEW.KEY.SELECT_METERS_NEW_KEY_HEADER',
+      ) as string,
+      width: '900px',
       data: { idSharing: this.id() },
     });
 
@@ -486,7 +569,12 @@ export class SharingOperationView implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((selectedEANs: string[] | null) => {
         if (!selectedEANs?.length) return;
-        void this.routing.navigate(['/keys/add'], {
+        // `returnUrl` brings the user back here once the key is saved, with the add-key dialog
+        // reopened on the freshly created key. It is a query param rather than router state so it
+        // survives the create round-trip — including the wizard's extra hop through the full
+        // creator. `idSharing` keeps a later in-editor import scoped to this operation.
+        void this.routing.navigate([mode === 'step' ? '/keys/add/step' : '/keys/add'], {
+          queryParams: { returnUrl: `/sharing_operations/${this.id()}`, idSharing: this.id() },
           state: { consumers: selectedEANs },
         });
       });

@@ -6,6 +6,38 @@ interface RuntimeKeycloakConfig {
   urlPatternFlags?: string;
 }
 
+/** Basemap settings for the map views. */
+interface RuntimeMapConfig {
+  /**
+   * MapLibre style JSON URL.
+   *
+   * Defaults to the OpenFreeMap public instance: no API key, no registration,
+   * no request limit, commercial use allowed, OpenStreetMap data under ODbL.
+   * Point it at a self-hosted style to remove the third-party dependency.
+   */
+  styleUrl: string;
+  /**
+   * Extra attribution to print on the map, on top of whatever the tiles already
+   * declare.
+   *
+   * Empty by default, and deliberately so: OpenFreeMap's TileJSON already
+   * carries "OpenFreeMap © OpenMapTiles Data from OpenStreetMap", MapLibre
+   * picks it up automatically, and setting the same text here prints it twice.
+   * Fill it in only for a self-hosted style whose TileJSON declares none —
+   * OpenStreetMap-derived tiles are ODbL and the attribution is not optional.
+   */
+  attribution: string;
+  /**
+   * Font stack for the cluster and coincidence count labels.
+   *
+   * Must exist in the style's `glyphs` endpoint. OpenFreeMap's Liberty style
+   * serves only Noto Sans — asking for "Open Sans Regular" makes every count
+   * badge silently disappear, with nothing in the console. Override only when
+   * self-hosting a style that ships a different family.
+   */
+  fontStack: string[];
+}
+
 export interface RuntimeConfig {
   apiUrl: string;
   basePath: string;
@@ -23,6 +55,7 @@ export interface RuntimeConfig {
    * cannot drift.
    */
   realtimeUrl: string;
+  map: RuntimeMapConfig;
   keycloak: RuntimeKeycloakConfig;
 }
 
@@ -36,6 +69,11 @@ const DEFAULT_CONFIG: RuntimeConfig = {
   // through the reverse proxy in Docker, and under `ng serve` it needs the
   // /realtime proxy entry in proxy.conf.json.
   realtimeUrl: '/realtime/stream',
+  map: {
+    styleUrl: 'https://tiles.openfreemap.org/styles/liberty',
+    attribution: '',
+    fontStack: ['Noto Sans Regular'],
+  },
   keycloak: {
     realm: 'optimce-realm',
     url: 'http://localhost:8081',
@@ -51,6 +89,12 @@ export function setRuntimeConfig(config: Partial<RuntimeConfig>): void {
   const mergedConfig: RuntimeConfig = {
     ...DEFAULT_CONFIG,
     ...config,
+    // The nested merge is hand-written per key, so every nested object needs
+    // its own line here or a partial config silently drops its siblings.
+    map: {
+      ...DEFAULT_CONFIG.map,
+      ...config.map,
+    },
     keycloak: {
       ...DEFAULT_CONFIG.keycloak,
       ...config.keycloak,
@@ -69,6 +113,18 @@ export const environments = {
   },
   get realtimeUrl(): string {
     return currentConfig.realtimeUrl;
+  },
+  get map(): RuntimeMapConfig {
+    // envsubst renders an UNSET variable as "", and "" is not undefined — the
+    // spread in setRuntimeConfig would happily install it and every tile
+    // request would 404. Falling back on empty rather than only on absent.
+    const map = currentConfig.map;
+    return {
+      styleUrl: map.styleUrl || DEFAULT_CONFIG.map.styleUrl,
+      // No `||` fallback: an empty attribution is a valid, intended value.
+      attribution: map.attribution ?? DEFAULT_CONFIG.map.attribution,
+      fontStack: map.fontStack?.length ? map.fontStack : DEFAULT_CONFIG.map.fontStack,
+    };
   },
   get keycloak(): {
     realm: string;

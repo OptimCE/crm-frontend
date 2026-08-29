@@ -56,7 +56,52 @@
       <app-error-handler controlName="idKey" />
     </div>
 
-    <!-- Step 2 — run metadata -->
+    <!-- Step 2 — where the data comes from -->
+    <fieldset class="source-picker">
+      <legend class="field-label-text text-sm font-medium text-surface-800 mb-2">
+        {{ 'CRM_DATA_SOURCE.SOURCE_LEGEND' | translate }}
+      </legend>
+
+      <div class="source-picker__options">
+        <div class="source-option" [class.source-option--active]="!usingCrmSource()">
+          <p-radioButton
+            inputId="sim-source-file"
+            value="file"
+            formControlName="inputSource"
+            (onClick)="onSourceChange('file')"
+            data-testid="simulation-hub__radio--source-file"
+          />
+          <label for="sim-source-file">
+            <span class="source-option__title">
+              {{ 'CRM_DATA_SOURCE.SOURCE_FILE' | translate }}
+            </span>
+            <span class="source-option__hint">
+              {{ 'CRM_DATA_SOURCE.SOURCE_FILE_HINT' | translate }}
+            </span>
+          </label>
+        </div>
+
+        <div class="source-option" [class.source-option--active]="usingCrmSource()">
+          <p-radioButton
+            inputId="sim-source-crm"
+            value="crm"
+            formControlName="inputSource"
+            (onClick)="onSourceChange('crm')"
+            data-testid="simulation-hub__radio--source-crm"
+          />
+          <label for="sim-source-crm">
+            <span class="source-option__title">
+              {{ 'CRM_DATA_SOURCE.SOURCE_CRM' | translate }}
+            </span>
+            <span class="source-option__hint">
+              {{ 'CRM_DATA_SOURCE.SOURCE_CRM_SIM_HINT' | translate }}
+            </span>
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Step 3 — run metadata -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <label class="flex flex-col gap-1.5">
         <span class="field-label-text text-sm font-medium text-surface-800">
@@ -73,74 +118,151 @@
         <app-error-handler controlName="simulationName" />
       </label>
 
-      <label class="flex flex-col gap-1.5">
-        <span class="field-label-text text-sm font-medium text-surface-800">
-          {{ 'SIMULATION_HUB.INJECTION_NAME_LABEL' | translate }}
+      @if (!usingCrmSource()) {
+        <label class="flex flex-col gap-1.5">
+          <span class="field-label-text text-sm font-medium text-surface-800">
+            {{ 'SIMULATION_HUB.INJECTION_NAME_LABEL' | translate }}
+            <span class="text-danger-500" aria-hidden="true">*</span>
+          </span>
+          <input
+            pInputText
+            type="text"
+            formControlName="injectionName"
+            [placeholder]="'SIMULATION_HUB.INJECTION_NAME_PLACEHOLDER' | translate"
+            data-testid="simulation-hub__input--injection-name"
+          />
+          <small class="text-xs text-surface-500">
+            {{ 'SIMULATION_HUB.INJECTION_NAME_HELP' | translate }}
+          </small>
+          <app-error-handler controlName="injectionName" />
+        </label>
+      }
+    </div>
+
+    <!-- Step 4 — the source itself: a file, or a period of stored readings -->
+    @if (!usingCrmSource()) {
+      <div>
+        <span class="field-label-text text-sm font-medium text-surface-800 block mb-1.5">
+          {{ 'SIMULATION_HUB.FILE_LABEL' | translate }}
           <span class="text-danger-500" aria-hidden="true">*</span>
         </span>
-        <input
-          pInputText
-          type="text"
-          formControlName="injectionName"
-          [placeholder]="'SIMULATION_HUB.INJECTION_NAME_PLACEHOLDER' | translate"
-          data-testid="simulation-hub__input--injection-name"
-        />
-        <small class="text-xs text-surface-500">
-          {{ 'SIMULATION_HUB.INJECTION_NAME_HELP' | translate }}
-        </small>
-        <app-error-handler controlName="injectionName" />
-      </label>
-    </div>
 
-    <!-- Step 3 — file picker (drop zone) -->
-    <div>
-      <span class="field-label-text text-sm font-medium text-surface-800 block mb-1.5">
-        {{ 'SIMULATION_HUB.FILE_LABEL' | translate }}
-        <span class="text-danger-500" aria-hidden="true">*</span>
-      </span>
-
-      <label
-        class="dropzone block"
-        [class.dropzone--filled]="!!file()"
-        [class.dropzone--error]="form.controls.file.touched && form.controls.file.invalid"
-        (dragover)="onDragOver($event)"
-        (drop)="onFileDropped($event)"
-        data-testid="simulation-hub__dropzone"
-      >
-        <input
-          type="file"
-          accept=".csv,.xlsx,.xls"
-          class="dropzone__input"
-          (change)="onFileSelected($event)"
-          data-testid="simulation-hub__input--file"
-        />
-        @if (!file()) {
-          <div class="dropzone__empty">
-            <i class="pi pi-file-excel text-2xl text-primary-500 mb-1"></i>
-            <span class="dropzone__title">{{ 'SIMULATION_HUB.FILE_DROP_PROMPT' | translate }}</span>
-            <span class="dropzone__hint">{{ 'SIMULATION_HUB.FILE_HINT' | translate }}</span>
-          </div>
-        } @else {
-          <div class="dropzone__filled">
-            <i class="pi pi-check-circle text-2xl text-primary-600"></i>
-            <div class="dropzone__file flex-1 min-w-0">
-              <span class="dropzone__filename truncate">{{ file()!.name }}</span>
-              <span class="dropzone__filesize">{{ formatFileSize(file()!.size) }}</span>
+        <label
+          class="dropzone block"
+          [class.dropzone--filled]="!!file()"
+          [class.dropzone--error]="form.controls.file.touched && form.controls.file.invalid"
+          (dragover)="onDragOver($event)"
+          (drop)="onFileDropped($event)"
+          data-testid="simulation-hub__dropzone"
+        >
+          <input
+            type="file"
+            accept=".csv,.xlsx,.xls"
+            class="dropzone__input"
+            (change)="onFileSelected($event)"
+            data-testid="simulation-hub__input--file"
+          />
+          @if (!file()) {
+            <div class="dropzone__empty">
+              <i class="pi pi-file-excel text-2xl text-primary-500 mb-1"></i>
+              <span class="dropzone__title">{{
+                'SIMULATION_HUB.FILE_DROP_PROMPT' | translate
+              }}</span>
+              <span class="dropzone__hint">{{ 'SIMULATION_HUB.FILE_HINT' | translate }}</span>
             </div>
-            <button
-              type="button"
-              class="dropzone__clear"
-              (click)="$event.preventDefault(); clearFile()"
-              [attr.aria-label]="'SIMULATION_HUB.FILE_CLEAR' | translate"
-              data-testid="simulation-hub__btn--clear-file"
-            >
-              <i class="pi pi-times"></i>
-            </button>
+          } @else {
+            <div class="dropzone__filled">
+              <i class="pi pi-check-circle text-2xl text-primary-600"></i>
+              <div class="dropzone__file flex-1 min-w-0">
+                <span class="dropzone__filename truncate">{{ file()!.name }}</span>
+                <span class="dropzone__filesize">{{ formatFileSize(file()!.size) }}</span>
+              </div>
+              <button
+                type="button"
+                class="dropzone__clear"
+                (click)="$event.preventDefault(); clearFile()"
+                [attr.aria-label]="'SIMULATION_HUB.FILE_CLEAR' | translate"
+                data-testid="simulation-hub__btn--clear-file"
+              >
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          }
+        </label>
+        <app-error-handler controlName="file" [errorsAdd]="fileErrors" />
+      </div>
+    } @else {
+      <div class="crm-source">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <span class="field-label-text text-sm font-medium text-surface-800">
+              {{ 'CRM_DATA_SOURCE.OPERATION_LABEL' | translate }}
+              <span class="text-danger-500" aria-hidden="true">*</span>
+            </span>
+            <p-select
+              formControlName="idSharingOperation"
+              [options]="operationOptions()"
+              optionLabel="label"
+              optionValue="value"
+              [filter]="operationOptions().length > 5"
+              filterBy="label"
+              [loading]="operationsLoading()"
+              [placeholder]="'CRM_DATA_SOURCE.OPERATION_PLACEHOLDER' | translate"
+              appendTo="body"
+              styleClass="w-full"
+              data-testid="simulation-hub__select--operation"
+            />
+            <app-error-handler controlName="idSharingOperation" />
           </div>
-        }
-      </label>
-      <app-error-handler controlName="file" [errorsAdd]="fileErrors" />
-    </div>
+
+          <div class="flex flex-col gap-1.5">
+            <span class="field-label-text text-sm font-medium text-surface-800">
+              {{ 'CRM_DATA_SOURCE.PERIOD_START_LABEL' | translate }}
+              <span class="text-danger-500" aria-hidden="true">*</span>
+            </span>
+            <p-date-picker
+              formControlName="periodStart"
+              dateFormat="dd/mm/yy"
+              [firstDayOfWeek]="1"
+              [showIcon]="true"
+              appendTo="body"
+              styleClass="w-full"
+              data-testid="simulation-hub__datepicker--period-start"
+            />
+            <app-error-handler controlName="periodStart" />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <span class="field-label-text text-sm font-medium text-surface-800">
+              {{ 'CRM_DATA_SOURCE.PERIOD_END_LABEL' | translate }}
+              <span class="text-danger-500" aria-hidden="true">*</span>
+            </span>
+            <p-date-picker
+              formControlName="periodEnd"
+              dateFormat="dd/mm/yy"
+              [firstDayOfWeek]="1"
+              [showIcon]="true"
+              appendTo="body"
+              styleClass="w-full"
+              data-testid="simulation-hub__datepicker--period-end"
+            />
+            <app-error-handler controlName="periodEnd" />
+          </div>
+        </div>
+
+        <p class="text-xs text-surface-500 mt-2">
+          {{ 'CRM_DATA_SOURCE.PERIOD_HELP_SIM' | translate }}
+        </p>
+
+        <div class="mt-3">
+          <app-crm-data-preview
+            [preview]="crmPreview()"
+            [loading]="crmPreviewLoading()"
+            [failed]="crmPreviewFailed()"
+          />
+        </div>
+      </div>
+    }
 
     <app-summary-error [errorsAdd]="summaryErrors" [controlLabels]="summaryLabels" />
 
@@ -154,7 +276,7 @@
         [label]="'SIMULATION_HUB.SUBMIT' | translate"
         severity="primary"
         [loading]="submitting()"
-        [disabled]="submitting()"
+        [disabled]="submitting() || (usingCrmSource() && !crmReady())"
         data-testid="simulation-hub__btn--submit"
       />
     </div>

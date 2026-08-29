@@ -1,4 +1,5 @@
 import { Sort } from './query.dtos';
+import { IncompleteMeterDTO, PreviewBlockerDTO } from './crm_data_source.dtos';
 
 /** Mirrors the simulation-key microservice's SimulationStatus (IntEnum). */
 export enum SimulationStatus {
@@ -105,4 +106,38 @@ export interface CreateSimulationPayload {
 export interface CreateSimulationResponse {
   id: number;
   status: SimulationStatus;
+}
+
+/**
+ * Start a simulation from the meter readings already in OptimCE.
+ *
+ * No `file` and no `injectionName`. The key's participant names must be the
+ * EANs of meters that have readings in the period — the preview is where the
+ * manager finds out whether they are.
+ */
+export interface CreateSimulationFromCrmPayload {
+  name: string;
+  idKey: number;
+  idSharingOperation: number;
+  /** `YYYY-MM-DD`, inclusive. */
+  periodStart: string;
+  periodEnd: string;
+}
+
+/** Response of `GET /simulation/crm-data-preview`. */
+export interface CrmSimulationPreviewDTO {
+  /** The single flag the submit button binds to. */
+  can_simulate: boolean;
+  /** Key participants that matched a meter EAN in the period. */
+  matched_participants: string[];
+  /** Key participants that matched nothing — the run is blocked while non-empty. */
+  unmatched_participants: string[];
+  meter_count: number;
+  reading_count: number;
+  first_timestamp: string | null;
+  last_timestamp: string | null;
+  total_consumption_kwh: number;
+  total_injection_kwh: number;
+  incomplete_meters: IncompleteMeterDTO[];
+  blockers: PreviewBlockerDTO[];
 }

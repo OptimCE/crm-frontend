@@ -1,0 +1,139 @@
+@if (loading()) {
+  <div class="crm-preview crm-preview--loading" data-testid="crm-preview__loading">
+    <p-skeleton height="1.25rem" width="60%" styleClass="mb-2" />
+    <p-skeleton height="1rem" width="40%" />
+  </div>
+} @else if (failed()) {
+  <div class="crm-preview crm-preview--error" data-testid="crm-preview__failed">
+    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+    <span>{{ 'CRM_DATA_SOURCE.PREVIEW.FAILED' | translate }}</span>
+  </div>
+} @else if (preview(); as data) {
+  <div
+    class="crm-preview"
+    [class.crm-preview--ok]="isClean()"
+    [class.crm-preview--warn]="data.ok && !isClean()"
+    [class.crm-preview--error]="!data.ok"
+    data-testid="crm-preview__panel"
+  >
+    <!-- Headline: what the period actually contains, in the manager's terms. -->
+    <div class="crm-preview__headline">
+      <i
+        class="pi"
+        [class.pi-check-circle]="isClean()"
+        [class.pi-info-circle]="data.ok && !isClean()"
+        [class.pi-times-circle]="!data.ok"
+        aria-hidden="true"
+      ></i>
+      <span data-testid="crm-preview__summary">
+        {{
+          'CRM_DATA_SOURCE.PREVIEW.SUMMARY'
+            | translate
+              : {
+                  meters: data.meterCount,
+                  readings: data.readingCount | number: '1.0-0',
+                }
+        }}
+      </span>
+    </div>
+
+    @if (data.firstTimestamp && data.lastTimestamp) {
+      <p class="crm-preview__period" data-testid="crm-preview__period">
+        {{
+          'CRM_DATA_SOURCE.PREVIEW.PERIOD_COVERED'
+            | translate
+              : {
+                  from: data.firstTimestamp | date: 'dd/MM/yyyy',
+                  to: data.lastTimestamp | date: 'dd/MM/yyyy',
+                }
+        }}
+      </p>
+    }
+
+    <dl class="crm-preview__totals">
+      <div>
+        <dt>{{ 'CRM_DATA_SOURCE.PREVIEW.TOTAL_CONSUMPTION' | translate }}</dt>
+        <dd data-testid="crm-preview__consumption">
+          {{ data.totalConsumptionKwh | number: '1.0-1' }} kWh
+        </dd>
+      </div>
+      <div>
+        <dt>{{ 'CRM_DATA_SOURCE.PREVIEW.TOTAL_INJECTION' | translate }}</dt>
+        <dd data-testid="crm-preview__injection">
+          {{ data.totalInjectionKwh | number: '1.0-1' }} kWh
+        </dd>
+      </div>
+    </dl>
+
+    <!-- Simulation only: does the key line up with the meters? -->
+    @if (matched().length || unmatched().length) {
+      <div class="crm-preview__participants">
+        @if (matched().length) {
+          <p class="crm-preview__matched" data-testid="crm-preview__matched">
+            <i class="pi pi-check" aria-hidden="true"></i>
+            {{
+              'CRM_DATA_SOURCE.PREVIEW.PARTICIPANTS_MATCHED'
+                | translate: { count: matched().length }
+            }}
+          </p>
+        }
+        @if (unmatched().length) {
+          <div class="crm-preview__unmatched" data-testid="crm-preview__unmatched">
+            <p>
+              {{
+                'CRM_DATA_SOURCE.PREVIEW.PARTICIPANTS_UNMATCHED'
+                  | translate: { count: unmatched().length }
+              }}
+            </p>
+            <ul>
+              @for (name of unmatched(); track name) {
+                <li>{{ name }}</li>
+              }
+            </ul>
+            <p class="crm-preview__hint">
+              {{ 'CRM_DATA_SOURCE.PREVIEW.PARTICIPANTS_UNMATCHED_HINT' | translate }}
+            </p>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Gaps: reported, never blocking. -->
+    @if (hasWarnings()) {
+      <div class="crm-preview__warnings" data-testid="crm-preview__warnings">
+        <p>
+          <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+          {{
+            'CRM_DATA_SOURCE.PREVIEW.INCOMPLETE_TITLE'
+              | translate: { count: data.incompleteMeters.length }
+          }}
+        </p>
+        <ul>
+          @for (meter of data.incompleteMeters; track meter.ean) {
+            <li>
+              {{
+                'CRM_DATA_SOURCE.PREVIEW.INCOMPLETE_METER'
+                  | translate: { ean: meter.ean, missing: meter.missing, expected: meter.expected }
+              }}
+            </li>
+          }
+        </ul>
+        <p class="crm-preview__hint">
+          {{ 'CRM_DATA_SOURCE.PREVIEW.INCOMPLETE_HINT' | translate }}
+        </p>
+      </div>
+    }
+
+    <!-- Blockers: always name the cause, never just "it failed". -->
+    @if (hasBlockers()) {
+      <div class="crm-preview__blockers" data-testid="crm-preview__blockers">
+        @for (blocker of data.blockers; track blocker.error_code) {
+          <div class="crm-preview__blocker">
+            <p class="crm-preview__blocker-message">{{ blocker.message }}</p>
+            <p class="crm-preview__blocker-detail">{{ blocker.detail }}</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

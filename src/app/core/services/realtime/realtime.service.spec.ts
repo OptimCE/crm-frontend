@@ -164,10 +164,15 @@ describe('RealtimeService', () => {
   it('backs off, reaches fallback after 3 failures, and keeps retrying', () => {
     vi.useFakeTimers();
     try {
+      service.connect();
       for (let attempt = 1; attempt <= 3; attempt++) {
-        const pending = http.match(TICKET_URL);
-        if (pending.length === 0) service.connect();
+        // Take the in-flight mint and fail it. Do NOT peek with `match()` first:
+        // it REMOVES what it matches, so a peek-then-expectOne consumes the
+        // request twice and the second call finds none.
         http.expectOne(TICKET_URL).error(new ProgressEvent('error'));
+        // Backing off is the point — the retry is on a timer, not immediate.
+        http.expectNone(TICKET_URL);
+        // Clears the jittered delay: <1s, then <2s, then the <60s fallback one.
         vi.advanceTimersByTime(60_000);
       }
       // `fallback` is not terminal — the pollers carry the app meanwhile, and a

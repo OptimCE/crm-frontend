@@ -4,6 +4,8 @@ import {
   CreateMeterDTO,
   MeterConsumptionDTO,
   MeterConsumptionQuery,
+  MeterMapDTO,
+  MeterMapQuery,
   MeterPartialQuery,
   MetersDTO,
   PartialMeterDTO,
@@ -32,6 +34,21 @@ export class MeterService extends ServiceBase {
     return this.cachedGet<ApiResponsePaginated<PartialMeterDTO[] | string>>(
       `meters-list:${JSON.stringify(query)}`,
       this.apiAddress + '/',
+      query,
+    );
+  }
+
+  /**
+   * Every plottable meter of the active community, for the map view.
+   *
+   * Not paginated — the backend caps it and reports `truncated` in the body.
+   * The `meters-map` prefix is already covered by COMMUNITY_SCOPED_CACHE_PREFIXES
+   * via its `meters` entry, so switching community clears it.
+   */
+  getMetersMap(query: MeterMapQuery): Observable<ApiResponse<MeterMapDTO | string>> {
+    return this.cachedGet<ApiResponse<MeterMapDTO | string>>(
+      `meters-map:${JSON.stringify(query)}`,
+      this.apiAddress + '/map',
       query,
     );
   }
@@ -87,6 +104,7 @@ export class MeterService extends ServiceBase {
     return this.http.post<ApiResponse<string>>(this.apiAddress + '/', create_meter).pipe(
       tap(() => {
         this.cache.invalidate('meters-list');
+        this.cache.invalidate('meters-map');
       }),
     );
   }
@@ -95,6 +113,7 @@ export class MeterService extends ServiceBase {
     return this.http.put<ApiResponse<string>>(this.apiAddress + '/', updated_meter).pipe(
       tap(() => {
         this.cache.invalidate('meters-list');
+        this.cache.invalidate('meters-map');
         this.cache.invalidate(`meters:${updated_meter.EAN}`);
       }),
     );
@@ -104,6 +123,7 @@ export class MeterService extends ServiceBase {
     return this.http.patch<ApiResponse<string>>(this.apiAddress + '/data', patch_meter_data).pipe(
       tap(() => {
         this.cache.invalidate('meters-list');
+        this.cache.invalidate('meters-map');
         this.cache.invalidate(`meters:${patch_meter_data.EAN}`);
       }),
     );
@@ -115,6 +135,7 @@ export class MeterService extends ServiceBase {
       .pipe(
         tap(() => {
           this.cache.invalidate('meters-list');
+          this.cache.invalidate('meters-map');
           this.cache.invalidate(`meters:${ean}`);
         }),
       );
@@ -124,6 +145,7 @@ export class MeterService extends ServiceBase {
     return this.http.delete<ApiResponse<string>>(this.apiAddress + '/' + id).pipe(
       tap(() => {
         this.cache.invalidate('meters-list');
+        this.cache.invalidate('meters-map');
         this.cache.invalidate(`meters:${id}`);
       }),
     );

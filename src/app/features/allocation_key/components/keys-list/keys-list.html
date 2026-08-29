@@ -8,12 +8,11 @@
     [subtitle]="'KEY.LIST.SUBTITLE' | translate"
     class="block mb-4"
   >
-    <p-split-button
+    <p-button
       headerActions
       label="{{ 'KEY.LIST.ADD_BUTTON_LABEL' | translate }}"
       icon="pi pi-plus"
-      (onClick)="addKey()"
-      [model]="optionsSplitButton"
+      (onClick)="openCreationMode()"
       severity="primary"
       data-testid="keys-list__btn--add"
     />

@@ -1,4 +1,69 @@
 <div class="container mx-auto px-4 py-2">
+  <!--
+    Prefill banner. Opt-in on purpose: the wizard asks for eight values the
+    signed-in user's own profile already holds, but nothing is read or written
+    until the button is pressed.
+  -->
+  <div
+    data-testid="encode-new-member__prefill"
+    class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-surface-200 bg-surface-50 px-4 py-3 dark:border-surface-700 dark:bg-surface-800"
+  >
+    @switch (prefillState()) {
+      @case ('applied') {
+        <span data-testid="encode-new-member__prefill-message" class="text-sm">
+          <i class="pi pi-check-circle mr-2 text-green-600"></i>
+          {{ 'INVITATION.MEMBER.PREFILL.APPLIED' | translate: { count: prefilledCount() } }}
+        </span>
+      }
+      @case ('armed') {
+        <span data-testid="encode-new-member__prefill-message" class="text-sm">
+          <i class="pi pi-info-circle mr-2"></i>
+          {{ 'INVITATION.MEMBER.PREFILL.ARMED' | translate }}
+        </span>
+      }
+      @case ('empty') {
+        <span data-testid="encode-new-member__prefill-message" class="text-sm">
+          <i class="pi pi-info-circle mr-2"></i>
+          {{ 'INVITATION.MEMBER.PREFILL.EMPTY' | translate }}
+        </span>
+        <p-button
+          data-testid="encode-new-member__prefill-profile-link"
+          [label]="'INVITATION.MEMBER.PREFILL.GO_TO_PROFILE' | translate"
+          severity="secondary"
+          [text]="true"
+          size="small"
+          (onClick)="goToProfile()"
+        />
+      }
+      @case ('error') {
+        <span data-testid="encode-new-member__prefill-message" class="text-sm text-red-600">
+          <i class="pi pi-exclamation-triangle mr-2"></i>
+          {{ 'INVITATION.MEMBER.PREFILL.ERROR' | translate }}
+        </span>
+        <p-button
+          data-testid="encode-new-member__prefill-button"
+          [label]="'INVITATION.MEMBER.PREFILL.RETRY' | translate"
+          severity="secondary"
+          size="small"
+          (onClick)="useMyProfile()"
+        />
+      }
+      @default {
+        <span class="text-sm">
+          <i class="pi pi-bolt mr-2"></i>
+          {{ 'INVITATION.MEMBER.PREFILL.CTA' | translate }}
+        </span>
+        <p-button
+          data-testid="encode-new-member__prefill-button"
+          [label]="'INVITATION.MEMBER.PREFILL.BUTTON' | translate"
+          [loading]="prefillState() === 'loading'"
+          severity="secondary"
+          size="small"
+          (onClick)="useMyProfile()"
+        />
+      }
+    }
+  </div>
   <p-stepper data-testid="encode-new-member__stepper" [value]="0" [linear]="true">
     <p-step-list>
       <p-step data-testid="encode-new-member__step--status" [value]="0">{{

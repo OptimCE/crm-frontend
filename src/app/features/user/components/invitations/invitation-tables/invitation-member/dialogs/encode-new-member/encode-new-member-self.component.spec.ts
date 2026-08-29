@@ -1,21 +1,73 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { of, throwError } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 import { EncodeNewMemberSelfComponent } from './encode-new-member-self.component';
 import { MeService } from '../../../../../../../../shared/services/me.service';
+import { UserService } from '../../../../../../../../shared/services/user.service';
+import { UserDTO } from '../../../../../../../../shared/dtos/user.dtos';
 import { ErrorMessageHandler } from '../../../../../../../../shared/services-ui/error.message.handler';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { AcceptInvitationWEncodedDTO } from '../../../../../../../../shared/dtos/invitation.dtos';
+import { ApiResponse } from '../../../../../../../../core/dtos/api.response';
+
+function profile(overrides: Partial<UserDTO> = {}): UserDTO {
+  return {
+    id: 7,
+    email: 'alice@example.be',
+    first_name: 'Alice',
+    last_name: 'Dupont',
+    nrn: '85073003328',
+    phone_number: '+32470112233',
+    iban: 'BE68539007547034',
+    home_address: {
+      id: 1,
+      street: 'Rue de la Loi',
+      number: 16,
+      postcode: '1000',
+      supplement: 'Bte 3',
+      city: 'Bruxelles',
+    },
+    billing_address: {
+      id: 2,
+      street: 'Avenue Louise',
+      number: 200,
+      postcode: '1050',
+      supplement: '',
+      city: 'Bruxelles',
+    },
+    ...overrides,
+  };
+}
+
+/** What `getProfile()` provisions on first login: an email and nothing else. */
+function blankProfile(): Partial<UserDTO> {
+  return {
+    first_name: null,
+    last_name: null,
+    nrn: null,
+    phone_number: null,
+    iban: null,
+    home_address: undefined,
+    billing_address: undefined,
+  };
+}
+
+function profileResponse(overrides: Partial<UserDTO> = {}): ApiResponse<UserDTO | string> {
+  return { data: profile(overrides), error_code: 0 };
+}
 
 describe('EncodeNewMemberSelfComponent', () => {
   let component: EncodeNewMemberSelfComponent;
   let fixture: ComponentFixture<EncodeNewMemberSelfComponent>;
   let meServiceSpy: { acceptInvitationMemberEncoded: ReturnType<typeof vi.fn> };
+  let userServiceSpy: { getUserInfo: ReturnType<typeof vi.fn> };
+  let routerSpy: { navigate: ReturnType<typeof vi.fn> };
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
   let dialogConfigSpy: { data: { invitationID?: number } | null };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
@@ -24,6 +76,10 @@ describe('EncodeNewMemberSelfComponent', () => {
     configData: { invitationID?: number } | null = { invitationID: 123 },
   ): void {
     meServiceSpy = { acceptInvitationMemberEncoded: vi.fn() };
+    // UserService extends ServiceBase, which injects HttpClient and
+    // CacheService - neither is provided here, so it must always be mocked.
+    userServiceSpy = { getUserInfo: vi.fn().mockReturnValue(of(profileResponse())) };
+    routerSpy = { navigate: vi.fn() };
     dialogRefSpy = { close: vi.fn() };
     dialogConfigSpy = { data: configData };
     errorHandlerSpy = { handleError: vi.fn() };
@@ -39,6 +95,8 @@ describe('EncodeNewMemberSelfComponent', () => {
       imports: [EncodeNewMemberSelfComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MeService, useValue: meServiceSpy },
+        { provide: UserService, useValue: userServiceSpy },
+        { provide: Router, useValue: routerSpy },
         { provide: DynamicDialogRef, useValue: dialogRefSpy },
         { provide: DynamicDialogConfig, useValue: dialogConfigSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
@@ -553,6 +611,222 @@ describe('EncodeNewMemberSelfComponent', () => {
       billing_address_city: 'Liege',
     });
   }
+
+  describe('Prefill from the user profile', () => {
+    beforeEach(async () => {
+      await createComponent();
+    });
+
+    it('reads nothing until the user asks for it', () => {
+      expect(userServiceSpy.getUserInfo).not.toHaveBeenCalled();
+      expect(component.prefillState()).toBe('idle');
+    });
+
+    it('holds the profile until a member type is chosen', () => {
+      component.useMyProfile();
+
+      expect(userServiceSpy.getUserInfo).toHaveBeenCalledTimes(1);
+      // Step-1 controls do not exist yet, and whether the address applies at
+      // all depends on the answer.
+      expect(component.prefillState()).toBe('armed');
+      expect(component.prefilledCount()).toBe(0);
+    });
+
+    it('fills the individual form once the type is chosen', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+
+      expect(component.prefillState()).toBe('applied');
+      expect(component.formData.getRawValue()).toMatchObject({
+        id: '85073003328',
+        // `name` is the FIRST name and `surname` the LAST name in this wizard.
+        name: 'Alice',
+        surname: 'Dupont',
+        email: 'alice@example.be',
+        phone: '+32470112233',
+      });
+      expect(component.ibanForm.get('iban')?.value).toBe('BE68539007547034');
+      expect(component.addressForm.get('home_address_street')?.value).toBe('Rue de la Loi');
+      // AddressDTO.number is numeric; the control is a text input.
+      expect(component.addressForm.get('home_address_number')?.value).toBe('16');
+      expect(component.prefilledCount()).toBeGreaterThan(0);
+    });
+
+    it('applies immediately when the type was already chosen', () => {
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      component.useMyProfile();
+
+      expect(component.prefillState()).toBe('applied');
+      expect(component.formData.get('surname')?.value).toBe('Dupont');
+    });
+
+    it('fills only the manager block for a company', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.COMPANY);
+
+      expect(component.formData.getRawValue()).toMatchObject({
+        NRN_manager: '85073003328',
+        name_manager: 'Alice',
+        surname_manager: 'Dupont',
+        email_manager: 'alice@example.be',
+        phone_manager: '+32470112233',
+      });
+      // A company's own identity and bank details are not the user's personal ones.
+      expect(component.formData.get('id')?.value).toBe('');
+      expect(component.formData.get('name')?.value).toBe('');
+      expect(component.formData.get('vatNumber')?.value).toBe('');
+      expect(component.ibanForm.get('iban')?.value).toBe('');
+      expect(component.addressForm.get('home_address_street')?.value).toBe('');
+    });
+
+    it('fills the manager block when an individual ticks the gestionnaire box', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      expect(component.formData.contains('NRN_manager')).toBe(false);
+
+      component.gestionnaireChange({ checked: true } as CheckboxChangeEvent);
+
+      expect(component.formData.get('NRN_manager')?.value).toBe('85073003328');
+      expect(component.formData.get('surname_manager')?.value).toBe('Dupont');
+    });
+
+    it('never overwrites a value the user already typed', () => {
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      component.formData.get('surname')?.setValue('Van Damme');
+      component.ibanForm.get('iban')?.setValue('BE00000000000000');
+
+      component.useMyProfile();
+
+      expect(component.formData.get('surname')?.value).toBe('Van Damme');
+      expect(component.ibanForm.get('iban')?.value).toBe('BE00000000000000');
+      // The blank ones are still filled.
+      expect(component.formData.get('name')?.value).toBe('Alice');
+    });
+
+    it('ticks "same address" and drops the billing controls when billing matches home', () => {
+      userServiceSpy.getUserInfo.mockReturnValue(
+        of(profileResponse({ billing_address: profile().home_address })),
+      );
+
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+
+      expect(component.addressForm.get('same_address')?.value).toEqual([true]);
+      expect(component.addressForm.contains('billing_address_street')).toBe(false);
+    });
+
+    it('keeps both addresses when they differ', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+
+      expect(component.addressForm.get('same_address')?.value).toBe(false);
+      expect(component.addressForm.get('billing_address_street')?.value).toBe('Avenue Louise');
+    });
+
+    it('still fills what little a freshly provisioned account has', () => {
+      // getProfile() creates the row with nothing but the email from Keycloak.
+      userServiceSpy.getUserInfo.mockReturnValue(of(profileResponse(blankProfile())));
+
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.COMPANY);
+
+      // Even here the manager block gets the email, so this is not "empty".
+      expect(component.formData.get('email_manager')?.value).toBe('alice@example.be');
+      expect(component.prefillState()).toBe('applied');
+      expect(component.prefilledCount()).toBe(1);
+    });
+
+    it('reports an empty profile instead of claiming success', () => {
+      userServiceSpy.getUserInfo.mockReturnValue(
+        of(profileResponse({ ...blankProfile(), email: '' })),
+      );
+
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+
+      expect(component.prefillState()).toBe('empty');
+      expect(component.prefilledCount()).toBe(0);
+    });
+
+    it('treats the 200-with-a-message failure envelope as an error', () => {
+      userServiceSpy.getUserInfo.mockReturnValue(
+        of({ data: 'Something went wrong', error_code: 42 }),
+      );
+
+      component.useMyProfile();
+
+      expect(component.prefillState()).toBe('error');
+    });
+
+    it('reports a transport failure', () => {
+      userServiceSpy.getUserInfo.mockReturnValue(throwError(() => new Error('offline')));
+
+      component.useMyProfile();
+
+      expect(component.prefillState()).toBe('error');
+    });
+
+    it('does not fire a second request while one is in flight', () => {
+      userServiceSpy.getUserInfo.mockReturnValue(NEVER);
+
+      component.useMyProfile();
+      component.useMyProfile();
+
+      expect(userServiceSpy.getUserInfo).toHaveBeenCalledTimes(1);
+    });
+
+    it('closes the dialog and leaves for the profile page', () => {
+      component.goToProfile();
+
+      expect(dialogRefSpy.close).toHaveBeenCalledWith(false);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/users']);
+    });
+
+    it('does not put the "same address" tick back after the user removed it', () => {
+      userServiceSpy.getUserInfo.mockReturnValue(
+        of(profileResponse({ billing_address: profile().home_address })),
+      );
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      expect(component.addressForm.get('same_address')?.value).toEqual([true]);
+
+      // The user disagrees and unticks it, then goes back and changes the type.
+      // `[]` is what an actual click produces: the non-binary checkbox filters
+      // its value out of the model array.
+      component.addressForm.get('same_address')?.setValue([]);
+      component.toggleSameAddress({} as CheckboxChangeEvent);
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+
+      expect(component.addressForm.get('same_address')?.value).toEqual([]);
+      expect(component.addressForm.contains('billing_address_street')).toBe(true);
+    });
+
+    it('stops counting a control that a type switch rebuilt empty', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      const asIndividual = component.prefilledCount();
+      expect(component.formData.get('id')?.value).toBe('85073003328');
+
+      component.onTypeClientChange(MemberType.COMPANY);
+
+      // `id` exists on the company form too, but it was rebuilt blank and the
+      // company branch never fills it, so the count must not carry it over.
+      expect(component.formData.get('id')?.value).toBe('');
+      expect(component.prefilledCount()).toBeLessThanOrEqual(asIndividual);
+      expect(component.prefilledCount()).toBeGreaterThan(0);
+    });
+
+    it('stops counting a prefilled value the user has since replaced', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      const filled = component.prefilledCount();
+
+      component.formData.get('surname')?.setValue('Van Damme');
+      component.gestionnaireChange({ checked: false } as CheckboxChangeEvent);
+
+      expect(component.prefilledCount()).toBe(filled - 1);
+    });
+  });
 
   function fillIndividualForm(): void {
     component.formData.patchValue({

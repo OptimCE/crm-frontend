@@ -1,6 +1,10 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import {
+  MeterMapQuery,
+  MeterPartialQuery,
+  PartialMeterDTO,
+} from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { MeterService } from '../../../../shared/services/meter.service';
@@ -21,6 +25,9 @@ import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { ViewToggle } from '../../../../shared/components/view-toggle/view-toggle';
+import { MetersMap } from './meters-map/meters-map';
+import type { MapViewMode } from '../../../../shared/components/map/map.types';
 
 @Component({
   selector: 'app-meters-list',
@@ -38,6 +45,8 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
+    ViewToggle,
+    MetersMap,
   ],
   templateUrl: './meters-list.html',
   styleUrl: './meters-list.css',
@@ -78,6 +87,25 @@ export class MetersList {
     () => (this.paginationInfo().page - 1) * this.paginationInfo().limit,
   );
   readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
+
+  /** List or map, mirrored in `?view=` so a map link can be shared. */
+  readonly view = signal<MapViewMode>('list');
+
+  /**
+   * Filters for the map, without pagination — the map is capped, not paged.
+   */
+  readonly mapQuery = computed<MeterMapQuery>(() => {
+    const { page: _page, limit: _limit, ...rest } = this.filter();
+    return rest;
+  });
+
+  /**
+   * Guards the deep-link subscription against re-applying filters when only
+   * `?view=` changed. `setView` navigates, which re-fires that subscription,
+   * and `applyFilters` resets to page 1 — so without this a user on page 3 who
+   * flipped to the map and back would silently land on page 1.
+   */
+  private lastAppliedParams = '';
 
   searchFieldOptions = [
     { label: 'METER.INFORMATIONS.EAN_LABEL', value: 'EAN' },
@@ -127,7 +155,13 @@ export class MetersList {
       const known = this.statusOptions.find((option) => (option.value as number) === status);
       this.statusFilter.set(known ? known.value : null);
 
-      this.applyFilters();
+      this.view.set(params.get('view') === 'map' ? 'map' : 'list');
+
+      const signature = `${String(this.holderFilter())}|${String(this.statusFilter())}`;
+      if (signature !== this.lastAppliedParams) {
+        this.lastAppliedParams = signature;
+        this.applyFilters();
+      }
     });
   }
 
@@ -255,8 +289,26 @@ export class MetersList {
     this.loadMeters();
   }
 
-  clear(table: Table): void {
-    table.clear();
+  setView(next: MapViewMode): void {
+    void this.routing.navigate([], {
+      relativeTo: this.route,
+      // null removes the param entirely for the default view, so a shared
+      // /meters link stays clean.
+      queryParams: { view: next === 'map' ? 'map' : null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  /**
+   * Resolved through a view query rather than a template ref: the clear button
+   * lives in the filter toolbar, which is shared by both views, while `#dt`
+   * only exists inside the list branch. The query is simply empty in map view.
+   */
+  private readonly table = viewChild<Table>('dt');
+
+  clear(): void {
+    this.table()?.clear();
     this.searchText.set('');
     this.searchField.set('EAN');
     this.statusFilter.set(null);

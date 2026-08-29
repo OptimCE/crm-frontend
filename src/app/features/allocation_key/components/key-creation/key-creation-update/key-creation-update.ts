@@ -37,6 +37,9 @@ import { KeyTableRow } from '../../../../../shared/types/key.types';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../../shared/types/error.types';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ImportSharingOperationMeters } from '../../../../../shared/components/import-sharing-operation-meters/import-sharing-operation-meters';
+import { sanitizeReturnUrl } from '../../../../../shared/utils/navigation.utils';
 
 interface ButtonClickParams {
   event: MouseEvent;
@@ -64,6 +67,7 @@ interface KeyForm {
   ],
   templateUrl: './key-creation-update.html',
   styleUrl: './key-creation-update.css',
+  providers: [DialogService],
 })
 export class KeyCreationUpdate implements OnInit {
   private route = inject(ActivatedRoute);
@@ -73,10 +77,23 @@ export class KeyCreationUpdate implements OnInit {
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
   private destroyRef = inject(DestroyRef);
+  private dialogService = inject(DialogService);
   private hasPendingConsumers = false;
 
   key!: KeyDTO;
   keyInput?: KeyDTO | null;
+  /**
+   * Where to go after a successful create, instead of the keys list. Set by callers that sent the
+   * user here to build a key for them (currently the sharing-operation page).
+   */
+  private returnUrl: string | null = null;
+  /**
+   * Set when a sharing operation sent the user here: the import dialog then stays scoped to that
+   * operation rather than asking which one again.
+   */
+  private fixedIdSharing: number | null = null;
+  /** True while building a brand-new key — the sharing-operation import only applies then. */
+  readonly isCreationMode = signal<boolean>(true);
   readonly isLoaded = signal<boolean>(false);
   readonly isSubmitted = signal<boolean>(false);
   readonly rowData = signal<KeyTableRow[]>([]);
@@ -131,6 +148,10 @@ export class KeyCreationUpdate implements OnInit {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const idParam = params.get('id');
       const id = idParam ? +idParam : 0;
+      this.returnUrl = sanitizeReturnUrl(params.get('returnUrl'));
+      const idSharing = Number(params.get('idSharing'));
+      this.fixedIdSharing = Number.isInteger(idSharing) && idSharing > 0 ? idSharing : null;
+      this.isCreationMode.set(!id);
 
       if (id) {
         // 1. If ID exists in URL, fetch from API
@@ -165,43 +186,10 @@ export class KeyCreationUpdate implements OnInit {
             description: '',
             iterations: [],
           };
-          const [first, ...rest] = transferredConsumers;
-          const [number, initialConsumers] = this.newIterationCheck();
-          let consumers = initialConsumers;
-          if (number === -1 || !consumers) {
-            return;
-          }
-          if (number > 1) {
-            consumers = this.key.iterations[this.key.iterations.length - 1].consumers.map(
-              (consumer) => {
-                return {
-                  id: -1,
-                  name: consumer.name,
-                  energy_allocated_percentage: 0,
-                };
-              },
-            );
-          }
-          const newIteration: IterationDTO = {
-            id: -1,
-            number: number,
-            energy_allocated_percentage: 1,
-            consumers: consumers,
-          };
-          this.key.iterations.push(newIteration);
-          this.rowData.set(this.formatData());
-          this.key.iterations[0].consumers[0].name = first;
-          for (const ean of rest) {
-            this.key.iterations[0].consumers.push({
-              id: -1,
-              name: ean,
-              energy_allocated_percentage: 0,
-            });
-          }
+          this.applyImportedEans(transferredConsumers);
+          // The grid is not ready yet; onGridReady renders these rows.
           this.hasPendingConsumers = true;
           this.isLoaded.set(true);
-          this.rowData.set(this.formatData());
-          this.refreshGrid();
         } else {
           // 3. Fallback: Initialize as completely new empty key
           this.key = {
@@ -510,7 +498,7 @@ export class KeyCreationUpdate implements OnInit {
               this.translate.instant('KEY.SUCCESS.KEY_ADDED') as string,
               VALIDATION_TYPE,
             );
-            void this.routing.navigate(['/keys']);
+            this.navigateAfterCreation();
           } else {
             this.errorHandler.handleError();
           }
@@ -522,6 +510,21 @@ export class KeyCreationUpdate implements OnInit {
       });
     }
   }
+  /**
+   * After creating a key, go back to whoever sent us here — carrying the key's name so that page
+   * can surface the new key (`POST /keys` answers "success", not the new id). Falls back to the
+   * keys list.
+   */
+  private navigateAfterCreation(): void {
+    if (this.returnUrl) {
+      void this.routing.navigate([this.returnUrl], {
+        queryParams: { add_key: 1, key_name: this.key.name },
+      });
+      return;
+    }
+    void this.routing.navigate(['/keys']);
+  }
+
   static displayedNumbers = new Set<number>();
 
   gridApi!: GridApi;
@@ -575,6 +578,95 @@ export class KeyCreationUpdate implements OnInit {
     }
     this.rowData.set(this.formatData());
     this.refreshGrid();
+  }
+
+  /**
+   * Adds meters, identified by their EAN, to the key's participant list.
+   *
+   * Shared by the router-state prefill (arriving from a sharing operation) and by the in-page
+   * "import from a sharing operation" button. EANs already present are skipped: the grid matches
+   * participants by name across iterations, and `deleteConsumer` also matches by name, so a
+   * duplicate row would delete its own twin.
+   *
+   * Imported participants land at 0 %, leaving the manager to distribute the shares — except in a
+   * PRORATA iteration, where they inherit the -1 sentinel so the iteration stays valid.
+   *
+   * @returns how many participants were actually added.
+   */
+  private applyImportedEans(eans: string[]): number {
+    const incoming = [...new Set(eans.map((ean) => ean.trim()).filter((ean) => ean !== ''))];
+    if (incoming.length === 0) return 0;
+
+    if (this.key.iterations.length === 0) {
+      const [number, consumers] = this.newIterationCheck();
+      if (number === -1 || !consumers) return 0;
+      this.key.iterations.push({
+        id: -1,
+        number: number,
+        energy_allocated_percentage: 1,
+        consumers: consumers,
+      });
+    }
+
+    const alreadyPresent = new Set(
+      this.key.iterations[0].consumers
+        .map((consumer) => consumer.name)
+        .filter((name) => name !== ''),
+    );
+    const toAdd = incoming.filter((ean) => !alreadyPresent.has(ean));
+    if (toAdd.length === 0) return 0;
+
+    for (const iteration of this.key.iterations) {
+      const share = iteration.consumers[0]?.energy_allocated_percentage === -1 ? -1 : 0;
+      for (const ean of toAdd) {
+        // Reuse the blank consumer an empty key is seeded with rather than leaving a nameless row.
+        const blank = iteration.consumers.find((consumer) => consumer.name === '');
+        if (blank) {
+          blank.name = ean;
+        } else {
+          iteration.consumers.push({ id: -1, name: ean, energy_allocated_percentage: share });
+        }
+      }
+    }
+
+    this.rowData.set(this.formatData());
+    return toAdd.length;
+  }
+
+  /**
+   * Imports the meters registered in a sharing operation on a chosen date as participants.
+   * Creation only — an existing key's participants stay under manual control.
+   */
+  importFromSharingOperation(): void {
+    const ref = this.dialogService.open(ImportSharingOperationMeters, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      header: this.translate.instant('KEY.IMPORT_FROM_SHARING_OPERATION.HEADER') as string,
+      width: '900px',
+      data: this.fixedIdSharing ? { idSharing: this.fixedIdSharing } : {},
+    });
+
+    ref?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((selectedEANs: string[] | null) => {
+        if (!selectedEANs?.length) return;
+
+        const added = this.applyImportedEans(selectedEANs);
+        const skipped = selectedEANs.length - added;
+        if (this.gridApi) {
+          this.refreshGrid();
+        }
+        this.snackbarNotification.openSnackBar(
+          this.translate.instant(
+            skipped > 0
+              ? 'KEY.IMPORT_FROM_SHARING_OPERATION.IMPORTED_WITH_SKIPPED'
+              : 'KEY.IMPORT_FROM_SHARING_OPERATION.IMPORTED',
+            { added, skipped },
+          ) as string,
+          VALIDATION_TYPE,
+        );
+      });
   }
 
   newIterationCheck(): [number, ConsumerDTO[]?] {

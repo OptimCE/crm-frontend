@@ -1,8 +1,10 @@
 import { Component, input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { vi } from 'vitest';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Subject } from 'rxjs';
 
 import { KeyCreationStepByStep } from './key-creation-step-by-step';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
@@ -23,12 +25,16 @@ describe('KeyCreationStepByStep', () => {
   let routerSpy: { navigate: ReturnType<typeof vi.fn> };
   let translateSpy: { instant: ReturnType<typeof vi.fn> };
   let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
+  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
+  let queryParams: Record<string, string>;
 
   beforeEach(async () => {
     eventBusSpy = { emit: vi.fn() };
     routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
     translateSpy = { instant: vi.fn((key: string) => key) };
     snackbarSpy = { openSnackBar: vi.fn() };
+    dialogServiceSpy = { open: vi.fn() };
+    queryParams = {};
 
     await TestBed.configureTestingModule({
       imports: [KeyCreationStepByStep],
@@ -37,11 +43,26 @@ describe('KeyCreationStepByStep', () => {
         { provide: Router, useValue: routerSpy },
         { provide: TranslateService, useValue: translateSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
+        { provide: DialogService, useValue: dialogServiceSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: {
+                get: (key: string): string | null => queryParams[key] ?? null,
+              },
+            },
+          },
+        },
       ],
     })
       .overrideComponent(KeyCreationStepByStep, {
-        remove: { imports: [BackArrow] },
-        add: { imports: [BackArrowStub] },
+        // The component provides DialogService itself, which would shadow the module-level spy.
+        remove: { imports: [BackArrow], providers: [DialogService] },
+        add: {
+          imports: [BackArrowStub],
+          providers: [{ provide: DialogService, useValue: dialogServiceSpy }],
+        },
       })
       .compileComponents();
 
@@ -455,6 +476,166 @@ describe('KeyCreationStepByStep', () => {
       component.submitKey();
       expect(eventBusSpy.emit).not.toHaveBeenCalled();
       expect(routerSpy.navigate).not.toHaveBeenCalled();
+    });
+
+    it('should forward the returnUrl so the caller still gets its round-trip back', () => {
+      queryParams = { returnUrl: '/sharing_operations/7' };
+      component.ngOnInit();
+
+      completeSecondStep(2);
+      fillIterations([[2, 100]]);
+      component.submitIteration();
+      component.lastForm.patchValue({ key_name: 'Test Key', key_description: 'Desc' });
+      component.submitKey();
+
+      expect(routerSpy.navigate).toHaveBeenCalledWith(
+        ['/keys/add'],
+        expect.objectContaining({
+          queryParams: { returnUrl: '/sharing_operations/7' },
+        }),
+      );
+    });
+
+    it('should send no returnUrl when there is none to forward', () => {
+      completeSecondStep(2);
+      fillIterations([[2, 100]]);
+      component.submitIteration();
+      component.lastForm.patchValue({ key_name: 'Test Key', key_description: 'Desc' });
+      component.submitKey();
+
+      expect(routerSpy.navigate).toHaveBeenCalledWith(
+        ['/keys/add'],
+        expect.objectContaining({ queryParams: {} }),
+      );
+    });
+  });
+
+  // -- Participants source ----------------------------------------------
+
+  describe('participant source', () => {
+    let dialogClose: Subject<string[] | null>;
+
+    beforeEach(() => {
+      dialogClose = new Subject();
+      dialogServiceSpy.open.mockReturnValue({
+        onClose: dialogClose.asObservable(),
+        destroy: vi.fn(),
+      } as unknown as DynamicDialogRef);
+    });
+
+    it('should default to the manual count', () => {
+      expect(component.participantSource()).toBe('manual');
+      expect(component.participantNames()).toEqual([]);
+    });
+
+    it('should let the import dialog choose its own operation by default', () => {
+      component.importFromSharingOperation();
+      const config = dialogServiceSpy.open.mock.calls.at(-1)?.[1] as { data: unknown };
+      expect(config.data).toEqual({});
+    });
+
+    it('should scope the dialog to the operation the wizard was opened from', () => {
+      queryParams = { idSharing: '42' };
+      component.ngOnInit();
+
+      component.importFromSharingOperation();
+      const config = dialogServiceSpy.open.mock.calls.at(-1)?.[1] as {
+        data: { idSharing: number };
+      };
+      expect(config.data.idSharing).toBe(42);
+    });
+
+    it('should set the count and pre-fill the names from the imported EANs', () => {
+      component.onParticipantSourceChange('operation');
+      component.importFromSharingOperation();
+      dialogClose.next(['EAN1', 'EAN2', 'EAN3']);
+
+      expect(component.participantNames()).toEqual(['EAN1', 'EAN2', 'EAN3']);
+      expect(component.formFirstStep.get('nb_consumers')?.value).toBe(3);
+      expect(component.formSecondStep.get('consumer_name_0')?.value).toBe('EAN1');
+      expect(component.formSecondStep.get('consumer_name_2')?.value).toBe('EAN3');
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalled();
+    });
+
+    it('should drop duplicate and blank EANs before counting them', () => {
+      component.onParticipantSourceChange('operation');
+      component.importFromSharingOperation();
+      dialogClose.next(['EAN1', ' EAN1 ', '  ', 'EAN2']);
+
+      expect(component.participantNames()).toEqual(['EAN1', 'EAN2']);
+      expect(component.formFirstStep.get('nb_consumers')?.value).toBe(2);
+    });
+
+    it('should ignore a cancelled import', () => {
+      component.onParticipantSourceChange('operation');
+      component.importFromSharingOperation();
+      dialogClose.next(null);
+      expect(component.participantNames()).toEqual([]);
+    });
+
+    it('should clear the imported names when switching back to a manual count', () => {
+      component.onParticipantSourceChange('operation');
+      component.importFromSharingOperation();
+      dialogClose.next(['EAN1', 'EAN2']);
+
+      component.onParticipantSourceChange('manual');
+      expect(component.participantNames()).toEqual([]);
+      // `null`, not `''` - the latter renders as a `0` in p-inputNumber.
+      expect(component.formFirstStep.get('nb_consumers')?.value).toBeNull();
+    });
+
+    it('should pre-fill from router state when arriving from a sharing operation', () => {
+      history.pushState({ consumers: ['EAN9', 'EAN8'] }, '');
+      try {
+        component.ngOnInit();
+        expect(component.participantSource()).toBe('operation');
+        expect(component.participantNames()).toEqual(['EAN9', 'EAN8']);
+        expect(component.formSecondStep.get('consumer_name_0')?.value).toBe('EAN9');
+        // The caller already picked the meters - do not toast at them for it.
+        expect(snackbarSpy.openSnackBar).not.toHaveBeenCalled();
+      } finally {
+        history.replaceState({}, '');
+      }
+    });
+
+    it('should carry the imported names through to the built key', () => {
+      component.onParticipantSourceChange('operation');
+      component.importFromSharingOperation();
+      dialogClose.next(['EAN1', 'EAN2']);
+
+      component.submitSecondForm();
+      fillIterations([[2, 100]]);
+      component.submitIteration();
+      component.lastForm.patchValue({ key_name: 'K', key_description: 'D' });
+      component.submitKey();
+
+      const key = eventBusSpy.emit.mock.calls.at(-1)?.[1] as {
+        iterations: { consumers: { name: string }[] }[];
+      };
+      expect(key.iterations[0].consumers.map((consumer) => consumer.name)).toEqual([
+        'EAN1',
+        'EAN2',
+      ]);
+    });
+  });
+
+  // -- Back navigation ---------------------------------------------------
+
+  describe('backUrl', () => {
+    it('should point at the keys list by default', () => {
+      expect(component.backUrl()).toBe('/keys');
+    });
+
+    it('should point back at whoever sent the user here', () => {
+      queryParams = { returnUrl: '/sharing_operations/7' };
+      component.ngOnInit();
+      expect(component.backUrl()).toBe('/sharing_operations/7');
+    });
+
+    it('should refuse an off-site returnUrl', () => {
+      queryParams = { returnUrl: '//evil.com' };
+      component.ngOnInit();
+      expect(component.backUrl()).toBe('/keys');
     });
   });
 });

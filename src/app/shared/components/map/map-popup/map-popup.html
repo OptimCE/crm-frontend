@@ -1,0 +1,81 @@
+<div class="flex items-start justify-between gap-2 mb-2">
+  <div class="min-w-0">
+    <h2 class="text-sm font-semibold text-surface-900 m-0" data-testid="map-popup__title">
+      {{ titleKey() | translate }}
+    </h2>
+    <p class="text-xs text-surface-500 m-0" data-testid="map-popup__count">
+      {{ 'MAP.POPUP.COUNT' | translate: { count: entries().length } }}
+    </p>
+  </div>
+  <button
+    type="button"
+    class="shrink-0 p-1 rounded text-surface-500 hover:text-surface-900"
+    [attr.aria-label]="'MAP.POPUP.CLOSE' | translate"
+    (click)="closeRequest.emit()"
+    data-testid="map-popup__btn--close"
+  >
+    <i class="pi pi-times text-xs"></i>
+  </button>
+</div>
+
+<ul class="map-popup__list list-none p-0 m-0 flex flex-col gap-2" data-testid="map-popup__list">
+  @for (entry of visible(); track entry.id) {
+    <li class="border-t border-surface-200 pt-2 first:border-t-0 first:pt-0">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-sm font-medium text-surface-900 break-words">{{ entry.title }}</span>
+        @for (badge of entry.badges ?? []; track badge.labelKey) {
+          <p-tag [severity]="badge.severity" [value]="badge.labelKey | translate" />
+        }
+      </div>
+
+      @for (field of entry.fields ?? []; track field.labelKey) {
+        <div class="text-xs text-surface-600 mt-0.5">
+          <span class="text-surface-400">{{ field.labelKey | translate }}:</span> {{ field.value }}
+        </div>
+      }
+
+      @if (entry.approximate) {
+        <p class="text-xs text-surface-500 italic mt-1 m-0" data-testid="map-popup__approximate">
+          {{ 'MAP.POPUP.APPROXIMATE_NOTICE' | translate }}
+        </p>
+      }
+
+      @if (entry.routerLink) {
+        <a
+          [routerLink]="entry.routerLink"
+          class="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline mt-1"
+          [attr.data-testid]="'map-popup__link--' + entry.id"
+        >
+          <i class="pi pi-arrow-up-right text-[0.6rem]"></i>
+          {{ 'MAP.POPUP.OPEN_DETAIL' | translate }}
+        </a>
+      }
+    </li>
+  }
+</ul>
+
+@if (pageCount() > 1) {
+  <div class="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-surface-200">
+    <button
+      type="button"
+      class="text-xs text-primary-600 disabled:text-surface-300"
+      [disabled]="page() === 0"
+      (click)="previous()"
+      data-testid="map-popup__btn--previous"
+    >
+      {{ 'MAP.POPUP.PREVIOUS' | translate }}
+    </button>
+    <span class="text-xs text-surface-500" aria-live="polite" data-testid="map-popup__page">
+      {{ 'MAP.POPUP.PAGE' | translate: { page: page() + 1, total: pageCount() } }}
+    </span>
+    <button
+      type="button"
+      class="text-xs text-primary-600 disabled:text-surface-300"
+      [disabled]="page() === pageCount() - 1"
+      (click)="next()"
+      data-testid="map-popup__btn--next"
+    >
+      {{ 'MAP.POPUP.NEXT' | translate }}
+    </button>
+  </div>
+}

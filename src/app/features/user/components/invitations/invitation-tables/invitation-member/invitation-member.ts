@@ -204,7 +204,7 @@ export class InvitationMember {
 
   encodeNewMember(invitation: UserMemberInvitationDTO): void {
     this.ref = this.dialogService.open(EncodeNewMemberSelfComponent, {
-      header: this.translate.instant('INVITATION.ENCODE_NEW_MEMBER_TITLE') as string,
+      header: this.translate.instant('INVITATION.MEMBER.ENCODE_NEW_MEMBER_TITLE') as string,
       modal: true,
       closable: true,
       closeOnEscape: true,

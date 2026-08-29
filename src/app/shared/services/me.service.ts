@@ -28,7 +28,12 @@ import {
 } from '../dtos/invitation.dtos';
 import { CompanyDTO, IndividualDTO } from '../dtos/member.dtos';
 import { DownloadDocument } from '../dtos/document.dtos';
-import { MeterConsumptionDTO, MeterConsumptionQuery } from '../dtos/meter.dtos';
+import {
+  MeterConsumptionDTO,
+  MeterConsumptionQuery,
+  MeterMapDTO,
+  MeterMapQuery,
+} from '../dtos/meter.dtos';
 import { defineTTL } from '../../core/services/cache/cache.helper';
 
 @Injectable({
@@ -79,6 +84,21 @@ export class MeService extends ServiceBase {
     return this.cachedGet<ApiResponsePaginated<MePartialMeterDTO[] | string>>(
       `me:meters:${JSON.stringify(query)}`,
       this.apiAddress + '/meters',
+      query,
+    );
+  }
+
+  /**
+   * Every plottable meter this user owns, across all their communities.
+   *
+   * User-scoped rather than community-scoped: the request carries no
+   * X-Community-ID and the result can span communities, which is also why each
+   * point carries a `community_name`.
+   */
+  getMetersMap(query: MeterMapQuery): Observable<ApiResponse<MeterMapDTO | string>> {
+    return this.cachedGet<ApiResponse<MeterMapDTO | string>>(
+      `me:meters-map:${JSON.stringify(query)}`,
+      this.apiAddress + '/meters/map',
       query,
     );
   }

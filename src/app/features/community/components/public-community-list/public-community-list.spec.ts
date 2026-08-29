@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { of, NEVER, throwError } from 'rxjs';
+import { BehaviorSubject, of, NEVER, throwError } from 'rxjs';
+import { ActivatedRoute, type ParamMap, Router, convertToParamMap } from '@angular/router';
 import { PublicCommunityList } from './public-community-list';
+import { CommunityMap } from './community-map/community-map';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { MunicipalityService } from '../../../../shared/services/municipality.service';
 import { CommunityDetailDTO, PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
@@ -111,8 +113,12 @@ describe('PublicCommunityList', () => {
   let municipalityServiceSpy: {
     searchMunicipalities: ReturnType<typeof vi.fn>;
   };
+  let routerSpy: { navigate: ReturnType<typeof vi.fn> };
+  let routeParams: BehaviorSubject<ParamMap>;
 
   beforeEach(async () => {
+    routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
+    routeParams = new BehaviorSubject<ParamMap>(convertToParamMap({}));
     communityServiceSpy = {
       getPublicCommunities: vi.fn().mockReturnValue(of(buildPaginatedResponse(buildCommunities()))),
       getCommunityPublicSharingOperations: vi
@@ -136,10 +142,21 @@ describe('PublicCommunityList', () => {
       providers: [
         { provide: CommunityService, useValue: communityServiceSpy },
         { provide: MunicipalityService, useValue: municipalityServiceSpy },
+        // The component reads `?view=` and writes it back, so both are needed
+        // now — it injected neither before the map view existed.
+        { provide: ActivatedRoute, useValue: { queryParamMap: routeParams } },
+        { provide: Router, useValue: routerSpy },
       ],
     })
       .overrideComponent(PublicCommunityList, {
-        set: { schemas: [NO_ERRORS_SCHEMA] },
+        // NO_ERRORS_SCHEMA only tolerates UNKNOWN elements; an imported
+        // standalone component still instantiates. The map branch is not
+        // rendered in list view, but removing it keeps that guarantee explicit.
+        //
+        // `remove` + `add` rather than `set`: `set` replaces the whole metadata
+        // field, and combining it with `remove` silently drops the override.
+        remove: { imports: [CommunityMap] },
+        add: { schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 
@@ -634,6 +651,57 @@ describe('PublicCommunityList', () => {
     });
     it('returns empty string for unknown values', () => {
       expect(component.typeLabelKey(999 as unknown as SharingOperationType)).toBe('');
+    });
+  });
+
+  // ── List / map view toggle ──────────────────────────────────────────
+
+  describe('view toggle', () => {
+    it('should default to the list view', () => {
+      expect(component.view()).toBe('list');
+    });
+
+    it('should read ?view=map from the query params', () => {
+      routeParams.next(convertToParamMap({ view: 'map' }));
+
+      expect(component.view()).toBe('map');
+    });
+
+    it('should write ?view=map and drop it again for the list', () => {
+      component.setView('map');
+      expect(routerSpy.navigate).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { view: 'map' }, queryParamsHandling: 'merge' }),
+      );
+
+      component.setView('list');
+      expect(routerSpy.navigate).toHaveBeenLastCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { view: null } }),
+      );
+    });
+
+    it('should expose the municipality filter as NIS codes for the map', () => {
+      component.selectedMunicipalities.set([
+        {
+          nis_code: 21004,
+          fr_name: 'Bruxelles',
+          nl_name: null,
+          de_name: null,
+          region_fr: null,
+          postal_codes: [],
+        },
+        {
+          nis_code: 21009,
+          fr_name: 'Ixelles',
+          nl_name: null,
+          de_name: null,
+          region_fr: null,
+          postal_codes: [],
+        },
+      ]);
+
+      expect(component.selectedNisCodes()).toEqual([21004, 21009]);
     });
   });
 });

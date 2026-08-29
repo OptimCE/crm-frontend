@@ -31,9 +31,13 @@ FROM nginx:1.29.8-alpine
 # Install curl for healthcheck
 RUN apk add --no-cache curl
 
-# Copy nginx configuration (optional,we use the default one for now, but you can customize it if needed)
-# COPY nginx.conf /etc/nginx/nginx.conf
-# COPY default.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configuration.
+#
+# Needed since the map views landed: nginx 1.29's mime.types has no entry for
+# `.mjs`, and maplibre-gl v6 loads its worker from a `.mjs` file. Served as
+# application/octet-stream the browser refuses to run it, and the map renders
+# with no tiles and no error. See default.conf.
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Copy built Angular app from builder stage
 COPY --from=builder /app/dist/crm-frontend/browser /usr/share/nginx/html

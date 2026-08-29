@@ -447,6 +447,16 @@
         "ADDRESSES": "Adressen",
         "HOUSE_ADDRESS": "Wohnadresse",
         "BILLING_ADDRESS": "Rechnungsadresse"
+      },
+      "PREFILL": {
+        "CTA": "Schneller geht es so: Füllen Sie dieses Formular mit den Daten aus Ihrem Profil.",
+        "BUTTON": "Meine Profildaten verwenden",
+        "ARMED": "Ihr Profil wird verwendet, sobald Sie eine Mitgliedsart gewählt haben.",
+        "APPLIED": "{{count}} Feld(er) aus Ihrem Profil ausgefüllt. Bitte prüfen Sie diese und ergänzen Sie den Rest.",
+        "EMPTY": "Ihr Profil enthält noch keine wiederverwendbaren Daten.",
+        "GO_TO_PROFILE": "Mein Profil vervollständigen",
+        "ERROR": "Ihr Profil konnte nicht geladen werden.",
+        "RETRY": "Erneut versuchen"
       }
     },
     "MANAGER": {
@@ -673,7 +683,37 @@
       "FINALISATION": "Abschluss",
       "STEP_CONSUMERS_COUNT": "Verbraucher",
       "STEP_CONSUMER_NAMES": "Namen",
-      "STEP_ITERATIONS": "Iterationen"
+      "STEP_ITERATIONS": "Iterationen",
+      "PARTICIPANTS_SOURCE": {
+        "LEGEND": "Wie möchten Sie die Teilnehmer festlegen?",
+        "MANUAL": "Manuell",
+        "MANUAL_HINT": "Geben Sie die Anzahl der Teilnehmer an und benennen Sie sie anschließend.",
+        "OPERATION": "Aus einer Sharing-Operation",
+        "OPERATION_HINT": "Wählen Sie eine Operation und ein Datum: Ihre Zähler werden zu den Teilnehmern.",
+        "CHOOSE_METERS": "Zähler auswählen",
+        "IMPORTED": "{{ count }} Teilnehmer importiert",
+        "CHANGE": "Ändern"
+      }
+    },
+    "CREATE_MODE": {
+      "HEADER": "Wie möchten Sie den Schlüssel erstellen?",
+      "SUBTITLE": "Beide Methoden ergeben denselben Schlüssel — wählen Sie, was Ihnen zusagt.",
+      "FULL": {
+        "TITLE": "Vollständige Erstellung",
+        "DESCRIPTION": "Die gesamte Tabelle auf einer Seite: Iterationen, Teilnehmer und Prozentsätze. Ideal, wenn Sie bereits wissen, was Sie erfassen möchten.",
+        "ACTION": "Editor öffnen"
+      },
+      "STEP": {
+        "TITLE": "Schrittweise Erstellung",
+        "DESCRIPTION": "Ein Assistent führt Sie: Teilnehmer, Iterationen und dann der Abschluss. Vor dem Speichern prüfen Sie die vollständige Tabelle.",
+        "ACTION": "Assistenten starten"
+      }
+    },
+    "IMPORT_FROM_SHARING_OPERATION": {
+      "BUTTON_LABEL": "Aus einer Operation importieren",
+      "HEADER": "Die Zähler einer Teilungsoperation importieren",
+      "IMPORTED": "{{ added }} Teilnehmer importiert",
+      "IMPORTED_WITH_SKIPPED": "{{ added }} Teilnehmer importiert, {{ skipped }} bereits vorhanden"
     },
     "TABLE": {
       "COLUMNS": {
@@ -708,7 +748,6 @@
       "SUBTITLE": "Konfigurieren Sie, wie Energie zwischen Verbrauchern verteilt wird",
       "ERASE_FILTERS_BUTTON_LABEL": "Filter löschen",
       "ADD_BUTTON_LABEL": "Hinzufügen",
-      "ADD_STANDARD_KEY_BUTTON_LABEL": "Standardschlüssel hinzufügen",
       "NAME_LABEL": "Name",
       "DESCRIPTION_LABEL": "Beschreibung",
       "PAGINATED_TEMPLATE_LIST": "Seite {{ page }} von {{ total_pages }} ({{ total }} Schlüssel)",
@@ -1353,7 +1392,9 @@
       "DESCRIPTION_LABEL": "Beschreibung",
       "NO_ALLOCATION_KEYS_FOUND_LABEL": "Kein Schlüssel gefunden",
       "ADD_BUTTON_LABEL": "Hinzufügen",
-      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Schlüssel)"
+      "PAGE_REPORT_TEMPLATE_KEYS_LABEL": "Seite {{ page }} von {{ total_pages }} ({{ total }} Schlüssel)",
+      "CREATE_KEY_BUTTON_LABEL": "Einen Schlüssel erstellen",
+      "CREATE_KEY_BUTTON_TOOLTIP": "Einen neuen Schlüssel aus den Zählern der Operation zu einem bestimmten Datum erstellen"
     },
     "ADD_METER": {
       "CLEAR_FILTER_BUTTON_LABEL": "Filter löschen",
@@ -1423,7 +1464,8 @@
         "APPROVE_KEY": "Genehmigen",
         "REJECT_KEY": "Ablehnen",
         "APPROVE_KEY_DATE_LABEL": "Startdatum für den genehmigten Schlüssel",
-        "APPROVE_KEY_NO_DATE_ERROR": "Bitte wählen Sie ein Startdatum aus, bevor Sie den Schlüssel genehmigen."
+        "APPROVE_KEY_NO_DATE_ERROR": "Bitte wählen Sie ein Startdatum aus, bevor Sie den Schlüssel genehmigen.",
+        "SELECT_METERS_NEW_KEY_HEADER": "Zähler für den neuen Schlüssel"
       },
       "METER": {
         "HEADERS": {
@@ -1493,6 +1535,7 @@
         "STATUS_LABEL": "Status",
         "APPROVED_LABEL": "Genehmigt",
         "DENIED_LABEL": "Abgelehnt",
+        "PENDING_LABEL": "Warten auf Genehmigung",
         "NO_HISTORY_KEY_FOUND_LABEL": "Kein Schlüsselverlauf gefunden",
         "NO_HISTORY_KEY_AVAILABLE_LABEL": "Kein Schlüsselverlauf verfügbar"
       },
@@ -1521,23 +1564,6 @@
       "SHARING_OPERATION_ADDED_SUCCESSFULLY_LABEL": "Teilungsoperation erfolgreich hinzugefügt",
       "SELECT_A_TYPE_PLACEHOLDER": "Typ auswählen"
     },
-    "SELECT_METER_NEW_KEY": {
-      "NOW": "Jetzt",
-      "FUTURE": "Zukünftig",
-      "METERS_SELECTED": "{{ count }} Zähler ausgewählt",
-      "CLEAR_ALL": "Alle löschen",
-      "SELECT_ALL_NOW": "Alle aktuellen Zähler auswählen",
-      "SELECT_ALL_FUTURE": "Alle zukünftigen Zähler auswählen",
-      "CLEAN_FILTERS": "Filter löschen",
-      "TABLE": {
-        "ADDRESS": "Adresse",
-        "EAN": "EAN",
-        "METER_NUMBER": "Zählernummer",
-        "STATUS": "Status",
-        "HOLDER": "Inhaber",
-        "NO_METERS_FOUND": "Kein Zähler gefunden"
-      }
-    },
     "ERRORS": {
       "GET_SHARING_OPERATION_PARTIAL_LIST": "Fehler beim Abrufen der Teilliste der Teilungen",
       "GET_FULL_SHARING_OPERATION": "Fehler beim vollständigen Abrufen der Teilung",
@@ -1551,6 +1577,30 @@
       "GET_METER_CONSUMPTION": "Fehler beim Abrufen des Zählerverbrauchs",
       "DOWNLOAD_METER_CONSUMPTION": "Fehler beim Herunterladen des Zählerverbrauchs",
       "DOWNLOAD_SHARING_OPERATION_METER_CONSUMPTION": "Fehler beim Herunterladen des Verbrauchs der geteilten Zähler"
+    }
+  },
+  "IMPORT_SHARING_OPERATION_METERS": {
+    "OPERATION_LABEL": "Teilungsoperation",
+    "OPERATION_PLACEHOLDER": "Wählen Sie eine Operation",
+    "DATE_LABEL": "Zum Datum",
+    "HINT": "Die an diesem Datum in der Operation registrierten Zähler sind unten aufgeführt. Verbraucher sind standardmäßig angehakt, Einspeisepunkte nicht.",
+    "SELECT_ALL": "Alle auswählen",
+    "CLEAN_FILTERS": "Filter löschen",
+    "METERS_SELECTED": "{{ count }} Zähler ausgewählt",
+    "CLEAR_ALL": "Alle löschen",
+    "CONFIRM": "Importieren ({{ count }})",
+    "NO_METERS_FOUND": "Kein Zähler in der Operation an diesem Datum",
+    "ROLE": {
+      "CONSUMER": "Verbraucher",
+      "INJECTION": "Einspeisung"
+    },
+    "TABLE": {
+      "ADDRESS": "Adresse",
+      "EAN": "EAN",
+      "METER_NUMBER": "Zählernummer",
+      "ROLE": "Rolle",
+      "STATUS": "Status",
+      "HOLDER": "Inhaber"
     }
   },
   "FORM_ERROR": {
@@ -2696,6 +2746,78 @@
       "10": "Oktober",
       "11": "November",
       "12": "Dezember"
+    }
+  },
+  "CRM_DATA_SOURCE": {
+    "SOURCE_LEGEND": "Woher stammen die Verbrauchsdaten?",
+    "SOURCE_FILE": "Eine Datei importieren",
+    "SOURCE_FILE_HINT": "Die CSV- oder Excel-Datei Ihres Netzbetreibers.",
+    "SOURCE_CRM": "Die bereits gespeicherten Daten verwenden",
+    "SOURCE_CRM_HINT": "Die Messdaten, die bereits in OptimCE vorliegen, für den von Ihnen gewählten Zeitraum.",
+    "SOURCE_CRM_SIM_HINT": "Die Messdaten, die bereits in OptimCE vorliegen. Die Teilnehmer des Schlüssels müssen den EAN-Codes der Zähler entsprechen.",
+    "OPERATION_LABEL": "Sharing-Vorgang",
+    "OPERATION_PLACEHOLDER": "Wählen Sie einen Sharing-Vorgang",
+    "PERIOD_START_LABEL": "Von",
+    "PERIOD_END_LABEL": "Bis",
+    "PERIOD_HELP": "Beide Daten sind eingeschlossen. Wir verwenden die Bruttomesswerte (vor der Aufteilung) aller Zähler des Vorgangs.",
+    "PERIOD_HELP_SIM": "Beide Daten sind eingeschlossen. Wir verwenden die Bruttomesswerte (vor der Aufteilung) der Zähler, die den Teilnehmern des Schlüssels entsprechen.",
+    "PREVIEW": {
+      "FAILED": "Die Daten konnten derzeit nicht geprüft werden. Bitte versuchen Sie es gleich noch einmal.",
+      "SUMMARY": "{{meters}} Zähler · {{readings}} Messwert(e)",
+      "PERIOD_COVERED": "Daten verfügbar von {{from}} bis {{to}}",
+      "TOTAL_CONSUMPTION": "Gesamtverbrauch",
+      "TOTAL_INJECTION": "Gesamteinspeisung",
+      "PARTICIPANTS_MATCHED": "{{count}} Teilnehmer des Schlüssels stimmen mit einem Zähler überein",
+      "PARTICIPANTS_UNMATCHED": "{{count}} Teilnehmer des Schlüssels stimmen mit keinem Zähler überein:",
+      "PARTICIPANTS_UNMATCHED_HINT": "Die Teilnehmer eines Schlüssels müssen den EAN-Code des Zählers tragen. Korrigieren Sie den Schlüssel oder wählen Sie einen anderen Sharing-Vorgang bzw. Zeitraum.",
+      "INCOMPLETE_TITLE": "{{count}} Zähler haben für einen Teil des Zeitraums keine Messwerte:",
+      "INCOMPLETE_METER": "{{ean}} — {{missing}} von {{expected}} Messwerten fehlen",
+      "INCOMPLETE_HINT": "Fehlende Messwerte zählen als Nullverbrauch. Die Berechnung ist weiterhin möglich, das Ergebnis ist für diese Zähler aber weniger aussagekräftig."
+    }
+  },
+  "MAP": {
+    "MAP_VIEW_LABEL": "Karte",
+    "LIST_VIEW_LABEL": "Liste",
+    "VIEW_SWITCH_ARIA": "Zwischen Listen- und Kartenansicht wechseln",
+    "REGION_ARIA": "Interaktive Karte",
+    "LOADING": "Karte wird geladen…",
+    "ZOOM_IN": "Vergrößern",
+    "ZOOM_OUT": "Verkleinern",
+    "RESET_VIEW": "Neu zentrieren",
+    "RETRY": "Erneut versuchen",
+    "UNAVAILABLE_TITLE": "Karte nicht verfügbar",
+    "UNAVAILABLE_WEBGL": "Ihr Browser unterstützt kein WebGL 2, das für die Karte erforderlich ist. Die Listenansicht bleibt verfügbar.",
+    "UNAVAILABLE_LOAD": "Die Karte konnte nicht geladen werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    "EMPTY_TITLE": "Nichts auf der Karte anzuzeigen",
+    "EMPTY_METERS": "Kein Zähler, der diesen Filtern entspricht, hat bereits geografische Koordinaten.",
+    "EMPTY_COMMUNITIES": "Keine öffentliche Gemeinschaft deckt eine lokalisierbare Gemeinde ab.",
+    "PARTIAL_COORDINATES": "{{ plotted }} von {{ total }} Zählern angezeigt: {{ missing }} haben noch keine Koordinaten.",
+    "CAPPED": "Es werden nur die ersten {{ limit }} Ergebnisse angezeigt. Grenzen Sie Ihre Filter ein, um alles zu sehen.",
+    "LEGEND": {
+      "TITLE": "Legende",
+      "PRECISION_ADDRESS": "Genaue Position",
+      "PRECISION_MUNICIPALITY": "Ungefähre Position (Gemeindemitte)",
+      "CLUSTER": "Gruppe von Markierungen — zum Aufklappen klicken"
+    },
+    "POPUP": {
+      "TITLE_POINTS": "An diesem Ort",
+      "TITLE_METERS": "Zähler an dieser Adresse",
+      "TITLE_ZONES": "Gemeinschaften in dieser Gemeinde",
+      "COUNT": "{{ count }} Ergebnis(se)",
+      "CLOSE": "Schließen",
+      "PREVIOUS": "Zurück",
+      "NEXT": "Weiter",
+      "PAGE": "{{ page }} / {{ total }}",
+      "OPEN_DETAIL": "Details öffnen",
+      "APPROXIMATE_NOTICE": "Ungefähre Position: Gemeindemitte.",
+      "HOLDER": "Inhaber",
+      "NO_HOLDER": "Kein Inhaber",
+      "OPERATION": "Teilungsvorgang",
+      "NO_OPERATION": "Kein Vorgang",
+      "COMMUNITY": "Gemeinschaft",
+      "MUNICIPALITIES": "Gemeinden",
+      "REGULATOR": "Regulierungsbehörde",
+      "OPERATIONS_COUNT": "{{ count }} öffentliche Vorgänge"
     }
   }
 }

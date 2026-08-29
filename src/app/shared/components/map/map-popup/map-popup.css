@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  min-width: 15rem;
+  max-width: 21rem;
+  outline: none;
+}
+
+.map-popup__list {
+  max-height: 16rem;
+  overflow-y: auto;
+  /* Stops a scroll gesture inside the popup from panning the map underneath. */
+  overscroll-behavior: contain;
+}

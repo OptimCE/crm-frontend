@@ -5,6 +5,7 @@ import {
   ClientType,
   InjectionStatus,
   MeterDataStatus,
+  MeterGeoPrecision,
   MeterRate,
   PhaseCategory,
   ProductionChain,
@@ -56,6 +57,23 @@ export interface PartialMeterDTO {
   /** End date (`YYYY-MM-DD`) of the meter data record selected for this view, if closed. */
   end_date?: string;
   sharing_operation?: SharingOperationPartialDTO;
+  /**
+   * Injection status of the meter data record selected for this view.
+   * `null`/absent means the meter is a pure offtake point — a consumer.
+   * Use {@link isConsumerMeter} rather than testing this directly: the frontend enum carries an
+   * extra `NONE` member that the backend expresses as `null`.
+   */
+  injection_status?: InjectionStatus | null;
+}
+
+/**
+ * Whether a meter is a pure offtake point (a consumer) rather than an injection/production point.
+ *
+ * The backend leaves `injection_status` null for consumers, while the frontend enum also has a
+ * `NONE` member — both must count as "consumer".
+ */
+export function isConsumerMeter(meter: Pick<PartialMeterDTO, 'injection_status'>): boolean {
+  return meter.injection_status == null || meter.injection_status === InjectionStatus.NONE;
 }
 
 /**
@@ -206,4 +224,50 @@ export interface UpdateMeterDTO {
 export interface DeleteFutureMeterDataDTO {
   id_meter_data: number;
   active_previous_meter_data?: boolean;
+}
+
+/**
+ * Query for the meters map. Same filters as the list; the map is not paginated,
+ * so `page`/`limit` are deliberately excluded rather than sent and ignored.
+ */
+export type MeterMapQuery = Omit<MeterPartialQuery, 'page' | 'limit'>;
+
+/** One plottable meter. */
+export interface MeterMapPointDTO {
+  EAN: string;
+  latitude: number;
+  longitude: number;
+  geo_precision: MeterGeoPrecision | null;
+  status: MeterDataStatus;
+  /** Null/absent means a pure offtake point — a consumer. See {@link isConsumerMeter}. */
+  injection_status?: InjectionStatus | null;
+  holder_name?: string;
+  sharing_operation_id?: number;
+  sharing_operation_name?: string;
+  /** Only set by the member-scoped endpoint, whose meters can span communities. */
+  community_name?: string;
+}
+
+/**
+ * The meters map payload.
+ *
+ * The counters are load-bearing, not diagnostics: at launch most addresses have
+ * no coordinates, and without them the map would show a fraction of the
+ * community as though it were the whole of it.
+ */
+export interface MeterMapDTO {
+  points: MeterMapPointDTO[];
+  /** Meters passing the filters, geocoded or not. */
+  total_matching: number;
+  /** Of those, the ones that have coordinates. */
+  total_plottable: number;
+  missing_coordinates: number;
+  /** True when `cap` cut the result short. */
+  truncated: boolean;
+  cap: number;
+}
+
+/** Whether a point's coordinate is precise enough to be treated as an address. */
+export function isExactMeterPoint(point: Pick<MeterMapPointDTO, 'geo_precision'>): boolean {
+  return point.geo_precision !== null && point.geo_precision <= MeterGeoPrecision.STREET;
 }

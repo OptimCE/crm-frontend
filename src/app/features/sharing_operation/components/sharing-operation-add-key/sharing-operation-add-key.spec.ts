@@ -30,7 +30,7 @@ describe('SharingOperationAddKey', () => {
   let component: SharingOperationAddKey;
   let fixture: ComponentFixture<SharingOperationAddKey>;
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
-  let dialogConfigStub: { data: { id: number } };
+  let dialogConfigStub: { data: { id: number; prefillName?: string } };
   let keyServiceSpy: { getKeysList: ReturnType<typeof vi.fn> };
   let sharingOpServiceSpy: { addKeyToSharing: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
@@ -220,6 +220,56 @@ describe('SharingOperationAddKey', () => {
       const mockTable = { clear: clearFn } as unknown as Table<KeyPartialDTO>;
       component.clear(mockTable);
       expect(clearFn).toHaveBeenCalled();
+    });
+  });
+
+  // ── 6b. Creating a key from here ──────────────────────────────────
+
+  describe('createKey', () => {
+    it('hands the flow back to the caller rather than attaching anything', () => {
+      component.createKey();
+
+      expect(dialogRefSpy.close).toHaveBeenCalledWith({ action: 'create' });
+      expect(sharingOpServiceSpy.addKeyToSharing).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('prefillName', () => {
+    it('drives the table filter so the box shows the value and clearing it really clears', () => {
+      dialogConfigStub.data.prefillName = 'Key from March';
+      // Rebuild the component so the new dialog payload is read.
+      fixture = TestBed.createComponent(SharingOperationAddKey);
+      component = fixture.componentInstance;
+      const filterFn = vi.fn();
+      vi.spyOn(component, 'table').mockReturnValue({
+        filter: filterFn,
+      } as unknown as Table<KeyPartialDTO>);
+
+      component.ngAfterViewInit();
+
+      expect(filterFn).toHaveBeenCalledWith('Key from March', 'nom', 'contains');
+    });
+
+    it('leaves the table alone when there is nothing to prefill', () => {
+      const filterFn = vi.fn();
+      vi.spyOn(component, 'table').mockReturnValue({
+        filter: filterFn,
+      } as unknown as Table<KeyPartialDTO>);
+
+      component.ngAfterViewInit();
+
+      expect(filterFn).not.toHaveBeenCalled();
+    });
+
+    it('does not smuggle the name into the query behind the table', () => {
+      dialogConfigStub.data.prefillName = 'Key from March';
+      fixture = TestBed.createComponent(SharingOperationAddKey);
+      component = fixture.componentInstance;
+      keyServiceSpy.getKeysList.mockClear();
+
+      component.loadKeys();
+
+      expect(keyServiceSpy.getKeysList).toHaveBeenCalledWith({ page: 1, limit: 10 });
     });
   });
 

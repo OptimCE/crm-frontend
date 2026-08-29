@@ -2,8 +2,9 @@ import { Component, input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 import { KeyCreationUpdate } from './key-creation-update';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
@@ -94,6 +95,8 @@ describe('KeyCreationUpdate', () => {
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
   let queryParamSubject: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
   let gridApiMock: { refreshCells: ReturnType<typeof vi.fn> };
+  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
+  let dialogCloseSubject: Subject<string[] | null>;
 
   /** Sets history.state portably (works in both browser and node envs). */
   function setHistoryState(state: Record<string, unknown>): void {
@@ -128,7 +131,11 @@ describe('KeyCreationUpdate', () => {
 
     queryParamSubject = new BehaviorSubject(convertToParamMap({}));
     keyServiceSpy = {
-      getKey: vi.fn(),
+      // `queryParamSubject` is shared by every component this file creates, and components are
+      // never destroyed, so any push of `?id=` reaches earlier instances too. Without a default
+      // observable here, those instances call `.subscribe()` on undefined and the uncaught error
+      // leaks into whichever spec file is running (they share one process).
+      getKey: vi.fn().mockReturnValue(of(new ApiResponse<KeyDTO>(buildKey()))),
       addKey: vi.fn(),
       updateKey: vi.fn(),
     };
@@ -136,6 +143,13 @@ describe('KeyCreationUpdate', () => {
     snackbarSpy = { openSnackBar: vi.fn() };
     errorHandlerSpy = { handleError: vi.fn() };
     gridApiMock = { refreshCells: vi.fn() };
+    dialogCloseSubject = new Subject<string[] | null>();
+    dialogServiceSpy = {
+      open: vi.fn().mockReturnValue({
+        onClose: dialogCloseSubject.asObservable(),
+        destroy: vi.fn(),
+      } as unknown as DynamicDialogRef),
+    };
 
     // Ensure history.state is never null (test environment default)
     if (typeof history !== 'undefined') {
@@ -160,6 +174,8 @@ describe('KeyCreationUpdate', () => {
         add: {
           imports: [BackArrowStub, AgGridStub],
           schemas: [NO_ERRORS_SCHEMA],
+          // The component provides the real DialogService; override it so no dialog is created.
+          providers: [{ provide: DialogService, useValue: dialogServiceSpy }],
         },
       })
       .compileComponents();
@@ -303,6 +319,87 @@ describe('KeyCreationUpdate', () => {
 
         setHistoryState({});
       });
+
+      it('should ignore EANs that are blank or repeated', async () => {
+        setHistoryState({ consumers: ['EAN1', ' ', 'EAN1', 'EAN2'] });
+
+        await createComponent(() => {
+          component.gridApi = gridApiMock as unknown as GridApi;
+        });
+
+        expect(component.key.iterations[0].consumers.map((c) => c.name)).toEqual(['EAN1', 'EAN2']);
+
+        setHistoryState({});
+      });
+    });
+  });
+
+  // ── 1b. Importing from a sharing operation ───────────────────────
+
+  describe('importFromSharingOperation', () => {
+    beforeEach(async () => {
+      await createComponent();
+      setupGridApi();
+    });
+
+    it('is offered while creating a key', () => {
+      expect(component.isCreationMode()).toBe(true);
+    });
+
+    it('is not offered while editing an existing key', async () => {
+      keyServiceSpy.getKey.mockReturnValue(of(new ApiResponse<KeyDTO>(buildKey())));
+      queryParamSubject.next(convertToParamMap({ id: '1' }));
+      await fixture.whenStable();
+
+      expect(component.isCreationMode()).toBe(false);
+    });
+
+    it('creates the first iteration and appends the imported EANs at 0 %', () => {
+      component.importFromSharingOperation();
+      dialogCloseSubject.next(['EAN-A', 'EAN-B']);
+
+      expect(component.key.iterations.length).toBe(1);
+      expect(component.key.iterations[0].consumers.map((c) => c.name)).toEqual(['EAN-A', 'EAN-B']);
+      component.key.iterations[0].consumers.forEach((c) =>
+        expect(c.energy_allocated_percentage).toBe(0),
+      );
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalled();
+    });
+
+    it('appends to the participants already in the key, skipping the ones present', () => {
+      component.importFromSharingOperation();
+      dialogCloseSubject.next(['EAN-A', 'EAN-B']);
+
+      component.importFromSharingOperation();
+      dialogCloseSubject.next(['EAN-B', 'EAN-C']);
+
+      expect(component.key.iterations[0].consumers.map((c) => c.name)).toEqual([
+        'EAN-A',
+        'EAN-B',
+        'EAN-C',
+      ]);
+    });
+
+    it('adds each participant to every iteration', () => {
+      component.importFromSharingOperation();
+      dialogCloseSubject.next(['EAN-A']);
+      component.newIteration();
+
+      component.importFromSharingOperation();
+      dialogCloseSubject.next(['EAN-B']);
+
+      expect(component.key.iterations.length).toBe(2);
+      component.key.iterations.forEach((iteration) =>
+        expect(iteration.consumers.map((c) => c.name)).toContain('EAN-B'),
+      );
+    });
+
+    it('does nothing when the dialog is cancelled', () => {
+      component.importFromSharingOperation();
+      dialogCloseSubject.next(null);
+
+      expect(component.key.iterations.length).toBe(0);
+      expect(snackbarSpy.openSnackBar).not.toHaveBeenCalled();
     });
   });
 
@@ -1060,6 +1157,61 @@ describe('KeyCreationUpdate', () => {
 
       expect(snackbarSpy.openSnackBar).toHaveBeenCalledWith('Key updated', VALIDATION_TYPE);
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys']);
+    });
+
+    describe('returnUrl', () => {
+      /** Re-runs ngOnInit with the given query params so `returnUrl` is picked up. */
+      async function withQueryParams(params: Record<string, string>): Promise<void> {
+        queryParamSubject.next(convertToParamMap(params));
+        await fixture.whenStable();
+      }
+
+      function submitNewKey(name = 'New Key'): void {
+        component.key = buildKey();
+        component.keyInput = null;
+        component.formGroup.get('name')?.setValue(name);
+        component.formGroup.get('description')?.setValue('New Desc');
+        keyServiceSpy.addKey.mockReturnValue(of(new ApiResponse('ok')));
+        component.onSubmit();
+      }
+
+      it('returns to the caller with the new key name after a create', async () => {
+        await withQueryParams({ returnUrl: '/sharing_operations/4' });
+
+        submitNewKey('Key from March');
+
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/sharing_operations/4'], {
+          queryParams: { add_key: 1, key_name: 'Key from March' },
+        });
+      });
+
+      it('still goes to the keys list after an update', async () => {
+        keyServiceSpy.getKey.mockReturnValue(of(new ApiResponse<KeyDTO>(buildKey())));
+        await withQueryParams({ id: '1', returnUrl: '/sharing_operations/4' });
+
+        const key = buildKey();
+        component.key = key;
+        component.keyInput = structuredClone(key);
+        component.formGroup.get('name')?.setValue('Updated');
+        component.formGroup.get('description')?.setValue('Test Description');
+        keyServiceSpy.updateKey.mockReturnValue(of(new ApiResponse('ok')));
+
+        component.onSubmit();
+
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys']);
+      });
+
+      it.each([
+        ['https://evil.example/steal', 'an absolute URL'],
+        ['//evil.example/steal', 'a protocol-relative URL'],
+        ['keys/add', 'a relative path'],
+      ])('ignores %s (%s) and falls back to the keys list', async (returnUrl) => {
+        await withQueryParams({ returnUrl });
+
+        submitNewKey();
+
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys']);
+      });
     });
 
     it('should call errorHandler when add returns null', () => {

@@ -124,3 +124,25 @@ export interface PatchRoleUserDTO {
   id_user: number;
   new_role: Role;
 }
+
+/** Query for the public communities map. */
+export interface PublicCommunityMapQuery {
+  /** Filter by regulator code, mirroring the public list. */
+  regulator?: string;
+}
+
+/**
+ * One public community as a map zone.
+ *
+ * `nis_codes` is the union of the communes covered by this community's public
+ * sharing operations — that union IS the zone. The polygons themselves come
+ * from `/municipalities/geometry`, once per commune, because several
+ * communities routinely share one.
+ */
+export interface PublicCommunityMapDTO {
+  id: number;
+  name: string;
+  regulator: string;
+  nis_codes: number[];
+  public_operations_count: number;
+}

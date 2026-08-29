@@ -5,7 +5,14 @@
     [text]="'COMMUNITY.LIST.PUBLIC_TITLE' | translate"
     [subtitle]="'COMMUNITY.LIST.PUBLIC_SUBTITLE' | translate"
     class="block mb-4"
-  />
+  >
+    <app-view-toggle
+      headerActions
+      [value]="view()"
+      (valueChange)="setView($event)"
+      data-testid="public-community-list__toggle--view"
+    />
+  </app-header-page>
 
   <!-- Municipality filter -->
   <div class="mb-4">
@@ -67,158 +74,177 @@
     />
   </div>
 
-  <!-- Community list -->
-  @if (communities().length === 0) {
-    <div class="py-8 text-center" data-testid="public-community-list__empty--message">
-      <i class="pi pi-address-book text-3xl text-surface-300 mb-2"></i>
-      <p class="text-surface-400 m-0">
-        {{ 'COMMUNITY.LIST.NO_PUBLIC_COMMUNITY_FOUND' | translate }}
-      </p>
-    </div>
-  } @else {
-    <div class="flex flex-col gap-3">
-      @for (community of communities(); track community.id) {
-        <div
-          class="bg-surface-0 border border-primary-100 rounded-xl shadow-sm hover:border-primary-400 transition-colors overflow-hidden"
-        >
-          <button
-            type="button"
-            class="accordion-header w-full flex items-center gap-3 p-4 cursor-pointer text-left"
-            (click)="toggleAccordion(community.id)"
-            [attr.aria-expanded]="isExpanded(community.id)"
-            [attr.data-testid]="'public-community-list__btn--accordion--' + $index"
+  <!-- Exactly ONE branch is instantiated, so a hidden map never boots a
+       WebGL context nor fetches its endpoints. -->
+  @if (view() === 'list') {
+    <!-- Community list -->
+    @if (communities().length === 0) {
+      <div class="py-8 text-center" data-testid="public-community-list__empty--message">
+        <i class="pi pi-address-book text-3xl text-surface-300 mb-2"></i>
+        <p class="text-surface-400 m-0">
+          {{ 'COMMUNITY.LIST.NO_PUBLIC_COMMUNITY_FOUND' | translate }}
+        </p>
+      </div>
+    } @else {
+      <div class="flex flex-col gap-3">
+        @for (community of communities(); track community.id) {
+          <div
+            class="bg-surface-0 border border-primary-100 rounded-xl shadow-sm hover:border-primary-400 transition-colors overflow-hidden"
           >
-            <app-community-logo
-              [src]="community.logo_presigned_url"
-              imgClass="w-8 h-8 object-contain rounded"
-              fallbackClass="w-8 h-8 bg-primary-50 rounded flex items-center justify-center"
-              iconClass="pi pi-building text-primary-400"
-            />
-            <span class="flex-1 font-semibold text-sm text-primary-700">{{ community.name }}</span>
-            <p-tag
-              severity="warn"
-              [value]="'REGULATORS.' + community.regulator | translate"
-              styleClass="text-xs"
-              [attr.data-testid]="'public-community-list__tag--regulator--' + $index"
-            />
-            <i
-              class="pi text-surface-500 transition-transform"
-              [class.pi-chevron-down]="!isExpanded(community.id)"
-              [class.pi-chevron-up]="isExpanded(community.id)"
-            ></i>
-          </button>
-
-          @if (isExpanded(community.id)) {
-            <div
-              class="p-4 border-t border-primary-100 bg-surface-50"
-              [attr.data-testid]="'public-community-list__detail--' + $index"
+            <button
+              type="button"
+              class="accordion-header w-full flex items-center gap-3 p-4 cursor-pointer text-left"
+              (click)="toggleAccordion(community.id)"
+              [attr.aria-expanded]="isExpanded(community.id)"
+              [attr.data-testid]="'public-community-list__btn--accordion--' + $index"
             >
-              @if (getDetail(community.id); as detail) {
-                @if (detail.description || detail.website_url || detail.headquarters_address) {
-                  <div
-                    class="mb-4 flex flex-col gap-2"
-                    [attr.data-testid]="'public-community-list__info--' + $index"
-                  >
-                    @if (detail.description) {
-                      <div>
-                        <span class="text-xs font-medium text-surface-500 block">{{
-                          'COMMUNITY_INFO.DESCRIPTION' | translate
-                        }}</span>
-                        <span class="text-sm text-surface-800 whitespace-pre-line">{{
-                          detail.description
-                        }}</span>
-                      </div>
-                    }
-                    @if (detail.website_url) {
-                      <div>
-                        <span class="text-xs font-medium text-surface-500 block">{{
-                          'COMMUNITY_INFO.WEBSITE' | translate
-                        }}</span>
-                        <a
-                          [href]="detail.website_url"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="text-sm text-primary-600 hover:underline"
-                          >{{ detail.website_url }}</a
-                        >
-                      </div>
-                    }
-                    @if (detail.headquarters_address; as addr) {
-                      <div>
-                        <span class="text-xs font-medium text-surface-500 block">{{
-                          'COMMUNITY_INFO.HEADQUARTERS' | translate
-                        }}</span>
-                        <span class="text-sm text-surface-800">
-                          {{ addr.street }} {{ addr.number }}
-                          @if (addr.supplement) {
-                            , {{ addr.supplement }}
-                          }
-                          <br />
-                          {{ addr.postcode }} {{ addr.city }}
-                        </span>
-                      </div>
-                    }
+              <app-community-logo
+                [src]="community.logo_presigned_url"
+                imgClass="w-8 h-8 object-contain rounded"
+                fallbackClass="w-8 h-8 bg-primary-50 rounded flex items-center justify-center"
+                iconClass="pi pi-building text-primary-400"
+              />
+              <span class="flex-1 font-semibold text-sm text-primary-700">{{
+                community.name
+              }}</span>
+              <p-tag
+                severity="warn"
+                [value]="'REGULATORS.' + community.regulator | translate"
+                styleClass="text-xs"
+                [attr.data-testid]="'public-community-list__tag--regulator--' + $index"
+              />
+              <i
+                class="pi text-surface-500 transition-transform"
+                [class.pi-chevron-down]="!isExpanded(community.id)"
+                [class.pi-chevron-up]="isExpanded(community.id)"
+              ></i>
+            </button>
+
+            @if (isExpanded(community.id)) {
+              <div
+                class="p-4 border-t border-primary-100 bg-surface-50"
+                [attr.data-testid]="'public-community-list__detail--' + $index"
+              >
+                @if (getDetail(community.id); as detail) {
+                  @if (detail.description || detail.website_url || detail.headquarters_address) {
+                    <div
+                      class="mb-4 flex flex-col gap-2"
+                      [attr.data-testid]="'public-community-list__info--' + $index"
+                    >
+                      @if (detail.description) {
+                        <div>
+                          <span class="text-xs font-medium text-surface-500 block">{{
+                            'COMMUNITY_INFO.DESCRIPTION' | translate
+                          }}</span>
+                          <span class="text-sm text-surface-800 whitespace-pre-line">{{
+                            detail.description
+                          }}</span>
+                        </div>
+                      }
+                      @if (detail.website_url) {
+                        <div>
+                          <span class="text-xs font-medium text-surface-500 block">{{
+                            'COMMUNITY_INFO.WEBSITE' | translate
+                          }}</span>
+                          <a
+                            [href]="detail.website_url"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-sm text-primary-600 hover:underline"
+                            >{{ detail.website_url }}</a
+                          >
+                        </div>
+                      }
+                      @if (detail.headquarters_address; as addr) {
+                        <div>
+                          <span class="text-xs font-medium text-surface-500 block">{{
+                            'COMMUNITY_INFO.HEADQUARTERS' | translate
+                          }}</span>
+                          <span class="text-sm text-surface-800">
+                            {{ addr.street }} {{ addr.number }}
+                            @if (addr.supplement) {
+                              , {{ addr.supplement }}
+                            }
+                            <br />
+                            {{ addr.postcode }} {{ addr.city }}
+                          </span>
+                        </div>
+                      }
+                    </div>
+                  }
+                } @else if (isLoadingDetail(community.id)) {
+                  <div class="flex items-center justify-center py-2 mb-2">
+                    <i class="pi pi-spinner pi-spin text-primary-400"></i>
                   </div>
                 }
-              } @else if (isLoadingDetail(community.id)) {
-                <div class="flex items-center justify-center py-2 mb-2">
-                  <i class="pi pi-spinner pi-spin text-primary-400"></i>
-                </div>
-              }
 
-              @if (isLoading(community.id)) {
-                <div class="flex items-center justify-center py-4">
-                  <i class="pi pi-spinner pi-spin text-primary-400"></i>
-                </div>
-              } @else if (getOperations(community.id); as ops) {
-                @if (ops.length === 0) {
-                  <p class="text-surface-400 text-sm m-0">
-                    {{ 'COMMUNITY.PUBLIC_LIST.NO_OPERATIONS' | translate }}
-                  </p>
-                } @else {
-                  <ul
-                    class="flex flex-col gap-3 list-none p-0 m-0"
-                    [attr.data-testid]="'public-community-list__ops--' + $index"
-                  >
-                    @for (op of ops; track op.id) {
-                      <li
-                        class="bg-surface-0 border border-primary-100 rounded-lg p-3"
-                        [attr.data-testid]="'public-community-list__op--' + op.id"
-                      >
-                        <div class="flex items-center gap-2 mb-2">
-                          <i [class]="typeIcon(op.type) + ' text-primary-500'"></i>
-                          <span class="font-semibold text-sm text-primary-700 flex-1">{{
-                            op.name
-                          }}</span>
-                          <p-tag
-                            [value]="typeLabelKey(op.type) | translate"
-                            severity="info"
-                            styleClass="text-xs"
-                          />
-                        </div>
-                        @if (op.municipalities && op.municipalities.length > 0) {
-                          <div class="flex flex-wrap gap-1">
-                            <span class="text-xs text-surface-500 mr-1">
-                              {{ 'COMMUNITY.PUBLIC_LIST.MUNICIPALITIES' | translate }}:
-                            </span>
-                            @for (m of op.municipalities; track m.nis_code) {
-                              <p-tag
-                                [value]="municipalityName(m)"
-                                severity="secondary"
-                                styleClass="text-xs"
-                              />
-                            }
+                @if (isLoading(community.id)) {
+                  <div class="flex items-center justify-center py-4">
+                    <i class="pi pi-spinner pi-spin text-primary-400"></i>
+                  </div>
+                } @else if (getOperations(community.id); as ops) {
+                  @if (ops.length === 0) {
+                    <p class="text-surface-400 text-sm m-0">
+                      {{ 'COMMUNITY.PUBLIC_LIST.NO_OPERATIONS' | translate }}
+                    </p>
+                  } @else {
+                    <ul
+                      class="flex flex-col gap-3 list-none p-0 m-0"
+                      [attr.data-testid]="'public-community-list__ops--' + $index"
+                    >
+                      @for (op of ops; track op.id) {
+                        <li
+                          class="bg-surface-0 border border-primary-100 rounded-lg p-3"
+                          [attr.data-testid]="'public-community-list__op--' + op.id"
+                        >
+                          <div class="flex items-center gap-2 mb-2">
+                            <i [class]="typeIcon(op.type) + ' text-primary-500'"></i>
+                            <span class="font-semibold text-sm text-primary-700 flex-1">{{
+                              op.name
+                            }}</span>
+                            <p-tag
+                              [value]="typeLabelKey(op.type) | translate"
+                              severity="info"
+                              styleClass="text-xs"
+                            />
                           </div>
-                        }
-                      </li>
-                    }
-                  </ul>
+                          @if (op.municipalities && op.municipalities.length > 0) {
+                            <div class="flex flex-wrap gap-1">
+                              <span class="text-xs text-surface-500 mr-1">
+                                {{ 'COMMUNITY.PUBLIC_LIST.MUNICIPALITIES' | translate }}:
+                              </span>
+                              @for (m of op.municipalities; track m.nis_code) {
+                                <p-tag
+                                  [value]="municipalityName(m)"
+                                  severity="secondary"
+                                  styleClass="text-xs"
+                                />
+                              }
+                            </div>
+                          }
+                        </li>
+                      }
+                    </ul>
+                  }
                 }
-              }
-            </div>
-          }
-        </div>
-      }
-    </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  } @else {
+    @defer (on immediate) {
+      <app-community-map
+        [regulator]="selectedRegulator()"
+        [municipalityNisCodes]="selectedNisCodes()"
+      />
+    } @placeholder {
+      <div class="h-[70vh]"></div>
+    } @loading (after 100ms; minimum 200ms) {
+      <div class="h-[70vh] flex items-center justify-center text-surface-400">
+        <i class="pi pi-spinner pi-spin text-2xl"></i>
+      </div>
+    }
   }
 </div>
