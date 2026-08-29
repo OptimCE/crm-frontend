@@ -355,6 +355,11 @@ export class AllocationGenerationHub implements OnInit {
 
   onSourceChange(source: InputSourceChoice): void {
     this.inputSource.set(source);
+    // The radio also writes this control through `formControlName`, but the signal
+    // alone is not enough: `crmSelection()` and `submitGeneration()` read the control,
+    // so a programmatic call here would leave the visible panel and the submitted
+    // branch disagreeing. Keep this handler the single writer of the choice.
+    this.startForm.controls.inputSource.setValue(source, { emitEvent: false });
     this.applySourceValidators(source);
     if (source === 'crm') {
       if (!this.operations().length) this.loadOperations();
