@@ -11,6 +11,10 @@ import type {
   MeterMapQuery,
 } from '../../../../../shared/dtos/meter.dtos';
 import { MeterDataStatus } from '../../../../../shared/types/meter.types';
+import { DialogService } from 'primeng/dynamicdialog';
+import { Button } from 'primeng/button';
+import { TranslateService } from '@ngx-translate/core';
+import { UnlocatedMeters } from '../unlocated-meters/unlocated-meters';
 
 /**
  * The map half of a meters list.
@@ -25,17 +29,28 @@ import { MeterDataStatus } from '../../../../../shared/types/meter.types';
 @Component({
   selector: 'app-meters-map',
   standalone: true,
-  imports: [MapCanvas, TranslatePipe],
+  imports: [MapCanvas, TranslatePipe, Button],
   templateUrl: './meters-map.html',
   styleUrl: './meters-map.css',
+  providers: [DialogService],
 })
 export class MetersMap {
   /** Filters, mirroring the list. Changing them refetches. */
   readonly query = input<MeterMapQuery>({});
   /** `community` = manager view of /meters; `me` = a member's own meters. */
   readonly scope = input<'community' | 'me'>('community');
+  /**
+   * Offer the repair dialog from the "N meters have no coordinates yet" strip.
+   *
+   * Off by default, and left off for the sharing-operation and member views: a
+   * member cannot edit community meters, and the operation map is a read-only
+   * perimeter view.
+   */
+  readonly canRepair = input(false);
 
   private readonly meterService = inject(MeterService);
+  private readonly dialogService = inject(DialogService);
+  private readonly translate = inject(TranslateService);
   private readonly meService = inject(MeService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -48,11 +63,43 @@ export class MetersMap {
   );
 
   protected readonly missing = computed(() => this.result()?.missing_coordinates ?? 0);
+  protected readonly approximate = computed(() => this.result()?.approximate ?? 0);
+  /**
+   * Everything the repair flow can improve: absent coordinates AND commune
+   * centroids. The strip counts the same population the dialog lists, so the
+   * number visibly drops as an operator works through it.
+   */
+  protected readonly needsAttention = computed(() => this.missing() + this.approximate());
   protected readonly truncated = computed(() => this.result()?.truncated ?? false);
   protected readonly cap = computed(() => this.result()?.cap ?? 0);
   protected readonly plotted = computed(() => this.result()?.points.length ?? 0);
   protected readonly total = computed(() => this.result()?.total_matching ?? 0);
   protected readonly isEmpty = computed(() => !this.loading() && this.points().length === 0);
+
+  /**
+   * One click from the map to a fixable address.
+   *
+   * The map's own filters are handed to the dialog: `missing_coordinates` is
+   * computed over them, so a dialog that ignored them would fix meters that
+   * were never on screen and the visible number would not move.
+   */
+  protected openRepair(): void {
+    const ref = this.dialogService.open(UnlocatedMeters, {
+      header: this.translate.instant('MAP.REPAIR.TITLE') as string,
+      width: '60rem',
+      modal: true,
+      dismissableMask: true,
+      data: { query: this.query() },
+    });
+    ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((repaired?: boolean) => {
+      if (repaired) {
+        // Straight to fetch, not through the effect: `query` has not changed, so
+        // the keyed guard would treat this as a duplicate and skip it — and the
+        // whole point is that the DATA behind that unchanged query has moved.
+        this.fetch(this.query());
+      }
+    });
+  }
 
   /**
    * Refetch key. The parent rebuilds the `query` object on every change

@@ -1,0 +1,5 @@
+/* The suggestion panel can be wider than the input; let it use the space so a
+   long label like "Chaussée de Bruxelles 123, 1410 Waterloo" is not truncated. */
+:host ::ng-deep .p-autocomplete-overlay {
+  min-width: 22rem;
+}

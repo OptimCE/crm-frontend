@@ -71,8 +71,7 @@ function putAddress(
 ): void {
   if (!address) return;
   put(target, `${prefix}_street`, address.street);
-  // The control is a text input; `AddressDTO.number` is numeric.
-  put(target, `${prefix}_number`, address.number != null ? String(address.number) : null);
+  put(target, `${prefix}_number`, address.number);
   put(target, `${prefix}_postcode`, address.postcode);
   put(target, `${prefix}_supplement`, address.supplement);
   put(target, `${prefix}_city`, address.city);
@@ -85,7 +84,7 @@ function sameAddresses(home: AddressDTO | undefined, billing: AddressDTO | undef
   if (!home) return false;
   return (
     usable(home.street) === usable(billing.street) &&
-    home.number === billing.number &&
+    usable(home.number) === usable(billing.number) &&
     usable(home.postcode) === usable(billing.postcode) &&
     usable(home.supplement) === usable(billing.supplement) &&
     usable(home.city) === usable(billing.city)

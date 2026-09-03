@@ -10,6 +10,7 @@ import {
   MetersDTO,
   PartialMeterDTO,
   PatchMeterDataDTO,
+  UpdateMeterAddressDTO,
   UpdateMeterDTO,
 } from '../dtos/meter.dtos';
 import { ApiResponse, ApiResponsePaginated } from '../../core/dtos/api.response';
@@ -115,6 +116,22 @@ export class MeterService extends ServiceBase {
         this.cache.invalidate('meters-list');
         this.cache.invalidate('meters-map');
         this.cache.invalidate(`meters:${updated_meter.EAN}`);
+      }),
+    );
+  }
+
+  /**
+   * Repair a meter's address, touching nothing else.
+   *
+   * Invalidates the same three caches a full update does — the address is on the
+   * list row, the map point and the detail view.
+   */
+  updateMeterAddress(update: UpdateMeterAddressDTO): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(this.apiAddress + '/address', update).pipe(
+      tap(() => {
+        this.cache.invalidate('meters-list');
+        this.cache.invalidate('meters-map');
+        this.cache.invalidate(`meters:${update.EAN}`);
       }),
     );
   }

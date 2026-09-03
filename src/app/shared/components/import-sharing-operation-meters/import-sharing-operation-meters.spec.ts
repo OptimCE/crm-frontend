@@ -27,7 +27,7 @@ function buildMeter(
   return {
     EAN: ean,
     meter_number: `MTR-${ean}`,
-    address: { id: 1, street: 'Rue Test', number: 1, postcode: '1000', city: 'Brussels' },
+    address: { id: 1, street: 'Rue Test', number: '1', postcode: '1000', city: 'Brussels' },
     status,
     injection_status,
   } as PartialMeterDTO;

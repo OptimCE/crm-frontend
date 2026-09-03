@@ -22,7 +22,7 @@ function buildMeter(overrides: Partial<PartialMeterDTO> = {}): PartialMeterDTO {
   return {
     EAN: '541234567890',
     meter_number: 'MTR-001',
-    address: { id: 1, street: 'Main St', number: 10, postcode: '1000', city: 'Brussels' },
+    address: { id: 1, street: 'Main St', number: '10', postcode: '1000', city: 'Brussels' },
     status: MeterDataStatus.ACTIVE,
     ...overrides,
   };

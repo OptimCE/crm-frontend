@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { MemberType } from '../../../../shared/types/member.types';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
@@ -22,6 +22,15 @@ import { NewMemberInformations } from './steps/new-member-informations/new-membe
 import { NewMemberAddress } from './steps/new-member-address/new-member-address';
 import { NewMemberBankingInfo } from './steps/new-member-banking-info/new-member-banking-info';
 import { ApiResponse } from '../../../../core/dtos/api.response';
+import { AddressPicked } from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import {
+  prefixedAddressNames,
+  readAddressFields,
+} from '../../../../shared/components/address-autocomplete/address-field-source';
+import {
+  AddressPickStore,
+  withPickedGeo,
+} from '../../../../shared/components/address-autocomplete/address-pick-store';
 
 interface AddressFormValue {
   same_address: boolean | unknown[];
@@ -75,6 +84,37 @@ interface MemberFormValue {
   providers: [ErrorMessageHandler],
 })
 export class MemberCreationUpdate implements OnInit {
+  protected readonly homeAddressSource = computed(() => ({
+    group: this.addressForm,
+    names: prefixedAddressNames('home_address'),
+  }));
+  protected readonly billingAddressSource = computed(() => ({
+    group: this.addressForm,
+    names: prefixedAddressNames('billing_address'),
+  }));
+  protected readonly homePick = new AddressPickStore();
+  protected readonly billingPick = new AddressPickStore();
+
+  protected onHomeAddressPicked(event: AddressPicked): void {
+    this.patchPickedAddress('home_address', event);
+    this.homePick.remember(event);
+  }
+
+  protected onBillingAddressPicked(event: AddressPicked): void {
+    this.patchPickedAddress('billing_address', event);
+    this.billingPick.remember(event);
+  }
+
+  private patchPickedAddress(prefix: string, event: AddressPicked): void {
+    // patchValue, not setValue: the billing controls are REMOVED from this form
+    // when "same address" is ticked, and patchValue tolerates that.
+    this.addressForm.patchValue({
+      [`${prefix}_street`]: event.fields.street,
+      [`${prefix}_number`]: event.fields.number,
+      [`${prefix}_postcode`]: event.fields.postcode,
+      [`${prefix}_city`]: event.fields.city,
+    });
+  }
   private membersService = inject(MemberService);
   private config =
     inject<DynamicDialogConfig<{ member: IndividualDTO | CompanyDTO }>>(DynamicDialogConfig);
@@ -197,14 +237,19 @@ export class MemberCreationUpdate implements OnInit {
       return;
     }
     const addressValue = this.addressForm.getRawValue() as AddressFormValue;
-    const homeAddress: AddressDTO = {
-      id: -1,
-      street: addressValue.home_address_street,
-      number: +addressValue.home_address_number,
-      postcode: addressValue.home_address_postcode,
-      supplement: addressValue.home_address_supplement,
-      city: addressValue.home_address_city,
-    };
+    // `geoFor` yields null the moment the form no longer matches what was
+    // picked, so a stale rooftop coordinate cannot reach the payload.
+    const homeAddress: AddressDTO = withPickedGeo(
+      {
+        id: -1,
+        street: addressValue.home_address_street,
+        number: addressValue.home_address_number,
+        postcode: addressValue.home_address_postcode,
+        supplement: addressValue.home_address_supplement,
+        city: addressValue.home_address_city,
+      },
+      this.homePick.geoFor(readAddressFields(this.homeAddressSource())),
+    );
     const existing = this.existingMember();
     if (existing) {
       if (
@@ -222,14 +267,17 @@ export class MemberCreationUpdate implements OnInit {
       ? addressValue.same_address.length > 0
       : Boolean(addressValue.same_address);
     if (!sameAddressChecked) {
-      billingAddress = {
-        id: -1,
-        street: addressValue.billing_address_street ?? '',
-        number: addressValue.billing_address_number ? +addressValue.billing_address_number : 1,
-        postcode: addressValue.billing_address_postcode ?? '',
-        supplement: addressValue.billing_address_supplement ?? '',
-        city: addressValue.billing_address_city ?? '',
-      };
+      billingAddress = withPickedGeo(
+        {
+          id: -1,
+          street: addressValue.billing_address_street ?? '',
+          number: addressValue.billing_address_number ?? '',
+          postcode: addressValue.billing_address_postcode ?? '',
+          supplement: addressValue.billing_address_supplement ?? '',
+          city: addressValue.billing_address_city ?? '',
+        },
+        this.billingPick.geoFor(readAddressFields(this.billingAddressSource())),
+      );
     }
     let status = 1;
     if (existing) {
@@ -389,11 +437,23 @@ export class MemberCreationUpdate implements OnInit {
       this.addressForm.removeControl('billing_address_supplement');
       this.addressForm.removeControl('billing_address_city');
     } else {
-      this.addressForm.addControl('billing_address_street', new FormControl(''));
-      this.addressForm.addControl('billing_address_number', new FormControl(''));
-      this.addressForm.addControl('billing_address_postcode', new FormControl(''));
+      // Re-add WITH the validators the initial form definition gives them.
+      // Without them, tick-then-untick left the billing address optional and an
+      // empty one reached the API.
+      this.addressForm.addControl(
+        'billing_address_street',
+        new FormControl('', Validators.required),
+      );
+      this.addressForm.addControl(
+        'billing_address_number',
+        new FormControl('', Validators.required),
+      );
+      this.addressForm.addControl(
+        'billing_address_postcode',
+        new FormControl('', Validators.required),
+      );
       this.addressForm.addControl('billing_address_supplement', new FormControl(''));
-      this.addressForm.addControl('billing_address_city', new FormControl(''));
+      this.addressForm.addControl('billing_address_city', new FormControl('', Validators.required));
     }
   }
 

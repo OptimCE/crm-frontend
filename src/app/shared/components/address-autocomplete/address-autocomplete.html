@@ -1,0 +1,114 @@
+<div class="flex flex-col gap-2">
+  <label [attr.for]="testId()" class="field-label">
+    {{ labelKey() | translate }}
+  </label>
+
+  <!--
+    forceSelection=false is the product decision, not an oversight: the picker
+    suggests, it never gates. Anything the register does not know must still be
+    saveable, so this box is a SEARCH box whose model is scratch text — it is
+    never bound to a domain control. See the component docstring.
+    [delay] is PrimeNG's own keystroke debounce; the repo uses it rather than
+    an RxJS one for every autocomplete.
+
+    [minLength] matters more than it looks: PrimeNG defaults it to 1, so without
+    it the panel opens on the first keystroke, finds the empty list `search()`
+    returns below the threshold, and announces "no address found" about a search
+    that was never made. [emptyMessage] is bound because PrimeNG otherwise falls
+    back to its own config translation, which is the hardcoded English
+    "No results found".
+  -->
+  <p-autoComplete
+    [inputId]="testId()"
+    [(ngModel)]="query"
+    [ngModelOptions]="{ standalone: true }"
+    [suggestions]="suggestions()"
+    (completeMethod)="search($event)"
+    (onSelect)="select($event.value)"
+    [forceSelection]="false"
+    [multiple]="false"
+    [delay]="250"
+    [minLength]="minSearchLength"
+    [disabled]="disabled()"
+    dataKey="id"
+    optionLabel="label"
+    styleClass="w-full"
+    appendTo="body"
+    [placeholder]="placeholderKey() | translate"
+    [attr.data-testid]="testId()"
+    [emptyMessage]="'ADDRESS_LOOKUP.NO_RESULTS' | translate"
+  >
+    <ng-template let-suggestion #item>
+      <div class="flex flex-col">
+        <span class="text-sm">{{ suggestion.label }}</span>
+        @if (suggestion.kind === 'street') {
+          <span class="text-xs text-surface-500">
+            {{ 'ADDRESS_LOOKUP.STREET_HINT' | translate }}
+          </span>
+        }
+      </div>
+    </ng-template>
+
+    <!--
+      CC-BY 4.0 attribution for the BeSt Address data. It belongs here and NOT
+      in environments.map.attribution, which is about basemap tiles and is empty
+      on purpose (OpenFreeMap's TileJSON already declares its own line, so
+      setting it prints the attribution twice).
+    -->
+    <ng-template #footer>
+      <div class="px-3 py-2 text-xs text-surface-500 border-t border-surface-200">
+        {{ 'ADDRESS_LOOKUP.ATTRIBUTION' | translate }}
+      </div>
+    </ng-template>
+  </p-autoComplete>
+
+  <!-- The pre-save answer to "will this appear on the map?" -->
+  @if (checking()) {
+    <span class="text-xs text-surface-500" [attr.data-testid]="testId() + '--checking'">
+      {{ 'ADDRESS_LOOKUP.CHECKING' | translate }}
+    </span>
+  }
+
+  @if (located(); as found) {
+    @if (found.precision === Precision.MUNICIPALITY) {
+      <span class="text-xs text-amber-700" [attr.data-testid]="testId() + '--approximate'">
+        <i class="pi pi-info-circle mr-1"></i>
+        {{ 'ADDRESS_LOOKUP.FOUND_APPROXIMATE' | translate }}
+      </span>
+    } @else {
+      <span class="text-xs text-green-700" [attr.data-testid]="testId() + '--located'">
+        <i class="pi pi-check-circle mr-1"></i>
+        {{ 'ADDRESS_LOOKUP.FOUND_EXACT' | translate }}
+      </span>
+    }
+  }
+
+  @if (unlocated(); as missing) {
+    <div
+      class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800"
+      [attr.data-testid]="testId() + '--not-found'"
+    >
+      <i class="pi pi-exclamation-triangle mr-1"></i>
+      {{ 'ADDRESS_LOOKUP.NOT_FOUND' | translate }}
+      @if (missing.suggestions.length > 0) {
+        <div class="mt-2 flex flex-col gap-1">
+          <span class="font-medium">{{ 'ADDRESS_LOOKUP.DID_YOU_MEAN' | translate }}</span>
+          @for (suggestion of missing.suggestions; track suggestion.id) {
+            <button
+              type="button"
+              class="text-left underline hover:no-underline"
+              (click)="useSuggestion(suggestion)"
+              [attr.data-testid]="testId() + '--use-suggestion'"
+            >
+              {{ suggestion.label }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+  <!--
+    'error' and 'idle' render NOTHING on purpose. A geocoder having a bad minute
+    must not put a warning under every address field in the app.
+  -->
+</div>

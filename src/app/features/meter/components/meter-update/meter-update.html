@@ -4,75 +4,99 @@
     <h3 class="text-sm font-semibold text-surface-700 mb-3">
       {{ 'COMMON.ADDRESS' | translate }}
     </h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
-      <div class="md:col-span-2 flex flex-col">
-        <label for="address_street" class="field-label">
-          {{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *
-        </label>
-        <input
-          pInputText
-          formControlName="address_street"
-          id="address_street"
-          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
-          class="w-full"
-          data-testid="meter-update__input--street"
-        />
-        <app-error-handler controlName="address_street" />
+    <app-address-autocomplete
+      class="block"
+      [source]="addressSource()"
+      testId="meter-update__autocomplete--address"
+      (addressPicked)="onAddressPicked($event)"
+      (geoChange)="addressPick.observe($event)"
+    />
+
+    @if (addressDetailsOpen()) {
+      <!-- Same twelve column layout as the creation dialog; see the note there. -->
+      <div class="mt-4 grid grid-cols-12 gap-x-4 gap-y-3">
+        <div class="col-span-12 md:col-span-6 flex flex-col">
+          <label for="address_street" class="field-label">
+            {{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *
+          </label>
+          <input
+            pInputText
+            formControlName="address_street"
+            id="address_street"
+            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
+            class="w-full"
+            data-testid="meter-update__input--street"
+          />
+          <app-error-handler controlName="address_street" />
+        </div>
+        <div class="col-span-6 md:col-span-3 flex flex-col">
+          <label for="address_number" class="field-label">
+            {{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *
+          </label>
+          <input
+            pInputText
+            formControlName="address_number"
+            id="address_number"
+            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+            class="w-full"
+            data-testid="meter-update__input--address-number"
+          />
+          <app-error-handler controlName="address_number" />
+        </div>
+        <div class="col-span-6 md:col-span-3 flex flex-col">
+          <label for="address_supplement" class="field-label">
+            {{ 'METER.ADDRESS.BOX_LABEL' | translate }}
+          </label>
+          <input
+            pInputText
+            formControlName="address_supplement"
+            id="address_supplement"
+            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+            class="w-full"
+            data-testid="meter-update__input--address-supplement"
+          />
+          <app-error-handler controlName="address_supplement" />
+        </div>
+        <div class="col-span-4 md:col-span-3 flex flex-col">
+          <label for="address_postcode" class="field-label">
+            {{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *
+          </label>
+          <input
+            pInputText
+            formControlName="address_postcode"
+            id="address_postcode"
+            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+            class="w-full"
+            data-testid="meter-update__input--postcode"
+          />
+          <app-error-handler controlName="address_postcode" />
+        </div>
+        <div class="col-span-8 md:col-span-9 flex flex-col">
+          <label for="address_city" class="field-label">
+            {{ 'METER.ADDRESS.CITY_LABEL' | translate }} *
+          </label>
+          <input
+            pInputText
+            formControlName="address_city"
+            id="address_city"
+            placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+            class="w-full"
+            data-testid="meter-update__input--city"
+          />
+          <app-error-handler controlName="address_city" />
+        </div>
       </div>
-      <div class="flex flex-col">
-        <label for="address_number" class="field-label">
-          {{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *
-        </label>
-        <input
-          pInputText
-          formControlName="address_number"
-          id="address_number"
-          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
-          data-testid="meter-update__input--address-number"
-        />
-        <app-error-handler controlName="address_number" />
-      </div>
-      <div class="flex flex-col">
-        <label for="address_supplement" class="field-label">
-          {{ 'METER.ADDRESS.BOX_LABEL' | translate }}
-        </label>
-        <input
-          pInputText
-          formControlName="address_supplement"
-          id="address_supplement"
-          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
-          data-testid="meter-update__input--address-supplement"
-        />
-        <app-error-handler controlName="address_supplement" />
-      </div>
-      <div class="flex flex-col">
-        <label for="address_postcode" class="field-label">
-          {{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *
-        </label>
-        <input
-          pInputText
-          formControlName="address_postcode"
-          id="address_postcode"
-          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
-          data-testid="meter-update__input--postcode"
-        />
-        <app-error-handler controlName="address_postcode" />
-      </div>
-      <div class="md:col-span-2 flex flex-col">
-        <label for="address_city" class="field-label">
-          {{ 'METER.ADDRESS.CITY_LABEL' | translate }} *
-        </label>
-        <input
-          pInputText
-          formControlName="address_city"
-          id="address_city"
-          placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
-          class="w-full"
-          data-testid="meter-update__input--city"
-        />
-        <app-error-handler controlName="address_city" />
-      </div>
-    </div>
+    } @else {
+      <!-- Only reachable for a meter with a blank address; see the .ts note. -->
+      <button
+        type="button"
+        class="mt-2 text-primary-500 hover:text-primary-700 underline text-sm"
+        (click)="openAddressDetails()"
+        data-testid="meter-update__button--address-manual"
+      >
+        {{ 'ADDRESS_LOOKUP.ENTER_MANUALLY' | translate }}
+      </button>
+    }
 
     <!-- Section: Meter Information -->
     <div class="border-t border-surface-200 mt-5 pt-4">

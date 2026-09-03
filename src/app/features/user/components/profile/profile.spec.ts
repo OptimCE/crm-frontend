@@ -31,14 +31,14 @@ function buildUser(overrides: Partial<UserDTO> = {}): UserDTO {
     home_address: {
       id: 1,
       street: 'Rue de la Loi',
-      number: 16,
+      number: '16',
       postcode: '1000',
       city: 'Bruxelles',
     },
     billing_address: {
       id: 2,
       street: 'Avenue Louise',
-      number: 42,
+      number: '42',
       postcode: '1050',
       city: 'Ixelles',
     },

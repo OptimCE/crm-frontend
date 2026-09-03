@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,6 +20,9 @@ import {
 } from '../../../../shared/dtos/member.dtos';
 import { AddressDTO } from '../../../../shared/dtos/address.dtos';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
+import { AddressGeoPrecision, AddressSuggestionDTO } from '../../../../shared/dtos/geocoding.dtos';
+import { AddressPicked } from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import { addressFingerprint } from '../../../../shared/components/address-autocomplete/address-field-source';
 
 // --- Helper builders ---
 
@@ -26,7 +30,7 @@ function buildAddress(overrides: Partial<AddressDTO> = {}): AddressDTO {
   return {
     id: 1,
     street: 'Rue Test',
-    number: 10,
+    number: '10',
     postcode: '1000',
     supplement: '',
     city: 'Brussels',
@@ -54,7 +58,7 @@ function buildIndividualDTO(overrides: Partial<IndividualDTO> = {}): IndividualD
     status: 1,
     iban: 'BE68539007547034',
     home_address: buildAddress(),
-    billing_address: buildAddress({ id: 2, street: 'Rue Billing', number: 20 }),
+    billing_address: buildAddress({ id: 2, street: 'Rue Billing', number: '20' }),
     NRN: '90.01.15-001.23',
     first_name: 'Jean',
     email: 'jean@example.com',
@@ -72,7 +76,7 @@ function buildCompanyDTO(overrides: Partial<CompanyDTO> = {}): CompanyDTO {
     status: 1,
     iban: 'BE68539007547034',
     home_address: buildAddress(),
-    billing_address: buildAddress({ id: 2, street: 'Rue Billing', number: 20 }),
+    billing_address: buildAddress({ id: 2, street: 'Rue Billing', number: '20' }),
     vat_number: 'BE0123456789',
     manager: buildManager(),
     ...overrides,
@@ -131,6 +135,41 @@ function fillCompanyForms(component: MemberCreationUpdate): void {
     billing_address_city: 'Liege',
   });
   component.ibanForm.patchValue({ iban: 'BE68539007547034' });
+}
+
+/**
+ * Drive the picker's output the way the template does.
+ *
+ * `onAddressPicked` and the pick store are `protected` because only the
+ * template touches them in production — but "the six forms are wired
+ * identically" is an assumption, and a @ViewChild that never resolved has
+ * already proved that assumption can be wrong.
+ */
+function pickAddress(
+  component: object,
+  handler: string,
+  fields: { street: string; number: string; postcode: string; city: string },
+): void {
+  const suggestion: AddressSuggestionDTO = {
+    id: 'best:42',
+    kind: 'address',
+    label: `${fields.street} ${fields.number}, ${fields.postcode} ${fields.city}`,
+    street: fields.street,
+    number: fields.number,
+    postcode: fields.postcode,
+    city: fields.city,
+    country: 'BE',
+    latitude: 50.846169,
+    longitude: 4.366538,
+    precision: AddressGeoPrecision.ROOFTOP,
+    best_address_id: 'best:42',
+  };
+  const full = { ...fields, supplement: '' };
+  (component as Record<string, (e: AddressPicked) => void>)[handler]({
+    suggestion,
+    fields: full,
+    fingerprint: addressFingerprint(full),
+  });
 }
 
 describe('MemberCreationUpdate', () => {
@@ -536,6 +575,31 @@ describe('MemberCreationUpdate', () => {
         expect(component.addressForm.get('billing_address_number')).toBeDefined();
       });
 
+      // Regression: the controls came back WITHOUT their validators, so
+      // tick-then-untick left the whole billing address optional and an empty
+      // one reached the API.
+      it('should re-add billing address controls with their required validators', () => {
+        component.addressForm.patchValue({ same_address: true });
+        component.toggleSameAddress({} as CheckboxChangeEvent);
+        component.addressForm.patchValue({ same_address: false });
+        component.toggleSameAddress({} as CheckboxChangeEvent);
+
+        for (const name of [
+          'billing_address_street',
+          'billing_address_number',
+          'billing_address_postcode',
+          'billing_address_city',
+        ]) {
+          expect(component.addressForm.get(name)?.hasValidator(Validators.required)).toBe(true);
+        }
+        // The box number stays optional, as it is on the home address.
+        expect(
+          component.addressForm
+            .get('billing_address_supplement')
+            ?.hasValidator(Validators.required),
+        ).toBe(false);
+      });
+
       it('should handle same_address as array (primeng checkbox behavior)', () => {
         component.addressForm.patchValue({ same_address: [true] });
         component.toggleSameAddress({} as CheckboxChangeEvent);
@@ -856,6 +920,121 @@ describe('MemberCreationUpdate', () => {
       expect(dto.home_address.street).toBe('Rue Test');
       expect(dto.billing_address.street).toBe('Rue Test');
       expect(dto.billing_address.city).toBe('Brussels');
+    });
+  });
+
+  describe('address picker', () => {
+    // The beforeEach hooks in this spec live inside the nested describes, so a
+    // block at this level would otherwise reuse whatever component the previous
+    // test left behind — including a form whose billing controls it removed.
+    beforeEach(async () => {
+      await createTestBed(null);
+      fixture = TestBed.createComponent(MemberCreationUpdate);
+      component = fixture.componentInstance;
+      component.ngOnInit();
+      await fixture.whenStable();
+    });
+
+    it('fills the HOME controls from a picked suggestion', () => {
+      pickAddress(component, 'onHomeAddressPicked', {
+        street: 'Place de la Station',
+        number: '20A',
+        postcode: '5000',
+        city: 'Namur',
+      });
+
+      const value = component.addressForm.getRawValue() as Record<string, unknown>;
+      expect(value['home_address_street']).toBe('Place de la Station');
+      expect(value['home_address_number']).toBe('20A');
+      expect(value['home_address_postcode']).toBe('5000');
+      expect(value['home_address_city']).toBe('Namur');
+    });
+
+    it('fills the BILLING controls independently', () => {
+      pickAddress(component, 'onBillingAddressPicked', {
+        street: 'Rue Neuve',
+        number: '40',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+
+      const value = component.addressForm.getRawValue() as Record<string, unknown>;
+      expect(value['billing_address_street']).toBe('Rue Neuve');
+      expect(value['home_address_street']).not.toBe('Rue Neuve');
+    });
+
+    it('keeps the home and billing coordinates apart', () => {
+      // One store per block. A shared one would put the billing address on the
+      // home address's roof.
+      pickAddress(component, 'onHomeAddressPicked', {
+        street: 'Rue A',
+        number: '1',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+      pickAddress(component, 'onBillingAddressPicked', {
+        street: 'Rue B',
+        number: '2',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+
+      const c = component as unknown as {
+        homePick: { geoFor: (f: unknown) => unknown };
+        billingPick: { geoFor: (f: unknown) => unknown };
+      };
+      const home = {
+        street: 'Rue A',
+        number: '1',
+        supplement: '',
+        postcode: '1000',
+        city: 'Bruxelles',
+      };
+      const billing = {
+        street: 'Rue B',
+        number: '2',
+        supplement: '',
+        postcode: '1000',
+        city: 'Bruxelles',
+      };
+      expect(c.homePick.geoFor(home)).toMatchObject({ latitude: 50.846169 });
+      expect(c.homePick.geoFor(billing)).toBeNull();
+      expect(c.billingPick.geoFor(billing)).toMatchObject({ latitude: 50.846169 });
+    });
+
+    it('DROPS the coordinate once the address is edited afterwards', () => {
+      pickAddress(component, 'onHomeAddressPicked', {
+        street: 'Rue A',
+        number: '1',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+
+      const c = component as unknown as { homePick: { geoFor: (f: unknown) => unknown } };
+      expect(
+        c.homePick.geoFor({
+          street: 'Rue A',
+          number: '3',
+          supplement: '',
+          postcode: '1000',
+          city: 'Bruxelles',
+        }),
+      ).toBeNull();
+    });
+
+    it('tolerates a pick while the billing controls are REMOVED', () => {
+      // toggleSameAddress removes them outright; patchValue must not throw.
+      component.addressForm.patchValue({ same_address: true });
+      component.toggleSameAddress({} as CheckboxChangeEvent);
+
+      expect(() =>
+        pickAddress(component, 'onBillingAddressPicked', {
+          street: 'Rue B',
+          number: '2',
+          postcode: '1000',
+          city: 'Bruxelles',
+        }),
+      ).not.toThrow();
     });
   });
 });

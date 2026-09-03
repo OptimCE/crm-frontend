@@ -1,0 +1,20 @@
+# Everything here is LF, in the object store AND in every working tree.
+#
+# This repo is developed on Windows with core.autocrlf=true, so without this
+# rule every file is checked out with CRLF while the blobs themselves stay LF.
+# Prettier's `endOfLine` defaults to "lf", so `npx prettier --check .` then
+# reports every file in the repo as unformatted — 208 of them here, none of
+# which had anything wrong with its formatting. That buries any real finding and
+# makes the check worthless, which is exactly what had happened.
+#
+# The blobs are already LF, so this only pins the working tree to match what is
+# committed; it does not rewrite anything.
+#
+# Git attributes are per-repository and do not follow into or out of a
+# submodule, which is why the monorepo root and administrative-document each
+# carry their own copy of the equivalent rule rather than inheriting one.
+* text=auto eol=lf
+
+# The one genuinely binary asset in the tree. `text=auto` would detect it, but
+# saying so costs nothing and removes the guess.
+*.ico binary

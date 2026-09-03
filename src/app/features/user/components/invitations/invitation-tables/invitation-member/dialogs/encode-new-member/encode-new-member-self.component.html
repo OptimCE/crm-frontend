@@ -107,6 +107,10 @@
             (backClicked)="activateCallback(1)"
             (formSubmitted)="submitForm3(activateCallback)"
             (toggleSameAddressEvent)="toggleSameAddress($event)"
+            (homeAddressPicked)="onHomeAddressPicked($event)"
+            (homeGeoChange)="homePick.observe($event)"
+            (billingAddressPicked)="onBillingAddressPicked($event)"
+            (billingGeoChange)="billingPick.observe($event)"
             [addressForm]="addressForm"
           ></app-new-member-address>
         </ng-template>

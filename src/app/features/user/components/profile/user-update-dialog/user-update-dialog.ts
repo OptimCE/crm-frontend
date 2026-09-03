@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -16,6 +16,19 @@ import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { Button } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Divider } from 'primeng/divider';
+import {
+  AddressAutocomplete,
+  AddressPicked,
+} from '../../../../../shared/components/address-autocomplete/address-autocomplete';
+import {
+  isAddressEmpty,
+  prefixedAddressNames,
+  readAddressFields,
+} from '../../../../../shared/components/address-autocomplete/address-field-source';
+import {
+  AddressPickStore,
+  withPickedGeo,
+} from '../../../../../shared/components/address-autocomplete/address-pick-store';
 
 interface UserUpdateDialogData {
   user: UserDTO;
@@ -86,7 +99,16 @@ function addressGroupValidator(prefix: string) {
 
 @Component({
   selector: 'app-user-update-dialog',
-  imports: [ReactiveFormsModule, InputText, TranslatePipe, Checkbox, Button, Ripple, Divider],
+  imports: [
+    ReactiveFormsModule,
+    InputText,
+    TranslatePipe,
+    Checkbox,
+    Button,
+    Ripple,
+    Divider,
+    AddressAutocomplete,
+  ],
   templateUrl: './user-update-dialog.html',
   styleUrl: './user-update-dialog.css',
 })
@@ -98,6 +120,48 @@ export class UserUpdateDialog implements OnInit {
   formData!: FormGroup;
   user!: UpdateUserDTO;
   protected readonly isSameAddress = signal(false);
+
+  protected readonly homeSource = computed(() => ({
+    group: this.formData,
+    names: prefixedAddressNames('home_address'),
+  }));
+  protected readonly billingSource = computed(() => ({
+    group: this.formData,
+    names: prefixedAddressNames('billing_address'),
+  }));
+  protected readonly homePick = new AddressPickStore();
+  protected readonly billingPick = new AddressPickStore();
+
+  /**
+   * This form legitimately allows a fully EMPTY address, so probing one would
+   * warn about an address the user never claimed to have. `addressGroupValidator`
+   * takes the same all-or-nothing view.
+   */
+  protected readonly probeHome = computed(
+    () => !isAddressEmpty(readAddressFields(this.homeSource())),
+  );
+  protected readonly probeBilling = computed(
+    () => !this.isSameAddress() && !isAddressEmpty(readAddressFields(this.billingSource())),
+  );
+
+  protected onHomePicked(event: AddressPicked): void {
+    this.patchAddress('home_address', event);
+    this.homePick.remember(event);
+  }
+
+  protected onBillingPicked(event: AddressPicked): void {
+    this.patchAddress('billing_address', event);
+    this.billingPick.remember(event);
+  }
+
+  private patchAddress(prefix: string, event: AddressPicked): void {
+    this.formData.patchValue({
+      [`${prefix}_street`]: event.fields.street,
+      [`${prefix}_number`]: event.fields.number,
+      [`${prefix}_postcode`]: event.fields.postcode,
+      [`${prefix}_city`]: event.fields.city,
+    });
+  }
 
   private readonly billingControls = [
     'billing_address_street',
@@ -208,13 +272,16 @@ export class UserUpdateDialog implements OnInit {
       formValue.home_address_postcode &&
       formValue.home_address_city
     ) {
-      dto.home_address = {
-        street: formValue.home_address_street,
-        number: +formValue.home_address_number,
-        postcode: formValue.home_address_postcode,
-        supplement: formValue.home_address_supplement,
-        city: formValue.home_address_city,
-      };
+      dto.home_address = withPickedGeo(
+        {
+          street: formValue.home_address_street,
+          number: formValue.home_address_number,
+          postcode: formValue.home_address_postcode,
+          supplement: formValue.home_address_supplement,
+          city: formValue.home_address_city,
+        },
+        this.homePick.geoFor(readAddressFields(this.homeSource())),
+      );
     }
 
     if (
@@ -224,13 +291,16 @@ export class UserUpdateDialog implements OnInit {
       formValue.billing_address_postcode &&
       formValue.billing_address_city
     ) {
-      dto.billing_address = {
-        street: formValue.billing_address_street,
-        number: +formValue.billing_address_number,
-        postcode: formValue.billing_address_postcode,
-        supplement: formValue.billing_address_supplement,
-        city: formValue.billing_address_city,
-      };
+      dto.billing_address = withPickedGeo(
+        {
+          street: formValue.billing_address_street,
+          number: formValue.billing_address_number,
+          postcode: formValue.billing_address_postcode,
+          supplement: formValue.billing_address_supplement,
+          city: formValue.billing_address_city,
+        },
+        this.billingPick.geoFor(readAddressFields(this.billingSource())),
+      );
     }
 
     this.userService

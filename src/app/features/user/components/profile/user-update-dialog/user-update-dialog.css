@@ -4,6 +4,17 @@
   margin-bottom: 0.75rem;
 }
 
+/*
+ * Inside the address block the row spacing is the grid's `gap-y-3`. Leaving
+ * .field's own margin-bottom on top of it would stack the two and push the
+ * postcode/city row away from the street row, which is the drift this layout
+ * exists to remove. Scoped to .address-grid so the rest of the dialog, which is
+ * not a grid, keeps its spacing.
+ */
+.address-grid .field {
+  margin-bottom: 0;
+}
+
 :host ::ng-deep .p-inputtext.ng-invalid.ng-dirty {
   border-color: var(--p-red-400);
 }

@@ -8,7 +8,7 @@
 } @else {
   <!-- Coverage strips. These are the honest answer to "is this the whole
        community?" — at launch most addresses have no coordinates yet. -->
-  @if (missing() > 0) {
+  @if (needsAttention() > 0) {
     <div
       class="rounded-xl border border-primary-100 bg-primary-50 px-4 py-2 mb-3 text-sm text-surface-700"
       data-testid="meters-map__strip--partial"
@@ -16,8 +16,19 @@
       <i class="pi pi-info-circle mr-1 text-primary-600"></i>
       {{
         'MAP.PARTIAL_COORDINATES'
-          | translate: { plotted: plotted(), total: total(), missing: missing() }
+          | translate
+            : { plotted: plotted(), total: total(), missing: missing(), approximate: approximate() }
       }}
+      @if (canRepair()) {
+        <p-button
+          [label]="'MAP.REPAIR_CTA' | translate"
+          [link]="true"
+          size="small"
+          styleClass="p-0 ml-2 align-baseline"
+          (onClick)="openRepair()"
+          data-testid="meters-map__button--repair"
+        />
+      }
     </div>
   }
 

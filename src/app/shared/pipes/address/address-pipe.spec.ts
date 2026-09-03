@@ -16,7 +16,7 @@ describe('AddressPipe', () => {
     const address: AddressDTO = {
       id: 1,
       street: 'Rue de la Loi',
-      number: 42,
+      number: '42',
       postcode: '1000',
       city: 'Bruxelles',
     };
@@ -28,7 +28,7 @@ describe('AddressPipe', () => {
     const address: AddressDTO = {
       id: 2,
       street: 'Avenue Louise',
-      number: 100,
+      number: '100',
       postcode: '1050',
       city: 'Ixelles',
     };
@@ -40,7 +40,7 @@ describe('AddressPipe', () => {
     const address: AddressDTO = {
       id: 3,
       street: 'Grand Place',
-      number: 1,
+      number: '1',
       postcode: '1000',
       city: 'Bruxelles',
     };
@@ -52,7 +52,7 @@ describe('AddressPipe', () => {
     const address: AddressDTO = {
       id: 4,
       street: '',
-      number: 0,
+      number: '0',
       postcode: '',
       city: '',
     };
@@ -64,7 +64,7 @@ describe('AddressPipe', () => {
     const address: AddressDTO = {
       id: 5,
       street: 'Rue Haute',
-      number: 10,
+      number: '10',
       postcode: '1000',
       city: 'Bruxelles',
       supplement: 'Boîte 3',
