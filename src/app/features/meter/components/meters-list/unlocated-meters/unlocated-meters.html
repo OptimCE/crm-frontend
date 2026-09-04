@@ -1,0 +1,155 @@
+<div class="flex flex-col gap-4">
+  @if (loading()) {
+    <p class="text-sm text-surface-500" data-testid="unlocated-meters__loading">
+      {{ 'COMMON.LOADING' | translate }}
+    </p>
+  } @else if (isEmpty()) {
+    <div
+      class="rounded-xl border border-surface-200 bg-surface-50 py-10 text-center"
+      data-testid="unlocated-meters__empty"
+    >
+      <i class="pi pi-check-circle text-3xl text-green-600 mb-2"></i>
+      <p class="font-medium text-surface-700 m-0">{{ 'MAP.REPAIR.EMPTY' | translate }}</p>
+    </div>
+  } @else {
+    <p class="text-sm text-surface-600 m-0" data-testid="unlocated-meters__subtitle">
+      {{ 'MAP.REPAIR.SUBTITLE' | translate: { count: total() } }}
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <!-- Left: the queue. The first row is selected on open, which is what
+           makes this "one click from the map to a fixable address". -->
+      <div class="md:col-span-2 repair-list flex flex-col gap-1">
+        @for (meter of meters(); track meter.EAN; let i = $index) {
+          <button
+            type="button"
+            class="text-left rounded-lg px-3 py-2 border"
+            [class.border-primary-400]="i === selectedIndex()"
+            [class.bg-primary-50]="i === selectedIndex()"
+            [class.border-surface-200]="i !== selectedIndex()"
+            (click)="selectRow(i)"
+            [attr.data-testid]="'unlocated-meters__row--' + meter.EAN"
+          >
+            <span class="block text-sm font-medium">{{ meter.EAN }}</span>
+            <span class="block text-xs text-surface-500">
+              {{ meter.address.street }} {{ meter.address.number }}, {{ meter.address.postcode }}
+              {{ meter.address.city }}
+            </span>
+          </button>
+        }
+      </div>
+
+      <!-- Right: the address being repaired. -->
+      <div class="md:col-span-3 flex flex-col gap-3">
+        @if (selected(); as meter) {
+          <span class="text-xs uppercase tracking-wide text-surface-500">
+            {{ meter.EAN }}
+          </span>
+        }
+
+        <form [formGroup]="addressForm" class="flex flex-col gap-3">
+          <app-address-autocomplete
+            [source]="addressSource()"
+            testId="unlocated-meters__autocomplete--address"
+            (addressPicked)="onAddressPicked($event)"
+            (geoChange)="addressPick.observe($event)"
+          />
+
+          <div class="grid grid-cols-12 gap-x-4 gap-y-3">
+            <div class="col-span-12 md:col-span-6 flex flex-col">
+              <label for="repair_street" class="field-label">
+                {{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *
+              </label>
+              <input
+                id="repair_street"
+                pInputText
+                formControlName="address_street"
+                class="w-full"
+                data-testid="unlocated-meters__input--street"
+              />
+            </div>
+            <div class="col-span-6 md:col-span-3 flex flex-col">
+              <label for="repair_number" class="field-label">
+                {{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *
+              </label>
+              <input
+                id="repair_number"
+                pInputText
+                formControlName="address_number"
+                class="w-full"
+                data-testid="unlocated-meters__input--number"
+              />
+            </div>
+            <div class="col-span-6 md:col-span-3 flex flex-col">
+              <label for="repair_box" class="field-label">
+                {{ 'METER.ADDRESS.BOX_LABEL' | translate }}
+              </label>
+              <input
+                id="repair_box"
+                pInputText
+                formControlName="address_supplement"
+                class="w-full"
+                data-testid="unlocated-meters__input--box"
+              />
+            </div>
+            <div class="col-span-4 md:col-span-3 flex flex-col">
+              <label for="repair_postcode" class="field-label">
+                {{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *
+              </label>
+              <input
+                id="repair_postcode"
+                pInputText
+                formControlName="address_postcode"
+                class="w-full"
+                data-testid="unlocated-meters__input--postcode"
+              />
+            </div>
+            <div class="col-span-8 md:col-span-9 flex flex-col">
+              <label for="repair_city" class="field-label">
+                {{ 'METER.ADDRESS.CITY_LABEL' | translate }} *
+              </label>
+              <input
+                id="repair_city"
+                pInputText
+                formControlName="address_city"
+                class="w-full"
+                data-testid="unlocated-meters__input--city"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <div class="flex items-center justify-between border-t border-surface-200 pt-3">
+    <span class="text-xs text-surface-500" data-testid="unlocated-meters__progress">
+      {{ 'MAP.REPAIR.PROGRESS' | translate: { repaired: repairedCount() } }}
+    </span>
+    <div class="flex gap-2">
+      <p-button
+        [label]="'MAP.REPAIR.CLOSE' | translate"
+        severity="secondary"
+        [text]="true"
+        (onClick)="close()"
+        data-testid="unlocated-meters__button--close"
+      />
+      @if (!isEmpty() && !loading()) {
+        <p-button
+          [label]="'MAP.REPAIR.SKIP' | translate"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="skip()"
+          data-testid="unlocated-meters__button--skip"
+        />
+        <p-button
+          [label]="'MAP.REPAIR.SAVE_AND_NEXT' | translate"
+          [loading]="saving()"
+          [disabled]="addressForm.invalid"
+          (onClick)="save()"
+          data-testid="unlocated-meters__button--save"
+        />
+      }
+    </div>
+  </div>
+</div>

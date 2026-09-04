@@ -20,7 +20,15 @@ import { SharingOperationPartialDTO } from './sharing_operation.dtos';
 export interface MeterPartialQuery extends PaginationQuery {
   street?: string;
   postcode?: number;
-  address_number?: number;
+  address_number?: string;
+  /**
+   * Restrict to meters that ARE (true) or are NOT (false) usably on the map.
+   *
+   * `false` is the repair queue, and it means more than "no coordinate": an
+   * address pinned to its commune centroid has one, but every meter in that
+   * commune sits stacked on the same point.
+   */
+  located?: boolean;
   city?: string;
   supplement?: string;
   EAN?: string;
@@ -262,6 +270,8 @@ export interface MeterMapDTO {
   /** Of those, the ones that have coordinates. */
   total_plottable: number;
   missing_coordinates: number;
+  /** Plotted, but on a commune centroid rather than a building. */
+  approximate: number;
   /** True when `cap` cut the result short. */
   truncated: boolean;
   cap: number;
@@ -270,4 +280,17 @@ export interface MeterMapDTO {
 /** Whether a point's coordinate is precise enough to be treated as an address. */
 export function isExactMeterPoint(point: Pick<MeterMapPointDTO, 'geo_precision'>): boolean {
   return point.geo_precision !== null && point.geo_precision <= MeterGeoPrecision.STREET;
+}
+
+/**
+ * Body of `PATCH /meters/address`.
+ *
+ * Narrower than {@link UpdateMeterDTO} on purpose: that one is a full replace
+ * and also carries meter_number, tarif_group, phases_number and
+ * reading_frequency, none of which the meters LIST provides. Repairing through
+ * it would mean refetching every meter just to echo its configuration back.
+ */
+export interface UpdateMeterAddressDTO {
+  EAN: string;
+  address: CreateAddressDTO;
 }

@@ -1,0 +1,6 @@
+/* The list pane scrolls independently of the edit pane, so a long queue never
+   pushes the Save button off screen. */
+.repair-list {
+  max-height: 24rem;
+  overflow-y: auto;
+}

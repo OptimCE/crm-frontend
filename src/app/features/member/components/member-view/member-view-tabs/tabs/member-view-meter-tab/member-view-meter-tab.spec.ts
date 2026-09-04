@@ -22,13 +22,13 @@ function buildMeters(): PartialMeterDTO[] {
     {
       EAN: '541449000000000001',
       meter_number: 'MTR-001',
-      address: { id: 1, street: 'Rue Test', number: 10, postcode: '1000', city: 'Bruxelles' },
+      address: { id: 1, street: 'Rue Test', number: '10', postcode: '1000', city: 'Bruxelles' },
       status: MeterDataStatus.ACTIVE,
     },
     {
       EAN: '541449000000000002',
       meter_number: 'MTR-002',
-      address: { id: 2, street: 'Avenue Libre', number: 5, postcode: '4000', city: 'Liege' },
+      address: { id: 2, street: 'Avenue Libre', number: '5', postcode: '4000', city: 'Liege' },
       status: MeterDataStatus.INACTIVE,
     },
   ];

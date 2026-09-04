@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,6 +14,19 @@ import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { FieldLabelHelper } from '../../../../shared/components/field-label-helper/field-label-helper';
+import {
+  AddressAutocomplete,
+  AddressPicked,
+} from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import {
+  isAddressEmpty,
+  prefixedAddressNames,
+  readAddressFields,
+} from '../../../../shared/components/address-autocomplete/address-field-source';
+import {
+  AddressPickStore,
+  withPickedGeo,
+} from '../../../../shared/components/address-autocomplete/address-pick-store';
 
 interface MeterUpdateDialogData {
   meter: MetersDTO;
@@ -49,6 +62,7 @@ interface MeterUpdateFormValue {
     TranslatePipe,
     FormErrorSummaryComponent,
     FieldLabelHelper,
+    AddressAutocomplete,
   ],
   templateUrl: './meter-update.html',
   styleUrl: './meter-update.css',
@@ -108,6 +122,7 @@ export class MeterUpdate implements OnInit {
         (readingFrequency) => readingFrequency.id === this.meter.reading_frequency,
       ),
     });
+    this.syncAddressDetailsVisibility();
     this.setupTranslationCategory();
   }
   setupTranslationCategory(): void {
@@ -173,6 +188,47 @@ export class MeterUpdate implements OnInit {
       });
   }
 
+  /** Where the picker finds this form's five address controls. */
+  protected readonly addressSource = computed(() => ({
+    group: this.metersForm,
+    names: prefixedAddressNames('address'),
+  }));
+  protected readonly addressPick = new AddressPickStore();
+
+  /**
+   * Whether the five detailed address inputs are on screen.
+   *
+   * Same rule as the creation dialog, and it needs no special case here: the
+   * block opens when the form already carries an address, and an existing meter
+   * always has one. The register search still sits above it for correcting a
+   * badly encoded address in one pick.
+   */
+  protected readonly addressDetailsOpen = signal(false);
+
+  /** The manual escape hatch; see the creation dialog for why it must exist. */
+  protected openAddressDetails(): void {
+    this.addressDetailsOpen.set(true);
+  }
+
+  /** Open the block whenever the form already carries an address. */
+  private syncAddressDetailsVisibility(): void {
+    if (!isAddressEmpty(readAddressFields(this.addressSource()))) {
+      this.addressDetailsOpen.set(true);
+    }
+  }
+
+  /** A picked suggestion fills the five controls; the coordinate is kept aside. */
+  protected onAddressPicked(event: AddressPicked): void {
+    this.metersForm.patchValue({
+      address_street: event.fields.street,
+      address_number: event.fields.number,
+      address_postcode: event.fields.postcode,
+      address_city: event.fields.city,
+    });
+    this.addressPick.remember(event);
+    this.addressDetailsOpen.set(true);
+  }
+
   onSubmit(): void {
     if (!this.metersForm.valid) {
       return;
@@ -180,13 +236,18 @@ export class MeterUpdate implements OnInit {
 
     const formValue = this.metersForm.getRawValue() as MeterUpdateFormValue;
 
-    const newAddress: CreateAddressDTO = {
-      street: formValue.address_street,
-      number: +formValue.address_number,
-      postcode: formValue.address_postcode,
-      city: formValue.address_city,
-      supplement: formValue.address_supplement,
-    };
+    // `geoFor` returns null once the user has edited away from what they picked,
+    // so a stale rooftop coordinate can never reach the payload.
+    const newAddress: CreateAddressDTO = withPickedGeo(
+      {
+        street: formValue.address_street,
+        number: formValue.address_number,
+        postcode: formValue.address_postcode,
+        city: formValue.address_city,
+        supplement: formValue.address_supplement,
+      },
+      this.addressPick.geoFor(readAddressFields(this.addressSource())),
+    );
 
     const updated_meter: UpdateMeterDTO = {
       EAN: formValue.EAN,

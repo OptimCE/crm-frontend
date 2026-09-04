@@ -10,6 +10,10 @@ import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { MetersDTO } from '../../../../shared/dtos/meter.dtos';
 import { PhaseCategory, ReadingFrequency, TarifGroup } from '../../../../shared/types/meter.types';
+import { UpdateMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import { AddressGeoPrecision, AddressSuggestionDTO } from '../../../../shared/dtos/geocoding.dtos';
+import { AddressPicked } from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import { addressFingerprint } from '../../../../shared/components/address-autocomplete/address-field-source';
 
 const mockMeter: MetersDTO = {
   EAN: '54000000001',
@@ -17,7 +21,7 @@ const mockMeter: MetersDTO = {
   address: {
     id: 1,
     street: 'Rue Test',
-    number: 10,
+    number: '10',
     postcode: '1000',
     city: 'Brussels',
     supplement: 'A',
@@ -26,6 +30,41 @@ const mockMeter: MetersDTO = {
   phases_number: PhaseCategory.SINGLE,
   reading_frequency: ReadingFrequency.MONTHLY,
 };
+
+/**
+ * Drive the picker's output the way the template does. `onAddressPicked` is
+ * `protected` because only the template calls it in production.
+ */
+function pickAddress(
+  component: MeterUpdate,
+  fields: { street: string; number: string; postcode: string; city: string },
+): void {
+  const suggestion: AddressSuggestionDTO = {
+    id: 'best:42',
+    kind: 'address',
+    label: `${fields.street} ${fields.number}, ${fields.postcode} ${fields.city}`,
+    street: fields.street,
+    number: fields.number,
+    postcode: fields.postcode,
+    city: fields.city,
+    country: 'BE',
+    latitude: 50.851609,
+    longitude: 4.354555,
+    precision: AddressGeoPrecision.ROOFTOP,
+    best_address_id: 'best:42',
+  };
+  const handler = component as unknown as { onAddressPicked: (event: AddressPicked) => void };
+  handler.onAddressPicked({
+    suggestion,
+    fields: { ...fields, supplement: '' },
+    fingerprint: addressFingerprint({ ...fields, supplement: '' }),
+  });
+}
+
+/** `addressDetailsOpen` is protected: only the template reads it in production. */
+function detailsOpen(component: MeterUpdate): boolean {
+  return (component as unknown as { addressDetailsOpen: () => boolean }).addressDetailsOpen();
+}
 
 describe('MeterUpdate', () => {
   let component: MeterUpdate;
@@ -109,7 +148,7 @@ describe('MeterUpdate', () => {
 
     it('should patch form with meter data from dialog config on init', () => {
       expect(component.metersForm.get('address_street')?.value).toBe('Rue Test');
-      expect(component.metersForm.get('address_number')?.value).toBe(10);
+      expect(component.metersForm.get('address_number')?.value).toBe('10');
       expect(component.metersForm.get('address_postcode')?.value).toBe('1000');
       expect(component.metersForm.get('address_supplement')?.value).toBe('A');
       expect(component.metersForm.get('address_city')?.value).toBe('Brussels');
@@ -199,7 +238,7 @@ describe('MeterUpdate', () => {
         EAN: '54000000002',
         address: {
           street: 'Rue Neuve',
-          number: 5,
+          number: '5',
           postcode: '1000',
           city: 'Brussels',
           supplement: '',
@@ -209,6 +248,51 @@ describe('MeterUpdate', () => {
         reading_frequency: ReadingFrequency.MONTHLY,
         tarif_group: TarifGroup.LOW_TENSION,
       });
+    });
+
+    it('carries a picked coordinate into the payload', () => {
+      // The whole point of the picker: a register pick lands on the map without
+      // waiting for a geocoder round trip, because the backend stores a
+      // caller-supplied pin directly.
+      fillFormValid();
+      meterServiceSpy.updateMeter.mockReturnValue(of({ data: 'ok' }));
+      pickAddress(component, {
+        street: 'Rue Neuve',
+        number: '5',
+        postcode: '1000',
+        city: 'Brussels',
+      });
+
+      component.onSubmit();
+
+      const dto = meterServiceSpy.updateMeter.mock.calls[0][0] as UpdateMeterDTO;
+      expect(dto.address).toMatchObject({
+        latitude: 50.851609,
+        longitude: 4.354555,
+        best_address_id: 'best:42',
+      });
+    });
+
+    it('DROPS the picked coordinate once the address is edited afterwards', () => {
+      // The failure this guards: pick "…5", hand-edit to 7, and the rooftop
+      // coordinate now points at the wrong building — a lie the map would
+      // render confidently.
+      fillFormValid();
+      meterServiceSpy.updateMeter.mockReturnValue(of({ data: 'ok' }));
+      pickAddress(component, {
+        street: 'Rue Neuve',
+        number: '5',
+        postcode: '1000',
+        city: 'Brussels',
+      });
+      component.metersForm.get('address_number')?.setValue('7');
+
+      component.onSubmit();
+
+      const dto = meterServiceSpy.updateMeter.mock.calls[0][0] as UpdateMeterDTO;
+      expect(dto.address).not.toHaveProperty('latitude');
+      expect(dto.address).not.toHaveProperty('best_address_id');
+      expect(dto.address.number).toBe('7');
     });
 
     it('should close dialog with true on successful response', () => {
@@ -245,6 +329,39 @@ describe('MeterUpdate', () => {
       component.onSubmit();
 
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+    });
+  });
+
+  // ── 8. Address details disclosure ───────────────────────────────────
+
+  describe('address details disclosure', () => {
+    it('shows the detailed fields immediately, because the address is already there', () => {
+      // The whole difference from the creation dialog, and it needs no special
+      // case: the rule is "open when the form carries an address", and an
+      // existing meter always does.
+      expect(detailsOpen(component)).toBe(true);
+    });
+
+    it('renders the inputs rather than the manual link', () => {
+      // Behavioural state is not enough on its own — the template has to
+      // actually honour the flag.
+      const host = fixture.nativeElement as HTMLElement;
+      const street = host.querySelector('[data-testid="meter-update__input--street"]');
+      const manual = host.querySelector('[data-testid="meter-update__button--address-manual"]');
+
+      expect(street).not.toBeNull();
+      expect(manual).toBeNull();
+    });
+
+    it('keeps them open after a pick', () => {
+      pickAddress(component, {
+        street: 'Rue Neuve',
+        number: '40',
+        postcode: '1000',
+        city: 'Brussels',
+      });
+
+      expect(detailsOpen(component)).toBe(true);
     });
   });
 });

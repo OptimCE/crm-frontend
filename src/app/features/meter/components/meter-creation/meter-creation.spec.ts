@@ -19,6 +19,9 @@ import {
   InjectionStatus,
   MeterDataStatus,
 } from '../../../../shared/types/meter.types';
+import { AddressGeoPrecision, AddressSuggestionDTO } from '../../../../shared/dtos/geocoding.dtos';
+import { AddressPicked } from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import { addressFingerprint } from '../../../../shared/components/address-autocomplete/address-field-source';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -62,6 +65,53 @@ function fillFormCompletely(component: MeterCreation): void {
 }
 
 // ── Test Suite ───────────────────────────────────────────────────────
+
+/**
+ * Drive the picker's output the way the template does.
+ *
+ * `onAddressPicked` and the pick store are `protected` because only the
+ * template touches them in production — but "the six forms are wired
+ * identically" is an assumption, and a @ViewChild that never resolved has
+ * already proved that assumption can be wrong.
+ */
+function pickAddress(
+  component: object,
+  handler: string,
+  fields: { street: string; number: string; postcode: string; city: string },
+): void {
+  const suggestion: AddressSuggestionDTO = {
+    id: 'best:42',
+    kind: 'address',
+    label: `${fields.street} ${fields.number}, ${fields.postcode} ${fields.city}`,
+    street: fields.street,
+    number: fields.number,
+    postcode: fields.postcode,
+    city: fields.city,
+    country: 'BE',
+    latitude: 50.846169,
+    longitude: 4.366538,
+    precision: AddressGeoPrecision.ROOFTOP,
+    best_address_id: 'best:42',
+  };
+  const full = { ...fields, supplement: '' };
+  (component as Record<string, (e: AddressPicked) => void>)[handler]({
+    suggestion,
+    fields: full,
+    fingerprint: addressFingerprint(full),
+  });
+}
+
+/**
+ * `addressDetailsOpen` and `openAddressDetails` are `protected` for the same
+ * reason `onAddressPicked` is: only the template touches them in production.
+ */
+function detailsOpen(component: object): boolean {
+  return (component as { addressDetailsOpen: () => boolean }).addressDetailsOpen();
+}
+
+function openDetails(component: object): void {
+  (component as { openAddressDetails: () => void }).openAddressDetails();
+}
 
 describe('MeterCreation', () => {
   let component: MeterCreation;
@@ -308,7 +358,7 @@ describe('MeterCreation', () => {
       expect(dto.EAN).toBe('541448200000000001');
       expect(dto.meter_number).toBe('MTR-001');
       expect(dto.address.street).toBe('Rue de la Loi');
-      expect(dto.address.number).toBe(16);
+      expect(dto.address.number).toBe('16');
       expect(dto.address.postcode).toBe('1000');
       expect(dto.address.city).toBe('Brussels');
       expect(dto.initial_data.status).toBe(MeterDataStatus.INACTIVE);
@@ -316,6 +366,18 @@ describe('MeterCreation', () => {
       // Calendar dates must travel as YYYY-MM-DD using the user's local components,
       // not as a UTC-shifted Date — guards against the timezone off-by-one bug.
       expect(dto.initial_data.start_date).toBe('2026-04-01');
+    });
+
+    // Regression: the box number was collected by the form and then silently
+    // dropped from the payload, while meter-UPDATE kept it — so a box typed at
+    // creation only appeared after the first edit.
+    it('should carry the box number (supplement) into the DTO', () => {
+      fillFormCompletely(component);
+      component.metersForm.patchValue({ address_supplement: 'B12' });
+      component.onSubmit();
+
+      const dto = meterServiceSpy.addMeter.mock.calls[0][0] as CreateMeterDTO;
+      expect(dto.address.supplement).toBe('B12');
     });
 
     it('should close dialog on successful response', () => {
@@ -398,6 +460,114 @@ describe('MeterCreation', () => {
       const validator = component.validMemberValidator();
       const ctrl = new FormControl({ id: 999, name: 'Unknown', member_type: 1, status: 1 });
       expect(validator(ctrl)).toEqual({ invalidMember: true });
+    });
+  });
+
+  describe('address picker', () => {
+    it('fills the five controls from a picked suggestion', () => {
+      pickAddress(component, 'onAddressPicked', {
+        street: 'Place de la Station',
+        number: '20A',
+        postcode: '5000',
+        city: 'Namur',
+      });
+
+      const value = component.metersForm.getRawValue() as Record<string, unknown>;
+      expect(value['address_street']).toBe('Place de la Station');
+      expect(value['address_number']).toBe('20A');
+      expect(value['address_postcode']).toBe('5000');
+      expect(value['address_city']).toBe('Namur');
+    });
+
+    it('carries the picked coordinate into the DTO', () => {
+      fillFormCompletely(component);
+      pickAddress(component, 'onAddressPicked', {
+        street: 'Rue de la Loi',
+        number: '16',
+        postcode: '1000',
+        city: 'Brussels',
+      });
+
+      component.onSubmit();
+
+      const dto = meterServiceSpy.addMeter.mock.calls[0][0] as CreateMeterDTO;
+      expect(dto.address).toMatchObject({
+        latitude: 50.846169,
+        longitude: 4.366538,
+        best_address_id: 'best:42',
+      });
+    });
+
+    it('DROPS it once the address is edited afterwards', () => {
+      fillFormCompletely(component);
+      pickAddress(component, 'onAddressPicked', {
+        street: 'Rue de la Loi',
+        number: '16',
+        postcode: '1000',
+        city: 'Brussels',
+      });
+      component.metersForm.get('address_number')?.setValue('18');
+
+      component.onSubmit();
+
+      const dto = meterServiceSpy.addMeter.mock.calls[0][0] as CreateMeterDTO;
+      expect(dto.address).not.toHaveProperty('latitude');
+    });
+  });
+
+  // ── 9. Address details disclosure ───────────────────────────────────
+
+  describe('address details disclosure', () => {
+    it('starts collapsed, because a new meter has no address yet', () => {
+      expect(detailsOpen(component)).toBe(false);
+    });
+
+    it('opens on a picked suggestion, so the filled fields are actually seen', () => {
+      // A pick that silently populated hidden inputs is indistinguishable from
+      // a pick that did nothing.
+      pickAddress(component, 'onAddressPicked', {
+        street: 'Place de la Station',
+        number: '20A',
+        postcode: '5000',
+        city: 'Namur',
+      });
+
+      expect(detailsOpen(component)).toBe(true);
+    });
+
+    it('opens on request, WITHOUT a pick', () => {
+      // The escape hatch is load-bearing: the picker is suggest-only and must
+      // never gate a save, so an address the register does not know still has
+      // to be encodable. If a pick were the only way in, collapsing by default
+      // would quietly turn "suggest, never block" into a hard block.
+      openDetails(component);
+
+      expect(detailsOpen(component)).toBe(true);
+    });
+
+    it('opens when step 1 fails on an address control', () => {
+      // The trap this exists to prevent: four of the five inputs are
+      // `Validators.required` and live inside the collapsed block, so marking
+      // them touched while hidden paints the step as invalid with nothing on
+      // screen to fix.
+      component.validateStep1(vi.fn());
+
+      expect(detailsOpen(component)).toBe(true);
+    });
+
+    it('stays collapsed when step 1 fails on something that is NOT the address', () => {
+      // Guards the opposite mistake — opening on any failure at all, which
+      // would make the collapse pointless the moment a user forgot the EAN.
+      component.metersForm.patchValue({
+        address_street: 'Rue Test',
+        address_number: '1',
+        address_postcode: '1000',
+        address_city: 'Brussels',
+      });
+
+      component.validateStep1(vi.fn());
+
+      expect(detailsOpen(component)).toBe(false);
     });
   });
 });

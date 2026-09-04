@@ -30,6 +30,19 @@ import { CommunityDetailDTO, MyCommunityDTO } from '../../../../shared/dtos/comm
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { ibanValidator } from '../../../../shared/validators/iban.validator';
 import { CommunityLogo } from '../../../../shared/components/community-logo/community-logo';
+import {
+  AddressAutocomplete,
+  AddressPicked,
+} from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import {
+  isAddressComplete,
+  nestedAddressNames,
+  readAddressFields,
+} from '../../../../shared/components/address-autocomplete/address-field-source';
+import {
+  AddressPickStore,
+  withPickedGeo,
+} from '../../../../shared/components/address-autocomplete/address-pick-store';
 
 /** Wallonia-only default applied when a community has no regulator yet. */
 const DEFAULT_REGULATOR = 'BE-WAL-CWAPE';
@@ -48,7 +61,7 @@ interface CommunityUpdatePayload {
 
 interface AddressFormValue {
   street: string;
-  number: number | null;
+  number: string;
   city: string;
   postcode: string;
   supplement: string;
@@ -97,6 +110,7 @@ function partialAddressValidator(group: AbstractControl): ValidationErrors | nul
     TranslatePipe,
     HeaderPage,
     CommunityLogo,
+    AddressAutocomplete,
   ],
   templateUrl: './community-info.html',
   styleUrl: './community-info.css',
@@ -137,7 +151,7 @@ export class CommunityInfo {
     headquarters_address: new FormGroup(
       {
         street: new FormControl<string>('', { nonNullable: true }),
-        number: new FormControl<number | null>(null),
+        number: new FormControl<string>('', { nonNullable: true }),
         city: new FormControl<string>('', { nonNullable: true }),
         postcode: new FormControl<string>('', { nonNullable: true }),
         supplement: new FormControl<string>('', { nonNullable: true }),
@@ -317,7 +331,7 @@ export class CommunityInfo {
       regulator: c.regulator ?? DEFAULT_REGULATOR,
       headquarters_address: {
         street: addr?.street ?? '',
-        number: addr?.number ?? null,
+        number: addr?.number ?? '',
         city: addr?.city ?? '',
         postcode: addr?.postcode ?? '',
         supplement: addr?.supplement ?? '',
@@ -327,6 +341,40 @@ export class CommunityInfo {
       iban: c.iban ?? '',
       account_holder_name: c.account_holder_name ?? '',
     });
+  }
+
+  /**
+   * The nested case. `FormGroup.get()` takes a dotted path, which is what lets
+   * one picker serve this form and the five that use flat prefixed controls.
+   */
+  protected readonly addressSource = computed(() => ({
+    group: this.form,
+    names: nestedAddressNames('headquarters_address'),
+  }));
+  protected readonly addressPick = new AddressPickStore();
+
+  /**
+   * Probing only once all four fields are filled matches this form's own
+   * all-or-nothing `partialAddressValidator`: a community may legitimately have
+   * no headquarters address, and warning about one it never claimed is noise.
+   */
+  protected readonly probeAddress = computed(() =>
+    isAddressComplete(readAddressFields(this.addressSource())),
+  );
+
+  protected onAddressPicked(event: AddressPicked): void {
+    // Through the ROOT form: `form.get('headquarters_address').patchValue`
+    // resolves to the fully typed child group and demands every key, including
+    // the `supplement` a suggestion never carries.
+    this.form.patchValue({
+      headquarters_address: {
+        street: event.fields.street,
+        number: event.fields.number,
+        postcode: event.fields.postcode,
+        city: event.fields.city,
+      },
+    });
+    this.addressPick.remember(event);
   }
 
   private buildUpdatePayload(): CommunityUpdatePayload {
@@ -350,14 +398,17 @@ export class CommunityInfo {
           : accountHolder,
     };
     const a = value.headquarters_address;
-    if (a.street && a.number !== null && a.city && a.postcode) {
-      payload.headquarters_address = {
-        street: a.street.trim(),
-        number: a.number,
-        city: a.city.trim(),
-        postcode: a.postcode.trim(),
-        supplement: a.supplement?.trim() || undefined,
-      };
+    if (a.street && a.number && a.city && a.postcode) {
+      payload.headquarters_address = withPickedGeo(
+        {
+          street: a.street.trim(),
+          number: a.number.trim(),
+          city: a.city.trim(),
+          postcode: a.postcode.trim(),
+          supplement: a.supplement?.trim() || undefined,
+        },
+        this.addressPick.geoFor(readAddressFields(this.addressSource())),
+      );
     }
     return payload;
   }

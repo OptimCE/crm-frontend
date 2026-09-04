@@ -16,6 +16,9 @@ import {
   UploadLogoResponse,
 } from '../../../../shared/dtos/community.dtos';
 import { Role } from '../../../../core/dtos/role';
+import { AddressGeoPrecision, AddressSuggestionDTO } from '../../../../shared/dtos/geocoding.dtos';
+import { AddressPicked } from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import { addressFingerprint } from '../../../../shared/components/address-autocomplete/address-field-source';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -57,6 +60,41 @@ function paginated<T>(data: T[]): ApiResponsePaginated<T[] | string> {
 }
 
 // ── Suite ──────────────────────────────────────────────────────────
+
+/**
+ * Drive the picker's output the way the template does.
+ *
+ * `onAddressPicked` and the pick store are `protected` because only the
+ * template touches them in production — but "the six forms are wired
+ * identically" is an assumption, and a @ViewChild that never resolved has
+ * already proved that assumption can be wrong.
+ */
+function pickAddress(
+  component: object,
+  handler: string,
+  fields: { street: string; number: string; postcode: string; city: string },
+): void {
+  const suggestion: AddressSuggestionDTO = {
+    id: 'best:42',
+    kind: 'address',
+    label: `${fields.street} ${fields.number}, ${fields.postcode} ${fields.city}`,
+    street: fields.street,
+    number: fields.number,
+    postcode: fields.postcode,
+    city: fields.city,
+    country: 'BE',
+    latitude: 50.846169,
+    longitude: 4.366538,
+    precision: AddressGeoPrecision.ROOFTOP,
+    best_address_id: 'best:42',
+  };
+  const full = { ...fields, supplement: '' };
+  (component as Record<string, (e: AddressPicked) => void>)[handler]({
+    suggestion,
+    fields: full,
+    fingerprint: addressFingerprint(full),
+  });
+}
 
 describe('CommunityInfo', () => {
   let component: CommunityInfo;
@@ -362,7 +400,7 @@ describe('CommunityInfo', () => {
         website_url: '',
         headquarters_address: {
           street: 'Rue X',
-          number: 12,
+          number: '12',
           city: 'Brux',
           postcode: '1000',
           supplement: 'Box A',
@@ -376,7 +414,7 @@ describe('CommunityInfo', () => {
       };
       expect(payload.headquarters_address).toEqual({
         street: 'Rue X',
-        number: 12,
+        number: '12',
         city: 'Brux',
         postcode: '1000',
         supplement: 'Box A',
@@ -392,7 +430,7 @@ describe('CommunityInfo', () => {
         website_url: '',
         headquarters_address: {
           street: '',
-          number: null,
+          number: '',
           city: '',
           postcode: '',
           supplement: '',
@@ -414,7 +452,7 @@ describe('CommunityInfo', () => {
         website_url: '',
         headquarters_address: {
           street: 'Rue X',
-          number: 12,
+          number: '12',
           city: 'Brux',
           postcode: '1000',
           supplement: '',
@@ -516,7 +554,7 @@ describe('CommunityInfo', () => {
     it('passes when every field is empty', () => {
       component.form.controls.headquarters_address.setValue({
         street: '',
-        number: null,
+        number: '',
         city: '',
         postcode: '',
         supplement: '',
@@ -527,7 +565,7 @@ describe('CommunityInfo', () => {
     it('passes when every required field is filled', () => {
       component.form.controls.headquarters_address.setValue({
         street: 'A',
-        number: 1,
+        number: '1',
         city: 'B',
         postcode: '1000',
         supplement: '',
@@ -538,7 +576,7 @@ describe('CommunityInfo', () => {
     it('flags partial state with `partialAddress: true`', () => {
       component.form.controls.headquarters_address.setValue({
         street: 'A',
-        number: null,
+        number: '',
         city: '',
         postcode: '',
         supplement: '',
@@ -551,7 +589,7 @@ describe('CommunityInfo', () => {
     it('whitespace-only values count as empty', () => {
       component.form.controls.headquarters_address.setValue({
         street: '   ',
-        number: null,
+        number: '',
         city: '',
         postcode: '',
         supplement: '',
@@ -638,6 +676,50 @@ describe('CommunityInfo', () => {
 
       component.save();
       expect(communitySpy.updateCommunity).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('address picker', () => {
+    it('patches the NESTED headquarters group', () => {
+      // Through the root form: form.get('headquarters_address').patchValue
+      // resolves to the fully typed child and demands every key, including the
+      // `supplement` a suggestion never carries.
+      pickAddress(component, 'onAddressPicked', {
+        street: 'Place de la Station',
+        number: '20A',
+        postcode: '5000',
+        city: 'Namur',
+      });
+
+      const address = component.form.get('headquarters_address')?.getRawValue() as Record<
+        string,
+        unknown
+      >;
+      expect(address['street']).toBe('Place de la Station');
+      expect(address['number']).toBe('20A');
+      expect(address['postcode']).toBe('5000');
+      expect(address['city']).toBe('Namur');
+    });
+
+    it('keeps the coordinate available while the form still matches', () => {
+      pickAddress(component, 'onAddressPicked', {
+        street: 'Place de la Station',
+        number: '20A',
+        postcode: '5000',
+        city: 'Namur',
+      });
+
+      const store = (component as unknown as { addressPick: { geoFor: (f: unknown) => unknown } })
+        .addressPick;
+      const fields = {
+        street: 'Place de la Station',
+        number: '20A',
+        supplement: '',
+        postcode: '5000',
+        city: 'Namur',
+      };
+      expect(store.geoFor(fields)).toMatchObject({ latitude: 50.846169, longitude: 4.366538 });
+      expect(store.geoFor({ ...fields, number: '21' })).toBeNull();
     });
   });
 });

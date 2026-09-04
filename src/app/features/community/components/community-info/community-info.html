@@ -277,11 +277,16 @@
                 }
               </div>
 
-              <div
-                formGroupName="headquarters_address"
-                class="grid grid-cols-1 sm:grid-cols-12 gap-3"
-              >
-                <div class="sm:col-span-9">
+              <app-address-autocomplete
+                class="block mb-3"
+                [source]="addressSource()"
+                [probe]="probeAddress()"
+                testId="community-info__autocomplete--address"
+                (addressPicked)="onAddressPicked($event)"
+                (geoChange)="addressPick.observe($event)"
+              />
+              <div formGroupName="headquarters_address" class="grid grid-cols-12 gap-x-4 gap-y-3">
+                <div class="col-span-12 md:col-span-6">
                   <span class="field-label">{{ 'COMMUNITY_INFO.STREET' | translate }}</span>
                   <input
                     pInputText
@@ -290,17 +295,16 @@
                     data-testid="community-info__input--street"
                   />
                 </div>
-                <div class="sm:col-span-3">
+                <div class="col-span-6 md:col-span-3">
                   <span class="field-label">{{ 'COMMUNITY_INFO.NUMBER' | translate }}</span>
                   <input
                     pInputText
-                    type="number"
                     formControlName="number"
                     class="w-full"
                     data-testid="community-info__input--number"
                   />
                 </div>
-                <div class="sm:col-span-12">
+                <div class="col-span-6 md:col-span-3">
                   <span class="field-label">{{ 'COMMUNITY_INFO.SUPPLEMENT' | translate }}</span>
                   <input
                     pInputText
@@ -309,7 +313,7 @@
                     data-testid="community-info__input--supplement"
                   />
                 </div>
-                <div class="sm:col-span-4">
+                <div class="col-span-4 md:col-span-3">
                   <span class="field-label">{{ 'COMMUNITY_INFO.POSTCODE' | translate }}</span>
                   <input
                     pInputText
@@ -318,7 +322,7 @@
                     data-testid="community-info__input--postcode"
                   />
                 </div>
-                <div class="sm:col-span-8">
+                <div class="col-span-8 md:col-span-9">
                   <span class="field-label">{{ 'COMMUNITY_INFO.CITY' | translate }}</span>
                   <input
                     pInputText
@@ -328,7 +332,7 @@
                   />
                 </div>
                 @if (hasPartialAddressError()) {
-                  <small class="sm:col-span-12 text-red-600">{{
+                  <small class="col-span-12 text-red-600">{{
                     'COMMUNITY_INFO.ERRORS.PARTIAL_ADDRESS' | translate
                   }}</small>
                 }

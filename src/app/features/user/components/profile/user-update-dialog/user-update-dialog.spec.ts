@@ -9,6 +9,12 @@ import { UserService } from '../../../../../shared/services/user.service';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { UpdateUserDTO } from '../../../../../shared/dtos/user.dtos';
 import { UserUpdateDialog } from './user-update-dialog';
+import {
+  AddressGeoPrecision,
+  AddressSuggestionDTO,
+} from '../../../../../shared/dtos/geocoding.dtos';
+import { AddressPicked } from '../../../../../shared/components/address-autocomplete/address-autocomplete';
+import { addressFingerprint } from '../../../../../shared/components/address-autocomplete/address-field-source';
 
 function buildMockUser(): UpdateUserDTO {
   return {
@@ -19,14 +25,14 @@ function buildMockUser(): UpdateUserDTO {
     iban: 'BE68539007547034',
     home_address: {
       street: 'Rue Haute',
-      number: 10,
+      number: '10',
       postcode: '1000',
       city: 'Brussels',
       supplement: 'A',
     },
     billing_address: {
       street: 'Rue Basse',
-      number: 20,
+      number: '20',
       postcode: '2000',
       city: 'Antwerp',
       supplement: '',
@@ -39,6 +45,41 @@ function ctrl(component: UserUpdateDialog, name: string): AbstractControl {
   const c = component.formData.get(name);
   expect(c).toBeTruthy();
   return c as AbstractControl;
+}
+
+/**
+ * Drive the picker's output the way the template does.
+ *
+ * `onAddressPicked` and the pick store are `protected` because only the
+ * template touches them in production — but "the six forms are wired
+ * identically" is an assumption, and a @ViewChild that never resolved has
+ * already proved that assumption can be wrong.
+ */
+function pickAddress(
+  component: object,
+  handler: string,
+  fields: { street: string; number: string; postcode: string; city: string },
+): void {
+  const suggestion: AddressSuggestionDTO = {
+    id: 'best:42',
+    kind: 'address',
+    label: `${fields.street} ${fields.number}, ${fields.postcode} ${fields.city}`,
+    street: fields.street,
+    number: fields.number,
+    postcode: fields.postcode,
+    city: fields.city,
+    country: 'BE',
+    latitude: 50.846169,
+    longitude: 4.366538,
+    precision: AddressGeoPrecision.ROOFTOP,
+    best_address_id: 'best:42',
+  };
+  const full = { ...fields, supplement: '' };
+  (component as Record<string, (e: AddressPicked) => void>)[handler]({
+    suggestion,
+    fields: full,
+    fingerprint: addressFingerprint(full),
+  });
 }
 
 describe('UserUpdateDialog', () => {
@@ -266,7 +307,7 @@ describe('UserUpdateDialog', () => {
       await createComponent();
 
       expect(ctrl(component, 'home_address_street').value).toBe('Rue Haute');
-      expect(ctrl(component, 'home_address_number').value).toBe(10);
+      expect(ctrl(component, 'home_address_number').value).toBe('10');
       expect(ctrl(component, 'home_address_postcode').value).toBe('1000');
       expect(ctrl(component, 'home_address_city').value).toBe('Brussels');
       expect(ctrl(component, 'home_address_supplement').value).toBe('A');
@@ -276,7 +317,7 @@ describe('UserUpdateDialog', () => {
       await createComponent();
 
       expect(ctrl(component, 'billing_address_street').value).toBe('Rue Basse');
-      expect(ctrl(component, 'billing_address_number').value).toBe(20);
+      expect(ctrl(component, 'billing_address_number').value).toBe('20');
       expect(ctrl(component, 'billing_address_postcode').value).toBe('2000');
       expect(ctrl(component, 'billing_address_city').value).toBe('Antwerp');
       expect(ctrl(component, 'billing_address_supplement').value).toBe('');
@@ -433,14 +474,14 @@ describe('UserUpdateDialog', () => {
       expect(arg.iban).toBe('BE68539007547034');
       expect(arg.home_address).toEqual({
         street: 'Rue Haute',
-        number: 10,
+        number: '10',
         postcode: '1000',
         city: 'Brussels',
         supplement: 'A',
       });
       expect(arg.billing_address).toEqual({
         street: 'Rue Basse',
-        number: 20,
+        number: '20',
         postcode: '2000',
         city: 'Antwerp',
         supplement: '',
@@ -467,6 +508,73 @@ describe('UserUpdateDialog', () => {
 
       const arg = userServiceSpy.updateUserInfo.mock.calls[0][0] as UpdateUserDTO;
       expect(arg.billing_address).toBeUndefined();
+    });
+  });
+
+  describe('address picker', () => {
+    it('patches the HOME block only', () => {
+      pickAddress(component, 'onHomePicked', {
+        street: 'Rue de la Loi',
+        number: '16',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+
+      const value = component.formData.getRawValue() as Record<string, unknown>;
+      expect(value['home_address_street']).toBe('Rue de la Loi');
+      expect(value['billing_address_street']).not.toBe('Rue de la Loi');
+    });
+
+    it('patches the BILLING block independently', () => {
+      pickAddress(component, 'onBillingPicked', {
+        street: 'Rue Neuve',
+        number: '40',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+
+      const value = component.formData.getRawValue() as Record<string, unknown>;
+      expect(value['billing_address_street']).toBe('Rue Neuve');
+      expect(value['home_address_street']).not.toBe('Rue Neuve');
+    });
+
+    it('keeps the two picks apart', () => {
+      // One store per block: a shared one would put the billing address on the
+      // home address's roof.
+      pickAddress(component, 'onHomePicked', {
+        street: 'Rue A',
+        number: '1',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+      pickAddress(component, 'onBillingPicked', {
+        street: 'Rue B',
+        number: '2',
+        postcode: '1000',
+        city: 'Bruxelles',
+      });
+
+      const c = component as unknown as {
+        homePick: { geoFor: (f: unknown) => unknown };
+        billingPick: { geoFor: (f: unknown) => unknown };
+      };
+      const home = {
+        street: 'Rue A',
+        number: '1',
+        supplement: '',
+        postcode: '1000',
+        city: 'Bruxelles',
+      };
+      const billing = {
+        street: 'Rue B',
+        number: '2',
+        supplement: '',
+        postcode: '1000',
+        city: 'Bruxelles',
+      };
+      expect(c.homePick.geoFor(home)).not.toBeNull();
+      expect(c.homePick.geoFor(billing)).toBeNull();
+      expect(c.billingPick.geoFor(billing)).not.toBeNull();
     });
   });
 });

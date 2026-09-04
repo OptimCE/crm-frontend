@@ -286,7 +286,7 @@
     </p-table>
   } @else {
     @defer (on immediate) {
-      <app-meters-map [query]="mapQuery()" />
+      <app-meters-map [query]="mapQuery()" [canRepair]="true" />
     } @placeholder {
       <div class="h-[70vh]"></div>
     } @loading (after 100ms; minimum 200ms) {

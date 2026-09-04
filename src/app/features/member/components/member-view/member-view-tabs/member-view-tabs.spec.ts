@@ -31,11 +31,11 @@ function buildIndividual(overrides: Partial<IndividualDTO> = {}): IndividualDTO 
     member_type: MemberType.INDIVIDUAL,
     status: MemberStatus.ACTIVE,
     iban: 'BE68539007547034',
-    home_address: { id: 1, street: 'Rue Test', number: 1, postcode: '1000', city: 'Bruxelles' },
+    home_address: { id: 1, street: 'Rue Test', number: '1', postcode: '1000', city: 'Bruxelles' },
     billing_address: {
       id: 2,
       street: 'Rue Facture',
-      number: 2,
+      number: '2',
       postcode: '1000',
       city: 'Bruxelles',
     },

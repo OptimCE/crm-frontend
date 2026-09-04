@@ -31,7 +31,7 @@ function buildAddress(overrides: Partial<AddressDTO> = {}): AddressDTO {
   return {
     id: 1,
     street: 'Main St',
-    number: 42,
+    number: '42',
     postcode: '1000',
     city: 'Brussels',
     ...overrides,

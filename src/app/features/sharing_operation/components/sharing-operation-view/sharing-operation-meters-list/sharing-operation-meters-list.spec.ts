@@ -27,7 +27,7 @@ function buildAddress(): AddressDTO {
   return {
     id: 1,
     street: 'Rue Test',
-    number: 42,
+    number: '42',
     postcode: '1000',
     city: 'Bruxelles',
   };

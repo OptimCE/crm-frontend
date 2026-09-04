@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import {
@@ -30,6 +30,19 @@ import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/mete
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
 import { eanValidator } from './ean.validator';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
+import {
+  AddressAutocomplete,
+  AddressPicked,
+} from '../../../../shared/components/address-autocomplete/address-autocomplete';
+import {
+  isAddressEmpty,
+  prefixedAddressNames,
+  readAddressFields,
+} from '../../../../shared/components/address-autocomplete/address-field-source';
+import {
+  AddressPickStore,
+  withPickedGeo,
+} from '../../../../shared/components/address-autocomplete/address-pick-store';
 import { InputText } from 'primeng/inputtext';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { RadioButton } from 'primeng/radiobutton';
@@ -96,6 +109,7 @@ interface MeterFormValue {
     StepPanel,
     StepPanels,
     FieldLabelHelper,
+    AddressAutocomplete,
   ],
   templateUrl: './meter-creation.html',
   styleUrl: './meter-creation.css',
@@ -164,6 +178,7 @@ export class MeterCreation implements OnInit {
       dateStart: new FormControl('', [Validators.required]),
       injectionStatus: new FormControl({ value: '', disabled: true }, [Validators.required]),
     });
+    this.syncAddressDetailsVisibility();
 
     this.memberService
       .getMembersList({ page: 1, limit: 100 })
@@ -399,6 +414,61 @@ export class MeterCreation implements OnInit {
     };
   }
 
+  /** Where the picker finds this form's five address controls. */
+  protected readonly addressSource = computed(() => ({
+    group: this.metersForm,
+    names: prefixedAddressNames('address'),
+  }));
+  protected readonly addressPick = new AddressPickStore();
+
+  /**
+   * Whether the five detailed address inputs are on screen.
+   *
+   * Creating a meter starts with the register search alone, because that is the
+   * path that produces a rooftop pin; the raw fields are noise until there is
+   * something in them. They open for good on anything that means "there is an
+   * address here now" — a picked suggestion, a form that arrived prefilled, a
+   * failed step validation, or the user asking to type it by hand.
+   *
+   * One-way on purpose, which is why there is no "hide" affordance: four of
+   * the five inputs are `Validators.required`, so a re-collapsible block could
+   * put a failing control off screen and leave the user with a step that
+   * refuses to advance and nothing visible explaining why.
+   */
+  protected readonly addressDetailsOpen = signal(false);
+
+  /**
+   * The manual escape hatch, and it is load-bearing rather than a courtesy.
+   *
+   * The picker is suggest-only and must never gate a save (an address the
+   * register does not know still has to be encodable). If picking a suggestion
+   * were the ONLY way to reveal the inputs, collapsing them by default would
+   * quietly turn that promise into a hard block.
+   */
+  protected openAddressDetails(): void {
+    this.addressDetailsOpen.set(true);
+  }
+
+  /** Open the block whenever the form already carries an address. */
+  private syncAddressDetailsVisibility(): void {
+    if (!isAddressEmpty(readAddressFields(this.addressSource()))) {
+      this.addressDetailsOpen.set(true);
+    }
+  }
+
+  protected onAddressPicked(event: AddressPicked): void {
+    this.metersForm.patchValue({
+      address_street: event.fields.street,
+      address_number: event.fields.number,
+      address_postcode: event.fields.postcode,
+      address_city: event.fields.city,
+    });
+    this.addressPick.remember(event);
+    // Show what was just written: a pick that silently filled hidden inputs
+    // would be indistinguishable from one that did nothing.
+    this.addressDetailsOpen.set(true);
+  }
+
   validateStep1(activateCallback: (step: number) => void): void {
     const step1Controls = [
       'address_street',
@@ -416,10 +486,24 @@ export class MeterCreation implements OnInit {
       const ctrl = this.metersForm.get(name);
       if (ctrl) {
         ctrl.markAsTouched();
-        if (ctrl.invalid) valid = false;
+        if (ctrl.invalid) {
+          valid = false;
+          // The four required address controls live in the collapsible block.
+          // Marking one touched while it is hidden would paint the step as
+          // invalid with no visible field to fix.
+          if (name.startsWith('address_')) {
+            this.addressDetailsOpen.set(true);
+          }
+        }
       }
     }
     if (valid) {
+      // No explicit probe here on purpose. The picker lives inside p-stepper's
+      // `<ng-template #content>`, which PrimeNG renders in its OWN view, so a
+      // @ViewChild in this component never resolves it — the call would be a
+      // silent no-op that reads as coverage. The ambient probe already fires
+      // 600 ms after typing stops, while the user is still on this step and the
+      // fields are still on screen to correct.
       activateCallback(1);
     }
   }
@@ -444,12 +528,20 @@ export class MeterCreation implements OnInit {
       member_id: formValue.member ? formValue.member.id : undefined,
       end_date: undefined,
     };
-    const newAddress: CreateAddressDTO = {
-      street: formValue.address_street,
-      number: +formValue.address_number,
-      postcode: formValue.address_postcode,
-      city: formValue.address_city,
-    };
+    // `geoFor` returns null once the user has edited away from what they picked,
+    // so a stale rooftop coordinate can never reach the payload.
+    const newAddress: CreateAddressDTO = withPickedGeo(
+      {
+        street: formValue.address_street,
+        number: formValue.address_number,
+        postcode: formValue.address_postcode,
+        city: formValue.address_city,
+        // `supplement` was silently dropped here while meter-UPDATE kept it, so
+        // a box number typed at creation reappeared only after the first edit.
+        supplement: formValue.address_supplement,
+      },
+      this.addressPick.geoFor(readAddressFields(this.addressSource())),
+    );
     const newMeter: CreateMeterDTO = {
       EAN: formValue.EAN,
       address: newAddress,

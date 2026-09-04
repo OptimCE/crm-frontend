@@ -16,7 +16,7 @@ function buildAddress(overrides: Partial<AddressDTO> = {}): AddressDTO {
   return {
     id: 1,
     street: 'Rue de la Loi',
-    number: 16,
+    number: '16',
     postcode: '1000',
     city: 'Bruxelles',
     ...overrides,
@@ -48,7 +48,7 @@ function buildIndividual(overrides: Partial<IndividualDTO> = {}): IndividualDTO 
     phone_number: '0471234567',
     social_rate: true,
     home_address: buildAddress(),
-    billing_address: buildAddress({ id: 2, street: 'Avenue Louise', number: 100 }),
+    billing_address: buildAddress({ id: 2, street: 'Avenue Louise', number: '100' }),
     ...overrides,
   };
 }
@@ -63,7 +63,7 @@ function buildCompany(overrides: Partial<CompanyDTO> = {}): CompanyDTO {
     vat_number: 'BE0123456789',
     manager: buildManager(),
     home_address: buildAddress(),
-    billing_address: buildAddress({ id: 3, street: 'Boulevard Anspach', number: 50 }),
+    billing_address: buildAddress({ id: 3, street: 'Boulevard Anspach', number: '50' }),
     ...overrides,
   };
 }

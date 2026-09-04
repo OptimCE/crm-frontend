@@ -7,7 +7,7 @@ function address(overrides: Partial<AddressDTO> = {}): AddressDTO {
   return {
     id: 1,
     street: 'Rue de la Loi',
-    number: 16,
+    number: '16',
     postcode: '1000',
     supplement: 'Bte 3',
     city: 'Bruxelles',
@@ -25,7 +25,7 @@ function user(overrides: Partial<UserDTO> = {}): UserDTO {
     phone_number: '+32470112233',
     iban: 'BE68539007547034',
     home_address: address(),
-    billing_address: address({ id: 2, street: 'Avenue Louise', number: 200 }),
+    billing_address: address({ id: 2, street: 'Avenue Louise', number: '200' }),
     ...overrides,
   };
 }
