@@ -2799,7 +2799,7 @@
     "RESET_VIEW": "Recentrer",
     "RETRY": "Réessayer",
     "UNAVAILABLE_TITLE": "Carte indisponible",
-    "UNAVAILABLE_WEBGL": "Votre navigateur ne prend pas en charge WebGL 2, nécessaire à l'affichage de la carte. La vue liste reste disponible.",
+    "UNAVAILABLE_WEBGL": "L'affichage de la carte nécessite WebGL 2, que ce navigateur ne fournit pas. L'accélération matérielle est peut-être désactivée, ou une extension de confidentialité bloque l'accès au canvas. La vue liste reste disponible.",
     "UNAVAILABLE_LOAD": "La carte n'a pas pu être chargée. Vérifiez votre connexion, puis réessayez.",
     "EMPTY_TITLE": "Rien à afficher sur la carte",
     "EMPTY_METERS": "Aucun compteur correspondant à ces filtres n'a encore de coordonnées géographiques.",

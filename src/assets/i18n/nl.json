@@ -2799,7 +2799,7 @@
     "RESET_VIEW": "Opnieuw centreren",
     "RETRY": "Opnieuw proberen",
     "UNAVAILABLE_TITLE": "Kaart niet beschikbaar",
-    "UNAVAILABLE_WEBGL": "Uw browser ondersteunt geen WebGL 2, dat de kaart nodig heeft. De lijstweergave blijft beschikbaar.",
+    "UNAVAILABLE_WEBGL": "De kaart heeft WebGL 2 nodig, dat deze browser niet levert. Mogelijk staat hardwareversnelling uit, of blokkeert een privacy-extensie de toegang tot canvas. De lijstweergave blijft beschikbaar.",
     "UNAVAILABLE_LOAD": "De kaart kon niet worden geladen. Controleer uw verbinding en probeer het opnieuw.",
     "EMPTY_TITLE": "Niets te tonen op de kaart",
     "EMPTY_METERS": "Geen enkele meter die aan deze filters voldoet heeft al geografische coördinaten.",

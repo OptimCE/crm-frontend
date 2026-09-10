@@ -2799,7 +2799,7 @@
     "RESET_VIEW": "Neu zentrieren",
     "RETRY": "Erneut versuchen",
     "UNAVAILABLE_TITLE": "Karte nicht verfügbar",
-    "UNAVAILABLE_WEBGL": "Ihr Browser unterstützt kein WebGL 2, das für die Karte erforderlich ist. Die Listenansicht bleibt verfügbar.",
+    "UNAVAILABLE_WEBGL": "Die Karte benötigt WebGL 2, das dieser Browser nicht bereitstellt. Möglicherweise ist die Hardwarebeschleunigung deaktiviert, oder eine Datenschutz-Erweiterung blockiert den Canvas-Zugriff. Die Listenansicht bleibt verfügbar.",
     "UNAVAILABLE_LOAD": "Die Karte konnte nicht geladen werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
     "EMPTY_TITLE": "Nichts auf der Karte anzuzeigen",
     "EMPTY_METERS": "Kein Zähler, der diesen Filtern entspricht, hat bereits geografische Koordinaten.",

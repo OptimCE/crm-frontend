@@ -2799,7 +2799,7 @@
     "RESET_VIEW": "Recentre",
     "RETRY": "Try again",
     "UNAVAILABLE_TITLE": "Map unavailable",
-    "UNAVAILABLE_WEBGL": "Your browser does not support WebGL 2, which the map requires. The list view is still available.",
+    "UNAVAILABLE_WEBGL": "The map needs WebGL 2, which this browser is not providing. Hardware acceleration may be disabled, or a privacy extension may be blocking canvas access. The list view is still available.",
     "UNAVAILABLE_LOAD": "The map could not be loaded. Check your connection and try again.",
     "EMPTY_TITLE": "Nothing to show on the map",
     "EMPTY_METERS": "No meter matching these filters has geographic coordinates yet.",
