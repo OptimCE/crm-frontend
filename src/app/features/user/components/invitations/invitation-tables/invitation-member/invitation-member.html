@@ -22,7 +22,7 @@
       <p-select
         data-testid="invitation-member__select--state"
         [ngModel]="stateFilter()"
-        [options]="stateOptions"
+        [options]="stateOptions()"
         (onChange)="onStateFilterChange($event.value)"
         optionLabel="label"
         optionValue="value"
@@ -31,24 +31,16 @@
       >
         <ng-template let-option pTemplate="item">
           @if (option.value === true) {
-            <p-tag severity="warn" value="{{ option.label | translate }}" class="text-sm"></p-tag>
+            <p-tag severity="warn" value="{{ option.label }}" class="text-sm"></p-tag>
           } @else {
-            <p-tag
-              severity="success"
-              value="{{ option.label | translate }}"
-              class="text-sm"
-            ></p-tag>
+            <p-tag severity="success" value="{{ option.label }}" class="text-sm"></p-tag>
           }
         </ng-template>
         <ng-template let-option pTemplate="selectedItem">
           @if (option.value === true) {
-            <p-tag severity="warn" value="{{ option.label | translate }}" class="text-sm"></p-tag>
+            <p-tag severity="warn" value="{{ option.label }}" class="text-sm"></p-tag>
           } @else {
-            <p-tag
-              severity="success"
-              value="{{ option.label | translate }}"
-              class="text-sm"
-            ></p-tag>
+            <p-tag severity="success" value="{{ option.label }}" class="text-sm"></p-tag>
           }
         </ng-template>
       </p-select>
@@ -118,7 +110,7 @@
           ></p-tag>
         }
       </td>
-      <td class="text-sm px-3">{{ invitation.created_at | date: 'dd/MM/yyyy' }}</td>
+      <td class="text-sm px-3">{{ invitation.created_at | localeDate: 'dd/MM/yyyy' }}</td>
       <td class="px-3">
         <div class="flex gap-2">
           @if (invitation.to_be_encoded) {
@@ -212,7 +204,9 @@
               <span class="field-label">{{
                 'INVITATION.MEMBER.HEADERS.CREATED_AT' | translate
               }}</span>
-              <span class="field-value">{{ invitation.created_at | date: 'dd/MM/yyyy' }}</span>
+              <span class="field-value">{{
+                invitation.created_at | localeDate: 'dd/MM/yyyy'
+              }}</span>
             </div>
           </div>
 

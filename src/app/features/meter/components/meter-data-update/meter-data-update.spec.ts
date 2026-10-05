@@ -1,6 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Confirmation, ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -67,7 +69,48 @@ describe('MeterDataUpdate', () => {
   let meterServiceSpy: { patchMeterData: ReturnType<typeof vi.fn> };
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
+  let confirmationSpy: { confirm: ReturnType<typeof vi.fn> };
   let membersSubject$: Subject<unknown>;
+
+  const janeDoe = buildMember({ id: 2, name: 'Jane Doe' });
+
+  async function configureTestBed(meterData: MetersDataDTO | undefined) {
+    membersSubject$ = new Subject();
+    memberServiceSpy = {
+      getMembersList: vi.fn().mockReturnValue(membersSubject$.asObservable()),
+    };
+    meterServiceSpy = { patchMeterData: vi.fn().mockReturnValue(of({ data: 'ok' })) };
+    dialogRefSpy = { close: vi.fn() };
+    errorHandlerSpy = { handleError: vi.fn() };
+    confirmationSpy = { confirm: vi.fn() };
+
+    await TestBed.configureTestingModule({
+      imports: [MeterDataUpdate, TranslateModule.forRoot()],
+      providers: [
+        { provide: MemberService, useValue: memberServiceSpy },
+        { provide: MeterService, useValue: meterServiceSpy },
+        {
+          provide: DynamicDialogConfig,
+          useValue: { data: { meterData, id: 'EAN123' } },
+        },
+        { provide: DynamicDialogRef, useValue: dialogRefSpy },
+        { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      // The real ConfirmDialog would subscribe to the spy's (absent) requireConfirmation$.
+      .overrideComponent(MeterDataUpdate, {
+        remove: { imports: [ConfirmDialog], providers: [ConfirmationService] },
+        add: {
+          providers: [{ provide: ConfirmationService, useValue: confirmationSpy }],
+          schemas: [NO_ERRORS_SCHEMA],
+        },
+      })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(MeterDataUpdate);
+    component = fixture.componentInstance;
+  }
 
   /** Call ngOnInit then emit the members response so the form exists first. */
   function initAndEmitMembers(members: MembersPartialDTO[] = [buildMember()]) {
@@ -76,35 +119,15 @@ describe('MeterDataUpdate', () => {
     membersSubject$.complete();
   }
 
+  function lastConfirmation(): Confirmation {
+    return confirmationSpy.confirm.mock.calls.at(-1)?.[0] as Confirmation;
+  }
+
   // ── With meterData (default scenario) ────────────────────────────
 
   describe('with meterData provided', () => {
     beforeEach(async () => {
-      membersSubject$ = new Subject();
-      memberServiceSpy = {
-        getMembersList: vi.fn().mockReturnValue(membersSubject$.asObservable()),
-      };
-      meterServiceSpy = { patchMeterData: vi.fn().mockReturnValue(of({ data: 'ok' })) };
-      dialogRefSpy = { close: vi.fn() };
-      errorHandlerSpy = { handleError: vi.fn() };
-
-      await TestBed.configureTestingModule({
-        imports: [MeterDataUpdate, TranslateModule.forRoot()],
-        providers: [
-          { provide: MemberService, useValue: memberServiceSpy },
-          { provide: MeterService, useValue: meterServiceSpy },
-          {
-            provide: DynamicDialogConfig,
-            useValue: { data: { meterData: buildMeterData(), id: 'EAN123' } },
-          },
-          { provide: DynamicDialogRef, useValue: dialogRefSpy },
-          { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-
-      fixture = TestBed.createComponent(MeterDataUpdate);
-      component = fixture.componentInstance;
+      await configureTestBed(buildMeterData());
     });
 
     it('should create the component', () => {
@@ -235,11 +258,11 @@ describe('MeterDataUpdate', () => {
     });
 
     it('should have 4 status options', () => {
-      expect(component.statusOptions.length).toBe(4);
+      expect(component.statusOptions().length).toBe(4);
     });
 
     it('should include ACTIVE, INACTIVE, WAITING_GRD, and WAITING_MANAGER statuses', () => {
-      const values = component.statusOptions.map((o) => o.value);
+      const values = component.statusOptions().map((o) => o.value);
       expect(values).toContain(MeterDataStatus.ACTIVE);
       expect(values).toContain(MeterDataStatus.INACTIVE);
       expect(values).toContain(MeterDataStatus.WAITING_GRD);
@@ -280,38 +303,180 @@ describe('MeterDataUpdate', () => {
 
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('some error');
     });
+
+    it('should load enough members for the whole community to be selectable', () => {
+      initAndEmitMembers();
+
+      expect(memberServiceSpy.getMembersList).toHaveBeenCalledWith({ page: 1, limit: 500 });
+    });
+
+    // ── Holder change confirmation ─────────────────────────────────
+
+    it('should save without confirmation when the holder is unchanged', () => {
+      initAndEmitMembers([buildMember(), janeDoe]);
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+      component.onSubmit();
+
+      expect(confirmationSpy.confirm).not.toHaveBeenCalled();
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ member_id: 1 }),
+      );
+    });
+
+    it('should ask for confirmation before transferring the meter to another member', () => {
+      const instantSpy = vi.spyOn(TestBed.inject(TranslateService), 'instant');
+      initAndEmitMembers([buildMember(), janeDoe]);
+      component.metersForm.patchValue({ member: janeDoe, dateStart: new Date(2024, 0, 1) });
+
+      component.onSubmit();
+
+      expect(meterServiceSpy.patchMeterData).not.toHaveBeenCalled();
+      expect(confirmationSpy.confirm).toHaveBeenCalledTimes(1);
+      const confirmation = lastConfirmation();
+      expect(confirmation.header).toBe('METER.UPDATE_DATA.HOLDER_CHANGE.HEADER');
+      expect(confirmation.message).toBe('METER.UPDATE_DATA.HOLDER_CHANGE.TRANSFER_MESSAGE');
+      expect(instantSpy).toHaveBeenCalledWith('METER.UPDATE_DATA.HOLDER_CHANGE.TRANSFER_MESSAGE', {
+        ean: 'EAN123',
+        from: 'John Doe',
+        to: 'Jane Doe',
+        date: '01/01/2024',
+      });
+    });
+
+    it('should save the new holder once the transfer is confirmed', () => {
+      initAndEmitMembers([buildMember(), janeDoe]);
+      component.metersForm.patchValue({ member: janeDoe, dateStart: new Date(2024, 0, 1) });
+      component.onSubmit();
+
+      (lastConfirmation().accept as () => void)();
+
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ member_id: 2, start_date: '2024-01-01' }),
+      );
+      expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
+    });
+
+    it('should neither save nor close when the transfer is not confirmed', () => {
+      initAndEmitMembers([buildMember(), janeDoe]);
+      component.metersForm.patchValue({ member: janeDoe, dateStart: new Date(2024, 0, 1) });
+
+      component.onSubmit();
+
+      expect(confirmationSpy.confirm).toHaveBeenCalledTimes(1);
+      expect(meterServiceSpy.patchMeterData).not.toHaveBeenCalled();
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
+    });
+
+    it('should ask for confirmation before removing the holder', () => {
+      initAndEmitMembers();
+      component.metersForm.patchValue({ member: null, dateStart: new Date(2024, 0, 1) });
+
+      component.onSubmit();
+
+      expect(meterServiceSpy.patchMeterData).not.toHaveBeenCalled();
+      expect(lastConfirmation().message).toBe('METER.UPDATE_DATA.HOLDER_CHANGE.REMOVE_MESSAGE');
+
+      (lastConfirmation().accept as () => void)();
+
+      const payload = meterServiceSpy.patchMeterData.mock.calls[0][0] as { member_id?: number };
+      expect(payload.member_id).toBeUndefined();
+    });
+  });
+
+  // ── Holder outside the loaded page of members ────────────────────
+
+  describe('with a holder outside the loaded page of members', () => {
+    const farHolder = buildMember({ id: 42, name: 'Far Holder' });
+
+    beforeEach(async () => {
+      await configureTestBed(buildMeterData({ member: farHolder }));
+    });
+
+    it('should keep the current holder selectable and pre-filled', () => {
+      initAndEmitMembers([buildMember(), janeDoe]);
+
+      expect(component.membersList().map((m) => m.id)).toEqual([42, 1, 2]);
+      const memberControl = component.metersForm.get('member');
+      expect((memberControl?.value as MembersPartialDTO).id).toBe(42);
+      expect(memberControl?.valid).toBe(true);
+    });
+
+    it('should save without confirmation when the holder is left untouched', () => {
+      initAndEmitMembers([buildMember(), janeDoe]);
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+      component.onSubmit();
+
+      expect(confirmationSpy.confirm).not.toHaveBeenCalled();
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ member_id: 42 }),
+      );
+    });
+  });
+
+  // ── Members list served from cache ───────────────────────────────
+
+  // Within the cache TTL, getMembersList emits synchronously, i.e. during ngOnInit itself
+  // (every opening of the dialog after the first one).
+  describe('when the members list is served from cache (synchronous emission)', () => {
+    function initWithCachedMembers(members: MembersPartialDTO[]) {
+      memberServiceSpy.getMembersList.mockReturnValue(of(buildMembersResponse(members)));
+      component.ngOnInit();
+    }
+
+    it('should pre-fill the current holder', async () => {
+      await configureTestBed(buildMeterData());
+      initWithCachedMembers([buildMember(), janeDoe]);
+
+      const memberControl = component.metersForm.get('member');
+      expect((memberControl?.value as MembersPartialDTO).id).toBe(1);
+      expect(memberControl?.valid).toBe(true);
+    });
+
+    it('should save the untouched holder without asking to remove it', async () => {
+      await configureTestBed(buildMeterData());
+      initWithCachedMembers([buildMember(), janeDoe]);
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+      component.onSubmit();
+
+      expect(confirmationSpy.confirm).not.toHaveBeenCalled();
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ member_id: 1 }),
+      );
+    });
+
+    it('should pre-fill a holder outside the loaded page of members', async () => {
+      await configureTestBed(buildMeterData({ member: buildMember({ id: 42, name: 'Far' }) }));
+      initWithCachedMembers([buildMember(), janeDoe]);
+
+      expect((component.metersForm.get('member')?.value as MembersPartialDTO).id).toBe(42);
+    });
   });
 
   // ── Without meterData ────────────────────────────────────────────
 
   describe('without meterData', () => {
     beforeEach(async () => {
-      membersSubject$ = new Subject();
-      memberServiceSpy = {
-        getMembersList: vi.fn().mockReturnValue(membersSubject$.asObservable()),
-      };
-      meterServiceSpy = { patchMeterData: vi.fn().mockReturnValue(of({ data: 'ok' })) };
-      dialogRefSpy = { close: vi.fn() };
-      errorHandlerSpy = { handleError: vi.fn() };
-
-      await TestBed.configureTestingModule({
-        imports: [MeterDataUpdate, TranslateModule.forRoot()],
-        providers: [
-          { provide: MemberService, useValue: memberServiceSpy },
-          { provide: MeterService, useValue: meterServiceSpy },
-          {
-            provide: DynamicDialogConfig,
-            useValue: { data: { meterData: undefined, id: 'EAN123' } },
-          },
-          { provide: DynamicDialogRef, useValue: dialogRefSpy },
-          { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-
-      fixture = TestBed.createComponent(MeterDataUpdate);
-      component = fixture.componentInstance;
+      await configureTestBed(undefined);
     });
+
+    /** Fill every required control so the form is valid; the holder is left to the test. */
+    function fillRequiredFields() {
+      component.metersForm.patchValue({
+        samplingPower: 10,
+        totalGeneratingCapacity: 5,
+        amperage: 25,
+        rate: component.rateCategory()[0],
+        productionChain: component.productionChainCategory()[0],
+        clientType: component.clientCategory()[0],
+        status: MeterDataStatus.ACTIVE,
+        injectionStatus: component.injectionStatusCategory()[0],
+        grd: component.grdAvailable[0],
+        dateStart: new Date(2024, 0, 1),
+      });
+    }
 
     it('should leave form with default values when no meterData is provided', () => {
       initAndEmitMembers();
@@ -332,6 +497,102 @@ describe('MeterDataUpdate', () => {
       component.onSubmit();
 
       expect(meterServiceSpy.patchMeterData).not.toHaveBeenCalled();
+    });
+
+    it('should save without confirmation when no holder is set', () => {
+      initAndEmitMembers();
+      fillRequiredFields();
+
+      component.onSubmit();
+
+      expect(confirmationSpy.confirm).not.toHaveBeenCalled();
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalled();
+    });
+
+    it('should ask for confirmation before assigning a first holder', () => {
+      const instantSpy = vi.spyOn(TestBed.inject(TranslateService), 'instant');
+      initAndEmitMembers([buildMember(), janeDoe]);
+      fillRequiredFields();
+      component.metersForm.patchValue({ member: janeDoe });
+
+      component.onSubmit();
+
+      expect(meterServiceSpy.patchMeterData).not.toHaveBeenCalled();
+      expect(lastConfirmation().message).toBe('METER.UPDATE_DATA.HOLDER_CHANGE.ASSIGN_MESSAGE');
+      expect(instantSpy).toHaveBeenCalledWith('METER.UPDATE_DATA.HOLDER_CHANGE.ASSIGN_MESSAGE', {
+        ean: 'EAN123',
+        from: '',
+        to: 'Jane Doe',
+        date: '01/01/2024',
+      });
+
+      (lastConfirmation().accept as () => void)();
+
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ member_id: 2 }),
+      );
+    });
+  });
+
+  // ── Translated select labels ─────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('status select labels', () => {
+    let translate: TranslateService;
+
+    function statusAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="meter-data-update__select--status"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      await configureTestBed(buildMeterData({ status: MeterDataStatus.WAITING_GRD }));
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        METER: {
+          STATUS: {
+            ACTIVE_LABEL: 'Actif',
+            INACTIVE_LABEL: 'Inactif',
+            WAITING_GRD_LABEL: 'En attente du GRD',
+            WAITING_MANAGER_LABEL: 'En attente du gestionnaire',
+          },
+        },
+      });
+      translate.setTranslation('en', {
+        METER: {
+          STATUS: {
+            ACTIVE_LABEL: 'Active',
+            INACTIVE_LABEL: 'Inactive',
+            WAITING_GRD_LABEL: 'Waiting for the DSO',
+            WAITING_MANAGER_LABEL: 'Waiting for the manager',
+          },
+        },
+      });
+      translate.use('fr');
+      initAndEmitMembers();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.statusOptions()).toEqual([
+        { value: MeterDataStatus.ACTIVE, label: 'Actif' },
+        { value: MeterDataStatus.INACTIVE, label: 'Inactif' },
+        { value: MeterDataStatus.WAITING_GRD, label: 'En attente du GRD' },
+        { value: MeterDataStatus.WAITING_MANAGER, label: 'En attente du gestionnaire' },
+      ]);
+    });
+
+    it('should give the current status a translated aria-label that follows the language', async () => {
+      expect(statusAriaLabel()).toBe('En attente du GRD');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(statusAriaLabel()).toBe('Waiting for the DSO');
     });
   });
 });

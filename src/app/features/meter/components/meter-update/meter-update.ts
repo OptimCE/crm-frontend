@@ -100,7 +100,13 @@ export class MeterUpdate implements OnInit {
       address_postcode: new FormControl('', [Validators.required]),
       address_supplement: new FormControl('', []),
       address_city: new FormControl('', [Validators.required]),
-      EAN: new FormControl('', [Validators.required]),
+      // Shown and carried in the payload, never editable: `updateMeter` uses the
+      // EAN only to find the row (crm-backend meter.repository.ts:432-450) and
+      // nothing in the platform can rewrite it, so an editable box here silently
+      // discards what you type. Disabled rather than validated, because a meter
+      // whose stored EAN predates the 18-digit rule must stay repairable —
+      // `onSubmit` reads getRawValue(), which still includes disabled controls.
+      EAN: new FormControl({ value: '', disabled: true }),
       meterNumber: new FormControl('', [Validators.required]),
       tarifGroup: new FormControl('', [Validators.required]),
       phasesNumber: new FormControl('', [Validators.required]),

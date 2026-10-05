@@ -1,0 +1,73 @@
+<div class="mx-auto w-full max-w-6xl" data-testid="live-data-hub">
+  <app-header-page
+    icon="pi pi-bolt"
+    [text]="'LIVE_DATA.TITLE' | translate"
+    [subtitle]="'LIVE_DATA.SUBTITLE' | translate"
+  />
+
+  <!--
+    Stamped on the hub rather than on each screen, so no tab can be added without
+    it. Plan section 2: live data is INDICATIVE — the grid operator's data
+    remains the only basis for allocation keys and invoicing — and every view
+    that shows these numbers has to say so. The backend stamps `indicative: true`
+    on every payload for the same reason; this is where a human reads it.
+  -->
+  <p-message
+    severity="secondary"
+    icon="pi pi-info-circle"
+    styleClass="block mt-4 text-sm"
+    data-testid="live-data-hub__indicative"
+  >
+    {{ 'LIVE_DATA.INDICATIVE' | translate }}
+  </p-message>
+
+  <!-- `lazy`, AND each screen inside an `<ng-template #content>`: PrimeNG defers
+       only TEMPLATE content. Screens projected as plain children are created -
+       and fetch, and start their pollers - whether their tab is ever opened or
+       not, which is what this did. Once opened, a screen stays mounted. -->
+  @if (userContext.compareWithActiveRole(Role.GESTIONNAIRE)) {
+    <p-tabs [value]="activeTab()" lazy class="block mt-5" data-testid="live-data-hub__tabs">
+      <p-tablist>
+        <p-tab [value]="0" data-testid="live-data-hub__tab--dashboard">{{
+          'LIVE_DATA.TABS.DASHBOARD' | translate
+        }}</p-tab>
+        <p-tab [value]="1" data-testid="live-data-hub__tab--devices">{{
+          'LIVE_DATA.TABS.DEVICES' | translate
+        }}</p-tab>
+        <p-tab [value]="2" data-testid="live-data-hub__tab--ops">{{
+          'LIVE_DATA.TABS.OPS' | translate
+        }}</p-tab>
+        <p-tab [value]="3" data-testid="live-data-hub__tab--settings">{{
+          'LIVE_DATA.TABS.SETTINGS' | translate
+        }}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <ng-template #content>
+            <app-live-dashboard />
+          </ng-template>
+        </p-tabpanel>
+        <p-tabpanel [value]="1">
+          <ng-template #content>
+            <app-live-devices />
+          </ng-template>
+        </p-tabpanel>
+        <p-tabpanel [value]="2">
+          <ng-template #content>
+            <app-live-ops />
+          </ng-template>
+        </p-tabpanel>
+        <p-tabpanel [value]="3">
+          <ng-template #content>
+            <app-live-settings />
+          </ng-template>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  } @else {
+    <!-- D-14: a member's own sharing operation(s), INSTEAD of the four tabs. -->
+    <div class="mt-5">
+      <app-live-member-view data-testid="live-data-hub__member-view" />
+    </div>
+  }
+</div>

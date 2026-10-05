@@ -1,0 +1,402 @@
+<div class="flex flex-col gap-4" data-testid="live-dashboard">
+  @if (forbidden()) {
+    <!-- Shown ONLY for 403 AGGREGATE_NOT_VISIBLE (2440), which the backend sends
+         to MEMBERS alone - managers and admins always pass its visibility gate.
+         The hub shows this view to managers only, so it surfaces when the
+         backend already sees a member, e.g. a role withdrawn mid-session. Same
+         words as the member view, then: the k-anonymity text would give a
+         false reason. Any other failure is a toast, never this. -->
+    <p-message severity="warn" styleClass="block" data-testid="live-dashboard__forbidden">
+      {{ 'LIVE_DATA.MEMBER.FORBIDDEN' | translate }}
+    </p-message>
+  } @else {
+    @if (operations().length > 0) {
+      <!-- D-14: the whole community, or one sharing operation. Option labels are
+           translated in the component - PrimeNG copies them into aria-label. -->
+      <div class="flex flex-wrap items-center gap-2" data-testid="live-dashboard__scope">
+        <label for="live-dashboard-scope" class="text-sm text-surface-600">
+          {{ 'LIVE_DATA.SCOPE.LABEL' | translate }}
+        </label>
+        <p-select
+          inputId="live-dashboard-scope"
+          [options]="scopeOptions()"
+          [ngModel]="scope()"
+          (ngModelChange)="selectScope($event)"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="min-w-64"
+          data-testid="live-dashboard__scope-select"
+        />
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <p-skeleton height="6rem" />
+        <p-skeleton height="6rem" />
+        <p-skeleton height="6rem" />
+        <p-skeleton height="6rem" />
+      </div>
+    } @else if (summary(); as data) {
+      <!-- The signal banner. `Literal['neutral']` on the wire, so there is
+           exactly one state to render — deviation 6 forbids deriving GOOD/BAD
+           from production alone, and a green light would be read as "now is a
+           good time to run the washing machine". -->
+      <p-message
+        severity="info"
+        icon="pi pi-sun"
+        styleClass="block"
+        data-testid="live-dashboard__signal"
+      >
+        <span class="font-medium">{{ 'LIVE_DATA.SIGNAL.NEUTRAL' | translate }}</span>
+        <span class="block text-xs mt-1 opacity-80">{{
+          'LIVE_DATA.SIGNAL.NEUTRAL_DETAIL' | translate
+        }}</span>
+      </p-message>
+
+      <!-- The backend's rollup verdict, the same the Ops tab shows - not the
+           chart's newest point, which is a day old on the 30-day range by
+           construction and ages on any range while the fleet is quiet. -->
+      @if (staleMinutes(); as minutes) {
+        <p-message severity="warn" styleClass="block" data-testid="live-dashboard__stale">
+          {{ 'LIVE_DATA.OPS.ROLLUP_STALE' | translate: { minutes: minutes } }}
+        </p-message>
+      }
+
+      @if (scope() === null) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- Production. ALWAYS shown when known, at any k — it is not subject to
+             the threshold. -->
+          <p-card styleClass="h-full" data-testid="live-dashboard__card--production">
+            <div class="text-xs text-surface-500">
+              {{ 'LIVE_DATA.SUMMARY.PRODUCTION' | translate }}
+            </div>
+            <div class="text-2xl font-semibold mt-1">
+              {{ formatWh(data.production_wh, locale()) }}
+            </div>
+            @if (productionAbsentReason(); as reason) {
+              <div class="text-xs text-surface-500 mt-1">
+                {{ absentReasonLabelKey(reason) | translate }}
+              </div>
+            }
+          </p-card>
+
+          <p-card styleClass="h-full" data-testid="live-dashboard__card--power">
+            <div class="text-xs text-surface-500">{{ 'LIVE_DATA.SUMMARY.POWER' | translate }}</div>
+            <div class="text-2xl font-semibold mt-1">{{ formatW(data.power_w, locale()) }}</div>
+          </p-card>
+
+          <!-- The grid terms. Withheld below k, and the key is ABSENT from the
+             payload rather than null — so this renders an em dash and the
+             reason, never a zero. -->
+          <p-card styleClass="h-full" data-testid="live-dashboard__card--grid">
+            <div class="text-xs text-surface-500">{{ 'LIVE_DATA.SUMMARY.IMPORT' | translate }}</div>
+            <div class="text-2xl font-semibold mt-1">{{ formatWh(data.import_wh, locale()) }}</div>
+            <div class="text-xs text-surface-500 mt-2">
+              {{ 'LIVE_DATA.SUMMARY.EXPORT' | translate }}: {{ formatWh(data.export_wh, locale()) }}
+            </div>
+            @if (gridAbsentReason(); as reason) {
+              <div
+                class="text-xs mt-1"
+                [class.text-amber-700]="gridWithheld()"
+                [class.text-surface-500]="!gridWithheld()"
+                data-testid="live-dashboard__grid-absent"
+              >
+                @if (gridWithheld()) {
+                  <i class="pi pi-lock text-xs"></i>
+                }
+                {{ absentReasonLabelKey(reason) | translate }}
+              </div>
+            }
+          </p-card>
+
+          <p-card styleClass="h-full" data-testid="live-dashboard__card--fleet">
+            <div class="text-xs text-surface-500">
+              {{ 'LIVE_DATA.SUMMARY.DEVICES' | translate }}
+            </div>
+            <div class="text-2xl font-semibold mt-1">
+              {{ data.n_devices }}
+              <span class="text-sm font-normal text-surface-500">
+                ({{ data.n_devices_online }} {{ 'LIVE_DATA.SUMMARY.ONLINE' | translate }})
+              </span>
+            </div>
+            @if (data.n_members !== undefined) {
+              <div class="text-xs text-surface-500 mt-2">
+                {{ 'LIVE_DATA.SUMMARY.MEMBERS' | translate }}: {{ data.n_members }}
+              </div>
+            }
+          </p-card>
+        </div>
+
+        @if (asOf(); as when) {
+          <!-- The hour these cards cover. Without it the figures read as "now",
+             and /summary answers with the newest CLOSED hour. -->
+          <div class="text-xs text-surface-500" data-testid="live-dashboard__as-of">
+            {{ 'LIVE_DATA.SUMMARY.AS_OF' | translate: { time: when } }}
+          </div>
+        }
+      } @else {
+        <!-- One operation's last closed hour, each grid term under the
+             OPERATION's own k. No power card: watts are a property of the
+             collector's last interval, not of an operation. -->
+        @if (operationSummary(); as op) {
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+            data-testid="live-dashboard__operation-cards"
+          >
+            <p-card styleClass="h-full">
+              <div class="text-xs text-surface-500">
+                {{ 'LIVE_DATA.SUMMARY.PRODUCTION' | translate }}
+              </div>
+              <div class="text-2xl font-semibold mt-1">
+                {{ formatWh(op.production_wh, locale()) }}
+              </div>
+              @if (
+                op.production_wh === undefined && absentReason(op.absent, 'production_wh');
+                as reason
+              ) {
+                <div class="text-xs text-surface-500 mt-1">
+                  {{ absentReasonLabelKey(reason) | translate }}
+                </div>
+              }
+            </p-card>
+            <p-card styleClass="h-full">
+              <div class="text-xs text-surface-500">
+                {{ 'LIVE_DATA.SUMMARY.IMPORT' | translate }}
+              </div>
+              <div class="text-2xl font-semibold mt-1">{{ formatWh(op.import_wh, locale()) }}</div>
+              <div class="text-xs text-surface-500 mt-2">
+                {{ 'LIVE_DATA.SUMMARY.EXPORT' | translate }}: {{ formatWh(op.export_wh, locale()) }}
+              </div>
+              @if (op.import_wh === undefined && absentReason(op.absent, 'import_wh'); as reason) {
+                <div
+                  class="text-xs mt-1 text-amber-700"
+                  data-testid="live-dashboard__operation-withheld"
+                >
+                  <i class="pi pi-lock text-xs"></i>
+                  {{ absentReasonLabelKey(reason) | translate }}
+                </div>
+              }
+            </p-card>
+            <p-card styleClass="h-full">
+              <div class="text-xs text-surface-500">
+                {{ 'LIVE_DATA.SUMMARY.SHARED' | translate }}
+              </div>
+              <div
+                class="text-2xl font-semibold mt-1"
+                data-testid="live-dashboard__operation-shared"
+              >
+                {{ formatWh(op.shared_wh, locale()) }}
+              </div>
+            </p-card>
+            <p-card styleClass="h-full">
+              <div class="text-xs text-surface-500">
+                {{ 'LIVE_DATA.SUMMARY.DEVICES' | translate }}
+              </div>
+              <div class="text-2xl font-semibold mt-1">
+                {{ op.n_devices }}
+                <span class="text-sm font-normal text-surface-500">
+                  {{ 'LIVE_DATA.SHARING.OF_METERS' | translate: { meters: op.n_meters } }}
+                </span>
+              </div>
+            </p-card>
+          </div>
+          @if (operationAsOf(); as when) {
+            <div class="text-xs text-surface-500">
+              {{ 'LIVE_DATA.SUMMARY.AS_OF' | translate: { time: when } }}
+            </div>
+          }
+        } @else {
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <p-skeleton height="6rem" />
+            <p-skeleton height="6rem" />
+            <p-skeleton height="6rem" />
+            <p-skeleton height="6rem" />
+          </div>
+        }
+      }
+
+      @if (showNoData()) {
+        <p-message severity="secondary" styleClass="block" data-testid="live-dashboard__no-data">
+          {{ 'LIVE_DATA.SUMMARY.NO_DATA' | translate }}
+        </p-message>
+      }
+    }
+
+    <p-card styleClass="mt-1" data-testid="live-dashboard__chart-card">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <h2 class="text-base font-semibold m-0">{{ 'LIVE_DATA.CHART.TITLE' | translate }}</h2>
+        <p-selectbutton
+          [options]="windowOptions()"
+          [ngModel]="window()"
+          (ngModelChange)="selectWindow($event)"
+          optionValue="value"
+          [allowEmpty]="false"
+          styleClass="text-sm"
+          data-testid="live-dashboard__window"
+        >
+          <ng-template #item let-option>
+            {{ option.label | translate }}
+          </ng-template>
+        </p-selectbutton>
+      </div>
+
+      @if (seriesLoading()) {
+        <p-skeleton height="18rem" />
+      } @else if (chartEmptyKey(); as emptyKey) {
+        <!-- A series with neither production nor a published export is NOT an
+             empty chart: rendered, it is a flat line at zero, which reads as
+             "the community produced nothing". Say why instead - nothing
+             measured, or net meters whose export is below k. -->
+        <p class="text-surface-500 text-sm" data-testid="live-dashboard__chart-empty">
+          {{ emptyKey | translate }}
+        </p>
+      } @else if (series(); as data) {
+        <!-- Its own component and its own lazy chunk, so `primeng/chart` and
+             chart.js stay out of the live-data feature chunk until someone
+             actually opens this tab. Production where the meters can see it,
+             and the export (protocol 3.4) - for a prosumer, the only one. -->
+        @defer (on immediate) {
+          <app-live-energy-chart
+            [series]="data"
+            [lines]="productionLines()"
+            [yMax]="yMax()"
+            testId="live-production-chart"
+          />
+        } @placeholder {
+          <div class="min-h-[18rem]"></div>
+        } @loading (after 100ms; minimum 200ms) {
+          <p-skeleton height="18rem" />
+        }
+
+        @if (data.suppressed_buckets > 0) {
+          <p
+            class="text-xs text-surface-500 mt-2"
+            [pTooltip]="'LIVE_DATA.ABSENT.BELOW_K_THRESHOLD' | translate"
+            data-testid="live-dashboard__suppressed"
+          >
+            <i class="pi pi-lock text-xs"></i>
+            {{ 'LIVE_DATA.CHART.SUPPRESSED' | translate: { count: data.suppressed_buckets } }}
+          </p>
+        }
+      }
+    </p-card>
+
+    <!-- The community's grid offtake, aggregated. NOT `consumption_wh`, which
+         stays absent (deviation 6): the energy a site takes straight from its
+         own panels never crosses the meter, and the footnote says so. Same
+         series request, same window, same k: `import_wh` is withheld per bucket
+         exactly like the export. D-13. -->
+    <p-card data-testid="live-dashboard__offtake-card">
+      <h2 class="text-base font-semibold m-0 mb-3">
+        {{ 'LIVE_DATA.CHART.OFFTAKE_TITLE' | translate }}
+      </h2>
+
+      @if (seriesLoading()) {
+        <p-skeleton height="18rem" />
+      } @else if (offtakeEmptyKey(); as emptyKey) {
+        <p class="text-surface-500 text-sm" data-testid="live-dashboard__offtake-empty">
+          {{ emptyKey | translate }}
+        </p>
+      } @else if (series(); as data) {
+        @defer (on immediate) {
+          <app-live-energy-chart
+            [series]="data"
+            [lines]="offtakeLines()"
+            [yMax]="yMax()"
+            testId="live-offtake-chart"
+          />
+        } @placeholder {
+          <div class="min-h-[18rem]"></div>
+        } @loading (after 100ms; minimum 200ms) {
+          <p-skeleton height="18rem" />
+        }
+
+        @if (data.suppressed_buckets > 0) {
+          <p
+            class="text-xs text-surface-500 mt-2"
+            [pTooltip]="'LIVE_DATA.ABSENT.BELOW_K_THRESHOLD' | translate"
+            data-testid="live-dashboard__offtake-suppressed"
+          >
+            <i class="pi pi-lock text-xs"></i>
+            {{ 'LIVE_DATA.CHART.SUPPRESSED' | translate: { count: data.suppressed_buckets } }}
+          </p>
+        }
+      }
+
+      <p class="text-xs text-surface-500 mt-2 mb-0" data-testid="live-dashboard__offtake-note">
+        {{ 'LIVE_DATA.CHART.OFFTAKE_NOTE' | translate }}
+      </p>
+    </p-card>
+
+    @if (operations().length > 0) {
+      <!-- D-14: what came from the community. Two stacks per period - the
+           offtake split into covered-by-the-community and supplied-by-the-
+           supplier, the injection into shared-in-the-community and the rest to
+           the grid. An ESTIMATE among monitored meters, per quarter-hour: the
+           grid operator's data stays the reference, and the note says so. -->
+      <p-card data-testid="live-dashboard__sharing-card">
+        <h2 class="text-base font-semibold m-0 mb-3">
+          {{ 'LIVE_DATA.SHARING.TITLE' | translate }}
+        </h2>
+
+        @if (seriesLoading()) {
+          <p-skeleton height="18rem" />
+        } @else if (sharingEmptyKey(); as emptyKey) {
+          <p class="text-surface-500 text-sm" data-testid="live-dashboard__sharing-empty">
+            {{ emptyKey | translate }}
+          </p>
+        } @else if (series(); as data) {
+          @defer (on immediate) {
+            <app-live-sharing-chart
+              [series]="data"
+              [segments]="sharingSegments()"
+              [yMax]="yMax()"
+            />
+          } @placeholder {
+            <div class="min-h-[18rem]"></div>
+          } @loading (after 100ms; minimum 200ms) {
+            <p-skeleton height="18rem" />
+          }
+
+          @if (data.suppressed_buckets > 0) {
+            <p
+              class="text-xs text-surface-500 mt-2"
+              [pTooltip]="'LIVE_DATA.ABSENT.BELOW_K_THRESHOLD' | translate"
+              data-testid="live-dashboard__sharing-suppressed"
+            >
+              <i class="pi pi-lock text-xs"></i>
+              {{ 'LIVE_DATA.CHART.SUPPRESSED' | translate: { count: data.suppressed_buckets } }}
+            </p>
+          }
+        }
+
+        <p class="text-xs text-surface-500 mt-2 mb-0" data-testid="live-dashboard__sharing-note">
+          {{
+            'LIVE_DATA.SHARING.NOTE'
+              | translate: { devices: coverage().devices, meters: coverage().meters }
+          }}
+        </p>
+      </p-card>
+    }
+
+    <!-- The forecast seam. Empty in phase 1 and it says why: a blank panel would
+         be indistinguishable from a broken job the day the first method ships. -->
+    @if (forecast(); as data) {
+      <p-card data-testid="live-dashboard__forecast">
+        <h2 class="text-base font-semibold m-0 mb-2">
+          {{ 'LIVE_DATA.FORECAST.TITLE' | translate }}
+        </h2>
+        @if (data.buckets.length === 0) {
+          <p class="text-surface-500 text-sm m-0">
+            @if (data.reason === 'no_method_for_production_chain') {
+              {{ 'LIVE_DATA.FORECAST.NO_METHOD' | translate }}
+            } @else {
+              {{ 'LIVE_DATA.FORECAST.UNAVAILABLE' | translate }}
+            }
+          </p>
+        }
+      </p-card>
+    }
+  }
+</div>

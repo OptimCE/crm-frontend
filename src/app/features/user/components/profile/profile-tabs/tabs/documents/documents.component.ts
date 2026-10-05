@@ -13,6 +13,7 @@ import { ApiResponse, Pagination } from '../../../../../../../core/dtos/api.resp
 import { downloadFromUrl } from '../../../../../../../shared/utils/download.utils';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-documents-user',
@@ -49,11 +50,11 @@ export class DocumentsComponent {
   readonly searchText = signal<string>('');
   readonly hasActiveFilters = computed(() => !!this.searchText());
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'PROFILE.DOCUMENTS.COMMUNITY_LABEL', value: 'community_name' },
     { label: 'PROFILE.DOCUMENTS.NAME_LABEL', value: 'file_name' },
     { label: 'PROFILE.DOCUMENTS.TYPE_LABEL', value: 'file_type' },
-  ];
+  ]);
 
   constructor() {
     this.updatePaginationTranslation();

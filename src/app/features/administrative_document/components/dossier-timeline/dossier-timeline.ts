@@ -1,4 +1,4 @@
-import { DatePipe, JsonPipe } from '@angular/common';
+import { JsonPipe } from '@angular/common';
 import { Component, computed, input, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
@@ -6,6 +6,7 @@ import { Tag } from 'primeng/tag';
 
 import { DocumentOut, StatusEventOut } from '../../../../shared/dtos/administrative-document.dtos';
 import { TimelineEntry, toTimelineEntries } from '../../administrative-document-format';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /**
  * The dossier's immutable journal.
@@ -16,7 +17,7 @@ import { TimelineEntry, toTimelineEntries } from '../../administrative-document-
 @Component({
   selector: 'app-dossier-timeline',
   standalone: true,
-  imports: [TranslatePipe, Button, Tag, DatePipe, JsonPipe],
+  imports: [TranslatePipe, Button, Tag, LocaleDatePipe, JsonPipe],
   templateUrl: './dossier-timeline.html',
 })
 export class DossierTimeline {

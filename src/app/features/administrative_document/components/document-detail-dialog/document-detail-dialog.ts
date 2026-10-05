@@ -1,4 +1,4 @@
-import { DatePipe, JsonPipe } from '@angular/common';
+import { JsonPipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -21,6 +21,7 @@ import {
   formatBytes,
   shortSha,
 } from '../../administrative-document-format';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 interface DocumentDetailDialogData {
   documentId: number;
@@ -30,7 +31,7 @@ interface DocumentDetailDialogData {
 @Component({
   selector: 'app-document-detail-dialog',
   standalone: true,
-  imports: [TranslatePipe, Button, Tag, DatePipe, JsonPipe],
+  imports: [TranslatePipe, Button, Tag, LocaleDatePipe, JsonPipe],
   templateUrl: './document-detail-dialog.html',
   providers: [ErrorMessageHandler],
 })

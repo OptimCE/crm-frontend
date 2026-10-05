@@ -7,7 +7,6 @@ import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { MeterCreation } from './meter-creation';
-import { eanValidator } from './ean.validator';
 import { MemberService } from '../../../../shared/services/member.service';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -569,46 +568,5 @@ describe('MeterCreation', () => {
 
       expect(detailsOpen(component)).toBe(false);
     });
-  });
-});
-
-// ── EAN Validator ───────────────────────────────────────────────────
-
-describe('eanValidator', () => {
-  const validator = eanValidator();
-
-  it('should return null for empty value', () => {
-    const ctrl = new FormControl('');
-    expect(validator(ctrl)).toBeNull();
-  });
-
-  it('should return null for null value', () => {
-    const ctrl = new FormControl(null);
-    expect(validator(ctrl)).toBeNull();
-  });
-
-  it('should return null for a valid 18-digit EAN', () => {
-    const ctrl = new FormControl('541448200000000001');
-    expect(validator(ctrl)).toBeNull();
-  });
-
-  it('should return invalidEan error for non-numeric EAN', () => {
-    const ctrl = new FormControl('12345678901234567A');
-    expect(validator(ctrl)).toEqual({ invalidEan: true });
-  });
-
-  it('should return invalidEan error for EAN with wrong length', () => {
-    const ctrl = new FormControl('12345');
-    expect(validator(ctrl)).toEqual({ invalidEan: true });
-  });
-
-  it('should return invalidEan error for EAN with 17 digits', () => {
-    const ctrl = new FormControl('54144820000000001');
-    expect(validator(ctrl)).toEqual({ invalidEan: true });
-  });
-
-  it('should trim whitespace and validate', () => {
-    const ctrl = new FormControl('  541448200000000001  ');
-    expect(validator(ctrl)).toBeNull();
   });
 });

@@ -26,7 +26,7 @@
         <span class="field-label">{{ 'COMMON.SEARCH' | translate }}</span>
         <p-input-group class="gap-2">
           <p-select
-            [options]="searchFieldOptions"
+            [options]="searchFieldOptions()"
             [ngModel]="searchField()"
             (ngModelChange)="searchField.set($event)"
             (onChange)="onSearchFieldChange()"
@@ -36,10 +36,10 @@
             data-testid="operations-list__select--search-field"
           >
             <ng-template let-option pTemplate="selectedItem">
-              <span class="text-sm">{{ option.label | translate }}</span>
+              <span class="text-sm">{{ option.label }}</span>
             </ng-template>
             <ng-template let-option pTemplate="item">
-              <span class="text-sm">{{ option.label | translate }}</span>
+              <span class="text-sm">{{ option.label }}</span>
             </ng-template>
           </p-select>
           <app-debounced-p-input
@@ -56,7 +56,7 @@
       <div>
         <span class="field-label">{{ 'SHARING_OPERATION.LIST.TYPE_LABEL' | translate }}</span>
         <p-select
-          [options]="typeOptions"
+          [options]="typeOptions()"
           [ngModel]="typeFilter()"
           (onChange)="onTypeFilterChange($event.value)"
           optionLabel="label"
@@ -69,13 +69,13 @@
           <ng-template let-option pTemplate="selectedItem">
             <div class="flex items-center gap-2">
               <i [class]="option.icon"></i>
-              <span class="text-sm">{{ option.label | translate }}</span>
+              <span class="text-sm">{{ option.label }}</span>
             </div>
           </ng-template>
           <ng-template let-option pTemplate="item">
             <div class="flex items-center gap-2">
               <i [class]="option.icon"></i>
-              <span class="text-sm">{{ option.label | translate }}</span>
+              <span class="text-sm">{{ option.label }}</span>
             </div>
           </ng-template>
         </p-select>

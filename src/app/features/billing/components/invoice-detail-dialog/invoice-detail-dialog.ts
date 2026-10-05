@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
@@ -9,6 +8,7 @@ import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 
 import { ApiResponse } from '../../../../core/dtos/api.response';
+import { LocaleService } from '../../../../core/services/language/locale.service';
 import {
   BillingDirection,
   InvoiceOut,
@@ -25,6 +25,7 @@ import {
   paymentMethodLabelKey,
   TagSeverity,
 } from '../../billing-format';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 interface InvoiceDetailDialogData {
   invoiceId: number;
@@ -33,7 +34,7 @@ interface InvoiceDetailDialogData {
 @Component({
   selector: 'app-invoice-detail-dialog',
   standalone: true,
-  imports: [DatePipe, TranslatePipe, Button, Skeleton, Tag],
+  imports: [LocaleDatePipe, TranslatePipe, Button, Skeleton, Tag],
   templateUrl: './invoice-detail-dialog.html',
 })
 export class InvoiceDetailDialog implements OnInit {
@@ -42,6 +43,7 @@ export class InvoiceDetailDialog implements OnInit {
   private readonly service = inject(BillingService);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService).locale;
 
   private readonly dialogData = this.config.data as InvoiceDetailDialogData | undefined;
   private readonly invoiceId = this.dialogData?.invoiceId ?? 0;
@@ -81,7 +83,7 @@ export class InvoiceDetailDialog implements OnInit {
     return invoiceTypeLabelKey(inv.type);
   }
   money(amount: string | null | undefined, currency: string): string {
-    return formatMoney(amount, currency);
+    return formatMoney(amount, this.locale(), currency);
   }
   methodLabelKey(method: PaymentOut['method']): string {
     return paymentMethodLabelKey(method);

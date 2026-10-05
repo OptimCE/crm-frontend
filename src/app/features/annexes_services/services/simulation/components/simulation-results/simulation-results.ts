@@ -1,9 +1,11 @@
+import { formatNumber, formatPercent as ngFormatPercent } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Skeleton } from 'primeng/skeleton';
 
 import { ApiResponse } from '../../../../../../core/dtos/api.response';
+import { LocaleService } from '../../../../../../core/services/language/locale.service';
 import {
   SimulationConsumerResultDTO,
   SimulationDetailDTO,
@@ -25,6 +27,7 @@ export class SimulationResults {
   private readonly service = inject(SimulationService);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService).locale;
 
   readonly detail = input.required<SimulationDetailDTO>();
 
@@ -115,12 +118,14 @@ export class SimulationResults {
     );
   }
 
+  /** Whole kWh, grouped the reader's way: "1,235" in English, "1 235" in French. */
   formatEnergy(value: number): string {
-    return value.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    return formatNumber(value, this.locale(), '1.0-0');
   }
 
+  /** A 0–1 rate as a percentage with one decimal, sign included: "45.7%", "45,7 %". */
   formatPercent(value: number): string {
-    return (value * 100).toFixed(1);
+    return ngFormatPercent(value, this.locale(), '1.1-1');
   }
 
   /** Clamp a 0–1 rate to a 0–100 number for the radial gauge fill. */

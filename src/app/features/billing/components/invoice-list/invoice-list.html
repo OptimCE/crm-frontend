@@ -41,13 +41,13 @@
           @if (inv.issued_at) {
             <span
               >{{ 'BILLING.INVOICE.ISSUED_AT' | translate }}:
-              {{ inv.issued_at | date: 'dd/MM/yyyy' }}</span
+              {{ inv.issued_at | localeDate: 'dd/MM/yyyy' }}</span
             >
           }
           @if (inv.due_date) {
             <span
               >{{ 'BILLING.INVOICE.DUE_DATE' | translate }}:
-              {{ inv.due_date | date: 'dd/MM/yyyy' }}</span
+              {{ inv.due_date | localeDate: 'dd/MM/yyyy' }}</span
             >
           }
         </div>

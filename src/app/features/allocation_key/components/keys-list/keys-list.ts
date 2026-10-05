@@ -9,6 +9,7 @@ import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Button } from 'primeng/button';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -61,10 +62,10 @@ export class KeysList {
   readonly firstRow = computed(() => (this.paginated().page - 1) * this.paginated().limit);
   readonly showPaginator = computed(() => this.paginated().total_pages > 1);
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'KEY.LIST.NAME_LABEL', value: 'name' },
     { label: 'KEY.LIST.DESCRIPTION_LABEL', value: 'description' },
-  ];
+  ]);
 
   lazy = true;
 

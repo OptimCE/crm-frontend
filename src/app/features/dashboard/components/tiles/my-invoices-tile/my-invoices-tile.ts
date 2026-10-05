@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -10,6 +9,7 @@ import { BillingService } from '../../../../../shared/services/billing.service';
 import { invoiceStatusLabelKey } from '../../../../billing/billing-format';
 import { TileState, UNPAID_INVOICE_STATUSES } from '../../../dashboard-format';
 import { DashboardTile } from '../dashboard-tile/dashboard-tile';
+import { LocaleNumberPipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 const VISIBLE_LIMIT = 3;
 
@@ -25,7 +25,7 @@ const VISIBLE_LIMIT = 3;
 @Component({
   selector: 'app-my-invoices-tile',
   standalone: true,
-  imports: [DecimalPipe, TranslatePipe, RouterLink, DashboardTile],
+  imports: [LocaleNumberPipe, TranslatePipe, RouterLink, DashboardTile],
   templateUrl: './my-invoices-tile.html',
 })
 export class MyInvoicesTile {

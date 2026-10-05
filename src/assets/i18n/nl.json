@@ -22,7 +22,8 @@
       "YES": "Ja",
       "NO": "Nee",
       "VALIDATE": "Bevestigen",
-      "CANCEL": "Annuleren"
+      "CANCEL": "Annuleren",
+      "CLOSE": "Sluiten"
     },
     "ROLE": {
       "ADMIN": "Beheerder",
@@ -312,7 +313,8 @@
     "BILLING": "Facturatie",
     "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
     "DASHBOARD": "Dashboard",
-    "HOME": "Start"
+    "HOME": "Start",
+    "LIVE_DATA": "Live gegevens"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -1131,11 +1133,11 @@
       "USAGE_TOOLTIP": "Residentieel: privéhuishouden. Professioneel: kmo of kantoor. Industrieel: grote industriële site met hoogspanningsaansluiting. Bepaalt het toepasselijke DNB-tariefschema.",
       "OWNER_LABEL": "Houder",
       "PLACEHOLDER": {
-        "EAN_LABEL": "1234567890123",
+        "EAN_LABEL": "541448000000000000",
         "METER_NUMBER_LABEL": "1234567890123"
       },
       "ERROR": {
-        "INVALID_EAN": "De EAN moet precies 13 cijfers bevatten."
+        "INVALID_EAN": "De EAN moet precies 18 cijfers bevatten."
       }
     },
     "CATEGORIES": {
@@ -1234,6 +1236,12 @@
       "ERRORS": {
         "SELECTED_MEMBER_INCORRECT": "Het geselecteerde lid is onjuist"
       },
+      "HOLDER_CHANGE": {
+        "HEADER": "Wijziging van houder bevestigen",
+        "TRANSFER_MESSAGE": "Meter {{ean}} wordt vanaf {{date}} overgedragen van {{from}} naar {{to}}. Vanaf die datum ziet {{to}} de meterstanden en wordt {{to}} ervoor gefactureerd. Is dit het juiste lid?",
+        "REMOVE_MESSAGE": "Meter {{ean}} wordt vanaf {{date}} niet langer aan {{from}} toegewezen en heeft dan geen houder meer. Doorgaan?",
+        "ASSIGN_MESSAGE": "Meter {{ean}} wordt vanaf {{date}} toegewezen aan {{to}}. Vanaf die datum ziet {{to}} de meterstanden en wordt {{to}} ervoor gefactureerd. Is dit het juiste lid?"
+      },
       "FORM_ERROR": {
         "DESCRIPTION": "beschrijving",
         "SAMPLINGPOWER": "afnamevermogen",
@@ -1316,6 +1324,7 @@
     "UPDATE": {
       "METER_INFORMATION_TITLE": "Meterinformatie",
       "VALIDATE_BUTTON_LABEL": "Bevestigen",
+      "EAN_READONLY_HINT": "De EAN identificeert de meter en kan hier niet worden gewijzigd.",
       "FORM_ERROR": {
         "ADDRESS_STREET": "straat",
         "ADDRESS_NUMBER": "nummer",
@@ -1652,6 +1661,11 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Administratieve documenten",
       "DESCRIPTION": "Volg de reglementaire dossiers bij de CWaPE en de netbeheerder: statussen, afgeleide termijnen en elke versie van elk ingediend document."
+    },
+    "LIVE_DATA": {
+      "NAME": "Live gegevens",
+      "DESCRIPTION": "Lees de slimme meters van de gemeenschap elk kwartier uit: productie zoals ze gebeurt, toestand van de apparaten, en een privacydrempel die u zelf bepaalt.",
+      "UNSUBSCRIBE_WARNING": "De apparaten blijven aangemeld en de opgeslagen historiek blijft bewaard, maar metingen die tijdens de uitschakeling worden verstuurd, gaan definitief verloren. Na heractivering wordt de verzameling binnen een minuut hervat, zonder nieuwe aanmelding."
     }
   },
   "BILLING": {
@@ -2079,6 +2093,7 @@
       "BUTTON": "CSV exporteren",
       "TOO_LARGE": "Te veel vermeldingen om te exporteren. Verfijn uw filters en probeer opnieuw."
     },
+    "UNKNOWN_ACTION": "Andere actie ({{code}})",
     "ACTIONS": {
       "crm": {
         "community_subscription": {
@@ -2149,6 +2164,9 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Verbruiksgegevens geüpload"
+        },
+        "address": {
+          "geocode_backfill": "Adressen gegeocodeerd (batch)"
         }
       },
       "allocation_key_generation": {
@@ -2173,6 +2191,79 @@
           "succeeded": "Simulatie voltooid",
           "failed": "Simulatie mislukt",
           "deleted": "Simulatie verwijderd"
+        }
+      },
+      "administrative_document": {
+        "dossier": {
+          "created": "Administratief dossier aangemaakt",
+          "updated": "Administratief dossier bijgewerkt",
+          "status_changed": "Status van het dossier gewijzigd"
+        },
+        "document": {
+          "created": "Administratief document aangemaakt",
+          "status_changed": "Status van het document gewijzigd",
+          "generation_requested": "Documentgeneratie aangevraagd",
+          "rendered": "Document gegenereerd",
+          "render_failed": "Documentgeneratie mislukt"
+        },
+        "document_version": {
+          "added": "Documentversie toegevoegd"
+        },
+        "deadline": {
+          "created": "Termijn aangemaakt",
+          "resolved": "Termijn afgesloten",
+          "missed": "Termijn overschreden",
+          "reminded": "Herinnering voor termijn verzonden"
+        },
+        "template": {
+          "saved": "Documentsjabloon opgeslagen"
+        },
+        "deadline_rule": {
+          "saved": "Termijnregel opgeslagen"
+        }
+      },
+      "billing": {
+        "run": {
+          "created": "Facturatie-uitvoering gestart",
+          "queue_failed": "Facturatie-uitvoering kon niet in de wachtrij worden geplaatst",
+          "computed": "Facturatie-uitvoering berekend",
+          "failed": "Facturatie-uitvoering mislukt"
+        },
+        "invoice": {
+          "issued": "Factuur uitgereikt",
+          "render_requested": "PDF-generatie van de factuur gestart",
+          "rendered": "PDF van de factuur gegenereerd",
+          "render_failed": "PDF-generatie van de factuur mislukt",
+          "pdf_deleted": "PDF van de factuur verwijderd",
+          "sent": "Factuur verzonden",
+          "paid": "Factuur betaald",
+          "overdue": "Factuur achterstallig",
+          "credited": "Creditnota aangemaakt"
+        },
+        "payment": {
+          "registered": "Betaling geregistreerd"
+        }
+      },
+      "live_data": {
+        "device": {
+          "created": "Live-gegevensapparaat aangemaakt",
+          "token_issued": "Aanmeldcode voor apparaat uitgegeven",
+          "revoked": "Live-gegevensapparaat ingetrokken",
+          "enrolled": "Live-gegevensapparaat aangemeld"
+        },
+        "settings": {
+          "updated": "Zichtbaarheid van live gegevens bijgewerkt"
+        }
+      },
+      "news": {
+        "post": {
+          "created": "Nieuwsbericht gepubliceerd",
+          "updated": "Nieuwsbericht bijgewerkt",
+          "deleted": "Nieuwsbericht verwijderd"
+        },
+        "vote": {
+          "cast": "Stem uitgebracht in een peiling",
+          "retracted": "Stem ingetrokken in een peiling"
         }
       }
     }
@@ -2591,6 +2682,8 @@
         "LOCALITE": "Gemeente",
         "DROITS_DE_VOTE": "Stemrechten",
         "EAN": "EAN",
+        "EAN_DELIVERY": "EAN van het afnamepunt",
+        "EAN_INJECTION": "EAN van het injectiepunt",
         "METER_NUMBER": "Meternummer",
         "GRD": "Netbeheerder",
         "CLIENT_RESIDENTIEL": "Residentiële klant",
@@ -2616,7 +2709,8 @@
         "RELOAD_BLOCKED": "U hebt het formulier gewijzigd — opnieuw laden wist uw correcties.",
         "CODES": {
           "meter": {
-            "no_member_attribution": "Leveringspunt {{subject}} is aan geen enkel lid toegewezen en kan dus niet onder een naam worden vermeld."
+            "no_member_attribution": "Leveringspunt {{subject}} is aan geen enkel lid toegewezen en kan dus niet onder een naam worden vermeld.",
+            "ean_not_form_representable": "EAN {{subject}} kan niet op dit formulier worden afgedrukt: de vakjes volgen een voorgedrukte \"5 4\" en bevatten alleen de 16 cijfers die erna komen. De vakjes blijven leeg — controleer de EAN in het CRM of vul ze met de hand in op de pdf."
           },
           "community": {
             "field_missing": "Ontbrekende informatie voor de gemeenschap: {{field}}. Het formulier wordt zonder deze gegevens ingediend."
@@ -2691,6 +2785,10 @@
       "ENTER": "Binnengaan",
       "OPEN": "Mijn gemeenschap openen",
       "MANAGE": "Mijn gemeenschappen beheren (aanmaken, hernoemen, verlaten)",
+      "CREATE_TITLE": "Een gemeenschap oprichten",
+      "CREATE_HINT": "Leidt u een project? Maak uw gemeenschap meteen aan, zonder op een uitnodiging te wachten: u wordt er de beheerder van.",
+      "CREATE_ACTION": "Mijn gemeenschap aanmaken",
+      "JOIN_TITLE": "Aansluiten bij een gemeenschap",
       "EMPTY": "U maakt nog geen deel uit van een gemeenschap.",
       "EMPTY_HINT": "Zodra een gemeenschap u uitnodigt, verschijnt de uitnodiging hier.",
       "EMPTY_ACTION": "Gemeenschappen in mijn buurt ontdekken"
@@ -2997,6 +3095,202 @@
       "browseFiles": "Bestanden bladeren",
       "maximizeLabel": "Maximaliseren",
       "minimizeLabel": "Minimaliseren"
+    }
+  },
+  "LIVE": {
+    "HINT": {
+      "REVOKED": "Dit apparaat is ingetrokken en kan geen gegevens meer versturen. De metingen die het al verstuurde, blijven bewaard.",
+      "OK": "Dit apparaat rapporteert normaal.",
+      "NEVER_SEEN": "Dit apparaat heeft nog nooit verbinding gemaakt. Controleer of het is ingeschakeld en of de aanmeldcode op het apparaat zelf is ingevoerd.",
+      "SILENT": "Er is al meer dan een dag geen data binnengekomen. Controleer de voeding en de netwerkverbinding van het apparaat.",
+      "OFFLINE": "Het apparaat heeft gemeld dat het offline ging, of reageert niet meer.",
+      "P1_NOT_ENABLED": "Het apparaat is verbonden en stuurt data, maar alle metingen zijn nul. De meest waarschijnlijke oorzaak is dat de P1-poort van de meter niet is geactiveerd door de netbeheerder — dat moet bij hen worden aangevraagd en kan niet ter plaatse worden opgelost.",
+      "INGEST_DOWN": "De dataverzameldienst is momenteel niet beschikbaar, dus er kan niets over dit apparaat worden geconcludeerd."
+    }
+  },
+  "LIVE_DATA": {
+    "TITLE": "Live gegevens",
+    "SUBTITLE": "Kwartiertelemetrie van de slimme meters van de gemeenschap.",
+    "INDICATIVE": "Indicatieve gegevens. De cijfers van de netbeheerder blijven de enige basis voor verdeelsleutels en facturatie.",
+    "SUBSCRIPTION_LOST": "Live gegevens zijn uitgeschakeld voor deze gemeenschap. Een beheerder kan ze opnieuw inschakelen via Annexdiensten.",
+    "TABS": {
+      "DASHBOARD": "Dashboard",
+      "DEVICES": "Apparaten",
+      "OPS": "Status apparaten",
+      "SETTINGS": "Instellingen"
+    },
+    "WINDOW": {
+      "DAY": "24 uur",
+      "WEEK": "7 dagen",
+      "MONTH": "30 dagen"
+    },
+    "SIGNAL": {
+      "NEUTRAL": "Alleen productie",
+      "NEUTRAL_DETAIL": "Het verbruik wordt nog niet gemeten, dus deze weergave kan niet zeggen of dit een goed moment is om energie te gebruiken — alleen hoeveel er wordt geproduceerd."
+    },
+    "SUMMARY": {
+      "PRODUCTION": "Productie, laatste volledige uur",
+      "POWER": "Huidig vermogen",
+      "IMPORT": "Van het net afgenomen",
+      "EXPORT": "Op het net geïnjecteerd",
+      "SHARED": "Gedeeld (schatting)",
+      "MEMBERS": "Bijdragende leden",
+      "DEVICES": "Apparaten",
+      "ONLINE": "online",
+      "AS_OF": "Op {{time}}",
+      "NO_DATA": "Er zijn nog geen metingen samengevat. Een net aangemaakte gemeenschap heeft niet niets geproduceerd — er is nog niet gemeten."
+    },
+    "CHART": {
+      "TITLE": "Productie en injectie",
+      "PRODUCTION": "Productie",
+      "EXPORT": "Op het net geïnjecteerd",
+      "Y_AXIS": "kWh",
+      "EMPTY": "Er is in deze periode niets gemeten.",
+      "EMPTY_WITHHELD": "Deze meters zien alleen de uitwisseling met het net, dus de productie kan niet worden getoond, en de injectie blijft verborgen tot genoeg leden bijdragen.",
+      "WITHHELD": "verborgen (privacy)",
+      "SUPPRESSED": "Bij {{count}} periode(n) zijn de netcijfers verborgen om de privacy van de leden te beschermen.",
+      "OFFTAKE_TITLE": "Verbruik afgenomen van het net",
+      "OFFTAKE": "Van het net afgenomen",
+      "OFFTAKE_NOTE": "Zonne-energie die ter plaatse wordt verbruikt, is niet inbegrepen: de meters zien alleen de uitwisseling met het net."
+    },
+    "SCOPE": {
+      "LABEL": "Bereik",
+      "COMMUNITY": "Hele gemeenschap"
+    },
+    "SHARING": {
+      "TITLE": "Delen binnen de deelactiviteiten (schatting)",
+      "OFFTAKE_SHARED": "Afname gedekt door de gemeenschap",
+      "OFFTAKE_SUPPLIER": "Afname geleverd door de leverancier",
+      "INJECTION_SHARED": "Injectie gedeeld in de gemeenschap",
+      "INJECTION_GRID": "Overige injectie naar het net",
+      "NOTE": "Schatting op basis van {{devices}} opgevolgde meter(s) van de {{meters}}, per kwartier berekend binnen elke deelactiviteit. De gegevens van de netbeheerder blijven de referentie.",
+      "OF_METERS": "van {{meters}} meter(s)"
+    },
+    "MEMBER": {
+      "TITLE": "Productie van mijn deelactiviteit",
+      "INTRO": "De productie van de deelactiviteit waaraan uw meter deelneemt. Waar de meters alleen de uitwisseling met het net zien, wordt de op het net geïnjecteerde energie getoond.",
+      "NONE": "U hebt momenteel geen actieve meter in een deelactiviteit van deze gemeenschap.",
+      "FORBIDDEN": "De beheerder van uw gemeenschap heeft deze cijfers niet beschikbaar gesteld aan leden.",
+      "OPERATION": "Deelactiviteit"
+    },
+    "ABSENT": {
+      "BELOW_K_THRESHOLD": "Verborgen: te weinig leden hebben aan deze periode bijgedragen om de cijfers te tonen zonder hen herkenbaar te maken.",
+      "NOT_MEASURED": "Niet gemeten: de meters in deze gemeenschap kunnen deze waarde niet zien.",
+      "NO_CONSUMPTION_IN_PHASE_1": "Verbruik wordt nog niet gemeten.",
+      "NO_CLOSED_HOUR_YET": "Het eerste uur met metingen is nog niet voorbij; het cijfer verschijnt zodra het is berekend.",
+      "UNKNOWN": "Niet beschikbaar."
+    },
+    "HEALTH": {
+      "OK": "Rapporteert",
+      "NEVER_SEEN": "Nooit gezien",
+      "SILENT": "Stil",
+      "OFFLINE": "Offline",
+      "REPORTING_ZEROS": "Stuurt nullen",
+      "REVOKED": "Ingetrokken",
+      "UNKNOWN": "Onbekend"
+    },
+    "DEVICE_STATUS": {
+      "PENDING": "Wacht op aanmelding",
+      "ACTIVE": "Aangemeld",
+      "REVOKED": "Ingetrokken"
+    },
+    "DEVICES": {
+      "TITLE": "Apparaten",
+      "ADD": "Apparaat toevoegen",
+      "EMPTY": "Er is nog geen apparaat aangemaakt voor deze gemeenschap.",
+      "NEVER": "nooit",
+      "REVOKE": "Intrekken",
+      "REVOKE_CONFIRM_HEADER": "Dit apparaat intrekken?",
+      "REVOKE_CONFIRM_MESSAGE": "Het apparaat wordt onmiddellijk niet meer aanvaard en dit kan niet ongedaan worden gemaakt. De reeds verzonden metingen blijven bewaard.",
+      "REVOKED": "Apparaat ingetrokken.",
+      "NEW_TOKEN": "Nieuwe aanmeldcode",
+      "CREATED": "Apparaat aangemaakt.",
+      "COARSENED": "Tijdstempels zijn verborgen voor een verbruiksapparaat: wanneer de meter van een huishouden laatst gezien is, is op zich informatie over dat huishouden.",
+      "LAST_REJECT": "Laatste weigering",
+      "REJECT_CAPACITY_HINT": "Productiemetingen worden als onwaarschijnlijk geweigerd: boven het opgegeven vermogen van het apparaat (kVA) of 's nachts. Waarschijnlijk is het geregistreerde vermogen lager dan dat van de omvormer, zodat alleen de zonnige pieken wegvallen. Controleer het, en de klok van de connector.",
+      "COL": {
+        "CONNECTOR": "Connector",
+        "LAST_SEEN": "Laatst gezien"
+      }
+    },
+    "REJECT_REASON": {
+      "SCHEMA_INVALID": "Ongeldig bericht",
+      "UNKNOWN_FIELD": "Onbekend veld in het bericht",
+      "BATCH_TOO_LARGE": "Te grote batch",
+      "DUPLICATE_TS_IN_BATCH": "Dubbel tijdstip in de batch",
+      "DEVICE_UNKNOWN": "Onbekend apparaat",
+      "DEVICE_REVOKED": "Apparaat ingetrokken",
+      "COMMUNITY_MISMATCH": "Verkeerde gemeenschap",
+      "TS_IN_FUTURE": "Tijdstip in de toekomst",
+      "TS_TOO_OLD": "Meting te oud",
+      "TS_NOT_ALIGNED": "Tijdstip niet op een kwartier",
+      "NEGATIVE_ENERGY": "Negatieve energie",
+      "OVER_DEVICE_CEILING": "Boven het plafond van het apparaat",
+      "IMPLAUSIBLE_PRODUCTION": "Onwaarschijnlijke productie",
+      "UNKNOWN": "Onbekende reden"
+    },
+    "CREATE": {
+      "TITLE": "Nieuw apparaat",
+      "NAME": "Naam",
+      "NAME_PLACEHOLDER": "bv. Dak, zuidgebouw",
+      "EAN": "Meter",
+      "EAN_PLACEHOLDER": "Kies een meter",
+      "EAN_FILTER_PLACEHOLDER": "EAN, adres of houder",
+      "EAN_HINT": "Alleen de actieve meters van de gemeenschap worden getoond. Een meter kan maar één apparaat tegelijk hebben.",
+      "EAN_EMPTY": "Deze gemeenschap heeft geen actieve meter om een apparaat aan te koppelen.",
+      "EAN_LOAD_ERROR": "De meters van de gemeenschap konden niet worden geladen. Sluit dit venster en probeer het opnieuw.",
+      "EAN_TRUNCATED": "Alleen de eerste {{shown}} van de {{total}} actieve meters worden getoond.",
+      "EAN_DEVICES_UNKNOWN": "Kon niet nagaan welke meters al een apparaat hebben. Een meter die er al een heeft, wordt bij het aanmaken geweigerd.",
+      "EAN_HAS_DEVICE": "Heeft al een apparaat",
+      "PURE_INJECTION": "Achter deze meter wordt niets verbruikt",
+      "PURE_INJECTION_HELP": "Vink dit alleen aan als de site alles op het net injecteert. Op een site die ook verbruikt, ziet een P1-poort de productie helemaal niet, en dit aanvinken zou overschatten wat de gemeenschap opwekt.",
+      "SUBMIT": "Aanmaken",
+      "ERRORS": {
+        "REQUIRED": "Geef een naam op en kies een meter."
+      }
+    },
+    "TOKEN": {
+      "TITLE": "Aanmeldcode",
+      "SHOWN_ONCE": "Deze code wordt één keer getoond en kan niet worden opgevraagd. Als hij verloren gaat, maak dan een nieuwe aan — waardoor deze vervalt.",
+      "EXPIRES": "Geldig tot {{date}}",
+      "COPY": "Code kopiëren",
+      "COPIED": "Code gekopieerd.",
+      "SCAN": "Scan deze code met de installatie-app van het apparaat, of typ hem met de hand in."
+    },
+    "OPS": {
+      "TITLE": "Status apparaten",
+      "SUBTITLE": "Wat rapporteert, wat niet, en hoe vers de cijfers zijn.",
+      "NEEDS_ATTENTION": "Vraagt aandacht",
+      "ALL_WELL": "Alle apparaten rapporteren normaal.",
+      "ROLLUP_AGE": "Cijfers {{minutes}} minuten geleden herberekend",
+      "ROLLUP_STALE": "De cijfers zijn al {{minutes}} minuten niet herberekend. Alle apparaten kunnen gezond zijn terwijl de berekening stilligt.",
+      "ROLLUP_NEVER": "Er is nog niets herberekend.",
+      "ROLLUP_IDLE": "Geen gegevens in de afgelopen 48 uur: er valt niets te herberekenen.",
+      "INGEST_DOWN": "De gegevensverzameling lijkt onderbroken: geen enkel apparaat heeft in meer dan een dag gerapporteerd. Controleer de verzameldienst vóór de apparaten.",
+      "REJECTIONS": "Weigeringen (24 u)",
+      "DEAD_LETTERS": "{{count}} bericht(en) konden de afgelopen 24 uur niet worden opgeslagen.",
+      "DEAD_LETTERS_NONE": "Alle berichten van de afgelopen 24 uur zijn opgeslagen.",
+      "READINGS_REJECTED": "Bij {{count}} apparaat/apparaten werden de afgelopen 24 uur afzonderlijke metingen geweigerd. Details staan in het tabblad Apparaten.",
+      "READINGS_REJECTED_NONE": "De afgelopen 24 uur werd geen enkele afzonderlijke meting geweigerd.",
+      "DIAG": "Melding van de connector"
+    },
+    "SETTINGS": {
+      "TITLE": "Zichtbaarheid",
+      "SUBTITLE": "Wat leden van deze gemeenschap mogen zien, en vanaf welke groepsgrootte cijfers worden verborgen.",
+      "IS_DEFAULT": "Dit zijn de standaardwaarden van het platform. Voor deze gemeenschap is nog niets opgeslagen.",
+      "MEMBERS_SEE_AGGREGATE": "Leden mogen de cijfers van hun deelactiviteit zien",
+      "MEMBERS_SEE_AGGREGATE_HELP": "Als dit uit staat, kunnen alleen beheerders het dashboard openen.",
+      "MEMBERS_SEE_PRODUCTION": "Leden mogen de productie zien",
+      "MEMBERS_SEE_PRODUCTION_HELP": "Als dit uit staat, wordt leden de toegang tot het dashboard geweigerd in plaats van het te tonen zonder productie: een saldo min een verbruik geeft de productie exact terug.",
+      "K": "Minimumaantal leden",
+      "K_HELP": "Netcijfers worden verborgen voor elke periode waaraan minder leden dan deze drempel hebben bijgedragen. Productie wordt altijd getoond. De laagst toegestane waarde is 3.",
+      "SAVE": "Opslaan",
+      "SAVED": "Zichtbaarheidsinstellingen opgeslagen."
+    },
+    "FORECAST": {
+      "TITLE": "Productieprognose",
+      "NO_METHOD": "Er is nog geen prognosemethode beschikbaar voor de productietechnologie van deze gemeenschap.",
+      "UNAVAILABLE": "Geen prognose beschikbaar."
     }
   }
 }

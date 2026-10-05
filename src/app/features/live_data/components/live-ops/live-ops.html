@@ -1,0 +1,123 @@
+<div class="flex flex-col gap-4" data-testid="live-ops">
+  <div>
+    <h2 class="text-base font-semibold m-0">{{ 'LIVE_DATA.OPS.TITLE' | translate }}</h2>
+    <p class="text-sm text-surface-500 m-0">{{ 'LIVE_DATA.OPS.SUBTITLE' | translate }}</p>
+  </div>
+
+  @if (loading()) {
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <p-skeleton height="6rem" />
+      <p-skeleton height="6rem" />
+      <p-skeleton height="6rem" />
+    </div>
+  } @else if (health(); as data) {
+    <!-- THE FRESHNESS BANNER, FIRST. Every device below can be green while the
+         scheduler that feeds the dashboard has been dead for a day, and nothing
+         else in the product would say so. The verdict is the backend's: the age
+         of the newest DATA cannot tell a dead scheduler from a quiet fleet. -->
+    @switch (freshness()) {
+      @case (RollupFreshness.STALE) {
+        <p-message severity="error" styleClass="block" data-testid="live-ops__rollup-stale">
+          {{ 'LIVE_DATA.OPS.ROLLUP_STALE' | translate: { minutes: lagMinutes() ?? '—' } }}
+        </p-message>
+      }
+      @case (RollupFreshness.NEVER) {
+        <p class="text-xs text-surface-500 m-0" data-testid="live-ops__rollup-never">
+          {{ 'LIVE_DATA.OPS.ROLLUP_NEVER' | translate }}
+        </p>
+      }
+      @case (RollupFreshness.IDLE) {
+        <p class="text-xs text-surface-500 m-0" data-testid="live-ops__rollup-idle">
+          <i class="pi pi-moon text-xs"></i>
+          {{ 'LIVE_DATA.OPS.ROLLUP_IDLE' | translate }}
+        </p>
+      }
+      @default {
+        <!-- `fresh`, and any state this build does not know: neutral. -->
+        @if (lagMinutes(); as minutes) {
+          <p class="text-xs text-surface-500 m-0" data-testid="live-ops__rollup-age">
+            <i class="pi pi-clock text-xs"></i>
+            {{ 'LIVE_DATA.OPS.ROLLUP_AGE' | translate: { minutes: minutes } }}
+          </p>
+        }
+      }
+    }
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <p-card styleClass="h-full" data-testid="live-ops__card--devices">
+        <div class="text-xs text-surface-500">{{ 'LIVE_DATA.SUMMARY.DEVICES' | translate }}</div>
+        <div class="text-2xl font-semibold mt-1">{{ data.n_devices }}</div>
+      </p-card>
+
+      <p-card styleClass="h-full" data-testid="live-ops__card--attention">
+        <div class="text-xs text-surface-500">
+          {{ 'LIVE_DATA.OPS.NEEDS_ATTENTION' | translate }}
+        </div>
+        <div
+          class="text-2xl font-semibold mt-1"
+          [class.text-red-600]="attentionCount() > 0"
+          data-testid="live-ops__attention-count"
+        >
+          {{ attentionCount() }}
+        </div>
+      </p-card>
+
+      <!-- What was NOT stored, both ways it can happen: a whole message refused
+           (a dead letter), or single readings dropped from a batch that was
+           otherwise stored - which leaves no dead letter at all, and is what a
+           capacity mismatch clipping the sunny peaks looks like. -->
+      <p-card styleClass="h-full" data-testid="live-ops__card--dead-letters">
+        <div class="text-xs text-surface-500">{{ 'LIVE_DATA.OPS.REJECTIONS' | translate }}</div>
+        <div class="text-sm mt-2 flex flex-col gap-1">
+          @if (data.dead_letters_24h > 0) {
+            <span class="text-red-600">
+              {{ 'LIVE_DATA.OPS.DEAD_LETTERS' | translate: { count: data.dead_letters_24h } }}
+            </span>
+          } @else {
+            <span class="text-surface-500">
+              {{ 'LIVE_DATA.OPS.DEAD_LETTERS_NONE' | translate }}
+            </span>
+          }
+          @if (data.n_devices_readings_rejected_24h > 0) {
+            <span class="text-amber-700" data-testid="live-ops__readings-rejected">
+              {{
+                'LIVE_DATA.OPS.READINGS_REJECTED'
+                  | translate: { count: data.n_devices_readings_rejected_24h }
+              }}
+            </span>
+          } @else {
+            <span class="text-surface-500" data-testid="live-ops__readings-rejected-none">
+              {{ 'LIVE_DATA.OPS.READINGS_REJECTED_NONE' | translate }}
+            </span>
+          }
+        </div>
+      </p-card>
+    </div>
+
+    @if (breakdown().length === 0) {
+      <p class="text-surface-500 text-sm" data-testid="live-ops__empty">
+        {{ 'LIVE_DATA.DEVICES.EMPTY' | translate }}
+      </p>
+    } @else if (banner() === 'ingest-down') {
+      <!-- Not "all well": UNKNOWN needs no per-device attention, so the count
+           above is zero, and that used to be read as every device being fine. -->
+      <p-message severity="warn" styleClass="block" data-testid="live-ops__ingest-down">
+        {{ 'LIVE_DATA.OPS.INGEST_DOWN' | translate }}
+      </p-message>
+    } @else if (banner() === 'all-well') {
+      <p-message severity="success" styleClass="block" data-testid="live-ops__all-well">
+        {{ 'LIVE_DATA.OPS.ALL_WELL' | translate }}
+      </p-message>
+    }
+
+    <div class="flex flex-wrap gap-2" data-testid="live-ops__breakdown">
+      @for (entry of breakdown(); track entry.state) {
+        <p-tag
+          [value]="(healthLabelKey(entry.state) | translate) + ' · ' + entry.count"
+          [severity]="healthSeverity(entry.state)"
+          [attr.data-testid]="'live-ops__tag--' + entry.state"
+        />
+      }
+    </div>
+  }
+</div>

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +11,7 @@ import { Tooltip } from 'primeng/tooltip';
 
 import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
 import { ERROR_TYPE } from '../../../../core/dtos/notification';
+import { LocaleService } from '../../../../core/services/language/locale.service';
 import {
   InvoiceOut,
   InvoiceSortField,
@@ -22,6 +22,7 @@ import {
 } from '../../../../shared/dtos/billing.dtos';
 import { BillingService } from '../../../../shared/services/billing.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { downloadBlob } from '../../../../shared/utils/download.utils';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
@@ -33,6 +34,7 @@ import {
   TagSeverity,
   toApiDate,
 } from '../../billing-format';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 const PAGE_LIMIT = 20;
 
@@ -59,7 +61,7 @@ interface SortOption {
   selector: 'app-billing-member-invoices',
   standalone: true,
   imports: [
-    DatePipe,
+    LocaleDatePipe,
     FormsModule,
     TranslatePipe,
     Button,
@@ -79,6 +81,7 @@ export class BillingMemberInvoices implements OnInit {
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly snackbar = inject(SnackbarNotification);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService).locale;
 
   readonly showHeader = input<boolean>(true);
 
@@ -92,32 +95,28 @@ export class BillingMemberInvoices implements OnInit {
   sortField: InvoiceSortField = DEFAULT_SORT;
   sortOrder: SortOrder = DEFAULT_ORDER;
 
-  statusOptions: StatusOption[] = [];
-  sortOptions: SortOption[] = [];
+  readonly statusOptions = translatedOptions<StatusOption>(
+    [
+      InvoiceStatus.ISSUED,
+      InvoiceStatus.SENT,
+      InvoiceStatus.PAID,
+      InvoiceStatus.OVERDUE,
+      InvoiceStatus.CANCELLED,
+    ].map((value) => ({ label: invoiceStatusLabelKey(value), value })),
+  );
+  readonly sortOptions = translatedOptions<SortOption>([
+    { value: 'issued_at', label: 'BILLING.SORT.ISSUED_DATE' },
+    { value: 'due_date', label: 'BILLING.SORT.DUE_DATE' },
+    { value: 'total', label: 'BILLING.SORT.AMOUNT' },
+    { value: 'number', label: 'BILLING.SORT.NUMBER' },
+    { value: 'status', label: 'BILLING.SORT.STATUS' },
+  ]);
 
   readonly hasMultiplePages = computed(() => this.pagination().total_pages > 1);
 
   protected readonly skeletons = [1, 2, 3];
 
   ngOnInit(): void {
-    const statuses = [
-      InvoiceStatus.ISSUED,
-      InvoiceStatus.SENT,
-      InvoiceStatus.PAID,
-      InvoiceStatus.OVERDUE,
-      InvoiceStatus.CANCELLED,
-    ];
-    this.statusOptions = statuses.map((value) => ({
-      label: this.translate.instant(invoiceStatusLabelKey(value)) as string,
-      value,
-    }));
-    this.sortOptions = [
-      { value: 'issued_at', label: this.translate.instant('BILLING.SORT.ISSUED_DATE') as string },
-      { value: 'due_date', label: this.translate.instant('BILLING.SORT.DUE_DATE') as string },
-      { value: 'total', label: this.translate.instant('BILLING.SORT.AMOUNT') as string },
-      { value: 'number', label: this.translate.instant('BILLING.SORT.NUMBER') as string },
-      { value: 'status', label: this.translate.instant('BILLING.SORT.STATUS') as string },
-    ];
     this.load(1);
   }
 
@@ -200,7 +199,7 @@ export class BillingMemberInvoices implements OnInit {
     return inv.type === InvoiceType.CREDIT_NOTE;
   }
   money(inv: InvoiceOut): string {
-    return formatMoney(inv.total, inv.currency);
+    return formatMoney(inv.total, this.locale(), inv.currency);
   }
 
   // ----- PDF (view-only) -------------------------------------------------

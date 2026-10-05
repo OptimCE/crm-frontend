@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -18,6 +18,10 @@ import { ErrorMessageHandler } from '../../../../../../shared/services-ui/error.
 import { SimulationResults } from './simulation-results';
 
 // ── Helpers ──────────────────────────────────────────────────────────
+
+/** French thousands separator (narrow no-break space) and percent-sign space. */
+const NNBSP = String.fromCharCode(0x202f);
+const NBSP = String.fromCharCode(0xa0);
 
 function buildConsumer(
   overrides: Partial<SimulationConsumerResultDTO> = {},
@@ -112,7 +116,9 @@ describe('SimulationResults', () => {
     errorHandlerSpy = { handleError: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [SimulationResults, TranslateModule.forRoot()],
+      // English, pinned: figures are written in the reader's language, and the
+      // loader-less module would otherwise leave that to the app's default.
+      imports: [SimulationResults, TranslateModule.forRoot({ lang: 'en' })],
       providers: [
         { provide: SimulationService, useValue: serviceSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
@@ -247,11 +253,22 @@ describe('SimulationResults', () => {
     });
 
     it('formatEnergy should round to whole units', () => {
-      expect(component.formatEnergy(1234.7)).toBe((1235).toLocaleString());
+      expect(component.formatEnergy(1234.7)).toBe('1,235');
     });
 
     it('formatPercent should scale a 0–1 rate to a percentage with one decimal', () => {
-      expect(component.formatPercent(0.4567)).toBe('45.7');
+      expect(component.formatPercent(0.4567)).toBe('45.7%');
+    });
+
+    it("should follow the reader's language, not the machine's", () => {
+      // BUG: formatEnergy passed `undefined` to toLocaleString - the BROWSER's
+      // locale - and formatPercent wrote a decimal point with toFixed. So the
+      // figures changed with the machine and never with the language chosen.
+      TestBed.inject(TranslateService).use('fr');
+
+      expect(component.formatEnergy(1234.7)).toBe(`1${NNBSP}235`);
+      // French puts a (no-break) space before the percent sign.
+      expect(component.formatPercent(0.4567)).toBe(`45,7${NBSP}%`);
     });
 
     it('percentValue should clamp a 0–1 rate to 0–100', () => {

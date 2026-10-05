@@ -22,7 +22,8 @@
       "YES": "Ja",
       "NO": "Nein",
       "VALIDATE": "Bestätigen",
-      "CANCEL": "Abbrechen"
+      "CANCEL": "Abbrechen",
+      "CLOSE": "Schließen"
     },
     "ROLE": {
       "ADMIN": "Administrator",
@@ -312,7 +313,8 @@
     "BILLING": "Abrechnung",
     "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
     "DASHBOARD": "Übersicht",
-    "HOME": "Start"
+    "HOME": "Start",
+    "LIVE_DATA": "Live-Daten"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -1131,11 +1133,11 @@
       "USAGE_TOOLTIP": "Wohngebäude: Privathaushalt. Gewerbe: KMU oder Büro. Industrie: Großbetrieb mit Hochspannungsanschluss. Bestimmt den anzuwendenden Netzbetreiber-Tarif.",
       "OWNER_LABEL": "Inhaber",
       "PLACEHOLDER": {
-        "EAN_LABEL": "1234567890123",
+        "EAN_LABEL": "541448000000000000",
         "METER_NUMBER_LABEL": "1234567890123"
       },
       "ERROR": {
-        "INVALID_EAN": "Der EAN muss genau 13 Ziffern enthalten."
+        "INVALID_EAN": "Der EAN muss genau 18 Ziffern enthalten."
       }
     },
     "CATEGORIES": {
@@ -1234,6 +1236,12 @@
       "ERRORS": {
         "SELECTED_MEMBER_INCORRECT": "Das ausgewählte Mitglied ist falsch"
       },
+      "HOLDER_CHANGE": {
+        "HEADER": "Inhaberwechsel bestätigen",
+        "TRANSFER_MESSAGE": "Zähler {{ean}} wird ab dem {{date}} von {{from}} auf {{to}} übertragen. Ab diesem Datum sieht {{to}} die Zählerstände und erhält dafür die Rechnung. Ist das das richtige Mitglied?",
+        "REMOVE_MESSAGE": "Zähler {{ean}} ist ab dem {{date}} nicht mehr {{from}} zugeordnet und hat dann keinen Inhaber mehr. Fortfahren?",
+        "ASSIGN_MESSAGE": "Zähler {{ean}} wird ab dem {{date}} {{to}} zugeordnet. Ab diesem Datum sieht {{to}} die Zählerstände und erhält dafür die Rechnung. Ist das das richtige Mitglied?"
+      },
       "FORM_ERROR": {
         "DESCRIPTION": "Beschreibung",
         "SAMPLINGPOWER": "Entnahmeleistung",
@@ -1316,6 +1324,7 @@
     "UPDATE": {
       "METER_INFORMATION_TITLE": "Zählerinformationen",
       "VALIDATE_BUTTON_LABEL": "Bestätigen",
+      "EAN_READONLY_HINT": "Der EAN identifiziert den Zähler und kann hier nicht geändert werden.",
       "FORM_ERROR": {
         "ADDRESS_STREET": "Straße",
         "ADDRESS_NUMBER": "Nummer",
@@ -1652,6 +1661,11 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Verwaltungsdokumente",
       "DESCRIPTION": "Verfolgen Sie die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers: Status, abgeleitete Fristen und jede Version jedes übermittelten Dokuments."
+    },
+    "LIVE_DATA": {
+      "NAME": "Live-Daten",
+      "DESCRIPTION": "Lesen Sie die intelligenten Zähler der Gemeinschaft viertelstündlich aus: Erzeugung in Echtzeit, Gerätezustand und eine Datenschutzschwelle, die Sie selbst bestimmen.",
+      "UNSUBSCRIBE_WARNING": "Die Geräte bleiben registriert und der gespeicherte Verlauf bleibt erhalten, aber Messwerte, die während der Deaktivierung gesendet werden, gehen endgültig verloren. Nach der Reaktivierung läuft die Erfassung innerhalb einer Minute weiter, ohne neue Registrierung."
     }
   },
   "BILLING": {
@@ -2079,6 +2093,7 @@
       "BUTTON": "CSV exportieren",
       "TOO_LARGE": "Zu viele Einträge zum Exportieren. Bitte engen Sie Ihre Filter ein und versuchen Sie es erneut."
     },
+    "UNKNOWN_ACTION": "Sonstige Aktion ({{code}})",
     "ACTIONS": {
       "crm": {
         "community_subscription": {
@@ -2149,6 +2164,9 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Verbrauchsdaten hochgeladen"
+        },
+        "address": {
+          "geocode_backfill": "Adressen geokodiert (Stapel)"
         }
       },
       "allocation_key_generation": {
@@ -2173,6 +2191,79 @@
           "succeeded": "Simulation abgeschlossen",
           "failed": "Simulation fehlgeschlagen",
           "deleted": "Simulation gelöscht"
+        }
+      },
+      "administrative_document": {
+        "dossier": {
+          "created": "Verwaltungsdossier erstellt",
+          "updated": "Verwaltungsdossier aktualisiert",
+          "status_changed": "Dossierstatus geändert"
+        },
+        "document": {
+          "created": "Verwaltungsdokument erstellt",
+          "status_changed": "Dokumentstatus geändert",
+          "generation_requested": "Dokumenterzeugung angefordert",
+          "rendered": "Dokument erzeugt",
+          "render_failed": "Dokumenterzeugung fehlgeschlagen"
+        },
+        "document_version": {
+          "added": "Dokumentversion hinzugefügt"
+        },
+        "deadline": {
+          "created": "Frist erstellt",
+          "resolved": "Frist abgeschlossen",
+          "missed": "Frist versäumt",
+          "reminded": "Fristerinnerung gesendet"
+        },
+        "template": {
+          "saved": "Dokumentvorlage gespeichert"
+        },
+        "deadline_rule": {
+          "saved": "Fristregel gespeichert"
+        }
+      },
+      "billing": {
+        "run": {
+          "created": "Abrechnungslauf gestartet",
+          "queue_failed": "Abrechnungslauf konnte nicht eingereiht werden",
+          "computed": "Abrechnungslauf berechnet",
+          "failed": "Abrechnungslauf fehlgeschlagen"
+        },
+        "invoice": {
+          "issued": "Rechnung ausgestellt",
+          "render_requested": "PDF-Erzeugung der Rechnung gestartet",
+          "rendered": "PDF der Rechnung erzeugt",
+          "render_failed": "PDF-Erzeugung der Rechnung fehlgeschlagen",
+          "pdf_deleted": "PDF der Rechnung gelöscht",
+          "sent": "Rechnung versendet",
+          "paid": "Rechnung bezahlt",
+          "overdue": "Rechnung überfällig",
+          "credited": "Gutschrift erstellt"
+        },
+        "payment": {
+          "registered": "Zahlung erfasst"
+        }
+      },
+      "live_data": {
+        "device": {
+          "created": "Live-Daten-Gerät erstellt",
+          "token_issued": "Registrierungscode für Gerät ausgestellt",
+          "revoked": "Live-Daten-Gerät widerrufen",
+          "enrolled": "Live-Daten-Gerät registriert"
+        },
+        "settings": {
+          "updated": "Sichtbarkeit der Live-Daten aktualisiert"
+        }
+      },
+      "news": {
+        "post": {
+          "created": "Beitrag veröffentlicht",
+          "updated": "Beitrag aktualisiert",
+          "deleted": "Beitrag gelöscht"
+        },
+        "vote": {
+          "cast": "Stimme in einer Umfrage abgegeben",
+          "retracted": "Stimme in einer Umfrage zurückgezogen"
         }
       }
     }
@@ -2591,6 +2682,8 @@
         "LOCALITE": "Ort",
         "DROITS_DE_VOTE": "Stimmrechte",
         "EAN": "EAN",
+        "EAN_DELIVERY": "EAN der Abnahmestelle",
+        "EAN_INJECTION": "EAN der Einspeisestelle",
         "METER_NUMBER": "Zählernummer",
         "GRD": "Netzbetreiber",
         "CLIENT_RESIDENTIEL": "Haushaltskunde",
@@ -2616,7 +2709,8 @@
         "RELOAD_BLOCKED": "Sie haben das Formular bearbeitet — Neuladen würde Ihre Korrekturen verwerfen.",
         "CODES": {
           "meter": {
-            "no_member_attribution": "Der Lieferpunkt {{subject}} ist keinem Mitglied zugeordnet und kann daher nicht unter einem Namen aufgeführt werden."
+            "no_member_attribution": "Der Lieferpunkt {{subject}} ist keinem Mitglied zugeordnet und kann daher nicht unter einem Namen aufgeführt werden.",
+            "ean_not_form_representable": "Der EAN {{subject}} kann auf diesem Formular nicht gedruckt werden: die Kästchen folgen einem vorgedruckten \"5 4\" und enthalten nur die 16 darauffolgenden Ziffern. Die Kästchen bleiben leer — prüfen Sie den EAN im CRM oder füllen Sie sie im PDF von Hand aus."
           },
           "community": {
             "field_missing": "Fehlende Angabe zur Gemeinschaft: {{field}}. Das Formular wird ohne sie eingereicht."
@@ -2691,6 +2785,10 @@
       "ENTER": "Betreten",
       "OPEN": "Meine Gemeinschaft öffnen",
       "MANAGE": "Meine Gemeinschaften verwalten (anlegen, umbenennen, verlassen)",
+      "CREATE_TITLE": "Eine Gemeinschaft gründen",
+      "CREATE_HINT": "Leiten Sie ein Projekt? Erstellen Sie Ihre Gemeinschaft gleich jetzt, ohne auf eine Einladung zu warten: Sie werden ihr Administrator.",
+      "CREATE_ACTION": "Meine Gemeinschaft erstellen",
+      "JOIN_TITLE": "Einer Gemeinschaft beitreten",
       "EMPTY": "Sie gehören noch keiner Gemeinschaft an.",
       "EMPTY_HINT": "Sobald eine Gemeinschaft Sie einlädt, erscheint die Einladung hier.",
       "EMPTY_ACTION": "Gemeinschaften in meiner Nähe entdecken"
@@ -2997,6 +3095,202 @@
       "browseFiles": "Dateien durchsuchen",
       "maximizeLabel": "Maximieren",
       "minimizeLabel": "Minimieren"
+    }
+  },
+  "LIVE": {
+    "HINT": {
+      "REVOKED": "Dieses Gerät wurde widerrufen und kann keine Daten mehr senden. Die bereits gesendeten Messwerte bleiben erhalten.",
+      "OK": "Dieses Gerät sendet normal.",
+      "NEVER_SEEN": "Dieses Gerät hat sich noch nie verbunden. Prüfen Sie, ob es eingeschaltet ist und ob der Registrierungscode am Gerät selbst eingegeben wurde.",
+      "SILENT": "Seit über einem Tag sind keine Daten eingegangen. Prüfen Sie Stromversorgung und Netzwerkverbindung des Geräts.",
+      "OFFLINE": "Das Gerät hat sich abgemeldet oder antwortet nicht mehr.",
+      "P1_NOT_ENABLED": "Das Gerät ist verbunden und sendet, aber alle Messwerte sind null. Die wahrscheinlichste Ursache ist, dass der P1-Anschluss des Zählers vom Netzbetreiber nicht freigeschaltet wurde — das muss dort beantragt werden und lässt sich vor Ort nicht beheben.",
+      "INGEST_DOWN": "Der Datenerfassungsdienst ist derzeit nicht verfügbar, daher lässt sich über dieses Gerät nichts aussagen."
+    }
+  },
+  "LIVE_DATA": {
+    "TITLE": "Live-Daten",
+    "SUBTITLE": "Viertelstundentelemetrie der intelligenten Zähler der Gemeinschaft.",
+    "INDICATIVE": "Indikative Daten. Die Werte des Netzbetreibers bleiben die einzige Grundlage für Verteilschlüssel und Abrechnung.",
+    "SUBSCRIPTION_LOST": "Live-Daten wurden für diese Gemeinschaft deaktiviert. Ein Administrator kann sie unter Zusatzdienste wieder aktivieren.",
+    "TABS": {
+      "DASHBOARD": "Übersicht",
+      "DEVICES": "Geräte",
+      "OPS": "Gerätestatus",
+      "SETTINGS": "Einstellungen"
+    },
+    "WINDOW": {
+      "DAY": "24 Stunden",
+      "WEEK": "7 Tage",
+      "MONTH": "30 Tage"
+    },
+    "SIGNAL": {
+      "NEUTRAL": "Nur Erzeugung",
+      "NEUTRAL_DETAIL": "Der Verbrauch wird noch nicht gemessen, daher kann diese Ansicht nicht sagen, ob jetzt ein guter Zeitpunkt zum Verbrauchen ist — nur wie viel erzeugt wird."
+    },
+    "SUMMARY": {
+      "PRODUCTION": "Erzeugung, letzte volle Stunde",
+      "POWER": "Aktuelle Leistung",
+      "IMPORT": "Aus dem Netz bezogen",
+      "EXPORT": "Ins Netz eingespeist",
+      "SHARED": "Geteilt (Schätzung)",
+      "MEMBERS": "Beitragende Mitglieder",
+      "DEVICES": "Geräte",
+      "ONLINE": "online",
+      "AS_OF": "Stand {{time}}",
+      "NO_DATA": "Es wurden noch keine Messwerte verdichtet. Eine gerade angelegte Gemeinschaft hat nicht nichts erzeugt — sie wurde noch nicht gemessen."
+    },
+    "CHART": {
+      "TITLE": "Erzeugung und Einspeisung",
+      "PRODUCTION": "Erzeugung",
+      "EXPORT": "Ins Netz eingespeist",
+      "Y_AXIS": "kWh",
+      "EMPTY": "In diesem Zeitraum wurde nichts gemessen.",
+      "EMPTY_WITHHELD": "Diese Zähler sehen nur den Austausch mit dem Netz, daher kann die Erzeugung nicht angezeigt werden, und die Einspeisung bleibt zurückgehalten, bis genügend Mitglieder beitragen.",
+      "WITHHELD": "zurückgehalten (Datenschutz)",
+      "SUPPRESSED": "Bei {{count}} Zeitraum/Zeiträumen wurden die Netzwerte zum Schutz der Privatsphäre der Mitglieder zurückgehalten.",
+      "OFFTAKE_TITLE": "Aus dem Netz bezogener Verbrauch",
+      "OFFTAKE": "Aus dem Netz bezogen",
+      "OFFTAKE_NOTE": "Vor Ort verbrauchter Solarstrom ist nicht enthalten: die Zähler sehen nur den Austausch mit dem Netz."
+    },
+    "SCOPE": {
+      "LABEL": "Bereich",
+      "COMMUNITY": "Gesamte Gemeinschaft"
+    },
+    "SHARING": {
+      "TITLE": "Teilen innerhalb der Teilungsvorgänge (Schätzung)",
+      "OFFTAKE_SHARED": "Durch die Gemeinschaft gedeckter Bezug",
+      "OFFTAKE_SUPPLIER": "Vom Lieferanten gelieferter Bezug",
+      "INJECTION_SHARED": "In der Gemeinschaft geteilte Einspeisung",
+      "INJECTION_GRID": "Restliche Einspeisung ins Netz",
+      "NOTE": "Schätzung anhand von {{devices}} überwachten von {{meters}} Zähler(n), je Viertelstunde innerhalb jedes Teilungsvorgangs berechnet. Die Daten des Netzbetreibers bleiben maßgeblich.",
+      "OF_METERS": "von {{meters}} Zähler(n)"
+    },
+    "MEMBER": {
+      "TITLE": "Erzeugung meines Teilungsvorgangs",
+      "INTRO": "Die Erzeugung des Teilungsvorgangs, an dem Ihr Zähler teilnimmt. Wo die Zähler nur den Austausch mit dem Netz sehen, wird die ins Netz eingespeiste Energie gezeigt.",
+      "NONE": "Sie haben derzeit keinen aktiven Zähler in einem Teilungsvorgang dieser Gemeinschaft.",
+      "FORBIDDEN": "Die Verwaltung Ihrer Gemeinschaft hat diese Werte nicht für Mitglieder freigegeben.",
+      "OPERATION": "Teilungsvorgang"
+    },
+    "ABSENT": {
+      "BELOW_K_THRESHOLD": "Zurückgehalten: zu wenige Mitglieder haben zu diesem Zeitraum beigetragen, um die Werte zu zeigen, ohne sie identifizierbar zu machen.",
+      "NOT_MEASURED": "Nicht gemessen: die Zähler dieser Gemeinschaft können diesen Wert nicht sehen.",
+      "NO_CONSUMPTION_IN_PHASE_1": "Der Verbrauch wird noch nicht gemessen.",
+      "NO_CLOSED_HOUR_YET": "Die erste Stunde mit Messwerten ist noch nicht vorbei; der Wert erscheint, sobald sie berechnet wurde.",
+      "UNKNOWN": "Nicht verfügbar."
+    },
+    "HEALTH": {
+      "OK": "Sendet",
+      "NEVER_SEEN": "Nie gesehen",
+      "SILENT": "Stumm",
+      "OFFLINE": "Offline",
+      "REPORTING_ZEROS": "Sendet Nullwerte",
+      "REVOKED": "Widerrufen",
+      "UNKNOWN": "Unbekannt"
+    },
+    "DEVICE_STATUS": {
+      "PENDING": "Wartet auf Registrierung",
+      "ACTIVE": "Registriert",
+      "REVOKED": "Widerrufen"
+    },
+    "DEVICES": {
+      "TITLE": "Geräte",
+      "ADD": "Gerät hinzufügen",
+      "EMPTY": "Für diese Gemeinschaft wurde noch kein Gerät angelegt.",
+      "NEVER": "nie",
+      "REVOKE": "Widerrufen",
+      "REVOKE_CONFIRM_HEADER": "Dieses Gerät widerrufen?",
+      "REVOKE_CONFIRM_MESSAGE": "Das Gerät wird sofort nicht mehr akzeptiert, und das lässt sich nicht rückgängig machen. Die bereits gesendeten Messwerte bleiben erhalten.",
+      "REVOKED": "Gerät widerrufen.",
+      "NEW_TOKEN": "Neuer Registrierungscode",
+      "CREATED": "Gerät angelegt.",
+      "COARSENED": "Bei einem Verbrauchsgerät werden die Zeitstempel ausgeblendet: wann der Zähler eines Haushalts zuletzt gesehen wurde, ist selbst eine Information über diesen Haushalt.",
+      "LAST_REJECT": "Letzte Ablehnung",
+      "REJECT_CAPACITY_HINT": "Erzeugungswerte werden als unplausibel abgelehnt: entweder über der angegebenen Leistung des Geräts (kVA) oder in der Nacht. Wahrscheinlich ist die erfasste Leistung kleiner als die des Wechselrichters, sodass nur die sonnigen Spitzen verworfen werden. Prüfen Sie sie und die Uhr des Konnektors.",
+      "COL": {
+        "CONNECTOR": "Konnektor",
+        "LAST_SEEN": "Zuletzt gesehen"
+      }
+    },
+    "REJECT_REASON": {
+      "SCHEMA_INVALID": "Fehlerhafte Nachricht",
+      "UNKNOWN_FIELD": "Unbekanntes Feld in der Nachricht",
+      "BATCH_TOO_LARGE": "Stapel zu groß",
+      "DUPLICATE_TS_IN_BATCH": "Doppelter Zeitstempel im Stapel",
+      "DEVICE_UNKNOWN": "Unbekanntes Gerät",
+      "DEVICE_REVOKED": "Gerät widerrufen",
+      "COMMUNITY_MISMATCH": "Falsche Gemeinschaft",
+      "TS_IN_FUTURE": "Zeitstempel in der Zukunft",
+      "TS_TOO_OLD": "Messwert zu alt",
+      "TS_NOT_ALIGNED": "Zeitstempel nicht auf der Viertelstunde",
+      "NEGATIVE_ENERGY": "Negative Energie",
+      "OVER_DEVICE_CEILING": "Über der Geräteobergrenze",
+      "IMPLAUSIBLE_PRODUCTION": "Unplausible Erzeugung",
+      "UNKNOWN": "Unbekannter Grund"
+    },
+    "CREATE": {
+      "TITLE": "Neues Gerät",
+      "NAME": "Name",
+      "NAME_PLACEHOLDER": "z. B. Dach, Südgebäude",
+      "EAN": "Zähler",
+      "EAN_PLACEHOLDER": "Zähler auswählen",
+      "EAN_FILTER_PLACEHOLDER": "EAN, Adresse oder Inhaber",
+      "EAN_HINT": "Nur die aktiven Zähler der Gemeinschaft werden angezeigt. Ein Zähler kann jeweils nur ein Gerät haben.",
+      "EAN_EMPTY": "Diese Gemeinschaft hat keinen aktiven Zähler, dem ein Gerät zugeordnet werden kann.",
+      "EAN_LOAD_ERROR": "Die Zähler der Gemeinschaft konnten nicht geladen werden. Schließen Sie dieses Fenster und versuchen Sie es erneut.",
+      "EAN_TRUNCATED": "Nur die ersten {{shown}} von {{total}} aktiven Zählern werden angezeigt.",
+      "EAN_DEVICES_UNKNOWN": "Es konnte nicht geprüft werden, welche Zähler bereits ein Gerät haben. Ein Zähler, der bereits eines hat, wird beim Anlegen abgelehnt.",
+      "EAN_HAS_DEVICE": "Hat bereits ein Gerät",
+      "PURE_INJECTION": "Hinter diesem Zähler wird nichts verbraucht",
+      "PURE_INJECTION_HELP": "Nur ankreuzen, wenn der Standort alles ins Netz einspeist. An einem Standort, der auch verbraucht, sieht ein P1-Anschluss die Erzeugung gar nicht, und dieses Häkchen würde überschätzen, was die Gemeinschaft erzeugt.",
+      "SUBMIT": "Anlegen",
+      "ERRORS": {
+        "REQUIRED": "Bitte geben Sie einen Namen an und wählen Sie einen Zähler."
+      }
+    },
+    "TOKEN": {
+      "TITLE": "Registrierungscode",
+      "SHOWN_ONCE": "Dieser Code wird einmal angezeigt und kann nicht erneut abgerufen werden. Geht er verloren, erzeugen Sie einen neuen — dieser wird dadurch ungültig.",
+      "EXPIRES": "Gültig bis {{date}}",
+      "COPY": "Code kopieren",
+      "COPIED": "Code kopiert.",
+      "SCAN": "Scannen Sie diesen Code mit der Einrichtungs-App des Geräts, oder geben Sie ihn von Hand ein."
+    },
+    "OPS": {
+      "TITLE": "Gerätestatus",
+      "SUBTITLE": "Was sendet, was nicht, und wie aktuell die Werte sind.",
+      "NEEDS_ATTENTION": "Zu prüfen",
+      "ALL_WELL": "Alle Geräte senden normal.",
+      "ROLLUP_AGE": "Werte vor {{minutes}} Minuten neu berechnet",
+      "ROLLUP_STALE": "Die Werte wurden seit {{minutes}} Minuten nicht neu berechnet. Alle Geräte können gesund sein, während die Berechnung steht.",
+      "ROLLUP_NEVER": "Es wurde noch nichts berechnet.",
+      "ROLLUP_IDLE": "Keine Daten in den letzten 48 Stunden – es gibt nichts neu zu berechnen.",
+      "INGEST_DOWN": "Die Datenerfassung scheint unterbrochen: Seit über einem Tag hat kein Gerät gesendet. Prüfen Sie den Erfassungsdienst vor den Geräten.",
+      "REJECTIONS": "Ablehnungen (24 h)",
+      "DEAD_LETTERS": "{{count}} Nachricht(en) konnten in den letzten 24 Stunden nicht gespeichert werden.",
+      "DEAD_LETTERS_NONE": "Alle in den letzten 24 Stunden empfangenen Nachrichten wurden gespeichert.",
+      "READINGS_REJECTED": "Bei {{count}} Gerät(en) wurden in den letzten 24 Stunden einzelne Messwerte abgelehnt. Details im Reiter Geräte.",
+      "READINGS_REJECTED_NONE": "In den letzten 24 Stunden wurde kein einzelner Messwert abgelehnt.",
+      "DIAG": "Meldung des Konnektors"
+    },
+    "SETTINGS": {
+      "TITLE": "Sichtbarkeit",
+      "SUBTITLE": "Was Mitglieder dieser Gemeinschaft sehen dürfen, und ab welcher Gruppengröße Werte zurückgehalten werden.",
+      "IS_DEFAULT": "Dies sind die Standardwerte der Plattform. Für diese Gemeinschaft wurde noch nichts gespeichert.",
+      "MEMBERS_SEE_AGGREGATE": "Mitglieder dürfen die Werte ihres Teilungsvorgangs sehen",
+      "MEMBERS_SEE_AGGREGATE_HELP": "Wenn ausgeschaltet, können nur Verwalter die Übersicht öffnen.",
+      "MEMBERS_SEE_PRODUCTION": "Mitglieder dürfen die Erzeugung sehen",
+      "MEMBERS_SEE_PRODUCTION_HELP": "Wenn ausgeschaltet, wird Mitgliedern die Übersicht verweigert, statt sie ohne Erzeugung zu zeigen: eine Bilanz minus ein Verbrauch ergibt die Erzeugung exakt zurück.",
+      "K": "Mindestanzahl Mitglieder",
+      "K_HELP": "Netzwerte werden für jeden Zeitraum zurückgehalten, zu dem weniger Mitglieder als dieser Schwellenwert beigetragen haben. Die Erzeugung wird immer angezeigt. Der niedrigste zulässige Wert ist 3.",
+      "SAVE": "Speichern",
+      "SAVED": "Sichtbarkeitseinstellungen gespeichert."
+    },
+    "FORECAST": {
+      "TITLE": "Erzeugungsprognose",
+      "NO_METHOD": "Für die Erzeugungstechnologie dieser Gemeinschaft ist noch keine Prognosemethode verfügbar.",
+      "UNAVAILABLE": "Keine Prognose verfügbar."
     }
   }
 }

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -30,6 +29,7 @@ import { ConsumptionUpload } from '../../../../shared/components/consumption-upl
 import { InvoiceList } from '../invoice-list/invoice-list';
 import { RealtimeService } from '../../../../core/services/realtime/realtime.service';
 import { REALTIME_TOPICS } from '../../../../core/services/realtime/realtime.types';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 const OPERATIONS_PAGE_LIMIT = 100;
 // Poll the active run while it computes so the UI converges without a manual refresh.
@@ -44,7 +44,7 @@ const SAFETY_POLL_INTERVAL_MS = 20_000;
   selector: 'app-run-generate',
   standalone: true,
   imports: [
-    DatePipe,
+    LocaleDatePipe,
     FormsModule,
     TranslatePipe,
     Button,

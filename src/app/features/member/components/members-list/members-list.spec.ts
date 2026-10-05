@@ -735,4 +735,98 @@ describe('MembersList', () => {
       expect(component.currentPageReportTemplate()).toBeTruthy();
     });
   });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('select labels', () => {
+    let translate: TranslateService;
+
+    function ariaLabelOf(testId: string): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector(`[data-testid="${testId}"] [role="combobox"]`)
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      // The suite echoes keys through a mocked `instant`; these need the real one.
+      vi.restoreAllMocks();
+      translate.setTranslation('fr', {
+        MEMBER: {
+          LIST: {
+            NAME_LABEL: 'Nom',
+            TYPE: { INDIVIDUAL_LABEL: 'Particulier', COMPANY_LABEL: 'Entreprise' },
+          },
+          VIEW: {
+            STATUS: {
+              ACTIVE_LABEL: 'Actif',
+              INACTIVE_LABEL: 'Inactif',
+              PENDING_LABEL: 'En attente',
+            },
+          },
+        },
+      });
+      translate.setTranslation('en', {
+        MEMBER: {
+          LIST: {
+            NAME_LABEL: 'Name',
+            TYPE: { INDIVIDUAL_LABEL: 'Individual', COMPANY_LABEL: 'Company' },
+          },
+          VIEW: {
+            STATUS: {
+              ACTIVE_LABEL: 'Active',
+              INACTIVE_LABEL: 'Inactive',
+              PENDING_LABEL: 'Pending',
+            },
+          },
+        },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the search-field options with their translation', () => {
+      expect(component.searchFieldOptions()).toEqual([{ label: 'Nom', value: 'name' }]);
+    });
+
+    it('should label the type options with their translation, keeping values and icons', () => {
+      expect(component.typeOptions()).toEqual([
+        { label: 'Particulier', value: MemberType.INDIVIDUAL, icon: 'pi pi-user' },
+        { label: 'Entreprise', value: MemberType.COMPANY, icon: 'pi pi-building' },
+      ]);
+    });
+
+    it('should label the status options with their translation, keeping values and severities', () => {
+      expect(component.statusOptions()).toEqual([
+        { label: 'Actif', value: MemberStatus.ACTIVE, severity: 'success' },
+        { label: 'Inactif', value: MemberStatus.INACTIVE, severity: 'danger' },
+        { label: 'En attente', value: MemberStatus.PENDING, severity: 'warn' },
+      ]);
+    });
+
+    it('should give every selected option a translated aria-label, not the i18n key', async () => {
+      component.typeFilter.set(MemberType.COMPANY);
+      component.statusFilter.set(MemberStatus.PENDING);
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('members-list__select--search-field')).toBe('Nom');
+      expect(ariaLabelOf('members-list__select--type')).toBe('Entreprise');
+      expect(ariaLabelOf('members-list__select--status')).toBe('En attente');
+    });
+
+    it('should translate the aria-labels again when the language changes', async () => {
+      component.statusFilter.set(MemberStatus.ACTIVE);
+      await fixture.whenStable();
+
+      translate.use('en');
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('members-list__select--search-field')).toBe('Name');
+      expect(ariaLabelOf('members-list__select--status')).toBe('Active');
+    });
+  });
 });

@@ -18,6 +18,7 @@ import { MemberType, MemberStatus } from '../../../../../../../shared/types/memb
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { Pagination } from '../../../../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-representations-user',
@@ -45,18 +46,41 @@ export class RepresentationsComponent {
 
   readonly membersPartialList = signal<MeMembersPartialDTO[]>([]);
 
-  memberTypeCategory = [MemberType.INDIVIDUAL, MemberType.COMPANY];
-  statusCategory = [MemberStatus.ACTIVE, MemberStatus.INACTIVE, MemberStatus.PENDING];
+  readonly memberTypeCategory = translatedOptions([
+    {
+      label: 'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL',
+      value: MemberType.INDIVIDUAL,
+      icon: 'pi pi-user',
+    },
+    { label: 'MEMBER.LIST.TYPE.COMPANY_LABEL', value: MemberType.COMPANY, icon: 'pi pi-building' },
+  ]);
+  readonly statusCategory = translatedOptions([
+    {
+      label: 'MEMBER.VIEW.STATUS.ACTIVE_LABEL',
+      value: MemberStatus.ACTIVE,
+      severity: 'success' as const,
+    },
+    {
+      label: 'MEMBER.VIEW.STATUS.INACTIVE_LABEL',
+      value: MemberStatus.INACTIVE,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'MEMBER.VIEW.STATUS.PENDING_LABEL',
+      value: MemberStatus.PENDING,
+      severity: 'warn' as const,
+    },
+  ]);
 
   readonly searchField = signal<string>('community_name');
   readonly searchText = signal<string>('');
   readonly typeFilter = signal<MemberType | null>(null);
   readonly statusFilter = signal<MemberStatus | null>(null);
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'PROFILE.REPRESENTATIONS.COMMUNITY_LABEL', value: 'community_name' },
     { label: 'MEMBER.LIST.NAME_LABEL', value: 'name' },
-  ];
+  ]);
 
   readonly hasActiveFilters = computed(
     () => !!this.searchText() || this.typeFilter() !== null || this.statusFilter() !== null,

@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TranslateService } from '@ngx-translate/core';
+import Keycloak from 'keycloak-js';
 import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -48,16 +51,19 @@ describe('NotificationStore', () => {
   let realtime: FakeRealtime;
   let unreadCount: ReturnType<typeof vi.fn>;
   let snackbar: { openSnackBar: ReturnType<typeof vi.fn> };
+  let keycloak: { authenticated: boolean };
 
   beforeEach(() => {
     vi.useFakeTimers();
     realtime = new FakeRealtime();
     unreadCount = vi.fn(() => of({ data: { count: 0 }, error_code: 0 }));
     snackbar = { openSnackBar: vi.fn() };
+    keycloak = { authenticated: true };
 
     TestBed.configureTestingModule({
       providers: [
         NotificationStore,
+        { provide: Keycloak, useValue: keycloak },
         { provide: RealtimeService, useValue: realtime },
         { provide: SnackbarNotification, useValue: snackbar },
         // The store resolves its toast copy through `instant`. These specs assert
@@ -109,6 +115,28 @@ describe('NotificationStore', () => {
     store.startPolling();
     store.startPolling();
     expect(realtime.connectCalls).toBe(1);
+  });
+
+  it('does not start at all while signed out', () => {
+    keycloak.authenticated = false;
+    start();
+
+    expect(realtime.connectCalls).toBe(0);
+    expect(unreadCount).not.toHaveBeenCalled();
+  });
+
+  it('stops polling once the session ends without a page load', () => {
+    start();
+    expect(unreadCount).toHaveBeenCalledTimes(1);
+
+    // keycloak-js clears the token in place when the session ends in another tab
+    // or a refresh is refused, and nothing reloads: every trigger is still wired.
+    keycloak.authenticated = false;
+    vi.advanceTimersByTime(30_000);
+    realtime.events$.next(event());
+    store.refreshUnread();
+
+    expect(unreadCount).toHaveBeenCalledTimes(1);
   });
 
   // ---- The regression guard for the frozen-badge bug ----------------------
@@ -200,5 +228,55 @@ describe('NotificationStore', () => {
     vi.advanceTimersByTime(30_000);
 
     expect(snackbar.openSnackBar).toHaveBeenCalledTimes(1);
+  });
+});
+
+/**
+ * The login page, on the wire. The navbar renders until the first navigation
+ * ends, so the bell starts the feed on the way to /auth as well, and a signed-out
+ * visitor used to send the unread-count poll and the realtime ticket mint from
+ * there: every one a 401, retried for as long as the page stayed open.
+ *
+ * The real NotificationService and RealtimeService over HttpTestingController,
+ * so a request from any path at all fails `verify()`.
+ */
+describe('NotificationStore while signed out', () => {
+  let http: HttpTestingController;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // The wake paths below only run in a visible tab.
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: Keycloak, useValue: { authenticated: false } },
+        { provide: SnackbarNotification, useValue: { openSnackBar: vi.fn() } },
+        { provide: TranslateService, useValue: { instant: (key: string) => key } },
+      ],
+    });
+    http = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    TestBed.resetTestingModule();
+  });
+
+  it('sends no request at all, whatever wakes it', () => {
+    const store = TestBed.inject(NotificationStore);
+
+    store.startPolling();
+    TestBed.tick();
+    store.refreshUnread();
+    document.dispatchEvent(new Event('visibilitychange'));
+    window.dispatchEvent(new Event('online'));
+    // Well past the first poll tick and the ticket's whole back-off.
+    vi.advanceTimersByTime(5 * 60_000);
+
+    http.verify();
   });
 });

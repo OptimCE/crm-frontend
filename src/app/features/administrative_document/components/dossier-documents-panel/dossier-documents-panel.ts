@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -42,6 +41,7 @@ import { DocumentDetailDialog } from '../document-detail-dialog/document-detail-
 import { GenerateDialog } from '../generate-dialog/generate-dialog';
 import { TransitionDialog, TransitionDialogData } from '../transition-dialog/transition-dialog';
 import { UploadVersionDialog } from '../upload-version-dialog/upload-version-dialog';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /** Rendering is a NATS round trip through another service; seconds, not ms. */
 const RENDER_POLL_INTERVAL_MS = 4000;
@@ -49,7 +49,7 @@ const RENDER_POLL_INTERVAL_MS = 4000;
 @Component({
   selector: 'app-dossier-documents-panel',
   standalone: true,
-  imports: [TranslatePipe, Button, Tag, ConfirmDialog, Tooltip, DatePipe],
+  imports: [TranslatePipe, Button, Tag, ConfirmDialog, Tooltip, LocaleDatePipe],
   templateUrl: './dossier-documents-panel.html',
   providers: [DialogService, ConfirmationService, ErrorMessageHandler],
 })

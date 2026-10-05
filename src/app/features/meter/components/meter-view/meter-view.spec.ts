@@ -470,4 +470,50 @@ describe('MeterView', () => {
       expect(component.meter()?.meter_number).toBe('M999');
     });
   });
+
+  // ── Period select labels ─────────────────────────────────────────
+
+  // The history and future selects used to take the meter-data periods
+  // themselves, so PrimeNG named them (aria-label) "[object Object]".
+  describe('period select labels', () => {
+    function periodSelect(kind: 'history' | 'future'): HTMLElement {
+      return (fixture.nativeElement as HTMLElement).querySelector(
+        `[data-testid="meter-view__select--${kind}-period"]`,
+      ) as HTMLElement;
+    }
+
+    beforeEach(async () => {
+      await createComponent();
+    });
+
+    it('should label each period with its dates, keeping the period as the value', () => {
+      const meter = component.meter();
+      expect(component.historyOptions()).toEqual([
+        { label: '01/01/2023 - 31/12/2023', value: meter?.meter_data_history?.[0] },
+      ]);
+      expect(component.futureOptions()).toEqual([
+        { label: '01/01/2025', value: meter?.futur_meter_data?.[0] },
+      ]);
+    });
+
+    it('should name the selected periods by their dates, in the aria-label and the display', async () => {
+      component.historySelected.set(component.meter()?.meter_data_history?.[0]);
+      component.futureSelected.set(component.meter()?.futur_meter_data?.[0]);
+      await fixture.whenStable();
+
+      const history = periodSelect('history');
+      expect(history.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+        '01/01/2023 - 31/12/2023',
+      );
+      expect(history.querySelector('.text-sm')?.textContent?.trim()).toBe(
+        '01/01/2023 - 31/12/2023',
+      );
+
+      const future = periodSelect('future');
+      expect(future.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+        '01/01/2025',
+      );
+      expect(future.querySelector('.text-sm')?.textContent?.trim()).toBe('01/01/2025');
+    });
+  });
 });

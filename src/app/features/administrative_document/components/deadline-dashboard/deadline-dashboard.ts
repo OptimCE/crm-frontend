@@ -21,6 +21,7 @@ import {
   SortOrder,
 } from '../../../../shared/dtos/administrative-document.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import {
@@ -94,46 +95,26 @@ export class DeadlineDashboard implements OnInit {
   sortField: DeadlineSortField = DEFAULT_SORT;
   sortOrder: SortOrder = DEFAULT_ORDER;
 
-  statusOptions: SelectOption<DeadlineStatus>[] = [];
-  typeOptions: SelectOption<string>[] = [];
-  sortOptions: SelectOption<DeadlineSortField>[] = [];
+  readonly statusOptions = translatedOptions<SelectOption<DeadlineStatus>>(
+    [DeadlineStatus.OPEN, DeadlineStatus.MET, DeadlineStatus.MISSED, DeadlineStatus.CANCELLED].map(
+      (value) => ({ label: deadlineStatusLabelKey(value), value }),
+    ),
+  );
+  readonly typeOptions = translatedOptions<SelectOption<string>>(
+    KNOWN_DEADLINE_TYPES.map((value) => ({ label: deadlineTypeLabelKey(value), value })),
+  );
+  readonly sortOptions = translatedOptions<SelectOption<DeadlineSortField>>([
+    { value: 'due_date', label: 'ADMINISTRATIVE_DOCUMENT.SORT.DUE_DATE' },
+    { value: 'created_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.CREATED_AT' },
+  ]);
 
   constructor() {
     this.updatePaginationTranslation();
   }
 
   ngOnInit(): void {
-    this.buildOptions();
     this.loadOperations();
     this.load(1);
-  }
-
-  private buildOptions(): void {
-    this.statusOptions = [
-      DeadlineStatus.OPEN,
-      DeadlineStatus.MET,
-      DeadlineStatus.MISSED,
-      DeadlineStatus.CANCELLED,
-    ].map((value) => ({
-      label: this.translate.instant(deadlineStatusLabelKey(value)) as string,
-      value,
-    }));
-
-    this.typeOptions = KNOWN_DEADLINE_TYPES.map((value) => ({
-      label: this.translate.instant(deadlineTypeLabelKey(value)) as string,
-      value,
-    }));
-
-    this.sortOptions = [
-      {
-        value: 'due_date',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.DUE_DATE') as string,
-      },
-      {
-        value: 'created_at',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.CREATED_AT') as string,
-      },
-    ];
   }
 
   private loadOperations(): void {

@@ -24,6 +24,7 @@ import { UserContextService } from '../../../../core/services/authorization/auth
 import { BillingService } from '../../../../shared/services/billing.service';
 import { MemberService } from '../../../../shared/services/member.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { invoiceStatusLabelKey, toApiDate } from '../../billing-format';
 import { InvoiceList } from '../invoice-list/invoice-list';
@@ -106,8 +107,24 @@ export class TrackingBoard implements OnInit {
   sortField: InvoiceSortField = DEFAULT_SORT;
   sortOrder: SortOrder = DEFAULT_ORDER;
 
-  statusOptions: StatusOption[] = [];
-  sortOptions: SortOption[] = [];
+  readonly statusOptions = translatedOptions<StatusOption>(
+    [
+      InvoiceStatus.DRAFT,
+      InvoiceStatus.ISSUED,
+      InvoiceStatus.SENT,
+      InvoiceStatus.PAID,
+      InvoiceStatus.OVERDUE,
+      InvoiceStatus.CANCELLED,
+      InvoiceStatus.RENDER_FAILED,
+    ].map((value) => ({ label: invoiceStatusLabelKey(value), value })),
+  );
+  readonly sortOptions = translatedOptions<SortOption>([
+    { value: 'issued_at', label: 'BILLING.SORT.ISSUED_DATE' },
+    { value: 'due_date', label: 'BILLING.SORT.DUE_DATE' },
+    { value: 'total', label: 'BILLING.SORT.AMOUNT' },
+    { value: 'number', label: 'BILLING.SORT.NUMBER' },
+    { value: 'status', label: 'BILLING.SORT.STATUS' },
+  ]);
 
   readonly hasMultiplePages = computed(() => this.pagination().total_pages > 1);
 
@@ -118,28 +135,6 @@ export class TrackingBoard implements OnInit {
   );
 
   ngOnInit(): void {
-    const statuses = [
-      InvoiceStatus.DRAFT,
-      InvoiceStatus.ISSUED,
-      InvoiceStatus.SENT,
-      InvoiceStatus.PAID,
-      InvoiceStatus.OVERDUE,
-      InvoiceStatus.CANCELLED,
-      InvoiceStatus.RENDER_FAILED,
-    ];
-    this.statusOptions = statuses.map((value) => ({
-      label: this.translate.instant(invoiceStatusLabelKey(value)) as string,
-      value,
-    }));
-
-    this.sortOptions = [
-      { value: 'issued_at', label: this.translate.instant('BILLING.SORT.ISSUED_DATE') as string },
-      { value: 'due_date', label: this.translate.instant('BILLING.SORT.DUE_DATE') as string },
-      { value: 'total', label: this.translate.instant('BILLING.SORT.AMOUNT') as string },
-      { value: 'number', label: this.translate.instant('BILLING.SORT.NUMBER') as string },
-      { value: 'status', label: this.translate.instant('BILLING.SORT.STATUS') as string },
-    ];
-
     // Seeded BEFORE the first load so the deep link does not flash the whole
     // ledger and then narrow it.
     this.participant = this.preselectedParticipant();

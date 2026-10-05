@@ -1,4 +1,13 @@
-import { Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { safeReturnUrl } from '../../../../core/guards/active-community.guard';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -36,7 +45,7 @@ import Keycloak from 'keycloak-js';
   styleUrl: './user-communities.css',
   providers: [DialogService, ConfirmationService, MessageService],
 })
-export class UserCommunities {
+export class UserCommunities implements OnInit {
   private communityService = inject(CommunityService);
   protected userContextService = inject(UserContextService);
   private keycloak = inject(Keycloak);
@@ -65,9 +74,40 @@ export class UserCommunities {
   /** auth_community_id currently being entered, for the button's spinner. */
   readonly entering = signal<string | null>(null);
 
+  /**
+   * `?create=1` opens the creation dialog on arrival. The `/home` empty state
+   * links here for someone who came to start a community, and so can the public
+   * website, since login keeps deep links. Bound like `returnUrl`.
+   */
+  readonly create = input(false, { transform: booleanAttribute });
+
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
     this.updatePaginationTranslation();
+  }
+
+  ngOnInit(): void {
+    this.openCreationOnArrival();
+  }
+
+  /**
+   * The param is stripped before the dialog opens, so neither a refresh nor Back
+   * from the new community's dashboard reopens it: a creation dialog that comes
+   * back after a successful create invites creating the same community twice.
+   * A `false` result means the user has already navigated elsewhere, and the
+   * dialog must not open over that page.
+   */
+  private openCreationOnArrival(): void {
+    if (!this.create()) return;
+    void this.router
+      .navigate([], {
+        queryParams: { create: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      })
+      .then((navigated) => {
+        if (navigated) this.createCommunity();
+      });
   }
 
   updatePaginationTranslation(): void {

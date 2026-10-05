@@ -152,9 +152,9 @@ describe('InvitationMember', () => {
     });
 
     it('should have stateOptions defined', () => {
-      expect(component.stateOptions).toHaveLength(2);
-      expect(component.stateOptions[0].value).toBe(true);
-      expect(component.stateOptions[1].value).toBe(false);
+      expect(component.stateOptions()).toHaveLength(2);
+      expect(component.stateOptions()[0].value).toBe(true);
+      expect(component.stateOptions()[1].value).toBe(false);
     });
   });
 
@@ -516,6 +516,53 @@ describe('InvitationMember', () => {
 
       onClose$.next(false);
       expect(loadSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  // ── Translated select labels ───────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('state select labels', () => {
+    let translate: TranslateService;
+
+    function stateAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="invitation-member__select--state"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      // The suite echoes keys through a mocked `instant`; these need the real one.
+      vi.restoreAllMocks();
+      translate.setTranslation('fr', {
+        INVITATION: { MEMBER: { TO_BE_ENCODED: 'À encoder', ENCODED: 'Encodé' } },
+      });
+      translate.setTranslation('en', {
+        INVITATION: { MEMBER: { TO_BE_ENCODED: 'To be entered', ENCODED: 'Entered' } },
+      });
+      translate.use('fr');
+      await fixture.whenStable();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.stateOptions()).toEqual([
+        { label: 'À encoder', value: true },
+        { label: 'Encodé', value: false },
+      ]);
+    });
+
+    it('should give the selected state a translated aria-label that follows the language', async () => {
+      component.stateFilter.set(true);
+      await fixture.whenStable();
+      expect(stateAriaLabel()).toBe('À encoder');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(stateAriaLabel()).toBe('To be entered');
     });
   });
 });

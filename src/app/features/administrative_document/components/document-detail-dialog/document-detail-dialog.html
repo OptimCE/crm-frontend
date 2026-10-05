@@ -64,7 +64,7 @@
                   {{ checksum(version) }}
                 </td>
                 <td class="py-2 pr-3 whitespace-nowrap">
-                  {{ version.created_at | date: 'short' }}
+                  {{ version.created_at | localeDate: 'short' }}
                 </td>
                 <td class="py-2 text-right whitespace-nowrap">
                   @if (hasSnapshot(version)) {

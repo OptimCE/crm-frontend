@@ -76,6 +76,7 @@ describe('UserCommunities', () => {
   };
 
   let routerSpy: {
+    navigate: ReturnType<typeof vi.fn>;
     navigateByUrl: ReturnType<typeof vi.fn>;
   };
 
@@ -97,7 +98,10 @@ describe('UserCommunities', () => {
 
     dialogServiceSpy = { open: vi.fn() };
 
-    routerSpy = { navigateByUrl: vi.fn().mockResolvedValue(true) };
+    routerSpy = {
+      navigate: vi.fn().mockResolvedValue(true),
+      navigateByUrl: vi.fn().mockResolvedValue(true),
+    };
 
     await TestBed.configureTestingModule({
       imports: [UserCommunities, TranslateModule.forRoot()],
@@ -495,6 +499,65 @@ describe('UserCommunities', () => {
 
       expect(keycloakSpy.updateToken).not.toHaveBeenCalled();
       expect(communityServiceSpy.getMyCommunities).not.toHaveBeenCalled();
+    });
+  });
+
+  // ── ?create=1 (the /home empty state's "create" button) ────────
+
+  describe('arriving with ?create=1', () => {
+    /** A fresh instance whose query param is bound before `ngOnInit`, as the router does. */
+    function arriveWith(create: string | undefined): void {
+      const arrival = TestBed.createComponent(UserCommunities);
+      arrival.componentRef.setInput('create', create);
+      arrival.detectChanges();
+    }
+
+    beforeEach(() => {
+      dialogServiceSpy.open.mockReturnValue({
+        onClose: new Subject<boolean>().asObservable(),
+        destroy: vi.fn(),
+      });
+    });
+
+    it('opens the creation dialog without a second click', async () => {
+      arriveWith('1');
+
+      await vi.waitFor(() => {
+        expect(dialogServiceSpy.open).toHaveBeenCalledWith(CommunityDialog, expect.anything());
+      });
+    });
+
+    it('strips the param first, so a refresh or Back cannot reopen the dialog', async () => {
+      arriveWith('1');
+
+      await vi.waitFor(() => expect(dialogServiceSpy.open).toHaveBeenCalled());
+      expect(routerSpy.navigate).toHaveBeenCalledWith([], {
+        queryParams: { create: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+      const [stripped] = routerSpy.navigate.mock.invocationCallOrder;
+      const [opened] = dialogServiceSpy.open.mock.invocationCallOrder;
+      expect(stripped).toBeLessThan(opened);
+    });
+
+    it('does not open the dialog over another page if the user has already left', async () => {
+      // `navigate` resolves false when a newer navigation supersedes it.
+      routerSpy.navigate.mockResolvedValue(false);
+
+      arriveWith('1');
+      await vi.waitFor(() => expect(routerSpy.navigate).toHaveBeenCalled());
+      await new Promise((resolve) => setTimeout(resolve));
+
+      expect(dialogServiceSpy.open).not.toHaveBeenCalled();
+    });
+
+    it('leaves a plain visit alone', async () => {
+      arriveWith(undefined);
+      await new Promise((resolve) => setTimeout(resolve));
+
+      expect(routerSpy.navigate).not.toHaveBeenCalled();
+      expect(dialogServiceSpy.open).not.toHaveBeenCalled();
     });
   });
 });

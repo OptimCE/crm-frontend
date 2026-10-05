@@ -1,6 +1,7 @@
 import { DestroyRef, inject, Injectable, Injector, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
+import Keycloak from 'keycloak-js';
 import { EMPTY, fromEvent, merge, Subject, timer } from 'rxjs';
 import { catchError, filter, switchMap } from 'rxjs';
 
@@ -41,6 +42,7 @@ export class NotificationStore {
   private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly realtime = inject(RealtimeService);
+  private readonly keycloak = inject(Keycloak);
   /** toObservable() needs an injection context; startPolling runs outside one. */
   private readonly injector = inject(Injector);
 
@@ -62,7 +64,9 @@ export class NotificationStore {
    * specifically so this keeps running).
    */
   startPolling(): void {
-    if (this.polling) return;
+    // Signed out, every request below is a 401, and the bell mounts on the way
+    // to /auth as well: the navbar renders until the first navigation ends.
+    if (this.polling || !this.keycloak.authenticated) return;
     this.polling = true;
 
     this.realtime.connect();
@@ -88,6 +92,11 @@ export class NotificationStore {
       this.realtime.on(REALTIME_TOPICS.NOTIFICATION_CREATED),
     )
       .pipe(
+        // Checked per request, not only at start: keycloak-js can end a session
+        // in place (a logout in another tab, a refused refresh). Nothing reloads
+        // then, so without this the badge polls a 401 for as long as the tab
+        // stays open.
+        filter(() => this.keycloak.authenticated),
         // catchError sits INSIDE switchMap, on the inner request, and that
         // placement is the whole point. An error allowed to escape switchMap
         // terminates this merged subscription — and with it the timer, the

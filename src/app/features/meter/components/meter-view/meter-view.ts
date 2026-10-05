@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
-import { DatePipe } from '@angular/common';
 import { Tag } from 'primeng/tag';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Ripple } from 'primeng/ripple';
@@ -26,6 +25,7 @@ import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { Skeleton } from 'primeng/skeleton';
 import { Avatar } from 'primeng/avatar';
 import { MeterConsumptionChart } from './meter-consumption-chart/meter-consumption-chart';
+import { meterPeriodOptions } from '../../../../shared/utils/meter-period-options.utils';
 
 @Component({
   selector: 'app-meter-view',
@@ -35,7 +35,6 @@ import { MeterConsumptionChart } from './meter-consumption-chart/meter-consumpti
     Button,
     FormsModule,
     AddressPipe,
-    DatePipe,
     Tag,
     TranslatePipe,
     Ripple,
@@ -76,6 +75,8 @@ export class MeterView implements OnInit {
   readonly hasMeterData = computed(() => !!this.meter()?.meter_data);
   readonly hasHistory = computed(() => !!this.meter()?.meter_data_history?.length);
   readonly hasFutureData = computed(() => !!this.meter()?.futur_meter_data?.length);
+  readonly historyOptions = meterPeriodOptions(() => this.meter()?.meter_data_history);
+  readonly futureOptions = meterPeriodOptions(() => this.meter()?.futur_meter_data);
 
   readonly currentStatus = computed(() => this.meter()?.meter_data?.status);
 

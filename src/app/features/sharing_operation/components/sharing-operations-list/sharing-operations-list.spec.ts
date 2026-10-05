@@ -1,7 +1,7 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Table, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
@@ -157,11 +157,11 @@ describe('SharingOperationsList', () => {
     });
 
     it('should have one searchFieldOption', () => {
-      expect(component.searchFieldOptions.length).toBe(1);
+      expect(component.searchFieldOptions().length).toBe(1);
     });
 
     it('should have three typeOptions', () => {
-      expect(component.typeOptions.length).toBe(3);
+      expect(component.typeOptions().length).toBe(3);
     });
 
     it('should initialize sharingOperationList as empty array', () => {
@@ -615,6 +615,89 @@ describe('SharingOperationsList', () => {
       // TranslateModule.forRoot() returns the key when no translation is set,
       // so the template should be a non-empty string after constructor runs
       expect(typeof component.currentPageReportTemplate()).toBe('string');
+    });
+  });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('select labels', () => {
+    let translate: TranslateService;
+
+    function ariaLabelOf(testId: string): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector(`[data-testid="${testId}"] [role="combobox"]`)
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        SHARING_OPERATION: {
+          LIST: { NAME_LABEL: 'Nom' },
+          TYPE: {
+            INSIDE_BUILDING: 'Au sein d’un bâtiment',
+            CER: 'Communauté d’énergie renouvelable',
+            CEC: 'Communauté d’énergie citoyenne',
+          },
+        },
+      });
+      translate.setTranslation('en', {
+        SHARING_OPERATION: {
+          LIST: { NAME_LABEL: 'Name' },
+          TYPE: {
+            INSIDE_BUILDING: 'Within a building',
+            CER: 'Renewable energy community',
+            CEC: 'Citizen energy community',
+          },
+        },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the search-field options with their translation', () => {
+      expect(component.searchFieldOptions()).toEqual([{ label: 'Nom', value: 'name' }]);
+    });
+
+    it('should label the type options with their translation, keeping values and icons', () => {
+      expect(component.typeOptions()).toEqual([
+        { label: 'Au sein d’un bâtiment', value: SharingOperationType.LOCAL, icon: 'pi pi-home' },
+        {
+          label: 'Communauté d’énergie renouvelable',
+          value: SharingOperationType.CER,
+          icon: 'pi pi-sitemap',
+        },
+        {
+          label: 'Communauté d’énergie citoyenne',
+          value: SharingOperationType.CEC,
+          icon: 'pi pi-globe',
+        },
+      ]);
+    });
+
+    it('should give every selected option a translated aria-label, not the i18n key', async () => {
+      component.typeFilter.set(SharingOperationType.CER);
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('operations-list__select--search-field')).toBe('Nom');
+      expect(ariaLabelOf('operations-list__select--type')).toBe(
+        'Communauté d’énergie renouvelable',
+      );
+    });
+
+    it('should translate the aria-labels again when the language changes', async () => {
+      component.typeFilter.set(SharingOperationType.CEC);
+      await fixture.whenStable();
+
+      translate.use('en');
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('operations-list__select--search-field')).toBe('Name');
+      expect(ariaLabelOf('operations-list__select--type')).toBe('Citizen energy community');
     });
   });
 });

@@ -28,7 +28,7 @@ import {
 } from '../../../../shared/types/meter.types';
 import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
-import { eanValidator } from './ean.validator';
+import { eanValidator } from '../../../../shared/validators/ean.validator';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import {
   AddressAutocomplete,
@@ -543,7 +543,11 @@ export class MeterCreation implements OnInit {
       this.addressPick.geoFor(readAddressFields(this.addressSource())),
     );
     const newMeter: CreateMeterDTO = {
-      EAN: formValue.EAN,
+      // Trimmed because `eanValidator` tests `value.trim()`: without this the
+      // form blesses a pasted "  541448…  " and then sends the padded string,
+      // which becomes the meter's primary key and matches no RESA EAN column
+      // ever again. crm-backend normalises too; both ends, deliberately.
+      EAN: formValue.EAN.trim(),
       address: newAddress,
       initial_data: newMeterData,
       meter_number: formValue.meterNumber,

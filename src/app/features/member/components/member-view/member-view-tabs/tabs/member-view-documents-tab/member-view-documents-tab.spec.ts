@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { of, Subject, throwError } from 'rxjs';
@@ -507,6 +507,51 @@ describe('MemberViewDocumentsTab', () => {
         component.searchText.set('');
         expect(component.hasActiveFilters()).toBe(false);
       });
+    });
+  });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('search-field select labels', () => {
+    let translate: TranslateService;
+
+    function searchFieldAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector(
+            '[data-testid="member-view-documents-tab__select--search-field"] [role="combobox"]',
+          )
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        MEMBER: { VIEW: { DOCUMENTS: { NAME_LABEL: 'Nom du fichier', TYPE_LABEL: 'Type' } } },
+      });
+      translate.setTranslation('en', {
+        MEMBER: { VIEW: { DOCUMENTS: { NAME_LABEL: 'File name', TYPE_LABEL: 'Kind' } } },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.searchFieldOptions()).toEqual([
+        { label: 'Nom du fichier', value: 'file_name' },
+        { label: 'Type', value: 'file_type' },
+      ]);
+    });
+
+    it('should give the selected field a translated aria-label that follows the language', async () => {
+      expect(searchFieldAriaLabel()).toBe('Nom du fichier');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(searchFieldAriaLabel()).toBe('File name');
     });
   });
 });

@@ -26,6 +26,7 @@ import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-members-list',
@@ -84,18 +85,20 @@ export class MembersList {
   );
   readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  searchFieldOptions = [{ label: 'MEMBER.LIST.NAME_LABEL', value: 'name' }];
+  readonly searchFieldOptions = translatedOptions([
+    { label: 'MEMBER.LIST.NAME_LABEL', value: 'name' },
+  ]);
 
-  typeOptions = [
+  readonly typeOptions = translatedOptions([
     {
       label: 'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL',
       value: MemberType.INDIVIDUAL,
       icon: 'pi pi-user',
     },
     { label: 'MEMBER.LIST.TYPE.COMPANY_LABEL', value: MemberType.COMPANY, icon: 'pi pi-building' },
-  ];
+  ]);
 
-  statusOptions = [
+  readonly statusOptions = translatedOptions([
     {
       label: 'MEMBER.VIEW.STATUS.ACTIVE_LABEL',
       value: MemberStatus.ACTIVE,
@@ -111,7 +114,7 @@ export class MembersList {
       value: MemberStatus.PENDING,
       severity: 'warn' as const,
     },
-  ];
+  ]);
 
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());

@@ -20,7 +20,7 @@
           {{ invoiceStatusLabelKey(invoice.status) | translate }}
         </span>
         <span class="font-semibold text-surface-900 shrink-0">
-          {{ invoice.total | number: '1.2-2' }} {{ invoice.currency }}
+          {{ invoice.total | localeNumber: '1.2-2' }} {{ invoice.currency }}
         </span>
       </li>
     }

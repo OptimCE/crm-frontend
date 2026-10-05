@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, computed, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -42,6 +41,7 @@ import { DossierDocumentsPanel } from '../dossier-documents-panel/dossier-docume
 import { DossierEditDialog } from '../dossier-edit-dialog/dossier-edit-dialog';
 import { DossierTimeline } from '../dossier-timeline/dossier-timeline';
 import { TransitionDialog, TransitionDialogData } from '../transition-dialog/transition-dialog';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 @Component({
   selector: 'app-dossier-detail',
@@ -58,7 +58,7 @@ import { TransitionDialog, TransitionDialogData } from '../transition-dialog/tra
     Tab,
     ConfirmDialog,
     BackArrow,
-    DatePipe,
+    LocaleDatePipe,
     DossierDocumentsPanel,
     DossierDeadlinesPanel,
     DossierTimeline,

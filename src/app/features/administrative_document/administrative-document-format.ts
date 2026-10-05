@@ -6,9 +6,6 @@
  * Label functions return translation KEYS — pipe them through `translate`.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-
-import { ApiResponse } from '../../core/dtos/api.response';
 import {
   DeadlineStatus,
   DocOrigin,
@@ -250,39 +247,12 @@ export function shortSha(sha: string | null | undefined): string {
 // API error extraction
 // ---------------------------------------------------------------------------
 
-/**
- * Pull the backend's message out of a failed request.
- *
- * The house one-liner is `error instanceof ApiResponse ? error.data : null`, but
- * `ApiResponse` is only ever thrown from `.spec.ts` files — at runtime an
- * HttpClient failure is an `HttpErrorResponse`, so that branch never fires and
- * every backend message degrades to a generic toast. This feature depends on
- * those messages (409 ILLEGAL_TRANSITION, 409 VERSION_NOT_ALLOWED, 413
- * FILE_TOO_LARGE, 409 DUPLICATE_EXTERNAL_REF, 422 SHARING_OPERATION_NOT_FOUND),
- * so handle both shapes.
- */
-export function extractApiErrorMessage(error: unknown): string | null {
-  if (error instanceof ApiResponse) {
-    return typeof error.data === 'string' ? error.data : null;
-  }
-  if (error instanceof HttpErrorResponse) {
-    const body = error.error as { data?: unknown } | null;
-    if (body && typeof body.data === 'string') return body.data;
-  }
-  return null;
-}
-
-/** The backend's numeric `error_code`, for branching on a specific failure. */
-export function extractApiErrorCode(error: unknown): number | null {
-  if (error instanceof ApiResponse) {
-    return typeof error.error_code === 'number' ? error.error_code : null;
-  }
-  if (error instanceof HttpErrorResponse) {
-    const body = error.error as { error_code?: unknown } | null;
-    if (body && typeof body.error_code === 'number') return body.error_code;
-  }
-  return null;
-}
+// Moved to `shared/utils` so the live-data annex (and its service) can use it
+// too; re-exported so this feature's call sites keep their import. This feature
+// depends on those messages (409 ILLEGAL_TRANSITION, 409 VERSION_NOT_ALLOWED,
+// 413 FILE_TOO_LARGE, 409 DUPLICATE_EXTERNAL_REF, 422
+// SHARING_OPERATION_NOT_FOUND).
+export { extractApiErrorCode, extractApiErrorMessage } from '../../shared/utils/api-error.utils';
 
 /** Domain error codes the UI branches on (administrative-document/shared/custom_errors.py). */
 export const ERROR_CODE = {

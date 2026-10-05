@@ -38,7 +38,7 @@
           'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.TYPE' | translate
         }}</span>
         <p-select
-          [options]="typeOptions"
+          [options]="typeOptions()"
           [(ngModel)]="typeFilter"
           (ngModelChange)="applyFilters()"
           optionLabel="label"
@@ -56,7 +56,7 @@
           'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.STATUS' | translate
         }}</span>
         <p-select
-          [options]="statusOptions"
+          [options]="statusOptions()"
           [(ngModel)]="statusFilter"
           (ngModelChange)="applyFilters()"
           optionLabel="label"
@@ -75,7 +75,7 @@
         }}</span>
         <div class="flex gap-2">
           <p-select
-            [options]="sortOptions"
+            [options]="sortOptions()"
             [(ngModel)]="sortField"
             (ngModelChange)="applyFilters()"
             optionLabel="label"
@@ -159,7 +159,7 @@
         </td>
         <td class="text-sm font-mono">{{ row.external_ref ?? '—' }}</td>
         <td class="text-sm whitespace-nowrap">
-          {{ row.submitted_at ? (row.submitted_at | date: 'short') : '—' }}
+          {{ row.submitted_at ? (row.submitted_at | localeDate: 'short') : '—' }}
         </td>
       </tr>
     </ng-template>

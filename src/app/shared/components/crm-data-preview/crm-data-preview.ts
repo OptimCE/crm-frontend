@@ -1,9 +1,9 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Skeleton } from 'primeng/skeleton';
 
 import { IncompleteMeterDTO, PreviewBlockerDTO } from '../../dtos/crm_data_source.dtos';
+import { LocaleDatePipe, LocaleNumberPipe } from '../../pipes/locale-format/locale-format-pipes';
 
 /**
  * Normalised pre-flight result, produced by whichever hub owns the HTTP call.
@@ -40,7 +40,7 @@ export interface CrmPreviewView {
  */
 @Component({
   selector: 'app-crm-data-preview',
-  imports: [DatePipe, DecimalPipe, Skeleton, TranslatePipe],
+  imports: [LocaleDatePipe, LocaleNumberPipe, Skeleton, TranslatePipe],
   templateUrl: './crm-data-preview.html',
   styleUrl: './crm-data-preview.css',
 })

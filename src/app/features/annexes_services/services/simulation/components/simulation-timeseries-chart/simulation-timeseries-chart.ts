@@ -1,10 +1,13 @@
+import { formatNumber } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
 import { Select } from 'primeng/select';
 
+import { LocaleService } from '../../../../../../core/services/language/locale.service';
 import { SimulationIterationTimeseriesDTO } from '../../../../../../shared/dtos/simulation.dtos';
+import { translationChanges } from '../../../../../../shared/utils/translated-options.utils';
 
 // A full year of 15-minute data is ~35k points; rendering every one chokes the
 // canvas. We stride down to at most this many points for display — the totals
@@ -19,20 +22,26 @@ const MAX_POINTS = 1500;
 })
 export class SimulationTimeseriesChart {
   private readonly translate = inject(TranslateService);
+  private readonly locale = inject(LocaleService).locale;
 
   readonly iterations = input.required<SimulationIterationTimeseriesDTO[]>();
   readonly selectedIndex = signal(0);
 
   readonly hasMultipleIterations = computed(() => this.iterations().length > 1);
 
-  readonly iterationOptions = computed(() =>
-    this.iterations().map((iteration, index) => ({
+  private readonly translationChanged = translationChanges();
+
+  // Read in the computed so a language switch re-labels the options: they are
+  // the select's aria-label too, and `instant()` alone is never read again.
+  readonly iterationOptions = computed(() => {
+    this.translationChanged();
+    return this.iterations().map((iteration, index) => ({
       label: this.translate.instant('SIMULATION_HUB.RESULTS.ITERATION_LABEL', {
         number: iteration.number,
       }) as string,
       value: index,
-    })),
-  );
+    }));
+  });
 
   readonly chartData = computed(() => {
     const list = this.iterations();
@@ -80,6 +89,9 @@ export class SimulationTimeseriesChart {
   });
 
   readonly options = {
+    // chart.js formats the axis ticks with this and falls back to the BROWSER's
+    // locale without it. Set when the chart is built, like its translated titles.
+    locale: this.locale(),
     maintainAspectRatio: false,
     responsive: true,
     interaction: { mode: 'index', intersect: false },
@@ -89,7 +101,7 @@ export class SimulationTimeseriesChart {
         callbacks: {
           label: (item: { dataset: { label?: string }; raw: unknown }): string => {
             const value = item.raw as number;
-            return `${item.dataset.label ?? ''}: ${value.toFixed(2)} kWh`;
+            return `${item.dataset.label ?? ''}: ${formatNumber(value, this.locale(), '1.2-2')} kWh`;
           },
         },
       },

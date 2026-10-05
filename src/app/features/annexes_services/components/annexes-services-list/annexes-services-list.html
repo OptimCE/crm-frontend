@@ -21,7 +21,7 @@
     }
   </app-header-page>
 
-  @if (!loading() && subscribedServices().length === 0) {
+  @if (showEmptyState()) {
     <div
       class="rounded-xl border border-primary-100 bg-surface-50 p-8 text-center"
       data-testid="annexes-services-list__empty"

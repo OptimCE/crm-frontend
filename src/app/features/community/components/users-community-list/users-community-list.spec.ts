@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
@@ -577,6 +577,68 @@ describe('UsersCommunityList', () => {
         component.roleFilter.set(null);
         expect(component.hasActiveFilters()).toBe(false);
       });
+    });
+  });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('role select labels', () => {
+    let translate: TranslateService;
+
+    function ariaLabelOf(testId: string): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector(`[data-testid="${testId}"] [role="combobox"]`)
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        COMMON: { ROLE: { MEMBER: 'Membre', MANAGER: 'Gestionnaire', ADMIN: 'Administrateur' } },
+      });
+      translate.setTranslation('en', {
+        COMMON: { ROLE: { MEMBER: 'Member', MANAGER: 'Manager', ADMIN: 'Admin' } },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the filter options with their translation, keeping values and severities', () => {
+      expect(component.roleOptions()).toEqual([
+        { label: 'Membre', value: Role.MEMBER, severity: 'info' },
+        { label: 'Gestionnaire', value: Role.GESTIONNAIRE, severity: 'warn' },
+        { label: 'Administrateur', value: Role.ADMIN, severity: 'contrast' },
+      ]);
+    });
+
+    it('should label the role-change options with their translation, keeping the values', () => {
+      expect(component.roles()).toEqual([
+        { label: 'Membre', value: Role.MEMBER },
+        { label: 'Gestionnaire', value: Role.GESTIONNAIRE },
+        { label: 'Administrateur', value: Role.ADMIN },
+      ]);
+    });
+
+    it('should give the selected filter role a translated aria-label that follows the language', async () => {
+      component.roleFilter.set(Role.GESTIONNAIRE);
+      await fixture.whenStable();
+      expect(ariaLabelOf('users-community-list__select--role')).toBe('Gestionnaire');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(ariaLabelOf('users-community-list__select--role')).toBe('Manager');
+    });
+
+    it('should give the role picked in the dialog a translated aria-label', async () => {
+      component.openDialogEditRole(buildUsers()[1]);
+      component.roleSelected.set(Role.MEMBER);
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('users-community-list__select--dialog-role')).toBe('Membre');
     });
   });
 });

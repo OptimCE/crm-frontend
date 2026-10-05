@@ -35,3 +35,41 @@ class ResizeObserverStub implements ResizeObserver {
 // `??=` so a real implementation wins — jsdom may grow one, and the builder's
 // `browsers` option runs these same specs in a browser that already has it.
 globalThis.ResizeObserver ??= ResizeObserverStub;
+
+/**
+ * jsdom does not implement `IntersectionObserver` either, and Angular constructs
+ * one for every `@defer (on viewport)` trigger it registers. Without this stub,
+ * each spec that renders such a block logs
+ * `ERROR ReferenceError: IntersectionObserver is not defined` — 99 of them in a
+ * fully green run, which is enough noise to bury a real error.
+ *
+ * The callback is deliberately never invoked, for the same reason as above:
+ * nothing is laid out in jsdom, so nothing ever enters the viewport. A
+ * viewport-deferred block therefore stays on its placeholder, which is exactly
+ * what the specs saw while the constructor threw. A spec that needs the deferred
+ * content renders it explicitly, through `fixture.getDeferBlocks()` and
+ * `DeferBlockState.Complete`.
+ */
+class IntersectionObserverStub implements IntersectionObserver {
+  readonly root = null;
+  readonly rootMargin = '0px 0px 0px 0px';
+  readonly thresholds: readonly number[] = [0];
+
+  observe(): void {
+    // no-op: nothing is laid out, so no element ever intersects
+  }
+
+  unobserve(): void {
+    // no-op: no entry was ever reported
+  }
+
+  disconnect(): void {
+    // no-op: no entry was ever reported
+  }
+
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+
+globalThis.IntersectionObserver ??= IntersectionObserverStub;

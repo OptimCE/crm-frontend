@@ -100,6 +100,29 @@ describe('AuthPage', () => {
     expect(keycloakMock.login).toHaveBeenCalledWith(expect.objectContaining({ locale: 'nl' }));
   });
 
+  it('should return to the page the visitor asked for before being sent to login', () => {
+    // A deep link from the public website has to survive the Keycloak round trip.
+    fixture.componentRef.setInput('returnUrl', '/users/communities?create=1');
+
+    component.login();
+
+    expect(keycloakMock.login).toHaveBeenCalledWith(
+      expect.objectContaining({
+        redirectUri: window.location.origin + '/users/communities?create=1',
+      }),
+    );
+  });
+
+  it('should refuse a returnUrl that would leave the site', () => {
+    fixture.componentRef.setInput('returnUrl', '//evil.example');
+
+    component.login();
+
+    expect(keycloakMock.login).toHaveBeenCalledWith(
+      expect.objectContaining({ redirectUri: window.location.origin + '/' }),
+    );
+  });
+
   it('should omit the locale when no language has been stored yet', () => {
     TestBed.inject(LanguageService).getCurrentLanguage = vi.fn().mockReturnValue(null);
 

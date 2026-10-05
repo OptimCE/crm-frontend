@@ -21,7 +21,7 @@
           'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.STATUS' | translate
         }}</span>
         <p-select
-          [options]="statusOptions"
+          [options]="statusOptions()"
           [(ngModel)]="statusFilter"
           (ngModelChange)="applyFilters()"
           optionLabel="label"
@@ -39,7 +39,7 @@
           'ADMINISTRATIVE_DOCUMENT.DEADLINES.FILTERS.TYPE' | translate
         }}</span>
         <p-select
-          [options]="typeOptions"
+          [options]="typeOptions()"
           [(ngModel)]="typeFilter"
           (ngModelChange)="applyFilters()"
           optionLabel="label"

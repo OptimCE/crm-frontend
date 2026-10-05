@@ -11,6 +11,7 @@ import { Skeleton } from 'primeng/skeleton';
 
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { LocaleService } from '../../../../core/services/language/locale.service';
 import { TariffOut, TariffScope } from '../../../../shared/dtos/billing.dtos';
 import { SharingOperationPartialDTO } from '../../../../shared/dtos/sharing_operation.dtos';
 import { BillingService } from '../../../../shared/services/billing.service';
@@ -38,6 +39,7 @@ export class TariffsPanel implements OnInit {
   private readonly snackbar = inject(SnackbarNotification);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService).locale;
   private dialogRef?: DynamicDialogRef | null;
 
   readonly operations = signal<SharingOperationPartialDTO[]>([]);
@@ -162,7 +164,7 @@ export class TariffsPanel implements OnInit {
     return names[segment] ?? String(segment);
   }
   price(tariff: TariffOut): string {
-    return formatPrice(tariff.price_per_kwh, tariff.currency);
+    return formatPrice(tariff.price_per_kwh, this.locale(), tariff.currency);
   }
 
   private handleError(error: unknown): void {

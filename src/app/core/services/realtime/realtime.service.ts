@@ -1,5 +1,6 @@
 import { computed, DestroyRef, inject, Injectable, NgZone, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import Keycloak from 'keycloak-js';
 import { filter, Observable, Subject } from 'rxjs';
 
 import { environments } from '../../../../environments/environments';
@@ -45,6 +46,12 @@ export class RealtimeService {
   private readonly http = inject(HttpClient);
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
+  /**
+   * Optional only because the generation and simulation hub specs, which read
+   * `live()` and `on()` but never connect, provide no Keycloak. Absent reads as
+   * signed out: nothing is minted.
+   */
+  private readonly keycloak = inject(Keycloak, { optional: true });
 
   readonly status = signal<RealtimeStatus>('idle');
   /** Read by pollers to choose a cadence — never to decide whether to run. */
@@ -90,6 +97,11 @@ export class RealtimeService {
    */
   connect(): void {
     if (this.stopped || this.source || this.minting) return;
+    // Signed out: the login page, or a session keycloak-js ended in place (a
+    // logout in another tab, a refused refresh). The bearer interceptor sends the
+    // mint bare then, so all it can earn is a 401 and a retry behind it. Every
+    // path listed above ends here, so this one check covers them all.
+    if (!this.keycloak?.authenticated) return;
 
     this.minting = true;
     if (this.status() === 'idle') this.status.set('connecting');

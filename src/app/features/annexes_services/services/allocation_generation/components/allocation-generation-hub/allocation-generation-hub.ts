@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import {
@@ -61,6 +60,7 @@ import { ErrorAdded, ErrorSummaryAdded } from '../../../../../../shared/types/er
 import { HeaderPage } from '../../../../../../layout/header-page/header-page';
 import { GenerationRow, KeyExpandState } from '../generation-row/generation-row';
 import { StartPanel } from '../start-panel/start-panel';
+import { LocaleDatePipe } from '../../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024; // 25 MB
 
@@ -105,7 +105,7 @@ const SAFETY_POLL_INTERVAL_MS = 20_000;
   selector: 'app-allocation-generation-hub',
   standalone: true,
   imports: [
-    DatePipe,
+    LocaleDatePipe,
     ReactiveFormsModule,
     TranslatePipe,
     Toast,

@@ -54,7 +54,7 @@
               } @else {
                 {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_VERSION' | translate }}
               }
-              &middot; {{ document.updated_at | date: 'short' }}
+              &middot; {{ document.updated_at | localeDate: 'short' }}
             </span>
           </div>
 

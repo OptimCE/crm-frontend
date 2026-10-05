@@ -1,3 +1,4 @@
+import { formatNumber, formatPercent } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -7,6 +8,7 @@ import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 
+import { LocaleService } from '../../../../../../core/services/language/locale.service';
 import {
   AllocationKeyDetailDTO,
   AllocationKeyPartialDTO,
@@ -36,6 +38,7 @@ const COLOR_GRADIENT: { backgroundColor: string; 'border-bottom': string }[] = [
 })
 export class KeysPanel {
   private readonly translate = inject(TranslateService);
+  private readonly locale = inject(LocaleService).locale;
 
   readonly key = input.required<AllocationKeyPartialDTO>();
   readonly expanded = input.required<boolean>();
@@ -49,11 +52,14 @@ export class KeysPanel {
   readonly colDefs = signal<ColDef<KeyTableRow>[]>([]);
   readonly defaultColDef: ColDef = { width: 200, flex: 1, minWidth: 120 };
 
-  readonly rowData = computed<KeyTableRow[]>(() => this.flattenDetail(this.detail()));
+  // Both read the locale, so a language switch rewrites figures already shown.
+  readonly rowData = computed<KeyTableRow[]>(() =>
+    this.flattenDetail(this.detail(), this.locale()),
+  );
 
   readonly surplusFormatted = computed<string>(() => {
     const value = this.key().surplus_total;
-    return Number.isFinite(value) ? value.toFixed(2) : '—';
+    return Number.isFinite(value) ? formatNumber(value, this.locale(), '1.2-2') : '—';
   });
 
   constructor() {
@@ -80,7 +86,7 @@ export class KeysPanel {
     return COLOR_GRADIENT[idx % COLOR_GRADIENT.length];
   }
 
-  private flattenDetail(detail: AllocationKeyDetailDTO | undefined): KeyTableRow[] {
+  private flattenDetail(detail: AllocationKeyDetailDTO | undefined, locale: string): KeyTableRow[] {
     if (!detail) return [];
     const rows: KeyTableRow[] = [];
     detail.iterations.forEach((iteration, iterationIndex) => {
@@ -89,11 +95,11 @@ export class KeysPanel {
         const vp =
           consumer.energy_allocated_percentage === -1
             ? (this.translate.instant('KEY.CREATE.PRORATA_LABEL') as string)
-            : (consumer.energy_allocated_percentage * 100).toFixed(2) + '%';
+            : formatPercent(consumer.energy_allocated_percentage, locale, '1.2-2');
         rows.push({
           number: firstConsumerOfIteration ? iteration.number : undefined,
           va_percentage: firstConsumerOfIteration
-            ? (iteration.energy_allocated_percentage * 100).toFixed(2) + '%'
+            ? formatPercent(iteration.energy_allocated_percentage, locale, '1.2-2')
             : undefined,
           name: consumer.name,
           vp_percentage: vp,

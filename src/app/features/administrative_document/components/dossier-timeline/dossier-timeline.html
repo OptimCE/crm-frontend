@@ -78,7 +78,7 @@
           </div>
 
           <div class="mt-1 text-xs text-surface-500">
-            {{ entry.occurredAt | date: 'medium' }}
+            {{ entry.occurredAt | localeDate: 'medium' }}
             &middot;
             @if (entry.actor) {
               <span class="font-mono" [title]="entry.actor">{{ entry.actor.slice(0, 12) }}</span>

@@ -1,4 +1,4 @@
-import { DatePipe, JsonPipe } from '@angular/common';
+import { JsonPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -10,12 +10,14 @@ import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
-import { AUDIT_ACTIONS } from '../../../../shared/constants/audit-actions';
+import { AUDIT_ACTIONS, auditActionLabelKey } from '../../../../shared/constants/audit-actions';
 import { AuditLogDTO, AuditLogQuery } from '../../../../shared/dtos/audit-log.dtos';
 import { AuditLogService } from '../../../../shared/services/audit-log.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ERROR_TYPE } from '../../../../core/dtos/notification';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 interface AuditLogErrorBody {
   data?: string;
@@ -34,7 +36,7 @@ interface AuditLogErrorBody {
     InputNumber,
     FormsModule,
     HeaderPage,
-    DatePipe,
+    LocaleDatePipe,
     JsonPipe,
   ],
   templateUrl: './audit-log-list.html',
@@ -79,10 +81,10 @@ export class AuditLogList {
   );
   readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  readonly actionOptions = AUDIT_ACTIONS.map((code) => ({
-    label: `AUDIT.ACTIONS.${code}`,
-    value: code,
-  }));
+  readonly actionOptions = translatedOptions(
+    AUDIT_ACTIONS.map((code) => ({ label: auditActionLabelKey(code), value: code })),
+  );
+  protected readonly actionLabelKey = auditActionLabelKey;
 
   constructor() {
     this.updatePaginationTranslation();

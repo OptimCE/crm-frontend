@@ -1,7 +1,7 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Table, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
@@ -127,7 +127,7 @@ describe('KeysList', () => {
     });
 
     it('should have two searchFieldOptions', () => {
-      expect(component.searchFieldOptions.length).toBe(2);
+      expect(component.searchFieldOptions().length).toBe(2);
     });
   });
 
@@ -494,6 +494,52 @@ describe('KeysList', () => {
       component.openCreationMode();
       dialogClose.next(null);
       expect(routerSpy.navigateByUrl).not.toHaveBeenCalled();
+    });
+  });
+
+  // ── 12. Translated select labels ────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('search-field select labels', () => {
+    let translate: TranslateService;
+
+    function searchFieldAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="keys-list__select--search-field"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        KEY: { LIST: { NAME_LABEL: 'Nom', DESCRIPTION_LABEL: 'Description' } },
+      });
+      translate.setTranslation('en', {
+        KEY: { LIST: { NAME_LABEL: 'Name', DESCRIPTION_LABEL: 'Summary' } },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.searchFieldOptions()).toEqual([
+        { label: 'Nom', value: 'name' },
+        { label: 'Description', value: 'description' },
+      ]);
+    });
+
+    it('should give the selected field a translated aria-label, not the i18n key', () => {
+      expect(searchFieldAriaLabel()).toBe('Nom');
+    });
+
+    it('should translate the aria-label again when the language changes', async () => {
+      translate.use('en');
+      await fixture.whenStable();
+
+      expect(searchFieldAriaLabel()).toBe('Name');
     });
   });
 });

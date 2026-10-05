@@ -1,7 +1,6 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { DashboardTile } from '../../../../dashboard/components/tiles/dashboard-tile/dashboard-tile';
@@ -9,6 +8,7 @@ import { TileState } from '../../../../dashboard/dashboard-format';
 import { MeEnergyMeterDTO, MeEnergySummaryDTO } from '../../../../../shared/dtos/me.dtos';
 import { MeService } from '../../../../../shared/services/me.service';
 import { envelopeData } from '../../../home-format';
+import { LocaleNumberPipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /**
  * "Mon énergie" — the one number on `/home` a member is likely to care about.
@@ -25,7 +25,7 @@ import { envelopeData } from '../../../home-format';
 @Component({
   selector: 'app-my-energy-panel',
   standalone: true,
-  imports: [TranslatePipe, RouterLink, DecimalPipe, DashboardTile],
+  imports: [TranslatePipe, RouterLink, LocaleNumberPipe, DashboardTile],
   templateUrl: './my-energy-panel.html',
 })
 export class MyEnergyPanel {

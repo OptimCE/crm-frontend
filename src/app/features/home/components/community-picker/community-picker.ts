@@ -15,7 +15,8 @@ import { MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
  * Cards rather than the filterable `p-table` at `/users/communities`: this is
  * the most important click in the application for someone who has just logged
  * in, and a table row with four action links buries it. That page still exists
- * and still owns creating, renaming and leaving.
+ * and still owns creating, renaming and leaving — the empty state only points
+ * at its creation dialog.
  */
 @Component({
   selector: 'app-community-picker',
@@ -57,6 +58,16 @@ export class CommunityPicker {
     // (`loadedFor`), and blocking the most important click in the app on a
     // 300-800 ms request would still be wrong when that request fails.
     void this.router.navigateByUrl(safeReturnUrl(this.returnUrl()) ?? '/dashboard');
+  }
+
+  /**
+   * Creating a community needs no invitation and no approval: any logged-in user
+   * can, and becomes its administrator. `?create=1` makes `/users/communities`
+   * open its creation dialog on arrival, so the button here does what it says
+   * instead of landing on a table with a second button to find.
+   */
+  createCommunity(): void {
+    void this.router.navigateByUrl('/users/communities?create=1');
   }
 
   /** Translation key for the role, reusing the labels the rest of the app uses. */

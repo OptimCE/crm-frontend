@@ -8,7 +8,7 @@ import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { Ripple } from 'primeng/ripple';
 import { Skeleton } from 'primeng/skeleton';
-import { SlicePipe } from '@angular/common';
+import { formatPercent, SlicePipe } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -17,6 +17,7 @@ import { CellClassParams, ColDef, GridApi, GridReadyEvent } from 'ag-grid-commun
 import { KeyTableRow } from '../../../../shared/types/key.types';
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
+import { LocaleService } from '../../../../core/services/language/locale.service';
 @Component({
   selector: 'app-key-view',
   standalone: true,
@@ -31,6 +32,7 @@ export class KeyView implements OnInit {
   private snackbarNotification = inject(SnackbarNotification);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
+  private locale = inject(LocaleService).locale;
 
   readonly key = signal<KeyDTO | undefined>(undefined);
   readonly isLoaded = signal(false);
@@ -93,11 +95,12 @@ export class KeyView implements OnInit {
     const formattedData: KeyTableRow[] = [];
     let alreadyAdded = false;
     const key = this.key();
+    const locale = this.locale();
     if (key && key.iterations) {
       key.iterations.forEach((iteration) => {
         alreadyAdded = false;
         iteration.consumers.forEach((consumer) => {
-          let vp_percentage = (consumer.energy_allocated_percentage * 100).toFixed(2) + '%';
+          let vp_percentage = formatPercent(consumer.energy_allocated_percentage, locale, '1.2-2');
           if (consumer.energy_allocated_percentage === -1) {
             vp_percentage = this.translate.instant('KEY.CREATE.PRORATA_LABEL') as string;
           }
@@ -109,7 +112,7 @@ export class KeyView implements OnInit {
           } else {
             formattedData.push({
               number: iteration.number,
-              va_percentage: (iteration.energy_allocated_percentage * 100).toFixed(2) + '%',
+              va_percentage: formatPercent(iteration.energy_allocated_percentage, locale, '1.2-2'),
               name: consumer.name,
               vp_percentage: vp_percentage,
             });

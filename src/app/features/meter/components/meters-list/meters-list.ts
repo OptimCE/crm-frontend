@@ -28,6 +28,7 @@ import { DebouncedPInputComponent } from '../../../../shared/components/debounce
 import { ViewToggle } from '../../../../shared/components/view-toggle/view-toggle';
 import { MetersMap } from './meters-map/meters-map';
 import type { MapViewMode } from '../../../../shared/components/map/map.types';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-meters-list',
@@ -107,13 +108,13 @@ export class MetersList {
    */
   private lastAppliedParams = '';
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'METER.INFORMATIONS.EAN_LABEL', value: 'EAN' },
     { label: 'METER.INFORMATIONS.METER_NUMBER_LABEL', value: 'meter_number' },
     { label: 'COMMON.ADDRESS', value: 'street' },
-  ];
+  ]);
 
-  statusOptions = [
+  readonly statusOptions = translatedOptions([
     {
       label: 'METER.STATUS.ACTIVE_LABEL',
       value: MeterDataStatus.ACTIVE,
@@ -134,7 +135,7 @@ export class MetersList {
       value: MeterDataStatus.WAITING_MANAGER,
       severity: 'warn' as const,
     },
-  ];
+  ]);
 
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());
@@ -152,7 +153,7 @@ export class MetersList {
       // is caller-supplied and an unknown value must fall back to "no filter",
       // not to a status the backend will reject.
       const status = Number(params.get('status'));
-      const known = this.statusOptions.find((option) => (option.value as number) === status);
+      const known = this.statusOptions().find((option) => (option.value as number) === status);
       this.statusFilter.set(known ? known.value : null);
 
       this.view.set(params.get('view') === 'map' ? 'map' : 'list');

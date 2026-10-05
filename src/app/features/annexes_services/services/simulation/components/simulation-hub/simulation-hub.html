@@ -41,7 +41,7 @@
       @if (lastRefreshedAt()) {
         <span class="text-xs text-surface-500" data-testid="simulation-hub__text--last-refresh">
           {{ 'SIMULATION_HUB.LAST_REFRESH_LABEL' | translate }}
-          {{ lastRefreshedAt() | date: 'shortTime' }}
+          {{ lastRefreshedAt() | localeDate: 'shortTime' }}
         </span>
       }
     </header>

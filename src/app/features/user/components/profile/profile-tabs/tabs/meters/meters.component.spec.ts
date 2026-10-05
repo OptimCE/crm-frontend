@@ -1,7 +1,7 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -435,6 +435,124 @@ describe('MetersComponent', () => {
         component.paginationInfo.set(new Pagination(1, 10, 5, 1));
         expect(component.showPaginator()).toBe(false);
       });
+    });
+  });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('search-field select labels', () => {
+    let translate: TranslateService;
+
+    function searchFieldAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="meters__select--search-field"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        PROFILE: { METERS: { COMMUNITY_LABEL: 'Communauté' } },
+        METER: { INFORMATIONS: { EAN_LABEL: 'EAN', METER_NUMBER_LABEL: 'Numéro de compteur' } },
+      });
+      translate.setTranslation('en', {
+        PROFILE: { METERS: { COMMUNITY_LABEL: 'Community' } },
+        METER: { INFORMATIONS: { EAN_LABEL: 'EAN code', METER_NUMBER_LABEL: 'Meter number' } },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.searchFieldOptions()).toEqual([
+        { label: 'Communauté', value: 'community_name' },
+        { label: 'EAN', value: 'EAN' },
+        { label: 'Numéro de compteur', value: 'meter_number' },
+      ]);
+    });
+
+    it('should give the selected field a translated aria-label that follows the language', async () => {
+      expect(searchFieldAriaLabel()).toBe('Communauté');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(searchFieldAriaLabel()).toBe('Community');
+    });
+  });
+
+  // The status options used to be bare MeterDataStatus numbers, so the select's
+  // aria-label read "1".."4" while the tags showed words.
+  describe('status select labels', () => {
+    let translate: TranslateService;
+
+    function statusSelect(): HTMLElement {
+      return (fixture.nativeElement as HTMLElement).querySelector(
+        '[data-testid="meters__select--status-filter"]',
+      ) as HTMLElement;
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        METER: {
+          STATUS: {
+            ACTIVE_LABEL: 'Actif',
+            INACTIVE_LABEL: 'Inactif',
+            WAITING_GRD_LABEL: 'En attente du GRD',
+            WAITING_MANAGER_LABEL: 'En attente du gestionnaire',
+          },
+        },
+      });
+      translate.setTranslation('en', {
+        METER: {
+          STATUS: {
+            ACTIVE_LABEL: 'Active',
+            INACTIVE_LABEL: 'Inactive',
+            WAITING_GRD_LABEL: 'Waiting for the DSO',
+            WAITING_MANAGER_LABEL: 'Waiting for the manager',
+          },
+        },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should offer the statuses as translated options, keeping values and severities', () => {
+      expect(component.statusCategory()).toEqual([
+        { label: 'Actif', value: MeterDataStatus.ACTIVE, severity: 'success' },
+        { label: 'Inactif', value: MeterDataStatus.INACTIVE, severity: 'danger' },
+        { label: 'En attente du GRD', value: MeterDataStatus.WAITING_GRD, severity: 'danger' },
+        {
+          label: 'En attente du gestionnaire',
+          value: MeterDataStatus.WAITING_MANAGER,
+          severity: 'danger',
+        },
+      ]);
+    });
+
+    it('should name the selected status in words, in the aria-label and the tag', async () => {
+      component.statusFilter.set(MeterDataStatus.WAITING_GRD);
+      await fixture.whenStable();
+
+      const combobox = statusSelect().querySelector('[role="combobox"]');
+      expect(combobox?.getAttribute('aria-label')).toBe('En attente du GRD');
+      expect(statusSelect().querySelector('.p-tag')?.textContent?.trim()).toBe('En attente du GRD');
+    });
+
+    it('should translate the selected status again when the language changes', async () => {
+      component.statusFilter.set(MeterDataStatus.ACTIVE);
+      await fixture.whenStable();
+
+      translate.use('en');
+      await fixture.whenStable();
+
+      const combobox = statusSelect().querySelector('[role="combobox"]');
+      expect(combobox?.getAttribute('aria-label')).toBe('Active');
+      expect(statusSelect().querySelector('.p-tag')?.textContent?.trim()).toBe('Active');
     });
   });
 });

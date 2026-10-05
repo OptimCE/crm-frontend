@@ -1,11 +1,12 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
+import { DestroyRef, DOCUMENT, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
 import { Translation } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
 
-const SUPPORTED_LANGUAGES = ['fr', 'en', 'nl', 'de'] as const;
-const DEFAULT_LANGUAGE = 'fr';
+export const SUPPORTED_LANGUAGES = ['fr', 'en', 'nl', 'de'] as const;
+export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
+export const DEFAULT_LANGUAGE: SupportedLanguage = 'fr';
 
 /** Where the PrimeNG strings live in each locale file. */
 const PRIMENG_BUNDLE_KEY = 'PRIMENG';
@@ -17,6 +18,7 @@ export class LanguageService {
   private translate = inject(TranslateService);
   private primeng = inject(PrimeNG);
   private destroyRef = inject(DestroyRef);
+  private document = inject(DOCUMENT);
 
   constructor() {
     // PrimeNG keeps its own translation table, entirely separate from
@@ -29,7 +31,10 @@ export class LanguageService {
     // onLangChange rather than `use()`: it fires once the bundle is actually
     // loaded, so the `get` below resolves against real data instead of racing
     // the HTTP loader.
-    this.translate.onLangChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+    this.translate.onLangChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
+      // index.html cannot know the reader's language; without this a screen
+      // reader pronounces every page as English.
+      this.document.documentElement.lang = event.lang;
       this.applyPrimeNgTranslation();
     });
     this.init();

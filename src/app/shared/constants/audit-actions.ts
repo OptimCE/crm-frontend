@@ -1,13 +1,22 @@
 /**
  * Frontend mirror of the backend audit-action registries:
- *  - crm-backend            (src/modules/audit_log/domain/audit-log.actions.ts)
+ *  - crm-backend               (src/modules/audit_log/domain/audit-log.actions.ts)
  *  - allocation-key-generation (core/audit_log/actions.py)
- *  - simulation-key         (core/audit_log/actions.py)
+ *  - simulation-key            (core/audit_log/actions.py)
+ *  - administrative-document   (core/audit_log/actions.py)
+ *  - billing                   (core/audit_log/actions.py)
+ *  - live-data                 (core/audit_log/actions.py)
+ *  - news-board                (core/audit_log/actions.py)
+ * notification-dispatch and document-generation write no audit rows.
  *
- * All three services write to the same shared `audit_log` table. The list is
+ * All of these services write to the same shared `audit_log` table. The list is
  * duplicated deliberately: the registries are not exposed at runtime, and the
  * action <p-select> needs the codes at build time to render the option list.
- * Keep in sync when any of those services adds a new code.
+ * Keep in sync when any of those services adds a new code, and add its label
+ * under `AUDIT.ACTIONS` in all four locale files (`audit-actions.spec.ts`
+ * enforces the second half). A code missing here still renders, through
+ * {@link auditActionLabelKey}'s fallback, but it has no label and no filter
+ * option.
  */
 export const AUDIT_ACTIONS: readonly string[] = [
   'crm.community_subscription.created',
@@ -51,6 +60,7 @@ export const AUDIT_ACTIONS: readonly string[] = [
   'crm.sharing_operation_key.approved',
   'crm.sharing_operation_key.rejected',
   'crm.sharing_op_consumption.uploaded',
+  'crm.address.geocode_backfill',
   // allocation-key-generation service
   'allocation_key_generation.generation.created',
   'allocation_key_generation.generation.queue_failed',
@@ -65,4 +75,59 @@ export const AUDIT_ACTIONS: readonly string[] = [
   'simulation_key.simulation.succeeded',
   'simulation_key.simulation.failed',
   'simulation_key.simulation.deleted',
+  // administrative-document service
+  'administrative_document.dossier.created',
+  'administrative_document.dossier.updated',
+  'administrative_document.dossier.status_changed',
+  'administrative_document.document.created',
+  'administrative_document.document.status_changed',
+  'administrative_document.document_version.added',
+  'administrative_document.document.generation_requested',
+  'administrative_document.document.rendered',
+  'administrative_document.document.render_failed',
+  'administrative_document.deadline.created',
+  'administrative_document.deadline.resolved',
+  'administrative_document.deadline.missed',
+  'administrative_document.deadline.reminded',
+  'administrative_document.template.saved',
+  'administrative_document.deadline_rule.saved',
+  // billing service
+  'billing.run.created',
+  'billing.run.queue_failed',
+  'billing.run.computed',
+  'billing.run.failed',
+  'billing.invoice.issued',
+  'billing.invoice.render_requested',
+  'billing.invoice.rendered',
+  'billing.invoice.render_failed',
+  'billing.invoice.pdf_deleted',
+  'billing.invoice.sent',
+  'billing.invoice.paid',
+  'billing.invoice.overdue',
+  'billing.invoice.credited',
+  'billing.payment.registered',
+  // live-data service
+  'live_data.device.created',
+  'live_data.device.token_issued',
+  'live_data.device.revoked',
+  'live_data.device.enrolled',
+  'live_data.settings.updated',
+  // news-board service
+  'news.post.created',
+  'news.post.updated',
+  'news.post.deleted',
+  'news.vote.cast',
+  'news.vote.retracted',
 ] as const;
+
+const KNOWN_ACTIONS: ReadonlySet<string> = new Set(AUDIT_ACTIONS);
+
+/**
+ * i18n key for an audit action code. The backend stores `action` as a free-form
+ * varchar and any annexe can add a code without touching this repository, so an
+ * unknown code maps to `AUDIT.UNKNOWN_ACTION` (interpolate `{ code }`) instead of
+ * rendering the raw `AUDIT.ACTIONS.<code>` path.
+ */
+export function auditActionLabelKey(code: string): string {
+  return KNOWN_ACTIONS.has(code) ? `AUDIT.ACTIONS.${code}` : 'AUDIT.UNKNOWN_ACTION';
+}

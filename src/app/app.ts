@@ -8,9 +8,25 @@ import {
   EventBusService,
   SnackNotificationEvent,
 } from './core/services/event_bus/eventbus.service';
-import { VALIDATION_TYPE } from './core/dtos/notification';
+import { INFO_TYPE, VALIDATION_TYPE } from './core/dtos/notification';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+
+/**
+ * How each snackbar type is shown. Anything unrecognised stays an error, as it
+ * always was. An info toast stays up twice as long: it explains something that
+ * happened (e.g. live data switched off mid-session) in two sentences, where a
+ * success or an error is read at a glance.
+ */
+function snackStyle(type: number): { severity: string; icon: string; life: number } {
+  if (type === VALIDATION_TYPE) {
+    return { severity: 'success', icon: 'pi pi-check-circle', life: 3000 };
+  }
+  if (type === INFO_TYPE) {
+    return { severity: 'info', icon: 'pi pi-info-circle', life: 6000 };
+  }
+  return { severity: 'error', icon: 'pi pi-times-circle', life: 3000 };
+}
 
 @Component({
   selector: 'app-root',
@@ -29,15 +45,13 @@ export class App implements OnInit, OnDestroy {
   private messageService = inject(MessageService);
 
   private readonly onSnackNotification = (event: CustomEvent<SnackNotificationEvent<string>>) => {
-    const icon =
-      event.detail.type === VALIDATION_TYPE ? 'pi pi-check-circle' : 'pi pi-times-circle';
-    const severity = event.detail.type === VALIDATION_TYPE ? 'success' : 'error';
+    const { severity, icon, life } = snackStyle(event.detail.type);
     this.messageService.add({
       key: 'br',
       severity,
       icon,
       summary: event.detail.message,
-      life: 3000,
+      life,
     });
   };
 

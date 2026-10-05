@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -11,6 +10,7 @@ import { switchMap, timer } from 'rxjs';
 
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { ERROR_TYPE, VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { LocaleService } from '../../../../core/services/language/locale.service';
 import { InvoiceOut, InvoiceStatus, InvoiceType } from '../../../../shared/dtos/billing.dtos';
 import { BillingService } from '../../../../shared/services/billing.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -26,6 +26,7 @@ import {
 import { CreditNoteDialog } from '../credit-note-dialog/credit-note-dialog';
 import { InvoiceDetailDialog } from '../invoice-detail-dialog/invoice-detail-dialog';
 import { PaymentDialog } from '../payment-dialog/payment-dialog';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /** Poll cadence + cap while waiting for an async PDF render to land. */
 const PDF_POLL_INTERVAL_MS = 3500;
@@ -39,7 +40,7 @@ const PDF_POLL_MAX_ATTEMPTS = 15;
 @Component({
   selector: 'app-invoice-list',
   standalone: true,
-  imports: [RouterLink, DatePipe, TranslatePipe, Button, Tag, Tooltip],
+  imports: [RouterLink, LocaleDatePipe, TranslatePipe, Button, Tag, Tooltip],
   providers: [DialogService],
   templateUrl: './invoice-list.html',
 })
@@ -50,6 +51,7 @@ export class InvoiceList {
   private readonly snackbar = inject(SnackbarNotification);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService).locale;
   private dialogRef?: DynamicDialogRef | null;
 
   readonly invoices = input<InvoiceOut[]>([]);
@@ -89,7 +91,7 @@ export class InvoiceList {
     return inv.type === InvoiceType.CREDIT_NOTE;
   }
   money(inv: InvoiceOut): string {
-    return formatMoney(inv.total, inv.currency);
+    return formatMoney(inv.total, this.locale(), inv.currency);
   }
   memberName(inv: InvoiceOut): string {
     return this.memberNames()?.get(inv.id_member) ?? `#${inv.id_member}`;

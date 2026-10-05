@@ -166,6 +166,40 @@ describe('MeterUpdate', () => {
     });
   });
 
+  // ── 1b. The EAN is an identifier, not an editable field ─────────────
+
+  describe('EAN control', () => {
+    it('is disabled, because updateMeter only uses the EAN to find the row', () => {
+      // An editable box here silently discarded whatever you typed: the API
+      // writes address/meter_number/tarif_group/phases_number/reading_frequency
+      // and uses the EAN purely as the WHERE clause.
+      expect(component.metersForm.get('EAN')?.disabled).toBe(true);
+    });
+
+    it('still carries the stored EAN into the payload via getRawValue()', () => {
+      expect(component.metersForm.get('EAN')?.value).toBe('54000000001');
+    });
+
+    it('leaves the form valid for a meter whose EAN predates the 18-digit rule', () => {
+      // The fixture EAN is 11 digits. A blocking 18-digit validator here would
+      // make this meter permanently unrepairable — it could never have its
+      // address corrected again — which is exactly why the control is disabled
+      // rather than validated.
+      component.metersForm.patchValue({
+        address_street: 'Rue Test',
+        address_number: '10',
+        address_postcode: '1000',
+        address_city: 'Brussels',
+        meterNumber: 'M-001',
+        tarifGroup: { id: TarifGroup.LOW_TENSION },
+        phasesNumber: { id: PhaseCategory.SINGLE },
+        readingFrequency: { id: ReadingFrequency.MONTHLY },
+      });
+      expect(component.metersForm.get('EAN')?.value).toBe('54000000001');
+      expect(component.metersForm.valid).toBe(true);
+    });
+  });
+
   // ── 2. Form validation ──────────────────────────────────────────────
 
   describe('Form validation', () => {

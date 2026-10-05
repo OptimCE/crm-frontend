@@ -1,3 +1,4 @@
+import { EAN_PATTERN } from '../../shared/validators/ean.validator';
 import { PrefillWarning } from '../../shared/dtos/administrative-document.dtos';
 import { prefillLabelKey } from './administrative-document-prefill';
 
@@ -38,8 +39,6 @@ export function warningFieldLabelKey(warning: PrefillWarning): string | null {
   return field ? prefillLabelKey(field) : null;
 }
 
-/** An EAN is exactly 18 digits. Meters are keyed by it throughout the app. */
-const EAN_PATTERN = /^\d{18}$/;
 /** A positive integer id, the only thing `/members/{id}` accepts. */
 const ID_PATTERN = /^[1-9]\d*$/;
 

@@ -1,4 +1,3 @@
-import { PercentPipe } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -10,6 +9,7 @@ import { FieldLabelHelper } from '../../../../../shared/components/field-label-h
 import { MeService } from '../../../../../shared/services/me.service';
 import { envelopeData, shareDisplay, TileState } from '../../../dashboard-format';
 import { DashboardTile } from '../dashboard-tile/dashboard-tile';
+import { LocalePercentPipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /**
  * "Which sharing operations am I in, and what fraction am I allocated?"
@@ -32,7 +32,7 @@ import { DashboardTile } from '../dashboard-tile/dashboard-tile';
 @Component({
   selector: 'app-my-participation-tile',
   standalone: true,
-  imports: [PercentPipe, TranslatePipe, FieldLabelHelper, DashboardTile],
+  imports: [LocalePercentPipe, TranslatePipe, FieldLabelHelper, DashboardTile],
   templateUrl: './my-participation-tile.html',
 })
 export class MyParticipationTile {

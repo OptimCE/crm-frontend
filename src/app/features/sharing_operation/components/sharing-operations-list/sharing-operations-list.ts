@@ -23,6 +23,7 @@ import { SharingOperationCreationUpdate } from '../sharing-operation-creation-up
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-sharing-operations-list',
@@ -68,9 +69,11 @@ export class SharingOperationsList {
   );
   readonly showPaginator = computed(() => this.paginationInfo().total_pages > 1);
 
-  searchFieldOptions = [{ label: 'SHARING_OPERATION.LIST.NAME_LABEL', value: 'name' }];
+  readonly searchFieldOptions = translatedOptions([
+    { label: 'SHARING_OPERATION.LIST.NAME_LABEL', value: 'name' },
+  ]);
 
-  typeOptions = [
+  readonly typeOptions = translatedOptions([
     {
       label: 'SHARING_OPERATION.TYPE.INSIDE_BUILDING',
       value: SharingOperationType.LOCAL,
@@ -78,7 +81,7 @@ export class SharingOperationsList {
     },
     { label: 'SHARING_OPERATION.TYPE.CER', value: SharingOperationType.CER, icon: 'pi pi-sitemap' },
     { label: 'SHARING_OPERATION.TYPE.CEC', value: SharingOperationType.CEC, icon: 'pi pi-globe' },
-  ];
+  ]);
 
   constructor() {
     this.destroyRef.onDestroy(() => this.ref?.destroy());

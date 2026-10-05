@@ -63,7 +63,7 @@
           <span class="field-label">{{ 'METER.FULL.BEGINNING_DATE_LABEL' | translate }}</span>
           @if (meterData().start_date) {
             <span class="field-value" data-testid="meter-data-view__text--start-date">{{
-              meterData().start_date | date: 'dd/MM/yyyy'
+              meterData().start_date | localeDate: 'dd/MM/yyyy'
             }}</span>
           } @else {
             <span class="field-empty">--</span>
@@ -73,7 +73,7 @@
           <span class="field-label">{{ 'METER.FULL.END_DATE_LABEL' | translate }}</span>
           @if (meterData().end_date) {
             <span class="field-value" data-testid="meter-data-view__text--end-date">{{
-              meterData().end_date | date: 'dd/MM/yyyy'
+              meterData().end_date | localeDate: 'dd/MM/yyyy'
             }}</span>
           } @else {
             <span class="field-empty">--</span>

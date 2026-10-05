@@ -327,37 +327,25 @@
                     'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate
                   }}</span>
                   <p-select
-                    [options]="meter()!.meter_data_history"
+                    [options]="historyOptions()"
+                    optionLabel="label"
+                    optionValue="value"
                     [ngModel]="historySelected()"
                     (ngModelChange)="historySelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
                     styleClass="w-full sm:w-80"
                     data-testid="meter-view__select--history-period"
                   >
-                    <ng-template #selectedItem>
-                      @if (historySelected()) {
-                        <div class="flex items-center gap-2">
-                          <i class="pi pi-calendar text-xs text-primary-500"></i>
-                          <span class="text-sm">
-                            {{ historySelected()?.start_date | date: 'dd/MM/yyyy' }}
-                            @if (historySelected()?.end_date) {
-                              -
-                            }
-                            {{ historySelected()?.end_date | date: 'dd/MM/yyyy' }}
-                          </span>
-                        </div>
-                      }
+                    <ng-template #selectedItem let-option>
+                      <div class="flex items-center gap-2">
+                        <i class="pi pi-calendar text-xs text-primary-500"></i>
+                        <span class="text-sm">{{ option.label }}</span>
+                      </div>
                     </ng-template>
-                    <ng-template let-history #item>
+                    <ng-template let-option #item>
                       <div class="flex items-center gap-2">
                         <i class="pi pi-calendar text-xs text-surface-400"></i>
-                        <span class="text-sm">
-                          {{ history.start_date | date: 'dd/MM/yyyy' }}
-                          @if (history.end_date) {
-                            -
-                          }
-                          {{ history.end_date | date: 'dd/MM/yyyy' }}
-                        </span>
+                        <span class="text-sm">{{ option.label }}</span>
                       </div>
                     </ng-template>
                   </p-select>
@@ -391,37 +379,25 @@
                     'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate
                   }}</span>
                   <p-select
-                    [options]="meter()!.futur_meter_data"
+                    [options]="futureOptions()"
+                    optionLabel="label"
+                    optionValue="value"
                     [ngModel]="futureSelected()"
                     (ngModelChange)="futureSelected.set($event)"
                     placeholder="{{ 'METER.FULL.PLACEHOLDER.SELECT_PERIOD_LABEL' | translate }}"
                     styleClass="w-full sm:w-80"
                     data-testid="meter-view__select--future-period"
                   >
-                    <ng-template #selectedItem>
-                      @if (futureSelected()) {
-                        <div class="flex items-center gap-2">
-                          <i class="pi pi-calendar text-xs text-primary-500"></i>
-                          <span class="text-sm">
-                            {{ futureSelected()?.start_date | date: 'dd/MM/yyyy' }}
-                            @if (futureSelected()?.end_date) {
-                              -
-                            }
-                            {{ futureSelected()?.end_date | date: 'dd/MM/yyyy' }}
-                          </span>
-                        </div>
-                      }
+                    <ng-template #selectedItem let-option>
+                      <div class="flex items-center gap-2">
+                        <i class="pi pi-calendar text-xs text-primary-500"></i>
+                        <span class="text-sm">{{ option.label }}</span>
+                      </div>
                     </ng-template>
-                    <ng-template let-futur #item>
+                    <ng-template let-option #item>
                       <div class="flex items-center gap-2">
                         <i class="pi pi-calendar text-xs text-surface-400"></i>
-                        <span class="text-sm">
-                          {{ futur.start_date | date: 'dd/MM/yyyy' }}
-                          @if (futur.end_date) {
-                            -
-                          }
-                          {{ futur.end_date | date: 'dd/MM/yyyy' }}
-                        </span>
+                        <span class="text-sm">{{ option.label }}</span>
                       </div>
                     </ng-template>
                   </p-select>
