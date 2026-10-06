@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import Keycloak from 'keycloak-js';
 import { vi } from 'vitest';
 
 import { environments } from '../../../../environments/environments';
@@ -68,15 +69,22 @@ function envelope(over: Partial<RealtimeEvent> = {}): RealtimeEvent {
 describe('RealtimeService', () => {
   let service: RealtimeService;
   let http: HttpTestingController;
+  let keycloak: { authenticated: boolean };
   let originalEventSource: unknown;
 
   beforeEach(() => {
     FakeEventSource.reset();
     originalEventSource = (globalThis as Record<string, unknown>)['EventSource'];
     (globalThis as Record<string, unknown>)['EventSource'] = FakeEventSource;
+    keycloak = { authenticated: true };
 
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), RealtimeService],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        RealtimeService,
+        { provide: Keycloak, useValue: keycloak },
+      ],
     });
     service = TestBed.inject(RealtimeService);
     http = TestBed.inject(HttpTestingController);
@@ -84,6 +92,7 @@ describe('RealtimeService', () => {
 
   afterEach(() => {
     (globalThis as Record<string, unknown>)['EventSource'] = originalEventSource;
+    vi.restoreAllMocks();
     TestBed.resetTestingModule();
   });
 
@@ -236,6 +245,34 @@ describe('RealtimeService', () => {
     // EventSource and orphans the first — which is never closed and holds a
     // server slot until TCP notices.
     expect(FakeEventSource.instances).toHaveLength(1);
+  });
+
+  // ---- Signed out: nothing is minted --------------------------------------
+
+  it('mints nothing while signed out, whichever path asks', () => {
+    // The login page. The bearer interceptor sends a signed-out request bare, so
+    // each of these was a 401 there, and every 401 scheduled the next attempt.
+    keycloak.authenticated = false;
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+
+    document.dispatchEvent(new Event('visibilitychange'));
+    window.dispatchEvent(new Event('online'));
+    service.connect();
+
+    http.expectNone(TICKET_URL);
+  });
+
+  it('does not re-mint once the session has ended without a page load', () => {
+    const source = connect();
+    source.fire('ready');
+
+    // keycloak-js clears the token in place when the session ends in another tab
+    // or a refresh is refused. The lifetime cap then asks for a fresh ticket.
+    keycloak.authenticated = false;
+    source.fire('expiring');
+
+    expect(source.closed).toBe(true);
+    http.expectNone(TICKET_URL);
   });
 
   // ---- dispatch ----------------------------------------------------------

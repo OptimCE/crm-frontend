@@ -13,6 +13,11 @@ export interface AnnexCatalogEntry {
   frontendRoute: string;
   subscribePath: string;
   unsubscribePath: string;
+  /**
+   * Frontend i18n key appended to the generic unsubscribe confirmation; absent =
+   * generic sentence only. Optional both ways: an older backend simply omits it.
+   */
+  unsubscribeWarningKey?: string;
 }
 
 /**

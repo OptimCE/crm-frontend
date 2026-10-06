@@ -8,7 +8,6 @@ import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { DatePipe } from '@angular/common';
 import {
   ApiResponse,
   ApiResponsePaginated,
@@ -24,6 +23,8 @@ import { CompanyDTO, IndividualDTO } from '../../../../../../shared/dtos/member.
 import { InvitationDetailComponent } from './dialogs/invitation-detail/invitation-detail.component';
 import { MeService } from '../../../../../../shared/services/me.service';
 import { DebouncedPInputComponent } from '../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { LocaleDatePipe } from '../../../../../../shared/pipes/locale-format/locale-format-pipes';
+import { translatedOptions } from '../../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-invitation-member',
@@ -32,7 +33,7 @@ import { DebouncedPInputComponent } from '../../../../../../shared/components/de
     TranslatePipe,
     Tag,
     Button,
-    DatePipe,
+    LocaleDatePipe,
     Select,
     FormsModule,
     InputGroupAddonModule,
@@ -63,10 +64,10 @@ export class InvitationMember {
   readonly stateFilter = signal<boolean | null>(null);
   readonly hasActiveFilters = computed(() => !!this.searchText() || this.stateFilter() !== null);
 
-  stateOptions = [
+  readonly stateOptions = translatedOptions([
     { label: 'INVITATION.MEMBER.TO_BE_ENCODED', value: true },
     { label: 'INVITATION.MEMBER.ENCODED', value: false },
-  ];
+  ]);
 
   private ref: DynamicDialogRef | null = null;
 

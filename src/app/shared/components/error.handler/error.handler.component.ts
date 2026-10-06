@@ -66,7 +66,7 @@ export class ErrorHandlerComponent implements OnInit {
             const requiredLength = params['requiredLength'] as number;
             const actualLength = params['actualLength'] as number;
             return translations['FORM_ERROR.MIN_LENGTH']
-              ? (this.translate.instant('FORM_ERROR.min_length', {
+              ? (this.translate.instant('FORM_ERROR.MIN_LENGTH', {
                   requiredLength,
                   actualLength,
                 }) as string)

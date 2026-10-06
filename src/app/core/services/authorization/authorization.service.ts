@@ -62,6 +62,11 @@ const COMMUNITY_SCOPED_CACHE_PREFIXES = [
   'administrative-document',
   'generation',
   'simulation',
+  // Every live-data read is community-scoped, including the uncached
+  // telemetry ones — but `live-data:devices` and `live-data:settings` are
+  // cached, and a community switch must not show the previous community's
+  // meters under the new community's name.
+  'live-data',
 ] as const;
 
 function highestRole(roles: Role[]): Role | null {

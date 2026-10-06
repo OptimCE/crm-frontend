@@ -20,6 +20,7 @@ import { ViewToggle } from '../../../../../../../shared/components/view-toggle/v
 import { MetersMap } from '../../../../../../meter/components/meters-list/meters-map/meters-map';
 import type { MapViewMode } from '../../../../../../../shared/components/map/map.types';
 import type { MeterMapQuery } from '../../../../../../../shared/dtos/meter.dtos';
+import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-meters-user',
@@ -50,22 +51,38 @@ export class MetersComponent {
 
   readonly metersPartialList = signal<MePartialMeterDTO[]>([]);
 
-  statusCategory = [
-    MeterDataStatus.ACTIVE,
-    MeterDataStatus.INACTIVE,
-    MeterDataStatus.WAITING_GRD,
-    MeterDataStatus.WAITING_MANAGER,
-  ];
+  readonly statusCategory = translatedOptions([
+    {
+      label: 'METER.STATUS.ACTIVE_LABEL',
+      value: MeterDataStatus.ACTIVE,
+      severity: 'success' as const,
+    },
+    {
+      label: 'METER.STATUS.INACTIVE_LABEL',
+      value: MeterDataStatus.INACTIVE,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'METER.STATUS.WAITING_GRD_LABEL',
+      value: MeterDataStatus.WAITING_GRD,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'METER.STATUS.WAITING_MANAGER_LABEL',
+      value: MeterDataStatus.WAITING_MANAGER,
+      severity: 'danger' as const,
+    },
+  ]);
 
   readonly searchField = signal<string>('community_name');
   readonly searchText = signal<string>('');
   readonly statusFilter = signal<MeterDataStatus | null>(null);
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'PROFILE.METERS.COMMUNITY_LABEL', value: 'community_name' },
     { label: 'METER.INFORMATIONS.EAN_LABEL', value: 'EAN' },
     { label: 'METER.INFORMATIONS.METER_NUMBER_LABEL', value: 'meter_number' },
-  ];
+  ]);
 
   readonly hasActiveFilters = computed(() => !!this.searchText() || this.statusFilter() !== null);
 

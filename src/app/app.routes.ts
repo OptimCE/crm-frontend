@@ -112,6 +112,18 @@ export const routes: Routes = [
     loadChildren: () => import('./features/billing/billing.routes').then((m) => m.BILLING_ROUTES),
   },
   {
+    // Subscription-gated only, exactly like billing (D-14, 2026-10-04: D-5
+    // lifted). Members see their own sharing operation(s) here; the hub
+    // branches on the role, and every community-wide read is manager-only on
+    // the backend, where the line actually is. The catalogue declares minRole
+    // MEMBER - it is filtered by role before it reaches the SPA, so MANAGER
+    // there would hide the annex from members altogether.
+    path: 'live-data',
+    canActivate: [canActivateAuth, activeFeatureGuard('live-data')],
+    loadChildren: () =>
+      import('./features/live_data/live-data.routes').then((m) => m.LIVE_DATA_ROUTES),
+  },
+  {
     // Subscription-gated only, exactly like billing — the annex catalog now sets
     // minRole MEMBER because members have a read of their own here ("what has
     // been filed about me"). The role split happens INSIDE the hub, and every

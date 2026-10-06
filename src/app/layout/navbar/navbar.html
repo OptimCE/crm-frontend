@@ -201,6 +201,23 @@
               [sidebarOpen]="sidebarOpen()"
             ></li>
           }
+          <!-- `canReach`, not `isActive`: it also holds the active role to the
+               minRole the catalogue declares for this annexe. That floor is
+               MEMBER since D-14 (the hub then shows members their own view),
+               and the route itself is gated by `activeFeatureGuard` only. Reading
+               it off the catalogue keeps the link in step if the floor moves, so
+               it never renders a link that bounces to `/`. -->
+          @if (communityServicesStore.canReach('live-data')) {
+            <li
+              appSidebarItem
+              (sidebarClose)="closeSideBar()"
+              [icon]="'pi pi-bolt'"
+              [isRouteActive]="isRouteActive().live_data"
+              [name]="'NAVBAR.LIVE_DATA' | translate"
+              [routerLinkUrl]="'/live-data'"
+              [sidebarOpen]="sidebarOpen()"
+            ></li>
+          }
           <!-- In the COMMUNITY section, not Management: members have their own
                view here now ("what has been filed about me"), and the hub
                branches on role. `isActive` rather than `canReach` for the same

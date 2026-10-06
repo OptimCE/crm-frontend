@@ -15,7 +15,7 @@
         @switch (shareDisplay(row)) {
           @case ('share') {
             <span class="text-base font-semibold text-primary-700">
-              {{ row.effective_share | percent: '1.0-2' }}
+              {{ row.effective_share | localePercent: '1.0-2' }}
             </span>
           }
           @case ('prorata') {

@@ -2,7 +2,6 @@ import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Avatar } from 'primeng/avatar';
 import { Card } from 'primeng/card';
@@ -21,13 +20,13 @@ import { MapNumberStringPipe } from '../../../../shared/pipes/map-number-string/
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { MeterDataView } from '../../../meter/components/meter-view/meter-data-view/meter-data-view';
 import { MeConsumptionChart } from './me-consumption-chart/me-consumption-chart';
+import { meterPeriodOptions } from '../../../../shared/utils/meter-period-options.utils';
 
 @Component({
   selector: 'app-meter-view-me',
   standalone: true,
   imports: [
     FormsModule,
-    DatePipe,
     TranslatePipe,
     Avatar,
     Card,
@@ -66,6 +65,8 @@ export class MeterViewMe implements OnInit {
   readonly hasMeterData = computed(() => !!this.meter()?.meter_data);
   readonly hasHistory = computed(() => !!this.meter()?.meter_data_history?.length);
   readonly hasFutureData = computed(() => !!this.meter()?.futur_meter_data?.length);
+  readonly historyOptions = meterPeriodOptions(() => this.meter()?.meter_data_history);
+  readonly futureOptions = meterPeriodOptions(() => this.meter()?.futur_meter_data);
   readonly currentStatus = computed(() => this.meter()?.meter_data?.status);
 
   readonly productionChainMap = signal<string[]>([]);

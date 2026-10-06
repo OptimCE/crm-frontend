@@ -1,6 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { Select } from 'primeng/select';
 import { Subject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -557,5 +559,95 @@ describe('SimulationStartPanel', () => {
       await fixture.whenStable();
       expect(simulationServiceSpy.previewCrmData).not.toHaveBeenCalled();
     });
+  });
+});
+
+// ── Rendered key picker ──────────────────────────────────────────────
+// The suite above blanks the template. This one renders it, because the
+// two-line option is template wiring only: `pTemplate="item"` without
+// `PrimeTemplate` in the component imports compiles cleanly and is silently
+// ignored, so the list falls back to the bare key name.
+
+describe('SimulationStartPanel key picker (rendered)', () => {
+  let restoreMatchMedia: (() => void) | null = null;
+
+  /** jsdom has no `matchMedia`; the select overlay asks it when it opens. */
+  function stubMatchMedia(): void {
+    const original = window.matchMedia;
+    window.matchMedia = vi.fn().mockReturnValue({
+      matches: false,
+      media: '',
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as unknown as MediaQueryList);
+    restoreMatchMedia = () => {
+      window.matchMedia = original;
+    };
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SimulationStartPanel, TranslateModule.forRoot()],
+      providers: [
+        {
+          provide: SimulationService,
+          useValue: {
+            startSimulation: vi.fn(),
+            startSimulationFromCrm: vi.fn(),
+            previewCrmData: vi.fn(),
+          },
+        },
+        {
+          provide: KeyService,
+          useValue: {
+            getKeysList: vi
+              .fn()
+              .mockReturnValue(
+                of(keysResponse([buildKey({ id: 3, name: 'Alpha', description: 'Solar split' })])),
+              ),
+          },
+        },
+        {
+          provide: SharingOperationService,
+          useValue: {
+            getSharingOperationList: vi.fn().mockReturnValue(of(operationsResponse([]))),
+          },
+        },
+        { provide: SnackbarNotification, useValue: { openSnackBar: vi.fn() } },
+        { provide: ErrorMessageHandler, useValue: { handleError: vi.fn() } },
+      ],
+    }).compileComponents();
+  });
+
+  afterEach(() => {
+    // Destroy the fixture first: the open overlay still calls `matchMedia` on teardown.
+    TestBed.resetTestingModule();
+    document.body.querySelectorAll('.p-select-overlay').forEach((node) => node.remove());
+    restoreMatchMedia?.();
+    restoreMatchMedia = null;
+  });
+
+  it('should list each key with its description under the name', async () => {
+    stubMatchMedia();
+    const fixture = TestBed.createComponent(SimulationStartPanel);
+    await fixture.whenStable();
+
+    const select = fixture.debugElement.query(By.css('[data-testid="simulation-hub__select--key"]'))
+      .componentInstance as Select;
+    select.show();
+    fixture.detectChanges();
+
+    const option = document.body.querySelector<HTMLElement>(
+      '.p-select-overlay .p-select-option[aria-label="Alpha"]',
+    );
+    expect(option).not.toBeNull();
+    const lines = Array.from(option?.querySelectorAll('span') ?? []).map((span) =>
+      span.textContent?.trim(),
+    );
+    expect(lines).toEqual(['Alpha', 'Solar split']);
   });
 });

@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,6 +18,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import { MetersDataDTO, PatchMeterDataDTO } from '../../../../shared/dtos/meter.dtos';
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
@@ -25,6 +28,7 @@ import { MemberService } from '../../../../shared/services/member.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import {
   MeterDataStatus,
   ClientType,
@@ -32,6 +36,9 @@ import {
   MeterRate,
   ProductionChain,
 } from '../../../../shared/types/meter.types';
+
+// Large enough to hold every member of a community, so any of them can be picked.
+const MEMBERS_PAGE_LIMIT = 500;
 
 interface MeterDataUpdateDialogData {
   meterData: MetersDataDTO;
@@ -56,7 +63,7 @@ interface MeterDataFormValue {
   rate: MeterDataCategory<MeterRate>;
   productionChain: MeterDataCategory<ProductionChain>;
   clientType: MeterDataCategory<ClientType>;
-  member: MembersPartialDTO;
+  member: MembersPartialDTO | '' | null;
   dateStart: string | Date;
   status: MeterDataStatus;
   injectionStatus: MeterDataCategory<InjectionStatus>;
@@ -76,9 +83,11 @@ interface MeterDataFormValue {
     Textarea,
     Select,
     DatePicker,
+    ConfirmDialog,
   ],
   templateUrl: './meter-data-update.html',
   styleUrl: './meter-data-update.css',
+  providers: [ConfirmationService],
 })
 export class MeterDataUpdate implements OnInit {
   private memberService = inject(MemberService);
@@ -87,6 +96,7 @@ export class MeterDataUpdate implements OnInit {
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
+  private confirmationService = inject(ConfirmationService);
   private destroyRef = inject(DestroyRef);
   readonly errorMemberAdded = signal<ErrorAdded>({});
   readonly errorsSummaryAdded = signal<ErrorSummaryAdded>({});
@@ -94,12 +104,12 @@ export class MeterDataUpdate implements OnInit {
   readonly meterData?: MetersDataDTO;
   readonly id: string;
   metersForm!: FormGroup;
-  statusOptions: MeterDataStatusOption[] = [
+  readonly statusOptions = translatedOptions<MeterDataStatusOption>([
     { value: MeterDataStatus.ACTIVE, label: 'METER.STATUS.ACTIVE_LABEL' },
     { value: MeterDataStatus.INACTIVE, label: 'METER.STATUS.INACTIVE_LABEL' },
     { value: MeterDataStatus.WAITING_GRD, label: 'METER.STATUS.WAITING_GRD_LABEL' },
     { value: MeterDataStatus.WAITING_MANAGER, label: 'METER.STATUS.WAITING_MANAGER_LABEL' },
-  ];
+  ]);
   readonly productionChainCategory = signal<MeterDataCategory<ProductionChain>[]>([
     { id: ProductionChain.PHOTOVOLTAIC, name: '' },
     { id: ProductionChain.WIND, name: '' },
@@ -143,27 +153,8 @@ export class MeterDataUpdate implements OnInit {
   }
 
   ngOnInit(): void {
-    this.memberService
-      .getMembersList({ page: 1, limit: 10 })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          if (response && response.data) {
-            this.membersList.set(response.data as MembersPartialDTO[]);
-            if (this.meterData && this.meterData.member) {
-              const member = this.meterData.member;
-              this.metersForm.patchValue({
-                member: this.membersList().find((m) => m.id === member.id),
-              });
-            }
-          } else {
-            console.error(response);
-          }
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
+    // Build the form before subscribing: a cached members list is emitted synchronously,
+    // and the holder pre-fill would otherwise be lost (empty holder, then removed on save).
     this.metersForm = new FormGroup({
       description: new FormControl('', []),
       samplingPower: new FormControl('', [Validators.required]),
@@ -178,6 +169,27 @@ export class MeterDataUpdate implements OnInit {
       injectionStatus: new FormControl('', [Validators.required]),
       grd: new FormControl('', [Validators.required]),
     });
+    this.memberService
+      .getMembersList({ page: 1, limit: MEMBERS_PAGE_LIMIT })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response && response.data) {
+            this.membersList.set(this.withCurrentHolder(response.data as MembersPartialDTO[]));
+            if (this.meterData && this.meterData.member) {
+              const member = this.meterData.member;
+              this.metersForm.patchValue({
+                member: this.membersList().find((m) => m.id === member.id),
+              });
+            }
+          } else {
+            console.error(response);
+          }
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
 
     this.setupErrorTranslation();
     this.setupTranslationCategory();
@@ -335,6 +347,18 @@ export class MeterDataUpdate implements OnInit {
     };
   }
 
+  /**
+   * Keep the current holder selectable even when it is not in the loaded page of members:
+   * otherwise the field opens empty and saving silently removes the holder.
+   */
+  private withCurrentHolder(members: MembersPartialDTO[]): MembersPartialDTO[] {
+    const holder = this.meterData?.member;
+    if (!holder || members.some((m) => m.id === holder.id)) {
+      return members;
+    }
+    return [holder, ...members];
+  }
+
   onSubmit(): void {
     if (!this.metersForm.valid) {
       return;
@@ -362,6 +386,45 @@ export class MeterDataUpdate implements OnInit {
       total_generating_capacity: formValue.totalGeneratingCapacity,
     };
 
+    // A new holder sees the meter's readings and is billed for it from the start date:
+    // make the manager confirm the change so a mis-picked member is caught before saving.
+    const previousHolder = this.meterData?.member ?? null;
+    const nextHolder = formValue.member || null;
+    if ((previousHolder?.id ?? null) !== (nextHolder?.id ?? null)) {
+      this.confirmHolderChange(previousHolder, nextHolder, formValue.dateStart, updateMeterData);
+      return;
+    }
+    this.performSave(updateMeterData);
+  }
+
+  private confirmHolderChange(
+    previousHolder: MembersPartialDTO | null,
+    nextHolder: MembersPartialDTO | null,
+    dateStart: string | Date,
+    updateMeterData: PatchMeterDataDTO,
+  ): void {
+    let messageKey = 'METER.UPDATE_DATA.HOLDER_CHANGE.TRANSFER_MESSAGE';
+    if (!previousHolder) {
+      messageKey = 'METER.UPDATE_DATA.HOLDER_CHANGE.ASSIGN_MESSAGE';
+    } else if (!nextHolder) {
+      messageKey = 'METER.UPDATE_DATA.HOLDER_CHANGE.REMOVE_MESSAGE';
+    }
+    this.confirmationService.confirm({
+      header: this.translate.instant('METER.UPDATE_DATA.HOLDER_CHANGE.HEADER') as string,
+      message: this.translate.instant(messageKey, {
+        ean: this.id,
+        from: previousHolder?.name ?? '',
+        to: nextHolder?.name ?? '',
+        date: formatDate(dateStart, 'dd/MM/yyyy', 'en-US'),
+      }) as string,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
+      accept: () => this.performSave(updateMeterData),
+    });
+  }
+
+  private performSave(updateMeterData: PatchMeterDataDTO): void {
     this.meterService
       .patchMeterData(updateMeterData)
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -10,7 +10,7 @@
       <p-input-group class="gap-2">
         <p-select
           data-testid="representations__select--search-field"
-          [options]="searchFieldOptions"
+          [options]="searchFieldOptions()"
           [ngModel]="searchField()"
           (ngModelChange)="searchField.set($event)"
           (onChange)="onSearchFieldChange()"
@@ -19,10 +19,10 @@
           class="search-field-select"
         >
           <ng-template let-option pTemplate="selectedItem">
-            <span class="text-sm">{{ option.label | translate }}</span>
+            <span class="text-sm">{{ option.label }}</span>
           </ng-template>
           <ng-template let-option pTemplate="item">
-            <span class="text-sm">{{ option.label | translate }}</span>
+            <span class="text-sm">{{ option.label }}</span>
           </ng-template>
         </p-select>
         <app-debounced-p-input
@@ -41,39 +41,25 @@
       <p-select
         data-testid="representations__select--type-filter"
         [ngModel]="typeFilter()"
-        [options]="memberTypeCategory"
+        [options]="memberTypeCategory()"
+        optionLabel="label"
+        optionValue="value"
         (onChange)="onTypeFilterChange($event.value)"
         placeholder="{{ 'MEMBER.LIST.SELECT_A_TYPE_PLACEHOLDER' | translate }}"
         [showClear]="true"
         class="w-full"
       >
         <ng-template let-option pTemplate="item">
-          @if (option === MemberType.INDIVIDUAL) {
-            <div>
-              <i class="pi pi-user mr-2"></i>
-              <span class="text-sm">{{ 'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL' | translate }}</span>
-            </div>
-          }
-          @if (option === MemberType.COMPANY) {
-            <div>
-              <i class="pi pi-building mr-2"></i>
-              <span class="text-sm">{{ 'MEMBER.LIST.TYPE.COMPANY_LABEL' | translate }}</span>
-            </div>
-          }
+          <div>
+            <i [class]="option.icon + ' mr-2'"></i>
+            <span class="text-sm">{{ option.label }}</span>
+          </div>
         </ng-template>
-        <ng-template let-value pTemplate="selectedItem">
-          @if (value === MemberType.INDIVIDUAL) {
-            <div>
-              <i class="pi pi-user mr-2"></i>
-              <span class="text-sm">{{ 'MEMBER.LIST.TYPE.INDIVIDUAL_LABEL' | translate }}</span>
-            </div>
-          }
-          @if (value === MemberType.COMPANY) {
-            <div>
-              <i class="pi pi-building mr-2"></i>
-              <span class="text-sm">{{ 'MEMBER.LIST.TYPE.COMPANY_LABEL' | translate }}</span>
-            </div>
-          }
+        <ng-template let-option pTemplate="selectedItem">
+          <div>
+            <i [class]="option.icon + ' mr-2'"></i>
+            <span class="text-sm">{{ option.label }}</span>
+          </div>
         </ng-template>
       </p-select>
     </div>
@@ -84,61 +70,19 @@
       <p-select
         data-testid="representations__select--status-filter"
         [ngModel]="statusFilter()"
-        [options]="statusCategory"
+        [options]="statusCategory()"
+        optionLabel="label"
+        optionValue="value"
         (onChange)="onStatusFilterChange($event.value)"
         placeholder="{{ 'MEMBER.LIST.SELECT_A_STATUS_PLACEHOLDER' | translate }}"
         [showClear]="true"
         class="w-full"
       >
         <ng-template let-option pTemplate="item">
-          @switch (option) {
-            @case (MemberStatus.ACTIVE) {
-              <p-tag
-                severity="success"
-                value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MemberStatus.INACTIVE) {
-              <p-tag
-                severity="danger"
-                value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MemberStatus.PENDING) {
-              <p-tag
-                severity="warn"
-                value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-          }
+          <p-tag [severity]="option.severity" [value]="option.label" class="text-sm"></p-tag>
         </ng-template>
-        <ng-template let-value pTemplate="selectedItem">
-          @switch (value) {
-            @case (MemberStatus.ACTIVE) {
-              <p-tag
-                severity="success"
-                value="{{ 'MEMBER.VIEW.STATUS.ACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MemberStatus.INACTIVE) {
-              <p-tag
-                severity="danger"
-                value="{{ 'MEMBER.VIEW.STATUS.INACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MemberStatus.PENDING) {
-              <p-tag
-                severity="warn"
-                value="{{ 'MEMBER.VIEW.STATUS.PENDING_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-          }
+        <ng-template let-option pTemplate="selectedItem">
+          <p-tag [severity]="option.severity" [value]="option.label" class="text-sm"></p-tag>
         </ng-template>
       </p-select>
     </div>

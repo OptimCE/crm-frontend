@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SimulationIterationTimeseriesDTO } from '../../../../../../shared/dtos/simulation.dtos';
 import { SimulationTimeseriesChart } from './simulation-timeseries-chart';
@@ -86,6 +86,31 @@ describe('SimulationTimeseriesChart', () => {
       // instant() returns the translation key when no messages are loaded.
       expect(options[0].label).toBe('SIMULATION_HUB.RESULTS.ITERATION_LABEL');
     });
+
+    // The labels are the select's aria-label too; they used to keep the language
+    // the results were opened in.
+    it('should label the options in the current language, and again after a switch', async () => {
+      const translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        SIMULATION_HUB: { RESULTS: { ITERATION_LABEL: 'Itération {{number}}' } },
+      });
+      translate.setTranslation('en', {
+        SIMULATION_HUB: { RESULTS: { ITERATION_LABEL: 'Iteration {{number}}' } },
+      });
+      translate.use('fr');
+      await createWith([buildIteration({ number: 1 }), buildIteration({ number: 2 })]);
+      expect(component.iterationOptions().map((o) => o.label)).toEqual([
+        'Itération 1',
+        'Itération 2',
+      ]);
+
+      translate.use('en');
+
+      expect(component.iterationOptions()).toEqual([
+        { label: 'Iteration 1', value: 0 },
+        { label: 'Iteration 2', value: 1 },
+      ]);
+    });
   });
 
   // ── 4. chartData ───────────────────────────────────────────────────
@@ -149,6 +174,28 @@ describe('SimulationTimeseriesChart', () => {
       await createWith([buildIteration({ number: 1 }), buildIteration({ number: 2 })]);
       component.onIterationChange(1);
       expect(component.selectedIndex()).toBe(1);
+    });
+  });
+
+  // ── 6. Figures in the reader's language ────────────────────────────
+
+  describe("figures in the reader's language", () => {
+    it('hands the language to chart.js, which formats the axis in it', async () => {
+      // BUG: with no `locale`, chart.js formats ticks in the BROWSER's locale.
+      TestBed.inject(TranslateService).use('de');
+      await createWith([buildIteration()]);
+      expect(component.options.locale).toBe('de');
+    });
+
+    it('writes the tooltip value in that language', async () => {
+      // BUG: `toFixed(2)` wrote "1234.50 kWh" in every language.
+      TestBed.inject(TranslateService).use('fr');
+      await createWith([buildIteration()]);
+      const label = component.options.plugins.tooltip.callbacks.label({
+        dataset: { label: 'Surplus' },
+        raw: 1234.5,
+      });
+      expect(label).toBe(`Surplus: 1${String.fromCharCode(0x202f)}234,50 kWh`);
     });
   });
 });

@@ -25,7 +25,7 @@
       <div>
         <span class="field-label">{{ 'AUDIT.LIST.ACTION_LABEL' | translate }}</span>
         <p-select
-          [options]="actionOptions"
+          [options]="actionOptions()"
           [ngModel]="actionFilter()"
           (onChange)="onActionFilterChange($event.value)"
           optionLabel="label"
@@ -37,10 +37,10 @@
           data-testid="audit-log-list__select--action"
         >
           <ng-template let-option pTemplate="selectedItem">
-            <span class="text-sm">{{ option.label | translate }}</span>
+            <span class="text-sm">{{ option.label }}</span>
           </ng-template>
           <ng-template let-option pTemplate="item">
-            <span class="text-sm">{{ option.label | translate }}</span>
+            <span class="text-sm">{{ option.label }}</span>
           </ng-template>
         </p-select>
       </div>
@@ -181,9 +181,11 @@
           ></i>
         </td>
         <td class="text-sm whitespace-nowrap">
-          {{ row.timestamp | date: 'medium' }}
+          {{ row.timestamp | localeDate: 'medium' }}
         </td>
-        <td class="text-sm">{{ 'AUDIT.ACTIONS.' + row.action | translate }}</td>
+        <td class="text-sm">
+          {{ actionLabelKey(row.action) | translate: { code: row.action } }}
+        </td>
         <td class="text-sm">{{ row.entity_type }}</td>
         <td class="text-sm font-mono">{{ row.entity_id ?? '—' }}</td>
         <td class="text-sm">{{ row.user_email ?? '—' }}</td>

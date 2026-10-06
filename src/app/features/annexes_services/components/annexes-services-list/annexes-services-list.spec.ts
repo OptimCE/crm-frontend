@@ -160,6 +160,41 @@ describe('AnnexesServicesList', () => {
       );
       expect(component.loading()).toBe(false);
     });
+
+    function nothingSubscribed(): CommunityAnnex[] {
+      storeSpy.services.set([buildAnnex({ feature: 'avail', subscribed: false })]);
+      return storeSpy.services();
+    }
+
+    it('should show the empty state when the catalogue loads with nothing subscribed', async () => {
+      storeSpy.ensureLoaded.mockImplementation(() => of(nothingSubscribed()));
+      await createComponent();
+      expect(component.showEmptyState()).toBe(true);
+    });
+
+    it('should NOT claim "no module subscribed" under the error toast', async () => {
+      // The store is left empty on failure, so the empty state's condition holds
+      // and both used to render at once.
+      storeSpy.ensureLoaded.mockReturnValue(throwError(() => new Error('boom')));
+      await createComponent();
+      expect(component.subscribedServices()).toEqual([]);
+      expect(component.loadError()).toBe(true);
+      expect(component.showEmptyState()).toBe(false);
+    });
+
+    it('should clear the error once a later refresh succeeds', async () => {
+      storeSpy.ensureLoaded.mockReturnValue(throwError(() => new Error('boom')));
+      storeSpy.reload.mockImplementation(() => of(nothingSubscribed()));
+      const onClose = new Subject<boolean | undefined>();
+      dialogServiceSpy.open.mockReturnValue({ onClose, destroy: vi.fn() });
+      await createComponent();
+
+      component.openAddDialog();
+      onClose.next(true);
+
+      expect(component.loadError()).toBe(false);
+      expect(component.showEmptyState()).toBe(true);
+    });
   });
 
   // ── 3. Computed signals ───────────────────────────────────────────
@@ -318,6 +353,31 @@ describe('AnnexesServicesList', () => {
       expect(confirmationSpy.confirm).toHaveBeenCalledTimes(1);
       const args = confirmationSpy.confirm.mock.calls[0][0] as Confirmation;
       expect(args.acceptButtonProps).toEqual({ severity: 'danger' });
+    });
+
+    // The loader-less TranslateModule answers every key with the key itself, so
+    // the message reads back as the keys it was built from.
+
+    it("appends the catalog's warning to the confirm message", () => {
+      // Live data discards readings sent while it is off; the generic "members
+      // will lose access" sentence alone would hide that.
+      component.unsubscribe(
+        buildAnnex({
+          feature: 'live-data',
+          unsubscribeWarningKey: 'ANNEXES_SERVICES.LIVE_DATA.UNSUBSCRIBE_WARNING',
+        }),
+        buildEvent().event,
+      );
+      const args = confirmationSpy.confirm.mock.calls[0][0] as Confirmation;
+      expect(args.message).toBe(
+        'ANNEXES_SERVICES.UNSUBSCRIBE_CONFIRM ANNEXES_SERVICES.LIVE_DATA.UNSUBSCRIBE_WARNING',
+      );
+    });
+
+    it('uses the generic confirm message alone when the module declares no warning', () => {
+      component.unsubscribe(buildAnnex(), buildEvent().event);
+      const args = confirmationSpy.confirm.mock.calls[0][0] as Confirmation;
+      expect(args.message).toBe('ANNEXES_SERVICES.UNSUBSCRIBE_CONFIRM');
     });
 
     it('should call service.unsubscribe and reload the store on confirm-accept success', () => {

@@ -12,6 +12,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { Role } from '../../../../core/dtos/role';
 import { CommunityService } from '../../../../shared/services/community.service';
@@ -65,21 +66,21 @@ export class UsersCommunityList {
   readonly roleFilter = signal<Role | null>(null);
   readonly hasActiveFilters = computed(() => !!this.searchText() || this.roleFilter() !== null);
 
-  roleOptions = [
+  readonly roleOptions = translatedOptions([
     { label: 'COMMON.ROLE.MEMBER', value: Role.MEMBER, severity: 'info' as const },
     { label: 'COMMON.ROLE.MANAGER', value: Role.GESTIONNAIRE, severity: 'warn' as const },
     { label: 'COMMON.ROLE.ADMIN', value: Role.ADMIN, severity: 'contrast' as const },
-  ];
+  ]);
 
   // Dialog state
   dialogVisible = signal(false);
   userSelected = signal<UsersCommunityDTO | undefined>(undefined);
   roleSelected = signal<Role | -1>(-1);
-  roles = [
-    { name: 'COMMON.ROLE.MEMBER', value: Role.MEMBER },
-    { name: 'COMMON.ROLE.MANAGER', value: Role.GESTIONNAIRE },
-    { name: 'COMMON.ROLE.ADMIN', value: Role.ADMIN },
-  ];
+  readonly roles = translatedOptions([
+    { label: 'COMMON.ROLE.MEMBER', value: Role.MEMBER },
+    { label: 'COMMON.ROLE.MANAGER', value: Role.GESTIONNAIRE },
+    { label: 'COMMON.ROLE.ADMIN', value: Role.ADMIN },
+  ]);
   ref?: DynamicDialogRef | null;
 
   constructor() {

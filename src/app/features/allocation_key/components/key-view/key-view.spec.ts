@@ -135,7 +135,8 @@ describe('KeyView', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [KeyView, TranslateModule.forRoot()],
+      // English, pinned: the percentages are written in the reader's language.
+      imports: [KeyView, TranslateModule.forRoot({ lang: 'en' })],
       providers: [
         { provide: KeyService, useValue: keyServiceSpy },
         { provide: Router, useValue: routerSpy },
@@ -386,6 +387,28 @@ describe('KeyView', () => {
       );
       const rows = component.formatData();
       expect(rows[0].vp_percentage).toBe('PRO RATA');
+    });
+
+    it("should write the percentages in the reader's language", () => {
+      // BUG: `toFixed(2) + '%'` wrote "33.30%" in every language - a decimal
+      // point where French, Dutch and German readers expect a comma.
+      translateService.use('fr');
+      component.key.set(
+        buildKey({
+          iterations: [
+            {
+              id: 1,
+              number: 1,
+              energy_allocated_percentage: 0.5,
+              consumers: [{ id: 1, name: 'A', energy_allocated_percentage: 0.333 }],
+            },
+          ],
+        }),
+      );
+      const rows = component.formatData();
+      const nbsp = String.fromCharCode(0xa0);
+      expect(rows[0].va_percentage).toBe(`50,00${nbsp}%`);
+      expect(rows[0].vp_percentage).toBe(`33,30${nbsp}%`);
     });
   });
 

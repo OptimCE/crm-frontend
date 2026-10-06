@@ -31,7 +31,7 @@
             | translate
               : {
                   meters: data.meterCount,
-                  readings: data.readingCount | number: '1.0-0',
+                  readings: data.readingCount | localeNumber: '1.0-0',
                 }
         }}
       </span>
@@ -43,8 +43,8 @@
           'CRM_DATA_SOURCE.PREVIEW.PERIOD_COVERED'
             | translate
               : {
-                  from: data.firstTimestamp | date: 'dd/MM/yyyy',
-                  to: data.lastTimestamp | date: 'dd/MM/yyyy',
+                  from: data.firstTimestamp | localeDate: 'dd/MM/yyyy',
+                  to: data.lastTimestamp | localeDate: 'dd/MM/yyyy',
                 }
         }}
       </p>
@@ -54,13 +54,13 @@
       <div>
         <dt>{{ 'CRM_DATA_SOURCE.PREVIEW.TOTAL_CONSUMPTION' | translate }}</dt>
         <dd data-testid="crm-preview__consumption">
-          {{ data.totalConsumptionKwh | number: '1.0-1' }} kWh
+          {{ data.totalConsumptionKwh | localeNumber: '1.0-1' }} kWh
         </dd>
       </div>
       <div>
         <dt>{{ 'CRM_DATA_SOURCE.PREVIEW.TOTAL_INJECTION' | translate }}</dt>
         <dd data-testid="crm-preview__injection">
-          {{ data.totalInjectionKwh | number: '1.0-1' }} kWh
+          {{ data.totalInjectionKwh | localeNumber: '1.0-1' }} kWh
         </dd>
       </div>
     </dl>

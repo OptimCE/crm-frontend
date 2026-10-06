@@ -80,6 +80,16 @@ describe('LanguageService', () => {
     expect(primengSpy.setTranslation).not.toHaveBeenCalled();
   });
 
+  it('declares the language on <html>, so the page is read out in it', () => {
+    // index.html hardcoded `lang="en"`: a screen reader spoke the French,
+    // Dutch or German interface with English pronunciation.
+    build({ accept: 'Oui' });
+
+    langChange.next({ lang: 'nl' });
+
+    expect(document.documentElement.lang).toBe('nl');
+  });
+
   it('subscribes before the first use(), so the initial load is covered', () => {
     // The constructor calls init() -> use(). If the subscription were set up
     // after that, the very first onLangChange would be missed and PrimeNG would

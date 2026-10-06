@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { of, Subject } from 'rxjs';
 import { vi } from 'vitest';
 
 import {
@@ -11,6 +11,10 @@ import {
 import { KeysPanel } from './keys-panel';
 
 // ── Helpers ──────────────────────────────────────────────────────────
+
+/** French thousands separator (narrow no-break space) and percent-sign space. */
+const NNBSP = String.fromCharCode(0x202f);
+const NBSP = String.fromCharCode(0xa0);
 
 function buildKey(overrides: Partial<AllocationKeyPartialDTO> = {}): AllocationKeyPartialDTO {
   return {
@@ -55,7 +59,8 @@ describe('KeysPanel', () => {
   let translateSpy: {
     get: ReturnType<typeof vi.fn>;
     instant: ReturnType<typeof vi.fn>;
-    onLangChange: { subscribe: ReturnType<typeof vi.fn> };
+    getCurrentLang: ReturnType<typeof vi.fn>;
+    onLangChange: Subject<LangChangeEvent>;
     onTranslationChange: { subscribe: ReturnType<typeof vi.fn> };
     onDefaultLangChange: { subscribe: ReturnType<typeof vi.fn> };
   };
@@ -88,7 +93,9 @@ describe('KeysPanel', () => {
         of(Object.fromEntries(keys.map((k) => [k, k])) as Record<string, string>),
       ),
       instant: vi.fn((k: string) => k),
-      onLangChange: { subscribe: vi.fn() },
+      // The reader's language: English, so the figures below read as English.
+      getCurrentLang: vi.fn(() => 'en'),
+      onLangChange: new Subject<LangChangeEvent>(),
       onTranslationChange: { subscribe: vi.fn() },
       onDefaultLangChange: { subscribe: vi.fn() },
     };
@@ -146,6 +153,13 @@ describe('KeysPanel', () => {
       expect(component.surplusFormatted()).toBe('0.00');
     });
 
+    it("should write the surplus in the reader's language", async () => {
+      // BUG: `toFixed(2)` wrote a decimal point, and no grouping, in every language.
+      translateSpy.getCurrentLang.mockReturnValue('fr');
+      await createWith({ key: buildKey({ surplus_total: 1234.5 }) });
+      expect(component.surplusFormatted()).toBe(`1${NNBSP}234,50`);
+    });
+
     it('should return em dash for non-finite values', async () => {
       await createWith({ key: buildKey({ surplus_total: NaN as unknown as number }) });
       expect(component.surplusFormatted()).toBe('—');
@@ -185,6 +199,24 @@ describe('KeysPanel', () => {
       expect(rows[0].vp_percentage).toBe('60.00%');
       expect(rows[1].vp_percentage).toBe('40.00%');
       expect(rows[2].vp_percentage).toBe('T(KEY.CREATE.PRORATA_LABEL)');
+    });
+
+    it("should write the percentages in the reader's language", async () => {
+      // BUG: `toFixed(2) + '%'` wrote "50.00%" whatever the language.
+      translateSpy.getCurrentLang.mockReturnValue('fr');
+      await createWith({ detail: buildDetail() });
+      const rows = component.rowData();
+      expect(rows[0].va_percentage).toBe(`50,00${NBSP}%`);
+      expect(rows[0].vp_percentage).toBe(`60,00${NBSP}%`);
+    });
+
+    it('should rewrite the rows when the reader switches language', async () => {
+      await createWith({ detail: buildDetail() });
+      expect(component.rowData()[0].va_percentage).toBe('50.00%');
+
+      translateSpy.onLangChange.next({ lang: 'de', translations: {} });
+
+      expect(component.rowData()[0].va_percentage).toBe(`50,00${NBSP}%`);
     });
 
     it('should track the iteration index on each row for color gradient', async () => {

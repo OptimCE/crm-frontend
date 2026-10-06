@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -121,8 +121,8 @@ describe('DocumentsComponent', () => {
     });
 
     it('should have three search field options', () => {
-      expect(component.searchFieldOptions).toHaveLength(3);
-      expect(component.searchFieldOptions.map((o) => o.value)).toEqual([
+      expect(component.searchFieldOptions()).toHaveLength(3);
+      expect(component.searchFieldOptions().map((o) => o.value)).toEqual([
         'community_name',
         'file_name',
         'file_type',
@@ -472,6 +472,54 @@ describe('DocumentsComponent', () => {
       meServiceSpy.getDocumentById.mockReturnValue(throwError(() => new Error('network error')));
       component.onDownloadDocument(doc);
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
+    });
+  });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('search-field select labels', () => {
+    let translate: TranslateService;
+
+    function searchFieldAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="documents__select--search-field"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        PROFILE: {
+          DOCUMENTS: { COMMUNITY_LABEL: 'Communauté', NAME_LABEL: 'Nom', TYPE_LABEL: 'Type' },
+        },
+      });
+      translate.setTranslation('en', {
+        PROFILE: {
+          DOCUMENTS: { COMMUNITY_LABEL: 'Community', NAME_LABEL: 'Name', TYPE_LABEL: 'Kind' },
+        },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.searchFieldOptions()).toEqual([
+        { label: 'Communauté', value: 'community_name' },
+        { label: 'Nom', value: 'file_name' },
+        { label: 'Type', value: 'file_type' },
+      ]);
+    });
+
+    it('should give the selected field a translated aria-label that follows the language', async () => {
+      expect(searchFieldAriaLabel()).toBe('Communauté');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(searchFieldAriaLabel()).toBe('Community');
     });
   });
 });

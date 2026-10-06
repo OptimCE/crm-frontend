@@ -1,5 +1,5 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 import { CommunityAnnex } from '../../shared/dtos/annexes_services.dtos';
 import { AnnexesServicesService } from '../../shared/services/annexes_services.service';
@@ -40,8 +40,9 @@ export class CommunityServicesStore {
 
   constructor() {
     // Prefetch on every community change so the navbar repaints without waiting
-    // for a consumer. getCommunityServices' cache key is community-agnostic, so
-    // invalidate it first to avoid serving the previous community's state.
+    // for a consumer. Invalidating first keeps a switch a fresh read, as it has
+    // always been; it no longer guards against the previous community's state,
+    // which the per-community request in `fetch` rules out on its own.
     effect(() => {
       const id = this.userContext.activeCommunityId();
       if (id === this.loadedFor) return;
@@ -51,7 +52,11 @@ export class CommunityServicesStore {
         return;
       }
       this.cache.invalidate('annexes-services');
-      this.fetch(id).subscribe();
+      // A failure is already reflected in the store (`fetch` empties it), and the
+      // consumers that must report it — `activeFeatureGuard`, the annexes page —
+      // get it from their own `ensureLoaded()`/`reload()`. Without a handler this
+      // background prefetch would also surface it as an unhandled error.
+      this.fetch(id).subscribe({ error: () => undefined });
     });
   }
 
@@ -71,10 +76,10 @@ export class CommunityServicesStore {
    */
   reload(): Observable<CommunityAnnex[]> {
     const id = this.userContext.activeCommunityId();
-    // Covers both key families: the community-agnostic `annexes-services:list`
-    // and the per-community `annexes-services:community:<id>` keys `catalogFor`
-    // writes. A subscription change in the active community also changes what
-    // the user dashboard should show for it.
+    // Covers both key families: this store's `annexes-services:list:<id>` and
+    // the `annexes-services:community:<id>` keys `catalogFor` writes. A
+    // subscription change in the active community also changes what the user
+    // dashboard should show for it.
     this.cache.invalidate('annexes-services');
     this.catalogs.clear();
     this.loadedFor = null;
@@ -149,25 +154,39 @@ export class CommunityServicesStore {
   }
 
   private fetch(id: string): Observable<CommunityAnnex[]> {
-    return this.annexesService.getCommunityServices().pipe(
+    // Asks for `id` explicitly — keyed and pinned to it, see
+    // `getCommunityServices` — so this pipe only ever sees `id`'s catalog. With
+    // the old community-agnostic request, a switch mid-fetch let the new
+    // community's `fetch` join the old one's request and pass the check below.
+    return this.annexesService.getCommunityServices(id).pipe(
       map((response) => response.data ?? []),
       map((services) => {
         if (this.userContext.activeCommunityId() !== id) {
-          // The community changed while this request was in flight, so the
-          // payload describes the wrong one. `ServiceBase.cachedGet` keys its
-          // in-flight map by URL and this endpoint takes no community
-          // parameter, so the new community would otherwise be handed the old
-          // community's catalog. Drop it and leave the store unloaded: the
-          // cache is cleared, so the next `ensureLoaded()` issues a real
-          // request for whichever community is active by then.
-          this.cache.invalidate('annexes-services');
-          this.loadedFor = null;
-          this.services.set([]);
+          // A late answer for a community the user has since left. Drop it and
+          // leave the store alone, as the error path below does: the newly
+          // active community has its own request and may already be loaded
+          // from it. Emptying the store here would blank a correct navbar with
+          // nothing to refill it, since the effect only re-runs on a switch.
           return [];
         }
         this.services.set(services);
         this.loadedFor = id;
         return services;
+      }),
+      catchError((error: unknown) => {
+        // Leave nothing behind on failure. After a community switch the signal
+        // still holds the PREVIOUS community's catalog, and after `reload()` one
+        // known to be out of date: the navbar, dashboards and cross-links would
+        // keep offering those annexes, each click bouncing off
+        // `activeFeatureGuard` to `/`. Empty is the safe direction `catalogFor`
+        // takes too. Only while `id` is still active: once the user has switched
+        // away, the new community's own fetch owns the signal and may already
+        // have filled it.
+        if (this.userContext.activeCommunityId() === id) {
+          this.loadedFor = null;
+          this.services.set([]);
+        }
+        return throwError(() => error);
       }),
     );
   }

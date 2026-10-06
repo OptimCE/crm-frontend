@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -21,6 +20,7 @@ import {
 import { SharingOperationService } from '../../../../../shared/services/sharing_operation.service';
 import { envelopeData, TileState } from '../../../dashboard-format';
 import { DashboardTile } from '../dashboard-tile/dashboard-tile';
+import { LocaleNumberPipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /**
  * How many operations get a volume read.
@@ -54,7 +54,7 @@ export interface OperationVolumes {
 @Component({
   selector: 'app-energy-glance-tile',
   standalone: true,
-  imports: [DecimalPipe, TranslatePipe, RouterLink, DashboardTile],
+  imports: [LocaleNumberPipe, TranslatePipe, RouterLink, DashboardTile],
   templateUrl: './energy-glance-tile.html',
 })
 export class EnergyGlanceTile {

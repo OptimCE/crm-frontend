@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +20,7 @@ import {
   SortOrder,
 } from '../../../../shared/dtos/administrative-document.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import {
   TagSeverity,
@@ -30,6 +30,7 @@ import {
   extractApiErrorMessage,
 } from '../../administrative-document-format';
 import { DossierCreateDialog } from '../dossier-create-dialog/dossier-create-dialog';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 const PAGE_LIMIT = 20;
 const DEFAULT_SORT: DossierSortField = 'created_at';
@@ -43,7 +44,7 @@ interface SelectOption<T> {
 @Component({
   selector: 'app-dossier-list',
   standalone: true,
-  imports: [TranslatePipe, TableModule, Select, Button, Tag, FormsModule, DatePipe],
+  imports: [TranslatePipe, TableModule, Select, Button, Tag, FormsModule, LocaleDatePipe],
   templateUrl: './dossier-list.html',
   providers: [DialogService, ErrorMessageHandler],
 })
@@ -86,12 +87,34 @@ export class DossierList implements OnInit {
   sortField: DossierSortField = DEFAULT_SORT;
   sortOrder: SortOrder = DEFAULT_ORDER;
 
-  statusOptions: SelectOption<DossierStatus>[] = [];
-  typeOptions: SelectOption<DossierType>[] = [];
-  sortOptions: SelectOption<DossierSortField>[] = [];
+  readonly statusOptions = translatedOptions<SelectOption<DossierStatus>>(
+    [
+      DossierStatus.IN_PREPARATION,
+      DossierStatus.SUBMITTED,
+      DossierStatus.COMPLETE,
+      DossierStatus.CLOSED,
+      DossierStatus.LAPSED,
+    ].map((value) => ({ label: dossierStatusLabelKey(value), value })),
+  );
+  readonly typeOptions = translatedOptions<SelectOption<DossierType>>(
+    [
+      DossierType.CREATION_NOTIFICATION,
+      DossierType.MODIFICATION,
+      DossierType.ANNUAL_REPORT,
+      DossierType.SHARING_AUTHORIZATION,
+      DossierType.SHARING_MODIFICATION,
+      DossierType.CESSATION,
+    ].map((value) => ({ label: dossierTypeLabelKey(value), value })),
+  );
+  readonly sortOptions = translatedOptions<SelectOption<DossierSortField>>([
+    { value: 'created_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.CREATED_AT' },
+    { value: 'updated_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.UPDATED_AT' },
+    { value: 'submitted_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.SUBMITTED_AT' },
+    { value: 'status', label: 'ADMINISTRATIVE_DOCUMENT.SORT.STATUS' },
+    { value: 'dossier_type', label: 'ADMINISTRATIVE_DOCUMENT.SORT.TYPE' },
+  ]);
 
   ngOnInit(): void {
-    this.buildOptions();
     this.loadOperations();
 
     // `/administrative-document?id_sharing_operation=2` from a sharing operation.
@@ -102,56 +125,6 @@ export class DossierList implements OnInit {
       this.operationFilter = Number.isInteger(operation) && operation > 0 ? operation : null;
       this.load(1);
     });
-  }
-
-  private buildOptions(): void {
-    const statuses = [
-      DossierStatus.IN_PREPARATION,
-      DossierStatus.SUBMITTED,
-      DossierStatus.COMPLETE,
-      DossierStatus.CLOSED,
-      DossierStatus.LAPSED,
-    ];
-    this.statusOptions = statuses.map((value) => ({
-      label: this.translate.instant(dossierStatusLabelKey(value)) as string,
-      value,
-    }));
-
-    const types = [
-      DossierType.CREATION_NOTIFICATION,
-      DossierType.MODIFICATION,
-      DossierType.ANNUAL_REPORT,
-      DossierType.SHARING_AUTHORIZATION,
-      DossierType.SHARING_MODIFICATION,
-      DossierType.CESSATION,
-    ];
-    this.typeOptions = types.map((value) => ({
-      label: this.translate.instant(dossierTypeLabelKey(value)) as string,
-      value,
-    }));
-
-    this.sortOptions = [
-      {
-        value: 'created_at',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.CREATED_AT') as string,
-      },
-      {
-        value: 'updated_at',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.UPDATED_AT') as string,
-      },
-      {
-        value: 'submitted_at',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.SUBMITTED_AT') as string,
-      },
-      {
-        value: 'status',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.STATUS') as string,
-      },
-      {
-        value: 'dossier_type',
-        label: this.translate.instant('ADMINISTRATIVE_DOCUMENT.SORT.TYPE') as string,
-      },
-    ];
   }
 
   private loadOperations(): void {

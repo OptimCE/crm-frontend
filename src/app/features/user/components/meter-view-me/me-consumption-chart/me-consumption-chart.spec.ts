@@ -125,4 +125,26 @@ describe('MeConsumptionChart', () => {
       expect(chartData?.datasets.length).toBe(4);
     });
   });
+
+  // ── Figures in the reader's language ──────────────────────────────
+
+  describe("figures in the reader's language", () => {
+    it('hands the language to chart.js, which formats the axis in it', async () => {
+      // BUG: with no `locale`, chart.js formats ticks in the BROWSER's locale.
+      TestBed.inject(TranslateService).use('en');
+      await createComponent();
+      expect(component.options.locale).toBe('en');
+    });
+
+    it('writes the tooltip value in that language', async () => {
+      // BUG: the raw number was printed as is: "0.125 kWh" in every language.
+      TestBed.inject(TranslateService).use('nl');
+      await createComponent();
+      const label = component.options.plugins.tooltip.callbacks.label({
+        dataset: { label: 'Netto' },
+        raw: 0.125,
+      });
+      expect(label).toBe('Netto: 0,125 kWh');
+    });
+  });
 });

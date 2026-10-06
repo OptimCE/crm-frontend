@@ -22,7 +22,8 @@
       "YES": "Oui",
       "NO": "Non",
       "VALIDATE": "Valider",
-      "CANCEL": "Annuler"
+      "CANCEL": "Annuler",
+      "CLOSE": "Fermer"
     },
     "ROLE": {
       "ADMIN": "Administrateur",
@@ -312,7 +313,8 @@
     "BILLING": "Facturation",
     "ADMINISTRATIVE_DOCUMENT": "Documents administratifs",
     "DASHBOARD": "Tableau de bord",
-    "HOME": "Accueil"
+    "HOME": "Accueil",
+    "LIVE_DATA": "Données en direct"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
@@ -1131,11 +1133,11 @@
       "USAGE_TOOLTIP": "Résidentiel : ménage privé. Professionnel : PME ou bureau. Industriel : grand site avec raccordement haute tension. Détermine le barème tarifaire GRD applicable.",
       "OWNER_LABEL": "Titulaire",
       "PLACEHOLDER": {
-        "EAN_LABEL": "1234567890123",
+        "EAN_LABEL": "541448000000000000",
         "METER_NUMBER_LABEL": "1234567890123"
       },
       "ERROR": {
-        "INVALID_EAN": "L'EAN doit comporter exactement 13 chiffres."
+        "INVALID_EAN": "L'EAN doit comporter exactement 18 chiffres."
       }
     },
     "CATEGORIES": {
@@ -1234,6 +1236,12 @@
       "ERRORS": {
         "SELECTED_MEMBER_INCORRECT": "Le membre sélectionné est incorrect"
       },
+      "HOLDER_CHANGE": {
+        "HEADER": "Confirmer le changement de titulaire",
+        "TRANSFER_MESSAGE": "Le compteur {{ean}} sera transféré de {{from}} à {{to}} à partir du {{date}}. À partir de cette date, {{to}} verra ses relevés et sera facturé pour ce compteur. S'agit-il du bon membre ?",
+        "REMOVE_MESSAGE": "Le compteur {{ean}} ne sera plus attribué à {{from}} à partir du {{date}} et n'aura plus de titulaire. Continuer ?",
+        "ASSIGN_MESSAGE": "Le compteur {{ean}} sera attribué à {{to}} à partir du {{date}}. À partir de cette date, {{to}} verra ses relevés et sera facturé pour ce compteur. S'agit-il du bon membre ?"
+      },
       "FORM_ERROR": {
         "DESCRIPTION": "description",
         "SAMPLINGPOWER": "puissance de prélèvement",
@@ -1316,6 +1324,7 @@
     "UPDATE": {
       "METER_INFORMATION_TITLE": "Information compteur",
       "VALIDATE_BUTTON_LABEL": "Valider",
+      "EAN_READONLY_HINT": "L'EAN identifie le compteur et ne peut pas être modifié ici.",
       "FORM_ERROR": {
         "ADDRESS_STREET": "rue",
         "ADDRESS_NUMBER": "numéro",
@@ -1652,6 +1661,11 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Documents administratifs",
       "DESCRIPTION": "Suivez les dossiers réglementaires déposés auprès de la CWaPE et du GRD : statuts, échéances calculées et chaque version de chaque document transmis."
+    },
+    "LIVE_DATA": {
+      "NAME": "Données en direct",
+      "DESCRIPTION": "Relevez les compteurs communicants de la communauté tous les quarts d'heure : production en temps réel, état des appareils et seuil de confidentialité que vous maîtrisez.",
+      "UNSUBSCRIBE_WARNING": "Les appareils restent enrôlés et l'historique est conservé, mais les relevés envoyés pendant la désactivation sont définitivement perdus. La réactivation relance la collecte en moins d'une minute, sans nouvel enrôlement."
     }
   },
   "BILLING": {
@@ -2079,6 +2093,7 @@
       "BUTTON": "Exporter en CSV",
       "TOO_LARGE": "Trop d'entrées à exporter. Veuillez affiner vos filtres et réessayer."
     },
+    "UNKNOWN_ACTION": "Autre action ({{code}})",
     "ACTIONS": {
       "crm": {
         "community_subscription": {
@@ -2149,6 +2164,9 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Données de consommation téléversées"
+        },
+        "address": {
+          "geocode_backfill": "Adresses géocodées (lot)"
         }
       },
       "allocation_key_generation": {
@@ -2173,6 +2191,79 @@
           "succeeded": "Simulation terminée",
           "failed": "Échec de la simulation",
           "deleted": "Simulation supprimée"
+        }
+      },
+      "administrative_document": {
+        "dossier": {
+          "created": "Dossier administratif créé",
+          "updated": "Dossier administratif mis à jour",
+          "status_changed": "Statut du dossier modifié"
+        },
+        "document": {
+          "created": "Document administratif créé",
+          "status_changed": "Statut du document modifié",
+          "generation_requested": "Génération du document demandée",
+          "rendered": "Document généré",
+          "render_failed": "Échec de la génération du document"
+        },
+        "document_version": {
+          "added": "Version du document ajoutée"
+        },
+        "deadline": {
+          "created": "Échéance créée",
+          "resolved": "Échéance clôturée",
+          "missed": "Échéance dépassée",
+          "reminded": "Rappel d'échéance envoyé"
+        },
+        "template": {
+          "saved": "Modèle de document enregistré"
+        },
+        "deadline_rule": {
+          "saved": "Règle d'échéance enregistrée"
+        }
+      },
+      "billing": {
+        "run": {
+          "created": "Exécution de facturation lancée",
+          "queue_failed": "L'exécution de facturation n'a pas pu être mise en file d'attente",
+          "computed": "Exécution de facturation calculée",
+          "failed": "Échec de l'exécution de facturation"
+        },
+        "invoice": {
+          "issued": "Facture émise",
+          "render_requested": "Génération du PDF de la facture lancée",
+          "rendered": "PDF de la facture généré",
+          "render_failed": "Échec de la génération du PDF de la facture",
+          "pdf_deleted": "PDF de la facture supprimé",
+          "sent": "Facture envoyée",
+          "paid": "Facture payée",
+          "overdue": "Facture en retard",
+          "credited": "Note de crédit créée"
+        },
+        "payment": {
+          "registered": "Paiement enregistré"
+        }
+      },
+      "live_data": {
+        "device": {
+          "created": "Appareil de données en direct créé",
+          "token_issued": "Code d'enrôlement de l'appareil émis",
+          "revoked": "Appareil de données en direct révoqué",
+          "enrolled": "Appareil de données en direct enrôlé"
+        },
+        "settings": {
+          "updated": "Visibilité des données en direct mise à jour"
+        }
+      },
+      "news": {
+        "post": {
+          "created": "Publication créée",
+          "updated": "Publication modifiée",
+          "deleted": "Publication supprimée"
+        },
+        "vote": {
+          "cast": "Vote enregistré dans un sondage",
+          "retracted": "Vote retiré d'un sondage"
         }
       }
     }
@@ -2591,6 +2682,8 @@
         "LOCALITE": "Localité",
         "DROITS_DE_VOTE": "Droits de vote",
         "EAN": "EAN",
+        "EAN_DELIVERY": "EAN du point de prélèvement",
+        "EAN_INJECTION": "EAN du point d'injection",
         "METER_NUMBER": "N° compteur",
         "GRD": "Gestionnaire de réseau",
         "CLIENT_RESIDENTIEL": "Client résidentiel",
@@ -2616,7 +2709,8 @@
         "RELOAD_BLOCKED": "Vous avez modifié le formulaire — recharger effacerait vos corrections.",
         "CODES": {
           "meter": {
-            "no_member_attribution": "Le point de fourniture {{subject}} n'est attribué à aucun membre : il ne peut pas être repris sous un nom."
+            "no_member_attribution": "Le point de fourniture {{subject}} n'est attribué à aucun membre : il ne peut pas être repris sous un nom.",
+            "ean_not_form_representable": "L'EAN {{subject}} ne peut pas être imprimé sur ce formulaire : ses cases suivent un « 5 4 » préimprimé et ne contiennent que les 16 chiffres suivants. Les cases restent vides — vérifiez l'EAN dans le CRM ou complétez-les à la main sur le PDF."
           },
           "community": {
             "field_missing": "Information manquante pour la communauté : {{field}}. Le formulaire sera déposé sans elle."
@@ -2691,6 +2785,10 @@
       "ENTER": "Entrer",
       "OPEN": "Ouvrir ma communauté",
       "MANAGE": "Gérer mes communautés (créer, renommer, quitter)",
+      "CREATE_TITLE": "Créer une communauté",
+      "CREATE_HINT": "Vous portez un projet ? Créez votre communauté dès maintenant, sans attendre d'invitation : vous en serez l'administrateur.",
+      "CREATE_ACTION": "Créer ma communauté",
+      "JOIN_TITLE": "Rejoindre une communauté",
       "EMPTY": "Vous ne faites encore partie d'aucune communauté.",
       "EMPTY_HINT": "Dès qu'une communauté vous invitera, l'invitation apparaîtra ici.",
       "EMPTY_ACTION": "Découvrir les communautés proches de chez moi"
@@ -2997,6 +3095,202 @@
       "browseFiles": "Parcourir les fichiers",
       "maximizeLabel": "Agrandir",
       "minimizeLabel": "Réduire"
+    }
+  },
+  "LIVE": {
+    "HINT": {
+      "REVOKED": "Cet appareil a été révoqué : il ne peut plus transmettre. Les mesures qu'il a déjà envoyées sont conservées.",
+      "OK": "Cet appareil transmet normalement.",
+      "NEVER_SEEN": "Cet appareil ne s'est jamais connecté. Vérifiez qu'il est sous tension et que le code d'enrôlement a bien été saisi sur l'appareil.",
+      "SILENT": "Aucune donnée depuis plus d'un jour. Vérifiez l'alimentation et la connexion réseau de l'appareil.",
+      "OFFLINE": "L'appareil a signalé sa déconnexion, ou ne répond plus.",
+      "P1_NOT_ENABLED": "L'appareil est connecté et transmet, mais toutes les mesures sont à zéro. La cause la plus probable est que le port P1 du compteur n'a pas été activé par le gestionnaire de réseau : cela doit lui être demandé et ne peut pas être résolu sur place.",
+      "INGEST_DOWN": "Le service de collecte est momentanément indisponible : aucune conclusion ne peut être tirée pour cet appareil."
+    }
+  },
+  "LIVE_DATA": {
+    "TITLE": "Données en direct",
+    "SUBTITLE": "Télémétrie au quart d'heure des compteurs communicants de la communauté.",
+    "INDICATIVE": "Données indicatives. Les relevés du gestionnaire de réseau restent la seule base des clés de répartition et de la facturation.",
+    "SUBSCRIPTION_LOST": "Les données en direct ont été désactivées pour cette communauté. Un administrateur peut les réactiver depuis les Services annexes.",
+    "TABS": {
+      "DASHBOARD": "Tableau de bord",
+      "DEVICES": "Appareils",
+      "OPS": "État du parc",
+      "SETTINGS": "Paramètres"
+    },
+    "WINDOW": {
+      "DAY": "24 heures",
+      "WEEK": "7 jours",
+      "MONTH": "30 jours"
+    },
+    "SIGNAL": {
+      "NEUTRAL": "Production uniquement",
+      "NEUTRAL_DETAIL": "La consommation n'est pas encore mesurée : cette vue ne peut pas dire si le moment est favorable pour consommer, seulement combien est produit."
+    },
+    "SUMMARY": {
+      "PRODUCTION": "Production, dernière heure complète",
+      "POWER": "Puissance actuelle",
+      "IMPORT": "Prélevé sur le réseau",
+      "EXPORT": "Injecté sur le réseau",
+      "SHARED": "Partagé (estimation)",
+      "MEMBERS": "Membres contributeurs",
+      "DEVICES": "Appareils",
+      "ONLINE": "en ligne",
+      "AS_OF": "Au {{time}}",
+      "NO_DATA": "Aucune mesure n'a encore été agrégée. Une communauté qui vient d'être créée n'a pas produit zéro : elle n'a pas encore été mesurée."
+    },
+    "CHART": {
+      "TITLE": "Production et injection",
+      "PRODUCTION": "Production",
+      "EXPORT": "Injecté sur le réseau",
+      "Y_AXIS": "kWh",
+      "EMPTY": "Rien n'a été mesuré sur cette période.",
+      "EMPTY_WITHHELD": "Ces compteurs ne voient que les échanges avec le réseau : la production ne peut pas être affichée, et l'injection reste masquée tant que trop peu de membres y contribuent.",
+      "WITHHELD": "masqué (vie privée)",
+      "SUPPRESSED": "Les chiffres réseau de {{count}} période(s) ont été masqués pour protéger la vie privée des membres.",
+      "OFFTAKE_TITLE": "Consommation prélevée sur le réseau",
+      "OFFTAKE": "Prélevé sur le réseau",
+      "OFFTAKE_NOTE": "La production solaire consommée sur place n'est pas incluse : les compteurs ne voient que les échanges avec le réseau."
+    },
+    "SCOPE": {
+      "LABEL": "Périmètre",
+      "COMMUNITY": "Toute la communauté"
+    },
+    "SHARING": {
+      "TITLE": "Partage dans les opérations (estimation)",
+      "OFFTAKE_SHARED": "Prélèvement couvert par la communauté",
+      "OFFTAKE_SUPPLIER": "Prélèvement fourni par le fournisseur",
+      "INJECTION_SHARED": "Injection partagée dans la communauté",
+      "INJECTION_GRID": "Reste de l'injection vers le réseau",
+      "NOTE": "Estimation parmi {{devices}} compteur(s) suivi(s) sur {{meters}}, calculée par quart d'heure au sein de chaque opération de partage. Les données du gestionnaire de réseau restent la référence.",
+      "OF_METERS": "sur {{meters}} compteur(s)"
+    },
+    "MEMBER": {
+      "TITLE": "Production de mon opération de partage",
+      "INTRO": "La production de l'opération de partage à laquelle participe votre compteur. Là où les compteurs ne voient que les échanges avec le réseau, c'est l'énergie injectée qui est montrée.",
+      "NONE": "Vous ne détenez actuellement aucun compteur actif dans une opération de partage de cette communauté.",
+      "FORBIDDEN": "Le gestionnaire de votre communauté n'a pas rendu ces chiffres accessibles aux membres.",
+      "OPERATION": "Opération de partage"
+    },
+    "ABSENT": {
+      "BELOW_K_THRESHOLD": "Masqué : trop peu de membres ont contribué à cette période pour que les chiffres puissent être affichés sans les identifier.",
+      "NOT_MEASURED": "Non mesuré : les compteurs de cette communauté ne voient pas cette valeur.",
+      "NO_CONSUMPTION_IN_PHASE_1": "La consommation n'est pas encore mesurée.",
+      "NO_CLOSED_HOUR_YET": "La première heure de mesures n'est pas encore terminée : le chiffre apparaîtra une fois qu'elle aura été calculée.",
+      "UNKNOWN": "Non disponible."
+    },
+    "HEALTH": {
+      "OK": "Transmet",
+      "NEVER_SEEN": "Jamais vu",
+      "SILENT": "Silencieux",
+      "OFFLINE": "Hors ligne",
+      "REPORTING_ZEROS": "Transmet des zéros",
+      "REVOKED": "Révoqué",
+      "UNKNOWN": "Inconnu"
+    },
+    "DEVICE_STATUS": {
+      "PENDING": "En attente d'enrôlement",
+      "ACTIVE": "Enrôlé",
+      "REVOKED": "Révoqué"
+    },
+    "DEVICES": {
+      "TITLE": "Appareils",
+      "ADD": "Ajouter un appareil",
+      "EMPTY": "Aucun appareil n'a encore été créé pour cette communauté.",
+      "NEVER": "jamais",
+      "REVOKE": "Révoquer",
+      "REVOKE_CONFIRM_HEADER": "Révoquer cet appareil ?",
+      "REVOKE_CONFIRM_MESSAGE": "L'appareil cesse immédiatement d'être accepté et l'opération est irréversible. Les mesures déjà transmises sont conservées.",
+      "REVOKED": "Appareil révoqué.",
+      "NEW_TOKEN": "Nouveau code d'enrôlement",
+      "CREATED": "Appareil créé.",
+      "COARSENED": "Les horodatages sont masqués pour un appareil de consommation : savoir quand le compteur d'un ménage a été vu pour la dernière fois est en soi une information sur ce ménage.",
+      "LAST_REJECT": "Dernier rejet",
+      "REJECT_CAPACITY_HINT": "Des mesures de production sont rejetées comme invraisemblables : soit au-dessus de la puissance déclarée de l'appareil (kVA), soit pendant la nuit. Le plus probable : la puissance enregistrée est inférieure à celle de l'onduleur, et seuls les pics ensoleillés sont écartés. Vérifiez-la, ainsi que l'horloge du connecteur.",
+      "COL": {
+        "CONNECTOR": "Connecteur",
+        "LAST_SEEN": "Vu pour la dernière fois"
+      }
+    },
+    "REJECT_REASON": {
+      "SCHEMA_INVALID": "Message mal formé",
+      "UNKNOWN_FIELD": "Champ inconnu dans le message",
+      "BATCH_TOO_LARGE": "Lot de mesures trop grand",
+      "DUPLICATE_TS_IN_BATCH": "Horodatage en double dans le lot",
+      "DEVICE_UNKNOWN": "Appareil inconnu",
+      "DEVICE_REVOKED": "Appareil révoqué",
+      "COMMUNITY_MISMATCH": "Communauté incorrecte",
+      "TS_IN_FUTURE": "Horodatage dans le futur",
+      "TS_TOO_OLD": "Mesure trop ancienne",
+      "TS_NOT_ALIGNED": "Horodatage hors du quart d'heure",
+      "NEGATIVE_ENERGY": "Énergie négative",
+      "OVER_DEVICE_CEILING": "Au-dessus du plafond de l'appareil",
+      "IMPLAUSIBLE_PRODUCTION": "Production invraisemblable",
+      "UNKNOWN": "Motif non reconnu"
+    },
+    "CREATE": {
+      "TITLE": "Nouvel appareil",
+      "NAME": "Nom",
+      "NAME_PLACEHOLDER": "ex. Toiture, bâtiment sud",
+      "EAN": "Compteur",
+      "EAN_PLACEHOLDER": "Choisissez un compteur",
+      "EAN_FILTER_PLACEHOLDER": "EAN, adresse ou titulaire",
+      "EAN_HINT": "Seuls les compteurs actifs de la communauté sont proposés. Un compteur ne peut avoir qu'un seul appareil à la fois.",
+      "EAN_EMPTY": "Cette communauté n'a aucun compteur actif auquel rattacher un appareil.",
+      "EAN_LOAD_ERROR": "Les compteurs de la communauté n'ont pas pu être chargés. Fermez cette fenêtre et réessayez.",
+      "EAN_TRUNCATED": "Seuls les {{shown}} premiers des {{total}} compteurs actifs sont proposés.",
+      "EAN_DEVICES_UNKNOWN": "Impossible de vérifier quels compteurs ont déjà un appareil. Un compteur qui en a déjà un sera refusé à la création.",
+      "EAN_HAS_DEVICE": "A déjà un appareil",
+      "PURE_INJECTION": "Rien ne consomme derrière ce compteur",
+      "PURE_INJECTION_HELP": "À cocher uniquement si le site injecte tout sur le réseau. Sur un site qui consomme aussi, un port P1 ne voit pas la production, et cocher cette case surestimerait ce que la communauté produit.",
+      "SUBMIT": "Créer",
+      "ERRORS": {
+        "REQUIRED": "Veuillez indiquer un nom et choisir un compteur."
+      }
+    },
+    "TOKEN": {
+      "TITLE": "Code d'enrôlement",
+      "SHOWN_ONCE": "Ce code n'est affiché qu'une fois et ne peut pas être récupéré. En cas de perte, générez-en un nouveau — ce qui invalide celui-ci.",
+      "EXPIRES": "Valable jusqu'au {{date}}",
+      "COPY": "Copier le code",
+      "COPIED": "Code copié.",
+      "SCAN": "Scannez ce code avec l'application de configuration de l'appareil, ou saisissez-le à la main."
+    },
+    "OPS": {
+      "TITLE": "État du parc",
+      "SUBTITLE": "Ce qui transmet, ce qui ne transmet pas, et la fraîcheur des chiffres.",
+      "NEEDS_ATTENTION": "À vérifier",
+      "ALL_WELL": "Tous les appareils transmettent normalement.",
+      "ROLLUP_AGE": "Chiffres recalculés il y a {{minutes}} minutes",
+      "ROLLUP_STALE": "Les chiffres n'ont pas été recalculés depuis {{minutes}} minutes. Tous les appareils peuvent être en bonne santé alors que la tâche de calcul est arrêtée.",
+      "ROLLUP_NEVER": "Aucun calcul n'a encore été effectué.",
+      "ROLLUP_IDLE": "Aucune donnée dans les dernières 48 heures : il n'y a rien à recalculer.",
+      "INGEST_DOWN": "La collecte semble interrompue : aucun appareil n'a transmis depuis plus d'un jour. Vérifiez le service de collecte avant les appareils.",
+      "REJECTIONS": "Rejets (24 h)",
+      "DEAD_LETTERS": "{{count}} message(s) n'ont pas pu être enregistrés au cours des 24 dernières heures.",
+      "DEAD_LETTERS_NONE": "Tous les messages reçus ces 24 dernières heures ont été enregistrés.",
+      "READINGS_REJECTED": "{{count}} appareil(s) ont vu des mesures isolées rejetées au cours des 24 dernières heures. Le détail figure dans l'onglet Appareils.",
+      "READINGS_REJECTED_NONE": "Aucune mesure isolée n'a été rejetée ces 24 dernières heures.",
+      "DIAG": "Diagnostic du connecteur"
+    },
+    "SETTINGS": {
+      "TITLE": "Visibilité",
+      "SUBTITLE": "Ce que les membres de cette communauté peuvent voir, et à partir de quelle taille de groupe les chiffres sont masqués.",
+      "IS_DEFAULT": "Ce sont les valeurs par défaut de la plateforme. Rien n'a encore été enregistré pour cette communauté.",
+      "MEMBERS_SEE_AGGREGATE": "Les membres peuvent voir les chiffres de leur opération de partage",
+      "MEMBERS_SEE_AGGREGATE_HELP": "Si désactivé, seuls les gestionnaires peuvent ouvrir le tableau de bord.",
+      "MEMBERS_SEE_PRODUCTION": "Les membres peuvent voir la production",
+      "MEMBERS_SEE_PRODUCTION_HELP": "Si désactivé, l'accès au tableau de bord est refusé aux membres plutôt que de leur montrer une vue sans la production : un solde moins une consommation redonne exactement la production.",
+      "K": "Nombre minimum de membres",
+      "K_HELP": "Les chiffres réseau sont masqués pour toute période à laquelle moins de membres que ce seuil ont contribué. La production est toujours affichée. La valeur minimale autorisée est 3.",
+      "SAVE": "Enregistrer",
+      "SAVED": "Paramètres de visibilité enregistrés."
+    },
+    "FORECAST": {
+      "TITLE": "Prévision de production",
+      "NO_METHOD": "Aucune méthode de prévision n'est encore disponible pour la filière de production de cette communauté.",
+      "UNAVAILABLE": "Aucune prévision disponible."
     }
   }
 }

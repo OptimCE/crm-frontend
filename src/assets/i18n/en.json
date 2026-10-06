@@ -22,7 +22,8 @@
       "YES": "Yes",
       "NO": "No",
       "VALIDATE": "Validate",
-      "CANCEL": "Cancel"
+      "CANCEL": "Cancel",
+      "CLOSE": "Close"
     },
     "ROLE": {
       "ADMIN": "Administrator",
@@ -312,7 +313,8 @@
     "BILLING": "Billing",
     "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
     "DASHBOARD": "Dashboard",
-    "HOME": "Home"
+    "HOME": "Home",
+    "LIVE_DATA": "Live data"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -1131,11 +1133,11 @@
       "USAGE_TOOLTIP": "Residential: private household. Professional: SME or office. Industrial: large industrial site with high-voltage connection or process loads. Determines which DSO tariff schedule applies.",
       "OWNER_LABEL": "Holder",
       "PLACEHOLDER": {
-        "EAN_LABEL": "1234567890123",
+        "EAN_LABEL": "541448000000000000",
         "METER_NUMBER_LABEL": "1234567890123"
       },
       "ERROR": {
-        "INVALID_EAN": "The EAN must be exactly 13 digits."
+        "INVALID_EAN": "The EAN must be exactly 18 digits."
       }
     },
     "CATEGORIES": {
@@ -1234,6 +1236,12 @@
       "ERRORS": {
         "SELECTED_MEMBER_INCORRECT": "The selected member is incorrect"
       },
+      "HOLDER_CHANGE": {
+        "HEADER": "Confirm holder change",
+        "TRANSFER_MESSAGE": "Meter {{ean}} will be transferred from {{from}} to {{to}} starting {{date}}. From that date, {{to}} will see its readings and be billed for it. Is this the right member?",
+        "REMOVE_MESSAGE": "Meter {{ean}} will no longer be assigned to {{from}} starting {{date}} and will have no holder. Continue?",
+        "ASSIGN_MESSAGE": "Meter {{ean}} will be assigned to {{to}} starting {{date}}. From that date, {{to}} will see its readings and be billed for it. Is this the right member?"
+      },
       "FORM_ERROR": {
         "DESCRIPTION": "description",
         "SAMPLINGPOWER": "withdrawal power",
@@ -1316,6 +1324,7 @@
     "UPDATE": {
       "METER_INFORMATION_TITLE": "Meter information",
       "VALIDATE_BUTTON_LABEL": "Validate",
+      "EAN_READONLY_HINT": "The EAN identifies the meter and cannot be changed here.",
       "FORM_ERROR": {
         "ADDRESS_STREET": "street",
         "ADDRESS_NUMBER": "number",
@@ -1652,6 +1661,11 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Administrative documents",
       "DESCRIPTION": "Track the regulatory dossiers filed with the CWaPE and the grid operator: statuses, derived deadlines, and every version of every document sent."
+    },
+    "LIVE_DATA": {
+      "NAME": "Live data",
+      "DESCRIPTION": "Read the community's smart meters every quarter of an hour: production as it happens, device health, and a privacy threshold you control.",
+      "UNSUBSCRIBE_WARNING": "Devices stay enrolled and stored history is kept, but readings sent while the module is disabled are discarded for good. Enabling it again resumes collection within a minute, with no re-enrolment."
     }
   },
   "BILLING": {
@@ -2079,6 +2093,7 @@
       "BUTTON": "Export CSV",
       "TOO_LARGE": "Too many entries to export. Please narrow your filters and try again."
     },
+    "UNKNOWN_ACTION": "Other action ({{code}})",
     "ACTIONS": {
       "crm": {
         "community_subscription": {
@@ -2149,6 +2164,9 @@
         },
         "sharing_op_consumption": {
           "uploaded": "Consumption data uploaded"
+        },
+        "address": {
+          "geocode_backfill": "Addresses geocoded (batch)"
         }
       },
       "allocation_key_generation": {
@@ -2173,6 +2191,79 @@
           "succeeded": "Simulation completed",
           "failed": "Simulation failed",
           "deleted": "Simulation deleted"
+        }
+      },
+      "administrative_document": {
+        "dossier": {
+          "created": "Administrative dossier created",
+          "updated": "Administrative dossier updated",
+          "status_changed": "Dossier status changed"
+        },
+        "document": {
+          "created": "Administrative document created",
+          "status_changed": "Document status changed",
+          "generation_requested": "Document generation requested",
+          "rendered": "Document generated",
+          "render_failed": "Document generation failed"
+        },
+        "document_version": {
+          "added": "Document version added"
+        },
+        "deadline": {
+          "created": "Deadline created",
+          "resolved": "Deadline closed",
+          "missed": "Deadline missed",
+          "reminded": "Deadline reminder sent"
+        },
+        "template": {
+          "saved": "Document template saved"
+        },
+        "deadline_rule": {
+          "saved": "Deadline rule saved"
+        }
+      },
+      "billing": {
+        "run": {
+          "created": "Billing run started",
+          "queue_failed": "Billing run could not be queued",
+          "computed": "Billing run computed",
+          "failed": "Billing run failed"
+        },
+        "invoice": {
+          "issued": "Invoice issued",
+          "render_requested": "Invoice PDF generation started",
+          "rendered": "Invoice PDF generated",
+          "render_failed": "Invoice PDF generation failed",
+          "pdf_deleted": "Invoice PDF deleted",
+          "sent": "Invoice sent",
+          "paid": "Invoice paid",
+          "overdue": "Invoice overdue",
+          "credited": "Credit note created"
+        },
+        "payment": {
+          "registered": "Payment registered"
+        }
+      },
+      "live_data": {
+        "device": {
+          "created": "Live data device created",
+          "token_issued": "Device enrolment code issued",
+          "revoked": "Live data device revoked",
+          "enrolled": "Live data device enrolled"
+        },
+        "settings": {
+          "updated": "Live data visibility updated"
+        }
+      },
+      "news": {
+        "post": {
+          "created": "News post published",
+          "updated": "News post updated",
+          "deleted": "News post deleted"
+        },
+        "vote": {
+          "cast": "Poll vote cast",
+          "retracted": "Poll vote withdrawn"
         }
       }
     }
@@ -2591,6 +2682,8 @@
         "LOCALITE": "City",
         "DROITS_DE_VOTE": "Voting rights",
         "EAN": "EAN",
+        "EAN_DELIVERY": "Delivery point EAN",
+        "EAN_INJECTION": "Injection point EAN",
         "METER_NUMBER": "Meter number",
         "GRD": "Grid operator",
         "CLIENT_RESIDENTIEL": "Residential client",
@@ -2616,7 +2709,8 @@
         "RELOAD_BLOCKED": "You have edited the form — reloading would discard your corrections.",
         "CODES": {
           "meter": {
-            "no_member_attribution": "Delivery point {{subject}} is not attributed to any member, so it cannot be listed under a name."
+            "no_member_attribution": "Delivery point {{subject}} is not attributed to any member, so it cannot be listed under a name.",
+            "ean_not_form_representable": "EAN {{subject}} cannot be printed on this form: its boxes follow a pre-printed \"5 4\" and hold only the 16 digits after it. The boxes are left blank — check the EAN in the CRM, or complete them by hand on the PDF."
           },
           "community": {
             "field_missing": "Community information is missing: {{field}}. The form will be filed without it."
@@ -2691,6 +2785,10 @@
       "ENTER": "Enter",
       "OPEN": "Open my community",
       "MANAGE": "Manage my communities (create, rename, leave)",
+      "CREATE_TITLE": "Create a community",
+      "CREATE_HINT": "Leading a project? Create your community now, without waiting for an invitation: you will be its administrator.",
+      "CREATE_ACTION": "Create my community",
+      "JOIN_TITLE": "Join a community",
       "EMPTY": "You are not part of any community yet.",
       "EMPTY_HINT": "As soon as a community invites you, the invitation will appear here.",
       "EMPTY_ACTION": "Find communities near me"
@@ -2997,6 +3095,202 @@
       "browseFiles": "Browse Files",
       "maximizeLabel": "Maximize",
       "minimizeLabel": "Minimize"
+    }
+  },
+  "LIVE": {
+    "HINT": {
+      "REVOKED": "This device has been revoked and can no longer send data. The measurements it already sent are kept.",
+      "OK": "This device is reporting normally.",
+      "NEVER_SEEN": "This device has never connected. Check that it is powered on, and that the enrolment code was entered on the device itself.",
+      "SILENT": "No data has arrived for more than a day. Check the device's power and network connection.",
+      "OFFLINE": "The device reported that it was going offline, or stopped responding.",
+      "P1_NOT_ENABLED": "The device is connected and sending data, but every reading is zero. The most likely cause is that the meter's P1 port has not been activated by the grid operator — this has to be requested from them and cannot be fixed on site.",
+      "INGEST_DOWN": "The data collection service is currently unavailable, so nothing can be concluded about this device."
+    }
+  },
+  "LIVE_DATA": {
+    "TITLE": "Live data",
+    "SUBTITLE": "Quarter-hourly telemetry from the community's smart meters.",
+    "INDICATIVE": "Indicative data. The grid operator's figures remain the only basis for allocation keys and invoicing.",
+    "SUBSCRIPTION_LOST": "Live data has been disabled for this community. An administrator can enable it again from Annex services.",
+    "TABS": {
+      "DASHBOARD": "Dashboard",
+      "DEVICES": "Devices",
+      "OPS": "Fleet status",
+      "SETTINGS": "Settings"
+    },
+    "WINDOW": {
+      "DAY": "24 hours",
+      "WEEK": "7 days",
+      "MONTH": "30 days"
+    },
+    "SIGNAL": {
+      "NEUTRAL": "Production only",
+      "NEUTRAL_DETAIL": "There is no consumption measurement yet, so this view cannot say whether now is a good time to use energy — only how much is being produced."
+    },
+    "SUMMARY": {
+      "PRODUCTION": "Production, last full hour",
+      "POWER": "Current power",
+      "IMPORT": "Drawn from the grid",
+      "EXPORT": "Fed into the grid",
+      "SHARED": "Shared (estimate)",
+      "MEMBERS": "Contributing members",
+      "DEVICES": "Devices",
+      "ONLINE": "online",
+      "AS_OF": "As of {{time}}",
+      "NO_DATA": "No measurements have been rolled up yet. A newly created community has not produced nothing — it has not been measured."
+    },
+    "CHART": {
+      "TITLE": "Production and export",
+      "PRODUCTION": "Production",
+      "EXPORT": "Fed into the grid",
+      "Y_AXIS": "kWh",
+      "EMPTY": "Nothing has been measured over this period.",
+      "EMPTY_WITHHELD": "These meters only see the exchange with the grid, so production cannot be shown, and the export is withheld until enough members contribute.",
+      "WITHHELD": "withheld (privacy)",
+      "SUPPRESSED": "{{count}} period(s) had their grid figures withheld to protect members' privacy.",
+      "OFFTAKE_TITLE": "Consumption drawn from the grid",
+      "OFFTAKE": "Drawn from the grid",
+      "OFFTAKE_NOTE": "Solar production used on site is not included: the meters only see the exchange with the grid."
+    },
+    "SCOPE": {
+      "LABEL": "Scope",
+      "COMMUNITY": "Whole community"
+    },
+    "SHARING": {
+      "TITLE": "Sharing within the operations (estimate)",
+      "OFFTAKE_SHARED": "Offtake covered by the community",
+      "OFFTAKE_SUPPLIER": "Offtake supplied by the supplier",
+      "INJECTION_SHARED": "Injection shared in the community",
+      "INJECTION_GRID": "Rest of the injection to the grid",
+      "NOTE": "Estimate among {{devices}} monitored meter(s) out of {{meters}}, computed per quarter-hour within each sharing operation. The grid operator's data remains the reference.",
+      "OF_METERS": "of {{meters}} meter(s)"
+    },
+    "MEMBER": {
+      "TITLE": "Production of my sharing operation",
+      "INTRO": "The production of the sharing operation your meter takes part in. Where the meters only see the exchange with the grid, the energy fed into the grid is shown instead.",
+      "NONE": "You do not currently hold an active meter in a sharing operation of this community.",
+      "FORBIDDEN": "Your community's manager has not made these figures available to members.",
+      "OPERATION": "Sharing operation"
+    },
+    "ABSENT": {
+      "BELOW_K_THRESHOLD": "Withheld: too few members contributed to this period for the figures to be shown without identifying them.",
+      "NOT_MEASURED": "Not measured: the meters in this community cannot see this value.",
+      "NO_CONSUMPTION_IN_PHASE_1": "Consumption is not measured yet.",
+      "NO_CLOSED_HOUR_YET": "The first hour of measurements has not ended yet; the figure appears once it has been computed.",
+      "UNKNOWN": "Not available."
+    },
+    "HEALTH": {
+      "OK": "Reporting",
+      "NEVER_SEEN": "Never seen",
+      "SILENT": "Silent",
+      "OFFLINE": "Offline",
+      "REPORTING_ZEROS": "Sending zeros",
+      "REVOKED": "Revoked",
+      "UNKNOWN": "Unknown"
+    },
+    "DEVICE_STATUS": {
+      "PENDING": "Awaiting enrolment",
+      "ACTIVE": "Enrolled",
+      "REVOKED": "Revoked"
+    },
+    "DEVICES": {
+      "TITLE": "Devices",
+      "ADD": "Add a device",
+      "EMPTY": "No device has been created for this community yet.",
+      "NEVER": "never",
+      "REVOKE": "Revoke",
+      "REVOKE_CONFIRM_HEADER": "Revoke this device?",
+      "REVOKE_CONFIRM_MESSAGE": "The device stops being accepted immediately and cannot be undone. The measurements it has already sent are kept.",
+      "REVOKED": "Device revoked.",
+      "NEW_TOKEN": "New enrolment code",
+      "CREATED": "Device created.",
+      "COARSENED": "Timestamps are hidden for a consumption device: when a household's meter was last seen is itself information about that household.",
+      "LAST_REJECT": "Last rejection",
+      "REJECT_CAPACITY_HINT": "Production readings are being rejected as implausible: either above the device's declared capacity (kVA), or at night. Most likely the recorded capacity is lower than the inverter's, so only the sunny peaks are dropped. Check it, and the connector's clock.",
+      "COL": {
+        "CONNECTOR": "Connector",
+        "LAST_SEEN": "Last seen"
+      }
+    },
+    "REJECT_REASON": {
+      "SCHEMA_INVALID": "Malformed message",
+      "UNKNOWN_FIELD": "Unknown field in the message",
+      "BATCH_TOO_LARGE": "Batch too large",
+      "DUPLICATE_TS_IN_BATCH": "Duplicate timestamp in the batch",
+      "DEVICE_UNKNOWN": "Unknown device",
+      "DEVICE_REVOKED": "Device revoked",
+      "COMMUNITY_MISMATCH": "Community mismatch",
+      "TS_IN_FUTURE": "Timestamp in the future",
+      "TS_TOO_OLD": "Reading too old",
+      "TS_NOT_ALIGNED": "Timestamp not on a quarter-hour",
+      "NEGATIVE_ENERGY": "Negative energy",
+      "OVER_DEVICE_CEILING": "Above the device ceiling",
+      "IMPLAUSIBLE_PRODUCTION": "Implausible production",
+      "UNKNOWN": "Unrecognised reason"
+    },
+    "CREATE": {
+      "TITLE": "New device",
+      "NAME": "Name",
+      "NAME_PLACEHOLDER": "e.g. Roof, south building",
+      "EAN": "Meter",
+      "EAN_PLACEHOLDER": "Choose a meter",
+      "EAN_FILTER_PLACEHOLDER": "EAN, address or holder",
+      "EAN_HINT": "Only the community's active meters are listed. A meter can have only one device at a time.",
+      "EAN_EMPTY": "This community has no active meter to attach a device to.",
+      "EAN_LOAD_ERROR": "The community's meters could not be loaded. Close this window and try again.",
+      "EAN_TRUNCATED": "Only the first {{shown}} of {{total}} active meters are listed.",
+      "EAN_DEVICES_UNKNOWN": "Could not check which meters already have a device. A meter that already has one will be refused when you create the device.",
+      "EAN_HAS_DEVICE": "Already has a device",
+      "PURE_INJECTION": "Nothing consumes behind this meter",
+      "PURE_INJECTION_HELP": "Tick this only if the site feeds everything into the grid. On a site that also consumes, a P1 port cannot see production at all, and ticking this would overstate what the community generates.",
+      "SUBMIT": "Create",
+      "ERRORS": {
+        "REQUIRED": "Please provide a name and choose a meter."
+      }
+    },
+    "TOKEN": {
+      "TITLE": "Enrolment code",
+      "SHOWN_ONCE": "This code is shown once and cannot be retrieved. If it is lost, issue a new one — which invalidates this one.",
+      "EXPIRES": "Valid until {{date}}",
+      "COPY": "Copy the code",
+      "COPIED": "Code copied.",
+      "SCAN": "Scan this code with the device's setup app, or type it in by hand."
+    },
+    "OPS": {
+      "TITLE": "Fleet status",
+      "SUBTITLE": "What is reporting, what is not, and how fresh the figures are.",
+      "NEEDS_ATTENTION": "Needs attention",
+      "ALL_WELL": "Every device is reporting normally.",
+      "ROLLUP_AGE": "Figures last recomputed {{minutes}} minutes ago",
+      "ROLLUP_STALE": "The figures have not been recomputed for {{minutes}} minutes. Every device can be healthy while the collection schedule is stopped.",
+      "ROLLUP_NEVER": "Nothing has been recomputed yet.",
+      "ROLLUP_IDLE": "No data in the last 48 hours, so there is nothing to recompute.",
+      "INGEST_DOWN": "Collection appears to be down: no device has reported for over a day. Check the collection service before the devices.",
+      "REJECTIONS": "Rejections (24 h)",
+      "DEAD_LETTERS": "{{count}} message(s) could not be stored in the last 24 hours.",
+      "DEAD_LETTERS_NONE": "Every message received in the last 24 hours was stored.",
+      "READINGS_REJECTED": "{{count}} device(s) had individual readings rejected in the last 24 hours. The Devices tab has the details.",
+      "READINGS_REJECTED_NONE": "No individual reading was rejected in the last 24 hours.",
+      "DIAG": "Connector reports"
+    },
+    "SETTINGS": {
+      "TITLE": "Visibility",
+      "SUBTITLE": "What members of this community may see, and how small a group may be before figures are withheld.",
+      "IS_DEFAULT": "These are the platform defaults. Nothing has been saved for this community yet.",
+      "MEMBERS_SEE_AGGREGATE": "Members may see their sharing operation's figures",
+      "MEMBERS_SEE_AGGREGATE_HELP": "When off, only managers can open the dashboard.",
+      "MEMBERS_SEE_PRODUCTION": "Members may see production",
+      "MEMBERS_SEE_PRODUCTION_HELP": "When off, members are refused the dashboard entirely rather than shown it with production removed — a balance minus a consumption gives the production back exactly.",
+      "K": "Minimum number of members",
+      "K_HELP": "Grid figures are withheld for any period to which fewer than this many members contributed. Production is always shown. The lowest permitted value is 3.",
+      "SAVE": "Save",
+      "SAVED": "Visibility settings saved."
+    },
+    "FORECAST": {
+      "TITLE": "Production forecast",
+      "NO_METHOD": "No forecasting method is available for this community's production technology yet.",
+      "UNAVAILABLE": "No forecast is available."
     }
   }
 }

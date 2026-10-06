@@ -1,4 +1,5 @@
 <div class="px-4 py-2">
+  <p-confirmDialog />
   <form [formGroup]="metersForm" (ngSubmit)="onSubmit()">
     <!-- Section: Description -->
     <div class="flex flex-col">
@@ -216,17 +217,17 @@
             formControlName="status"
             optionValue="value"
             optionLabel="label"
-            [options]="statusOptions"
+            [options]="statusOptions()"
             appendTo="body"
             data-testid="meter-data-update__select--status"
           >
             <ng-template #selectedItem let-selectedOption>
               @if (selectedOption) {
-                <div>{{ selectedOption.label | translate }}</div>
+                <div>{{ selectedOption.label }}</div>
               }
             </ng-template>
             <ng-template let-option #item>
-              <div>{{ option.label | translate }}</div>
+              <div>{{ option.label }}</div>
             </ng-template>
           </p-select>
           <app-error-handler controlName="status" />

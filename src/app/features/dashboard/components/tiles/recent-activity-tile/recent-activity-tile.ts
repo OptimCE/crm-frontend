@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { auditActionLabelKey } from '../../../../../shared/constants/audit-actions';
 import { AuditLogDTO } from '../../../../../shared/dtos/audit-log.dtos';
 import { TimeAgoPipe } from '../../../../../shared/pipes/time-ago/time-ago-pipe';
 import { AuditLogService } from '../../../../../shared/services/audit-log.service';
@@ -21,6 +22,7 @@ export class RecentActivityTile {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly reloadKey = input<number>(0);
+  protected readonly actionLabelKey = auditActionLabelKey;
 
   readonly entries = signal<AuditLogDTO[]>([]);
   private readonly failed = signal<boolean>(false);

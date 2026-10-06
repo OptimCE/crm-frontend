@@ -13,6 +13,7 @@ import { Role } from '../../../../core/dtos/role';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-managers-community-list',
@@ -46,10 +47,10 @@ export class ManagersCommunityList {
   readonly roleFilter = signal<Role | null>(null);
   readonly hasActiveFilters = computed(() => !!this.searchText() || this.roleFilter() !== null);
 
-  roleOptions = [
+  readonly roleOptions = translatedOptions([
     { label: 'COMMON.ROLE.MANAGER', value: Role.GESTIONNAIRE, severity: 'warn' as const },
     { label: 'COMMON.ROLE.ADMIN', value: Role.ADMIN, severity: 'contrast' as const },
-  ];
+  ]);
 
   loadUsers(): void {
     this.communityService.getAdmins(this.filter()).subscribe({

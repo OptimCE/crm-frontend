@@ -46,9 +46,20 @@ export class AnnexesServicesList implements OnInit {
 
   readonly services = this.store.services;
   readonly loading = signal<boolean>(true);
+  /** The last `refresh()` failed; its error toast is the page's answer. */
+  readonly loadError = signal<boolean>(false);
   readonly pendingUnsubscribe = signal<string | null>(null);
   readonly subscribedServices = computed(() => this.services().filter((s) => s.subscribed));
   readonly availableToAdd = computed(() => this.services().filter((s) => !s.subscribed));
+
+  /**
+   * "No module subscribed" only once the catalogue has actually been read. A
+   * failed fetch leaves the store empty too, and the empty state would then sit
+   * under the error toast asserting something the page could not find out.
+   */
+  readonly showEmptyState = computed(
+    () => !this.loading() && !this.loadError() && this.subscribedServices().length === 0,
+  );
 
   /**
    * Gates the add-module trigger. Both halves are load-bearing.
@@ -79,10 +90,12 @@ export class AnnexesServicesList implements OnInit {
 
   private refresh(source$: Observable<CommunityAnnex[]> = this.store.reload()): void {
     this.loading.set(true);
+    this.loadError.set(false);
     source$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.loading.set(false),
       error: () => {
         this.loading.set(false);
+        this.loadError.set(true);
         this.messageService.add({
           severity: 'error',
           detail: this.translate.instant('ANNEXES_SERVICES.ERROR_LOADING') as string,
@@ -119,10 +132,17 @@ export class AnnexesServicesList implements OnInit {
       return;
     }
     const name = this.translate.instant(service.displayKey) as string;
+    const base = this.translate.instant('ANNEXES_SERVICES.UNSUBSCRIBE_CONFIRM', { name }) as string;
+    // A module whose switch-off has consequences beyond "members lose access"
+    // (live data discards readings sent meanwhile) declares its own sentence in
+    // the catalog — no feature id is hard-coded here.
+    const warning = service.unsubscribeWarningKey
+      ? (this.translate.instant(service.unsubscribeWarningKey) as string)
+      : null;
     this.confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       header: this.translate.instant('ANNEXES_SERVICES.UNSUBSCRIBE_CONFIRM_HEADER') as string,
-      message: this.translate.instant('ANNEXES_SERVICES.UNSUBSCRIBE_CONFIRM', { name }) as string,
+      message: warning ? `${base} ${warning}` : base,
       acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
       rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
       acceptButtonProps: { severity: 'danger' },

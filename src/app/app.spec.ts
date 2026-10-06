@@ -11,7 +11,7 @@ import { UserContextService } from './core/services/authorization/authorization.
 import { EventBusService } from './core/services/event_bus/eventbus.service';
 import { Navbar } from './layout/navbar/navbar';
 import { Toast } from 'primeng/toast';
-import { VALIDATION_TYPE, ERROR_TYPE } from './core/dtos/notification';
+import { VALIDATION_TYPE, ERROR_TYPE, INFO_TYPE } from './core/dtos/notification';
 
 // ── Stubs ──────────────────────────────────────────────────────────
 
@@ -190,6 +190,24 @@ describe('App', () => {
         icon: 'pi pi-times-circle',
         summary: 'Something failed',
         life: 3000,
+      });
+    });
+
+    it('should add an info toast for INFO_TYPE', () => {
+      // Two sentences (live data switched off mid-session), so it stays up
+      // twice as long as a success or an error.
+      handler(
+        new CustomEvent('snack-notification', {
+          detail: { type: INFO_TYPE, message: 'Live data has been disabled.' },
+        }),
+      );
+
+      expect(messageServiceMock.add).toHaveBeenCalledWith({
+        key: 'br',
+        severity: 'info',
+        icon: 'pi pi-info-circle',
+        summary: 'Live data has been disabled.',
+        life: 6000,
       });
     });
   });

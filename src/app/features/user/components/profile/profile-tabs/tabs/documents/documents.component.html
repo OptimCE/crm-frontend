@@ -10,7 +10,7 @@
       <p-input-group class="gap-2">
         <p-select
           data-testid="documents__select--search-field"
-          [options]="searchFieldOptions"
+          [options]="searchFieldOptions()"
           [ngModel]="searchField()"
           (ngModelChange)="searchField.set($event)"
           (onChange)="onSearchFieldChange()"
@@ -19,10 +19,10 @@
           class="search-field-select"
         >
           <ng-template let-option pTemplate="selectedItem">
-            <span class="text-sm">{{ option.label | translate }}</span>
+            <span class="text-sm">{{ option.label }}</span>
           </ng-template>
           <ng-template let-option pTemplate="item">
-            <span class="text-sm">{{ option.label | translate }}</span>
+            <span class="text-sm">{{ option.label }}</span>
           </ng-template>
         </p-select>
         <app-debounced-p-input

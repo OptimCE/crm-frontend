@@ -10,7 +10,6 @@ import { TagModule } from 'primeng/tag';
 import { Skeleton } from 'primeng/skeleton';
 import { Avatar } from 'primeng/avatar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ConfirmPopup } from 'primeng/confirmpopup';
@@ -59,6 +58,7 @@ import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { SharingOperationConsumptionChart } from './sharing-operation-consumption-chart/sharing-operation-consumption-chart';
 import { SharingOperationCreationUpdate } from '../sharing-operation-creation-update/sharing-operation-creation-update';
 import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-municipalities-update/sharing-operation-municipalities-update';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 @Component({
   selector: 'app-sharing-operation-view',
@@ -73,7 +73,7 @@ import { SharingOperationMunicipalitiesUpdate } from '../sharing-operation-munic
     Skeleton,
     Avatar,
     RouterLink,
-    DatePipe,
+    LocaleDatePipe,
     ToastModule,
     SplitButtonModule,
     ConfirmPopup,

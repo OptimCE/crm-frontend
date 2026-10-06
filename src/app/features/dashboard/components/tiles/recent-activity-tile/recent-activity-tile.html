@@ -10,7 +10,7 @@
     @for (entry of entries(); track entry.id) {
       <li class="flex flex-col">
         <span class="text-sm text-surface-700 truncate">
-          {{ 'AUDIT.ACTIONS.' + entry.action | translate }}
+          {{ actionLabelKey(entry.action) | translate: { code: entry.action } }}
         </span>
         <span class="text-xs text-surface-400">
           {{ entry.user_email ?? ('DASHBOARD.MANAGER.ACTIVITY.SYSTEM' | translate) }} ·

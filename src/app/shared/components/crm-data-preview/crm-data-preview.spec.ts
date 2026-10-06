@@ -102,3 +102,40 @@ describe('CrmDataPreview', () => {
     expect(component.unmatched()).toEqual([]);
   });
 });
+
+/** French groups thousands with a narrow no-break space (U+202F), not a comma. */
+const NNBSP = String.fromCharCode(0x202f);
+
+describe('CrmDataPreview figures', () => {
+  // The real template this time: the suite above blanks it to test the logic.
+  function render(lang: string): HTMLElement {
+    TestBed.configureTestingModule({
+      imports: [CrmDataPreview, TranslateModule.forRoot({ lang })],
+    });
+    const fixture = TestBed.createComponent(CrmDataPreview);
+    fixture.componentRef.setInput('preview', buildPreview());
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  function total(el: HTMLElement, testId: string): string | undefined {
+    return el.querySelector(`[data-testid="${testId}"]`)?.textContent?.trim();
+  }
+
+  afterEach(() => TestBed.resetTestingModule());
+
+  it("writes the totals in the reader's language", () => {
+    // BUG: `| number` used Angular's LOCALE_ID, which nothing set, so a French
+    // reader saw "1,234.5 kWh" - which reads, in French, as a bit over ONE kWh.
+    const el = render('fr');
+
+    expect(total(el, 'crm-preview__consumption')).toBe(`1${NNBSP}234,5 kWh`);
+    expect(total(el, 'crm-preview__injection')).toBe('987,6 kWh');
+  });
+
+  it('keeps the English notation for an English reader', () => {
+    const el = render('en');
+
+    expect(total(el, 'crm-preview__consumption')).toBe('1,234.5 kWh');
+  });
+});

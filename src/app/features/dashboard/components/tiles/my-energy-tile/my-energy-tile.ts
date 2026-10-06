@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -11,6 +10,7 @@ import { MePartialMeterDTO } from '../../../../../shared/dtos/me.dtos';
 import { MeService } from '../../../../../shared/services/me.service';
 import { envelopeData, TileState } from '../../../dashboard-format';
 import { DashboardTile } from '../dashboard-tile/dashboard-tile';
+import { LocaleNumberPipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /** Days of history summarised. Long enough to be meaningful, short to fetch. */
 const WINDOW_DAYS = 30;
@@ -38,7 +38,7 @@ interface MeterVolumes {
 @Component({
   selector: 'app-my-energy-tile',
   standalone: true,
-  imports: [DecimalPipe, TranslatePipe, RouterLink, DashboardTile],
+  imports: [LocaleNumberPipe, TranslatePipe, RouterLink, DashboardTile],
   templateUrl: './my-energy-tile.html',
 })
 export class MyEnergyTile {

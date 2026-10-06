@@ -586,4 +586,102 @@ describe('SharingOperationMetersList', () => {
       });
     });
   });
+
+  // ── Translated select labels ──────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('select labels', () => {
+    let translate: TranslateService;
+
+    function ariaLabelOf(testId: string): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector(`[data-testid="${testId}"] [role="combobox"]`)
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      // The suite echoes keys through a mocked `instant`; these need the real one.
+      vi.restoreAllMocks();
+      translate.setTranslation('fr', {
+        SHARING_OPERATION: {
+          VIEW: {
+            ADDRESS: { STREET_NAME_LABEL: 'Rue', CITY_LABEL: 'Ville' },
+            METER: {
+              INFORMATIONS: { EAN_LABEL: 'EAN', METER_NUMBER_LABEL: 'Numéro de compteur' },
+              STATUS: {
+                ACTIVATED_LABEL: 'Activé',
+                DEACTIVATED_LABEL: 'Désactivé',
+                WAITING_FOR_GRD_ACCEPTANCE_LABEL: 'En attente du GRD',
+                WAITING_FOR_MANAGER_ACCEPTANCE_LABEL: 'En attente du gestionnaire',
+              },
+            },
+          },
+        },
+      });
+      translate.setTranslation('en', {
+        SHARING_OPERATION: {
+          VIEW: {
+            ADDRESS: { STREET_NAME_LABEL: 'Street', CITY_LABEL: 'City' },
+            METER: {
+              INFORMATIONS: { EAN_LABEL: 'EAN code', METER_NUMBER_LABEL: 'Meter number' },
+              STATUS: {
+                ACTIVATED_LABEL: 'Activated',
+                DEACTIVATED_LABEL: 'Deactivated',
+                WAITING_FOR_GRD_ACCEPTANCE_LABEL: 'Waiting for the DSO',
+                WAITING_FOR_MANAGER_ACCEPTANCE_LABEL: 'Waiting for the manager',
+              },
+            },
+          },
+        },
+      });
+      translate.use('fr');
+      await fixture.whenStable();
+    });
+
+    it('should label the search-field options with their translation, keeping the values', () => {
+      expect(component.searchFieldOptions()).toEqual([
+        { label: 'EAN', value: 'EAN' },
+        { label: 'Numéro de compteur', value: 'meter_number' },
+        { label: 'Rue', value: 'street' },
+        { label: 'Ville', value: 'city' },
+      ]);
+    });
+
+    it('should label the status options with their translation, keeping values and severities', () => {
+      expect(component.statusOptions()).toEqual([
+        { label: 'Activé', value: MeterDataStatus.ACTIVE, severity: 'success' },
+        { label: 'Désactivé', value: MeterDataStatus.INACTIVE, severity: 'danger' },
+        { label: 'En attente du GRD', value: MeterDataStatus.WAITING_GRD, severity: 'warn' },
+        {
+          label: 'En attente du gestionnaire',
+          value: MeterDataStatus.WAITING_MANAGER,
+          severity: 'warn',
+        },
+      ]);
+    });
+
+    it('should give every selected option a translated aria-label, not the i18n key', async () => {
+      component.searchField.set('city');
+      component.statusFilter.set(MeterDataStatus.INACTIVE);
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('op-meters-list__select--search-field')).toBe('Ville');
+      expect(ariaLabelOf('op-meters-list__select--status')).toBe('Désactivé');
+    });
+
+    it('should translate the aria-labels again when the language changes', async () => {
+      component.statusFilter.set(MeterDataStatus.ACTIVE);
+      await fixture.whenStable();
+
+      translate.use('en');
+      await fixture.whenStable();
+
+      expect(ariaLabelOf('op-meters-list__select--search-field')).toBe('EAN code');
+      expect(ariaLabelOf('op-meters-list__select--status')).toBe('Activated');
+    });
+  });
 });

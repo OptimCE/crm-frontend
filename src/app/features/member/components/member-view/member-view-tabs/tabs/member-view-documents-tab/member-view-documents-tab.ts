@@ -20,6 +20,7 @@ import { downloadFromUrl } from '../../../../../../../shared/utils/download.util
 import { VALIDATION_TYPE } from '../../../../../../../core/dtos/notification';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-member-view-documents-tab',
@@ -57,10 +58,10 @@ export class MemberViewDocumentsTab implements OnInit {
   readonly searchText = signal<string>('');
   readonly hasActiveFilters = computed(() => !!this.searchText());
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'MEMBER.VIEW.DOCUMENTS.NAME_LABEL', value: 'file_name' },
     { label: 'MEMBER.VIEW.DOCUMENTS.TYPE_LABEL', value: 'file_type' },
-  ];
+  ]);
 
   // Pagination computed signals
   readonly firstRow = computed(

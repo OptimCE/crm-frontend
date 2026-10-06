@@ -60,6 +60,35 @@ export default defineConfig([
   },
 
   {
+    // Angular's pipes format with LOCALE_ID, which is fixed at bootstrap, so they
+    // ignore the language the reader picks. Specs may still import them, e.g. to
+    // spy on the one a locale pipe delegates to.
+    files: ['**/*.ts'],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@angular/common',
+              importNames: [
+                'DecimalPipe',
+                'DatePipe',
+                'PercentPipe',
+                'CurrencyPipe',
+                'CommonModule',
+              ],
+              message:
+                "Angular's number and date pipes (and CommonModule, which exports them) format with LOCALE_ID and ignore the reader's language. Use LocaleNumberPipe, LocaleDatePipe or LocalePercentPipe from shared/pipes/locale-format.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     rules: {},

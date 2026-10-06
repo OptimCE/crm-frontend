@@ -20,6 +20,7 @@ import { VALIDATION_TYPE } from '../../../../../../../core/dtos/notification';
 import { AddressPipe } from '../../../../../../../shared/pipes/address/address-pipe';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
+import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-member-view-meter-tab',
@@ -61,18 +62,34 @@ export class MemberViewMeterTab implements OnInit {
   readonly statusFilter = signal<MeterDataStatus | null>(null);
   readonly hasActiveFilters = computed(() => !!this.searchText() || this.statusFilter() !== null);
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'MEMBER.VIEW.METERS.ADDRESS_LABEL', value: 'street' },
     { label: 'MEMBER.VIEW.METERS.EAN_LABEL', value: 'EAN' },
     { label: 'MEMBER.VIEW.METERS.METER_NUMBER_LABEL', value: 'meter_number' },
-  ];
+  ]);
 
-  statusCategory = [
-    MeterDataStatus.ACTIVE,
-    MeterDataStatus.INACTIVE,
-    MeterDataStatus.WAITING_GRD,
-    MeterDataStatus.WAITING_MANAGER,
-  ];
+  readonly statusCategory = translatedOptions([
+    {
+      label: 'METER.STATUS.ACTIVE_LABEL',
+      value: MeterDataStatus.ACTIVE,
+      severity: 'success' as const,
+    },
+    {
+      label: 'METER.STATUS.INACTIVE_LABEL',
+      value: MeterDataStatus.INACTIVE,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'METER.STATUS.WAITING_GRD_LABEL',
+      value: MeterDataStatus.WAITING_GRD,
+      severity: 'danger' as const,
+    },
+    {
+      label: 'METER.STATUS.WAITING_MANAGER_LABEL',
+      value: MeterDataStatus.WAITING_MANAGER,
+      severity: 'danger' as const,
+    },
+  ]);
 
   // Pagination computed signals
   readonly firstRow = computed(

@@ -1,3 +1,4 @@
+import { formatNumber } from '@angular/common';
 import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -12,6 +13,7 @@ import { Button } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import { DatePicker } from 'primeng/datepicker';
 import { Ripple } from 'primeng/ripple';
+import { LocaleService } from '../../../../../core/services/language/locale.service';
 import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { SharingOpConsumptionDTO } from '../../../../../shared/dtos/sharing_operation.dtos';
@@ -55,6 +57,7 @@ export class SharingOperationConsumptionChart implements OnInit {
   private sharingOperationService = inject(SharingOperationService);
   private errorHandler = inject(ErrorMessageHandler);
   private destroyRef = inject(DestroyRef);
+  private locale = inject(LocaleService).locale;
 
   /** Sharing operation id used to query consumption data. */
   readonly idSharing = input.required<number>();
@@ -74,6 +77,9 @@ export class SharingOperationConsumptionChart implements OnInit {
   formChart!: FormGroup;
 
   options = {
+    // chart.js formats the axis ticks with this and falls back to the BROWSER's
+    // locale without it. Set when the chart is built, like its translated titles.
+    locale: this.locale(),
     maintainAspectRatio: false,
     aspectRatio: 0.8,
     plugins: {
@@ -85,10 +91,10 @@ export class SharingOperationConsumptionChart implements OnInit {
             const label = items[0]?.label;
             return label ? formatBrusselsWallClockDateTime(label) : '';
           },
-          label: function (tooltipItem: { dataset: { label?: string }; raw: unknown }): string {
+          label: (tooltipItem: { dataset: { label?: string }; raw: unknown }): string => {
             const label = tooltipItem.dataset.label || '';
             const value = tooltipItem.raw as number;
-            return `${label}: ${value} kWh`;
+            return `${label}: ${formatNumber(value, this.locale(), '1.0-3')} kWh`;
           },
         },
       },

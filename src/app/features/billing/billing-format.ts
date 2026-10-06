@@ -73,12 +73,23 @@ export function isRunPending(status: BillingRunStatus): boolean {
   return status === BillingRunStatus.PENDING || status === BillingRunStatus.COMPUTING;
 }
 
-/** Format a decimal-string amount as a localized currency value. */
-export function formatMoney(amount: string | null | undefined, currency = 'EUR'): string {
+/**
+ * Format a decimal-string amount as money, in the reader's language.
+ *
+ * `locale` is the app's language (LocaleService.locale), REQUIRED so no caller
+ * can fall back to the browser's locale, which is what `undefined` meant here:
+ * the same invoice read "€1,234.50" or "1 234,50 €" depending on the machine,
+ * never on the language chosen in the app.
+ */
+export function formatMoney(
+  amount: string | null | undefined,
+  locale: string,
+  currency = 'EUR',
+): string {
   if (amount == null || amount === '') return '';
   const value = Number(amount);
   if (Number.isNaN(value)) return String(amount);
-  return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(value);
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(value);
 }
 
 /** Local calendar date (`YYYY-MM-DD`) for the API — avoids the UTC shift `toISOString` causes. */
@@ -90,12 +101,19 @@ export function toApiDate(date: Date | null | undefined): string | null {
   return `${y}-${m}-${d}`;
 }
 
-/** Format a per-kWh price with higher precision (kept as a decimal string upstream). */
-export function formatPrice(price: string | null | undefined, currency = 'EUR'): string {
+/**
+ * Format a per-kWh price with higher precision (kept as a decimal string
+ * upstream), in the reader's language - see `formatMoney` for `locale`.
+ */
+export function formatPrice(
+  price: string | null | undefined,
+  locale: string,
+  currency = 'EUR',
+): string {
   if (price == null || price === '') return '';
   const value = Number(price);
   if (Number.isNaN(value)) return String(price);
-  return `${new Intl.NumberFormat(undefined, {
+  return `${new Intl.NumberFormat(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 5,
   }).format(value)} ${currency}/kWh`;

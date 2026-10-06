@@ -12,7 +12,7 @@
         'DASHBOARD.MEMBER.ENERGY.CONSUMED' | translate
       }}</span>
       <span class="text-lg font-semibold text-surface-900"
-        >{{ totalConsumed() | number: '1.0-1' }} kWh</span
+        >{{ totalConsumed() | localeNumber: '1.0-1' }} kWh</span
       >
     </span>
     <span class="flex flex-col">
@@ -20,7 +20,7 @@
         'DASHBOARD.MEMBER.ENERGY.SHARED' | translate
       }}</span>
       <span class="text-lg font-semibold text-primary-700"
-        >{{ totalShared() | number: '1.0-1' }} kWh</span
+        >{{ totalShared() | localeNumber: '1.0-1' }} kWh</span
       >
     </span>
   </div>
@@ -39,7 +39,7 @@
           >{{ row.meter.meter_number }}</a
         >
         <span class="text-xs text-surface-500 shrink-0"
-          >{{ row.sharedKwh | number: '1.0-1' }} kWh</span
+          >{{ row.sharedKwh | localeNumber: '1.0-1' }} kWh</span
         >
       </li>
     }

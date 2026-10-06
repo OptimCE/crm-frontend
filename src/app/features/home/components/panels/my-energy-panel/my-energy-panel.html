@@ -24,8 +24,8 @@
         'HOME.ENERGY.HEADLINE'
           | translate
             : {
-                consumed: totals.gross_kwh | number: '1.0-1',
-                shared: totals.shared_kwh | number: '1.0-1',
+                consumed: totals.gross_kwh | localeNumber: '1.0-1',
+                shared: totals.shared_kwh | localeNumber: '1.0-1',
               }
       }}
     </p>
@@ -36,8 +36,8 @@
           'HOME.ENERGY.INJECTED'
             | translate
               : {
-                  injected: totals.inj_gross_kwh | number: '1.0-1',
-                  shared: totals.inj_shared_kwh | number: '1.0-1',
+                  injected: totals.inj_gross_kwh | localeNumber: '1.0-1',
+                  shared: totals.inj_shared_kwh | localeNumber: '1.0-1',
                 }
         }}
       </p>
@@ -58,7 +58,7 @@
           </a>
           @if (meter.has_data) {
             <span class="whitespace-nowrap"
-              >{{ meter.totals.gross_kwh | number: '1.0-1' }} kWh</span
+              >{{ meter.totals.gross_kwh | localeNumber: '1.0-1' }} kWh</span
             >
           } @else {
             <!-- NOT "0 kWh": we have no reading, which is a different statement

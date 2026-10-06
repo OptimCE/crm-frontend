@@ -1,0 +1,112 @@
+<div class="flex flex-col gap-4 max-w-2xl" data-testid="live-settings">
+  <div>
+    <h2 class="text-base font-semibold m-0">{{ 'LIVE_DATA.SETTINGS.TITLE' | translate }}</h2>
+    <p class="text-sm text-surface-500 m-0">{{ 'LIVE_DATA.SETTINGS.SUBTITLE' | translate }}</p>
+  </div>
+
+  @if (loading()) {
+    <p-skeleton height="16rem" />
+  } @else if (loadFailed()) {
+    <!-- Never the form with values it did not load: see `load` in the component. -->
+    <div class="flex flex-col items-start gap-2" data-testid="live-settings__load-failed">
+      <p class="text-sm text-surface-500 m-0">{{ 'COMMON.ERROR_LOADING' | translate }}</p>
+      <p-button
+        size="small"
+        [text]="true"
+        icon="pi pi-refresh"
+        [label]="'COMMON.RETRY' | translate"
+        (onClick)="load()"
+        data-testid="live-settings__btn--retry"
+      />
+    </div>
+  } @else {
+    @if (isDefault()) {
+      <!-- No row exists yet. Worth saying: without it a manager cannot tell "we
+           chose this" from "nobody has ever looked", and the GET deliberately
+           does not create the row just because they opened the panel. -->
+      <p-message
+        severity="secondary"
+        icon="pi pi-info-circle"
+        styleClass="block text-sm"
+        data-testid="live-settings__is-default"
+      >
+        {{ 'LIVE_DATA.SETTINGS.IS_DEFAULT' | translate }}
+      </p-message>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+      <p-card>
+        <div class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between gap-3">
+              <label class="text-sm font-medium" for="members-see-aggregate">{{
+                'LIVE_DATA.SETTINGS.MEMBERS_SEE_AGGREGATE' | translate
+              }}</label>
+              <p-toggleswitch
+                inputId="members-see-aggregate"
+                formControlName="members_see_aggregate"
+                data-testid="live-settings__toggle--aggregate"
+              />
+            </div>
+            <p class="text-xs text-surface-500 m-0">
+              {{ 'LIVE_DATA.SETTINGS.MEMBERS_SEE_AGGREGATE_HELP' | translate }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between gap-3">
+              <label class="text-sm font-medium" for="members-see-production">{{
+                'LIVE_DATA.SETTINGS.MEMBERS_SEE_PRODUCTION' | translate
+              }}</label>
+              <p-toggleswitch
+                inputId="members-see-production"
+                formControlName="members_see_production"
+                data-testid="live-settings__toggle--production"
+              />
+            </div>
+            <!-- Why this is a refusal and not a redaction: a balance minus a
+                 consumption gives the production back exactly, so returning the
+                 summary with production removed would hand over the thing that
+                 was withheld. -->
+            <p class="text-xs text-surface-500 m-0">
+              {{ 'LIVE_DATA.SETTINGS.MEMBERS_SEE_PRODUCTION_HELP' | translate }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium" for="live-settings-k">{{
+              'LIVE_DATA.SETTINGS.K' | translate
+            }}</label>
+            <!-- The stepper buttons are anchored to the host's right edge. An
+                 unsized input keeps its ~250px intrinsic width, overflows the
+                 w-40 host, and the buttons land over the middle of the value. -->
+            <p-inputnumber
+              inputId="live-settings-k"
+              formControlName="k"
+              [min]="K_FLOOR"
+              [max]="K_CEILING"
+              [showButtons]="true"
+              [useGrouping]="false"
+              styleClass="w-40"
+              inputStyleClass="w-full"
+              data-testid="live-settings__input--k"
+            />
+            <p class="text-xs text-surface-500 m-0">
+              {{ 'LIVE_DATA.SETTINGS.K_HELP' | translate }}
+            </p>
+          </div>
+        </div>
+      </p-card>
+
+      <div class="flex justify-end">
+        <p-button
+          type="submit"
+          [label]="'LIVE_DATA.SETTINGS.SAVE' | translate"
+          [loading]="saving()"
+          [disabled]="form.invalid"
+          data-testid="live-settings__btn--save"
+        />
+      </div>
+    </form>
+  }
+</div>

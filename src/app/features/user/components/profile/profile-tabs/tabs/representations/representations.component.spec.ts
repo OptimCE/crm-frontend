@@ -474,4 +474,149 @@ describe('RepresentationsComponent', () => {
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/users/me/members', 42]);
     });
   });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('search-field select labels', () => {
+    let translate: TranslateService;
+
+    function searchFieldAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="representations__select--search-field"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      // The suite echoes keys through a mocked `instant`; these need the real one.
+      vi.restoreAllMocks();
+      translate.setTranslation('fr', {
+        PROFILE: { REPRESENTATIONS: { COMMUNITY_LABEL: 'Communauté' } },
+        MEMBER: { LIST: { NAME_LABEL: 'Nom' } },
+      });
+      translate.setTranslation('en', {
+        PROFILE: { REPRESENTATIONS: { COMMUNITY_LABEL: 'Community' } },
+        MEMBER: { LIST: { NAME_LABEL: 'Name' } },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the options with their translation, keeping the values', () => {
+      expect(component.searchFieldOptions()).toEqual([
+        { label: 'Communauté', value: 'community_name' },
+        { label: 'Nom', value: 'name' },
+      ]);
+    });
+
+    it('should give the selected field a translated aria-label that follows the language', async () => {
+      expect(searchFieldAriaLabel()).toBe('Communauté');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(searchFieldAriaLabel()).toBe('Community');
+    });
+  });
+
+  // Both filters used to take bare MemberType / MemberStatus numbers, so their
+  // aria-label read "1".."3" while the templates showed words.
+  describe('type and status select labels', () => {
+    let translate: TranslateService;
+
+    function select(testId: string): HTMLElement {
+      return (fixture.nativeElement as HTMLElement).querySelector(
+        `[data-testid="${testId}"]`,
+      ) as HTMLElement;
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      // The suite echoes keys through a mocked `instant`; these need the real one.
+      vi.restoreAllMocks();
+      translate.setTranslation('fr', {
+        MEMBER: {
+          LIST: { TYPE: { INDIVIDUAL_LABEL: 'Particulier', COMPANY_LABEL: 'Entreprise' } },
+          VIEW: {
+            STATUS: {
+              ACTIVE_LABEL: 'Actif',
+              INACTIVE_LABEL: 'Inactif',
+              PENDING_LABEL: 'En attente',
+            },
+          },
+        },
+      });
+      translate.setTranslation('en', {
+        MEMBER: {
+          LIST: { TYPE: { INDIVIDUAL_LABEL: 'Individual', COMPANY_LABEL: 'Company' } },
+          VIEW: {
+            STATUS: {
+              ACTIVE_LABEL: 'Active',
+              INACTIVE_LABEL: 'Inactive',
+              PENDING_LABEL: 'Pending',
+            },
+          },
+        },
+      });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should offer the member types as translated options, keeping values and icons', () => {
+      expect(component.memberTypeCategory()).toEqual([
+        { label: 'Particulier', value: MemberType.INDIVIDUAL, icon: 'pi pi-user' },
+        { label: 'Entreprise', value: MemberType.COMPANY, icon: 'pi pi-building' },
+      ]);
+    });
+
+    it('should offer the statuses as translated options, keeping values and severities', () => {
+      expect(component.statusCategory()).toEqual([
+        { label: 'Actif', value: MemberStatus.ACTIVE, severity: 'success' },
+        { label: 'Inactif', value: MemberStatus.INACTIVE, severity: 'danger' },
+        { label: 'En attente', value: MemberStatus.PENDING, severity: 'warn' },
+      ]);
+    });
+
+    it('should name the selected type and status in words, in the aria-label and the display', async () => {
+      component.typeFilter.set(MemberType.COMPANY);
+      component.statusFilter.set(MemberStatus.PENDING);
+      await fixture.whenStable();
+
+      const type = select('representations__select--type-filter');
+      expect(type.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+        'Entreprise',
+      );
+      expect(type.querySelector('.text-sm')?.textContent?.trim()).toBe('Entreprise');
+      expect([...(type.querySelector('i')?.classList ?? [])].sort()).toEqual([
+        'mr-2',
+        'pi',
+        'pi-building',
+      ]);
+
+      const status = select('representations__select--status-filter');
+      expect(status.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+        'En attente',
+      );
+      expect(status.querySelector('.p-tag')?.textContent?.trim()).toBe('En attente');
+    });
+
+    it('should translate the selected type and status again when the language changes', async () => {
+      component.typeFilter.set(MemberType.INDIVIDUAL);
+      component.statusFilter.set(MemberStatus.ACTIVE);
+      await fixture.whenStable();
+
+      translate.use('en');
+      await fixture.whenStable();
+
+      const type = select('representations__select--type-filter');
+      const status = select('representations__select--status-filter');
+      expect(type.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+        'Individual',
+      );
+      expect(status.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe('Active');
+    });
+  });
 });

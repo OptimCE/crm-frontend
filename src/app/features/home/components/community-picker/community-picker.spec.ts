@@ -94,6 +94,34 @@ describe('CommunityPicker', () => {
     expect(html).toContain('community-picker__empty');
   });
 
+  it('offers a brand-new account both ways out: create, or wait and look around', () => {
+    fixture.componentRef.setInput('communities', []);
+    fixture.detectChanges();
+
+    // A project holder sent here by the public website must not be told only
+    // to wait for an invitation; a household still needs exactly that message.
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('[data-testid="community-picker__btn--create"]')).not.toBeNull();
+    expect(el.textContent).toContain('HOME.COMMUNITIES.CREATE_TITLE');
+    expect(el.textContent).toContain('HOME.COMMUNITIES.JOIN_TITLE');
+    expect(el.textContent).toContain('HOME.COMMUNITIES.EMPTY_HINT');
+    const directory = el.querySelector('[data-testid="community-picker__link--directory"]');
+    expect(directory?.getAttribute('href')).toBe('/communities/public');
+  });
+
+  it('sends the create button straight to the creation dialog', () => {
+    fixture.componentRef.setInput('communities', []);
+    fixture.detectChanges();
+
+    const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      '[data-testid="community-picker__btn--create"] button',
+    );
+    button?.click();
+
+    // `?create=1` is what makes `/users/communities` open the dialog on arrival.
+    expect(navigateByUrl).toHaveBeenCalledWith('/users/communities?create=1');
+  });
+
   it('offers to open rather than to enter when there is exactly one community', () => {
     // It is already selected by `initializeDefaultCommunity`, so "Enter" would
     // describe something that has already happened.

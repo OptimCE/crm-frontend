@@ -119,8 +119,12 @@
               class="hover-flex flex-wrap"
               [attr.data-testid]="'op-view__row--history--' + rowIndex"
             >
-              <td class="text-sm px-3 py-2">{{ historyKey.start_date | date: 'dd/MM/yyyy' }}</td>
-              <td class="text-sm px-3 py-2">{{ historyKey.end_date | date: 'dd/MM/yyyy' }}</td>
+              <td class="text-sm px-3 py-2">
+                {{ historyKey.start_date | localeDate: 'dd/MM/yyyy' }}
+              </td>
+              <td class="text-sm px-3 py-2">
+                {{ historyKey.end_date | localeDate: 'dd/MM/yyyy' }}
+              </td>
               <td class="text-sm px-3 py-2">{{ historyKey.key.name }}</td>
               <td class="text-sm px-3 py-2">
                 @switch (historyKey.status) {

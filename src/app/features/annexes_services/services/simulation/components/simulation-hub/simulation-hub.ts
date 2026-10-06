@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -26,6 +25,7 @@ import { SnackbarNotification } from '../../../../../../shared/services-ui/snack
 import { HeaderPage } from '../../../../../../layout/header-page/header-page';
 import { SimulationRunRow } from '../simulation-run-row/simulation-run-row';
 import { SimulationStartPanel } from '../simulation-start-panel/simulation-start-panel';
+import { LocaleDatePipe } from '../../../../../../shared/pipes/locale-format/locale-format-pipes';
 
 // While at least one run is PENDING, poll the list so the UI converges to the
 // terminal state without the user hitting refresh. Stops automatically once
@@ -43,7 +43,7 @@ const SAFETY_POLL_INTERVAL_MS = 20_000;
   selector: 'app-simulation-hub',
   standalone: true,
   imports: [
-    DatePipe,
+    LocaleDatePipe,
     TranslatePipe,
     Toast,
     ConfirmDialog,

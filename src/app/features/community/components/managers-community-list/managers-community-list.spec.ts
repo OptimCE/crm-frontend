@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
@@ -347,6 +347,49 @@ describe('ManagersCommunityList', () => {
         component.roleFilter.set(null);
         expect(component.hasActiveFilters()).toBe(false);
       });
+    });
+  });
+
+  // ── Translated select labels ────────────────────────────────────
+
+  // PrimeNG copies an option's label into the select's aria-label, so a key
+  // there is what a screen reader announces.
+  describe('role select labels', () => {
+    let translate: TranslateService;
+
+    function roleAriaLabel(): string | null {
+      return (
+        (fixture.nativeElement as HTMLElement)
+          .querySelector('[data-testid="managers-community-list__select--role"] [role="combobox"]')
+          ?.getAttribute('aria-label') ?? null
+      );
+    }
+
+    beforeEach(async () => {
+      translate = TestBed.inject(TranslateService);
+      translate.setTranslation('fr', {
+        COMMON: { ROLE: { MANAGER: 'Gestionnaire', ADMIN: 'Administrateur' } },
+      });
+      translate.setTranslation('en', { COMMON: { ROLE: { MANAGER: 'Manager', ADMIN: 'Admin' } } });
+      translate.use('fr');
+      await createComponent();
+    });
+
+    it('should label the options with their translation, keeping values and severities', () => {
+      expect(component.roleOptions()).toEqual([
+        { label: 'Gestionnaire', value: Role.GESTIONNAIRE, severity: 'warn' },
+        { label: 'Administrateur', value: Role.ADMIN, severity: 'contrast' },
+      ]);
+    });
+
+    it('should give the selected role a translated aria-label that follows the language', async () => {
+      component.roleFilter.set(Role.ADMIN);
+      await fixture.whenStable();
+      expect(roleAriaLabel()).toBe('Administrateur');
+
+      translate.use('en');
+      await fixture.whenStable();
+      expect(roleAriaLabel()).toBe('Admin');
     });
   });
 });

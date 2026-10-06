@@ -29,6 +29,7 @@ import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { toLocalDateString } from '../../../../../shared/utils/date.utils';
+import { translatedOptions } from '../../../../../shared/utils/translated-options.utils';
 
 @Component({
   selector: 'app-sharing-operation-meters-list',
@@ -97,7 +98,7 @@ export class SharingOperationMetersList implements OnInit {
   readonly firstRow = computed(() => (this.pagination().page - 1) * this.pagination().limit);
   readonly showPaginator = computed(() => this.pagination().total_pages > 1);
 
-  searchFieldOptions = [
+  readonly searchFieldOptions = translatedOptions([
     { label: 'SHARING_OPERATION.VIEW.METER.INFORMATIONS.EAN_LABEL', value: 'EAN' },
     {
       label: 'SHARING_OPERATION.VIEW.METER.INFORMATIONS.METER_NUMBER_LABEL',
@@ -105,9 +106,9 @@ export class SharingOperationMetersList implements OnInit {
     },
     { label: 'SHARING_OPERATION.VIEW.ADDRESS.STREET_NAME_LABEL', value: 'street' },
     { label: 'SHARING_OPERATION.VIEW.ADDRESS.CITY_LABEL', value: 'city' },
-  ];
+  ]);
 
-  statusOptions = [
+  readonly statusOptions = translatedOptions([
     {
       label: 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL',
       value: MeterDataStatus.ACTIVE,
@@ -128,7 +129,7 @@ export class SharingOperationMetersList implements OnInit {
       value: MeterDataStatus.WAITING_MANAGER,
       severity: 'warn' as const,
     },
-  ];
+  ]);
 
   ngOnInit(): void {
     this.meterEventService.meterAdded$

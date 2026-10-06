@@ -105,6 +105,28 @@ describe('ErrorHandlerComponent', () => {
     expect(component.message()).toBeTruthy();
   });
 
+  it('renders the minlength sentence with its numbers, never a raw key', async () => {
+    // The handler asked for 'FORM_ERROR.min_length' - wrong case, a key that
+    // exists in no locale - so every "too short" error showed that raw path.
+    // `toBeTruthy()` above cannot tell a sentence from a key.
+    await setupComponent('test', {
+      test: new FormControl('', [Validators.minLength(5)]),
+    });
+    const translate = TestBed.inject(TranslateService);
+    translate.setTranslation('en', {
+      FORM_ERROR: {
+        MIN_LENGTH: 'At least {{ requiredLength }} characters (now {{ actualLength }}).',
+      },
+    });
+    translate.use('en');
+    fixture.detectChanges();
+
+    formGroup.get('test')?.setValue('ab');
+    fixture.detectChanges();
+
+    expect(component.message()).toBe('At least 5 characters (now 2).');
+  });
+
   it('should clear error when control becomes valid', async () => {
     await setupComponent('test', {
       test: new FormControl('', [Validators.required]),

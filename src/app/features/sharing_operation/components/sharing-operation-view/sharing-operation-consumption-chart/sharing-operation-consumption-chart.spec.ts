@@ -224,4 +224,26 @@ describe('SharingOperationConsumptionChart', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
   });
+
+  // ── Figures in the reader's language ──────────────────────────────
+
+  describe("figures in the reader's language", () => {
+    it('hands the language to chart.js, which formats the axis in it', async () => {
+      // BUG: with no `locale`, chart.js formats ticks in the BROWSER's locale.
+      TestBed.inject(TranslateService).use('de');
+      await createComponent();
+      expect(component.options.locale).toBe('de');
+    });
+
+    it('writes the tooltip value in that language', async () => {
+      // BUG: the raw number was printed as is: "1234.5 kWh" in every language.
+      TestBed.inject(TranslateService).use('fr');
+      await createComponent();
+      const label = component.options.plugins.tooltip.callbacks.label({
+        dataset: { label: 'Partagé' },
+        raw: 1234.5,
+      });
+      expect(label).toBe(`Partagé: 1${String.fromCharCode(0x202f)}234,5 kWh`);
+    });
+  });
 });

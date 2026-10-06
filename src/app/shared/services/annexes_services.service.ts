@@ -18,19 +18,39 @@ export class AnnexesServicesService extends ServiceBase {
     this.apiAddress = environments.apiUrl + '/annexes-services';
   }
 
-  getCommunityServices(): Observable<ApiResponse<CommunityAnnex[]>> {
-    return this.cachedGet<ApiResponse<CommunityAnnex[]>>('annexes-services:list', this.apiAddress);
+  /**
+   * The ACTIVE community's catalog, for `CommunityServicesStore`, which passes
+   * the id it is loading.
+   *
+   * Keyed AND pinned by `communityId`, and both are load-bearing. The key used
+   * to be the community-agnostic `annexes-services:list`, and `cachedGet` shares
+   * a pending request by key while `CacheService.invalidate` cannot reach that
+   * in-flight map: a switch during the fetch handed the NEW community the old
+   * one's request, its answer, and a "loaded" flag. The pin covers what the key
+   * cannot: the interceptor stamps whichever community is active when a request
+   * is SENT, and `cachedGet` re-sends on a timeout or 5xx, so a retry after a
+   * switch would ask for the new community and cache the answer under the old
+   * one's key.
+   *
+   * Same request as `getServicesForCommunity`; the key family differs so the
+   * store's active path and the dashboard fan-out never share an entry.
+   */
+  getCommunityServices(communityId: string): Observable<ApiResponse<CommunityAnnex[]>> {
+    return this.cachedGet<ApiResponse<CommunityAnnex[]>>(
+      `annexes-services:list:${communityId}`,
+      this.apiAddress,
+      undefined,
+      undefined,
+      { context: new HttpContext().set(COMMUNITY_ID, communityId) },
+    );
   }
 
   /**
    * The catalog of an ARBITRARY community, for the user dashboard's fan-out.
    *
-   * Two things make this different from `getCommunityServices()` and both are
-   * load-bearing: the request is pinned to `communityId` with the `COMMUNITY_ID`
-   * context token (the interceptor would otherwise stamp the ACTIVE community),
-   * and the cache key embeds the community — the key above deliberately does
-   * not, which is why `CommunityServicesStore` has to invalidate it on every
-   * switch.
+   * Pinned to `communityId` with the `COMMUNITY_ID` context token (the
+   * interceptor would otherwise stamp the ACTIVE community), and keyed by it —
+   * see `getCommunityServices` for why both matter.
    */
   getServicesForCommunity(communityId: string): Observable<ApiResponse<CommunityAnnex[]>> {
     return this.cachedGet<ApiResponse<CommunityAnnex[]>>(

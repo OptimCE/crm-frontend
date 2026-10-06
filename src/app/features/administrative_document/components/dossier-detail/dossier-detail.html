@@ -76,7 +76,7 @@
           <dd class="field-value m-0">
             {{
               d.submitted_at
-                ? (d.submitted_at | date: 'short')
+                ? (d.submitted_at | localeDate: 'short')
                 : ('ADMINISTRATIVE_DOCUMENT.DETAIL.NOT_SET' | translate)
             }}
           </dd>
