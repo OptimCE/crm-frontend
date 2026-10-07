@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { Skeleton } from 'primeng/skeleton';
 import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Ripple } from 'primeng/ripple';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Card } from 'primeng/card';
 import { Avatar } from 'primeng/avatar';
@@ -20,7 +19,6 @@ import { ProfileTabs } from './profile-tabs/profile-tabs';
     Skeleton,
     Button,
     TranslatePipe,
-    Ripple,
     Card,
     Avatar,
     Tooltip,

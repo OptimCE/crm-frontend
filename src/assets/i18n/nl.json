@@ -1045,7 +1045,7 @@
         "GUARDIAN_TITLE": "Informatie over de manager",
         "VALIDATE_INFORMATION_FORM_BUTTON": "Bevestigen",
         "ERROR": {
-          "SOCIAL_SECURITY_NUMBER": "Het IBAN-nummer is ongeldig"
+          "SOCIAL_SECURITY_NUMBER": "Het rijksregisternummer is ongeldig"
         },
         "FORM_ERROR": {
           "ID": "rijksregisternummer",

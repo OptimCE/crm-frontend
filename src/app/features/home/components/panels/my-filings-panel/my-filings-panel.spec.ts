@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { signal } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Role } from '../../../../../core/dtos/role';
 import { UserContextService } from '../../../../../core/services/authorization/authorization.service';
@@ -201,6 +201,48 @@ describe('MyFilingsPanel', () => {
     expect(fixture.componentInstance.rows()).toHaveLength(1);
     expect(fixture.componentInstance.rows()[0].community.auth_community_id).toBe(ORG_B);
     expect(fixture.componentInstance.state()).toBe('ready');
+  });
+
+  it('writes the filing date in the reader language, never as the raw timestamp', () => {
+    // BUG: the panel listed "2026-10-02T16:29:17.519196Z": the version's
+    // timestamp went through the bare-date formatter, which hands it back as is.
+    // Local noon, so it is the 2nd whatever zone the suite runs in.
+    const createdAt = new Date(2026, 9, 2, 12, 0).toISOString();
+    start([community(1, ORG_A, 'A')]);
+    flushCatalog(ORG_A, true);
+    httpMock
+      .expectOne((candidate) => candidate.url.includes('/filings/mine'))
+      .flush({
+        data: [
+          {
+            dossier: {
+              id: 1,
+              dossier_type: 1,
+              status: 1,
+              title: null,
+              external_ref: null,
+              submitted_at: null,
+            },
+            document: { id: 2, doc_type: 'annex6_sharing_form', status: 1, title: null },
+            template_label: null,
+            version: { id: 3, version_no: 1, created_at: createdAt },
+            my_rows: { members: [], participants: [{ ean: 'X' }], installations: [], storage: [] },
+          },
+        ],
+        error_code: 0,
+      });
+    fixture.detectChanges();
+
+    const shown = (): string | undefined =>
+      (fixture.nativeElement as HTMLElement)
+        .querySelector('[data-testid="my-filings-panel__date"]')
+        ?.textContent?.trim();
+    expect(shown()).toBe('2 oct. 2026');
+
+    // The same date follows a switch of language, with no reload.
+    TestBed.inject(TranslateService).use('en');
+    fixture.detectChanges();
+    expect(shown()).toBe('Oct 2, 2026');
   });
 
   it('issues nothing at all when the user has no community', () => {

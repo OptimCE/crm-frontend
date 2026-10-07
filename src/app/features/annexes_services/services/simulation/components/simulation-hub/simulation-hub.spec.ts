@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService } from '@ngx-translate/core';
@@ -178,11 +179,22 @@ describe('SimulationHub', () => {
       expect(component.runsLoading()).toBe(false);
     });
 
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
     it('should clear loading and report errors on failure', async () => {
-      serviceSpy.listSimulations.mockReturnValue(throwError(() => new ApiResponse('boom')));
+      serviceSpy.listSimulations.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: { data: 'The simulation service is not enabled', error_code: 2101 },
+            }),
+        ),
+      );
       await createComponent();
       expect(component.runsLoading()).toBe(false);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('boom');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'The simulation service is not enabled',
+      );
     });
 
     it('should request the page passed to loadRuns', async () => {
@@ -304,10 +316,18 @@ describe('SimulationHub', () => {
     });
 
     it('should clear loading and report errors when detail loading fails', () => {
-      serviceSpy.getSimulation.mockReturnValue(throwError(() => new ApiResponse('boom')));
+      serviceSpy.getSimulation.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 404,
+              error: { data: 'Simulation not found', error_code: 2102 },
+            }),
+        ),
+      );
       component.toggleRun(1);
       expect(component.detailLoadingId()).toBeNull();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('boom');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Simulation not found');
     });
   });
 
@@ -337,10 +357,20 @@ describe('SimulationHub', () => {
     });
 
     it('should report errors when the delete fails', () => {
-      serviceSpy.deleteSimulation.mockReturnValue(throwError(() => new ApiResponse('nope')));
+      serviceSpy.deleteSimulation.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 409,
+              error: { data: 'A running simulation cannot be deleted', error_code: 2103 },
+            }),
+        ),
+      );
       component.deleteRun(1);
       fireAccept();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('nope');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'A running simulation cannot be deleted',
+      );
     });
   });
 

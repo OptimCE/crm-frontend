@@ -302,6 +302,36 @@
 }
 
 /* ------------------------------------------------------------------
+   Address search suggestions (app-address-autocomplete)
+   The panel is appended to <body>, outside the component's view
+   encapsulation, so it is styled here, scoped by its panelStyleClass.
+   PrimeNG gives the overlay the field's width as a min-width, but its
+   nowrap options then widened the panel to the longest label: 410.8 px
+   on a 390 px phone, past the screen edge. Inline-size containment
+   stops the labels from sizing the panel, so it is exactly as wide as
+   the field, and a long label wraps instead.
+   ------------------------------------------------------------------ */
+.p-autocomplete-overlay.address-suggestions {
+  contain: inline-size;
+}
+.p-autocomplete-overlay.address-suggestions .p-autocomplete-option {
+  white-space: normal;
+}
+
+/* ------------------------------------------------------------------
+   Help popovers (app-field-label-helper, app-header-with-helper)
+   p-popover is appended to <body>, outside the components' view
+   encapsulation, so the card is styled here, scoped by its styleClass.
+   The corners keep the theme radius on purpose: Popover.align()
+   subtracts twice the root's border-radius from the arrow offset, so
+   a 10 px radius moved the arrow 8 px off the trigger on phones, where
+   the popover is pushed left of it.
+   ------------------------------------------------------------------ */
+.p-popover.helper-popover .p-popover-content {
+  padding: 0.875rem 1rem;
+}
+
+/* ------------------------------------------------------------------
    Responsive PrimeNG DynamicDialog
    Apply via DynamicDialogConfig.styleClass: 'responsive-dialog'
    ------------------------------------------------------------------ */

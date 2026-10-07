@@ -8,6 +8,7 @@ import { Observable, Subject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { MemberView } from './member-view';
+import { MemberCreationUpdate } from '../member-creation-update/member-creation-update';
 import { MemberService } from '../../../../shared/services/member.service';
 import { InvitationService } from '../../../../shared/services/invitation.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -481,6 +482,18 @@ describe('MemberView', () => {
         { data: { member: unknown } },
       ];
       expect(callArgs[1].data.member).toEqual(component.individual());
+    });
+
+    it('should open a dialog that narrows to the screen on phones', () => {
+      component.toModify();
+      expect(dialogServiceSpy.open).toHaveBeenCalledWith(
+        MemberCreationUpdate,
+        expect.objectContaining({
+          width: '900px',
+          breakpoints: { '1024px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
+        }),
+      );
     });
 
     it('should reload member and show snackbar on dialog close with response', () => {

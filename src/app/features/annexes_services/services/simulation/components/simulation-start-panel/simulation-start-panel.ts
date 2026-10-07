@@ -10,6 +10,7 @@ import { Select } from 'primeng/select';
 import { debounceTime, distinctUntilChanged, map, Observable } from 'rxjs';
 
 import { ApiResponse } from '../../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../../../core/dtos/notification';
 import { ErrorHandlerComponent } from '../../../../../../shared/components/error.handler/error.handler.component';
 import { FormErrorSummaryComponent } from '../../../../../../shared/components/summary-error.handler/summary-error.handler.component';
@@ -523,7 +524,6 @@ export class SimulationStartPanel implements OnInit {
   }
 
   private handleApiError(error: unknown): void {
-    const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-    this.errorHandler.handleError(errorData);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

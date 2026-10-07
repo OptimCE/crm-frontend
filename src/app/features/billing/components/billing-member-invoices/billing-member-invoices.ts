@@ -9,7 +9,8 @@ import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 
-import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { ERROR_TYPE } from '../../../../core/dtos/notification';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import {
@@ -144,9 +145,7 @@ export class BillingMemberInvoices implements OnInit {
         },
         error: (error: unknown) => {
           this.loading.set(false);
-          this.errorHandler.handleError(
-            error instanceof ApiResponse ? (error.data as string) : null,
-          );
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

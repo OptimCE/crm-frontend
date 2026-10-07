@@ -5,7 +5,6 @@ import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FormErrorSummaryComponent } from '../../../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { Button } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../../../shared/types/error.types';
 import { MemberType } from '../../../../../../shared/types/member.types';
@@ -20,7 +19,6 @@ import { MemberType } from '../../../../../../shared/types/member.types';
     TranslatePipe,
     FormErrorSummaryComponent,
     Button,
-    Ripple,
   ],
   templateUrl: './new-member-informations.html',
   styleUrl: './new-member-informations.css',

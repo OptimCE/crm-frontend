@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { TranslateModule } from '@ngx-translate/core';
@@ -355,14 +356,19 @@ describe('MeterUpdate', () => {
   // ── 7. onSubmit — valid form, error ─────────────────────────────────
 
   describe('onSubmit — valid form, error', () => {
-    it('should call errorHandler.handleError on HTTP error', () => {
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the meter cannot be updated", () => {
       fillFormValid();
-      const error = new Error('Network error');
-      meterServiceSpy.updateMeter.mockReturnValue(throwError(() => error));
+      const message = 'This meter does not exist';
+      meterServiceSpy.updateMeter.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 404, error: { data: message, error_code: 2002 } }),
+        ),
+      );
 
       component.onSubmit();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 

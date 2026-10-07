@@ -1,4 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Confirmation, ConfirmationService } from 'primeng/api';
@@ -295,13 +296,19 @@ describe('MeterDataUpdate', () => {
     });
 
     it('should call errorHandler.handleError on patchMeterData error', () => {
-      meterServiceSpy.patchMeterData.mockReturnValue(throwError(() => ({ data: 'some error' })));
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'The start date overlaps an existing period of this meter';
+      meterServiceSpy.patchMeterData.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 422, error: { data: message, error_code: 2017 } }),
+        ),
+      );
       initAndEmitMembers();
       component.metersForm.patchValue({ dateStart: new Date('2024-01-01') });
 
       component.onSubmit();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('some error');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
 
     it('should load enough members for the whole community to be selectable', () => {

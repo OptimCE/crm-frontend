@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { vi } from 'vitest';
 import { of, throwError } from 'rxjs';
@@ -105,12 +106,16 @@ describe('MeterDeactivation', () => {
     });
 
     it('should surface the error and not close the dialog on failure', () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'The deactivation date cannot be before the start of the current period';
       meterServiceSpy.deactivateMeter.mockReturnValueOnce(
-        throwError(() => new ApiResponse('boom')),
+        throwError(
+          () => new HttpErrorResponse({ status: 422, error: { data: message, error_code: 2021 } }),
+        ),
       );
       component.deleteForm.get('date')?.setValue(new Date(2026, 0, 15) as unknown as string);
       component.onSubmit();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('boom');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
       expect(dialogRefSpy.close).not.toHaveBeenCalled();
     });
   });

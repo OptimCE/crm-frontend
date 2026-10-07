@@ -12,6 +12,7 @@ import { PhaseCategory, ReadingFrequency, TarifGroup } from '../../../../shared/
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { FieldLabelHelper } from '../../../../shared/components/field-label-helper/field-label-helper';
 import {
@@ -276,7 +277,7 @@ export class MeterUpdate implements OnInit {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

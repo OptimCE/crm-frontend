@@ -1,13 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { ImportSharingOperationMeters } from './import-sharing-operation-meters';
 import { AddressPipe } from '../../pipes/address/address-pipe';
 import { SharingOperationService } from '../../services/sharing_operation.service';
+import { ErrorMessageHandler } from '../../services-ui/error.message.handler';
 import { PartialMeterDTO } from '../../dtos/meter.dtos';
 import {
   SharingOperationMetersQuery,
@@ -72,6 +74,7 @@ describe('ImportSharingOperationMeters', () => {
   let fixture: ComponentFixture<ImportSharingOperationMeters>;
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
   let serviceSpy: ServiceSpy;
+  let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
 
   async function setup(data: unknown = { idSharing: 1 }): Promise<void> {
     // A test may call setup() again to swap the dialog payload; TestBed refuses to be
@@ -84,6 +87,7 @@ describe('ImportSharingOperationMeters', () => {
         .fn()
         .mockReturnValue(of(new ApiResponsePaginated(operations, new Pagination(1, 10, 2, 1)))),
     };
+    errorHandlerSpy = { handleError: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [ImportSharingOperationMeters, TranslateModule.forRoot()],
@@ -95,7 +99,11 @@ describe('ImportSharingOperationMeters', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(ImportSharingOperationMeters, {
-        set: { imports: [TranslatePipe, AddressPipe], schemas: [NO_ERRORS_SCHEMA] },
+        set: {
+          imports: [TranslatePipe, AddressPipe],
+          schemas: [NO_ERRORS_SCHEMA],
+          providers: [{ provide: ErrorMessageHandler, useValue: errorHandlerSpy }],
+        },
       })
       .compileComponents();
 
@@ -145,6 +153,21 @@ describe('ImportSharingOperationMeters', () => {
       ).padStart(2, '0')}`;
       expect(lastMetersQuery(serviceSpy.getSharingOperationMetersList).at).toBe(expected);
     });
+
+    it("shows the server's message when the meters cannot be loaded", () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'This sharing operation no longer exists';
+      serviceSpy.getSharingOperationMetersList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 404, error: { data: message, error_code: 3001 } }),
+        ),
+      );
+
+      component.loadMeters();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+      expect(component.loading()).toBe(false);
+    });
   });
 
   // ── 3. Operation chosen in the dialog ────────────────────────────
@@ -162,6 +185,20 @@ describe('ImportSharingOperationMeters', () => {
 
     it('does not query meters until an operation is picked', () => {
       expect(serviceSpy.getSharingOperationMetersList).not.toHaveBeenCalled();
+    });
+
+    it("shows the server's message when the operations cannot be listed", () => {
+      const message = 'You are not allowed to view the sharing operations of this community';
+      serviceSpy.getSharingOperationList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 3004 } }),
+        ),
+      );
+
+      component.ngOnInit();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+      expect(component.loadingOperations()).toBe(false);
     });
 
     it('loads that operation’s meters once one is picked', () => {
@@ -343,6 +380,20 @@ describe('ImportSharingOperationMeters', () => {
       expect(lastMetersQuery(serviceSpy.getSharingOperationMetersList).limit).toBe(9999);
       // Even the injection point is taken — this is an explicit "select all".
       all.forEach((m) => expect(component.isSelected(m.EAN)).toBe(true));
+    });
+
+    it("shows the server's message when select-all fails, and keeps the selection", () => {
+      const message = 'An unexpected error occurred while retrieving the meters';
+      serviceSpy.getSharingOperationMetersList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 500, error: { data: message, error_code: 3061 } }),
+        ),
+      );
+
+      component.selectAll();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+      expect(component.selectedEans()).toEqual(new Set([CONSUMER_A.EAN, CONSUMER_B.EAN]));
     });
 
     it('clears the whole selection', () => {

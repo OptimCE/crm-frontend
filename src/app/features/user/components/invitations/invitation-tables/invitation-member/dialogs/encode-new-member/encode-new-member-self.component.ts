@@ -7,11 +7,15 @@ import { NewMemberBankingInfo } from '../../../../../../../member/components/mem
 import { NewMemberInformations } from '../../../../../../../member/components/member-creation-update/steps/new-member-informations/new-member-informations';
 import { NewMemberType } from '../../../../../../../member/components/member-creation-update/steps/new-member-type/new-member-type';
 import { ErrorMessageHandler } from '../../../../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../../../../shared/utils/api-error.utils';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateManagerDTO, CreateMemberDTO } from '../../../../../../../../shared/dtos/member.dtos';
 import { ibanValidator } from '../../../../../../../../shared/validators/iban.validator';
-import { numRegistreBeValidator } from '../../../../../../../member/components/member-creation-update/num_registre_nat_be.validator';
+import {
+  normalizeNumRegistreBe,
+  numRegistreBeValidator,
+} from '../../../../../../../member/components/member-creation-update/num_registre_nat_be.validator';
 import { AddressDTO } from '../../../../../../../../shared/dtos/address.dtos';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
@@ -273,7 +277,7 @@ export class EncodeNewMemberSelfComponent implements OnInit {
     let manager: CreateManagerDTO | undefined = undefined;
     if (this.gestionnaire()) {
       manager = {
-        NRN: formDataValue.NRN_manager ?? '',
+        NRN: normalizeNumRegistreBe(formDataValue.NRN_manager ?? ''),
         name: formDataValue.name_manager ?? '',
         surname: formDataValue.surname_manager ?? '',
         email: formDataValue.email_manager ?? '',
@@ -288,11 +292,16 @@ export class EncodeNewMemberSelfComponent implements OnInit {
     if (typeClient === -1) {
       return;
     }
+    const isCompany = typeClient === MemberType.COMPANY;
     const memberToAdd: CreateMemberDTO = {
-      NRN: formDataValue.id,
+      // A company's `id` is its company number, not a national register number.
+      NRN:
+        typeClient === MemberType.COMPANY
+          ? formDataValue.id
+          : normalizeNumRegistreBe(formDataValue.id),
       billing_address: billingAddress,
       email: formDataValue.email ?? '',
-      first_name: formDataValue.name,
+      first_name: isCompany ? '' : formDataValue.name,
       home_address: homeAddress,
       iban: ibanFormValue.iban,
       member_type: typeClient,
@@ -300,7 +309,7 @@ export class EncodeNewMemberSelfComponent implements OnInit {
       social_rate: socialRate,
       status: status,
       vat_number: formDataValue.vatNumber ?? '',
-      name: formDataValue.surname ?? '',
+      name: isCompany ? formDataValue.name : (formDataValue.surname ?? ''),
       manager: manager,
     };
     if (this.typeClient() === MemberType.COMPANY) {
@@ -320,8 +329,8 @@ export class EncodeNewMemberSelfComponent implements OnInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

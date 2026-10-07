@@ -14,7 +14,6 @@ import { InputText } from 'primeng/inputtext';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { Button } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { Divider } from 'primeng/divider';
 import {
   AddressAutocomplete,
@@ -105,7 +104,6 @@ function addressGroupValidator(prefix: string) {
     TranslatePipe,
     Checkbox,
     Button,
-    Ripple,
     Divider,
     AddressAutocomplete,
   ],

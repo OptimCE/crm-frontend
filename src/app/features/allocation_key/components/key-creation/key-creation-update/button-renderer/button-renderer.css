@@ -1,0 +1,11 @@
+/*
+ * The button is icon-only: keep it at its own size, vertically centered in the cell. The grid
+ * cell sets line-height to the row height, which the button would inherit (its ::after nbsp
+ * makes it that tall, and the cell clips it), hence the reset.
+ */
+:host {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: normal;
+}

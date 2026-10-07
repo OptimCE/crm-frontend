@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { TranslateModule } from '@ngx-translate/core';
@@ -204,18 +205,24 @@ describe('SharingOperationCreationUpdate', () => {
       });
     });
 
-    it('should call errorHandler.handleError on service error', () => {
+    it("shows the server's message when the sharing operation cannot be created", () => {
       component.formAddSharingOp.patchValue({
         name: 'My Operation',
         type: SharingOperationType.CEC,
         municipalities: [buildMunicipality(31001)],
       });
-      const error = new Error('Network error');
-      sharingOpServiceSpy.createSharingOperation.mockReturnValue(throwError(() => error));
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'A sharing operation with this name already exists';
+      sharingOpServiceSpy.createSharingOperation.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3010 } }),
+        ),
+      );
 
       component.onSubmitForm();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
     });
   });
 
@@ -280,9 +287,13 @@ describe('SharingOperationCreationUpdate', () => {
       expect(sharingOpServiceSpy.createSharingOperation).not.toHaveBeenCalled();
     });
 
-    it('should surface backend errors via errorHandler', () => {
-      const error = new Error('boom');
-      sharingOpServiceSpy.updateSharingOperation.mockReturnValue(throwError(() => error));
+    it("shows the server's message when the sharing operation cannot be updated", () => {
+      const message = 'You are not allowed to modify this sharing operation';
+      sharingOpServiceSpy.updateSharingOperation.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 3003 } }),
+        ),
+      );
       component.formAddSharingOp.patchValue({
         name: 'Renamed',
         type: SharingOperationType.CER,
@@ -291,7 +302,8 @@ describe('SharingOperationCreationUpdate', () => {
 
       component.onSubmitForm();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
     });
   });
 });

@@ -34,8 +34,8 @@
                     | translate)
               }}
             </span>
-            <span class="text-surface-500 whitespace-nowrap">
-              {{ formatApiDate(filing.version.created_at) }}
+            <span class="text-surface-500 whitespace-nowrap" data-testid="my-filings-panel__date">
+              {{ formatApiDay(filing.version.created_at, locale()) }}
             </span>
           </span>
         }

@@ -16,7 +16,6 @@ import { ButtonRenderer } from './button-renderer/button-renderer';
 import { HeaderWithHelper } from '../../key-view/header-with-helper/header-with-helper';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
-import { Ripple } from 'primeng/ripple';
 import { InputText } from 'primeng/inputtext';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
@@ -30,11 +29,12 @@ import {
   ColDef,
   ColGroupDef,
   GridApi,
+  GridOptions,
   GridReadyEvent,
   NewValueParams,
 } from 'ag-grid-community';
 import { KeyTableRow } from '../../../../../shared/types/key.types';
-import { ApiResponse } from '../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../shared/utils/api-error.utils';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../../shared/types/error.types';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -56,7 +56,6 @@ interface KeyForm {
     TranslatePipe,
     Button,
     Card,
-    Ripple,
     InputText,
     ReactiveFormsModule,
     AgGridAngular,
@@ -115,10 +114,8 @@ export class KeyCreationUpdate implements OnInit {
   });
   readonly errorsAdded = signal<ErrorAdded>({});
   readonly errorsSummaryAdded = signal<ErrorSummaryAdded>({});
-  gridOptions = {
+  gridOptions: GridOptions<KeyTableRow> = {
     suppressCellFocus: false, // just to reduce masking
-    debug: true, // enables logs
-    suppressReactUi: false,
   };
   refreshGrid(): void {
     this.formGroup.updateValueAndValidity();
@@ -166,8 +163,7 @@ export class KeyCreationUpdate implements OnInit {
             }
           },
           error: (error) => {
-            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-            this.errorHandler.handleError(errorData);
+            this.errorHandler.handleError(extractApiErrorMessage(error));
           },
         });
       } else {
@@ -221,6 +217,9 @@ export class KeyCreationUpdate implements OnInit {
       ])
       .subscribe({
         next: (translations: Record<string, string>) => {
+          // The help columns' text goes to HeaderWithHelper alone (its title + popover). TooltipModule
+          // is registered here, so a headerTooltip on them would show the same text again. The plain
+          // delete headers keep theirs: it is their only tooltip.
           this.colDefs.set([
             {
               headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
@@ -236,7 +235,6 @@ export class KeyCreationUpdate implements OnInit {
                 label: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
                 tooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
               },
-              headerTooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             },
             {
               headerName: translations['KEY.TABLE.DELETE_ITERATION_BUTTON_LABEL'],
@@ -247,6 +245,8 @@ export class KeyCreationUpdate implements OnInit {
                 onClick: this.deleteIteration.bind(this),
                 label: translations['KEY.TABLE.DELETE_ITERATION_BUTTON_LABEL'],
               },
+              // Repeats the header, which narrow columns cut off (the cells are icon-only).
+              headerTooltip: translations['KEY.TABLE.DELETE_ITERATION_BUTTON_LABEL'],
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
@@ -259,7 +259,6 @@ export class KeyCreationUpdate implements OnInit {
                 label: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
                 tooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
               },
-              headerTooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             },
             {
               headerName: translations['KEY.TABLE.COLUMNS.CONSUMER_LABEL'],
@@ -283,7 +282,6 @@ export class KeyCreationUpdate implements OnInit {
                     label: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
                     tooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
                   },
-                  headerTooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
                 },
               ],
             },
@@ -296,6 +294,8 @@ export class KeyCreationUpdate implements OnInit {
                 onClick: this.deleteConsumer.bind(this),
                 label: translations['KEY.TABLE.DELETE_CONSUMER_BUTTON_LABEL'],
               },
+              // Repeats the header, which narrow columns cut off (the cells are icon-only).
+              headerTooltip: translations['KEY.TABLE.DELETE_CONSUMER_BUTTON_LABEL'],
             },
           ]);
         },
@@ -486,8 +486,7 @@ export class KeyCreationUpdate implements OnInit {
           }
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
     } else {
@@ -504,8 +503,7 @@ export class KeyCreationUpdate implements OnInit {
           }
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
     }
@@ -644,6 +642,8 @@ export class KeyCreationUpdate implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('KEY.IMPORT_FROM_SHARING_OPERATION.HEADER') as string,
       width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       data: this.fixedIdSharing ? { idSharing: this.fixedIdSharing } : {},
     });
 
@@ -871,11 +871,5 @@ export class KeyCreationUpdate implements OnInit {
     }
     this.rowData.set(this.formatData());
     this.refreshGrid();
-  }
-
-  getContext(): { form: FormGroup } {
-    return {
-      form: this.formGroup,
-    };
   }
 }

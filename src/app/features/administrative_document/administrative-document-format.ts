@@ -6,6 +6,8 @@
  * Label functions return translation KEYS — pipe them through `translate`.
  */
 
+import { formatDate } from '@angular/common';
+
 import {
   DeadlineStatus,
   DocOrigin,
@@ -198,13 +200,46 @@ const API_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
  *
  * Anything that is not a bare date is returned untouched. Counting dashes is
  * not enough for that: `not-a-date` and `2026-09-21T08:00:00Z` both split into
- * three parts and would come back reversed into nonsense.
+ * three parts and would come back reversed into nonsense. A timestamp is an
+ * instant, not a day: write it with `formatApiDay`.
  */
 export function formatApiDate(value: string | null | undefined): string {
   if (!value) return '';
   if (!API_DATE_PATTERN.test(value)) return value;
   const [y, m, d] = value.split('-');
   return `${d}/${m}/${y}`;
+}
+
+/**
+ * How `formatApiDay` writes a day. CLDR's medium date names the month in every
+ * language but German, so an English reader never gets en-US's "10/2/26".
+ */
+const API_DAY_FORMAT = 'mediumDate';
+
+/**
+ * The day an API timestamp falls on, in the reader's language: "2 oct. 2026",
+ * "Oct 2, 2026", "2 okt 2026", "02.10.2026".
+ *
+ * For `*_at` values such as a version's `created_at`
+ * (`2026-10-02T16:29:17.519196Z`), which `formatApiDate` hands back untouched.
+ * They are instants, so `formatDate` converts them to the reader's own day
+ * first: 23:30 UTC is already the next day in Brussels.
+ *
+ * Pass `LocaleService.locale()`, read in the template, so a language switch
+ * rewrites the date along with the sentence around it.
+ *
+ * A bare `YYYY-MM-DD` has no instant to convert: it keeps `formatApiDate`'s
+ * rendering and is never parsed. Anything unparseable comes back as it was, as
+ * there — a raw value on screen beats a template that throws.
+ */
+export function formatApiDay(value: string | null | undefined, locale: string): string {
+  if (!value) return '';
+  if (API_DATE_PATTERN.test(value)) return formatApiDate(value);
+  try {
+    return formatDate(value, API_DAY_FORMAT, locale);
+  } catch {
+    return value;
+  }
 }
 
 /** Parse a bare `YYYY-MM-DD` into a local Date, for seeding a p-datepicker. */

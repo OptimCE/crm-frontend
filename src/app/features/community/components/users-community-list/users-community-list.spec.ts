@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -379,17 +380,30 @@ describe('UsersCommunityList', () => {
       expect(component.userSelected()).toBeUndefined();
     });
 
-    it('should call errorHandler.handleError on API error', () => {
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the role cannot be changed", () => {
       const user = buildUsers()[1];
       component.userSelected.set(user);
       component.roleSelected.set(Role.MEMBER);
 
-      const error = new Error('update failed');
-      communityServiceSpy.patchRoleUser.mockReturnValue(throwError(() => error));
+      communityServiceSpy.patchRoleUser.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: {
+                data: "Only an administrator can change a member's role",
+                error_code: 50005,
+              },
+            }),
+        ),
+      );
 
       component.updateRole();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        "Only an administrator can change a member's role",
+      );
     });
   });
 
@@ -431,6 +445,9 @@ describe('UsersCommunityList', () => {
       const callArgs = dialogServiceSpy.open.mock.calls[0] as [unknown, Record<string, unknown>];
       expect(callArgs[1]['modal']).toBe(true);
       expect(callArgs[1]['closable']).toBe(true);
+      expect(callArgs[1]['width']).toBe('900px');
+      expect(callArgs[1]['breakpoints']).toEqual({ '1024px': '90vw', '640px': '100vw' });
+      expect(callArgs[1]['styleClass']).toBe('responsive-dialog');
     });
   });
 
@@ -484,16 +501,28 @@ describe('UsersCommunityList', () => {
       expect(invitationServiceSpy.inviteUserToBecomeManager).not.toHaveBeenCalled();
     });
 
-    it('should call errorHandler.handleError on invitation error', () => {
+    it("shows the server's message when the manager invitation cannot be sent", () => {
       const onClose = new Subject<unknown>();
       dialogServiceSpy.open.mockReturnValue({ onClose, destroy: vi.fn() });
-      const error = new Error('invite failed');
-      invitationServiceSpy.inviteUserToBecomeManager.mockReturnValue(throwError(() => error));
+      invitationServiceSpy.inviteUserToBecomeManager.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 409,
+              error: {
+                data: 'This user is already a manager of this community',
+                error_code: 51002,
+              },
+            }),
+        ),
+      );
 
       component.inviteGestionnaire();
-      onClose.next('fail@test.com');
+      onClose.next('manager@test.com');
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'This user is already a manager of this community',
+      );
     });
   });
 

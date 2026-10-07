@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -112,6 +113,21 @@ describe('UnlocatedMeters', () => {
     expect(component.addressForm.getRawValue().address_street).toBe('Rue A');
   });
 
+  // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+  it("shows the server's message when the meters cannot be loaded", async () => {
+    const message = 'The meters could not be retrieved';
+    meterServiceSpy.getMetersList.mockReturnValue(
+      throwError(
+        () => new HttpErrorResponse({ status: 500, error: { data: message, error_code: 1 } }),
+      ),
+    );
+
+    await build();
+
+    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    expect(component.loading()).toBe(false);
+  });
+
   it('saves the edited address for the selected meter and advances', async () => {
     await build();
     component.addressForm.patchValue({ address_street: 'Rue de la Loi', address_number: '16' });
@@ -215,6 +231,20 @@ describe('UnlocatedMeters', () => {
     expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     expect(component.total()).toBe(2);
     expect(component.repairedCount()).toBe(0);
+  });
+
+  it("shows the server's message when the address cannot be saved", async () => {
+    await build();
+    const message = 'You are not a manager of this community';
+    meterServiceSpy.updateMeterAddress.mockReturnValue(
+      throwError(
+        () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 50003 } }),
+      ),
+    );
+
+    component.save();
+
+    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
   });
 
   it('skip moves on without writing anything', async () => {

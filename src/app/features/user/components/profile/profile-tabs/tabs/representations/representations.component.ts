@@ -16,6 +16,7 @@ import {
 } from '../../../../../../../shared/dtos/me.dtos';
 import { MemberType, MemberStatus } from '../../../../../../../shared/types/member.types';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import { Pagination } from '../../../../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
@@ -171,7 +172,7 @@ export class RepresentationsComponent {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

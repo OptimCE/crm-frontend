@@ -8,7 +8,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import {
   TariffIn,
@@ -150,9 +150,7 @@ export class TariffDialog implements OnInit {
         },
         error: (error: unknown) => {
           this.submitting.set(false);
-          this.errorHandler.handleError(
-            error instanceof ApiResponse ? (error.data as string) : null,
-          );
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

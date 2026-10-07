@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
@@ -212,6 +213,24 @@ describe('CommunityInfo', () => {
       create();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.loading()).toBe(false);
+    });
+
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the community cannot be loaded", async () => {
+      await configure();
+      communitySpy.getCommunityDetail.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: { data: 'You are not a member of this community', error_code: 50002 },
+            }),
+        ),
+      );
+      create();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'You are not a member of this community',
+      );
     });
 
     it('resets the form to the loaded values', async () => {
@@ -475,6 +494,24 @@ describe('CommunityInfo', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.saving()).toBe(false);
     });
+
+    it("shows the server's message when the community cannot be updated", () => {
+      communitySpy.updateCommunity.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 422,
+              error: { data: 'The VAT number must start with a country code', error_code: 55012 },
+            }),
+        ),
+      );
+
+      component.save();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'The VAT number must start with a country code',
+      );
+    });
   });
 
   describe('save() — with file', () => {
@@ -515,6 +552,24 @@ describe('CommunityInfo', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.saving()).toBe(false);
     });
+
+    it("shows the server's message when the logo cannot be uploaded", () => {
+      communitySpy.uploadLogo.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 422,
+              error: { data: 'The logo must be a PNG, JPEG or SVG image', error_code: 55020 },
+            }),
+        ),
+      );
+
+      component.save();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'The logo must be a PNG, JPEG or SVG image',
+      );
+    });
   });
 
   // ── removeLogo ────────────────────────────────────────────────────
@@ -540,6 +595,26 @@ describe('CommunityInfo', () => {
       component.removeLogo();
 
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
+    });
+
+    it("shows the server's message when the logo cannot be removed", async () => {
+      await configure({ isAdmin: true });
+      create();
+      communitySpy.deleteLogo.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 404,
+              error: { data: 'This community has no logo to remove', error_code: 55021 },
+            }),
+        ),
+      );
+
+      component.removeLogo();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'This community has no logo to remove',
+      );
     });
   });
 

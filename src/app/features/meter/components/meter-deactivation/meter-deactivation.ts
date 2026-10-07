@@ -13,7 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
 
 interface MeterDeactivationDialogData {
@@ -61,8 +61,7 @@ export class MeterDeactivation {
         this.ref.close(true);
       },
       error: (error: unknown) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
       },
     });
   }

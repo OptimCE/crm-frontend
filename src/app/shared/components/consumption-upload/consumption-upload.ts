@@ -13,7 +13,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 
-import { ApiResponse } from '../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../core/dtos/notification';
 import { SharingOperationService } from '../../services/sharing_operation.service';
 import { ErrorMessageHandler } from '../../services-ui/error.message.handler';
@@ -136,9 +136,7 @@ export class ConsumptionUpload {
         },
         error: (error: unknown) => {
           this.uploading.set(false);
-          this.errorHandler.handleError(
-            error instanceof ApiResponse ? (error.data as string) : null,
-          );
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
@@ -405,6 +406,21 @@ describe('AnnexesServicesList', () => {
       accept();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.pendingUnsubscribe()).toBeNull();
+    });
+
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the module cannot be deactivated", () => {
+      const message = 'This module is not activated for the community';
+      annexesServiceSpy.unsubscribe.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 1102 } }),
+        ),
+      );
+      component.unsubscribe(buildAnnex(), buildEvent().event);
+      const confirmation = confirmationSpy.confirm.mock.calls[0][0] as Confirmation;
+      const accept = confirmation.accept as () => void;
+      accept();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 });

@@ -1,0 +1,39 @@
+/*
+  Step list. The four step titles never wrap and need 728 px in French, and that
+  minimum used to size the whole dialog: 801 px wide on a 390 px phone, with both
+  edges off-screen. As a size container, the step list stops counting towards
+  the dialog's width, and its titles adapt to the room it actually gets:
+  - under 46rem (736 px), only the current step keeps its title (437 px needed);
+  - under 28rem (448 px, phones), only the numbers show. A cut-off title would not
+    help: "Informations…" is both the personal and the banking step.
+  A hidden title stays readable by screen readers, so each step keeps its name.
+  `min-width: 0` turns a still-too-long title (another translation) into an
+  ellipsis instead of a scrolling step list.
+  EncodeNewMemberSelfComponent shows the same steps with the same rules.
+*/
+:host ::ng-deep .p-steplist {
+  container-type: inline-size;
+}
+
+:host ::ng-deep .p-step,
+:host ::ng-deep .p-step-header {
+  min-width: 0;
+}
+
+@container (width < 46rem) {
+  :host ::ng-deep .p-step:not(.p-step-active) .p-step-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+  }
+}
+
+@container (width < 28rem) {
+  :host ::ng-deep .p-step-active .p-step-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+  }
+}

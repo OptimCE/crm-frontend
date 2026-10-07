@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { AddressPipe } from '../../../../shared/pipes/address/address-pipe';
 import { Tag } from 'primeng/tag';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { Card } from 'primeng/card';
@@ -37,7 +36,6 @@ import { meterPeriodOptions } from '../../../../shared/utils/meter-period-option
     AddressPipe,
     Tag,
     TranslatePipe,
-    Ripple,
     Select,
     Tabs,
     TabList,
@@ -276,6 +274,8 @@ export class MeterView implements OnInit {
       closable: true,
       closeOnEscape: true,
       width: '600px',
+      breakpoints: { '768px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('METER.FULL.METER_MODIFICATION_HEADER') as string,
       data: {
         meter: this.meter(),
@@ -303,6 +303,8 @@ export class MeterView implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('METER.FULL.METER_DATA_UPDATE_HEADER') as string,
       width: '1000px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       data: {
         id: meter.EAN,
         meterData: meter.meter_data,

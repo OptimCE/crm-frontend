@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -185,11 +186,16 @@ describe('MemberViewMeterTab', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
     });
 
-    it('should call errorHandler on error', () => {
-      const error = new Error('Network error');
-      meterServiceSpy.getMetersList.mockReturnValue(throwError(() => error));
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("should show the server's message when the meters cannot be loaded", () => {
+      const message = 'You are not a manager of this community';
+      meterServiceSpy.getMetersList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 50003 } }),
+        ),
+      );
       component.loadMeters();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 
@@ -432,6 +438,8 @@ describe('MemberViewMeterTab', () => {
           closable: true,
           closeOnEscape: true,
           width: '700px',
+          breakpoints: { '768px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
           data: { holder_id: 1 },
         }),
       );

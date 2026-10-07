@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import {
   MemberDisplay,
@@ -201,6 +201,6 @@ export class NewsPoll implements OnInit {
   }
 
   private handleError(error: unknown): void {
-    this.errorHandler.handleError(error instanceof ApiResponse ? (error.data as string) : null);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

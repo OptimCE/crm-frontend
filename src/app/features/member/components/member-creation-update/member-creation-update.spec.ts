@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { of, throwError } from 'rxjs';
@@ -9,6 +10,8 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MemberCreationUpdate } from './member-creation-update';
 import { MemberService } from '../../../../shared/services/member.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../../../core/dtos/notification';
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { MemberType } from '../../../../shared/types/member.types';
 import {
@@ -183,14 +186,25 @@ describe('MemberCreationUpdate', () => {
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
   let dialogConfigSpy: { data: { member: IndividualDTO | CompanyDTO } | null };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
+  let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
 
   // --- Default creation-mode setup ---
 
-  function createTestBed(configData: { member: IndividualDTO | CompanyDTO } | null = null) {
+  // The template is replaced by '' unless `rendered` is set, which keeps the
+  // real one and its real step components. `realErrorHandler` keeps the real
+  // ErrorMessageHandler, which is what turns an error into the snackbar's text.
+  function createTestBed(
+    configData: { member: IndividualDTO | CompanyDTO } | null = null,
+    { rendered = false, realErrorHandler = false } = {},
+  ) {
     memberServiceSpy = { addMember: vi.fn(), updateMember: vi.fn() };
     dialogRefSpy = { close: vi.fn() };
     dialogConfigSpy = { data: configData };
     errorHandlerSpy = { handleError: vi.fn() };
+    snackbarSpy = { openSnackBar: vi.fn() };
+    const providers = realErrorHandler
+      ? [ErrorMessageHandler]
+      : [{ provide: ErrorMessageHandler, useValue: errorHandlerSpy }];
 
     return TestBed.configureTestingModule({
       imports: [MemberCreationUpdate, TranslateModule.forRoot()],
@@ -199,15 +213,12 @@ describe('MemberCreationUpdate', () => {
         { provide: DynamicDialogRef, useValue: dialogRefSpy },
         { provide: DynamicDialogConfig, useValue: dialogConfigSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+        { provide: SnackbarNotification, useValue: snackbarSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(MemberCreationUpdate, {
-        set: {
-          imports: [TranslateModule],
-          template: '',
-          providers: [{ provide: ErrorMessageHandler, useValue: errorHandlerSpy }],
-        },
+        set: rendered ? { providers } : { imports: [TranslateModule], template: '', providers },
       })
       .compileComponents();
   }
@@ -293,6 +304,233 @@ describe('MemberCreationUpdate', () => {
     it('should reject a structurally malformed IBAN', () => {
       ibanControl()?.setValue('NOT-AN-IBAN');
       expect(ibanControl()?.hasError('invalidIban')).toBe(true);
+    });
+  });
+
+  // =============================================
+  // 1c. The rendered wizard (real template)
+  // =============================================
+
+  describe('rendered wizard', () => {
+    // PrimeNG creates the content of every step panel up front, so step 1
+    // exists before a member type is chosen. The other blocks replace the
+    // template with '', so none of them could see that it was bound to a form
+    // that did not exist yet.
+
+    function byTestId(testId: string): HTMLElement {
+      const el = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        `[data-testid="${testId}"]`,
+      );
+      if (!el) {
+        throw new Error(`[data-testid="${testId}"] is not rendered`);
+      }
+      return el;
+    }
+
+    async function settle(): Promise<void> {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+    }
+
+    // A p-button reacts to clicks on the <button> it renders.
+    async function press(testId: string): Promise<void> {
+      byTestId(testId).querySelector('button')?.click();
+      await settle();
+    }
+
+    async function type(testId: string, value: string): Promise<void> {
+      const input = byTestId(testId) as HTMLInputElement;
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+      await settle();
+    }
+
+    function summaryItems(): number {
+      return (fixture.nativeElement as HTMLElement).querySelectorAll(
+        '[data-testid^="summary-error__item--"]',
+      ).length;
+    }
+
+    // A p-checkbox reacts to the change event of the <input> it renders.
+    async function tick(testId: string): Promise<void> {
+      byTestId(testId).querySelector('input')?.click();
+      await settle();
+    }
+
+    // The message under a field: its error handler sits beside the input.
+    function fieldError(testId: string): string {
+      const message = byTestId(testId).parentElement?.querySelector(
+        '[data-testid="error-handler__message--error"]',
+      );
+      return message?.textContent?.trim() ?? '';
+    }
+
+    // No translations are loaded, so a message reads as its key.
+    const REQUIRED = 'FORM_ERROR.REQUIRED_FIELD';
+    const INVALID_NRN = 'MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER';
+    const NRN = 'new-member-informations__input--nrn';
+    const MANAGER_NRN = 'new-member-informations__input--manager-nrn';
+
+    describe('in creation mode', () => {
+      beforeEach(async () => {
+        await createTestBed(null, { rendered: true });
+        fixture = TestBed.createComponent(MemberCreationUpdate);
+        component = fixture.componentInstance;
+      });
+
+      it('opens before a member type is chosen without a form error', () => {
+        // Threw NG01052 here. Production builds skip that check and logged
+        // "Cannot read properties of undefined (reading '_rawValidators')".
+        expect(() => fixture.detectChanges()).not.toThrow();
+      });
+
+      it('keeps the error summary of the informations step in sync with the form', async () => {
+        await settle();
+        byTestId('new-member-type__card--individual').click();
+        await settle();
+        await press('new-member-type__btn--next');
+
+        await press('new-member-informations__btn--next');
+        // NRN, first name, surname, e-mail and phone are required.
+        expect(summaryItems()).toBe(5);
+
+        await type('new-member-informations__input--surname', 'Dupont');
+        expect(summaryItems()).toBe(4);
+      });
+
+      it('keeps the error summary in sync after the member type is switched', async () => {
+        await settle();
+        byTestId('new-member-type__card--individual').click();
+        await settle();
+        await press('new-member-type__btn--next');
+        await press('new-member-informations__btn--next');
+        expect(summaryItems()).toBe(5);
+
+        // A switch rebuilds formData, while step 1 and its summary stay.
+        await press('new-member-informations__btn--back');
+        byTestId('new-member-type__card--company').click();
+        await settle();
+        await press('new-member-type__btn--next');
+        // Company number, name and VAT number, plus the manager's five fields.
+        expect(summaryItems()).toBe(8);
+
+        await type('new-member-informations__input--company-name', 'ACME');
+        expect(summaryItems()).toBe(7);
+      });
+
+      // The real validator, as the wizard wires it on the member and the guardian.
+      describe('the national register number fields', () => {
+        beforeEach(async () => {
+          await settle();
+          byTestId('new-member-type__card--individual').click();
+          await settle();
+          await press('new-member-type__btn--next');
+          await tick('new-member-informations__checkbox--guardian');
+        });
+
+        // The placeholder is the format hint. It used to be "123456789", which
+        // the validator refuses, so following it led straight to this error.
+        it.each([NRN, MANAGER_NRN])(
+          'accept the number shown as the placeholder (%s)',
+          async (testId) => {
+            await type(testId, '123456789');
+            expect(fieldError(testId)).toBe(INVALID_NRN);
+
+            const placeholder = (byTestId(testId) as HTMLInputElement).placeholder;
+            await type(testId, placeholder);
+            expect(fieldError(testId)).toBe('');
+          },
+        );
+
+        it.each([NRN, MANAGER_NRN])('accept the 11 digits without dots (%s)', async (testId) => {
+          await type(testId, '85073003328');
+          await press('new-member-informations__btn--next');
+
+          expect(fieldError(testId)).toBe('');
+        });
+      });
+
+      // The manager's fields stay on screen when an individual with a guardian
+      // becomes a company, but every one of them gets a new form control.
+      describe("the manager's fields after an individual with a guardian becomes a company", () => {
+        async function individualWithGuardian(): Promise<void> {
+          await settle();
+          byTestId('new-member-type__card--individual').click();
+          await settle();
+          await press('new-member-type__btn--next');
+          await tick('new-member-informations__checkbox--guardian');
+        }
+
+        async function becomeCompany(): Promise<void> {
+          await press('new-member-informations__btn--back');
+          byTestId('new-member-type__card--company').click();
+          await settle();
+          await press('new-member-type__btn--next');
+        }
+
+        it('clear their message once filled in', async () => {
+          await individualWithGuardian();
+          await press('new-member-informations__btn--next');
+          expect(fieldError(MANAGER_NRN)).toBe(REQUIRED);
+
+          await becomeCompany();
+          // The new control is empty too.
+          expect(fieldError(MANAGER_NRN)).toBe(REQUIRED);
+
+          await type(MANAGER_NRN, '85.07.30-033.28');
+          expect(fieldError(MANAGER_NRN)).toBe('');
+
+          await press('new-member-informations__btn--next');
+          expect(fieldError(MANAGER_NRN)).toBe('');
+          expect(fieldError('new-member-informations__input--manager-surname')).toBe(REQUIRED);
+        });
+
+        it('check the new controls when the form is submitted', async () => {
+          await individualWithGuardian();
+          await becomeCompany();
+          await type(MANAGER_NRN, '85.07.30-033.28');
+
+          await press('new-member-informations__btn--next');
+
+          expect(fieldError(MANAGER_NRN)).toBe('');
+          expect(fieldError('new-member-informations__input--manager-surname')).toBe(REQUIRED);
+        });
+      });
+    });
+
+    describe('in update mode', () => {
+      beforeEach(async () => {
+        await createTestBed({ member: buildIndividualDTO() }, { rendered: true });
+        fixture = TestBed.createComponent(MemberCreationUpdate);
+        component = fixture.componentInstance;
+        await settle();
+      });
+
+      it("shows the member's details on the informations step", async () => {
+        await press('new-member-type__btn--next');
+
+        const nrn = byTestId('new-member-informations__input--nrn') as HTMLInputElement;
+        expect(nrn.value).toBe('90.01.15-001.23');
+      });
+
+      it('keeps the error summary in sync after the member type is switched', async () => {
+        await press('new-member-type__btn--next');
+        await type('new-member-informations__input--surname', '');
+        await press('new-member-informations__btn--next');
+        expect(summaryItems()).toBe(1);
+
+        await press('new-member-informations__btn--back');
+        byTestId('new-member-type__card--company').click();
+        await settle();
+        await press('new-member-type__btn--next');
+        // Only the name carries over from the individual: company number, VAT
+        // number and the manager's five fields are missing.
+        expect(summaryItems()).toBe(7);
+
+        await type('new-member-informations__input--vat-number', 'BE0123456789');
+        expect(summaryItems()).toBe(6);
+      });
     });
   });
 
@@ -712,6 +950,28 @@ describe('MemberCreationUpdate', () => {
       expect(dto.manager?.email).toBe('jane@example.com');
     });
 
+    it('should send a national register number typed without dots in the dotted form', () => {
+      fillIndividualForms(component);
+      component.formData.patchValue({ id: '90011500123' });
+      memberServiceSpy.addMember.mockReturnValue(of(new ApiResponse('ok')));
+
+      component.onSubmitEnd();
+
+      const dto = memberServiceSpy.addMember.mock.calls[0][0] as CreateMemberDTO;
+      expect(dto.NRN).toBe('90.01.15-001.23');
+    });
+
+    it("should send the manager's national register number in the dotted form", () => {
+      fillCompanyForms(component);
+      component.formData.patchValue({ NRN_manager: '90 01 15 123 45' });
+      memberServiceSpy.addMember.mockReturnValue(of(new ApiResponse('ok')));
+
+      component.onSubmitEnd();
+
+      const dto = memberServiceSpy.addMember.mock.calls[0][0] as CreateMemberDTO;
+      expect(dto.manager?.NRN).toBe('90.01.15-123.45');
+    });
+
     it('should not submit company without manager', () => {
       component.onTypeClientChange(MemberType.COMPANY);
       // Disable gestionnaire to remove manager
@@ -861,6 +1121,64 @@ describe('MemberCreationUpdate', () => {
   });
 
   // =============================================
+  // 11a. onSubmitEnd — the server rejects the member
+  // =============================================
+
+  // HttpClient fails with an HttpErrorResponse whose body sits in `error.error`.
+  // Testing the error for `instanceof ApiResponse` showed the generic text for
+  // every refusal, in both modes.
+  describe.each([
+    ['creation', null, 'addMember'],
+    ['update', buildIndividualDTO(), 'updateMember'],
+  ] as const)('onSubmitEnd — %s rejected by the server', (_mode, member, call) => {
+    beforeEach(async () => {
+      await createTestBed(member ? { member } : null, { realErrorHandler: true });
+      fixture = TestBed.createComponent(MemberCreationUpdate);
+      component = fixture.componentInstance;
+      component.ngOnInit();
+      await fixture.whenStable();
+      if (!member) {
+        fillIndividualForms(component);
+      }
+    });
+
+    function rejectWith(status: number, body: unknown): void {
+      memberServiceSpy[call].mockReturnValue(
+        throwError(() => new HttpErrorResponse({ status, error: body })),
+      );
+    }
+
+    it("shows the server's message", () => {
+      rejectWith(422, { data: "The field 'name' is empty", error_code: 5008 });
+
+      component.onSubmitEnd();
+
+      expect(memberServiceSpy[call]).toHaveBeenCalledTimes(1);
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalledExactlyOnceWith(
+        "The field 'name' is empty",
+        ERROR_TYPE,
+      );
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['an envelope whose data is not a string', 422, { data: ['name'], error_code: 5008 }],
+      ['an envelope without data', 500, { error_code: 1 }],
+      ['an HTML error page', 502, '<html><body>Bad Gateway</body></html>'],
+      ['empty', 504, null],
+    ])('shows the generic message when the body is %s', (_label, status, body) => {
+      rejectWith(status, body);
+
+      component.onSubmitEnd();
+
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalledExactlyOnceWith(
+        'COMMON.ERRORS.EXCEPTION',
+        ERROR_TYPE,
+      );
+    });
+  });
+
+  // =============================================
   // 11b. onSubmitEnd — company update (rename)
   // =============================================
 
@@ -890,6 +1208,31 @@ describe('MemberCreationUpdate', () => {
       expect(dto.id).toBe(company.id);
       expect(dto.name).toBe('ACME Corp Renamed');
       expect(dto.first_name).toBe('');
+    });
+  });
+
+  // =============================================
+  // 11c. onSubmitEnd — update of a number stored without dots
+  // =============================================
+
+  describe('onSubmitEnd — update of a national register number stored without dots', () => {
+    // Members created before the format check, or from a profile, may hold it so.
+    beforeEach(async () => {
+      await createTestBed({ member: buildIndividualDTO({ NRN: '90011500123' }) });
+      fixture = TestBed.createComponent(MemberCreationUpdate);
+      component = fixture.componentInstance;
+      component.ngOnInit();
+      await fixture.whenStable();
+    });
+
+    it('should accept it as it is and save it in the dotted form', () => {
+      expect(component.formData.get('id')?.errors).toBeNull();
+      memberServiceSpy.updateMember.mockReturnValue(of(new ApiResponse('ok')));
+
+      component.onSubmitEnd();
+
+      const dto = memberServiceSpy.updateMember.mock.calls[0][0] as UpdateMemberDTO;
+      expect(dto.NRN).toBe('90.01.15-001.23');
     });
   });
 

@@ -1045,7 +1045,7 @@
         "GUARDIAN_TITLE": "Informationen zum Manager",
         "VALIDATE_INFORMATION_FORM_BUTTON": "Bestätigen",
         "ERROR": {
-          "SOCIAL_SECURITY_NUMBER": "Die IBAN-Nummer ist ungültig"
+          "SOCIAL_SECURITY_NUMBER": "Die Nationalregisternummer ist ungültig"
         },
         "FORM_ERROR": {
           "ID": "Nationalregisternummer",

@@ -9,7 +9,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Select } from 'primeng/select';
 import { Skeleton } from 'primeng/skeleton';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import { TariffOut, TariffScope } from '../../../../shared/dtos/billing.dtos';
@@ -168,6 +168,6 @@ export class TariffsPanel implements OnInit {
   }
 
   private handleError(error: unknown): void {
-    this.errorHandler.handleError(error instanceof ApiResponse ? (error.data as string) : null);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

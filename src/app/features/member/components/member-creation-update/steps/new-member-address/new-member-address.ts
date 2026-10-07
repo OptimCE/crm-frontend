@@ -5,7 +5,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { FormErrorSummaryComponent } from '../../../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { Button } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AddressAutocomplete,
@@ -24,7 +23,6 @@ import { prefixedAddressNames } from '../../../../../../shared/components/addres
     Checkbox,
     FormErrorSummaryComponent,
     Button,
-    Ripple,
     AddressAutocomplete,
   ],
   templateUrl: './new-member-address.html',

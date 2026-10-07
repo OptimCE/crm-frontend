@@ -1,0 +1,30 @@
+/*
+  Same four steps as MemberCreationUpdate: see member-creation-update.css for why
+  the step list is a size container and where the thresholds come from.
+*/
+:host ::ng-deep .p-steplist {
+  container-type: inline-size;
+}
+
+:host ::ng-deep .p-step,
+:host ::ng-deep .p-step-header {
+  min-width: 0;
+}
+
+@container (width < 46rem) {
+  :host ::ng-deep .p-step:not(.p-step-active) .p-step-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+  }
+}
+
+@container (width < 28rem) {
+  :host ::ng-deep .p-step-active .p-step-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+  }
+}

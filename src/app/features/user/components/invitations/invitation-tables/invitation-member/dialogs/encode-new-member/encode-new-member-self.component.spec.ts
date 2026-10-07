@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +13,8 @@ import { MeService } from '../../../../../../../../shared/services/me.service';
 import { UserService } from '../../../../../../../../shared/services/user.service';
 import { UserDTO } from '../../../../../../../../shared/dtos/user.dtos';
 import { ErrorMessageHandler } from '../../../../../../../../shared/services-ui/error.message.handler';
+import { SnackbarNotification } from '../../../../../../../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../../../../../../../core/dtos/notification';
 import { MemberType } from '../../../../../../../../shared/types/member.types';
 import { AcceptInvitationWEncodedDTO } from '../../../../../../../../shared/dtos/invitation.dtos';
 import { ApiResponse } from '../../../../../../../../core/dtos/api.response';
@@ -112,6 +115,7 @@ describe('EncodeNewMemberSelfComponent', () => {
   let dialogRefSpy: { close: ReturnType<typeof vi.fn> };
   let dialogConfigSpy: { data: { invitationID?: number } | null };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
+  let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
 
   function setupTestBed(
     configData: { invitationID?: number } | null = { invitationID: 123 },
@@ -124,11 +128,12 @@ describe('EncodeNewMemberSelfComponent', () => {
     dialogRefSpy = { close: vi.fn() };
     dialogConfigSpy = { data: configData };
     errorHandlerSpy = { handleError: vi.fn() };
+    snackbarSpy = { openSnackBar: vi.fn() };
   }
 
   async function createComponent(
     configData: { invitationID?: number } | null = { invitationID: 123 },
-    options: { skipDetectChanges?: boolean } = {},
+    options: { skipDetectChanges?: boolean; realErrorHandler?: boolean } = {},
   ): Promise<void> {
     setupTestBed(configData);
 
@@ -141,12 +146,16 @@ describe('EncodeNewMemberSelfComponent', () => {
         { provide: DynamicDialogRef, useValue: dialogRefSpy },
         { provide: DynamicDialogConfig, useValue: dialogConfigSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+        { provide: SnackbarNotification, useValue: snackbarSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(EncodeNewMemberSelfComponent, {
         set: {
-          providers: [{ provide: ErrorMessageHandler, useValue: errorHandlerSpy }],
+          // The real handler is what turns the error into the snackbar's text.
+          providers: options.realErrorHandler
+            ? [ErrorMessageHandler]
+            : [{ provide: ErrorMessageHandler, useValue: errorHandlerSpy }],
         },
       })
       .compileComponents();
@@ -526,6 +535,23 @@ describe('EncodeNewMemberSelfComponent', () => {
       expect(callArg.member.manager).toBeUndefined();
     });
 
+    // The backend requires `name` for every member type, and reads `first_name`
+    // only for an individual. A company form has no surname.
+    it('should send the company name as name, not first_name, for COMPANY', () => {
+      component.onTypeClientChange(MemberType.COMPANY);
+      fillValidForms();
+      fillCompanyForm();
+      fillManagerForm();
+      meServiceSpy.acceptInvitationMemberEncoded.mockReturnValue(of({ data: 'success' }));
+
+      component.onSubmitEnd();
+
+      expect(meServiceSpy.acceptInvitationMemberEncoded).toHaveBeenCalledTimes(1);
+      const callArg = meServiceSpy.acceptInvitationMemberEncoded.mock
+        .calls[0][0] as AcceptInvitationWEncodedDTO;
+      expect(callArg.member).toMatchObject({ name: 'TestCorp', first_name: '' });
+    });
+
     it('should call service with correct DTO for COMPANY with manager', () => {
       component.onTypeClientChange(MemberType.COMPANY);
       fillValidForms();
@@ -549,6 +575,23 @@ describe('EncodeNewMemberSelfComponent', () => {
         expect(manager.email).toBe('manager@test.com');
         expect(manager.phone_number).toBe('0479999999');
       }
+    });
+
+    it('should send national register numbers typed without dots in the dotted form', () => {
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      component.gestionnaireChange({ checked: true } as CheckboxChangeEvent);
+      fillValidForms();
+      fillIndividualForm();
+      fillManagerForm();
+      component.formData.patchValue({ id: '85073003328', NRN_manager: '90 01 15 123 45' });
+      meServiceSpy.acceptInvitationMemberEncoded.mockReturnValue(of({ data: 'success' }));
+
+      component.onSubmitEnd();
+
+      const callArg = meServiceSpy.acceptInvitationMemberEncoded.mock
+        .calls[0][0] as AcceptInvitationWEncodedDTO;
+      expect(callArg.member.NRN).toBe('85.07.30-033.28');
+      expect(callArg.member.manager?.NRN).toBe('90.01.15-123.45');
     });
 
     it('should close dialog with response data on success', () => {
@@ -578,7 +621,7 @@ describe('EncodeNewMemberSelfComponent', () => {
       fillValidForms();
       fillIndividualForm();
       meServiceSpy.acceptInvitationMemberEncoded.mockReturnValue(
-        throwError(() => ({ data: 'some-error' })),
+        throwError(() => new ApiResponse('some-error')),
       );
 
       component.onSubmitEnd();
@@ -651,6 +694,51 @@ describe('EncodeNewMemberSelfComponent', () => {
       expect(callArg.member.home_address.street).toBe('Home St');
       expect(callArg.member.billing_address.street).toBe('Billing St');
       expect(callArg.member.billing_address.city).toBe('Antwerp');
+    });
+  });
+
+  // HttpClient fails with an HttpErrorResponse whose body sits in `error.error`.
+  // Reading `error.data` off it showed the generic text for every refusal.
+  describe('when the server rejects the member', () => {
+    beforeEach(async () => {
+      await createComponent({ invitationID: 123 }, { realErrorHandler: true });
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      fillValidForms();
+      fillIndividualForm();
+    });
+
+    function rejectWith(status: number, body: unknown): void {
+      meServiceSpy.acceptInvitationMemberEncoded.mockReturnValue(
+        throwError(() => new HttpErrorResponse({ status, error: body })),
+      );
+    }
+
+    it("shows the server's message", () => {
+      rejectWith(422, { data: "The field 'name' is empty", error_code: 5008 });
+
+      component.onSubmitEnd();
+
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalledExactlyOnceWith(
+        "The field 'name' is empty",
+        ERROR_TYPE,
+      );
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['an envelope whose data is not a string', 422, { data: ['name'], error_code: 5008 }],
+      ['an envelope without data', 500, { error_code: 1 }],
+      ['an HTML error page', 502, '<html><body>Bad Gateway</body></html>'],
+      ['empty', 504, null],
+    ])('shows the generic message when the body is %s', (_label, status, body) => {
+      rejectWith(status, body);
+
+      component.onSubmitEnd();
+
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalledExactlyOnceWith(
+        'COMMON.ERRORS.EXCEPTION',
+        ERROR_TYPE,
+      );
     });
   });
 
@@ -749,6 +837,17 @@ describe('EncodeNewMemberSelfComponent', () => {
 
       expect(component.formData.get('NRN_manager')?.value).toBe('85073003328');
       expect(component.formData.get('surname_manager')?.value).toBe('Dupont');
+    });
+
+    // The profile keeps the number as the user typed it, here without dots.
+    it('copies a national number the form accepts, for the member and for a manager', () => {
+      component.useMyProfile();
+      component.onTypeClientChange(MemberType.INDIVIDUAL);
+      expect(component.formData.get('id')?.errors).toBeNull();
+
+      component.onTypeClientChange(MemberType.COMPANY);
+      expect(component.formData.get('NRN_manager')?.value).toBe('85073003328');
+      expect(component.formData.get('NRN_manager')?.errors).toBeNull();
     });
 
     it('never overwrites a value the user already typed', () => {
@@ -1024,5 +1123,149 @@ describe('EncodeNewMemberSelfComponent', () => {
         }),
       ).not.toThrow();
     });
+  });
+
+  describe('rendered wizard', () => {
+    // PrimeNG creates the content of every step panel when the dialog opens,
+    // so the informations step and its error summary start out on the empty
+    // placeholder formData, and only get the real group once a type is chosen.
+
+    function byTestId(testId: string): HTMLElement {
+      const el = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        `[data-testid="${testId}"]`,
+      );
+      if (!el) {
+        throw new Error(`[data-testid="${testId}"] is not rendered`);
+      }
+      return el;
+    }
+
+    async function settle(): Promise<void> {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+    }
+
+    // A p-button reacts to clicks on the <button> it renders.
+    async function press(testId: string): Promise<void> {
+      byTestId(testId).querySelector('button')?.click();
+      await settle();
+    }
+
+    async function type(testId: string, value: string): Promise<void> {
+      const input = byTestId(testId) as HTMLInputElement;
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+      await settle();
+    }
+
+    async function chooseType(card: 'individual' | 'company'): Promise<void> {
+      byTestId(`new-member-type__card--${card}`).click();
+      await settle();
+      await press('new-member-type__btn--next');
+    }
+
+    function summaryItems(): number {
+      return (fixture.nativeElement as HTMLElement).querySelectorAll(
+        '[data-testid^="summary-error__item--"]',
+      ).length;
+    }
+
+    // A p-checkbox reacts to the change event of the <input> it renders.
+    async function tick(testId: string): Promise<void> {
+      byTestId(testId).querySelector('input')?.click();
+      await settle();
+    }
+
+    // The message under a field: its error handler sits beside the input.
+    function fieldError(testId: string): string {
+      const message = byTestId(testId).parentElement?.querySelector(
+        '[data-testid="error-handler__message--error"]',
+      );
+      return message?.textContent?.trim() ?? '';
+    }
+
+    beforeEach(async () => {
+      await createComponent();
+      await settle();
+    });
+
+    it('keeps the error summary of the informations step in sync with the form', async () => {
+      await chooseType('individual');
+
+      await press('new-member-informations__btn--next');
+      // NRN, first name, surname, e-mail and phone are required.
+      expect(summaryItems()).toBe(5);
+
+      await type('new-member-informations__input--surname', 'Dupont');
+      expect(summaryItems()).toBe(4);
+    });
+
+    it('keeps the error summary in sync after the member type is switched', async () => {
+      await chooseType('individual');
+      await press('new-member-informations__btn--next');
+      expect(summaryItems()).toBe(5);
+
+      await press('new-member-informations__btn--back');
+      await chooseType('company');
+      // Company number, name and VAT number, plus the manager's five fields.
+      expect(summaryItems()).toBe(8);
+
+      await type('new-member-informations__input--company-name', 'ACME');
+      expect(summaryItems()).toBe(7);
+    });
+
+    it("clears a manager's field message once filled in after an individual with a guardian becomes a company", async () => {
+      // The manager's fields stay on screen through the switch, but every one
+      // of them gets a new form control. No translations are loaded, so a
+      // message reads as its key.
+      const managerNrn = 'new-member-informations__input--manager-nrn';
+      await chooseType('individual');
+      await tick('new-member-informations__checkbox--guardian');
+      await press('new-member-informations__btn--next');
+      expect(fieldError(managerNrn)).toBe('FORM_ERROR.REQUIRED_FIELD');
+
+      await press('new-member-informations__btn--back');
+      await chooseType('company');
+      await type(managerNrn, '85.07.30-033.28');
+      expect(fieldError(managerNrn)).toBe('');
+
+      await press('new-member-informations__btn--next');
+      expect(fieldError(managerNrn)).toBe('');
+      expect(fieldError('new-member-informations__input--manager-surname')).toBe(
+        'FORM_ERROR.REQUIRED_FIELD',
+      );
+    });
+
+    it('lists only what the profile left to fix', async () => {
+      userServiceSpy.getUserInfo.mockReturnValue(of(profileResponse({ phone_number: null })));
+      await press('encode-new-member__prefill-button');
+      await chooseType('individual');
+
+      await press('new-member-informations__btn--next');
+      // Only the phone number is missing. The national number, which the
+      // profile stores without dots, is accepted as it is.
+      expect(summaryItems()).toBe(1);
+      expect(fieldError('new-member-informations__input--nrn')).toBe('');
+
+      await type('new-member-informations__input--phone', '0498765432');
+      expect(summaryItems()).toBe(0);
+    });
+
+    // The placeholder is the format hint. It used to be "123456789", which the
+    // validator refuses, so following it led straight to this error.
+    it.each(['new-member-informations__input--nrn', 'new-member-informations__input--manager-nrn'])(
+      'accepts the national register number shown as the placeholder (%s)',
+      async (testId) => {
+        await chooseType('individual');
+        await tick('new-member-informations__checkbox--guardian');
+
+        await type(testId, '123456789');
+        expect(fieldError(testId)).toBe('MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER');
+
+        await type(testId, (byTestId(testId) as HTMLInputElement).placeholder);
+        expect(fieldError(testId)).toBe('');
+      },
+    );
   });
 });

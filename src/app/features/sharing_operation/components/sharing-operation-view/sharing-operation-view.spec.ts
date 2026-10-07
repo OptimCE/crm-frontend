@@ -1,4 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { ActivatedRoute, convertToParamMap, Router, RouterLink } from '@angular/router';
@@ -117,6 +118,7 @@ describe('SharingOperationView', () => {
     addConsumptionDataToSharing: ReturnType<typeof vi.fn>;
     patchKeyStatus: ReturnType<typeof vi.fn>;
     getSharingOperationKeysList: ReturnType<typeof vi.fn>;
+    patchVisibility: ReturnType<typeof vi.fn>;
   };
   let meterServiceSpy: {
     getMetersList: ReturnType<typeof vi.fn>;
@@ -164,6 +166,7 @@ describe('SharingOperationView', () => {
       addConsumptionDataToSharing: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
       patchKeyStatus: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
       getSharingOperationKeysList: vi.fn().mockReturnValue(of(buildPaginatedKeysResponse())),
+      patchVisibility: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
     };
 
     meterServiceSpy = {
@@ -329,6 +332,27 @@ describe('SharingOperationView', () => {
       );
       component.loadOperationSharing(true);
       expect(component.isLoading()).toBe(false); // resolved immediately since observable is sync
+    });
+  });
+
+  // ── 2b. toggleVisibility() ────────────────────────────────────────
+
+  describe('toggleVisibility', () => {
+    beforeEach(async () => {
+      await createComponent();
+    });
+
+    it("shows the server's message when the visibility cannot be changed", () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'Only a manager can change the visibility of a sharing operation';
+      sharingOperationServiceSpy.patchVisibility.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 3041 } }),
+        ),
+      );
+      component.toggleVisibility();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+      expect(component.togglingVisibility()).toBe(false);
     });
   });
 
@@ -522,6 +546,13 @@ describe('SharingOperationView', () => {
     it('should open dialog', () => {
       component.editKey();
       expect(dialogServiceSpy.open).toHaveBeenCalled();
+      expect(dialogServiceSpy.open.mock.calls.at(-1)?.[1]).toEqual(
+        expect.objectContaining({
+          width: '900px',
+          breakpoints: { '1024px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
+        }),
+      );
     });
 
     it('should reload operation and show snackbar on dialog close with response', () => {
@@ -730,6 +761,17 @@ describe('SharingOperationView', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
 
+    it("shows the server's message when the waiting key cannot be rejected", () => {
+      const message = 'This key is no longer waiting for approval';
+      sharingOperationServiceSpy.patchKeyStatus.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3112 } }),
+        ),
+      );
+      component.revokeWaitingKey();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    });
+
     it('should not call patchKeyStatus when no waiting key', async () => {
       sharingOperationServiceSpy.getSharingOperation.mockReturnValue(
         of(new ApiResponse<SharingOperationDTO>(buildSharingOperation())),
@@ -807,6 +849,18 @@ describe('SharingOperationView', () => {
       );
       component.approveWaitingKey();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
+    });
+
+    it("shows the server's message when the waiting key cannot be approved", () => {
+      component.dateStartApproved.set(new Date('2025-06-01'));
+      const message = 'The approval date cannot be earlier than the start of the current key';
+      sharingOperationServiceSpy.patchKeyStatus.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 422, error: { data: message, error_code: 3114 } }),
+        ),
+      );
+      component.approveWaitingKey();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 
@@ -887,6 +941,17 @@ describe('SharingOperationView', () => {
       component.loadSharingOperationKey();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.loadingSharingOperationKeys()).toBe(false);
+    });
+
+    it("shows the server's message when the key history cannot be loaded", () => {
+      const message = 'You do not have access to this sharing operation';
+      sharingOperationServiceSpy.getSharingOperationKeysList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 3005 } }),
+        ),
+      );
+      component.loadSharingOperationKey();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 

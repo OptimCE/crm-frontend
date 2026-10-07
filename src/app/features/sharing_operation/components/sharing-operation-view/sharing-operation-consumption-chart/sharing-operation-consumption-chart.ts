@@ -12,10 +12,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import { DatePicker } from 'primeng/datepicker';
-import { Ripple } from 'primeng/ripple';
 import { LocaleService } from '../../../../../core/services/language/locale.service';
 import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
-import { ApiResponse } from '../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../shared/utils/api-error.utils';
 import { SharingOpConsumptionDTO } from '../../../../../shared/dtos/sharing_operation.dtos';
 import { SharingOperationService } from '../../../../../shared/services/sharing_operation.service';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
@@ -47,7 +46,6 @@ interface ChartFormValue {
     ErrorHandlerComponent,
     FormsModule,
     ReactiveFormsModule,
-    Ripple,
     TranslatePipe,
   ],
   templateUrl: './sharing-operation-consumption-chart.html',
@@ -216,8 +214,7 @@ export class SharingOperationConsumptionChart implements OnInit {
           }
         },
         error: (error) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

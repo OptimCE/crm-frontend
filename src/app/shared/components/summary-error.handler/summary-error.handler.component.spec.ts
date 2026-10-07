@@ -1,11 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, FormRecord, Validators } from '@angular/forms';
+import { Component, EventEmitter, signal } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  FormRecord,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { vi } from 'vitest';
 
 import { FormErrorSummaryComponent } from './summary-error.handler.component';
 import { ErrorHandlerParams } from '../../types/error.types';
+
+/** A parent that can hand its form a new group, as the member wizards do. */
+@Component({
+  selector: 'app-swapping-form-host',
+  standalone: true,
+  imports: [ReactiveFormsModule, FormErrorSummaryComponent],
+  template: `<form [formGroup]="group()"><app-summary-error /></form>`,
+})
+class SwappingFormHost {
+  readonly group = signal<FormGroup>(
+    new FormGroup({ name: new FormControl('', Validators.required) }),
+  );
+}
 
 describe('FormErrorSummaryComponent', () => {
   let component: FormErrorSummaryComponent;
@@ -453,6 +474,111 @@ describe('FormErrorSummaryComponent', () => {
       expect(component.errorMessages().length).toBeGreaterThan(0);
 
       formGroup.get('name')?.setValue('Valid');
+      expect(component.errorMessages()).toEqual([]);
+    });
+  });
+
+  // =============================================
+  // 9b. A FormGroup swapped into the directive
+  // =============================================
+
+  // `[formGroup]` can be handed a new group after this component exists: the
+  // member wizards rebuild theirs whenever the member type changes. The summary
+  // notices during the check of its parent's view, so this needs a real parent
+  // re-binding a real FormGroupDirective.
+  describe('a FormGroup swapped into the directive', () => {
+    let host: ComponentFixture<SwappingFormHost>;
+    let summary: FormErrorSummaryComponent;
+    let replacement: FormGroup;
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [SwappingFormHost, TranslateModule.forRoot()],
+      }).compileComponents();
+      host = TestBed.createComponent(SwappingFormHost);
+      host.detectChanges();
+      summary = host.debugElement.query(By.directive(FormErrorSummaryComponent))
+        .componentInstance as FormErrorSummaryComponent;
+      replacement = new FormGroup({
+        company: new FormControl('', Validators.required),
+        vat: new FormControl('', Validators.required),
+      });
+    });
+
+    function submit(): void {
+      (host.nativeElement as HTMLElement).querySelector('form')?.dispatchEvent(new Event('submit'));
+    }
+
+    function swapIn(group: FormGroup): void {
+      host.componentInstance.group.set(group);
+      host.detectChanges();
+    }
+
+    function isObserved(changes: unknown): boolean {
+      return (changes as { observed: boolean }).observed;
+    }
+
+    it('lists the errors of the new group as soon as it is swapped in after a submit', () => {
+      submit();
+      expect(summary.errorMessages().length).toBe(1);
+
+      swapIn(replacement);
+
+      expect(summary.errorMessages().length).toBe(2);
+    });
+
+    it('refreshes as the new group is fixed', () => {
+      submit();
+      swapIn(replacement);
+
+      replacement.get('company')?.setValue('ACME');
+      replacement.get('vat')?.setValue('BE0123456789');
+
+      expect(summary.errorMessages()).toEqual([]);
+    });
+
+    it('stops listening to the group it replaced', () => {
+      const replaced = host.componentInstance.group();
+      expect(isObserved(replaced.valueChanges)).toBe(true);
+
+      swapIn(replacement);
+
+      expect(isObserved(replaced.valueChanges)).toBe(false);
+      expect(isObserved(replaced.statusChanges)).toBe(false);
+    });
+
+    it('stays empty after a swap until the form is submitted', () => {
+      swapIn(replacement);
+
+      replacement.get('company')?.setValue('ACME');
+
+      expect(summary.errorMessages()).toEqual([]);
+    });
+  });
+
+  // Production builds skip the NG01052 check, so a step panel that PrimeNG
+  // creates before its form exists leaves the directive without a group.
+  describe('a directive that has no group yet', () => {
+    beforeEach(async () => {
+      await setupTestBed();
+      mockFormGroupDirective.form = null as unknown as FormGroup;
+    });
+
+    it('waits for the group and follows it once it arrives', () => {
+      fixture = TestBed.createComponent(FormErrorSummaryComponent);
+      component = fixture.componentInstance;
+      fixture.componentRef.setInput('showBeforeSubmit', true);
+      fixture.detectChanges();
+      expect(component.errorMessages()).toEqual([]);
+
+      const group = new FormGroup({ name: new FormControl('', Validators.required) });
+      mockFormGroupDirective.form = group;
+      // Stands in for the check of the parent's view that follows a re-bind.
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+      expect(component.errorMessages().length).toBe(1);
+
+      group.get('name')?.setValue('Jean');
       expect(component.errorMessages()).toEqual([]);
     });
   });

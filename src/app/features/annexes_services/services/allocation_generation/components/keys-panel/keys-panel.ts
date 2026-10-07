@@ -123,6 +123,8 @@ export class KeysPanel {
         'KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP',
       ])
       .subscribe((t: Record<string, string>) => {
+        // The help text goes to HeaderWithHelper alone (its title + popover). AG Grid's own
+        // headerTooltip needs TooltipModule, which ag-grid-setup.ts does not register.
         this.colDefs.set([
           {
             headerName: t['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
@@ -133,7 +135,6 @@ export class KeysPanel {
               label: t['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               tooltip: t['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             },
-            headerTooltip: t['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             minWidth: 110,
           },
           {
@@ -145,7 +146,6 @@ export class KeysPanel {
               label: t['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
               tooltip: t['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             },
-            headerTooltip: t['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             minWidth: 120,
           },
           {
@@ -163,7 +163,6 @@ export class KeysPanel {
               label: t['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
               tooltip: t['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
             },
-            headerTooltip: t['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
             minWidth: 120,
           },
         ]);

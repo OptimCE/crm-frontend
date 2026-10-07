@@ -1,4 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -222,6 +223,18 @@ describe('SharingOperationConsumptionChart', () => {
       );
       component.downloadTotalConsumption();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
+    });
+
+    it("shows the server's message when the consumption export fails", () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'No consumption data was found for the selected period';
+      sharingOperationServiceSpy.downloadSharingOperationConsumptions.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 404, error: { data: message, error_code: 3301 } }),
+        ),
+      );
+      component.downloadTotalConsumption();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 

@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, signal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   FormGroupDirective,
+  ReactiveFormsModule,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
@@ -11,6 +13,25 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { ErrorHandlerComponent } from './error.handler.component';
+
+function nrnGroup(nrn: string): FormGroup {
+  return new FormGroup({ nrn: new FormControl(nrn, Validators.required) });
+}
+
+/** A parent that can hand its form a new group, as the member wizards do. */
+@Component({
+  selector: 'app-swapping-field-host',
+  imports: [ReactiveFormsModule, ErrorHandlerComponent],
+  template: `
+    <form [formGroup]="group()">
+      <input formControlName="nrn" />
+      <app-error-handler controlName="nrn" />
+    </form>
+  `,
+})
+class SwappingFieldHost {
+  readonly group = signal<FormGroup>(nrnGroup(''));
+}
 
 describe('ErrorHandlerComponent', () => {
   let component: ErrorHandlerComponent;
@@ -258,5 +279,137 @@ describe('ErrorHandlerComponent', () => {
 
     // Should show only the first error (required comes before minlength)
     expect(component.message()).toBe('Required error');
+  });
+
+  // `[formGroup]` can be handed a new group while the field stays on screen:
+  // the member wizards rebuild theirs whenever the member type changes. The
+  // handler notices during the check of its parent's view, so this needs a real
+  // parent re-binding a real FormGroupDirective.
+  describe('a FormGroup swapped into the directive', () => {
+    const VALID_NRN = '85.07.30-033.28';
+    let host: ComponentFixture<SwappingFieldHost>;
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [SwappingFieldHost, TranslateModule.forRoot()],
+      }).compileComponents();
+      const translate = TestBed.inject(TranslateService);
+      translate.setTranslation('en', { FORM_ERROR: { REQUIRED_FIELD: 'Required' } });
+      translate.use('en');
+      host = TestBed.createComponent(SwappingFieldHost);
+      host.detectChanges();
+    });
+
+    function shown(): string {
+      const message = (host.nativeElement as HTMLElement).querySelector(
+        '[data-testid="error-handler__message--error"]',
+      );
+      return message?.textContent?.trim() ?? '';
+    }
+
+    function submit(): void {
+      (host.nativeElement as HTMLElement).querySelector('form')?.dispatchEvent(new Event('submit'));
+      host.detectChanges();
+    }
+
+    function swapIn(group: FormGroup): void {
+      host.componentInstance.group.set(group);
+      host.detectChanges();
+    }
+
+    function typeNrn(value: string): void {
+      const input = (host.nativeElement as HTMLElement).querySelector('input') as HTMLInputElement;
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+      host.detectChanges();
+    }
+
+    function isObserved(changes: unknown): boolean {
+      return (changes as { observed: boolean }).observed;
+    }
+
+    it('reads a message on screen again from the control that replaced it', () => {
+      submit();
+      expect(shown()).toBe('Required');
+
+      swapIn(nrnGroup(VALID_NRN));
+
+      expect(shown()).toBe('');
+    });
+
+    it('clears the message once the field is filled in on the new control', () => {
+      submit();
+      swapIn(nrnGroup(''));
+      // The new control is empty too.
+      expect(shown()).toBe('Required');
+
+      typeNrn(VALID_NRN);
+
+      expect(shown()).toBe('');
+    });
+
+    it('keeps a blank field blank, and checks the new control on submit', () => {
+      typeNrn(VALID_NRN);
+      swapIn(nrnGroup(''));
+      // Nothing was on screen, so the swap alone shows nothing.
+      expect(shown()).toBe('');
+
+      submit();
+
+      expect(shown()).toBe('Required');
+    });
+
+    it('shows nothing under a field filled in on the new control when the form is submitted', () => {
+      swapIn(nrnGroup(''));
+      typeNrn(VALID_NRN);
+
+      submit();
+
+      expect(shown()).toBe('');
+    });
+
+    it('stops listening to the control it replaced', () => {
+      const replaced = host.componentInstance.group().controls['nrn'];
+      expect(isObserved(replaced.valueChanges)).toBe(true);
+
+      swapIn(nrnGroup(''));
+
+      expect(isObserved(replaced.valueChanges)).toBe(false);
+    });
+
+    it('clears its message when the new group has no such control', () => {
+      submit();
+      expect(shown()).toBe('Required');
+
+      swapIn(new FormGroup({ nrn_manager: new FormControl('', Validators.required) }));
+
+      expect(shown()).toBe('');
+    });
+  });
+
+  // Production builds skip the NG01052 check, so a step panel that PrimeNG
+  // creates before its form exists leaves the directive without a group.
+  describe('a directive that has no group yet', () => {
+    it('waits for the group and follows its control once it arrives', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      await setupComponent('test');
+      mockFormGroupDirective.form = null as unknown as FormGroup;
+      fixture.detectChanges();
+      expect(consoleSpy).toHaveBeenCalledWith('Control "test" not found in the form group.');
+
+      const group = new FormGroup({ test: new FormControl('ok', Validators.required) });
+      mockFormGroupDirective.form = group;
+      // Stands in for the check of the parent's view that follows a re-bind.
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+      group.get('test')?.setValue('');
+      expect(component.message()).toBeTruthy();
+
+      group.get('test')?.setValue('Jean');
+      expect(component.message()).toBe('');
+      // Reported once, when the field was created, not at every check.
+      expect(consoleSpy).toHaveBeenCalledTimes(1);
+      consoleSpy.mockRestore();
+    });
   });
 });

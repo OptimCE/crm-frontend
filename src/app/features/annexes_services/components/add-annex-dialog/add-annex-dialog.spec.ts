@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -173,6 +174,18 @@ describe('AddAnnexDialog', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       expect(component.pendingFeature()).toBeNull();
       expect(dialogRefSpy.close).not.toHaveBeenCalled();
+    });
+
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the module cannot be activated", () => {
+      const message = 'This module is already activated for the community';
+      annexesServiceSpy.subscribe.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 1101 } }),
+        ),
+      );
+      component.add(buildAnnex());
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
 
     it('should be a no-op while pendingFeature is set', () => {

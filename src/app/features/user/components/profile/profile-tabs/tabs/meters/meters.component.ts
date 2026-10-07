@@ -13,6 +13,7 @@ import { MeService } from '../../../../../../../shared/services/me.service';
 import { MeMetersPartialQuery, MePartialMeterDTO } from '../../../../../../../shared/dtos/me.dtos';
 import { MeterDataStatus } from '../../../../../../../shared/types/meter.types';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import { AddressPipe } from '../../../../../../../shared/pipes/address/address-pipe';
 import { Pagination } from '../../../../../../../core/dtos/api.response';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
@@ -182,7 +183,7 @@ export class MetersComponent {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

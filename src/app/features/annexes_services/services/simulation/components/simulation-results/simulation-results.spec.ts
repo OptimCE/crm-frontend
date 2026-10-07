@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -198,12 +199,26 @@ describe('SimulationResults', () => {
       expect(component.timeseriesError()).toBe(true);
     });
 
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
     it('should handle a request failure and allow a retry', async () => {
-      serviceSpy.getTimeseries.mockReturnValue(throwError(() => new ApiResponse('boom')));
+      serviceSpy.getTimeseries.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 503,
+              error: {
+                data: 'The simulation results are temporarily unavailable',
+                error_code: 2105,
+              },
+            }),
+        ),
+      );
       await createWith();
       expect(component.timeseriesError()).toBe(true);
       expect(component.timeseriesLoading()).toBe(false);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('boom');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'The simulation results are temporarily unavailable',
+      );
 
       // loadedForId reset → re-showing the same row refetches.
       serviceSpy.getTimeseries.mockReturnValue(of(new ApiResponse(timeseries())));

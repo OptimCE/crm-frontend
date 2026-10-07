@@ -7,9 +7,10 @@ import { catchError, switchMap } from 'rxjs/operators';
 
 import { UserContextService } from '../../../../../core/services/authorization/authorization.service';
 import { CommunityServicesStore } from '../../../../../core/services/community-services.store';
+import { LocaleService } from '../../../../../core/services/language/locale.service';
 import { DashboardTile } from '../../../../dashboard/components/tiles/dashboard-tile/dashboard-tile';
 import { TileState } from '../../../../dashboard/dashboard-format';
-import { formatApiDate } from '../../../../administrative_document/administrative-document-format';
+import { formatApiDay } from '../../../../administrative_document/administrative-document-format';
 import { MyFilingOut } from '../../../../../shared/dtos/administrative-document.dtos';
 import { MyCommunityDTO } from '../../../../../shared/dtos/community.dtos';
 import { AdministrativeDocumentService } from '../../../../../shared/services/administrative-document.service';
@@ -61,8 +62,12 @@ export class MyFilingsPanel {
     return this.total() === 0 ? 'empty' : 'ready';
   });
 
-  /** Bare `YYYY-MM-DD` must not go through `| date` — it parses as UTC midnight. */
-  protected readonly formatApiDate = formatApiDate;
+  /**
+   * For the filing date. `created_at` is a timestamp, not a bare `YYYY-MM-DD`;
+   * reading `locale()` in the template rewrites it on a language switch.
+   */
+  protected readonly locale = inject(LocaleService).locale;
+  protected readonly formatApiDay = formatApiDay;
 
   constructor() {
     // An effect, not a direct call: `load()` reads the required `communities`

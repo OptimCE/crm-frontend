@@ -488,7 +488,12 @@ describe('MetersList', () => {
 
       expect(dialogServiceSpy.open).toHaveBeenCalledWith(
         MeterCreation,
-        expect.objectContaining({ modal: true, width: '700px' }),
+        expect.objectContaining({
+          modal: true,
+          width: '700px',
+          breakpoints: { '768px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
+        }),
       );
     });
 

@@ -351,6 +351,7 @@ describe('MeterView', () => {
           MeterUpdate,
           expect.objectContaining({
             modal: true,
+            styleClass: 'responsive-dialog',
             data: { meter: component.meter() },
           }),
         );
@@ -381,6 +382,7 @@ describe('MeterView', () => {
           MeterDataUpdate,
           expect.objectContaining({
             modal: true,
+            styleClass: 'responsive-dialog',
             data: {
               id: buildMeter().EAN,
               meterData: component.meter()?.meter_data,

@@ -3,7 +3,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Dialog } from 'primeng/dialog';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { CompanyDTO, IndividualDTO, MemberLinkDTO } from '../../../../shared/dtos/member.dtos';
 import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -42,7 +41,6 @@ enum InvitationStatus {
     TranslatePipe,
     RouterLink,
     Button,
-    Ripple,
     Tag,
     Skeleton,
     Card,
@@ -202,6 +200,9 @@ export class MemberView implements OnInit {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('MEMBER.VIEW.UPDATE_A_MEMBER_HEADER') as string,
       data: {
         member: this.individual() || this.legalEntity(),

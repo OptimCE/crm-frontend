@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -149,11 +150,20 @@ describe('PendingMemberInvitation', () => {
       expect(component.loadingMembers()).toBe(false);
     });
 
-    it('should call errorHandler.handleError on observable error', () => {
-      const error = new Error('network fail');
-      invitationServiceSpy.getMembersPendingInviation.mockReturnValue(throwError(() => error));
+    it("shows the server's message when the pending member invitations cannot be loaded", () => {
+      invitationServiceSpy.getMembersPendingInviation.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: { data: 'You are not a manager of this community', error_code: 50003 },
+            }),
+        ),
+      );
       component.loadPendingMemberInvitation();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'You are not a manager of this community',
+      );
     });
 
     it('should set loadingMembers to false on error', () => {
@@ -256,12 +266,21 @@ describe('PendingMemberInvitation', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
 
-    it('should call errorHandler.handleError with data on ApiResponse error', () => {
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the invitation cannot be cancelled", () => {
       invitationServiceSpy.cancelMemberInvitation.mockReturnValue(
-        throwError(() => new ApiResponse('Cancel failed')),
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 409,
+              error: { data: 'This invitation has already been accepted', error_code: 51007 },
+            }),
+        ),
       );
       component.cancelMemberInvitation(invitation);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Cancel failed');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'This invitation has already been accepted',
+      );
     });
 
     it('should call errorHandler.handleError with null on non-ApiResponse error', () => {

@@ -14,6 +14,7 @@ import { AUDIT_ACTIONS, auditActionLabelKey } from '../../../../shared/constants
 import { AuditLogDTO, AuditLogQuery } from '../../../../shared/dtos/audit-log.dtos';
 import { AuditLogService } from '../../../../shared/services/audit-log.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { ERROR_TYPE } from '../../../../core/dtos/notification';
@@ -117,7 +118,7 @@ export class AuditLogList {
         this.loading.set(false);
       },
       error: (error: unknown) => {
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
         this.loading.set(false);
       },
     });

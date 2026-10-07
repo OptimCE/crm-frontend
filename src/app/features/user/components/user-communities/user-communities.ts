@@ -25,7 +25,8 @@ import { UserContextService } from '../../../../core/services/authorization/auth
 import { Role } from '../../../../core/dtos/role';
 import { CommunityDialog } from './community-dialog/community-dialog';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
-import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import Keycloak from 'keycloak-js';
 
@@ -266,7 +267,7 @@ export class UserCommunities implements OnInit {
               });
             },
             error: (error: unknown) => {
-              const detail = error instanceof ApiResponse ? (error.data as string) : null;
+              const detail = extractApiErrorMessage(error);
               this.messageService.add({
                 severity: 'error',
                 summary: this.translate.instant('COMMON.ERRORS.EXCEPTION') as string,

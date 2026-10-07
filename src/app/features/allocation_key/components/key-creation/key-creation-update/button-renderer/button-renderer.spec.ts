@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { Tooltip } from 'primeng/tooltip';
 import { vi } from 'vitest';
 
 import { ButtonRenderer } from './button-renderer';
@@ -128,11 +130,66 @@ describe('ButtonRenderer', () => {
   // ── 5. Template rendering ───────────────────────────────────────
 
   describe('template', () => {
+    function innerButton(): HTMLButtonElement {
+      return (fixture.nativeElement as HTMLElement).querySelector(
+        '[data-testid="btn-renderer__btn--delete"] button',
+      ) as HTMLButtonElement;
+    }
+
+    function tooltip(): Tooltip {
+      return fixture.debugElement.query(By.directive(Tooltip)).injector.get(Tooltip);
+    }
+
     it('should render a p-button element', () => {
       component.agInit(buildParams({ label: 'Delete' }));
       fixture.detectChanges();
       const button = (fixture.nativeElement as HTMLElement).querySelector('p-button');
       expect(button).toBeTruthy();
+    });
+
+    // The label used to be rendered inside the button, and narrow grid columns cut it off.
+    it('should render an icon-only trash button, without the label as text', () => {
+      component.agInit(buildParams({ label: 'Supprimer le consommateur' }));
+      fixture.detectChanges();
+      const button = innerButton();
+      expect(button.classList).toContain('p-button-icon-only');
+      expect(button.querySelector('.pi-trash')).toBeTruthy();
+      expect(button.querySelector('.p-button-label')).toBeNull();
+      expect(button.textContent?.trim()).toBe('');
+    });
+
+    it('should use the label as the accessible name and the tooltip', () => {
+      component.agInit(buildParams({ label: 'Supprimer le consommateur' }));
+      fixture.detectChanges();
+      expect(innerButton().getAttribute('aria-label')).toBe('Supprimer le consommateur');
+      expect(tooltip().content).toBe('Supprimer le consommateur');
+    });
+
+    it('should set no aria-label and no tooltip text when the label is empty', () => {
+      component.agInit(buildParams({ label: '' }));
+      fixture.detectChanges();
+      expect(innerButton().hasAttribute('aria-label')).toBe(false);
+      expect(tooltip().content).toBeUndefined();
+    });
+
+    it('should call params.onClick with the row data when the button is clicked', () => {
+      const onClickSpy = vi.fn();
+      const rowData = { id: 7, name: 'Consumer' };
+      component.agInit(
+        buildParams({
+          onClick: onClickSpy,
+          node: { data: rowData } as unknown as ICellRendererParams['node'],
+        }),
+      );
+      fixture.detectChanges();
+
+      innerButton().click();
+
+      expect(onClickSpy).toHaveBeenCalledTimes(1);
+      expect(onClickSpy).toHaveBeenCalledWith({
+        event: expect.any(MouseEvent) as unknown,
+        rowData,
+      });
     });
   });
 });

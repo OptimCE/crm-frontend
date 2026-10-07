@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { of, throwError } from 'rxjs';
@@ -187,6 +188,17 @@ describe('SharingOperationAddKey', () => {
       component.loadKeys();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
+
+    it("shows the server's message when the keys cannot be loaded", () => {
+      const message = 'You are not allowed to view the keys of this community';
+      keyServiceSpy.getKeysList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 2003 } }),
+        ),
+      );
+      component.loadKeys();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    });
   });
 
   // ── 4. updatePaginationTranslation ────────────────────────────────
@@ -299,13 +311,17 @@ describe('SharingOperationAddKey', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
 
-    it('should call errorHandler with error data on observable error', () => {
+    it("shows the server's message when the key cannot be attached", () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'This key is already attached to the sharing operation';
       sharingOpServiceSpy.addKeyToSharing.mockReturnValue(
-        throwError(() => ({ data: 'KEY_ALREADY_ASSIGNED' })),
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3108 } }),
+        ),
       );
       component.selectedKey.set(fakeKeysList[0]);
       component.addKey();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('KEY_ALREADY_ASSIGNED');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
 
     it('should call errorHandler with null when error has no data', () => {

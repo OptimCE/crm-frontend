@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +10,7 @@ import { Table, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
 import { KeysList } from './keys-list';
 import { KeyService } from '../../../../shared/services/key.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
-import { ApiResponse, ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
+import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
 import { KeyPartialDTO } from '../../../../shared/dtos/key.dtos';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { Toast } from 'primeng/toast';
@@ -186,10 +187,21 @@ describe('KeysList', () => {
       expect(component.loading()).toBe(false);
     });
 
-    it('should call errorHandler with data on ApiResponse error', () => {
-      keyServiceSpy.getKeysList.mockReturnValue(throwError(() => new ApiResponse('Some error')));
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the keys cannot be loaded", () => {
+      keyServiceSpy.getKeysList.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: { data: 'You are not a manager of this community', error_code: 50003 },
+            }),
+        ),
+      );
       component.loadKeys();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Some error');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'You are not a manager of this community',
+      );
     });
 
     it('should call errorHandler with null on non-ApiResponse error', () => {

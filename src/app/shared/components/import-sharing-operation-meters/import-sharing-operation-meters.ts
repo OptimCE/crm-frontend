@@ -21,6 +21,7 @@ import { Pagination } from '../../../core/dtos/api.response';
 import { MeterDataStatus } from '../../types/meter.types';
 import { toLocalDateString } from '../../utils/date.utils';
 import { ErrorMessageHandler } from '../../services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../utils/api-error.utils';
 
 /**
  * Dialog input.
@@ -121,7 +122,7 @@ export class ImportSharingOperationMeters implements OnInit {
           this.loadingOperations.set(false);
         },
         error: (error: unknown) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.loadingOperations.set(false);
         },
       });
@@ -167,7 +168,7 @@ export class ImportSharingOperationMeters implements OnInit {
           this.loading.set(false);
         },
         error: (error: unknown) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.loading.set(false);
         },
       });
@@ -252,7 +253,7 @@ export class ImportSharingOperationMeters implements OnInit {
           }
           this.selectedEans.set(next);
         },
-        error: (error: unknown) => this.errorHandler.handleError(error),
+        error: (error: unknown) => this.errorHandler.handleError(extractApiErrorMessage(error)),
       });
   }
 

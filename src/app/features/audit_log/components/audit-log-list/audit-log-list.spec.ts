@@ -1,9 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
 import { Select } from 'primeng/select';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import en from '../../../../../assets/i18n/en.json';
@@ -30,6 +31,11 @@ describe('AuditLogList', () => {
   let component: AuditLogList;
   let fixture: ComponentFixture<AuditLogList>;
   let translate: TranslateService;
+  let auditLogServiceSpy: {
+    getAuditLogList: ReturnType<typeof vi.fn>;
+    exportAuditLogCsv: ReturnType<typeof vi.fn>;
+  };
+  let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
 
   function actionAriaLabel(): string | null {
     return (
@@ -40,20 +46,18 @@ describe('AuditLogList', () => {
   }
 
   beforeEach(async () => {
-    const errorHandlerSpy = { handleError: vi.fn() };
+    errorHandlerSpy = { handleError: vi.fn() };
+    auditLogServiceSpy = {
+      getAuditLogList: vi
+        .fn()
+        .mockReturnValue(of(new ApiResponsePaginated([], new Pagination(1, 10, 0, 1)))),
+      exportAuditLogCsv: vi.fn(),
+    };
 
     await TestBed.configureTestingModule({
       imports: [AuditLogList, TranslateModule.forRoot()],
       providers: [
-        {
-          provide: AuditLogService,
-          useValue: {
-            getAuditLogList: vi
-              .fn()
-              .mockReturnValue(of(new ApiResponsePaginated([], new Pagination(1, 10, 0, 1)))),
-            exportAuditLogCsv: vi.fn(),
-          },
-        },
+        { provide: AuditLogService, useValue: auditLogServiceSpy },
         { provide: SnackbarNotification, useValue: { openSnackBar: vi.fn() } },
       ],
     })
@@ -79,6 +83,21 @@ describe('AuditLogList', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+  it("should show the server's message when the audit log cannot be loaded", () => {
+    const message = 'Only an administrator can read the audit log';
+    auditLogServiceSpy.getAuditLogList.mockReturnValue(
+      throwError(
+        () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 50004 } }),
+      ),
+    );
+
+    component.loadAuditLogs();
+
+    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    expect(component.loading()).toBe(false);
   });
 
   // PrimeNG copies an option's label into the select's aria-label and filters

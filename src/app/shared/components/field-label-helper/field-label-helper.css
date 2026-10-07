@@ -46,10 +46,8 @@
   outline-offset: 2px;
 }
 
-:host ::ng-deep .helper-popover .p-popover-content {
-  padding: 0.875rem 1rem;
-  border-radius: 0.625rem;
-}
+/* The popover card (.helper-popover) is styled in src/styles.css:
+   p-popover is appended to <body>, out of this component's reach. */
 
 .helper-popover__content {
   display: flex;

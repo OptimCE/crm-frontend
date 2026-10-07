@@ -20,6 +20,7 @@ import {
 import { MeterPartialQuery, PartialMeterDTO } from '../../../../../shared/dtos/meter.dtos';
 import { MeterService } from '../../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../shared/utils/api-error.utils';
 
 /** The map's active filters, so the dialog repairs what the map is missing. */
 export interface UnlocatedMetersDialogData {
@@ -110,7 +111,7 @@ export class UnlocatedMeters {
         },
         error: (error: unknown) => {
           this.loading.set(false);
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }
@@ -169,7 +170,7 @@ export class UnlocatedMeters {
         },
         error: (error: unknown) => {
           this.saving.set(false);
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

@@ -1,7 +1,6 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
@@ -28,7 +27,8 @@ import {
   SharingOperationMetersQueryType,
 } from '../../../../shared/dtos/sharing_operation.dtos';
 import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
-import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MeterService } from '../../../../shared/services/meter.service';
@@ -64,7 +64,6 @@ import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-fo
   selector: 'app-sharing-operation-view',
   standalone: true,
   imports: [
-    Ripple,
     InputTextModule,
     PrimeTemplate,
     TableModule,
@@ -304,8 +303,7 @@ export class SharingOperationView implements OnInit {
           this.togglingVisibility.set(false);
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.togglingVisibility.set(false);
         },
       });
@@ -427,6 +425,9 @@ export class SharingOperationView implements OnInit {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('SHARING_OPERATION.VIEW.KEY.MODIFY_KEY_HEADER') as string,
       data: {
         id: this.id(),
@@ -474,8 +475,7 @@ export class SharingOperationView implements OnInit {
             }
           },
           error: (error: unknown) => {
-            const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-            this.errorHandler.handleError(errorData);
+            this.errorHandler.handleError(extractApiErrorMessage(error));
           },
         });
     }
@@ -505,7 +505,7 @@ export class SharingOperationView implements OnInit {
             }
           },
           error: (error) => {
-            this.errorHandler.handleError(error);
+            this.errorHandler.handleError(extractApiErrorMessage(error));
           },
         });
     } else {
@@ -562,6 +562,8 @@ export class SharingOperationView implements OnInit {
         'SHARING_OPERATION.VIEW.KEY.SELECT_METERS_NEW_KEY_HEADER',
       ) as string,
       width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       data: { idSharing: this.id() },
     });
 
@@ -603,8 +605,7 @@ export class SharingOperationView implements OnInit {
           }
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.loadingSharingOperationKeys.set(false);
         },
       });

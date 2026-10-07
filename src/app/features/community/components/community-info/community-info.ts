@@ -25,6 +25,7 @@ import { UserContextService } from '../../../../core/services/authorization/auth
 import { RegulatorStore } from '../../../../core/services/regulator.store';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { CommunityDetailDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
@@ -213,7 +214,7 @@ export class CommunityInfo {
           this.loading.set(false);
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.loading.set(false);
         },
       });
@@ -288,7 +289,7 @@ export class CommunityInfo {
             this.loadCommunity();
           },
           error: (error) => {
-            this.errorHandler.handleError(error);
+            this.errorHandler.handleError(extractApiErrorMessage(error));
             this.saving.set(false);
           },
         });
@@ -297,7 +298,7 @@ export class CommunityInfo {
       upload$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: finishUpdate,
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.saving.set(false);
         },
       });
@@ -313,7 +314,7 @@ export class CommunityInfo {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.loadCommunity(),
-        error: (error) => this.errorHandler.handleError(error),
+        error: (error) => this.errorHandler.handleError(extractApiErrorMessage(error)),
       });
   }
 

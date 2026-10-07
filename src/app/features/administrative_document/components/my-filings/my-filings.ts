@@ -2,12 +2,13 @@ import { Component, DestroyRef, computed, inject, input, signal } from '@angular
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { LocaleService } from '../../../../core/services/language/locale.service';
 import { MyFilingOut } from '../../../../shared/dtos/administrative-document.dtos';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import {
   FilingRowField,
   filingRowFields,
-  formatApiDate,
+  formatApiDay,
 } from '../../administrative-document-format';
 
 /** One block of the caller's rows, ready to render as label/value pairs. */
@@ -49,8 +50,12 @@ export class MyFilings {
     () => !this.loading() && !this.failed() && this.filings().length === 0,
   );
 
-  /** Bare `YYYY-MM-DD` must not go through `| date` — it parses as UTC midnight. */
-  protected readonly formatApiDate = formatApiDate;
+  /**
+   * For the filing date. `created_at` is a timestamp, not a bare `YYYY-MM-DD`;
+   * reading `locale()` in the template rewrites it on a language switch.
+   */
+  protected readonly locale = inject(LocaleService).locale;
+  protected readonly formatApiDay = formatApiDay;
 
   constructor() {
     this.load();

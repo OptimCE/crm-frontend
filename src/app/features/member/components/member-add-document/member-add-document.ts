@@ -6,7 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DocumentService } from '../../../../shared/services/document.service';
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 
 @Component({
   selector: 'app-member-add-document',
@@ -89,8 +89,7 @@ export class MemberAddDocument implements OnInit {
         }
       },
       error: (error: unknown) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
       },
     });
   }

@@ -8,7 +8,7 @@ import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 import { switchMap, timer } from 'rxjs';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { ERROR_TYPE, VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import { InvoiceOut, InvoiceStatus, InvoiceType } from '../../../../shared/dtos/billing.dtos';
@@ -324,6 +324,6 @@ export class InvoiceList {
   }
 
   private handleError(error: unknown): void {
-    this.errorHandler.handleError(error instanceof ApiResponse ? (error.data as string) : null);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

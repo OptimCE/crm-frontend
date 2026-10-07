@@ -7,6 +7,7 @@ import { CommunityAnnex } from '../../../../shared/dtos/annexes_services.dtos';
 import { CommunityServicesStore } from '../../../../core/services/community-services.store';
 import { AnnexesServicesService } from '../../../../shared/services/annexes_services.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 
@@ -65,7 +66,7 @@ export class AddAnnexDialog {
           this.ref.close(true);
         },
         error: (error: unknown) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.pendingFeature.set(null);
         },
       });

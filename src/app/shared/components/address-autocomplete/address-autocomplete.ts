@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { Subject, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { Observable, Subject, debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {
   AddressGeoPrecision,
@@ -46,6 +46,13 @@ export interface AddressPicked {
   fingerprint: string;
 }
 
+/** What one search hands the suggestion list. */
+interface SearchAnswer {
+  rows: AddressSuggestionDTO[];
+  /** False when the register was not asked, so an empty `rows` proves nothing. */
+  searched: boolean;
+}
+
 /** Debounce for the ambient "can we locate this?" probe. */
 const PROBE_DEBOUNCE_MS = 600;
 
@@ -55,10 +62,11 @@ const PROBE_DEBOUNCE_MS = 600;
  * 200k-street register.
  *
  * Used twice on purpose: once to drop the request, and once as the
- * autocomplete's `minLength` so the overlay does not open at all below it.
- * PrimeNG's default is 1, so without the second use the panel opens on the
- * first keystroke, finds the empty list this guard just produced, and reports
- * "no address found" about a search that was never made.
+ * autocomplete's `minLength` so that PrimeNG (default 1) does not even ask
+ * below it. That second use is not watertight: PrimeNG counts the raw text and
+ * this guard counts it trimmed, so "Bd " still asks. What keeps that empty
+ * answer from reporting "no address found" about a search that was never made
+ * is {@link AddressAutocomplete.searched}.
  */
 const MIN_QUERY_LENGTH = 3;
 
@@ -90,7 +98,6 @@ const MIN_QUERY_LENGTH = 3;
   standalone: true,
   imports: [AutoComplete, FormsModule, TranslatePipe],
   templateUrl: './address-autocomplete.html',
-  styleUrl: './address-autocomplete.css',
 })
 export class AddressAutocomplete {
   private readonly geocodingService = inject(GeocodingService);
@@ -110,6 +117,21 @@ export class AddressAutocomplete {
   readonly geoChange = output<AddressGeoState>();
 
   readonly suggestions = signal<AddressSuggestionDTO[]>([]);
+  /**
+   * Whether {@link suggestions} is the register's answer, which is what lets an
+   * empty list say "no address found". The template binds it to PrimeNG's
+   * `[showEmptyMessage]`.
+   *
+   * False when the list was emptied without asking: for a query too short once
+   * trimmed (PrimeNG's `minLength` counts the raw text, so "Bd " gets here), or
+   * after a pick, which empties the box. PrimeNG would otherwise open the panel
+   * on that empty list to report a search that was never made.
+   *
+   * The binding sits ABOVE `[suggestions]` on purpose: Angular sets inputs in
+   * template order, and PrimeNG decides whether to open inside its
+   * `suggestions` setter, with `showEmptyMessage` as it stands at that moment.
+   */
+  readonly searched = signal(false);
   readonly searching = signal(false);
   readonly geo = signal<AddressGeoState>({ kind: 'idle' });
 
@@ -136,11 +158,14 @@ export class AddressAutocomplete {
    * Scratch text for the search box. Never persisted — see the class docstring.
    *
    * Typed as a union because PrimeNG writes the picked ROW into the model before
-   * `onSelect` fires; `select()` resets it to '' immediately after. Declaring it
-   * `string` would be a lie that happens to compile.
+   * `onSelect` fires; `select()` resets it to '' immediately after. An emptied
+   * box it writes as `null`, not ''. Declaring it `string` would be a lie that
+   * happens to compile.
    */
-  protected query: string | AddressSuggestionDTO = '';
+  protected query: string | AddressSuggestionDTO | null = '';
 
+  /** The search box's query, trimmed. See the pipeline in the constructor. */
+  private readonly searchTerms = new Subject<string>();
   private readonly probeRequests = new Subject<AddressFieldValues>();
   /** Set on pick, so the probe does not re-ask about an address just resolved. */
   private lastPickedFingerprint: string | null = null;
@@ -149,6 +174,28 @@ export class AddressAutocomplete {
   protected readonly minSearchLength = MIN_QUERY_LENGTH;
 
   constructor() {
+    // Only the newest search may answer. Replies do not come back in order (a
+    // cold first hit takes 0.6-1.5 s against the 250 ms [delay]), and PrimeNG
+    // shows whatever its `suggestions` input received last, even once its
+    // spinner has stopped: a late reply to "Rue de la" replaced the list
+    // already showing for "Rue de la S". So a newer query, one too short once
+    // trimmed, a pick, or an edit too short to search (see `onQueryChange()`)
+    // drops the reply still in flight. Its request still completes and is
+    // cached, because `cachedGet` shares it without refCount.
+    //
+    // No debounce and no distinctUntilChanged, unlike the probe below: [delay]
+    // already debounces, and a repeated query must be answered again.
+    this.searchTerms
+      .pipe(
+        switchMap((term) => this.suggestionsFor(term)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((answer) => {
+        this.searched.set(answer.searched);
+        this.suggestions.set(answer.rows);
+        this.searching.set(false);
+      });
+
     this.probeRequests
       .pipe(
         debounceTime(PROBE_DEBOUNCE_MS),
@@ -184,31 +231,45 @@ export class AddressAutocomplete {
     });
   }
 
-  /** PrimeNG debounces the keystrokes for us via `[delay]`; see the template. */
+  /**
+   * PrimeNG debounces the keystrokes for us via `[delay]`; see the template.
+   *
+   * Every call must be answered with a NEW array, even an empty one, unless a
+   * newer call, a pick or an edit supersedes it (see the constructor):
+   * PrimeNG's `loading` is one flag, and the newest answer clears it. PrimeNG
+   * sets that flag before asking, and only its `suggestions` setter opens the
+   * panel and clears it. The signal and the template binding both skip an
+   * identical array (`Object.is`), so handing the last array over again leaves
+   * the panel shut and the spinner spinning.
+   */
   search(event: AutoCompleteCompleteEvent): void {
-    const term = (event.query || '').trim();
-    if (term.length < MIN_QUERY_LENGTH) {
-      this.suggestions.set([]);
+    this.searching.set(true);
+    this.searchTerms.next((event.query || '').trim());
+  }
+
+  /**
+   * The box was edited. PrimeNG writes every edit into the model: the text,
+   * `null` for an emptied box, or the row for a pick, which `select()` handles.
+   *
+   * Text too short to search, an emptied box included, is never searched:
+   * PrimeNG hides the panel without asking, so its `loading` flag stays up.
+   * Its `suggestions` setter opens the panel on any rows while that flag is
+   * up, so the late reply reopened it under the emptied box, full of rows for
+   * a query no longer there. So that reply is dropped, and the list emptied
+   * without asking, as after a pick: the flag comes down and the panel stays
+   * shut.
+   *
+   * Only while a search is in flight. Otherwise PrimeNG closes the panel
+   * itself, and emptying the list would leave only the footer in the panel
+   * while it fades out.
+   */
+  onQueryChange(query: string | AddressSuggestionDTO | null): void {
+    if (query !== null && typeof query !== 'string') {
       return;
     }
-
-    this.searching.set(true);
-    this.geocodingService
-      .suggestAddresses(term)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          // The backend reuses the success envelope for failures, so `data` can
-          // be a translated string. Every service in this repo guards this way.
-          this.suggestions.set(Array.isArray(response.data) ? response.data : []);
-          this.searching.set(false);
-        },
-        error: () => {
-          // Suggestions are advisory: an empty list, never a visible error.
-          this.suggestions.set([]);
-          this.searching.set(false);
-        },
-      });
+    if (this.searching() && (query ?? '').trim().length < MIN_QUERY_LENGTH) {
+      this.searchTerms.next('');
+    }
   }
 
   /** A row was chosen — tell the parent what to write, and stop warning. */
@@ -232,8 +293,10 @@ export class AddressAutocomplete {
 
     this.addressPicked.emit({ suggestion, fields, fingerprint });
     // The box has done its job; the five controls now show the address.
+    // Searching the emptied box empties the list without asking, and drops a
+    // reply still in flight: it answers a query the user is done with.
     this.query = '';
-    this.suggestions.set([]);
+    this.searchTerms.next('');
   }
 
   /** Offered under a "we could not locate this" warning. */
@@ -250,6 +313,26 @@ export class AddressAutocomplete {
    */
   probeNow(): void {
     this.onFormChanged(true);
+  }
+
+  /** One query's answer. Every call builds a NEW array: see `search()`. */
+  private suggestionsFor(term: string): Observable<SearchAnswer> {
+    if (term.length < MIN_QUERY_LENGTH) {
+      return of({ rows: [], searched: false });
+    }
+
+    return this.geocodingService.suggestAddresses(term).pipe(
+      // The backend reuses the success envelope for failures, so `data` can
+      // be a translated string. Every service in this repo guards this way.
+      // Copied because a repeated query is a cache hit, which returns the
+      // very same response object: see `search()`.
+      map((response) => ({
+        rows: Array.isArray(response.data) ? [...response.data] : [],
+        searched: true,
+      })),
+      // Suggestions are advisory: an empty list, never a visible error.
+      catchError(() => of({ rows: [], searched: true })),
+    );
   }
 
   private onFormChanged(immediate = false): void {
