@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -541,6 +542,170 @@ describe('MeterDataUpdate', () => {
     });
   });
 
+  // ── "Aucun" (no production) ──────────────────────────────────────
+
+  // The backend has no NONE member: "Aucun" is a null column. A PATCH must send it as null, because
+  // the backend carries an omitted field over from the previous record (5 / 8 answered 422).
+  describe('production fields set to "Aucun"', () => {
+    function productionChainId(): ProductionChain | undefined {
+      return (component.metersForm.get('productionChain')?.value as { id: ProductionChain })?.id;
+    }
+
+    function injectionStatusId(): InjectionStatus | undefined {
+      return (component.metersForm.get('injectionStatus')?.value as { id: InjectionStatus })?.id;
+    }
+
+    function chainOption(id: ProductionChain) {
+      return component.productionChainCategory().find((p) => p.id === id);
+    }
+
+    function sentPayload(): Record<string, unknown> {
+      return meterServiceSpy.patchMeterData.mock.calls.at(-1)?.[0] as Record<string, unknown>;
+    }
+
+    describe('on a meter saved without production (null fields)', () => {
+      beforeEach(async () => {
+        await configureTestBed(buildMeterData({ injection_status: null, production_chain: null }));
+        initAndEmitMembers();
+      });
+
+      it('should prefill both selects with the "Aucun" option', () => {
+        expect(productionChainId()).toBe(ProductionChain.NONE);
+        expect(injectionStatusId()).toBe(InjectionStatus.NONE);
+      });
+
+      it('should lock the injection status, as choosing "Aucun" does', () => {
+        expect(component.metersForm.get('injectionStatus')?.disabled).toBe(true);
+        component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+        expect(component.metersForm.valid).toBe(true);
+      });
+
+      it('should save it again as null, not as the frontend-only 5 / 8', () => {
+        component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+        component.onSubmit();
+
+        expect(sentPayload()).toEqual(
+          expect.objectContaining({ injection_status: null, production_chain: null }),
+        );
+      });
+
+      it('should unlock the injection status when a production chain is picked', () => {
+        component.metersForm.get('productionChain')?.setValue(chainOption(ProductionChain.WIND));
+        component.onChangeProductionChain();
+
+        expect(component.metersForm.get('injectionStatus')?.enabled).toBe(true);
+      });
+    });
+
+    describe('on a producing meter', () => {
+      beforeEach(async () => {
+        await configureTestBed(
+          buildMeterData({
+            injection_status: InjectionStatus.AUTOPROD_OWNER,
+            production_chain: ProductionChain.PHOTOVOLTAIC,
+          }),
+        );
+      });
+
+      it('should send its values as they are when they are kept', () => {
+        initAndEmitMembers();
+        component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+        component.onSubmit();
+
+        expect(component.metersForm.get('injectionStatus')?.enabled).toBe(true);
+        expect(sentPayload()).toEqual(
+          expect.objectContaining({
+            injection_status: InjectionStatus.AUTOPROD_OWNER,
+            production_chain: ProductionChain.PHOTOVOLTAIC,
+          }),
+        );
+      });
+
+      it('should set and lock the injection status when the chain is switched to "Aucun"', () => {
+        initAndEmitMembers();
+
+        component.metersForm.get('productionChain')?.setValue(chainOption(ProductionChain.NONE));
+        component.onChangeProductionChain();
+
+        expect(injectionStatusId()).toBe(InjectionStatus.NONE);
+        expect(component.metersForm.get('injectionStatus')?.disabled).toBe(true);
+      });
+
+      it('should clear both fields with an explicit null once switched to "Aucun"', () => {
+        initAndEmitMembers();
+        component.metersForm.get('productionChain')?.setValue(chainOption(ProductionChain.NONE));
+        component.onChangeProductionChain();
+        component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+        component.onSubmit();
+
+        // Present and null: an absent key would keep the photovoltaic values server-side.
+        expect(sentPayload()).toHaveProperty('injection_status', null);
+        expect(sentPayload()).toHaveProperty('production_chain', null);
+      });
+
+      it('should leave the injection status alone when another chain is picked', () => {
+        initAndEmitMembers();
+
+        component.metersForm.get('productionChain')?.setValue(chainOption(ProductionChain.WIND));
+        component.onChangeProductionChain();
+
+        expect(injectionStatusId()).toBe(InjectionStatus.AUTOPROD_OWNER);
+        expect(component.metersForm.get('injectionStatus')?.enabled).toBe(true);
+      });
+
+      it('should apply the coupling when "Aucun" is picked in the rendered select', () => {
+        // Rendering runs ngOnInit, so the members arrive afterwards.
+        fixture.detectChanges();
+        membersSubject$.next(buildMembersResponse());
+        component.metersForm.get('productionChain')?.setValue(chainOption(ProductionChain.NONE));
+
+        fixture.debugElement
+          .query(By.css('[data-testid="meter-data-update__select--production-chain"]'))
+          .triggerEventHandler('onChange', { value: chainOption(ProductionChain.NONE) });
+
+        expect(injectionStatusId()).toBe(InjectionStatus.NONE);
+        expect(component.metersForm.get('injectionStatus')?.disabled).toBe(true);
+      });
+    });
+
+    describe('on a legacy record with an injection status but no chain', () => {
+      beforeEach(async () => {
+        await configureTestBed(
+          buildMeterData({
+            injection_status: InjectionStatus.INJECTION_OWNER,
+            production_chain: null,
+          }),
+        );
+        initAndEmitMembers();
+      });
+
+      it('should show the chain as "Aucun" but keep the injection status editable', () => {
+        expect(productionChainId()).toBe(ProductionChain.NONE);
+        expect(injectionStatusId()).toBe(InjectionStatus.INJECTION_OWNER);
+        expect(component.metersForm.get('injectionStatus')?.enabled).toBe(true);
+      });
+
+      it('should not rewrite the injection status on an unrelated save', () => {
+        component.metersForm.patchValue({
+          description: 'New text',
+          dateStart: new Date(2024, 0, 1),
+        });
+
+        component.onSubmit();
+
+        expect(sentPayload()).toEqual(
+          expect.objectContaining({
+            injection_status: InjectionStatus.INJECTION_OWNER,
+            production_chain: null,
+          }),
+        );
+      });
+    });
+  });
+
   // ── Translated select labels ─────────────────────────────────────
 
   // PrimeNG copies an option's label into the select's aria-label, so a key
@@ -600,6 +765,65 @@ describe('MeterDataUpdate', () => {
       translate.use('en');
       await fixture.whenStable();
       expect(statusAriaLabel()).toBe('Waiting for the DSO');
+    });
+  });
+
+  // ── Card radios ──────────────────────────────────────────────────
+
+  // Rate and client type both bind to controls of the one metersForm, and
+  // PrimeNG treats radios with the same form root AND the same `name` as one
+  // group. Without a name per field, changing the rate emptied the client
+  // type's dot while its card stayed highlighted.
+  describe('card radios', () => {
+    // Choose a card the way a user does: its label clicks the radio.
+    async function chooseCard(inputId: string): Promise<void> {
+      const label = (fixture.nativeElement as HTMLElement).querySelector<HTMLLabelElement>(
+        `label[for="${inputId}"]`,
+      );
+      if (!label) {
+        throw new Error(`label[for="${inputId}"] is not rendered`);
+      }
+      label.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    }
+
+    // The dot is drawn from the radio's own state (a class on its host).
+    function radio(inputId: string): { input: boolean; dot: boolean } {
+      const input = (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>(
+        `input#${inputId}`,
+      );
+      if (!input) {
+        throw new Error(`input#${inputId} is not rendered`);
+      }
+      return {
+        input: input.checked,
+        dot: !!input.closest('p-radiobutton')?.classList.contains('p-radiobutton-checked'),
+      };
+    }
+
+    const CHECKED = { input: true, dot: true };
+
+    beforeEach(async () => {
+      await configureTestBed(
+        buildMeterData({ rate: MeterRate.SIMPLE, client_type: ClientType.RESIDENTIAL }),
+      );
+      initAndEmitMembers();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    });
+
+    it("keeps the client type's dot when the rate is changed", async () => {
+      const client = `client_${ClientType.RESIDENTIAL}`;
+      // The meter's own values, as the dialog opens.
+      expect(radio(`rate_${MeterRate.SIMPLE}`)).toEqual(CHECKED);
+      expect(radio(client)).toEqual(CHECKED);
+
+      await chooseCard(`rate_${MeterRate.BI_HOURLY}`);
+
+      expect(component.metersForm.get('rate')?.value).toMatchObject({ id: MeterRate.BI_HOURLY });
+      expect(radio(`rate_${MeterRate.BI_HOURLY}`)).toEqual(CHECKED);
+      expect(radio(client)).toEqual(CHECKED);
     });
   });
 });

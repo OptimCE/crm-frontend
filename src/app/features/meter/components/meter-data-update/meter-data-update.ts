@@ -21,7 +21,14 @@ import { DatePicker } from 'primeng/datepicker';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
-import { MetersDataDTO, PatchMeterDataDTO } from '../../../../shared/dtos/meter.dtos';
+import {
+  injectionStatusForPatch,
+  injectionStatusFromApi,
+  MetersDataDTO,
+  PatchMeterDataDTO,
+  productionChainForPatch,
+  productionChainFromApi,
+} from '../../../../shared/dtos/meter.dtos';
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
 import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
 import { MemberService } from '../../../../shared/services/member.service';
@@ -195,22 +202,26 @@ export class MeterDataUpdate implements OnInit {
     this.setupErrorTranslation();
     this.setupTranslationCategory();
     if (this.meterData) {
+      // A meter saved with "Aucun" comes back as null, which matches no option.
+      const productionChain = productionChainFromApi(this.meterData.production_chain);
+      const injectionStatus = injectionStatusFromApi(this.meterData.injection_status);
       this.metersForm.patchValue({
         description: this.meterData.description,
         samplingPower: this.meterData.sampling_power,
         totalGeneratingCapacity: this.meterData.totalGenerating_capacity,
         amperage: this.meterData.amperage,
-        productionChain: this.productionChainCategory().find(
-          (p) => p.id === this.meterData?.production_chain,
-        ),
-        injectionStatus: this.injectionStatusCategory().find(
-          (p) => p.id === this.meterData?.injection_status,
-        ),
+        productionChain: this.productionChainCategory().find((p) => p.id === productionChain),
+        injectionStatus: this.injectionStatusCategory().find((p) => p.id === injectionStatus),
         rate: this.rateCategory().find((p) => p.id === this.meterData?.rate),
         clientType: this.clientCategory().find((p) => p.id === this.meterData?.client_type),
         grd: this.grdAvailable.find((p) => p.name === this.meterData?.grd),
         status: this.meterData.status,
       });
+      // Reopen it as the coupling below left it. A legacy record with an injection status but no
+      // chain stays editable: locking it to "Aucun" would rewrite it on an unrelated save.
+      if (productionChain === ProductionChain.NONE && injectionStatus === InjectionStatus.NONE) {
+        this.metersForm.get('injectionStatus')?.disable();
+      }
     }
   }
   setupErrorTranslation(): void {
@@ -349,6 +360,25 @@ export class MeterDataUpdate implements OnInit {
   }
 
   /**
+   * The add wizard's coupling: no production chain means no injection either, so "Aucun" sets the
+   * injection status to "Aucun" and locks it (`getRawValue()` still sends it); any other chain unlocks it.
+   */
+  onChangeProductionChain(): void {
+    const chain = (
+      this.metersForm.get('productionChain')?.value as MeterDataCategory<ProductionChain> | null
+    )?.id;
+    const injectionStatus = this.metersForm.get('injectionStatus');
+    if (chain === ProductionChain.NONE) {
+      injectionStatus?.setValue(
+        this.injectionStatusCategory().find((i) => i.id === InjectionStatus.NONE),
+      );
+      injectionStatus?.disable();
+    } else {
+      injectionStatus?.enable();
+    }
+  }
+
+  /**
    * Keep the current holder selectable even when it is not in the loaded page of members:
    * otherwise the field opens empty and saving silently removes the holder.
    */
@@ -374,9 +404,10 @@ export class MeterDataUpdate implements OnInit {
       description: formValue.description,
       end_date: undefined,
       grd: formValue.grd.name,
-      injection_status: formValue.injectionStatus.id,
+      // "Aucun" is null, not absent: the backend keeps an omitted field from the previous record.
+      injection_status: injectionStatusForPatch(formValue.injectionStatus.id),
       member_id: formValue.member ? formValue.member.id : undefined,
-      production_chain: formValue.productionChain.id,
+      production_chain: productionChainForPatch(formValue.productionChain.id),
       rate: formValue.rate.id,
       sampling_power: formValue.samplingPower,
       sharing_operation_id: undefined,

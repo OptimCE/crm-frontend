@@ -262,6 +262,23 @@ describe('MeterDataView', () => {
       );
       expect(hasMapped).toBe(true);
     });
+
+    // The backend stores "Aucun" as null, which no index of the maps matches (it rendered blank).
+    it('should display the "Aucun" labels for production fields stored as null', () => {
+      const productionChainMap = ['', 'PV', 'Wind', 'Hydro', 'Bio', 'Biogas', 'Cogen', 'Other'];
+      setInputs(fixture, buildMeterData({ injection_status: null, production_chain: null }), {
+        productionChainMap: [...productionChainMap, 'Aucune filière'],
+        injectionStatusMap: ['', 'Auto owner', 'Auto rights', 'Inj owner', 'Inj rights', 'Aucun'],
+      });
+      fixture.detectChanges();
+
+      const text = (testId: string) =>
+        getEl(fixture)
+          .querySelector(`[data-testid="meter-data-view__text--${testId}"]`)
+          ?.textContent?.trim();
+      expect(text('production-chain')).toBe('Aucune filière');
+      expect(text('injection-status')).toBe('Aucun');
+    });
   });
 
   describe('Financial characteristics card', () => {

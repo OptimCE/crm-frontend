@@ -85,6 +85,54 @@ export function isConsumerMeter(meter: Pick<PartialMeterDTO, 'injection_status'>
 }
 
 /**
+ * The `injection_status` to send: `NONE` travels as absent.
+ *
+ * The backend enum has no `NONE` member (its DTO answers 422 "doit être de type 'InjectionStatus'"
+ * and the column's CHECK only allows 1-4); "no injection" is a null column there.
+ */
+export function injectionStatusForApi(status?: InjectionStatus): InjectionStatus | undefined {
+  return status === InjectionStatus.NONE ? undefined : status;
+}
+
+/**
+ * The `production_chain` to send: `NONE` travels as absent, like {@link injectionStatusForApi}
+ * (the backend enum and the column's CHECK stop at `OTHER`).
+ */
+export function productionChainForApi(chain?: ProductionChain): ProductionChain | undefined {
+  return chain === ProductionChain.NONE ? undefined : chain;
+}
+
+/**
+ * The `injection_status` to send in a PATCH: `NONE` travels as an explicit `null`, which clears it.
+ *
+ * Absent is not enough here: the backend carries an omitted field over from the meter's previous
+ * configuration, so switching a producer to "Aucun" would silently keep its old status.
+ */
+export function injectionStatusForPatch(status: InjectionStatus): InjectionStatus | null {
+  return status === InjectionStatus.NONE ? null : status;
+}
+
+/**
+ * The `production_chain` to send in a PATCH: `NONE` travels as `null`, like
+ * {@link injectionStatusForPatch}.
+ */
+export function productionChainForPatch(chain: ProductionChain): ProductionChain | null {
+  return chain === ProductionChain.NONE ? null : chain;
+}
+
+/** The option a stored `injection_status` stands for: the backend stores "Aucun" as `null`. */
+export function injectionStatusFromApi(
+  status: InjectionStatus | null | undefined,
+): InjectionStatus {
+  return status ?? InjectionStatus.NONE;
+}
+
+/** The option a stored `production_chain` stands for: the backend stores "Aucun" as `null`. */
+export function productionChainFromApi(chain: ProductionChain | null | undefined): ProductionChain {
+  return chain ?? ProductionChain.NONE;
+}
+
+/**
  * DTO representing detailed meter configuration and status for a specific period (history/current/future).
  */
 export interface MetersDataDTO {
@@ -97,8 +145,10 @@ export interface MetersDataDTO {
   client_type: ClientType;
   start_date: string;
   end_date?: string;
-  injection_status: InjectionStatus;
-  production_chain: ProductionChain;
+  /** `null` = no injection ("Aucun"); read it through {@link injectionStatusFromApi}. */
+  injection_status: InjectionStatus | null;
+  /** `null` = no production ("Aucun"); read it through {@link productionChainFromApi}. */
+  production_chain: ProductionChain | null;
   totalGenerating_capacity: number;
   member?: MembersPartialDTO;
   grd: string;
@@ -217,8 +267,15 @@ export interface CreateMeterDTO {
  * DTO for patching meter data configuration.
  * Requires EAN to identify the meter to update.
  */
-export interface PatchMeterDataDTO extends CreateMeterDataDTO {
+export interface PatchMeterDataDTO extends Omit<
+  CreateMeterDataDTO,
+  'injection_status' | 'production_chain'
+> {
   EAN: string;
+  /** Omitted = unchanged; `null` = cleared ("Aucun"). See {@link injectionStatusForPatch}. */
+  injection_status?: InjectionStatus | null;
+  /** Omitted = unchanged; `null` = cleared ("Aucun"). See {@link productionChainForPatch}. */
+  production_chain?: ProductionChain | null;
 }
 export interface UpdateMeterDTO {
   EAN: string;

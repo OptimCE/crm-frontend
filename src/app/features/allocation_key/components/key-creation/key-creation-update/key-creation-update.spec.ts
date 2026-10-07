@@ -539,6 +539,24 @@ describe('KeyCreationUpdate', () => {
       expect(rows[0].vp_percentage).toBe('75%');
     });
 
+    it('should show percentages without floating-point noise', () => {
+      // 0.07 * 100 is 7.000000000000001 and 0.29 * 100 is 28.999999999999996.
+      component.key = buildKey({
+        iterations: [
+          {
+            id: 1,
+            number: 1,
+            energy_allocated_percentage: 0.07,
+            consumers: [{ id: 1, name: 'A', energy_allocated_percentage: 0.29 }],
+          },
+        ],
+      });
+
+      const rows = component.formatData();
+      expect(rows[0].va_percentage).toBe('7%');
+      expect(rows[0].vp_percentage).toBe('29%');
+    });
+
     it('should format vp_percentage as prorata label when energy is -1', () => {
       component.key = buildKey({
         iterations: [
@@ -1043,6 +1061,20 @@ describe('KeyCreationUpdate', () => {
       expect(errors?.['SumIterations']).toBeFalsy();
     });
 
+    it('should pass when iteration shares reach 1 only up to floating-point noise', () => {
+      // 0.7 + 0.2 + 0.1 is 0.9999999999999999, which a strict `!== 1` rejected.
+      component.key = buildKey({
+        iterations: [0.7, 0.2, 0.1].map((share, index) => ({
+          id: index + 1,
+          number: index + 1,
+          energy_allocated_percentage: share,
+          consumers: [{ id: index + 1, name: 'A', energy_allocated_percentage: 1 }],
+        })),
+      });
+      const errors = revalidate();
+      expect(errors?.['SumIterations']).toBeFalsy();
+    });
+
     it('should return SumConsumers when consumer percentages do not sum to 1', () => {
       component.key = buildKey({
         iterations: [
@@ -1162,6 +1194,37 @@ describe('KeyCreationUpdate', () => {
       expect(keyServiceSpy.addKey).toHaveBeenCalled();
       expect(component.key.name).toBe('New Key');
       expect(component.key.description).toBe('New Desc');
+    });
+
+    it('should create a key whose three iterations were typed as 70 %, 20 % and 10 %', () => {
+      component.key = buildKey({
+        id: -1,
+        iterations: [1, 2, 3].map((number) => ({
+          id: -1,
+          number,
+          energy_allocated_percentage: 1,
+          consumers: [{ id: -1, name: 'A', energy_allocated_percentage: 1 }],
+        })),
+      });
+      component.keyInput = null;
+      component.rowData.set(component.formatData());
+      ['70', '20', '10'].forEach((typed, index) => {
+        const data: KeyTableRow = { ...component.rowData()[index], va_percentage: typed };
+        component.onCellValueChanged({
+          colDef: { field: 'va_percentage' },
+          data,
+          node: { rowIndex: index },
+        } as unknown as NewValueParams<KeyTableRow, string>);
+      });
+      component.formGroup.get('name')?.setValue('New Key');
+      component.formGroup.get('description')?.setValue('New Desc');
+      keyServiceSpy.addKey.mockReturnValue(of(new ApiResponse('ok')));
+
+      component.onSubmit();
+
+      expect(component.formGroup.get('key_data')?.errors).toBeNull();
+      expect(keyServiceSpy.addKey).toHaveBeenCalled();
+      expect(component.rowData().map((row) => row.va_percentage)).toEqual(['70%', '20%', '10%']);
     });
 
     it('should call updateKey when keyInput is truthy (update mode)', () => {

@@ -159,6 +159,7 @@
                     [inputId]="'phase_' + phase.id"
                     [value]="phase"
                     formControlName="phasesNumber"
+                    name="phasesNumber"
                   />
                   <label [for]="'phase_' + phase.id" class="font-medium text-sm cursor-pointer">
                     {{ phase.name }}
@@ -201,6 +202,7 @@
                     [inputId]="'readingFreq_' + readingFreq.id"
                     [value]="readingFreq"
                     formControlName="readingFrequency"
+                    name="readingFrequency"
                   />
                   <label
                     [for]="'readingFreq_' + readingFreq.id"
@@ -244,6 +246,7 @@
                     [inputId]="'tarifGroup_' + tarifGroup.id"
                     [value]="tarifGroup"
                     formControlName="tarifGroup"
+                    name="tarifGroup"
                   />
                   <label
                     [for]="'tarifGroup_' + tarifGroup.id"

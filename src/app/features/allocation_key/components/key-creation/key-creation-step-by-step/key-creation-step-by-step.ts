@@ -19,6 +19,7 @@ import { Card } from 'primeng/card';
 import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
 import { ImportSharingOperationMeters } from '../../../../../shared/components/import-sharing-operation-meters/import-sharing-operation-meters';
 import { sanitizeReturnUrl } from '../../../../../shared/utils/navigation.utils';
+import { sumsToOne } from '../../../key-shares';
 /** Where the participant list comes from at step 0. */
 type ParticipantSource = 'manual' | 'operation';
 
@@ -302,6 +303,7 @@ export class KeyCreationStepByStep implements OnInit {
     }
   }
 
+  /** Sum of the iterations' shares, as a fraction: 1 means 100 %. */
   getSumOfIter(): number {
     let sumInj = 0;
     for (const iteration of this.iterations) {
@@ -383,18 +385,28 @@ export class KeyCreationStepByStep implements OnInit {
 
     const sumInj = this.getSumOfIter();
     this.displayErrorInj.set(false);
-    if (sumInj >= 0.99 && sumInj <= 1.01) {
-      this.displayEnd.set(true);
-    } else if (sumInj > 1.01) {
+    // Also turns the end step back off: the Validate button advances whenever it is shown.
+    this.recalculateIterationDisplay();
+    if (this.displayEnd()) {
+      return;
+    }
+    if (sumInj > 1) {
       this.displayErrorInj.set(true);
     } else if (currentFormIterations.length < 3) {
+      // Short of 100 %: a new iteration takes the rest.
       this.addIteration(currentFormIterations.length);
     } else {
       this.displayErrorInj.set(true);
     }
   }
+
+  /**
+   * Shows the end step only when the iterations add up to 100 %, within the band that /keys/add
+   * and the API accept (`sumsToOne`). A wider band would end the wizard on a key the next screen
+   * refuses.
+   */
   recalculateIterationDisplay(): void {
-    this.displayEnd.set(this.getSumOfIter() >= 99 && this.getSumOfIter() <= 101);
+    this.displayEnd.set(sumsToOne(this.getSumOfIter()));
   }
   deleteIteration(index: number): void {
     if (this.formIterations().length > 1) {

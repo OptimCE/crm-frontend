@@ -40,6 +40,7 @@ import { BackArrow } from '../../../../../layout/back-arrow/back-arrow';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ImportSharingOperationMeters } from '../../../../../shared/components/import-sharing-operation-meters/import-sharing-operation-meters';
 import { sanitizeReturnUrl } from '../../../../../shared/utils/navigation.utils';
+import { formatShare, sumsToOne } from '../../../key-shares';
 
 interface ButtonClickParams {
   event: MouseEvent;
@@ -365,7 +366,7 @@ export class KeyCreationUpdate implements OnInit {
           this.key.iterations.forEach((iteration) => {
             sum += iteration.energy_allocated_percentage;
           });
-          if (sum !== 1) {
+          if (!sumsToOne(sum)) {
             errors['SumIterations'] = true;
             return errors;
           }
@@ -380,11 +381,8 @@ export class KeyCreationUpdate implements OnInit {
               }
               return;
             });
-            if (sum >= 0.999 && sum <= 1.001) {
-              sum = 1;
-            }
-            if (sum !== 1) {
-              // Autoriser une approximation (0.9999 doit être acceptée ainsi que 1.0001)
+            // Autoriser une approximation (0.9999 doit être acceptée ainsi que 1.0001)
+            if (!sumsToOne(sum)) {
               let prorata = true;
               iteration.consumers.forEach((consumer) => {
                 if (consumer.energy_allocated_percentage !== -1) {
@@ -546,13 +544,13 @@ export class KeyCreationUpdate implements OnInit {
     if (this.key && this.key.iterations) {
       this.key.iterations.forEach((iteration) => {
         iteration.consumers.forEach((consumer) => {
-          let vp_percentage = consumer.energy_allocated_percentage * 100 + '%';
+          let vp_percentage = formatShare(consumer.energy_allocated_percentage);
           if (consumer.energy_allocated_percentage === -1) {
             vp_percentage = this.translate.instant('KEY.CREATE.PRORATA_LABEL') as string;
           }
           formattedData.push({
             number: iteration.number,
-            va_percentage: iteration.energy_allocated_percentage * 100 + '%',
+            va_percentage: formatShare(iteration.energy_allocated_percentage),
             name: consumer.name,
             vp_percentage: vp_percentage,
           });
