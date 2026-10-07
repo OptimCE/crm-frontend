@@ -404,4 +404,63 @@ describe('MeterUpdate', () => {
       expect(detailsOpen(component)).toBe(true);
     });
   });
+
+  // ── 9. Card radios ──────────────────────────────────────────────────
+
+  describe('card radios', () => {
+    // A card's highlight compares ids, its dot compares objects (PrimeNG's ==),
+    // so two bugs showed as "highlighted card, empty dot":
+    // - the form picked the meter's values before the translation replaced the
+    //   category items, so no dot showed when the dialog opened;
+    // - the three groups share one form root and PrimeNG groups radios by root
+    //   AND `name`: without a name per field, changing the phase emptied the
+    //   other two dots.
+
+    // Choose a card the way a user does: its label clicks the radio.
+    async function chooseCard(inputId: string): Promise<void> {
+      const label = (fixture.nativeElement as HTMLElement).querySelector<HTMLLabelElement>(
+        `label[for="${inputId}"]`,
+      );
+      if (!label) {
+        throw new Error(`label[for="${inputId}"] is not rendered`);
+      }
+      label.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    }
+
+    // The dot is drawn from the radio's own state (a class on its host).
+    function radio(inputId: string): { input: boolean; dot: boolean } {
+      const input = (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>(
+        `input#${inputId}`,
+      );
+      if (!input) {
+        throw new Error(`input#${inputId} is not rendered`);
+      }
+      return {
+        input: input.checked,
+        dot: !!input.closest('p-radiobutton')?.classList.contains('p-radiobutton-checked'),
+      };
+    }
+
+    const CHECKED = { input: true, dot: true };
+
+    it("keeps the other groups' dots when a card is changed", async () => {
+      const readingFreq = `readingFreq_${ReadingFrequency.MONTHLY}`;
+      const tarifGroup = `tarifGroup_${TarifGroup.LOW_TENSION}`;
+      // The meter's own values, as the dialog opens.
+      expect(radio(`phase_${PhaseCategory.SINGLE}`)).toEqual(CHECKED);
+      expect(radio(readingFreq)).toEqual(CHECKED);
+      expect(radio(tarifGroup)).toEqual(CHECKED);
+
+      await chooseCard(`phase_${PhaseCategory.THREE}`);
+
+      expect(component.metersForm.get('phasesNumber')?.value).toMatchObject({
+        id: PhaseCategory.THREE,
+      });
+      expect(radio(`phase_${PhaseCategory.THREE}`)).toEqual(CHECKED);
+      expect(radio(readingFreq)).toEqual(CHECKED);
+      expect(radio(tarifGroup)).toEqual(CHECKED);
+    });
+  });
 });

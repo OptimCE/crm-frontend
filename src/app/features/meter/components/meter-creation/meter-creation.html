@@ -12,7 +12,11 @@
       <!-- STEP 1: Meter Identity -->
       <p-step-panel [value]="0">
         <ng-template #content let-activateCallback="activateCallback">
-          <div class="py-4" [formGroup]="metersForm">
+          <!--
+            A real form, so "next" submits it: the field error handlers below
+            show their message on submit, and a <div [formGroup]> never submits.
+          -->
+          <form class="py-4" [formGroup]="metersForm" (ngSubmit)="validateStep1(activateCallback)">
             <!-- Section: Address -->
             <h3 class="text-sm font-semibold text-surface-700 mb-3">
               {{ 'COMMON.ADDRESS' | translate }}
@@ -25,88 +29,91 @@
               (geoChange)="addressPick.observe($event)"
             />
 
-            @if (addressDetailsOpen()) {
-              <!--
-                Twelve columns so each row reads the way a Belgian address is
-                written: street / number / box, then postcode / city. The three
-                column grid this replaces (span-2, 1, 1, 1, span-2) left the
-                city with nowhere to sit on row two, so it wrapped and opened
-                two holes in the block, with the box number stranded between the
-                street line and the postcode line.
-              -->
-              <div class="mt-4 grid grid-cols-12 gap-x-4 gap-y-3">
-                <div class="col-span-12 md:col-span-6 flex flex-col">
-                  <label for="street_name" class="field-label">
-                    {{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *
-                  </label>
-                  <input
-                    id="street_name"
-                    pInputText
-                    formControlName="address_street"
-                    placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
-                    class="w-full"
-                    data-testid="meter-creation__input--street"
-                  />
-                  <app-error-handler controlName="address_street" [formGroup]="metersForm" />
-                </div>
-                <div class="col-span-6 md:col-span-3 flex flex-col">
-                  <label for="address_number" class="field-label">
-                    {{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *
-                  </label>
-                  <input
-                    id="address_number"
-                    pInputText
-                    formControlName="address_number"
-                    placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
-                    class="w-full"
-                    data-testid="meter-creation__input--address-number"
-                  />
-                  <app-error-handler controlName="address_number" [formGroup]="metersForm" />
-                </div>
-                <div class="col-span-6 md:col-span-3 flex flex-col">
-                  <label for="box_number" class="field-label">
-                    {{ 'METER.ADDRESS.BOX_LABEL' | translate }}
-                  </label>
-                  <input
-                    id="box_number"
-                    pInputText
-                    formControlName="address_supplement"
-                    placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
-                    class="w-full"
-                    data-testid="meter-creation__input--box-number"
-                  />
-                  <app-error-handler controlName="address_supplement" [formGroup]="metersForm" />
-                </div>
-                <div class="col-span-4 md:col-span-3 flex flex-col">
-                  <label for="postcode" class="field-label">
-                    {{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *
-                  </label>
-                  <input
-                    id="postcode"
-                    pInputText
-                    formControlName="address_postcode"
-                    placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
-                    class="w-full"
-                    data-testid="meter-creation__input--postcode"
-                  />
-                  <app-error-handler controlName="address_postcode" [formGroup]="metersForm" />
-                </div>
-                <div class="col-span-8 md:col-span-9 flex flex-col">
-                  <label for="city" class="field-label">
-                    {{ 'METER.ADDRESS.CITY_LABEL' | translate }} *
-                  </label>
-                  <input
-                    id="city"
-                    pInputText
-                    formControlName="address_city"
-                    placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
-                    class="w-full"
-                    data-testid="meter-creation__input--city"
-                  />
-                  <app-error-handler controlName="address_city" [formGroup]="metersForm" />
-                </div>
+            <!--
+              Twelve columns so each row reads the way a Belgian address is
+              written: street / number / box, then postcode / city. The three
+              column grid this replaces (span-2, 1, 1, 1, span-2) left the
+              city with nowhere to sit on row two, so it wrapped and opened
+              two holes in the block, with the box number stranded between the
+              street line and the postcode line.
+
+              Hidden rather than left out with @if: validateStep1 opens the
+              block DURING the submit, and error handlers created only then
+              would miss that submit and leave the failing fields blank.
+            -->
+            <div class="mt-4 grid grid-cols-12 gap-x-4 gap-y-3" [hidden]="!addressDetailsOpen()">
+              <div class="col-span-12 md:col-span-6 flex flex-col">
+                <label for="street_name" class="field-label">
+                  {{ 'METER.ADDRESS.STREET_NAME_LABEL' | translate }} *
+                </label>
+                <input
+                  id="street_name"
+                  pInputText
+                  formControlName="address_street"
+                  placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.STREET_NAME_LABEL' | translate }}"
+                  class="w-full"
+                  data-testid="meter-creation__input--street"
+                />
+                <app-error-handler controlName="address_street" />
               </div>
-            } @else {
+              <div class="col-span-6 md:col-span-3 flex flex-col">
+                <label for="address_number" class="field-label">
+                  {{ 'METER.ADDRESS.NUMBER_LABEL' | translate }} *
+                </label>
+                <input
+                  id="address_number"
+                  pInputText
+                  formControlName="address_number"
+                  placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.NUMBER_LABEL' | translate }}"
+                  class="w-full"
+                  data-testid="meter-creation__input--address-number"
+                />
+                <app-error-handler controlName="address_number" />
+              </div>
+              <div class="col-span-6 md:col-span-3 flex flex-col">
+                <label for="box_number" class="field-label">
+                  {{ 'METER.ADDRESS.BOX_LABEL' | translate }}
+                </label>
+                <input
+                  id="box_number"
+                  pInputText
+                  formControlName="address_supplement"
+                  placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.BOX_LABEL' | translate }}"
+                  class="w-full"
+                  data-testid="meter-creation__input--box-number"
+                />
+                <app-error-handler controlName="address_supplement" />
+              </div>
+              <div class="col-span-4 md:col-span-3 flex flex-col">
+                <label for="postcode" class="field-label">
+                  {{ 'METER.ADDRESS.POSTAL_CODE_LABEL' | translate }} *
+                </label>
+                <input
+                  id="postcode"
+                  pInputText
+                  formControlName="address_postcode"
+                  placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.POSTAL_CODE_LABEL' | translate }}"
+                  class="w-full"
+                  data-testid="meter-creation__input--postcode"
+                />
+                <app-error-handler controlName="address_postcode" />
+              </div>
+              <div class="col-span-8 md:col-span-9 flex flex-col">
+                <label for="city" class="field-label">
+                  {{ 'METER.ADDRESS.CITY_LABEL' | translate }} *
+                </label>
+                <input
+                  id="city"
+                  pInputText
+                  formControlName="address_city"
+                  placeholder="{{ 'METER.ADDRESS.PLACEHOLDER.CITY_LABEL' | translate }}"
+                  class="w-full"
+                  data-testid="meter-creation__input--city"
+                />
+                <app-error-handler controlName="address_city" />
+              </div>
+            </div>
+            @if (!addressDetailsOpen()) {
               <!--
                 Not a courtesy link. The picker is suggest-only and must never
                 gate a save, so an address the register does not know still has
@@ -142,7 +149,6 @@
                   />
                   <app-error-handler
                     controlName="EAN"
-                    [formGroup]="metersForm"
                     [customErrors]="{
                       invalidEan: ('METER.INFORMATIONS.ERROR.INVALID_EAN' | translate),
                     }"
@@ -161,7 +167,7 @@
                     }}"
                     data-testid="meter-creation__input--meter-number"
                   />
-                  <app-error-handler controlName="meterNumber" [formGroup]="metersForm" />
+                  <app-error-handler controlName="meterNumber" />
                 </div>
               </div>
 
@@ -198,6 +204,7 @@
                             [inputId]="'phase' + phase.id"
                             [value]="phase"
                             [formControl]="$any(metersForm.get('phasesNumber'))"
+                            name="phasesNumber"
                           />
                           <label
                             [for]="'phase' + phase.id"
@@ -209,7 +216,7 @@
                       </div>
                     }
                   </div>
-                  <app-error-handler controlName="phasesNumber" [formGroup]="metersForm" />
+                  <app-error-handler controlName="phasesNumber" />
                 </div>
 
                 <!-- Reading Frequency -->
@@ -245,6 +252,7 @@
                             [inputId]="'readingFreq' + readingFreq.id"
                             [value]="readingFreq"
                             [formControl]="$any(metersForm.get('readingFrequency'))"
+                            name="readingFrequency"
                           />
                           <label
                             [for]="'readingFreq' + readingFreq.id"
@@ -256,7 +264,7 @@
                       </div>
                     }
                   </div>
-                  <app-error-handler controlName="readingFrequency" [formGroup]="metersForm" />
+                  <app-error-handler controlName="readingFrequency" />
                 </div>
 
                 <!-- Tarif Group -->
@@ -292,6 +300,7 @@
                             [inputId]="'tarifGroup' + tarifGroup.id"
                             [value]="tarifGroup"
                             [formControl]="$any(metersForm.get('tarifGroup'))"
+                            name="tarifGroup"
                           />
                           <label
                             [for]="'tarifGroup' + tarifGroup.id"
@@ -303,7 +312,7 @@
                       </div>
                     }
                   </div>
-                  <app-error-handler controlName="tarifGroup" [formGroup]="metersForm" />
+                  <app-error-handler controlName="tarifGroup" />
                 </div>
               </div>
             </div>
@@ -311,14 +320,14 @@
             <!-- Step 1 navigation -->
             <div class="flex justify-end mt-6 pt-4 border-t border-surface-200">
               <p-button
+                type="submit"
                 icon="pi pi-arrow-right"
                 iconPos="right"
                 label="{{ 'METER.ADD.NEXT_STEP_BUTTON' | translate }}"
-                (click)="validateStep1(activateCallback)"
                 data-testid="meter-creation__btn--next-step"
               />
             </div>
-          </div>
+          </form>
         </ng-template>
       </p-step-panel>
 
@@ -347,13 +356,19 @@
                 <h3 class="text-sm font-semibold text-surface-700 mb-3">
                   {{ 'METER.ADD.ENERGY_CHARACTERISTIC_HEADER' | translate }}
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
-                  <div class="flex flex-col">
+                <!--
+                  Each field spans three rows of a subgrid (label / input / error), so
+                  the inputs of a row line up even when only some labels wrap to two
+                  lines, and a message under one field does not push its neighbours.
+                -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-y-0">
+                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
                     <app-field-label-helper
                       forId="samplingPower"
                       label="{{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_LABEL' | translate }}"
                       tooltip="{{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_TOOLTIP' | translate }}"
                       [required]="true"
+                      class="md:self-end"
                     />
                     <input
                       id="samplingPower"
@@ -365,7 +380,7 @@
                     />
                     <app-error-handler controlName="samplingPower" />
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
                     <app-field-label-helper
                       forId="totalGeneratingCapacity"
                       label="{{ 'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_LABEL' | translate }}"
@@ -373,6 +388,7 @@
                         'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_TOOLTIP' | translate
                       }}"
                       [required]="true"
+                      class="md:self-end"
                     />
                     <input
                       id="totalGeneratingCapacity"
@@ -384,12 +400,13 @@
                     />
                     <app-error-handler controlName="totalGeneratingCapacity" />
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
                     <app-field-label-helper
                       forId="amperage"
                       label="{{ 'METER.INFORMATIONS.AMPERAGE_LABEL' | translate }}"
                       tooltip="{{ 'METER.INFORMATIONS.AMPERAGE_TOOLTIP' | translate }}"
                       [required]="true"
+                      class="md:self-end"
                     />
                     <input
                       id="amperage"
@@ -404,13 +421,14 @@
                 </div>
 
                 <!-- Dropdowns for large option sets -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 mt-4">
-                  <div class="flex flex-col">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-y-0 mt-4">
+                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
                     <app-field-label-helper
                       forId="selectProductionChainCategory"
                       label="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
                       tooltip="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_TOOLTIP' | translate }}"
                       [required]="true"
+                      class="md:self-end"
                     />
                     <p-select
                       id="selectProductionChainCategory"
@@ -424,12 +442,13 @@
                     />
                     <app-error-handler controlName="productionChain" />
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
                     <app-field-label-helper
                       forId="selectInjectionStatusCategory"
                       label="{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}"
                       tooltip="{{ 'METER.INFORMATIONS.INJECTION_STATUS_TOOLTIP' | translate }}"
                       [required]="true"
+                      class="md:self-end"
                     />
                     <p-select
                       id="selectInjectionStatusCategory"
@@ -442,12 +461,13 @@
                     />
                     <app-error-handler controlName="injectionStatus" />
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
                     <app-field-label-helper
                       forId="selectGrd"
                       label="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
                       tooltip="{{ 'METER.INFORMATIONS.GRD_TOOLTIP' | translate }}"
                       [required]="true"
+                      class="md:self-end"
                     />
                     <p-select
                       id="selectGrd"
@@ -495,6 +515,7 @@
                             [inputId]="'rate' + rate.id"
                             [value]="rate"
                             formControlName="rate"
+                            name="rate"
                           />
                           <label
                             [for]="'rate' + rate.id"
@@ -540,6 +561,7 @@
                             [inputId]="'client' + client.id"
                             [value]="client"
                             formControlName="clientType"
+                            name="clientType"
                           />
                           <label
                             [for]="'client' + client.id"

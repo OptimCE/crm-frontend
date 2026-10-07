@@ -113,6 +113,11 @@ export class MeterUpdate implements OnInit {
       phasesNumber: new FormControl('', [Validators.required]),
       readingFrequency: new FormControl('', [Validators.required]),
     });
+    // Translate the categories BEFORE picking the meter's values from them: the
+    // translation replaces every item with a copy, and a card radio is checked
+    // only when the control holds the very object it renders (PrimeNG compares
+    // with ==). Picked first, the dialog opened with no dot on any card.
+    this.setupTranslationCategory();
     this.metersForm.patchValue({
       address_street: this.meter.address.street,
       address_number: this.meter.address.number,
@@ -130,7 +135,6 @@ export class MeterUpdate implements OnInit {
       ),
     });
     this.syncAddressDetailsVisibility();
-    this.setupTranslationCategory();
   }
   setupTranslationCategory(): void {
     this.setupReadingFrequencyCategory();

@@ -26,7 +26,12 @@ import {
   ReadingFrequency,
   TarifGroup,
 } from '../../../../shared/types/meter.types';
-import { CreateMeterDataDTO, CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
+import {
+  CreateMeterDataDTO,
+  CreateMeterDTO,
+  injectionStatusForApi,
+  productionChainForApi,
+} from '../../../../shared/dtos/meter.dtos';
 import { toLocalDateString } from '../../../../shared/utils/date.utils';
 import { eanValidator } from '../../../../shared/validators/ean.validator';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
@@ -521,8 +526,9 @@ export class MeterCreation implements OnInit {
       rate: formValue.rate.id,
       client_type: formValue.clientType.id,
       start_date: toLocalDateString(formValue.dateStart),
-      injection_status: formValue.injectionStatus.id,
-      production_chain: formValue.productionChain.id,
+      // "Aucun" has no backend value: sending 5 / 8 answered 422.
+      injection_status: injectionStatusForApi(formValue.injectionStatus.id),
+      production_chain: productionChainForApi(formValue.productionChain.id),
       total_generating_capacity: formValue.totalGeneratingCapacity,
       grd: formValue.grd,
       member_id: formValue.member ? formValue.member.id : undefined,

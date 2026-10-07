@@ -345,7 +345,7 @@ describe('KeyCreationStepByStep', () => {
       expect(component.displayErrorInj()).toBe(false);
     });
 
-    it('should set displayErrorInj when sum exceeds 101%', () => {
+    it('should set displayErrorInj when sum exceeds 100%', () => {
       completeSecondStep(2);
       fillIterations([[1, 50]]);
       component.submitIteration(); // 50% → auto-adds iter 2
@@ -354,28 +354,82 @@ describe('KeyCreationStepByStep', () => {
         [1, 60],
         [1, 60],
       ]);
-      component.submitIteration(); // 120% > 101%
+      component.submitIteration(); // 120% > 100%
       expect(component.displayErrorInj()).toBe(true);
     });
 
-    it('should auto-add iteration when sum < 99% and fewer than 3 iterations', () => {
+    it('should auto-add iteration when sum < 100% and fewer than 3 iterations', () => {
       completeSecondStep(2);
       fillIterations([[1, 30]]);
       component.submitIteration();
-      // 30% < 99%, should have added another iteration form
+      // 30% < 100%, should have added another iteration form
       expect(component.formIterations().length).toBe(2);
       expect(component.displayEnd()).toBe(false);
     });
 
-    it('should set displayErrorInj when sum < 99% and already 3 iterations', () => {
+    it('should set displayErrorInj when sum < 100% and already 3 iterations', () => {
       completeSecondStep(2);
       fillIterations([
         [1, 10],
         [1, 10],
         [1, 10],
       ]);
-      component.submitIteration(); // 30% < 99% but already 3 iters
+      component.submitIteration(); // 30% < 100% but already 3 iters
       expect(component.displayErrorInj()).toBe(true);
+    });
+
+    it('should accept 70 % + 20 % + 10 %, which sums to 0.9999999999999999', () => {
+      completeSecondStep(2);
+      fillIterations([
+        [1, 70],
+        [1, 20],
+        [1, 10],
+      ]);
+      component.submitIteration();
+      expect(component.displayEnd()).toBe(true);
+      expect(component.displayErrorInj()).toBe(false);
+    });
+
+    // /keys/add and the API refuse 99 % and 101 % (`sumsToOne`), so the wizard must not end on them.
+    it('should ask for the missing 1 % instead of ending on 99 %', () => {
+      completeSecondStep(2);
+      fillIterations([[1, 99]]);
+      component.submitIteration();
+      expect(component.displayEnd()).toBe(false);
+      expect(component.formIterations().length).toBe(2);
+    });
+
+    it('should refuse 33 % + 33 % + 33 %', () => {
+      completeSecondStep(2);
+      fillIterations([
+        [1, 33],
+        [1, 33],
+        [1, 33],
+      ]);
+      component.submitIteration();
+      expect(component.displayEnd()).toBe(false);
+      expect(component.displayErrorInj()).toBe(true);
+    });
+
+    it('should refuse 101 %', () => {
+      completeSecondStep(2);
+      fillIterations([[1, 101]]);
+      component.submitIteration();
+      expect(component.displayEnd()).toBe(false);
+      expect(component.displayErrorInj()).toBe(true);
+    });
+
+    it('should leave the end step when an edit takes the sum off 100 %', () => {
+      completeSecondStep(2);
+      fillIterations([[1, 100]]);
+      component.submitIteration();
+      expect(component.displayEnd()).toBe(true);
+
+      fillIterations([[1, 120]]);
+      component.submitIteration();
+      // The Validate button advances to step 3 whenever displayEnd() is true.
+      expect(component.displayErrorInj()).toBe(true);
+      expect(component.displayEnd()).toBe(false);
     });
   });
 
@@ -410,6 +464,33 @@ describe('KeyCreationStepByStep', () => {
     it('should reset displayErrorInj to false', () => {
       component.displayErrorInj.set(true);
       component.deleteIteration(0);
+      expect(component.displayErrorInj()).toBe(false);
+    });
+
+    it('should hide the end step when the remaining iteration is short of 100 %', () => {
+      expect(component.displayEnd()).toBe(true); // 50 % + 50 %
+      component.deleteIteration(0);
+      expect(component.displayEnd()).toBe(false);
+    });
+  });
+
+  describe('deleteIteration leaving 100 %', () => {
+    it('should show the end step when the remaining iterations add up to 100 %', () => {
+      completeSecondStep(2);
+      fillIterations([[1, 60]]);
+      component.submitIteration(); // 60 % → a second iteration is added
+      fillIterations([
+        [1, 60],
+        [2, 100],
+      ]);
+      component.submitIteration(); // 160 % → refused
+      expect(component.displayErrorInj()).toBe(true);
+      expect(component.displayEnd()).toBe(false);
+
+      component.deleteIteration(0); // what is left is 100 %
+
+      expect(component.iterations.map((it) => it.energy_allocated_percentage)).toEqual([1]);
+      expect(component.displayEnd()).toBe(true);
       expect(component.displayErrorInj()).toBe(false);
     });
   });

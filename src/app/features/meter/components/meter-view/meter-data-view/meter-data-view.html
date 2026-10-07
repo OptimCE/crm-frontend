@@ -139,7 +139,7 @@
           'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate
         }}</span>
         <span class="field-value" data-testid="meter-data-view__text--production-chain">{{
-          meterData().production_chain | mapNumberString: productionChainMap()
+          productionChain() | mapNumberString: productionChainMap()
         }}</span>
       </div>
       <div class="md:col-span-2">
@@ -147,7 +147,7 @@
           'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate
         }}</span>
         <span class="field-value" data-testid="meter-data-view__text--injection-status">{{
-          meterData().injection_status | mapNumberString: injectionStatusMap()
+          injectionStatus() | mapNumberString: injectionStatusMap()
         }}</span>
       </div>
     </div>

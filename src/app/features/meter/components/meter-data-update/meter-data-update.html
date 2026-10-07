@@ -80,6 +80,7 @@
             optionLabel="name"
             placeholder="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
             appendTo="body"
+            (onChange)="onChangeProductionChain()"
             data-testid="meter-data-update__select--production-chain"
           />
           <app-error-handler controlName="productionChain" />
@@ -145,6 +146,7 @@
                   [inputId]="'rate_' + rate.id"
                   [value]="rate"
                   formControlName="rate"
+                  name="rate"
                 />
                 <label [for]="'rate_' + rate.id" class="font-medium text-sm cursor-pointer">
                   {{ rate.name }}
@@ -178,6 +180,7 @@
                   [inputId]="'client_' + client.id"
                   [value]="client"
                   formControlName="clientType"
+                  name="clientType"
                 />
                 <label [for]="'client_' + client.id" class="font-medium text-sm cursor-pointer">
                   {{ client.name }}

@@ -1,8 +1,12 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Tag } from 'primeng/tag';
 import { Card } from 'primeng/card';
 import { TranslatePipe } from '@ngx-translate/core';
-import { MetersDataDTO } from '../../../../../shared/dtos/meter.dtos';
+import {
+  injectionStatusFromApi,
+  MetersDataDTO,
+  productionChainFromApi,
+} from '../../../../../shared/dtos/meter.dtos';
 import { MeterDataStatus } from '../../../../../shared/types/meter.types';
 import { MemberType } from '../../../../../shared/types/member.types';
 import { MapNumberStringPipe } from '../../../../../shared/pipes/map-number-string/map-number-string-pipe';
@@ -20,6 +24,13 @@ export class MeterDataView {
   readonly injectionStatusMap = input.required<string[]>();
   readonly rateMap = input.required<string[]>();
   readonly clientTypeMap = input.required<string[]>();
+  // "Aucun" is stored as null, which no map index matches: show it as the NONE label.
+  protected readonly productionChain = computed(() =>
+    productionChainFromApi(this.meterData().production_chain),
+  );
+  protected readonly injectionStatus = computed(() =>
+    injectionStatusFromApi(this.meterData().injection_status),
+  );
   protected readonly MeterStatus = MeterDataStatus;
   protected readonly MemberType = MemberType;
 }
