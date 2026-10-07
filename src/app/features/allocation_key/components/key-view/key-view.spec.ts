@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
@@ -215,11 +216,22 @@ describe('KeyView', () => {
         expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys']);
       });
 
-      it('should call errorHandler with data on ApiResponse error', async () => {
-        keyServiceSpy.getKey.mockReturnValue(throwError(() => new ApiResponse('Some error')));
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      it("shows the server's message when the key cannot be loaded", async () => {
+        keyServiceSpy.getKey.mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({
+                status: 404,
+                error: { data: 'This allocation key does not exist', error_code: 31001 },
+              }),
+          ),
+        );
         await createComponent();
 
-        expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Some error');
+        expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+          'This allocation key does not exist',
+        );
       });
 
       it('should call errorHandler with null on non-ApiResponse error', async () => {
@@ -263,6 +275,29 @@ describe('KeyView', () => {
 
     it('should set consumer VAP column with HeaderWithHelper', () => {
       expect(component.colDefs()[3].headerComponent).toBe(HeaderWithHelper);
+    });
+
+    // BUG: these columns also set headerTooltip, and TooltipModule is registered here, so hovering
+    // a header showed the help text twice: AG Grid's tooltip on top of HeaderWithHelper's title.
+    it('should leave the header help to HeaderWithHelper alone', () => {
+      const helpColumns = component
+        .colDefs()
+        .filter((col) => col.headerComponent === HeaderWithHelper);
+      expect(
+        helpColumns.map((col) => [
+          col.field,
+          (col.headerComponentParams as { tooltip: string }).tooltip,
+        ]),
+      ).toEqual([
+        ['number', 'KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
+        ['va_percentage', 'KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
+        ['vp_percentage', 'KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
+      ]);
+      expect(
+        helpColumns
+          .filter((col) => 'headerTooltip' in col || 'headerTooltipValueGetter' in col)
+          .map((col) => col.field),
+      ).toEqual([]);
     });
 
     it('should bind cellStyle to all columns', () => {
@@ -473,12 +508,17 @@ describe('KeyView', () => {
       expect(component.gridApi).toBe(gridApiMock);
     });
 
-    it('should call sizeColumnsToFit after timeout', () => {
+    // sizeColumnsToFit() would turn flex off and freeze the widths it picked (see onGridReady).
+    it('should not call sizeColumnsToFit, the flex columns already fill the grid', () => {
       vi.useFakeTimers();
-      setupGridApi();
-      vi.runAllTimers();
-      expect(gridApiMock.sizeColumnsToFit).toHaveBeenCalled();
-      vi.useRealTimers();
+      try {
+        setupGridApi();
+        vi.runAllTimers();
+      } finally {
+        vi.useRealTimers(); // before asserting: a fake clock left behind times out every later test
+      }
+      expect(component.defaultColDef.flex).toBe(1);
+      expect(gridApiMock.sizeColumnsToFit).not.toHaveBeenCalled();
     });
 
     it('should call refreshHeader after timeout', () => {
@@ -535,10 +575,20 @@ describe('KeyView', () => {
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/keys']);
     });
 
-    it('should call errorHandler with data on ApiResponse error', () => {
-      keyServiceSpy.deleteKey.mockReturnValue(throwError(() => new ApiResponse('err')));
+    it("shows the server's message when the key cannot be deleted", () => {
+      keyServiceSpy.deleteKey.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 409,
+              error: { data: 'This key is still used by a sharing operation', error_code: 31003 },
+            }),
+        ),
+      );
       component.deleteKey();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('err');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'This key is still used by a sharing operation',
+      );
     });
 
     it('should navigate to /keys on error', () => {
@@ -620,10 +670,20 @@ describe('KeyView', () => {
       expect(keyServiceSpy.downloadKey).not.toHaveBeenCalled();
     });
 
-    it('should call errorHandler with data on ApiResponse error', () => {
-      keyServiceSpy.downloadKey.mockReturnValue(throwError(() => new ApiResponse('err')));
+    it("shows the server's message when the key cannot be exported", () => {
+      keyServiceSpy.downloadKey.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 500,
+              error: { data: 'The Excel export could not be generated', error_code: 31005 },
+            }),
+        ),
+      );
       component.exportExcel();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('err');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'The Excel export could not be generated',
+      );
     });
 
     it('should call errorHandler with null on non-ApiResponse error', () => {

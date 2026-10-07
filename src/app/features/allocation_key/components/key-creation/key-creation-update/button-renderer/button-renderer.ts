@@ -1,17 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { Button } from 'primeng/button';
+import { Tooltip } from 'primeng/tooltip';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { Ripple } from 'primeng/ripple';
 import { ICellRendererParams } from 'ag-grid-community';
 
 interface ButtonRendererParams extends ICellRendererParams {
+  /** Accessible name and tooltip of the icon-only delete button. */
   label: string;
   onClick: (params: { event: MouseEvent; rowData: unknown }) => void;
 }
 @Component({
   selector: 'app-button-renderer',
   standalone: true,
-  imports: [Button, Ripple],
+  imports: [Button, Tooltip],
   templateUrl: './button-renderer.html',
   styleUrl: './button-renderer.css',
 })

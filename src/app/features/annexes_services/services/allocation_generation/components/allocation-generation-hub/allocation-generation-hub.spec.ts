@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService } from '@ngx-translate/core';
@@ -482,6 +483,25 @@ describe('AllocationGenerationHub', () => {
       component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
       component.submitGeneration();
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
+      expect(component.submitting()).toBe(false);
+    });
+
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the generation cannot be started", () => {
+      serviceSpy.startGeneration.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 422,
+              error: { data: "The column 'My Inj' was not found in the file", error_code: 2004 },
+            }),
+        ),
+      );
+      component.onFileSelected(fileInputEvent(makeFile('data.csv', 1024)));
+      component.submitGeneration();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        "The column 'My Inj' was not found in the file",
+      );
       expect(component.submitting()).toBe(false);
     });
 

@@ -6,7 +6,7 @@ import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Textarea } from 'primeng/textarea';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { CreditNoteIn, InvoiceOut } from '../../../../shared/dtos/billing.dtos';
 import { BillingService } from '../../../../shared/services/billing.service';
@@ -60,9 +60,7 @@ export class CreditNoteDialog {
         },
         error: (error: unknown) => {
           this.submitting.set(false);
-          this.errorHandler.handleError(
-            error instanceof ApiResponse ? (error.data as string) : null,
-          );
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

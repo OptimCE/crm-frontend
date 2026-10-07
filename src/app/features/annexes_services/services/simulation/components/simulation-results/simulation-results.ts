@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Skeleton } from 'primeng/skeleton';
 
-import { ApiResponse } from '../../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../../shared/utils/api-error.utils';
 import { LocaleService } from '../../../../../../core/services/language/locale.service';
 import {
   SimulationConsumerResultDTO,
@@ -87,8 +87,7 @@ export class SimulationResults {
           this.timeseriesLoading.set(false);
           this.timeseriesError.set(true);
           this.loadedForId = null; // allow a retry when the row is reopened
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

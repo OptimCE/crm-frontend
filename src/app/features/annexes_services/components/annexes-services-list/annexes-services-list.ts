@@ -18,6 +18,7 @@ import { CommunityAnnex } from '../../../../shared/dtos/annexes_services.dtos';
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { AddAnnexDialog } from '../add-annex-dialog/add-annex-dialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 
@@ -161,7 +162,7 @@ export class AnnexesServicesList implements OnInit {
               this.refresh();
             },
             error: (error: unknown) => {
-              this.errorHandler.handleError(error);
+              this.errorHandler.handleError(extractApiErrorMessage(error));
               this.pendingUnsubscribe.set(null);
             },
           });

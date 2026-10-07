@@ -12,7 +12,7 @@
       id="dateDeb"
       formControlName="dateDeb"
       dateFormat="dd/mm/yy"
-      styleClass="w-full"
+      [fluid]="true"
       data-testid="op-chart__datepicker--start"
     ></p-date-picker>
     <app-error-handler controlName="dateDeb"></app-error-handler>
@@ -25,13 +25,12 @@
       id="dateFin"
       formControlName="dateFin"
       dateFormat="dd/mm/yy"
-      styleClass="w-full"
+      [fluid]="true"
       data-testid="op-chart__datepicker--end"
     ></p-date-picker>
     <app-error-handler controlName="dateFin"></app-error-handler>
   </div>
   <p-button
-    pRipple
     label="{{ 'SHARING_OPERATION.VIEW.CONSUMPTION_MONITORING.SEARCH_BUTTON_LABEL' | translate }}"
     icon="pi pi-search"
     type="submit"
@@ -63,7 +62,6 @@
 @if (displayDownloadButton()) {
   <div class="flex justify-center">
     <p-button
-      pRipple
       [outlined]="true"
       icon="pi pi-download"
       label="{{

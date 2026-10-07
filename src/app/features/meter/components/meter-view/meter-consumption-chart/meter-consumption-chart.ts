@@ -13,7 +13,6 @@ import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { DatePicker } from 'primeng/datepicker';
-import { Ripple } from 'primeng/ripple';
 import { LocaleService } from '../../../../../core/services/language/locale.service';
 import { ErrorHandlerComponent } from '../../../../../shared/components/error.handler/error.handler.component';
 import { MeterConsumptionDTO } from '../../../../../shared/dtos/meter.dtos';
@@ -47,7 +46,6 @@ interface ChartFormValue {
     ErrorHandlerComponent,
     FormsModule,
     ReactiveFormsModule,
-    Ripple,
     TranslatePipe,
   ],
   templateUrl: './meter-consumption-chart.html',

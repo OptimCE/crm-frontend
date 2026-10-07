@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -181,11 +182,14 @@ describe('MemberViewDocumentsTab', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
     });
 
-    it('should call errorHandler on error', () => {
-      const error = new Error('Network error');
-      documentServiceSpy.getDocuments.mockReturnValue(throwError(() => error));
+    it("should show the server's message when the documents cannot be loaded", () => {
+      const apiError = new HttpErrorResponse({
+        status: 404,
+        error: { data: 'This member does not exist', error_code: 51001 },
+      });
+      documentServiceSpy.getDocuments.mockReturnValue(throwError(() => apiError));
       component.loadDocument();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('This member does not exist');
     });
   });
 
@@ -367,13 +371,17 @@ describe('MemberViewDocumentsTab', () => {
       expect(fetchSpy).toHaveBeenCalledWith('http://minio/file');
     });
 
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
     it('should call errorHandler on error', () => {
-      const apiError = new ApiResponse('Download failed', 500);
+      const apiError = new HttpErrorResponse({
+        status: 404,
+        error: { data: 'This document no longer exists', error_code: 52002 },
+      });
       documentServiceSpy.downloadDocument.mockReturnValue(throwError(() => apiError));
 
       component.onDownloadDocument(buildDocuments()[0]);
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Download failed');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('This document no longer exists');
     });
 
     it('should call errorHandler with null for non-ApiResponse errors', () => {

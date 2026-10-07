@@ -1,12 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import en from '../../../../../assets/i18n/en.json';
 import fr from '../../../../../assets/i18n/fr.json';
 import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
+import { ERROR_TYPE } from '../../../../core/dtos/notification';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 import { BillingService } from '../../../../shared/services/billing.service';
 import { MemberService } from '../../../../shared/services/member.service';
@@ -108,6 +110,29 @@ describe('TrackingBoard', () => {
 
       expect(lookup(en, key)).not.toBe(lookup(fr, key));
       expect(ariaLabelOf('tracking-board__select--sort')).toBe(lookup(en, key));
+    });
+  });
+
+  describe('listing errors', () => {
+    it("should show the server's message when the invoices cannot be listed", () => {
+      const message = 'Only a manager of this community can list its invoices';
+      const billing = TestBed.inject(BillingService) as unknown as {
+        listInvoices: ReturnType<typeof vi.fn>;
+      };
+      const snackbar = TestBed.inject(SnackbarNotification) as unknown as {
+        openSnackBar: ReturnType<typeof vi.fn>;
+      };
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      billing.listInvoices.mockReturnValueOnce(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 6003 } }),
+        ),
+      );
+
+      component.applyFilters();
+
+      expect(snackbar.openSnackBar).toHaveBeenCalledWith(message, ERROR_TYPE);
+      expect(component.loading()).toBe(false);
     });
   });
 });

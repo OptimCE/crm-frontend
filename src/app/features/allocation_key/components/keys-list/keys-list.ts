@@ -5,7 +5,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { KeyService } from '../../../../shared/services/key.service';
 import { Router, RouterLink } from '@angular/router';
-import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Button } from 'primeng/button';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -90,8 +91,7 @@ export class KeysList {
           this.loading.set(false);
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.loading.set(false);
         },
       });

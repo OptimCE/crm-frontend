@@ -10,7 +10,8 @@ import { Select } from 'primeng/select';
 import { Skeleton } from 'primeng/skeleton';
 import { Tooltip } from 'primeng/tooltip';
 
-import { ApiResponse, Pagination } from '../../../../core/dtos/api.response';
+import { Pagination } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import {
   InvoiceOut,
@@ -259,6 +260,6 @@ export class TrackingBoard implements OnInit {
   }
 
   private handleError(error: unknown): void {
-    this.errorHandler.handleError(error instanceof ApiResponse ? (error.data as string) : null);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

@@ -24,7 +24,10 @@ export interface PrefillField {
 /** A repeating sheet: one editable table. */
 export interface PrefillTable {
   key: string;
+  /** Every key the rows carry, internal ones included: the shape sent back. */
   columns: string[];
+  /** The columns the reviewer sees and edits — `columns` minus the internal keys. */
+  visibleColumns: string[];
   rows: TableRow[];
 }
 
@@ -50,6 +53,23 @@ function isRowArray(value: unknown): value is TableRow[] {
 }
 
 /**
+ * True for a key the backend keeps for itself, which it underscore-prefixes.
+ *
+ * `_id_member`, on every row of the member-bearing sheets, is what lets a member
+ * be shown their own rows of a frozen filing. No manifest binds it and the
+ * renderers ignore it: it is identity, not form content, and there is nothing
+ * in it for a reviewer to read or correct.
+ *
+ * It is never shown, but it IS sent back, unchanged. The backend re-attaches an
+ * id only to a row that arrives without one, by matching it against the CRM's
+ * rows on EAN or name — a guess that a corrected value or a homonym defeats,
+ * leaving that row attributed to nobody.
+ */
+export function isInternalKey(key: string): boolean {
+  return key.startsWith('_');
+}
+
+/**
  * Column order comes from the FIRST row, then any key later rows add.
  *
  * The backend emits every column on every row in a stable order, so this is
@@ -72,14 +92,21 @@ export function toPrefillForm(data: PrefillData): PrefillForm {
   const tables: PrefillTable[] = [];
 
   for (const [key, value] of Object.entries(data ?? {})) {
+    if (isInternalKey(key)) continue;
     if (isRowArray(value)) {
-      tables.push({ key, columns: columnsOf(value), rows: value.map((row) => ({ ...row })) });
+      const columns = columnsOf(value);
+      tables.push({
+        key,
+        columns,
+        visibleColumns: columns.filter((column) => !isInternalKey(column)),
+        rows: value.map((row) => ({ ...row })),
+      });
     } else if (isScalar(value)) {
       fields.push({ key, value });
     }
     // Anything else (a nested object, an array of scalars) is not editable as a
     // form control. It is carried through untouched by `toPayload` below rather
-    // than being shown and mangled.
+    // than being shown and mangled — and so is an internal key.
   }
 
   return { fields, tables };
@@ -88,8 +115,10 @@ export function toPrefillForm(data: PrefillData): PrefillForm {
 /**
  * Rebuild the payload from the edited form.
  *
- * `original` is threaded through so keys the form cannot represent survive the
- * round trip: dropping them would silently strip data from the filing.
+ * `original` is threaded through so keys the form cannot represent, or does not
+ * show, survive the round trip: dropping them would silently strip data from the
+ * filing. A table's internal columns need no such help — they stay in its
+ * `columns`, so every row goes back with the value it came with.
  *
  * Empty strings become `null` — the backend and the renderers treat "absent" as
  * null, and an empty string would write a blank cell that is not the same thing.
@@ -98,7 +127,7 @@ export function toPayload(form: PrefillForm, original: PrefillData): PrefillData
   const payload: PrefillData = {};
 
   for (const [key, value] of Object.entries(original ?? {})) {
-    if (!isRowArray(value) && !isScalar(value)) payload[key] = value;
+    if (isInternalKey(key) || (!isRowArray(value) && !isScalar(value))) payload[key] = value;
   }
   for (const field of form.fields) {
     payload[field.key] = field.value === '' ? null : field.value;

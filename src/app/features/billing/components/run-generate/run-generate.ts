@@ -9,7 +9,7 @@ import { Select } from 'primeng/select';
 import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { BillingRunOut, InvoiceOut } from '../../../../shared/dtos/billing.dtos';
 import { SharingOperationPartialDTO } from '../../../../shared/dtos/sharing_operation.dtos';
@@ -284,6 +284,6 @@ export class RunGenerate implements OnInit {
   }
 
   private handleError(error: unknown): void {
-    this.errorHandler.handleError(error instanceof ApiResponse ? (error.data as string) : null);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

@@ -9,7 +9,8 @@ import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MeService } from '../../../../../../../shared/services/me.service';
 import { MeDocumentDTO, MeDocumentPartialQuery } from '../../../../../../../shared/dtos/me.dtos';
-import { ApiResponse, Pagination } from '../../../../../../../core/dtos/api.response';
+import { Pagination } from '../../../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import { downloadFromUrl } from '../../../../../../../shared/utils/download.utils';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
@@ -114,7 +115,7 @@ export class DocumentsComponent {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }
@@ -158,8 +159,7 @@ export class DocumentsComponent {
           downloadFromUrl(response.data.url, response.data.fileName);
         },
         error: (error) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

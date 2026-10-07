@@ -13,7 +13,8 @@ import {
   DocumentExposedDTO,
   DocumentQueryDTO,
 } from '../../../../../../../shared/dtos/document.dtos';
-import { ApiResponse, Pagination } from '../../../../../../../core/dtos/api.response';
+import { Pagination } from '../../../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import { DocumentService } from '../../../../../../../shared/services/document.service';
 import { MemberAddDocument } from '../../../../member-add-document/member-add-document';
 import { downloadFromUrl } from '../../../../../../../shared/utils/download.utils';
@@ -117,7 +118,7 @@ export class MemberViewDocumentsTab implements OnInit {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }
@@ -174,8 +175,7 @@ export class MemberViewDocumentsTab implements OnInit {
           downloadFromUrl(response.data.url, response.data.fileName);
         },
         error: (error) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

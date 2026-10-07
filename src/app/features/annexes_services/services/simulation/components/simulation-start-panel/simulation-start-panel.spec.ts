@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -207,12 +208,23 @@ describe('SimulationStartPanel', () => {
       expect(component.keysLoading()).toBe(false);
     });
 
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
     it('should flag an error and stay not-loading on failure', async () => {
-      keyServiceSpy.getKeysList.mockReturnValue(throwError(() => new ApiResponse('boom')));
+      keyServiceSpy.getKeysList.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: { data: 'You are not a manager of this community', error_code: 50003 },
+            }),
+        ),
+      );
       await createComponent();
       expect(component.keysError()).toBe(true);
       expect(component.keysLoading()).toBe(false);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('boom');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'You are not a manager of this community',
+      );
     });
 
     it('should keep loading while the request is pending', async () => {
@@ -363,7 +375,13 @@ describe('SimulationStartPanel', () => {
 
     it('should surface an error and not emit launched on failure', () => {
       simulationServiceSpy.startSimulation.mockReturnValue(
-        throwError(() => new ApiResponse('nope')),
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 422,
+              error: { data: 'The selected key has no consumers', error_code: 2106 },
+            }),
+        ),
       );
       const launched = vi.fn();
       component.launched.subscribe(launched);
@@ -372,7 +390,7 @@ describe('SimulationStartPanel', () => {
       component.submit();
 
       expect(component.submitting()).toBe(false);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('nope');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('The selected key has no consumers');
       expect(launched).not.toHaveBeenCalled();
     });
   });

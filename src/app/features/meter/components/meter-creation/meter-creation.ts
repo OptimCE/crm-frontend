@@ -51,7 +51,7 @@ import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
 import { Button } from 'primeng/button';
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { Stepper } from 'primeng/stepper';
 import { StepList } from 'primeng/stepper';
 import { Step } from 'primeng/stepper';
@@ -197,7 +197,7 @@ export class MeterCreation implements OnInit {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
 
@@ -567,8 +567,7 @@ export class MeterCreation implements OnInit {
           }
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

@@ -6,6 +6,7 @@ import { Button } from 'primeng/button';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -147,7 +148,7 @@ export class MembersList {
         this.loading.set(false);
       },
       error: (error) => {
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
         this.loading.set(false);
       },
     });
@@ -224,6 +225,9 @@ export class MembersList {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('MEMBER.LIST.ADD_MEMBER_HEADER') as string,
     });
     if (this.ref) {
@@ -259,6 +263,8 @@ export class MembersList {
       closable: true,
       closeOnEscape: true,
       width: '700px',
+      breakpoints: { '768px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('MEMBER.LIST.ADD_METER_HEADER') as string,
       data: {
         holder_id: member_id,
@@ -323,6 +329,9 @@ export class MembersList {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('MEMBER.LIST.PENDING_INVITATION_HEADER') as string,
     });
   }

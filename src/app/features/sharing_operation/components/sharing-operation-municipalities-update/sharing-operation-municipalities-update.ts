@@ -7,6 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ErrorHandlerComponent } from '../../../../shared/components/error.handler/error.handler.component';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MunicipalityService } from '../../../../shared/services/municipality.service';
 import { MunicipalityPartialDTO } from '../../../../shared/dtos/municipality.dtos';
@@ -118,7 +119,7 @@ export class SharingOperationMunicipalitiesUpdate implements OnInit {
         },
         error: (error) => {
           this.submitting.set(false);
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

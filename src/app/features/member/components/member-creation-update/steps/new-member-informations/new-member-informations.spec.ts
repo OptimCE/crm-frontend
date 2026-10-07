@@ -1,12 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
 import { vi } from 'vitest';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 import { NewMemberInformations } from './new-member-informations';
 import { MemberType } from '../../../../../../shared/types/member.types';
+import { numRegistreBeValidator } from '../../num_registre_nat_be.validator';
+import de from '../../../../../../../assets/i18n/de.json';
+import en from '../../../../../../../assets/i18n/en.json';
+import fr from '../../../../../../../assets/i18n/fr.json';
+import nl from '../../../../../../../assets/i18n/nl.json';
 
 describe('NewMemberInformations', () => {
   let component: NewMemberInformations;
@@ -244,5 +249,79 @@ describe('NewMemberInformations', () => {
       expect(form.get('email_manager')).toBeDefined();
       expect(form.get('phone_manager')).toBeDefined();
     });
+  });
+
+  // --- invalid national register number message, with the real bundles ---
+
+  describe('invalid national register number message', () => {
+    // BUG: fr, nl and de had copied the bank step's "the IBAN number is invalid",
+    // so a mistyped national register number was reported as a wrong IBAN.
+    // Cast: the PRIMENG block carries a number (`firstDayOfWeek`), which the
+    // strict TranslationObject type does not admit. The strings are what matter.
+    const bundles = { fr, nl, de, en } as unknown as Record<string, TranslationObject>;
+
+    /** Nine digits, as the old placeholder showed: two short of a national register number. */
+    const MISTYPED = '123456789';
+
+    function buildFormWithMistypedNrns(): FormGroup {
+      const nrnRules = [Validators.required, numRegistreBeValidator()];
+      return new FormGroup({
+        id: new FormControl(MISTYPED, nrnRules),
+        name: new FormControl('Jean'),
+        surname: new FormControl('Dupont'),
+        email: new FormControl('jean@example.com'),
+        phone: new FormControl('0498765432'),
+        socialRate: new FormControl(false),
+        NRN_manager: new FormControl(MISTYPED, nrnRules),
+        name_manager: new FormControl('Marie'),
+        surname_manager: new FormControl('Dupont'),
+        email_manager: new FormControl('marie@example.com'),
+        phone_manager: new FormControl('0498123456'),
+      });
+    }
+
+    /** The message shown beside the input whose id is `inputId`. */
+    function fieldMessage(root: HTMLElement, inputId: string): string {
+      return (
+        root
+          .querySelector(`#${inputId}`)
+          ?.parentElement?.querySelector('[data-testid="error-handler__message--error"]')
+          ?.textContent?.trim() ?? ''
+      );
+    }
+
+    it.each(Object.keys(bundles))(
+      'names the national register number, not an IBAN, in %s',
+      (lang) => {
+        const translate = TestBed.inject(TranslateService);
+        translate.setTranslation(lang, bundles[lang]);
+        translate.use(lang);
+        createComponent(buildFormWithMistypedNrns(), MemberType.INDIVIDUAL, true);
+        const root = fixture.nativeElement as HTMLElement;
+
+        root.querySelector('form')?.dispatchEvent(new Event('submit'));
+        fixture.detectChanges();
+
+        const message = translate.instant(
+          'MEMBER.ADD.INFORMATIONS.ERROR.SOCIAL_SECURITY_NUMBER',
+        ) as string;
+        const summary = Array.from(
+          root.querySelectorAll('[data-testid="summary-error__list"] li'),
+          (item) => item.textContent?.trim(),
+        );
+        // Beside the member's and the guardian's number, and once each in the summary.
+        expect([fieldMessage(root, 'nrn'), fieldMessage(root, 'NRN_manager'), ...summary]).toEqual([
+          message,
+          message,
+          message,
+          message,
+        ]);
+        // It names the field as the summary labels it, so a rewording stays green
+        // and a copied IBAN message does not.
+        const field = translate.instant('MEMBER.ADD.INFORMATIONS.FORM_ERROR.ID') as string;
+        expect(message.toLowerCase()).toContain(field.toLowerCase());
+        expect(message).not.toMatch(/IBAN/i);
+      },
+    );
   });
 });

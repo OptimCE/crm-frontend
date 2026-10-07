@@ -1,4 +1,8 @@
+import { registerLocaleData } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import localeDe from '@angular/common/locales/de';
+import localeFr from '@angular/common/locales/fr';
+import localeNl from '@angular/common/locales/nl';
 
 import { ApiResponse } from '../../core/dtos/api.response';
 import {
@@ -24,6 +28,7 @@ import {
   extractApiErrorCode,
   extractApiErrorMessage,
   formatApiDate,
+  formatApiDay,
   formatBytes,
   isOverdue,
   parseApiDate,
@@ -112,6 +117,59 @@ describe('dates', () => {
     expect(isOverdue('2026-09-20', today)).toBe(true);
     expect(isOverdue('2026-09-21', today)).toBe(false); // due today is not yet overdue
     expect(isOverdue('2026-09-22', today)).toBe(false);
+  });
+});
+
+describe('formatApiDay', () => {
+  // The app registers these in LocaleService, which a pure spec never builds;
+  // without them Angular throws NG0701 for every language but English.
+  beforeAll(() => {
+    registerLocaleData(localeFr, 'fr');
+    registerLocaleData(localeNl, 'nl');
+    registerLocaleData(localeDe, 'de');
+  });
+
+  /**
+   * A timestamp in the API's own shape (microseconds, then `Z`) for a LOCAL
+   * wall-clock time, so it falls on the same day whatever zone the suite runs in.
+   */
+  function apiTimestamp(month: number, day: number, hours: number, minutes: number): string {
+    return new Date(2026, month - 1, day, hours, minutes, 17, 519)
+      .toISOString()
+      .replace(/Z$/, '196Z');
+  }
+
+  it('writes a timestamp as its day, in each language', () => {
+    // BUG: the member read "Transmis le 2026-10-02T16:29:17.519196Z" — the
+    // timestamp went through formatApiDate, which hands it back untouched.
+    const filedAt = apiTimestamp(10, 2, 18, 29);
+
+    expect(formatApiDay(filedAt, 'fr')).toBe('2 oct. 2026');
+    expect(formatApiDay(filedAt, 'en')).toBe('Oct 2, 2026');
+    expect(formatApiDay(filedAt, 'nl')).toBe('2 okt 2026');
+    expect(formatApiDay(filedAt, 'de')).toBe('02.10.2026');
+  });
+
+  it('counts the day where the reader is, not in UTC', () => {
+    // Either side of local midnight. East of UTC (Brussels) the first is still
+    // the 1st in UTC, west of it the second is already the 3rd: reading the day
+    // off the string would be wrong by one somewhere.
+    expect(formatApiDay(apiTimestamp(10, 2, 0, 30), 'fr')).toBe('2 oct. 2026');
+    expect(formatApiDay(apiTimestamp(10, 2, 23, 30), 'fr')).toBe('2 oct. 2026');
+  });
+
+  it('leaves a bare date exactly as formatApiDate writes it, in every language', () => {
+    // A calendar day has no instant to convert, so it is never parsed at all.
+    for (const lang of ['fr', 'en', 'nl', 'de']) {
+      expect(formatApiDay('2026-09-21', lang), lang).toBe('21/09/2026');
+    }
+  });
+
+  it('renders nothing for no value, and an unparseable value as it came', () => {
+    expect(formatApiDay(null, 'fr')).toBe('');
+    expect(formatApiDay(undefined, 'fr')).toBe('');
+    expect(formatApiDay('', 'fr')).toBe('');
+    expect(formatApiDay('not-a-date', 'fr')).toBe('not-a-date');
   });
 });
 

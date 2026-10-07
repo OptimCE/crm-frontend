@@ -12,6 +12,7 @@ import { Paginator, PaginatorState } from 'primeng/paginator';
 
 import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { NotificationItem } from '../../components/notification-item/notification-item';
 import { NotificationDTO } from '../../dtos/notification.dto';
 import { routeFor } from '../../services/notification-type.registry';
@@ -113,7 +114,7 @@ export class NotificationsPage implements OnInit {
       error: (error: unknown) => {
         this.failed.set(true);
         this.loading.set(false);
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
       },
     });
   }

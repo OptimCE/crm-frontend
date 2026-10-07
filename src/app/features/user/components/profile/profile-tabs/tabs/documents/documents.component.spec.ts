@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -215,11 +216,15 @@ describe('DocumentsComponent', () => {
       expect(component.documentsPartialList()).toEqual([]);
     });
 
-    it('should call errorHandler.handleError on observable error', () => {
-      const error = new Error('network fail');
+    it("shows the server's message when the documents cannot be loaded", () => {
+      const message = 'Your documents could not be retrieved, please try again later';
+      const error = new HttpErrorResponse({
+        status: 503,
+        error: { data: message, error_code: 52001 },
+      });
       meServiceSpy.getDocuments.mockReturnValue(throwError(() => error));
       component.loadDocuments();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 
@@ -461,8 +466,12 @@ describe('DocumentsComponent', () => {
       expect(fetchSpy).toHaveBeenCalledWith('http://minio/download.pdf');
     });
 
-    it('should call errorHandler.handleError with data when error is ApiResponse', () => {
-      const apiError = new ApiResponse('Document not found');
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the document cannot be downloaded", () => {
+      const apiError = new HttpErrorResponse({
+        status: 404,
+        error: { data: 'Document not found', error_code: 52002 },
+      });
       meServiceSpy.getDocumentById.mockReturnValue(throwError(() => apiError));
       component.onDownloadDocument(doc);
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Document not found');

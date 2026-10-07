@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -146,11 +147,24 @@ describe('PendingManagerInvitation', () => {
       expect(component.loadingGestionnaire()).toBe(false);
     });
 
-    it('should call errorHandler.handleError on observable error', () => {
-      const error = new Error('network fail');
-      invitationServiceSpy.getManagerPendingInvitation.mockReturnValue(throwError(() => error));
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("shows the server's message when the pending manager invitations cannot be loaded", () => {
+      invitationServiceSpy.getManagerPendingInvitation.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 403,
+              error: {
+                data: 'Only an administrator can view pending manager invitations',
+                error_code: 50004,
+              },
+            }),
+        ),
+      );
       component.loadPendingGestionnaireInvitation();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'Only an administrator can view pending manager invitations',
+      );
     });
 
     it('should set loadingGestionnaire to false on error', () => {
@@ -221,11 +235,18 @@ describe('PendingManagerInvitation', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
     });
 
-    it('should call errorHandler.handleError on observable error', () => {
-      const error = new Error('cancel failed');
-      invitationServiceSpy.cancelManagerInvitation.mockReturnValue(throwError(() => error));
+    it("shows the server's message when the invitation cannot be cancelled", () => {
+      invitationServiceSpy.cancelManagerInvitation.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 404,
+              error: { data: 'This invitation no longer exists', error_code: 51004 },
+            }),
+        ),
+      );
       component.cancelInvitation(invitation);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('This invitation no longer exists');
     });
   });
 });

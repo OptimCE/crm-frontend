@@ -150,6 +150,8 @@ export class KeyCreationStepByStep implements OnInit {
       closeOnEscape: true,
       header: this.translate.instant('KEY.IMPORT_FROM_SHARING_OPERATION.HEADER') as string,
       width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       data: this.fixedIdSharing ? { idSharing: this.fixedIdSharing } : {},
     });
 

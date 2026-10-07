@@ -60,7 +60,7 @@
           [(ngModel)]="periodStart"
           dateFormat="dd/mm/yy"
           appendTo="body"
-          styleClass="w-full"
+          [fluid]="true"
           [showIcon]="true"
           data-testid="run-generate__datepicker--period-start"
         />
@@ -74,7 +74,7 @@
           [(ngModel)]="periodEnd"
           dateFormat="dd/mm/yy"
           appendTo="body"
-          styleClass="w-full"
+          [fluid]="true"
           [showIcon]="true"
           data-testid="run-generate__datepicker--period-end"
         />

@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
@@ -15,7 +17,7 @@ import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.mes
 import { VALIDATION_TYPE } from '../../../../../core/dtos/notification';
 import { ApiResponse } from '../../../../../core/dtos/api.response';
 import { KeyDTO } from '../../../../../shared/dtos/key.dtos';
-import { GridApi, GridReadyEvent, NewValueParams } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, NewValueParams } from 'ag-grid-community';
 import { KeyTableRow } from '../../../../../shared/types/key.types';
 
 // ── Stubs ──────────────────────────────────────────────────────────
@@ -206,6 +208,44 @@ describe('KeyCreationUpdate', () => {
         expect(component.colDefs().length).toBeGreaterThan(0);
       });
 
+      // The delete columns' headers get cut off, and their cells are icon-only buttons.
+      it.each(['delete1', 'delete'])(
+        'should repeat the %s column header as its tooltip',
+        (field) => {
+          const column = component
+            .colDefs()
+            .find((def): def is ColDef<KeyTableRow> => 'field' in def && def.field === field);
+          expect(column?.headerTooltip).toBeTruthy();
+          expect(column?.headerTooltip).toBe(column?.headerName);
+        },
+      );
+
+      // BUG: the help columns also set headerTooltip, and TooltipModule is registered here, so
+      // hovering their header showed the help text twice: AG Grid's tooltip on top of
+      // HeaderWithHelper's title. Unlike the plain delete headers, they need no AG Grid tooltip.
+      it("should leave the help columns' text to HeaderWithHelper alone", () => {
+        const helpColumns = component
+          .colDefs()
+          .flatMap((def) => ('children' in def ? def.children : [def]))
+          .filter((col): col is ColDef<KeyTableRow> => !('children' in col))
+          .filter((col) => col.headerComponent === 'headerHelperRenderer');
+        expect(
+          helpColumns.map((col) => [
+            col.field,
+            (col.headerComponentParams as { tooltip: string }).tooltip,
+          ]),
+        ).toEqual([
+          ['number', 'KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
+          ['va_percentage', 'KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
+          ['vp_percentage', 'KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
+        ]);
+        expect(
+          helpColumns
+            .filter((col) => 'headerTooltip' in col || 'headerTooltipValueGetter' in col)
+            .map((col) => col.field),
+        ).toEqual([]);
+      });
+
       it('should reset keyInput to null', () => {
         expect(component.keyInput).toBeNull();
       });
@@ -266,14 +306,20 @@ describe('KeyCreationUpdate', () => {
         expect(errorHandlerSpy.handleError).toHaveBeenCalled();
       });
 
-      it('should call errorHandler with data on ApiResponse error', async () => {
-        const apiError = new ApiResponse('Some error');
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      it("shows the server's message when the key cannot be loaded", async () => {
+        const apiError = new HttpErrorResponse({
+          status: 404,
+          error: { data: 'This allocation key does not exist', error_code: 31001 },
+        });
         keyServiceSpy.getKey.mockReturnValue(throwError(() => apiError));
         queryParamSubject.next(convertToParamMap({ id: '1' }));
 
         await createComponent();
 
-        expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Some error');
+        expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+          'This allocation key does not exist',
+        );
       });
 
       it('should call errorHandler with null on non-ApiResponse error', async () => {
@@ -1226,17 +1272,22 @@ describe('KeyCreationUpdate', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
 
-    it('should call errorHandler with data on add ApiResponse error', () => {
+    it("shows the server's message when the key cannot be added", () => {
       component.key = buildKey();
       component.keyInput = null;
       component.formGroup.get('name')?.setValue('New Key');
       component.formGroup.get('description')?.setValue('New Desc');
-      const apiError = new ApiResponse('Add failed');
+      const apiError = new HttpErrorResponse({
+        status: 409,
+        error: { data: 'A key with this name already exists', error_code: 31002 },
+      });
       keyServiceSpy.addKey.mockReturnValue(throwError(() => apiError));
 
       component.onSubmit();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Add failed');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'A key with this name already exists',
+      );
     });
 
     it('should call errorHandler with null on add non-ApiResponse error', () => {
@@ -1249,6 +1300,29 @@ describe('KeyCreationUpdate', () => {
       component.onSubmit();
 
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
+    });
+
+    it("shows the server's message when the key cannot be updated", () => {
+      const key = buildKey();
+      component.key = key;
+      component.keyInput = structuredClone(key);
+      component.formGroup.get('name')?.setValue('Updated Name');
+      component.formGroup.get('description')?.setValue('Test Description');
+      const apiError = new HttpErrorResponse({
+        status: 409,
+        error: {
+          data: 'This key is used by a sharing operation and can no longer be changed',
+          error_code: 31004,
+        },
+      });
+      keyServiceSpy.updateKey.mockReturnValue(throwError(() => apiError));
+
+      component.onSubmit();
+
+      expect(keyServiceSpy.updateKey).toHaveBeenCalled();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+        'This key is used by a sharing operation and can no longer be changed',
+      );
     });
   });
 
@@ -1493,6 +1567,43 @@ describe('KeyCreationUpdate', () => {
       >[0];
       component.cellStyleNumber(params);
       expect(KeyCreationUpdate.lastNumberCellStyleNumber).toBe(2);
+    });
+  });
+
+  // ── 15. Grid inputs ──────────────────────────────────────────────
+
+  describe('grid inputs', () => {
+    // ag-grid-angular re-applies every input that receives a new object. `[context]="getContext()"`
+    // built one on each pass, so every change detection re-applied the grid's context.
+    it('hands the grid the same values on every change detection pass', async () => {
+      fixture = TestBed.createComponent(KeyCreationUpdate);
+      component = fixture.componentInstance;
+      fixture.detectChanges(); // runs ngOnInit: with no id and no state, the page loads at once
+      await fixture.whenStable();
+      // The app runs zone.js, so every event, timer or response re-checks the whole page. This
+      // TestBed is zoneless, and there `fixture.detectChanges()` skips views that are not dirty,
+      // so it would never re-read the bindings. The view's own detectChanges() checks them all.
+      fixture.changeDetectorRef.detectChanges();
+
+      const grid = fixture.debugElement.query(By.css('[data-testid="key-update__grid--data"]'));
+      // The grid is stubbed out, so its tag is an unknown element: `properties` lists every binding.
+      const firstPass: Record<string, unknown> = { ...grid.properties };
+      expect(Object.keys(firstPass)).toEqual(
+        expect.arrayContaining(['rowData', 'columnDefs', 'defaultColDef', 'components']),
+      );
+
+      fixture.changeDetectorRef.detectChanges();
+
+      const secondPass: Record<string, unknown> = grid.properties;
+      for (const [name, value] of Object.entries(firstPass)) {
+        expect(secondPass[name], name).toBe(value);
+      }
+    });
+
+    // `debug: true` makes AG Grid console.log its internals, in the production build too.
+    it('leaves AG Grid debug logging off', async () => {
+      await createComponent();
+      expect(component.gridOptions.debug).toBeFalsy();
     });
   });
 });

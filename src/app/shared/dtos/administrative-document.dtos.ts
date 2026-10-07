@@ -8,8 +8,9 @@
  * Two date conventions coexist and must not be mixed up:
  * - `*_date` fields (due_date, submission_date, …) are bare calendar dates
  *   `YYYY-MM-DD`. Format them with `formatApiDate`, never the `| date` pipe.
- * - `*_at` fields (created_at, occurred_at, …) are ISO datetimes and may go
- *   through `| date`.
+ * - `*_at` fields (created_at, occurred_at, …) are ISO datetimes: `| localeDate`,
+ *   or `formatApiDay` for the day alone. Never `formatApiDate`, which hands
+ *   them back raw.
  */
 
 // ---------------------------------------------------------------------------

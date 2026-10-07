@@ -94,7 +94,6 @@
             <div class="flex flex-wrap gap-2">
               @if (key.iterations.length < 3) {
                 <p-button
-                  pRipple
                   [outlined]="true"
                   icon="pi pi-plus"
                   label="{{ 'KEY.CREATE.FORM.KEY_ADD_ITERATION_BUTTON_LABEL' | translate }}"
@@ -103,7 +102,6 @@
                   data-testid="key-update__btn--add-iteration"
                 ></p-button>
                 <p-button
-                  pRipple
                   [outlined]="true"
                   icon="pi pi-percentage"
                   label="{{ 'KEY.CREATE.FORM.KEY_ADD_PRORATA_ITERATION_BUTTON_LABEL' | translate }}"
@@ -115,7 +113,6 @@
 
               @if (key.iterations.length > 0) {
                 <p-button
-                  pRipple
                   [outlined]="true"
                   icon="pi pi-user-plus"
                   label="{{ 'KEY.CREATE.FORM.KEY_ADD_CONSUMER_BUTTON_LABEL' | translate }}"
@@ -127,7 +124,6 @@
 
               @if (isCreationMode()) {
                 <p-button
-                  pRipple
                   [outlined]="true"
                   icon="pi pi-download"
                   label="{{ 'KEY.IMPORT_FROM_SHARING_OPERATION.BUTTON_LABEL' | translate }}"
@@ -158,7 +154,6 @@
                 [defaultColDef]="defaultColDef"
                 (cellValueChanged)="onCellValueChanged($event)"
                 [components]="frameworkComponents"
-                [context]="getContext()"
                 [gridOptions]="gridOptions"
                 domLayout="autoHeight"
                 id="key_data"
@@ -179,7 +174,6 @@
               }"
             ></app-summary-error>
             <p-button
-              pRipple
               type="submit"
               icon="pi pi-check"
               label="{{ 'KEY.CREATE.FORM.KEY_CREATE_BUTTON_LABEL' | translate }}"

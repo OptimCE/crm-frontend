@@ -7,7 +7,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Skeleton } from 'primeng/skeleton';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { Role } from '../../../../core/dtos/role';
 import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 import { PostListItem } from '../../../../shared/dtos/news.dtos';
@@ -125,6 +125,6 @@ export class NewsBoard implements OnInit {
   protected readonly skeletons = [1, 2, 3];
 
   private handleError(error: unknown): void {
-    this.errorHandler.handleError(error instanceof ApiResponse ? (error.data as string) : null);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

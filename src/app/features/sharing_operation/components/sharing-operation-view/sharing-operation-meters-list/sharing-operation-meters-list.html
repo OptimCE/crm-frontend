@@ -231,7 +231,6 @@
         >
           @if (meter.status === MeterStatus.ACTIVE) {
             <p-button
-              pRipple
               label="{{
                 'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
               }}"
@@ -243,7 +242,6 @@
             />
           } @else {
             <p-button
-              pRipple
               label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
               severity="success"
               (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
@@ -253,7 +251,6 @@
             />
           }
           <p-button
-            pRipple
             label="{{ 'SHARING_OPERATION.VIEW.METER.DELETE_BUTTON_LABEL' | translate }}"
             severity="danger"
             (onClick)="openMeterChangeStatusPopup($event, meter, 2)"
@@ -263,7 +260,6 @@
           />
           @if (isFutureRow(meter)) {
             <p-button
-              pRipple
               label="{{ 'SHARING_OPERATION.VIEW.METER.HARD_DELETE_BUTTON_LABEL' | translate }}"
               severity="danger"
               [outlined]="true"
@@ -351,7 +347,6 @@
           >
             @if (meter.status === MeterStatus.ACTIVE) {
               <p-button
-                pRipple
                 label="{{
                   'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
                 }}"
@@ -363,7 +358,6 @@
               />
             } @else {
               <p-button
-                pRipple
                 label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
                 severity="success"
                 (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
@@ -373,7 +367,6 @@
               />
             }
             <p-button
-              pRipple
               label="{{ 'SHARING_OPERATION.VIEW.METER.DELETE_BUTTON_LABEL' | translate }}"
               severity="danger"
               (onClick)="openMeterChangeStatusPopup($event, meter, 2)"
@@ -383,7 +376,6 @@
             />
             @if (isFutureRow(meter)) {
               <p-button
-                pRipple
                 label="{{ 'SHARING_OPERATION.VIEW.METER.HARD_DELETE_BUTTON_LABEL' | translate }}"
                 severity="danger"
                 [outlined]="true"

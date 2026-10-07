@@ -1,6 +1,15 @@
-import { Component, DestroyRef, ElementRef, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  DoCheck,
+  ElementRef,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { AbstractControl, FormGroup, FormGroupDirective } from '@angular/forms';
-import { merge } from 'rxjs';
+import { merge, Subscription } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ErrorHandlerParams, ErrorSummaryAdded } from '../../types/error.types';
@@ -12,7 +21,7 @@ import { ErrorHandlerParams, ErrorSummaryAdded } from '../../types/error.types';
   templateUrl: './summary-error.handler.component.html',
   styleUrl: './summary-error.handler.component.css',
 })
-export class FormErrorSummaryComponent implements OnInit {
+export class FormErrorSummaryComponent implements OnInit, DoCheck {
   private formGroupDirective = inject(FormGroupDirective);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
@@ -27,21 +36,46 @@ export class FormErrorSummaryComponent implements OnInit {
 
   defaultErrors: ErrorSummaryAdded = {};
 
+  /** The group whose changes refresh the list, and that subscription. */
+  private watchedForm: FormGroup | null = null;
+  private formChanges?: Subscription;
+
   ngOnInit(): void {
     this.loadDefaultErrorMessages();
-    const form = this.formGroupDirective?.control;
-    if (!form) return;
     this.formGroupDirective.ngSubmit.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.hasSubmitted.set(true);
       this.collectErrors();
     });
-    merge(form.valueChanges, form.statusChanges)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        if (this.hasSubmitted() || this.showBeforeSubmit()) {
-          this.collectErrors();
-        }
-      });
+    this.destroyRef.onDestroy(() => this.formChanges?.unsubscribe());
+    this.watchForm();
+  }
+
+  ngDoCheck(): void {
+    this.watchForm();
+  }
+
+  /**
+   * Listen to the group `[formGroup]` holds now.
+   *
+   * The host can hand the directive a new group at any time: the member wizards
+   * rebuild theirs whenever the member type changes. Angular moves the form
+   * controls over to it, but nothing tells this component, which used to keep
+   * listening to the discarded group and only caught up on the next submit.
+   */
+  private watchForm(): void {
+    const form = this.formGroupDirective.control;
+    if (form === this.watchedForm) return;
+    this.formChanges?.unsubscribe();
+    this.watchedForm = form;
+    this.formChanges = form
+      ? merge(form.valueChanges, form.statusChanges).subscribe(() => {
+          if (this.hasSubmitted() || this.showBeforeSubmit()) {
+            this.collectErrors();
+          }
+        })
+      : undefined;
+    // List the new group's errors now, not at its first change.
+    this.collectErrors();
   }
 
   private loadDefaultErrorMessages(): void {
@@ -84,7 +118,10 @@ export class FormErrorSummaryComponent implements OnInit {
     }
 
     const errors: string[] = [];
-    this.collectFrom(this.formGroupDirective.control, errors);
+    const form = this.formGroupDirective.control;
+    if (form) {
+      this.collectFrom(form, errors);
+    }
     this.errorMessages.set(errors);
   }
 

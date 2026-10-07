@@ -1,4 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -241,13 +242,18 @@ describe('RepresentationsComponent', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(null);
     });
 
-    it('should call errorHandler.handleError on error', () => {
-      const error = new Error('Network error');
+    it("shows the server's message when the represented members cannot be loaded", () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'The members you represent could not be retrieved, please try again later';
+      const error = new HttpErrorResponse({
+        status: 503,
+        error: { data: message, error_code: 53001 },
+      });
       meServiceSpy.getMembers.mockReturnValue(throwError(() => error));
 
       component.loadMembers();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 

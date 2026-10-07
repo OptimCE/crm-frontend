@@ -5,7 +5,7 @@ import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { PostListItem } from '../../../../shared/dtos/news.dtos';
 import { NewsService } from '../../../../shared/services/news.service';
@@ -87,9 +87,7 @@ export class NewsPost {
         },
         error: (error: unknown) => {
           this.deleting.set(false);
-          this.errorHandler.handleError(
-            error instanceof ApiResponse ? (error.data as string) : null,
-          );
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

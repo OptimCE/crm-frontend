@@ -28,6 +28,7 @@ import { MemberService } from '../../../../shared/services/member.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import {
   MeterDataStatus,
@@ -436,8 +437,8 @@ export class MeterDataUpdate implements OnInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

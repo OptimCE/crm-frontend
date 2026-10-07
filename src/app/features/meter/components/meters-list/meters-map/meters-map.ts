@@ -87,6 +87,8 @@ export class MetersMap {
     const ref = this.dialogService.open(UnlocatedMeters, {
       header: this.translate.instant('MAP.REPAIR.TITLE') as string,
       width: '60rem',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       modal: true,
       dismissableMask: true,
       data: { query: this.query() },

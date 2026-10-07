@@ -1,0 +1,18 @@
+/*
+  Phones: in the full-screen dialog the step list gets about 330 px, but the two
+  nowrap step titles need 423 px in French. `.p-steplist` scrolls on overflow, so
+  the second step slid out of view. Keep only the current step's title, and let
+  it ellipsize rather than push the next step's number out on narrower phones.
+  (The key-creation wizard hides every title at this width; with two steps the
+  current one still fits and tells the user where they are.)
+*/
+@media (max-width: 640px) {
+  :host ::ng-deep .p-step:not(.p-step-active) .p-step-title {
+    display: none;
+  }
+
+  :host ::ng-deep .p-step,
+  :host ::ng-deep .p-step-header {
+    min-width: 0;
+  }
+}

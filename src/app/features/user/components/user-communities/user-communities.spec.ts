@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -58,6 +60,7 @@ describe('UserCommunities', () => {
 
   let communityServiceSpy: {
     getMyCommunities: ReturnType<typeof vi.fn>;
+    leave: ReturnType<typeof vi.fn>;
   };
 
   let userContextServiceSpy: {
@@ -83,6 +86,7 @@ describe('UserCommunities', () => {
   beforeEach(async () => {
     communityServiceSpy = {
       getMyCommunities: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
+      leave: vi.fn(),
     };
 
     userContextServiceSpy = {
@@ -499,6 +503,44 @@ describe('UserCommunities', () => {
 
       expect(keycloakSpy.updateToken).not.toHaveBeenCalled();
       expect(communityServiceSpy.getMyCommunities).not.toHaveBeenCalled();
+    });
+  });
+
+  // ── leaveCommunity ─────────────────────────────────────────────
+
+  describe('leaveCommunity', () => {
+    it("shows the server's message when the community cannot be left", () => {
+      // ConfirmationService and MessageService are the component's own providers.
+      const confirmationService = fixture.debugElement.injector.get(ConfirmationService);
+      vi.spyOn(confirmationService, 'confirm').mockImplementation((confirmation) => {
+        (confirmation.accept as () => void)();
+        return confirmationService;
+      });
+      const addSpy = vi
+        .spyOn(fixture.debugElement.injector.get(MessageService), 'add')
+        .mockImplementation(() => undefined);
+      communityServiceSpy.leave.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 409,
+              error: {
+                data: 'You are the last administrator of this community',
+                error_code: 50021,
+              },
+            }),
+        ),
+      );
+
+      component.leaveCommunity(new Event('click'), buildCommunity({ id: 7 }));
+
+      expect(communityServiceSpy.leave).toHaveBeenCalledWith(7);
+      expect(addSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          severity: 'error',
+          detail: 'You are the last administrator of this community',
+        }),
+      );
     });
   });
 

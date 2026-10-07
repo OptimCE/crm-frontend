@@ -4,7 +4,7 @@ import { PrimeTemplate } from 'primeng/api';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ApiResponse } from '../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../shared/utils/api-error.utils';
 import {
   UserMemberInvitationDTO,
   UserMemberInvitationQuery,
@@ -37,7 +37,7 @@ export class PendingMemberInvitation {
         this.loadingMembers.set(false);
       },
       error: (error) => {
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
         this.loadingMembers.set(false);
       },
     });
@@ -73,8 +73,7 @@ export class PendingMemberInvitation {
         }
       },
       error: (error: unknown) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
       },
     });
   }

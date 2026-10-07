@@ -26,14 +26,22 @@
       </p-step-panel>
       <p-step-panel [value]="1">
         <ng-template #content let-activateCallback="activateCallback">
-          <app-new-member-informations
-            (formSubmitted)="submitForm2(activateCallback)"
-            (backClicked)="activateCallback(0)"
-            (gestionnaireChangeEvent)="gestionnaireChange($event)"
-            [form]="formData"
-            [gestionnaire]="gestionnaire()"
-            [typeClient]="typeClient()"
-          ></app-new-member-informations>
+          <!--
+            PrimeNG creates every panel's content up front, but formData only
+            exists once a member type is chosen. Created earlier, this step bound
+            [formGroup] to undefined, and its error summary never subscribed to
+            the form.
+          -->
+          @if (typeClient() !== -1) {
+            <app-new-member-informations
+              (formSubmitted)="submitForm2(activateCallback)"
+              (backClicked)="activateCallback(0)"
+              (gestionnaireChangeEvent)="gestionnaireChange($event)"
+              [form]="formData"
+              [gestionnaire]="gestionnaire()"
+              [typeClient]="typeClient()"
+            ></app-new-member-informations>
+          }
         </ng-template>
       </p-step-panel>
       <p-step-panel [value]="2">

@@ -115,7 +115,7 @@
             <table class="w-full text-xs">
               <thead class="bg-surface-100">
                 <tr>
-                  @for (column of table.columns; track column) {
+                  @for (column of table.visibleColumns; track column) {
                     <th class="text-left font-medium px-2 py-1 whitespace-nowrap">
                       {{ labelKey(column) | translate }}
                     </th>
@@ -126,7 +126,7 @@
               <tbody>
                 @for (row of table.rows; track $index) {
                   <tr class="border-t border-surface-200">
-                    @for (column of table.columns; track column) {
+                    @for (column of table.visibleColumns; track column) {
                       <td class="px-1 py-1">
                         <input
                           pInputText

@@ -209,6 +209,9 @@ export class InvitationMember {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       data: {
         invitationID: invitation.id,
       },

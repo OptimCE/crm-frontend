@@ -12,6 +12,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
 import { CommunityUsersQueryDTO, UsersCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { Role } from '../../../../core/dtos/role';
@@ -168,7 +169,7 @@ export class UsersCommunityList {
         }
       },
       error: (error) => {
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
       },
     });
     this.dialogVisible.set(false);
@@ -189,6 +190,9 @@ export class UsersCommunityList {
       modal: true,
       closable: true,
       closeOnEscape: true,
+      width: '900px',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translateService.instant('COMMUNITY_PENDING_INVITATION.TITLE') as string,
     });
   }
@@ -210,7 +214,7 @@ export class UsersCommunityList {
               }
             },
             error: (error) => {
-              this.errorHandler.handleError(error);
+              this.errorHandler.handleError(extractApiErrorMessage(error));
             },
           });
         }

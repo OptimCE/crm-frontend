@@ -14,14 +14,14 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import { TranslatePipe } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ibanValidator } from '../../../../shared/validators/iban.validator';
-import { numRegistreBeValidator } from './num_registre_nat_be.validator';
+import { normalizeNumRegistreBe, numRegistreBeValidator } from './num_registre_nat_be.validator';
 import { AddressDTO } from '../../../../shared/dtos/address.dtos';
 import { Step, StepList, StepPanel, StepPanels, Stepper } from 'primeng/stepper';
 import { NewMemberType } from './steps/new-member-type/new-member-type';
 import { NewMemberInformations } from './steps/new-member-informations/new-member-informations';
 import { NewMemberAddress } from './steps/new-member-address/new-member-address';
 import { NewMemberBankingInfo } from './steps/new-member-banking-info/new-member-banking-info';
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { AddressPicked } from '../../../../shared/components/address-autocomplete/address-autocomplete';
 import {
   prefixedAddressNames,
@@ -121,6 +121,7 @@ export class MemberCreationUpdate implements OnInit {
   private ref = inject(DynamicDialogRef);
   private errorHandler = inject(ErrorMessageHandler);
   readonly typeClient = signal<MemberType | -1>(-1);
+  // Built once a member type is chosen. Until then the template keeps step 1 empty.
   formData!: FormGroup;
   addressForm!: FormGroup;
   ibanForm!: FormGroup;
@@ -305,7 +306,7 @@ export class MemberCreationUpdate implements OnInit {
     let manager: CreateManagerDTO | undefined = undefined;
     if (this.gestionnaire()) {
       manager = {
-        NRN: formValue.NRN_manager ?? '',
+        NRN: normalizeNumRegistreBe(formValue.NRN_manager ?? ''),
         name: formValue.name_manager ?? '',
         surname: formValue.surname_manager ?? '',
         email: formValue.email_manager ?? '',
@@ -325,7 +326,8 @@ export class MemberCreationUpdate implements OnInit {
     const isCompany = typeClient === MemberType.COMPANY;
 
     const memberToAdd: CreateMemberDTO = {
-      NRN: formValue.id,
+      // A company's `id` is its company number, not a national register number.
+      NRN: isCompany ? formValue.id : normalizeNumRegistreBe(formValue.id),
       billing_address: billingAddress,
       email: formValue.email ?? '',
       first_name: isCompany ? '' : formValue.name,
@@ -361,8 +363,7 @@ export class MemberCreationUpdate implements OnInit {
           }
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
     } else {
@@ -375,8 +376,7 @@ export class MemberCreationUpdate implements OnInit {
           }
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
     }

@@ -1,13 +1,12 @@
 <p-button
-  pRipple
   type="button"
   (click)="onClick($event)"
-  label="{{ label() }}"
   icon="pi pi-trash"
+  [ariaLabel]="label() ?? undefined"
+  [pTooltip]="label() ?? undefined"
+  tooltipPosition="top"
   [outlined]="true"
   severity="danger"
   size="small"
-  class="flex h-full"
-  styleClass="w-full text-sm!"
   data-testid="btn-renderer__btn--delete"
 ></p-button>

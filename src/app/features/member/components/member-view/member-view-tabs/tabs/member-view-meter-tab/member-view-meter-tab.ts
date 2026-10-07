@@ -19,6 +19,7 @@ import { MeterCreation } from '../../../../../../meter/components/meter-creation
 import { VALIDATION_TYPE } from '../../../../../../../core/dtos/notification';
 import { AddressPipe } from '../../../../../../../shared/pipes/address/address-pipe';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 
@@ -161,7 +162,7 @@ export class MemberViewMeterTab implements OnInit {
           }
         },
         error: (error) => {
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }
@@ -223,6 +224,8 @@ export class MemberViewMeterTab implements OnInit {
       closable: true,
       closeOnEscape: true,
       width: '700px',
+      breakpoints: { '768px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('MEMBER.VIEW.METERS.ADD_A_METER_HEADER') as string,
       data: {
         holder_id: this.id(),

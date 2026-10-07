@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -251,14 +252,19 @@ describe('MembersList', () => {
       expect(component.loading()).toBe(false);
     });
 
-    it('should call errorHandler and stop loading on error', async () => {
-      const error = new Error('fail');
-      memberServiceSpy.getMembersList.mockReturnValue(throwError(() => error));
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    it("should show the server's message and stop loading on error", async () => {
+      const message = 'You are not a member of this community';
+      memberServiceSpy.getMembersList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 403, error: { data: message, error_code: 50002 } }),
+        ),
+      );
 
       await createComponent();
       component.loadMembers();
 
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
       expect(component.loading()).toBe(false);
     });
 
@@ -570,7 +576,12 @@ describe('MembersList', () => {
 
       expect(dialogServiceSpy.open).toHaveBeenCalledWith(
         MemberCreationUpdate,
-        expect.objectContaining({ modal: true }),
+        expect.objectContaining({
+          modal: true,
+          width: '900px',
+          breakpoints: { '1024px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
+        }),
       );
     });
 
@@ -663,6 +674,8 @@ describe('MembersList', () => {
         expect.objectContaining({
           modal: true,
           width: '700px',
+          breakpoints: { '768px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
           data: { holder_id: 10 },
         }),
       );
@@ -719,7 +732,12 @@ describe('MembersList', () => {
 
       expect(dialogServiceSpy.open).toHaveBeenCalledWith(
         MemberPendingInvite,
-        expect.objectContaining({ modal: true }),
+        expect.objectContaining({
+          modal: true,
+          width: '900px',
+          breakpoints: { '1024px': '90vw', '640px': '100vw' },
+          styleClass: 'responsive-dialog',
+        }),
       );
     });
   });

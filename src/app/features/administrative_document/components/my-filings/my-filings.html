@@ -46,7 +46,7 @@
             <p class="text-xs text-surface-500 m-0">
               {{
                 'ADMINISTRATIVE_DOCUMENT.MY_FILINGS.AS_OF'
-                  | translate: { date: formatApiDate(filing.version.created_at) }
+                  | translate: { date: formatApiDay(filing.version.created_at, locale()) }
               }}
             </p>
             @if (filing.dossier.external_ref) {

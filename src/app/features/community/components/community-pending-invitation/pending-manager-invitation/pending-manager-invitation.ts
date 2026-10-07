@@ -3,6 +3,7 @@ import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../shared/utils/api-error.utils';
 import {
   UserManagerInvitationDTO,
   UserManagerInvitationQuery,
@@ -34,7 +35,7 @@ export class PendingManagerInvitation {
         this.loadingGestionnaire.set(false);
       },
       error: (error) => {
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
         this.loadingGestionnaire.set(false);
       },
     });
@@ -65,7 +66,7 @@ export class PendingManagerInvitation {
         }
       },
       error: (error) => {
-        this.errorHandler.handleError(error);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
       },
     });
   }

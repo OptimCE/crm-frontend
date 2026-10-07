@@ -256,6 +256,8 @@ export class MetersList {
       closable: true,
       closeOnEscape: true,
       width: '700px',
+      breakpoints: { '768px': '90vw', '640px': '100vw' },
+      styleClass: 'responsive-dialog',
       header: this.translate.instant('METER.LIST.ADD_METER_HEADER') as string,
     });
     if (this.ref) {

@@ -11,20 +11,34 @@
     [delay] is PrimeNG's own keystroke debounce; the repo uses it rather than
     an RxJS one for every autocomplete.
 
-    [minLength] matters more than it looks: PrimeNG defaults it to 1, so without
-    it the panel opens on the first keystroke, finds the empty list `search()`
-    returns below the threshold, and announces "no address found" about a search
+    (ngModelChange) sits beside [(ngModel)] on purpose: PrimeNG never searches
+    an emptied box, or text too short to search, so the reply still in flight
+    would reopen the panel under it. See `onQueryChange()`.
+
+    [minLength] keeps PrimeNG (default 1) from asking below the threshold, but
+    it counts the raw text while `search()` trims, so "Bd " still asks, and
+    `search()` answers an empty list without asking the register. Hence
+    [showEmptyMessage]="searched()", which must stay ABOVE [suggestions]:
+    Angular sets inputs in template order, and PrimeNG reads it inside its
+    suggestions setter. Without it, the panel opens on that empty list and
+    announces "no address found" about a search
     that was never made. [emptyMessage] is bound because PrimeNG otherwise falls
     back to its own config translation, which is the hardcoded English
     "No results found".
+
+    [fluid] and not styleClass="w-full": PrimeNG puts styleClass on the
+    inline-flex host, so the host filled the field while the input inside it
+    kept its natural width (about 207 px).
   -->
   <p-autoComplete
     [inputId]="testId()"
     [(ngModel)]="query"
     [ngModelOptions]="{ standalone: true }"
+    [showEmptyMessage]="searched()"
     [suggestions]="suggestions()"
     (completeMethod)="search($event)"
     (onSelect)="select($event.value)"
+    (ngModelChange)="onQueryChange($event)"
     [forceSelection]="false"
     [multiple]="false"
     [delay]="250"
@@ -32,11 +46,12 @@
     [disabled]="disabled()"
     dataKey="id"
     optionLabel="label"
-    styleClass="w-full"
+    [fluid]="true"
     appendTo="body"
     [placeholder]="placeholderKey() | translate"
     [attr.data-testid]="testId()"
     [emptyMessage]="'ADDRESS_LOOKUP.NO_RESULTS' | translate"
+    panelStyleClass="address-suggestions"
   >
     <ng-template let-suggestion #item>
       <div class="flex flex-col">

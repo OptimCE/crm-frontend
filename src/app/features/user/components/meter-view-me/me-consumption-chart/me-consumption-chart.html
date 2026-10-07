@@ -11,7 +11,7 @@
       id="dateDeb"
       formControlName="dateDeb"
       dateFormat="dd/mm/yy"
-      styleClass="w-full"
+      [fluid]="true"
       data-testid="me-consumption-chart__datepicker--date-start"
     ></p-date-picker>
     <app-error-handler controlName="dateDeb"></app-error-handler>
@@ -22,13 +22,12 @@
       id="dateFin"
       formControlName="dateFin"
       dateFormat="dd/mm/yy"
-      styleClass="w-full"
+      [fluid]="true"
       data-testid="me-consumption-chart__datepicker--date-end"
     ></p-date-picker>
     <app-error-handler controlName="dateFin"></app-error-handler>
   </div>
   <p-button
-    pRipple
     label="{{ 'METER.FULL.SEARCH_BUTTON_LABEL' | translate }}"
     icon="pi pi-search"
     type="submit"

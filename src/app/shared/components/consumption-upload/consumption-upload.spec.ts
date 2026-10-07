@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -143,5 +144,28 @@ describe('ConsumptionUpload', () => {
     serviceSpy.addConsumptionDataToSharing.mockReturnValue(throwError(() => new Error('boom')));
     component.submit();
     expect(errorHandlerSpy.handleError).toHaveBeenCalled();
+  });
+
+  // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+  it("shows the server's message when the upload is rejected", () => {
+    createComponent();
+    selectFile();
+    serviceSpy.addConsumptionDataToSharing.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 422,
+            error: {
+              data: 'Row 4: the EAN 541448000000000001 is not part of this sharing operation',
+              error_code: 54012,
+            },
+          }),
+      ),
+    );
+    component.submit();
+    expect(component.uploading()).toBe(false);
+    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+      'Row 4: the EAN 541448000000000001 is not part of this sharing operation',
+    );
   });
 });

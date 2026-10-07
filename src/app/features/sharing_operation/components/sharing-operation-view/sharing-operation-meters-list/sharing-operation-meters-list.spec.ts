@@ -1,4 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -60,6 +61,7 @@ describe('SharingOperationMetersList', () => {
   let sharingServiceSpy: {
     getSharingOperationMetersList: ReturnType<typeof vi.fn>;
     patchMeterStatus: ReturnType<typeof vi.fn>;
+    deleteMeterFromSharingOperation: ReturnType<typeof vi.fn>;
   };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
   let routerSpy: { navigate: ReturnType<typeof vi.fn> };
@@ -70,6 +72,7 @@ describe('SharingOperationMetersList', () => {
     sharingServiceSpy = {
       getSharingOperationMetersList: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
       patchMeterStatus: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
+      deleteMeterFromSharingOperation: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
     };
     errorHandlerSpy = { handleError: vi.fn() };
     routerSpy = { navigate: vi.fn().mockResolvedValue(true) };
@@ -152,11 +155,15 @@ describe('SharingOperationMetersList', () => {
     });
 
     it('should call errorHandler and stop loading on error', () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'This sharing operation does not exist';
       sharingServiceSpy.getSharingOperationMetersList.mockReturnValue(
-        throwError(() => ({ data: 'server error' })),
+        throwError(
+          () => new HttpErrorResponse({ status: 404, error: { data: message, error_code: 3004 } }),
+        ),
       );
       meterAddedSubject.next();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('server error');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
       expect(component.loading()).toBe(false);
     });
 
@@ -479,11 +486,14 @@ describe('SharingOperationMetersList', () => {
     });
 
     it('should call errorHandler on error', () => {
+      const message = 'The meter cannot be activated before the end of its previous period';
       sharingServiceSpy.patchMeterStatus.mockReturnValue(
-        throwError(() => ({ data: 'patch error' })),
+        throwError(
+          () => new HttpErrorResponse({ status: 422, error: { data: message, error_code: 3021 } }),
+        ),
       );
       component.approveMeter(meter);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('patch error');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 
@@ -509,11 +519,14 @@ describe('SharingOperationMetersList', () => {
     });
 
     it('should call errorHandler on error', () => {
+      const message = 'This meter is not active in the sharing operation';
       sharingServiceSpy.patchMeterStatus.mockReturnValue(
-        throwError(() => ({ data: 'remove error' })),
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3022 } }),
+        ),
       );
       component.removeMeter(meter);
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('remove error');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 
@@ -536,6 +549,41 @@ describe('SharingOperationMetersList', () => {
       component['dateStartMeter'].set(new Date());
       component.putMeterToWaiting(meter);
       expect(component['dateStartMeter']()).toBeNull();
+    });
+
+    it("shows the server's message when the meter cannot be set to waiting", () => {
+      const message = 'This meter is already waiting for approval by the DSO';
+      sharingServiceSpy.patchMeterStatus.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3023 } }),
+        ),
+      );
+      component.putMeterToWaiting(meter);
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    });
+  });
+
+  // ── hardDeleteMeter ───────────────────────────────────────────────
+  describe('hardDeleteMeter', () => {
+    it("shows the server's message when the future meter cannot be deleted", () => {
+      const message = 'Only a meter that has not started yet can be deleted';
+      sharingServiceSpy.deleteMeterFromSharingOperation.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3024 } }),
+        ),
+      );
+      const event = {
+        stopPropagation: vi.fn(),
+        target: document.createElement('button'),
+      } as unknown as Event;
+
+      component.hardDeleteMeter(event, buildMeter());
+      const confirmCall = confirmationServiceSpy.confirm.mock.calls[0][0] as {
+        accept: () => void;
+      };
+      confirmCall.accept();
+
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
   });
 

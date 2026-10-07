@@ -7,7 +7,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import {
   BillingDirection,
@@ -66,9 +66,7 @@ export class InvoiceDetailDialog implements OnInit {
         },
         error: (error: unknown) => {
           this.loading.set(false);
-          this.errorHandler.handleError(
-            error instanceof ApiResponse ? (error.data as string) : null,
-          );
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

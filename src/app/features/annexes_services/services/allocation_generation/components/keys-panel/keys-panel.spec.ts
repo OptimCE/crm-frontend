@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { createGrid, GridApi, IHeaderComp } from 'ag-grid-community';
 import { of, Subject } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -8,6 +9,8 @@ import {
   AllocationKeyDetailDTO,
   AllocationKeyPartialDTO,
 } from '../../../../../../shared/dtos/allocation_generation.dtos';
+import { HeaderWithHelper } from '../../../../../allocation_key/components/key-view/header-with-helper/header-with-helper';
+import { registerAllocationGenerationAgGridModules } from '../../ag-grid-setup';
 import { KeysPanel } from './keys-panel';
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -15,6 +18,28 @@ import { KeysPanel } from './keys-panel';
 /** French thousands separator (narrow no-break space) and percent-sign space. */
 const NNBSP = String.fromCharCode(0x202f);
 const NBSP = String.fromCharCode(0xa0);
+
+/** The colDef properties AG Grid ties to TooltipModule (COLUMN_DEFINITION_MOD_VALIDATIONS). */
+const TOOLTIP_MODULE_PROPS: readonly string[] = [
+  'headerTooltip',
+  'headerTooltipValueGetter',
+  'tooltipField',
+  'tooltipValueGetter',
+  'tooltipComponentSelector',
+];
+
+/** Stands in for HeaderWithHelper, an Angular component that a vanilla grid cannot render. */
+class StubHeader implements IHeaderComp {
+  private readonly gui = document.createElement('span');
+
+  getGui(): HTMLElement {
+    return this.gui;
+  }
+
+  refresh(): boolean {
+    return true;
+  }
+}
 
 function buildKey(overrides: Partial<AllocationKeyPartialDTO> = {}): AllocationKeyPartialDTO {
   return {
@@ -270,6 +295,63 @@ describe('KeysPanel', () => {
       expect(component.defaultColDef.width).toBe(200);
       expect(component.defaultColDef.flex).toBe(1);
       expect(component.defaultColDef.minWidth).toBe(120);
+    });
+  });
+
+  // ── 6. AG Grid modules ─────────────────────────────────────────────
+
+  describe('AG Grid modules', () => {
+    let api: GridApi | undefined;
+
+    afterEach(() => {
+      api?.destroy();
+      api = undefined;
+      vi.restoreAllMocks();
+    });
+
+    // A colDef property whose module is missing does nothing, and AG Grid logs "error #200", in
+    // production too. Spec files share AG Grid's registry (isolate: false), so this cannot see a
+    // module that another spec registered first: allocation_key's specs register Tooltip.
+    it('should need no AG Grid module beyond the ones the feature registers', async () => {
+      await createWith({ detail: buildDetail() });
+      registerAllocationGenerationAgGridModules();
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+      // The grid options of keys-panel.html.
+      api = createGrid(document.createElement('div'), {
+        columnDefs: component
+          .colDefs()
+          .map((def) => (def.headerComponent ? { ...def, headerComponent: StubHeader } : def)),
+        rowData: component.rowData(),
+        defaultColDef: component.defaultColDef,
+        domLayout: 'autoHeight',
+      });
+
+      const missingModules = consoleError.mock.calls
+        .map((args) => args.map(String).join(' '))
+        .filter((message) => message.includes('error #200'));
+      expect(missingModules).toEqual([]);
+    });
+
+    it('should leave the header help to HeaderWithHelper', async () => {
+      await createWith();
+      const help = component
+        .colDefs()
+        .filter((def) => def.headerComponent === HeaderWithHelper)
+        .map((def) => [def.field, (def.headerComponentParams as { tooltip: string }).tooltip]);
+      expect(help).toEqual([
+        ['number', 'KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
+        ['va_percentage', 'KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
+        ['vp_percentage', 'KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
+      ]);
+
+      // BUG: headerTooltip repeated that text, but it needs TooltipModule, which this feature does
+      // not register: the grid logged "error #200", or showed a second tooltip once /keys had
+      // registered the module. The grid above is blind to it after such a leak, so check here.
+      const tooltipProps = component
+        .colDefs()
+        .flatMap((def) => TOOLTIP_MODULE_PROPS.filter((prop) => prop in def));
+      expect(tooltipProps).toEqual([]);
     });
   });
 });

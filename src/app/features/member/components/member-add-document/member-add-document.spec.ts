@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of, throwError } from 'rxjs';
@@ -8,7 +9,6 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MemberAddDocument } from './member-add-document';
 import { DocumentService } from '../../../../shared/services/document.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
-import { ApiResponse } from '../../../../core/dtos/api.response';
 
 describe('MemberAddDocument', () => {
   let component: MemberAddDocument;
@@ -196,18 +196,27 @@ describe('MemberAddDocument', () => {
     expect(errorHandlerSpy.handleError).toHaveBeenCalled();
   });
 
-  it('should call errorHandler with data on ApiResponse error', () => {
+  // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+  it("shows the server's message when the upload is rejected", () => {
     const mockFile = new File(['content'], 'test.pdf', { type: 'application/pdf' });
     component.fileToUpload.set(mockFile);
     component.formGroup.patchValue({ fileToUpload: mockFile });
 
     documentServiceSpy.uploadDocument.mockReturnValue(
-      throwError(() => new ApiResponse('Upload failed')),
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 413,
+            error: { data: 'The file exceeds the maximum size of 10 MB', error_code: 52004 },
+          }),
+      ),
     );
 
     component.uploadDocument();
 
-    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('Upload failed');
+    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(
+      'The file exceeds the maximum size of 10 MB',
+    );
   });
 
   it('should call errorHandler with null on non-ApiResponse error', () => {

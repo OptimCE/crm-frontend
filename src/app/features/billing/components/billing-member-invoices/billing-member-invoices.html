@@ -7,9 +7,9 @@
 }
 
 <div class="mx-auto w-full max-w-3xl" [class.mt-5]="showHeader()">
-  <!-- Filters -->
+  <!-- Filters: two columns at most, since the card is capped at max-w-3xl -->
   <div class="filter-bar rounded-xl p-4 border border-primary-100 mb-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <!-- Status -->
       <div>
         <span class="field-label">{{ 'BILLING.FILTERS.STATUS' | translate }}</span>
@@ -37,7 +37,7 @@
           [showClear]="true"
           dateFormat="dd/mm/yy"
           appendTo="body"
-          styleClass="w-full"
+          [fluid]="true"
           data-testid="my-invoices__datepicker--from"
         />
       </div>
@@ -52,7 +52,7 @@
           [showClear]="true"
           dateFormat="dd/mm/yy"
           appendTo="body"
-          styleClass="w-full"
+          [fluid]="true"
           data-testid="my-invoices__datepicker--to"
         />
       </div>

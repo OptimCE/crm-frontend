@@ -14,6 +14,7 @@ import { TagModule } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { KeyPartialDTO, KeyPartialQuery } from '../../../../shared/dtos/key.dtos';
 import { Pagination } from '../../../../core/dtos/api.response';
 import { KeyService } from '../../../../shared/services/key.service';
@@ -112,11 +113,11 @@ export class SharingOperationAddKey implements OnInit, AfterViewInit {
             }
           },
           error: (error) => {
-            this.errorHandler.handleError(error);
+            this.errorHandler.handleError(extractApiErrorMessage(error));
           },
         });
     } catch (e) {
-      this.errorHandler.handleError(e);
+      this.errorHandler.handleError(extractApiErrorMessage(e));
     }
   }
 
@@ -174,8 +175,8 @@ export class SharingOperationAddKey implements OnInit, AfterViewInit {
             this.errorHandler.handleError();
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

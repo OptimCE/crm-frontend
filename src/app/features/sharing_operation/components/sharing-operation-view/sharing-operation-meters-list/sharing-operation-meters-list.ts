@@ -18,11 +18,11 @@ import { AddressPipe } from '../../../../../shared/pipes/address/address-pipe';
 import { Toast } from 'primeng/toast';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { DatePicker } from 'primeng/datepicker';
-import { Ripple } from 'primeng/ripple';
 import { MeterDataStatus } from '../../../../../shared/types/meter.types';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ErrorMessageHandler } from '../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../shared/utils/api-error.utils';
 import { Router } from '@angular/router';
 import { SharingOperationMeterEventService } from '../sharing-operation.meter.subjet';
 import { InputGroup } from 'primeng/inputgroup';
@@ -44,7 +44,6 @@ import { translatedOptions } from '../../../../../shared/utils/translated-option
     Toast,
     ConfirmPopup,
     DatePicker,
-    Ripple,
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
@@ -150,8 +149,8 @@ export class SharingOperationMetersList implements OnInit {
             this.loading.set(false);
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           this.loading.set(false);
         },
       });
@@ -307,8 +306,8 @@ export class SharingOperationMetersList implements OnInit {
             this.loadMetersSharingOperation();
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
 
@@ -331,8 +330,8 @@ export class SharingOperationMetersList implements OnInit {
             this.loadMetersSharingOperation();
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
 
@@ -355,8 +354,8 @@ export class SharingOperationMetersList implements OnInit {
             this.loadMetersSharingOperation();
           }
         },
-        error: (error: { data?: unknown }) => {
-          this.errorHandler.handleError(error.data ?? null);
+        error: (error: unknown) => {
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
 
@@ -399,8 +398,8 @@ export class SharingOperationMetersList implements OnInit {
                 this.loadMetersSharingOperation();
               }
             },
-            error: (error: { data?: unknown }) => {
-              this.errorHandler.handleError(error.data ?? null);
+            error: (error: unknown) => {
+              this.errorHandler.handleError(extractApiErrorMessage(error));
             },
           });
       },

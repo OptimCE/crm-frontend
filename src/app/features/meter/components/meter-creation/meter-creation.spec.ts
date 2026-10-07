@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -209,6 +210,17 @@ describe('MeterCreation', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
 
+    it("shows the server's message when the members cannot be loaded", () => {
+      const message = 'The members could not be retrieved';
+      memberServiceSpy.getMembersList.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 500, error: { data: message, error_code: 1 } }),
+        ),
+      );
+      component.ngOnInit();
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    });
+
     it('should have injectionStatus disabled by default', () => {
       expect(component.metersForm.get('injectionStatus')?.disabled).toBe(true);
     });
@@ -392,12 +404,17 @@ describe('MeterCreation', () => {
       expect(errorHandlerSpy.handleError).toHaveBeenCalled();
     });
 
-    it('should call errorHandler with data on ApiResponse error', () => {
-      const apiError = new ApiResponse('EAN_ALREADY_EXISTS', 400);
-      meterServiceSpy.addMeter.mockReturnValue(throwError(() => apiError));
+    it("shows the server's message when the meter cannot be created", () => {
+      // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+      const message = 'A meter with this EAN already exists';
+      meterServiceSpy.addMeter.mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 2003 } }),
+        ),
+      );
       fillFormCompletely(component);
       component.onSubmit();
-      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith('EAN_ALREADY_EXISTS');
+      expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
     });
 
     it('should call errorHandler with null on non-ApiResponse error', () => {

@@ -9,7 +9,8 @@ import { Toast } from 'primeng/toast';
 import { Tooltip } from 'primeng/tooltip';
 import { interval, switchMap } from 'rxjs';
 
-import { ApiResponse, Pagination } from '../../../../../../core/dtos/api.response';
+import { Pagination } from '../../../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../../../shared/utils/api-error.utils';
 import { VALIDATION_TYPE } from '../../../../../../core/dtos/notification';
 import { RealtimeService } from '../../../../../../core/services/realtime/realtime.service';
 import { REALTIME_TOPICS } from '../../../../../../core/services/realtime/realtime.types';
@@ -319,7 +320,6 @@ export class SimulationHub implements OnInit {
   }
 
   private handleApiError(error: unknown): void {
-    const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-    this.errorHandler.handleError(errorData);
+    this.errorHandler.handleError(extractApiErrorMessage(error));
   }
 }

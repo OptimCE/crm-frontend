@@ -25,7 +25,7 @@
         formControlName="submission_date"
         dateFormat="dd/mm/yy"
         appendTo="body"
-        styleClass="w-full"
+        [fluid]="true"
         [showIcon]="true"
         data-testid="transition-dialog__date--submission"
       />
@@ -42,7 +42,7 @@
         formControlName="acknowledged_date"
         dateFormat="dd/mm/yy"
         appendTo="body"
-        styleClass="w-full"
+        [fluid]="true"
         [showIcon]="true"
         data-testid="transition-dialog__date--acknowledged"
       />

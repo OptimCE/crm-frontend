@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { TranslateModule } from '@ngx-translate/core';
@@ -145,13 +146,20 @@ describe('SharingOperationMunicipalitiesUpdate', () => {
     });
   });
 
-  it('forwards backend errors to the error handler', () => {
-    const error = new Error('boom');
-    sharingOpServiceSpy.updateMunicipalities.mockReturnValue(throwError(() => error));
+  it("shows the server's message when the municipalities cannot be saved", () => {
+    // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
+    const message = 'One of the selected municipalities does not exist';
+    sharingOpServiceSpy.updateMunicipalities.mockReturnValue(
+      throwError(
+        () => new HttpErrorResponse({ status: 422, error: { data: message, error_code: 3052 } }),
+      ),
+    );
 
     component.onSubmitForm();
 
-    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(error);
+    expect(errorHandlerSpy.handleError).toHaveBeenCalledWith(message);
+    expect(component.submitting()).toBe(false);
+    expect(dialogRefSpy.close).not.toHaveBeenCalled();
   });
 
   it('closes the dialog with false when cancel is clicked', () => {

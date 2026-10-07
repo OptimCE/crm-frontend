@@ -6,7 +6,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { HeaderWithHelper } from './header-with-helper/header-with-helper';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
-import { Ripple } from 'primeng/ripple';
 import { Skeleton } from 'primeng/skeleton';
 import { formatPercent, SlicePipe } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -15,13 +14,13 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { CellClassParams, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { KeyTableRow } from '../../../../shared/types/key.types';
-import { ApiResponse } from '../../../../core/dtos/api.response';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 @Component({
   selector: 'app-key-view',
   standalone: true,
-  imports: [Button, Card, Ripple, Skeleton, SlicePipe, AgGridAngular, TranslatePipe, BackArrow],
+  imports: [Button, Card, Skeleton, SlicePipe, AgGridAngular, TranslatePipe, BackArrow],
   templateUrl: './key-view.html',
   styleUrl: './key-view.css',
 })
@@ -145,8 +144,7 @@ export class KeyView implements OnInit {
         }
       },
       error: (error: unknown) => {
-        const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-        this.errorHandler.handleError(errorData);
+        this.errorHandler.handleError(extractApiErrorMessage(error));
         this.hasError.set(true);
       },
     });
@@ -168,6 +166,8 @@ export class KeyView implements OnInit {
         'VAP_HEADER',
       ])
       .subscribe((translations: Record<string, string>) => {
+        // The help text goes to HeaderWithHelper alone (its title + popover). TooltipModule is
+        // registered here, so a headerTooltip would show the same text again in AG Grid's tooltip.
         this.colDefs.set([
           {
             headerName: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
@@ -178,7 +178,6 @@ export class KeyView implements OnInit {
               label: translations['KEY.TABLE.COLUMNS.ITERATION_NUMBER_LABEL'],
               tooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             },
-            headerTooltip: translations['KEY.TABLE.COLUMNS.ITERATION_TOOLTIP'],
             minWidth: 120,
             suppressSizeToFit: false,
           },
@@ -191,7 +190,6 @@ export class KeyView implements OnInit {
               label: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_LABEL'],
               tooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             },
-            headerTooltip: translations['KEY.TABLE.COLUMNS.VA_PERCENTAGE_TOOLTIP'],
             minWidth: 120,
             suppressSizeToFit: false,
           },
@@ -212,7 +210,6 @@ export class KeyView implements OnInit {
               label: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_LABEL'],
               tooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
             },
-            headerTooltip: translations['KEY.TABLE.COLUMNS.CONSUMER_VAP_TOOLTIP'],
             minWidth: 120,
             suppressSizeToFit: false,
           },
@@ -224,9 +221,10 @@ export class KeyView implements OnInit {
     this.rowData.set(this.formatData());
     this.gridApi = event.api;
 
-    // Ensure columns are sized properly
+    // No sizeColumnsToFit(): every column is flex (defaultColDef), which already fills the grid and
+    // follows its resizes. sizeColumnsToFit() turns flex off on the columns it resizes, so a load
+    // narrower than the minWidths (a phone) would leave them stuck at 120 px on any wider screen.
     setTimeout((): void => {
-      this.gridApi.sizeColumnsToFit();
       this.gridApi.refreshHeader();
       this.gridApi.refreshCells({ force: true });
     }, 0);
@@ -248,8 +246,7 @@ export class KeyView implements OnInit {
           void this.routing.navigate(['/keys']);
         },
         error: (error: unknown) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
           void this.routing.navigate(['/keys']);
         },
       });
@@ -284,8 +281,7 @@ export class KeyView implements OnInit {
           }
         },
         error: (error) => {
-          const errorData = error instanceof ApiResponse ? (error.data as string) : null;
-          this.errorHandler.handleError(errorData);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
     }

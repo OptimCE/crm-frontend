@@ -6,6 +6,7 @@ import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
+import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import {
   PreferenceRow,
   preferencesFromRows,
@@ -56,7 +57,7 @@ export class NotificationPreferencesComponent {
         },
         error: (error) => {
           this.loading.set(false);
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }
@@ -78,7 +79,7 @@ export class NotificationPreferencesComponent {
         },
         error: (error) => {
           this.saving.set(false);
-          this.errorHandler.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }

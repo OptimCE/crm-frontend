@@ -6,7 +6,13 @@
  * string masquerading as a value, or a row order changing.
  */
 
-import { blankRow, columnsOf, toPayload, toPrefillForm } from './administrative-document-prefill';
+import {
+  blankRow,
+  columnsOf,
+  isInternalKey,
+  toPayload,
+  toPrefillForm,
+} from './administrative-document-prefill';
 
 const PAYLOAD = {
   community_name: 'CE du Condroz',
@@ -106,5 +112,80 @@ describe('toPayload', () => {
     const withNested = { ...PAYLOAD, extra: { nested: true } };
     const form = toPrefillForm(withNested);
     expect(toPayload(form, withNested)['extra']).toEqual({ nested: true });
+  });
+});
+
+describe('internal keys', () => {
+  // The shape the backend sends for `annex6_sharing_form`: `_id_member` is
+  // stamped first on every participant row (prefill.py, ROW_MEMBER_ID).
+  const SHARING = {
+    community_name: 'CE du Condroz',
+    participants: [
+      { _id_member: 12, ean: '541448820000000001', nom: 'Dupont', localite: 'Namur' },
+      { _id_member: 34, ean: '541448820000000002', nom: 'Martin', localite: 'Liège' },
+    ],
+  };
+
+  function participants(payload: Record<string, unknown>): Record<string, unknown>[] {
+    return payload['participants'] as Record<string, unknown>[];
+  }
+
+  it('recognises the underscore prefix, and nothing else', () => {
+    expect(isInternalKey('_id_member')).toBe(true);
+    expect(isInternalKey('id_member')).toBe(false);
+    expect(isInternalKey('code_postal')).toBe(false);
+  });
+
+  it('never offers one as a column', () => {
+    // BUG: every member/installation sheet opened on a column headed
+    // "ADMINISTRATIVE_DOCUMENT.PREFILL.FIELDS._ID_MEMBER".
+    const [table] = toPrefillForm(SHARING).tables;
+    expect(table.visibleColumns).toEqual(['ean', 'nom', 'localite']);
+  });
+
+  it('keeps it in the shape the rows are sent back in', () => {
+    const [table] = toPrefillForm(SHARING).tables;
+    expect(table.columns).toEqual(['_id_member', 'ean', 'nom', 'localite']);
+  });
+
+  it('round-trips it untouched', () => {
+    const form = toPrefillForm(SHARING);
+    expect(toPayload(form, SHARING)).toEqual(SHARING);
+  });
+
+  it('sends a row back with its id even after its EAN was corrected', () => {
+    // The case the backend cannot recover by itself: it re-attaches a missing
+    // id by matching the row's EAN against the CRM's rows.
+    const form = toPrefillForm(SHARING);
+    form.tables[0].rows[0]['ean'] = '541448820000000009';
+
+    const rows = participants(toPayload(form, SHARING));
+    expect(rows.map((row) => [row['_id_member'], row['ean']])).toEqual([
+      [12, '541448820000000009'],
+      [34, '541448820000000002'],
+    ]);
+  });
+
+  it('lets the id follow its row when another row is removed', () => {
+    const form = toPrefillForm(SHARING);
+    form.tables[0].rows.splice(0, 1);
+    expect(participants(toPayload(form, SHARING))).toEqual([SHARING.participants[1]]);
+  });
+
+  it('gives an added row no id of its own, for the backend to resolve', () => {
+    const form = toPrefillForm(SHARING);
+    form.tables[0].rows.push(blankRow(form.tables[0]));
+
+    const rows = participants(toPayload(form, SHARING));
+    expect(rows[2]).toEqual({ _id_member: null, ean: null, nom: null, localite: null });
+  });
+
+  it('keeps a top-level one out of the identity header, but in the payload', () => {
+    const withInternal = { ...SHARING, _revision: 3 };
+    const form = toPrefillForm(withInternal);
+
+    expect(form.fields.map((field) => field.key)).toEqual(['community_name']);
+    expect(form.tables.map((table) => table.key)).toEqual(['participants']);
+    expect(toPayload(form, withInternal)).toEqual(withInternal);
   });
 });
