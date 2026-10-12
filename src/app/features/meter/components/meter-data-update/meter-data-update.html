@@ -109,6 +109,8 @@
             [options]="grdAvailable"
             formControlName="grd"
             optionLabel="name"
+            [filter]="true"
+            filterBy="name"
             placeholder="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
             appendTo="body"
             data-testid="meter-data-update__select--grd"

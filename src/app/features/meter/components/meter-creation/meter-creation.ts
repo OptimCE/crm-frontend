@@ -63,6 +63,7 @@ import { Step } from 'primeng/stepper';
 import { StepPanel } from 'primeng/stepper';
 import { StepPanels } from 'primeng/stepper';
 import { FieldLabelHelper } from '../../../../shared/components/field-label-helper/field-label-helper';
+import { GRD_OPTIONS, GrdOption } from '../../../../shared/constants/grd';
 
 interface ListRadio {
   id: number;
@@ -143,14 +144,8 @@ export class MeterCreation implements OnInit {
 
   minDate = new Date();
   holder_id?: number;
-  grdAvailable: ListRadio[] = [
-    { id: 1, name: 'RESA' },
-    { id: 2, name: 'ORES' },
-    { id: 3, name: 'AIEG' },
-    { id: 4, name: 'AIESH' },
-    { id: 5, name: 'REW' },
-    { id: 6, name: 'ELIA' },
-  ];
+  // A copy: p-select takes a mutable array.
+  readonly grdAvailable: GrdOption[] = [...GRD_OPTIONS];
 
   constructor() {
     this.holder_id = undefined;

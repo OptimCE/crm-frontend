@@ -37,6 +37,7 @@ import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
+import { findGrdOption, GRD_OPTIONS, GrdOption } from '../../../../shared/constants/grd';
 import {
   MeterDataStatus,
   ClientType,
@@ -75,7 +76,7 @@ interface MeterDataFormValue {
   dateStart: string | Date;
   status: MeterDataStatus;
   injectionStatus: MeterDataCategory<InjectionStatus>;
-  grd: MeterDataCategory;
+  grd: GrdOption;
 }
 
 @Component({
@@ -145,14 +146,8 @@ export class MeterDataUpdate implements OnInit {
     { id: InjectionStatus.INJECTION_RIGHTS, name: '' },
     { id: InjectionStatus.NONE, name: '' },
   ]);
-  grdAvailable: MeterDataCategory[] = [
-    { id: 1, name: 'RESA' },
-    { id: 2, name: 'ORES' },
-    { id: 3, name: 'AIEG' },
-    { id: 4, name: 'AIESH' },
-    { id: 5, name: 'REW' },
-    { id: 6, name: 'ELIA' },
-  ];
+  // A copy: p-select takes a mutable array.
+  readonly grdAvailable: GrdOption[] = [...GRD_OPTIONS];
   readonly membersList = signal<MembersPartialDTO[]>([]);
   constructor() {
     const data = this.config.data as MeterDataUpdateDialogData;
@@ -214,7 +209,8 @@ export class MeterDataUpdate implements OnInit {
         injectionStatus: this.injectionStatusCategory().find((p) => p.id === injectionStatus),
         rate: this.rateCategory().find((p) => p.id === this.meterData?.rate),
         clientType: this.clientCategory().find((p) => p.id === this.meterData?.client_type),
-        grd: this.grdAvailable.find((p) => p.name === this.meterData?.grd),
+        // Case-insensitive; a stored value that is not a GRD (e.g. ELIA) leaves it to pick.
+        grd: findGrdOption(this.meterData.grd),
         status: this.meterData.status,
       });
       // Reopen it as the coupling below left it. A legacy record with an injection status but no

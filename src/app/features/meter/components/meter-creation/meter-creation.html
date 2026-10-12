@@ -360,9 +360,14 @@
                   Each field spans three rows of a subgrid (label / input / error), so
                   the inputs of a row line up even when only some labels wrap to two
                   lines, and a message under one field does not push its neighbours.
+                  `md:grid-cols-1` gives that inner grid a minmax(0, 1fr) column: with the
+                  implicit auto column, a number input or a long select placeholder kept its
+                  intrinsic width and overflowed into the gap.
                 -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-y-0">
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="samplingPower"
                       label="{{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_LABEL' | translate }}"
@@ -380,7 +385,9 @@
                     />
                     <app-error-handler controlName="samplingPower" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="totalGeneratingCapacity"
                       label="{{ 'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_LABEL' | translate }}"
@@ -400,7 +407,9 @@
                     />
                     <app-error-handler controlName="totalGeneratingCapacity" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="amperage"
                       label="{{ 'METER.INFORMATIONS.AMPERAGE_LABEL' | translate }}"
@@ -422,7 +431,9 @@
 
                 <!-- Dropdowns for large option sets -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-y-0 mt-4">
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="selectProductionChainCategory"
                       label="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
@@ -442,7 +453,9 @@
                     />
                     <app-error-handler controlName="productionChain" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="selectInjectionStatusCategory"
                       label="{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}"
@@ -461,7 +474,9 @@
                     />
                     <app-error-handler controlName="injectionStatus" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="selectGrd"
                       label="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
@@ -475,6 +490,8 @@
                       formControlName="grd"
                       optionLabel="name"
                       optionValue="name"
+                      [filter]="true"
+                      filterBy="name"
                       placeholder="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
                       appendTo="body"
                       data-testid="meter-creation__select--grd"

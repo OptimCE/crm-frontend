@@ -392,6 +392,47 @@ describe('MeterDataUpdate', () => {
     });
   });
 
+  // ── Stored GRD ───────────────────────────────────────────────────
+
+  describe('with a stored GRD', () => {
+    it('should not offer ELIA, the transmission operator', async () => {
+      await configureTestBed(buildMeterData());
+
+      expect(component.grdAvailable.map((g) => g.name)).not.toContain('ELIA');
+    });
+
+    it('should leave a legacy ELIA empty and require a real GRD', async () => {
+      await configureTestBed(buildMeterData({ grd: 'ELIA' }));
+      initAndEmitMembers();
+
+      const grdControl = component.metersForm.get('grd');
+      expect(grdControl?.value).toBeFalsy();
+      expect(grdControl?.hasError('required')).toBe(true);
+      expect(component.metersForm.valid).toBe(false);
+    });
+
+    it('should match the stored value ignoring case and save its canonical name', async () => {
+      await configureTestBed(buildMeterData({ grd: 'resa' }));
+      initAndEmitMembers();
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
+
+      expect(component.metersForm.get('grd')?.value).toEqual({ name: 'RESA' });
+
+      component.onSubmit();
+
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
+        expect.objectContaining({ grd: 'RESA' }),
+      );
+    });
+
+    it('should pre-fill a Flemish operator', async () => {
+      await configureTestBed(buildMeterData({ grd: 'Fluvius Limburg' }));
+      initAndEmitMembers();
+
+      expect(component.metersForm.get('grd')?.value).toEqual({ name: 'Fluvius Limburg' });
+    });
+  });
+
   // ── Holder outside the loaded page of members ────────────────────
 
   describe('with a holder outside the loaded page of members', () => {

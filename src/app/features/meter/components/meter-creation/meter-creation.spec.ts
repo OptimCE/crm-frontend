@@ -230,6 +230,12 @@ describe('MeterCreation', () => {
     it('should have injectionStatus disabled by default', () => {
       expect(component.metersForm.get('injectionStatus')?.disabled).toBe(true);
     });
+
+    it('should offer the GRDs of every region but not ELIA, the transmission operator', () => {
+      const names = component.grdAvailable.map((g) => g.name);
+      expect(names).not.toContain('ELIA');
+      expect(names).toEqual(expect.arrayContaining(['ORES', 'Sibelga', 'Fluvius Antwerpen']));
+    });
   });
 
   // ── 1b. holder_id pre-selection ────────────────────────────────────
