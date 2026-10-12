@@ -51,14 +51,21 @@
   "LOGIN": {
     "LOGIN": "Connectez-vous",
     "SLIDES": {
-      "MEMBERS_TITLE": "Gérez vos membres facilement",
-      "MEMBERS_DESC": "Ajoutez, modifiez et suivez tous les membres de votre communauté depuis un seul tableau de bord.",
-      "METERS_TITLE": "Surveillez vos compteurs",
-      "METERS_DESC": "Suivez la production et la consommation d'énergie.",
-      "SHARING_TITLE": "Opérations de partage",
-      "SHARING_DESC": "Configurez et gérez les opérations de partage d'énergie au sein de votre communauté.",
-      "KEYS_TITLE": "Clés de répartition",
-      "KEYS_DESC": "Créez et gérez les clés de répartition pour distribuer l'énergie équitablement."
+      "COMMUNITY_TITLE": "Toute la communauté au même endroit",
+      "COMMUNITY_DESC": "Inscrivez les membres, rattachez leurs compteurs et retrouvez-les sur la carte.",
+      "SHARING_TITLE": "Le partage, au quart d'heure près",
+      "SHARING_DESC": "Suivez l'énergie produite, consommée et partagée, quart d'heure par quart d'heure.",
+      "KEYS_TITLE": "Des clés de répartition sur mesure",
+      "KEYS_DESC": "Composez une clé ou générez-en une optimisée, puis simulez-la sur vos données avant de l'appliquer.",
+      "BILLING_TITLE": "Une facturation qui suit le partage",
+      "BILLING_DESC": "Fixez vos tarifs : chaque facture est calculée sur l'énergie partagée, puis suivie jusqu'au paiement.",
+      "MEMBER_SPACE_TITLE": "Un espace pour chaque membre",
+      "MEMBER_SPACE_DESC": "Chaque membre retrouve sa consommation, sa part d'énergie partagée, ses factures et les actualités de la communauté."
+    },
+    "TOUR": {
+      "LABEL": "Découvrir OptimCE",
+      "PAUSE": "Mettre le défilement en pause",
+      "PLAY": "Reprendre le défilement"
     }
   },
   "NOTIFICATIONS": {
@@ -73,13 +80,15 @@
       "admin_deadline": "Échéances administratives",
       "admin_dossier": "Dossiers administratifs",
       "billing_run": "Campagnes de facturation",
+      "credit_note": "Notes de crédit",
       "document": "Documents",
       "invoice": "Factures",
       "manager_invitation": "Invitations de gestionnaire",
       "member": "Membres",
       "member_invitation": "Invitations de membre",
       "news_poll": "Sondages",
-      "news_post": "Actualités"
+      "news_post": "Actualités",
+      "producer_statement": "Décomptes producteur"
     },
     "TYPES": {
       "document": {
@@ -118,6 +127,16 @@
         },
         "overdue": {
           "title": "Une facture a dépassé sa date d'échéance"
+        }
+      },
+      "credit_note": {
+        "issued": {
+          "title": "Une note de crédit a été émise en votre faveur"
+        }
+      },
+      "producer_statement": {
+        "issued": {
+          "title": "Un nouveau décompte producteur est disponible"
         }
       },
       "billing_run": {
@@ -1765,7 +1784,8 @@
       "PAID": "Payée",
       "OVERDUE": "En retard",
       "CANCELLED": "Annulée",
-      "RENDER_FAILED": "Échec du rendu"
+      "RENDER_FAILED": "Échec du rendu",
+      "CREDITED": "Créditée"
     },
     "INVOICE_TYPE": {
       "INVOICE": "Facture",
@@ -1784,7 +1804,8 @@
       "DELETE_PDF": "Supprimer le PDF"
     },
     "ISSUE": {
-      "SUCCESS": "Facture {{number}} émise (OGM {{ogm}})."
+      "SUCCESS": "Facture {{number}} émise (OGM {{ogm}}).",
+      "SUCCESS_NO_OGM": "Document {{number}} émis."
     },
     "SEND": {
       "SUCCESS": "Facture envoyée."
@@ -1903,6 +1924,8 @@
       "ISSUED_AT": "Émise",
       "DUE_DATE": "Échéance",
       "OGM_LABEL": "Communication structurée",
+      "TO_RECEIVE": "À recevoir",
+      "IN_YOUR_FAVOUR": "En votre faveur",
       "PAGE_INFO": "Page {{page}} sur {{total}}"
     },
     "RUN_TOAST_FINISHED": "Le calcul de facturation est terminé.",

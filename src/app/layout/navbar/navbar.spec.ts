@@ -8,6 +8,7 @@ import Keycloak from 'keycloak-js';
 
 import { Navbar } from './navbar';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
+import { NotificationStore } from '../../features/notifications/services/notification.store';
 
 describe('Navbar', () => {
   let component: Navbar;
@@ -316,6 +317,58 @@ describe('Navbar', () => {
       component.onMouseLeave();
 
       expect(component.sidebarOpen()).toBe(true);
+    });
+
+    // The popover is appended to <body>: moving into it is a mouseleave on the
+    // <aside>, and collapsing then would hide the bell under the open popover.
+    describe('with the notification popover open', () => {
+      let store: NotificationStore;
+
+      beforeEach(() => {
+        store = TestBed.inject(NotificationStore);
+        component.onMouseEnter();
+        vi.advanceTimersByTime(120);
+        store.popoverOpen.set(true);
+        TestBed.tick();
+      });
+
+      it('should keep the sidebar open when the pointer leaves for the popover', () => {
+        component.onMouseLeave();
+
+        expect(component.sidebarOpen()).toBe(true);
+      });
+
+      it('should collapse once the popover closes with the pointer outside the sidebar', () => {
+        component['activeSublist'].set('members');
+        component.onMouseLeave();
+
+        store.popoverOpen.set(false);
+        TestBed.tick();
+
+        expect(component.sidebarOpen()).toBe(false);
+        expect(component.activeSublist()).toBeNull();
+      });
+
+      it('should stay open when the popover closes with the pointer back over the sidebar', () => {
+        component.onMouseLeave();
+        component.onMouseEnter();
+
+        store.popoverOpen.set(false);
+        TestBed.tick();
+        vi.advanceTimersByTime(200);
+
+        expect(component.sidebarOpen()).toBe(true);
+      });
+
+      it('should not collapse a pinned sidebar when the popover closes', () => {
+        component.togglePin();
+        component.onMouseLeave();
+
+        store.popoverOpen.set(false);
+        TestBed.tick();
+
+        expect(component.sidebarOpen()).toBe(true);
+      });
     });
   });
 

@@ -29,6 +29,7 @@ export function invoiceStatusSeverity(status: InvoiceStatus): TagSeverity {
     case InvoiceStatus.RENDER_FAILED:
       return 'danger';
     case InvoiceStatus.CANCELLED:
+    case InvoiceStatus.CREDITED:
     case InvoiceStatus.DRAFT:
     default:
       return 'secondary';
@@ -37,6 +38,40 @@ export function invoiceStatusSeverity(status: InvoiceStatus): TagSeverity {
 
 export function invoiceTypeLabelKey(type: InvoiceType): string {
   return `BILLING.INVOICE_TYPE.${InvoiceType[type]}`;
+}
+
+/**
+ * True only for a document the member pays: a consumer INVOICE.
+ *
+ * A PRODUCER_STATEMENT is the community paying the producer, and a CREDIT_NOTE
+ * cancels an invoice. Both are numbered and issued like an invoice and go
+ * through the same statuses, so the status does not tell who pays whom. Only
+ * the type does. (Billing backends before 2026-10-08 also gave both a due date
+ * and a structured communication.) An unknown type counts as not payable:
+ * telling a member to pay something they may be owed is the worse mistake.
+ *
+ * The invoice lists take a `type` filter now; keep this check on the rows
+ * anyway, because an older backend ignores the filter.
+ */
+export function memberPays(type: InvoiceType): boolean {
+  return type === InvoiceType.INVOICE;
+}
+
+/**
+ * What a document the member does not pay means to them, as an i18n key, or
+ * null for a bill (it needs no such label).
+ */
+export function settlementLabelKey(type: InvoiceType): string | null {
+  switch (type) {
+    case InvoiceType.INVOICE:
+      return null;
+    case InvoiceType.CREDIT_NOTE:
+      return 'BILLING.MEMBER_VIEW.IN_YOUR_FAVOUR';
+    case InvoiceType.PRODUCER_STATEMENT:
+      return 'BILLING.MEMBER_VIEW.TO_RECEIVE';
+    default:
+      return null;
+  }
 }
 
 export function runStatusLabelKey(status: BillingRunStatus): string {

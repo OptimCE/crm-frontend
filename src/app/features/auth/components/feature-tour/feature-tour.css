@@ -1,0 +1,178 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ===== Slides: stacked in one grid cell, so the tallest one sets the height and nothing jumps ===== */
+.tour__slides {
+  display: grid;
+}
+
+.tour__slide {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.4s ease,
+    visibility 0s linear 0.4s;
+}
+
+.tour__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease;
+}
+
+.tour__art {
+  margin-bottom: 1.75rem;
+}
+
+.tour__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.375rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #0d3b11;
+  text-wrap: balance;
+}
+
+.tour__desc {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #45574a;
+}
+
+/* ===== Controls: pause button + one segment per slide ===== */
+.tour__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.tour__toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid #a5d6a7;
+  border-radius: 50%;
+  background: #fff;
+  color: #1b5e20;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.tour__toggle:hover {
+  border-color: #43a047;
+}
+
+.tour__tabs {
+  flex: 1;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tour__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.tour__toggle:focus-visible,
+.tour__tab:focus-visible {
+  outline: 2px solid #1b5e20;
+  outline-offset: 2px;
+}
+
+.tour__bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: #c8e6c9;
+  overflow: hidden;
+}
+
+.tour__tab:hover .tour__bar {
+  background: #a5d6a7;
+}
+
+.tour__fill {
+  display: block;
+  height: 100%;
+  background: #43a047;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.tour__tab.is-done .tour__fill {
+  background: #1b5e20;
+  transform: none;
+}
+
+/* Its end advances the tour (feature-tour.ts). */
+.tour__fill.is-running {
+  animation: tour-progress 7s linear forwards;
+}
+
+.tour.is-paused .tour__fill,
+.tour:has(:focus-visible) .tour__fill {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) {
+  .tour:hover .tour__fill {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes tour-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* No rotation: the active segment simply shows as filled. */
+@media (prefers-reduced-motion: reduce) {
+  .tour__slide {
+    transition: none;
+  }
+
+  .tour__fill.is-running {
+    animation: none;
+    transform: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  :host {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    max-width: 320px;
+  }
+
+  .tour__art {
+    margin-bottom: 1.25rem;
+  }
+
+  .tour__title {
+    font-size: 1.15rem;
+  }
+
+  .tour__desc {
+    font-size: 0.9375rem;
+  }
+}

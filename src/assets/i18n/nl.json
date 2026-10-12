@@ -51,14 +51,21 @@
   "LOGIN": {
     "LOGIN": "Aanmelden",
     "SLIDES": {
-      "MEMBERS_TITLE": "Beheer uw leden eenvoudig",
-      "MEMBERS_DESC": "Voeg toe, bewerk en volg al uw gemeenschapsleden vanuit één dashboard.",
-      "METERS_TITLE": "Monitor uw meters",
-      "METERS_DESC": "Volg de energieproductie en het verbruik.",
-      "SHARING_TITLE": "Deeloperaties",
-      "SHARING_DESC": "Configureer en beheer energiedelingsoperaties binnen uw gemeenschap.",
-      "KEYS_TITLE": "Verdeelsleutels",
-      "KEYS_DESC": "Maak en beheer verdeelsleutels om energie eerlijk te verdelen."
+      "COMMUNITY_TITLE": "Uw hele gemeenschap op één plek",
+      "COMMUNITY_DESC": "Schrijf leden in, koppel hun meters en vind ze terug op de kaart.",
+      "SHARING_TITLE": "Delen, tot op het kwartier",
+      "SHARING_DESC": "Volg de geproduceerde, verbruikte en gedeelde energie, kwartier per kwartier.",
+      "KEYS_TITLE": "Verdeelsleutels op maat",
+      "KEYS_DESC": "Stel een sleutel samen of genereer een geoptimaliseerde, en simuleer hem op uw eigen gegevens voordat u hem toepast.",
+      "BILLING_TITLE": "Facturatie die het delen volgt",
+      "BILLING_DESC": "Stel uw tarieven in: elke factuur wordt berekend op de gedeelde energie en opgevolgd tot ze betaald is.",
+      "MEMBER_SPACE_TITLE": "Een eigen ruimte voor elk lid",
+      "MEMBER_SPACE_DESC": "Elk lid ziet zijn verbruik, zijn deel van de gedeelde energie, zijn facturen en het nieuws van de gemeenschap."
+    },
+    "TOUR": {
+      "LABEL": "Ontdek OptimCE",
+      "PAUSE": "Diavoorstelling pauzeren",
+      "PLAY": "Diavoorstelling hervatten"
     }
   },
   "NOTIFICATIONS": {
@@ -73,13 +80,15 @@
       "admin_deadline": "Administratieve deadlines",
       "admin_dossier": "Administratieve dossiers",
       "billing_run": "Facturatierondes",
+      "credit_note": "Creditnota's",
       "document": "Documenten",
       "invoice": "Facturen",
       "manager_invitation": "Beheerdersuitnodigingen",
       "member": "Leden",
       "member_invitation": "Ledenuitnodigingen",
       "news_poll": "Peilingen",
-      "news_post": "Nieuwsberichten"
+      "news_post": "Nieuwsberichten",
+      "producer_statement": "Producentafrekeningen"
     },
     "TYPES": {
       "document": {
@@ -118,6 +127,16 @@
         },
         "overdue": {
           "title": "Een factuur is over de vervaldatum"
+        }
+      },
+      "credit_note": {
+        "issued": {
+          "title": "Er is een creditnota in uw voordeel uitgereikt"
+        }
+      },
+      "producer_statement": {
+        "issued": {
+          "title": "Er is een nieuwe producentafrekening beschikbaar"
         }
       },
       "billing_run": {
@@ -1765,7 +1784,8 @@
       "PAID": "Betaald",
       "OVERDUE": "Achterstallig",
       "CANCELLED": "Geannuleerd",
-      "RENDER_FAILED": "Weergave mislukt"
+      "RENDER_FAILED": "Weergave mislukt",
+      "CREDITED": "Gecrediteerd"
     },
     "INVOICE_TYPE": {
       "INVOICE": "Factuur",
@@ -1784,7 +1804,8 @@
       "DELETE_PDF": "PDF verwijderen"
     },
     "ISSUE": {
-      "SUCCESS": "Factuur {{number}} uitgereikt (OGM {{ogm}})."
+      "SUCCESS": "Factuur {{number}} uitgereikt (OGM {{ogm}}).",
+      "SUCCESS_NO_OGM": "Document {{number}} uitgereikt."
     },
     "SEND": {
       "SUCCESS": "Factuur verzonden."
@@ -1903,6 +1924,8 @@
       "ISSUED_AT": "Uitgereikt",
       "DUE_DATE": "Vervaldatum",
       "OGM_LABEL": "Gestructureerde mededeling",
+      "TO_RECEIVE": "Te ontvangen",
+      "IN_YOUR_FAVOUR": "In uw voordeel",
       "PAGE_INFO": "Pagina {{page}} van {{total}}"
     },
     "RUN_TOAST_FINISHED": "De facturatieberekening is voltooid.",

@@ -131,12 +131,14 @@ export class InvoiceList {
   canGeneratePdf(inv: InvoiceOut): boolean {
     return inv.status !== InvoiceStatus.CANCELLED;
   }
+  /** Mirrors the backend: kept once sent, settled, or cancelled by a credit note. */
   canDeletePdf(inv: InvoiceOut): boolean {
     return (
       inv.pdf_ready &&
       inv.status !== InvoiceStatus.SENT &&
       inv.status !== InvoiceStatus.PAID &&
-      inv.status !== InvoiceStatus.OVERDUE
+      inv.status !== InvoiceStatus.OVERDUE &&
+      inv.status !== InvoiceStatus.CREDITED
     );
   }
   isGenerating(inv: InvoiceOut): boolean {
@@ -248,10 +250,14 @@ export class InvoiceList {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
+          // Only a consumer invoice gets a structured communication: a credit
+          // note or a producer statement is not paid by the member, and is not
+          // an "invoice" either.
+          const ogm = res.data.structured_comm;
           this.snackbar.openSnackBar(
-            this.translate.instant('BILLING.ISSUE.SUCCESS', {
+            this.translate.instant(ogm ? 'BILLING.ISSUE.SUCCESS' : 'BILLING.ISSUE.SUCCESS_NO_OGM', {
               number: res.data.number,
-              ogm: res.data.structured_comm ?? '',
+              ogm: ogm ?? '',
             }) as string,
             VALIDATION_TYPE,
           );

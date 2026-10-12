@@ -142,6 +142,21 @@
   display: none;
 }
 
+/* PrimeNG centres the logo's unread badge on its top-right corner, outside the
+   wrapper, which clipped it to a red sliver. Collapsed, the brand name is out of
+   the DOM, so nothing else can overflow; expanded keeps the clip for it. */
+.sidebar:not(.sidebar--expanded) .sidebar__logo-wrapper {
+  overflow: visible;
+}
+
+/* Pin the badge's right edge instead of centring it on the corner, so "12" or
+   "99+" grows inward over the logo rather than past the rail's overflow:hidden
+   edge. A one-digit badge lands where PrimeNG's own default puts it. */
+:host ::ng-deep .sidebar__logo-wrapper .p-overlaybadge .p-badge {
+  inset-inline-end: -10px;
+  transform: translateY(-50%);
+}
+
 .sidebar__logo {
   width: 36px;
   height: 36px;

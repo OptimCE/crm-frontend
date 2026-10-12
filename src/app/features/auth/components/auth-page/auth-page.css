@@ -5,103 +5,14 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== Left panel: carousel ===== */
+/* ===== Left panel: feature tour ===== */
 .left-panel {
   flex: 1;
-  background: linear-gradient(160deg, #e8f5e9 0%, #f1f8e9 100%);
+  background: #e8f5e9;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.left-panel::before {
-  content: '';
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  background: rgba(67, 160, 71, 0.06);
-  border-radius: 50%;
-  top: -60px;
-  left: -60px;
-}
-
-.left-panel::after {
-  content: '';
-  position: absolute;
-  width: 250px;
-  height: 250px;
-  background: rgba(67, 160, 71, 0.05);
-  border-radius: 50%;
-  bottom: -40px;
-  right: -40px;
-}
-
-:host ::ng-deep .left-panel .p-carousel {
-  max-width: 420px;
-  width: 100%;
-}
-
-:host ::ng-deep .left-panel .p-carousel-indicator-list {
-  gap: 0.5rem;
-  padding-top: 2rem;
-}
-
-:host ::ng-deep .left-panel .p-carousel-indicator-button {
-  width: 10px !important;
-  height: 10px !important;
-  border-radius: 50% !important;
-  background: #c8e6c9 !important;
-  border: none !important;
-  transition: all 0.3s ease !important;
-}
-
-:host ::ng-deep .left-panel .p-carousel-indicator-active .p-carousel-indicator-button {
-  background: #43a047 !important;
-  width: 28px !important;
-  border-radius: 5px !important;
-}
-
-/* ===== Carousel slides ===== */
-.slide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 2rem 1rem;
-}
-
-.slide-icon-wrapper {
-  width: 350px;
-  height: 350px;
-  background: rgba(67, 160, 71, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.slide-icon {
-  font-size: 2.5rem;
-  color: #43a047;
-}
-
-.slide-title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 0.75rem 0;
-}
-
-.slide-desc {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.6;
-  margin: 0;
-  max-width: 320px;
 }
 
 /* ===== Right panel: login ===== */
@@ -173,71 +84,22 @@
   .left-panel {
     padding: 2rem;
   }
-
-  :host ::ng-deep .left-panel .p-carousel {
-    max-width: 340px;
-  }
-
-  .slide-icon-wrapper {
-    width: 280px;
-    height: 280px;
-  }
-
-  .slide-icon {
-    font-size: 2rem;
-  }
-
-  .slide-title {
-    font-size: 1.15rem;
-  }
-
-  .slide-desc {
-    font-size: 0.9rem;
-  }
 }
 
-/* ===== Responsive: mobile — stack vertically ===== */
+/* ===== Responsive: mobile — stack vertically, login first ===== */
 @media (max-width: 768px) {
   .login-wrapper {
     flex-direction: column;
   }
 
   .left-panel {
-    min-height: auto;
-    padding: 2.5rem 1.5rem 1.5rem;
-  }
-
-  .left-panel::before,
-  .left-panel::after {
-    display: none;
-  }
-
-  .slide {
-    padding: 1rem 0.5rem;
-  }
-
-  .slide-icon-wrapper {
-    width: 252px;
-    height: 252px;
-    margin-bottom: 1.25rem;
-  }
-
-  .slide-icon {
-    font-size: 1.75rem;
-  }
-
-  .slide-title {
-    font-size: 1.1rem;
-  }
-
-  .slide-desc {
-    font-size: 0.85rem;
-    max-width: 280px;
+    padding: 2.5rem 1.5rem 3rem;
   }
 
   .right-panel {
+    order: -1;
     min-height: auto;
-    padding: 2rem 0;
+    padding: 3rem 0 2rem;
   }
 
   .lang-selector {
@@ -261,17 +123,7 @@
 /* ===== Responsive: small mobile ===== */
 @media (max-width: 480px) {
   .left-panel {
-    padding: 2rem 1rem 1rem;
-  }
-
-  .slide-icon-wrapper {
-    width: 224px;
-    height: 224px;
-    margin-bottom: 1rem;
-  }
-
-  .slide-icon {
-    font-size: 1.5rem;
+    padding: 2rem 1rem 2.5rem;
   }
 
   .login-content {

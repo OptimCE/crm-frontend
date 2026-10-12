@@ -1,4 +1,14 @@
-import { Component, computed, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  output,
+  signal,
+  untracked,
+} from '@angular/core';
 import { filter } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
 import { Role } from '../../core/dtos/role';
@@ -126,6 +136,8 @@ export class Navbar implements OnInit {
   });
 
   private hoverTimeout: ReturnType<typeof setTimeout> | null = null;
+  /** Pointer currently over the <aside>; read when the notification popover closes. */
+  private hovered = false;
 
   memberLinks: Links[] = [
     { name: 'NAVBAR.HANDLE_MEMBRE', icon: 'pi pi-users', url: '/members' },
@@ -139,6 +151,15 @@ export class Navbar implements OnInit {
       this.pinned.set(true);
       this.sidebarOpen.set(true);
     }
+
+    // Finishes the collapse onMouseLeave held back while the notification popover
+    // was open — unless the pointer came back over the rail in the meantime.
+    effect(() => {
+      if (this.notificationStore.popoverOpen()) return;
+      untracked(() => {
+        if (!this.hovered) this.collapse();
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -193,6 +214,7 @@ export class Navbar implements OnInit {
   }
 
   onMouseEnter(): void {
+    this.hovered = true;
     if (this.mobile() || this.pinned()) return;
     this.hoverTimeout = setTimeout(() => {
       this.sidebarOpen.set(true);
@@ -200,11 +222,21 @@ export class Navbar implements OnInit {
   }
 
   onMouseLeave(): void {
+    this.hovered = false;
     if (this.mobile() || this.pinned()) return;
     if (this.hoverTimeout) {
       clearTimeout(this.hoverTimeout);
       this.hoverTimeout = null;
     }
+    // The bell's popover is appended to <body>, so moving into it leaves the
+    // <aside>. Collapsing now would display:none the bell right under its own
+    // open popover; the effect in the constructor collapses once it closes.
+    if (this.notificationStore.popoverOpen()) return;
+    this.collapse();
+  }
+
+  private collapse(): void {
+    if (this.mobile() || this.pinned()) return;
     this.sidebarOpen.set(false);
     this.activeSublist.set(null);
   }

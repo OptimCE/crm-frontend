@@ -117,6 +117,7 @@ export class TrackingBoard implements OnInit {
       InvoiceStatus.OVERDUE,
       InvoiceStatus.CANCELLED,
       InvoiceStatus.RENDER_FAILED,
+      InvoiceStatus.CREDITED,
     ].map((value) => ({ label: invoiceStatusLabelKey(value), value })),
   );
   readonly sortOptions = translatedOptions<SortOption>([

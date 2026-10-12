@@ -17,7 +17,6 @@ import {
   InvoiceOut,
   InvoiceSortField,
   InvoiceStatus,
-  InvoiceType,
   MyInvoiceQuery,
   SortOrder,
 } from '../../../../shared/dtos/billing.dtos';
@@ -32,6 +31,8 @@ import {
   invoiceStatusLabelKey,
   invoiceStatusSeverity,
   invoiceTypeLabelKey,
+  memberPays,
+  settlementLabelKey,
   TagSeverity,
   toApiDate,
 } from '../../billing-format';
@@ -57,6 +58,11 @@ interface SortOption {
  * `GET /invoices/mine` — the server scopes the result to the authenticated
  * member from the auth header, so no member-id lookup happens here.
  * Reused as the manager console's "My invoices" tab (pass [showHeader]="false").
+ *
+ * The list also holds documents the member does not pay: producer statements
+ * (the community pays the producer) and credit notes. They carry a structured
+ * communication too, so the payment block is shown for bills only, and the
+ * others get their type and what they mean to the member ("to receive").
  */
 @Component({
   selector: 'app-billing-member-invoices',
@@ -103,6 +109,7 @@ export class BillingMemberInvoices implements OnInit {
       InvoiceStatus.PAID,
       InvoiceStatus.OVERDUE,
       InvoiceStatus.CANCELLED,
+      InvoiceStatus.CREDITED,
     ].map((value) => ({ label: invoiceStatusLabelKey(value), value })),
   );
   readonly sortOptions = translatedOptions<SortOption>([
@@ -194,8 +201,11 @@ export class BillingMemberInvoices implements OnInit {
   typeLabelKey(inv: InvoiceOut): string {
     return invoiceTypeLabelKey(inv.type);
   }
-  isCreditNote(inv: InvoiceOut): boolean {
-    return inv.type === InvoiceType.CREDIT_NOTE;
+  pays(inv: InvoiceOut): boolean {
+    return memberPays(inv.type);
+  }
+  settlementKey(inv: InvoiceOut): string | null {
+    return settlementLabelKey(inv.type);
   }
   money(inv: InvoiceOut): string {
     return formatMoney(inv.total, this.locale(), inv.currency);

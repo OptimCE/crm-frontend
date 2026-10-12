@@ -1,0 +1,78 @@
+<section
+  class="tour"
+  [class.is-paused]="paused()"
+  [attr.aria-label]="'LOGIN.TOUR.LABEL' | translate"
+  data-testid="auth-page__carousel"
+>
+  <div class="tour__slides" [attr.aria-live]="rotating() ? 'off' : 'polite'">
+    @for (slide of slides; track slide.kind; let i = $index) {
+      <div
+        class="tour__slide"
+        [class.is-active]="i === active()"
+        role="tabpanel"
+        [id]="'tour-panel-' + i"
+        [attr.aria-labelledby]="'tour-tab-' + i"
+        [attr.data-testid]="'auth-page__slide--' + i"
+      >
+        <app-tour-illustration
+          class="tour__art"
+          [kind]="slide.kind"
+          [active]="i === active()"
+          [attr.data-testid]="'auth-page__slide-image--' + i"
+        />
+        <h2 class="tour__title" [attr.data-testid]="'auth-page__slide-title--' + i">
+          {{ slide.titleKey | translate }}
+        </h2>
+        <p class="tour__desc" [attr.data-testid]="'auth-page__slide-desc--' + i">
+          {{ slide.descKey | translate }}
+        </p>
+      </div>
+    }
+  </div>
+
+  <div class="tour__controls">
+    @if (!reducedMotion) {
+      <button
+        type="button"
+        class="tour__toggle"
+        [attr.aria-label]="(paused() ? 'LOGIN.TOUR.PLAY' : 'LOGIN.TOUR.PAUSE') | translate"
+        (click)="togglePause()"
+        data-testid="auth-page__tour-toggle"
+      >
+        <i
+          class="pi"
+          [class.pi-play]="paused()"
+          [class.pi-pause]="!paused()"
+          aria-hidden="true"
+        ></i>
+      </button>
+    }
+    <div class="tour__tabs" role="tablist" [attr.aria-label]="'LOGIN.TOUR.LABEL' | translate">
+      @for (slide of slides; track slide.kind; let i = $index) {
+        <button
+          #tab
+          type="button"
+          role="tab"
+          class="tour__tab"
+          [class.is-done]="i < active()"
+          [id]="'tour-tab-' + i"
+          [attr.aria-controls]="'tour-panel-' + i"
+          [attr.aria-selected]="i === active()"
+          [attr.aria-label]="slide.titleKey | translate"
+          [tabIndex]="i === active() ? 0 : -1"
+          (click)="select(i)"
+          (keydown)="onTabKeydown($event)"
+          [attr.data-testid]="'auth-page__tour-tab--' + i"
+        >
+          <span class="tour__bar">
+            <span
+              class="tour__fill"
+              [class.is-running]="i === active()"
+              (animationend)="onProgressEnd($event)"
+            ></span>
+          </span>
+        </button>
+      }
+    </div>
+  </div>
+</section>

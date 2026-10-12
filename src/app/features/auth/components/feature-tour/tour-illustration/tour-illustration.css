@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: inherit;
+}
+
+/* ===== Build animations: they run while the host is `is-playing`, so each return of the slide replays them ===== */
+.a-drop,
+.a-pop,
+.a-slide,
+.a-grow-x,
+.a-grow-y,
+.a-cell {
+  transform-box: fill-box;
+}
+
+.a-pop,
+.a-cell {
+  transform-origin: center;
+}
+
+.a-grow-x {
+  transform-origin: left center;
+}
+
+.a-grow-y {
+  transform-origin: center bottom;
+}
+
+/* With pathLength="1", one dash is the whole line: offset 1 hides it, 0 shows it. */
+.a-draw {
+  stroke-dasharray: 1;
+}
+
+/*
+ * Keyframe names stay in top-level `animation` shorthands: Angular renames a component's
+ * keyframes and rewrites the references, but not inside @media blocks.
+ */
+:host(.is-playing) .a-drop {
+  animation: tour-drop 0.6s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-fade {
+  animation: tour-fade 0.6s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-pop {
+  animation: tour-pop 0.6s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-slide {
+  animation: tour-slide 0.6s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-grow-x {
+  animation: tour-grow-x 0.6s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-grow-y {
+  animation: tour-grow-y 0.6s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-draw {
+  animation: tour-draw 0.9s var(--ease) var(--d, 0ms) both;
+}
+
+:host(.is-playing) .a-sweep {
+  animation: tour-sweep 0.5s var(--ease) var(--d, 0ms) both;
+}
+
+/* The day's grid fills hour by hour, left to right. */
+:host(.is-playing) .a-cell {
+  animation: tour-pop 0.35s var(--ease) calc(var(--i) * 22ms + 300ms) both;
+}
+
+/* Reduced motion: no builds, every drawing simply shows its final state. Same specificity, later rule. */
+@media (prefers-reduced-motion: reduce) {
+  :host(.is-playing) [class] {
+    animation: none;
+  }
+}
+
+@keyframes tour-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes tour-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes tour-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes tour-slide {
+  from {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, 0));
+  }
+}
+
+@keyframes tour-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes tour-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes tour-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* Ends on each segment's own dash length (its attribute). 477.52 = the donut's circumference. */
+@keyframes tour-sweep {
+  from {
+    stroke-dasharray: 0 477.52;
+  }
+}

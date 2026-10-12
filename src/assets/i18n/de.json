@@ -51,14 +51,21 @@
   "LOGIN": {
     "LOGIN": "Anmelden",
     "SLIDES": {
-      "MEMBERS_TITLE": "Verwalten Sie Ihre Mitglieder einfach",
-      "MEMBERS_DESC": "Fügen Sie alle Mitglieder Ihrer Gemeinschaft über ein einziges Dashboard hinzu, bearbeiten und verfolgen Sie sie.",
-      "METERS_TITLE": "Überwachen Sie Ihre Zähler",
-      "METERS_DESC": "Verfolgen Sie die Energieproduktion und den Verbrauch.",
-      "SHARING_TITLE": "Teilungsoperationen",
-      "SHARING_DESC": "Konfigurieren und verwalten Sie Energieteilungsoperationen in Ihrer Gemeinschaft.",
-      "KEYS_TITLE": "Verteilungsschlüssel",
-      "KEYS_DESC": "Erstellen und verwalten Sie Verteilungsschlüssel, um Energie gerecht zu verteilen."
+      "COMMUNITY_TITLE": "Ihre ganze Gemeinschaft an einem Ort",
+      "COMMUNITY_DESC": "Erfassen Sie Mitglieder, verknüpfen Sie ihre Zähler und finden Sie sie auf der Karte.",
+      "SHARING_TITLE": "Teilen, auf die Viertelstunde genau",
+      "SHARING_DESC": "Verfolgen Sie erzeugte, verbrauchte und geteilte Energie, Viertelstunde für Viertelstunde.",
+      "KEYS_TITLE": "Verteilungsschlüssel nach Maß",
+      "KEYS_DESC": "Stellen Sie einen Schlüssel zusammen oder erzeugen Sie einen optimierten, und simulieren Sie ihn mit Ihren Daten, bevor Sie ihn anwenden.",
+      "BILLING_TITLE": "Eine Abrechnung, die dem Teilen folgt",
+      "BILLING_DESC": "Legen Sie Ihre Tarife fest: Jede Rechnung wird aus der geteilten Energie berechnet und bis zur Zahlung verfolgt.",
+      "MEMBER_SPACE_TITLE": "Ein eigener Bereich für jedes Mitglied",
+      "MEMBER_SPACE_DESC": "Jedes Mitglied sieht seinen Verbrauch, seinen Anteil an der geteilten Energie, seine Rechnungen und die Neuigkeiten der Gemeinschaft."
+    },
+    "TOUR": {
+      "LABEL": "OptimCE entdecken",
+      "PAUSE": "Diashow anhalten",
+      "PLAY": "Diashow fortsetzen"
     }
   },
   "NOTIFICATIONS": {
@@ -73,13 +80,15 @@
       "admin_deadline": "Verwaltungsfristen",
       "admin_dossier": "Verwaltungsdossiers",
       "billing_run": "Abrechnungsläufe",
+      "credit_note": "Gutschriften",
       "document": "Dokumente",
       "invoice": "Rechnungen",
       "manager_invitation": "Verwalter-Einladungen",
       "member": "Mitglieder",
       "member_invitation": "Mitglieder-Einladungen",
       "news_poll": "Umfragen",
-      "news_post": "Beiträge"
+      "news_post": "Beiträge",
+      "producer_statement": "Erzeugerabrechnungen"
     },
     "TYPES": {
       "document": {
@@ -118,6 +127,16 @@
         },
         "overdue": {
           "title": "Eine Rechnung ist überfällig"
+        }
+      },
+      "credit_note": {
+        "issued": {
+          "title": "Eine Gutschrift zu Ihren Gunsten wurde ausgestellt"
+        }
+      },
+      "producer_statement": {
+        "issued": {
+          "title": "Eine neue Erzeugerabrechnung ist verfügbar"
         }
       },
       "billing_run": {
@@ -1765,7 +1784,8 @@
       "PAID": "Bezahlt",
       "OVERDUE": "Überfällig",
       "CANCELLED": "Storniert",
-      "RENDER_FAILED": "Erstellung fehlgeschlagen"
+      "RENDER_FAILED": "Erstellung fehlgeschlagen",
+      "CREDITED": "Gutgeschrieben"
     },
     "INVOICE_TYPE": {
       "INVOICE": "Rechnung",
@@ -1784,7 +1804,8 @@
       "DELETE_PDF": "PDF löschen"
     },
     "ISSUE": {
-      "SUCCESS": "Rechnung {{number}} ausgestellt (OGM {{ogm}})."
+      "SUCCESS": "Rechnung {{number}} ausgestellt (OGM {{ogm}}).",
+      "SUCCESS_NO_OGM": "Dokument {{number}} ausgestellt."
     },
     "SEND": {
       "SUCCESS": "Rechnung versendet."
@@ -1903,6 +1924,8 @@
       "ISSUED_AT": "Ausgestellt",
       "DUE_DATE": "Fällig",
       "OGM_LABEL": "Strukturierte Mitteilung",
+      "TO_RECEIVE": "Zu erhalten",
+      "IN_YOUR_FAVOUR": "Zu Ihren Gunsten",
       "PAGE_INFO": "Seite {{page}} von {{total}}"
     },
     "RUN_TOAST_FINISHED": "Die Abrechnungsberechnung ist abgeschlossen.",
