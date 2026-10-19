@@ -22,6 +22,11 @@ export enum InvoiceStatus {
   OVERDUE = 4,
   CANCELLED = 5,
   RENDER_FAILED = 6,
+  /**
+   * Terminal: a credit note correcting this invoice has been issued. The invoice
+   * no longer stands, so it is neither payable nor ever OVERDUE.
+   */
+  CREDITED = 7,
 }
 
 export enum InvoiceType {
@@ -189,6 +194,11 @@ export type SortOrder = 'asc' | 'desc';
 /** Manager tracking board query. Note: billing uses `limit`, not `page_size`. */
 export interface InvoiceQuery {
   status?: InvoiceStatus;
+  /**
+   * Document type. A billing backend that predates this filter ignores it, so a
+   * caller that needs bills only must still check `memberPays` on the rows.
+   */
+  type?: InvoiceType;
   participant?: number;
   /** Local calendar date (YYYY-MM-DD) — filter on invoice `issued_at`, inclusive. */
   issued_from?: string;
@@ -202,6 +212,8 @@ export interface InvoiceQuery {
 /** Member self-service query (caller-scoped by the auth header server-side). */
 export interface MyInvoiceQuery {
   status?: InvoiceStatus;
+  /** Document type; see {@link InvoiceQuery.type}. */
+  type?: InvoiceType;
   issued_from?: string;
   issued_to?: string;
   sort?: InvoiceSortField;

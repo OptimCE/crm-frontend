@@ -91,11 +91,19 @@ const REGISTRY: Record<string, NotificationPresentation> = {
   // billing — `/billing` is a single role-branched hub (BillingHub): the invoiced
   // member lands on their own invoice list, a manager on the console. There is no
   // per-invoice route and the hub reads no route params, so a query string would
-  // be dead weight; when a detail view exists only these three entries change
-  // (the producers already send `invoice_id`).
+  // be dead weight; when a detail view exists only these entries change (the
+  // producers already send `invoice_id`).
   'invoice.issued': { icon: 'pi pi-receipt', route: staticRoute('/billing'), feature: 'billing' },
   'invoice.overdue': {
     icon: 'pi pi-exclamation-circle',
+    route: staticRoute('/billing'),
+    feature: 'billing',
+  },
+  // The two documents a member does not pay announce themselves separately, so
+  // neither reads as "a new invoice".
+  'credit_note.issued': { icon: 'pi pi-undo', route: staticRoute('/billing'), feature: 'billing' },
+  'producer_statement.issued': {
+    icon: 'pi pi-wallet',
     route: staticRoute('/billing'),
     feature: 'billing',
   },

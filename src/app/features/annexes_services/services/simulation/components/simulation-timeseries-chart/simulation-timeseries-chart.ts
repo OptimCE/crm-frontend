@@ -6,13 +6,18 @@ import { ChartModule } from 'primeng/chart';
 import { Select } from 'primeng/select';
 
 import { LocaleService } from '../../../../../../core/services/language/locale.service';
-import { SimulationIterationTimeseriesDTO } from '../../../../../../shared/dtos/simulation.dtos';
+import {
+  SimulationIterationTimeseriesDTO,
+  SimulationSeries,
+} from '../../../../../../shared/dtos/simulation.dtos';
+import { SIMULATION_CHART_MAX_POINTS } from '../../../../../../shared/services/simulation.service';
 import { translationChanges } from '../../../../../../shared/utils/translated-options.utils';
 
 // A full year of 15-minute data is ~35k points; rendering every one chokes the
 // canvas. We stride down to at most this many points for display — the totals
-// (shown as metric cards) are always exact, this only smooths the curve.
-const MAX_POINTS = 1500;
+// (shown as metric cards) are always exact, this only smooths the curve. The
+// service already samples to it; an older one sends every timestep.
+const MAX_POINTS = SIMULATION_CHART_MAX_POINTS;
 
 @Component({
   selector: 'app-simulation-timeseries-chart',
@@ -25,6 +30,8 @@ export class SimulationTimeseriesChart {
   private readonly locale = inject(LocaleService).locale;
 
   readonly iterations = input.required<SimulationIterationTimeseriesDTO[]>();
+  /** Timesteps between two values of the series, as the service sampled them. */
+  readonly stride = input(1);
   readonly selectedIndex = signal(0);
 
   readonly hasMultipleIterations = computed(() => this.iterations().length > 1);
@@ -49,8 +56,10 @@ export class SimulationTimeseriesChart {
     if (!iteration) return null;
     const length = iteration.consumption.length;
     const stride = Math.max(1, Math.ceil(length / MAX_POINTS));
+    // Value i is timestep i * serviceStride, labelled from 1.
+    const serviceStride = this.stride();
     const labels = this.decimate(
-      Array.from({ length }, (_, i) => i + 1),
+      Array.from({ length }, (_, i) => i * serviceStride + 1),
       stride,
     ).map((n) => String(n));
     return {
@@ -100,8 +109,11 @@ export class SimulationTimeseriesChart {
       tooltip: {
         callbacks: {
           label: (item: { dataset: { label?: string }; raw: unknown }): string => {
-            const value = item.raw as number;
-            return `${item.dataset.label ?? ''}: ${formatNumber(value, this.locale(), '1.2-2')} kWh`;
+            const value = item.raw as number | null;
+            // A gap (null) is no value, not 0 kWh, which formatNumber would print.
+            const text =
+              value === null ? '–' : `${formatNumber(value, this.locale(), '1.2-2')} kWh`;
+            return `${item.dataset.label ?? ''}: ${text}`;
           },
         },
       },
@@ -129,7 +141,13 @@ export class SimulationTimeseriesChart {
     this.selectedIndex.set(index);
   }
 
-  private dataset(labelKey: string, data: number[], color: string, stride: number, fill: boolean) {
+  private dataset(
+    labelKey: string,
+    data: SimulationSeries,
+    color: string,
+    stride: number,
+    fill: boolean,
+  ) {
     return {
       label: this.translate.instant(labelKey) as string,
       data: this.decimate(data, stride),
@@ -143,7 +161,7 @@ export class SimulationTimeseriesChart {
     };
   }
 
-  private decimate(values: number[], stride: number): number[] {
+  private decimate<T>(values: T[], stride: number): T[] {
     if (stride <= 1) return values;
     return values.filter((_, index) => index % stride === 0);
   }

@@ -76,7 +76,13 @@ describe('routeFor', () => {
   });
 
   it('sends billing notifications to the role-branched hub', () => {
-    for (const type of ['invoice.issued', 'invoice.overdue', 'billing_run.completed']) {
+    for (const type of [
+      'invoice.issued',
+      'invoice.overdue',
+      'credit_note.issued',
+      'producer_statement.issued',
+      'billing_run.completed',
+    ]) {
       expect(routeFor(notification(type, { invoice_id: 8 }))).toBe('/billing');
     }
   });

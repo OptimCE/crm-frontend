@@ -1,7 +1,7 @@
 import { signal } from '@angular/core';
 import { AddressSuggestionDTO } from '../../dtos/geocoding.dtos';
 import { AddressGeoState, AddressPicked } from './address-autocomplete';
-import { AddressFieldValues, geoFromPick } from './address-field-source';
+import { AddressFieldValues, addressFingerprint, geoFromPick } from './address-field-source';
 
 /** The extra fields a picked suggestion contributes to an address payload. */
 export interface PickedAddressGeo {
@@ -9,6 +9,16 @@ export interface PickedAddressGeo {
   longitude: number;
   best_address_id?: string;
   country?: string;
+}
+
+/**
+ * What a picked suggestion tells the GRD lookup that typed text cannot: the
+ * commune's NIS code and the locality inside it. Sent as GET parameters, never
+ * stored.
+ */
+export interface PickedDsoHint {
+  nis_code?: number;
+  post_name?: string;
 }
 
 /**
@@ -56,6 +66,30 @@ export class AddressPickStore {
    */
   geoFor(current: AddressFieldValues): PickedAddressGeo | null {
     return geoFromPick(this.pick, this.fingerprint, current);
+  }
+
+  /**
+   * The register's commune code and locality name, for the GRD lookup, or null if
+   * the form no longer matches the pick (the rule of {@link geoFor}) or the pick
+   * carried neither.
+   *
+   * Without it the lookup still runs on the typed postcode and city; it just asks
+   * more often which locality the address is in.
+   */
+  dsoHintFor(current: AddressFieldValues): PickedDsoHint | null {
+    if (!this.pick || this.fingerprint === null) {
+      return null;
+    }
+    if (this.fingerprint !== addressFingerprint(current)) {
+      return null;
+    }
+    const hint: PickedDsoHint = {
+      ...(this.pick.nis_code !== undefined && this.pick.nis_code !== null
+        ? { nis_code: this.pick.nis_code }
+        : {}),
+      ...(this.pick.post_name?.trim() ? { post_name: this.pick.post_name.trim() } : {}),
+    };
+    return Object.keys(hint).length > 0 ? hint : null;
   }
 
   /** True when the user was warned that this address cannot be located. */

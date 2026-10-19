@@ -360,9 +360,14 @@
                   Each field spans three rows of a subgrid (label / input / error), so
                   the inputs of a row line up even when only some labels wrap to two
                   lines, and a message under one field does not push its neighbours.
+                  `md:grid-cols-1` gives that inner grid a minmax(0, 1fr) column: with the
+                  implicit auto column, a number input or a long select placeholder kept its
+                  intrinsic width and overflowed into the gap.
                 -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-y-0">
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="samplingPower"
                       label="{{ 'METER.INFORMATIONS.WITHDRAWAL_POWER_LABEL' | translate }}"
@@ -380,7 +385,9 @@
                     />
                     <app-error-handler controlName="samplingPower" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="totalGeneratingCapacity"
                       label="{{ 'METER.INFORMATIONS.TOTAL_GENERATING_CAPACITY_LABEL' | translate }}"
@@ -400,7 +407,9 @@
                     />
                     <app-error-handler controlName="totalGeneratingCapacity" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="amperage"
                       label="{{ 'METER.INFORMATIONS.AMPERAGE_LABEL' | translate }}"
@@ -422,7 +431,9 @@
 
                 <!-- Dropdowns for large option sets -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-y-0 mt-4">
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="selectProductionChainCategory"
                       label="{{ 'METER.INFORMATIONS.PRODUCTION_CHAIN_LABEL' | translate }}"
@@ -442,7 +453,9 @@
                     />
                     <app-error-handler controlName="productionChain" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="selectInjectionStatusCategory"
                       label="{{ 'METER.INFORMATIONS.INJECTION_STATUS_LABEL' | translate }}"
@@ -461,7 +474,9 @@
                     />
                     <app-error-handler controlName="injectionStatus" />
                   </div>
-                  <div class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid">
+                  <div
+                    class="flex flex-col md:grid md:row-span-3 md:grid-rows-subgrid md:grid-cols-1"
+                  >
                     <app-field-label-helper
                       forId="selectGrd"
                       label="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
@@ -471,16 +486,152 @@
                     />
                     <p-select
                       id="selectGrd"
-                      [options]="grdAvailable"
+                      [options]="grdAvailable()"
                       formControlName="grd"
                       optionLabel="name"
-                      optionValue="name"
+                      optionValue="id"
+                      [filter]="true"
+                      filterBy="name"
                       placeholder="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"
                       appendTo="body"
+                      (onChange)="onGrdChange()"
                       data-testid="meter-creation__select--grd"
                     />
                     <app-error-handler controlName="grd" />
                   </div>
+                </div>
+
+                <!--
+                  What the GRD lookup said about the address of step 1. Advisory only:
+                  the select stays free, a pick by hand always wins, and nothing here
+                  can hold the submit back. "Not found" and "unavailable" change
+                  nothing; they only say why the select was left alone.
+                -->
+                <div class="mt-3 flex flex-col gap-2" data-testid="meter-creation__grd-lookup">
+                  @if (grdLookupLoading()) {
+                    <span
+                      class="text-xs text-surface-500"
+                      data-testid="meter-creation__grd-lookup--loading"
+                    >
+                      <i class="pi pi-spin pi-spinner mr-1"></i>
+                      {{ 'METER.GRD_LOOKUP.LOADING' | translate }}
+                    </span>
+                  }
+                  @if (grdPrefilledName(); as name) {
+                    <span
+                      class="text-xs text-surface-600"
+                      data-testid="meter-creation__grd-lookup--prefilled"
+                    >
+                      <i class="pi pi-check-circle mr-1"></i>
+                      {{ 'METER.GRD_LOOKUP.PREFILLED' | translate: { name } }}
+                    </span>
+                  }
+                  @if (grdLookupStatus() === 'not_found') {
+                    <span
+                      class="text-xs text-surface-500"
+                      data-testid="meter-creation__grd-lookup--not-found"
+                    >
+                      {{ 'METER.GRD_LOOKUP.NOT_FOUND' | translate }}
+                    </span>
+                  } @else if (grdLookupStatus() === 'unavailable') {
+                    <span
+                      class="text-xs text-surface-500"
+                      data-testid="meter-creation__grd-lookup--unavailable"
+                    >
+                      {{ 'METER.GRD_LOOKUP.UNAVAILABLE' | translate }}
+                    </span>
+                  }
+
+                  <!--
+                    The choices ask for the commune, then the locality, when the
+                    postcode alone does not settle the GRD. A choice is not part of
+                    the meter, so the radios bind a standalone ngModel instead of a
+                    control of metersForm (p-radioButton needs one or the other).
+                  -->
+                  @if (grdChoices().communes; as choice) {
+                    <div role="radiogroup" data-testid="meter-creation__grd-lookup--communes">
+                      <span class="field-label block mb-1">
+                        {{ 'METER.GRD_LOOKUP.CHOOSE_COMMUNE' | translate }}
+                      </span>
+                      <div class="flex flex-wrap gap-x-4 gap-y-2">
+                        @for (option of choice.options; track option.value) {
+                          <div class="flex items-center gap-2">
+                            <p-radioButton
+                              [inputId]="'grdCommune' + $index"
+                              name="grdCommune"
+                              [value]="option.value"
+                              [ngModel]="choice.selected"
+                              [ngModelOptions]="{ standalone: true }"
+                              (ngModelChange)="chooseGrdCommune($event)"
+                            />
+                            <label [for]="'grdCommune' + $index" class="text-sm cursor-pointer">
+                              {{ option.label }}
+                            </label>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                  @if (grdChoices().sections; as choice) {
+                    <div role="radiogroup" data-testid="meter-creation__grd-lookup--sections">
+                      <span class="field-label block mb-1">
+                        {{ 'METER.GRD_LOOKUP.CHOOSE_SECTION' | translate }}
+                      </span>
+                      <div class="flex flex-wrap gap-x-4 gap-y-2">
+                        @for (option of choice.options; track option.value) {
+                          <div class="flex items-center gap-2">
+                            <p-radioButton
+                              [inputId]="'grdSection' + $index"
+                              name="grdSection"
+                              [value]="option.value"
+                              [ngModel]="choice.selected"
+                              [ngModelOptions]="{ standalone: true }"
+                              (ngModelChange)="chooseGrdSection($event)"
+                            />
+                            <label [for]="'grdSection' + $index" class="text-sm cursor-pointer">
+                              {{ option.label }}
+                            </label>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+
+                  @if (grdNote(); as note) {
+                    <p-message
+                      severity="info"
+                      styleClass="block text-sm"
+                      data-testid="meter-creation__grd-lookup--note"
+                    >
+                      {{ note }}
+                    </p-message>
+                  }
+                  @if (grdToConfirm()) {
+                    <p-message
+                      severity="info"
+                      styleClass="block text-sm"
+                      data-testid="meter-creation__grd-lookup--to-confirm"
+                    >
+                      {{ 'METER.GRD_LOOKUP.TO_CONFIRM' | translate }}
+                    </p-message>
+                  }
+                  @for (warning of grdWarnings(); track $index) {
+                    <p-message
+                      severity="warn"
+                      styleClass="block text-sm"
+                      data-testid="meter-creation__grd-lookup--warning"
+                    >
+                      {{ warning }}
+                    </p-message>
+                  }
+                  @if (grdDataVersionShown(); as version) {
+                    <span
+                      class="text-xs text-surface-500"
+                      data-testid="meter-creation__grd-lookup--attribution"
+                    >
+                      {{ 'METER.GRD_LOOKUP.ATTRIBUTION' | translate: { version } }}
+                    </span>
+                  }
                 </div>
               </div>
 

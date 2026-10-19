@@ -51,14 +51,21 @@
   "LOGIN": {
     "LOGIN": "Aanmelden",
     "SLIDES": {
-      "MEMBERS_TITLE": "Beheer uw leden eenvoudig",
-      "MEMBERS_DESC": "Voeg toe, bewerk en volg al uw gemeenschapsleden vanuit één dashboard.",
-      "METERS_TITLE": "Monitor uw meters",
-      "METERS_DESC": "Volg de energieproductie en het verbruik.",
-      "SHARING_TITLE": "Deeloperaties",
-      "SHARING_DESC": "Configureer en beheer energiedelingsoperaties binnen uw gemeenschap.",
-      "KEYS_TITLE": "Verdeelsleutels",
-      "KEYS_DESC": "Maak en beheer verdeelsleutels om energie eerlijk te verdelen."
+      "COMMUNITY_TITLE": "Uw hele gemeenschap op één plek",
+      "COMMUNITY_DESC": "Schrijf leden in, koppel hun meters en vind ze terug op de kaart.",
+      "SHARING_TITLE": "Delen, tot op het kwartier",
+      "SHARING_DESC": "Volg de geproduceerde, verbruikte en gedeelde energie, kwartier per kwartier.",
+      "KEYS_TITLE": "Verdeelsleutels op maat",
+      "KEYS_DESC": "Stel een sleutel samen of genereer een geoptimaliseerde, en simuleer hem op uw eigen gegevens voordat u hem toepast.",
+      "BILLING_TITLE": "Facturatie die het delen volgt",
+      "BILLING_DESC": "Stel uw tarieven in: elke factuur wordt berekend op de gedeelde energie en opgevolgd tot ze betaald is.",
+      "MEMBER_SPACE_TITLE": "Een eigen ruimte voor elk lid",
+      "MEMBER_SPACE_DESC": "Elk lid ziet zijn verbruik, zijn deel van de gedeelde energie, zijn facturen en het nieuws van de gemeenschap."
+    },
+    "TOUR": {
+      "LABEL": "Ontdek OptimCE",
+      "PAUSE": "Diavoorstelling pauzeren",
+      "PLAY": "Diavoorstelling hervatten"
     }
   },
   "NOTIFICATIONS": {
@@ -73,13 +80,15 @@
       "admin_deadline": "Administratieve deadlines",
       "admin_dossier": "Administratieve dossiers",
       "billing_run": "Facturatierondes",
+      "credit_note": "Creditnota's",
       "document": "Documenten",
       "invoice": "Facturen",
       "manager_invitation": "Beheerdersuitnodigingen",
       "member": "Leden",
       "member_invitation": "Ledenuitnodigingen",
       "news_poll": "Peilingen",
-      "news_post": "Nieuwsberichten"
+      "news_post": "Nieuwsberichten",
+      "producer_statement": "Producentafrekeningen"
     },
     "TYPES": {
       "document": {
@@ -118,6 +127,16 @@
         },
         "overdue": {
           "title": "Een factuur is over de vervaldatum"
+        }
+      },
+      "credit_note": {
+        "issued": {
+          "title": "Er is een creditnota in uw voordeel uitgereikt"
+        }
+      },
+      "producer_statement": {
+        "issued": {
+          "title": "Er is een nieuwe producentafrekening beschikbaar"
         }
       },
       "billing_run": {
@@ -1125,8 +1144,9 @@
       "PRODUCTION_CHAIN_TOOLTIP": "Type hernieuwbare of koolstofarme installatie op deze meter. Kies 'Geen' voor een puur verbruiksmeter.",
       "INJECTION_STATUS_LABEL": "Injectiestatus",
       "INJECTION_STATUS_TOOLTIP": "Beschrijft de relatie van de meter met een productie-installatie en wie de injectierechten heeft: eigenaar, houder van een gebruiksrecht of geen.",
-      "GRD_LABEL": "GRD",
+      "GRD_LABEL": "Netbeheerder",
       "GRD_TOOLTIP": "Distributienetbeheerder: het gereglementeerde nutsbedrijf dat het elektriciteitsnet in uw gebied beheert (bv. Ores, Fluvius, Sibelga).",
+      "GRD_ELIA_OPTION": "Elia — lokaal transmissienet (30–70 kV)",
       "RATE_LABEL": "Tarief",
       "RATE_TOOLTIP": "Enkelvoudig tarief: één prijs 24/7. Tweevoudig uurrooster: dag- en nachtprijzen verschillen. Uitsluitend nacht: alle energie aan nachttarief (voor grote opslag- of verwarmingssystemen).",
       "USAGE_LABEL": "Gebruik",
@@ -1139,6 +1159,20 @@
       "ERROR": {
         "INVALID_EAN": "De EAN moet precies 18 cijfers bevatten."
       }
+    },
+    "GRD_LOOKUP": {
+      "LOADING": "Netbeheerder van dit adres opzoeken…",
+      "PREFILLED": "{{name}}, ingevuld op basis van het adres. Controleer het en wijzig het indien nodig.",
+      "CHOOSE_SECTION": "De netbeheerder hangt af van de deelgemeente. Kies die van de meter:",
+      "CHOOSE_COMMUNE": "Deze postcode omvat meerdere gemeenten. Kies die van de meter:",
+      "NOT_FOUND": "Geen netbeheerder gevonden voor deze postcode: kies hem in de lijst.",
+      "UNAVAILABLE": "Het opzoeken van de netbeheerder is momenteel niet beschikbaar: kies hem in de lijst.",
+      "TO_CONFIRM": "Deze informatie moet nog bevestigd worden: controleer de netbeheerder op een recente energiefactuur.",
+      "ATTRIBUTION": "Netbeheerders (gegevens {{version}}): Statbel (CC BY 4.0, gewijzigd), Fluvius, ORES, regulatoren CWaPE, VREG en Brugel"
+    },
+    "GRD_WARNING": {
+      "REGION_OUTSIDE_COMMUNITY_REGULATOR": "Dit adres valt onder {{address_regulator}}, terwijl de gemeenschap onder {{community_regulator}} valt. Controleer het adres van de meter.",
+      "EAN_SIBELGA_OUTSIDE_BRUSSELS": "Deze EAN begint met het prefix van Sibelga (Brussel), maar het adres ligt niet in Brussel. Controleer de EAN en het adres."
     },
     "CATEGORIES": {
       "PRODUCTION_CHAIN": {
@@ -1765,7 +1799,8 @@
       "PAID": "Betaald",
       "OVERDUE": "Achterstallig",
       "CANCELLED": "Geannuleerd",
-      "RENDER_FAILED": "Weergave mislukt"
+      "RENDER_FAILED": "Weergave mislukt",
+      "CREDITED": "Gecrediteerd"
     },
     "INVOICE_TYPE": {
       "INVOICE": "Factuur",
@@ -1784,7 +1819,8 @@
       "DELETE_PDF": "PDF verwijderen"
     },
     "ISSUE": {
-      "SUCCESS": "Factuur {{number}} uitgereikt (OGM {{ogm}})."
+      "SUCCESS": "Factuur {{number}} uitgereikt (OGM {{ogm}}).",
+      "SUCCESS_NO_OGM": "Document {{number}} uitgereikt."
     },
     "SEND": {
       "SUCCESS": "Factuur verzonden."
@@ -1903,6 +1939,8 @@
       "ISSUED_AT": "Uitgereikt",
       "DUE_DATE": "Vervaldatum",
       "OGM_LABEL": "Gestructureerde mededeling",
+      "TO_RECEIVE": "Te ontvangen",
+      "IN_YOUR_FAVOUR": "In uw voordeel",
       "PAGE_INFO": "Pagina {{page}} van {{total}}"
     },
     "RUN_TOAST_FINISHED": "De facturatieberekening is voltooid.",

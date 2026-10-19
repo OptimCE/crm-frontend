@@ -48,6 +48,9 @@ export function envelopeData<T>(response: ApiResponse<T | string>): T | null {
 /**
  * "Unpaid" has no server-side filter: `GET /billing/invoices` takes a single
  * `status`, so the definition lives here and costs one count call per status.
+ * It only means "unpaid" together with `type: InvoiceType.INVOICE`: a producer
+ * statement or a credit note goes through the same statuses. A CREDITED
+ * invoice is excluded by its status.
  */
 export const UNPAID_INVOICE_STATUSES: readonly InvoiceStatus[] = [
   InvoiceStatus.ISSUED,

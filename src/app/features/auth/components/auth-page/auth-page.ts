@@ -1,23 +1,15 @@
 import { Component, inject, input } from '@angular/core';
 import { Button } from 'primeng/button';
-import { Carousel } from 'primeng/carousel';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSelector } from '../../../../shared/components/language-selector/language-selector';
 import Keycloak from 'keycloak-js';
 import { LanguageService } from '../../../../core/services/language/language.service';
 import { safeReturnUrl } from '../../../../core/guards/active-community.guard';
-
-interface Slide {
-  icon: string;
-  titleKey: string;
-  descKey: string;
-  images: string;
-  index: number;
-}
+import { FeatureTour } from '../feature-tour/feature-tour';
 
 @Component({
   selector: 'app-auth-page',
-  imports: [Button, Carousel, TranslatePipe, LanguageSelector],
+  imports: [Button, TranslatePipe, LanguageSelector, FeatureTour],
   standalone: true,
   templateUrl: './auth-page.html',
   styleUrl: './auth-page.css',
@@ -31,37 +23,6 @@ export class AuthPage {
    * Bound from `?returnUrl=` by `withComponentInputBinding()` (app.config.ts).
    */
   readonly returnUrl = input<string | undefined>();
-
-  slides: Slide[] = [
-    {
-      icon: 'pi-users',
-      titleKey: 'LOGIN.SLIDES.MEMBERS_TITLE',
-      descKey: 'LOGIN.SLIDES.MEMBERS_DESC',
-      images: 'assets/images/sliders/members',
-      index: 0,
-    },
-    {
-      icon: 'pi-bolt',
-      titleKey: 'LOGIN.SLIDES.METERS_TITLE',
-      descKey: 'LOGIN.SLIDES.METERS_DESC',
-      images: 'assets/images/sliders/chart',
-      index: 1,
-    },
-    {
-      icon: 'pi-share-alt',
-      titleKey: 'LOGIN.SLIDES.SHARING_TITLE',
-      descKey: 'LOGIN.SLIDES.SHARING_DESC',
-      images: 'assets/images/sliders/sharing',
-      index: 2,
-    },
-    {
-      icon: 'pi-key',
-      titleKey: 'LOGIN.SLIDES.KEYS_TITLE',
-      descKey: 'LOGIN.SLIDES.KEYS_DESC',
-      images: 'assets/images/sliders/sun',
-      index: 3,
-    },
-  ];
 
   /**
    * `locale` is forwarded by keycloak-js as the OIDC `ui_locales` parameter.

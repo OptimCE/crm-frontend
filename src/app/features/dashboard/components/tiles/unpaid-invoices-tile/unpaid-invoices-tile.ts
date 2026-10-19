@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { catchError, forkJoin, map, of } from 'rxjs';
 
-import { BillingRunOut } from '../../../../../shared/dtos/billing.dtos';
+import { BillingRunOut, InvoiceType } from '../../../../../shared/dtos/billing.dtos';
 import { SharingOperationPartialDTO } from '../../../../../shared/dtos/sharing_operation.dtos';
 import { BillingService } from '../../../../../shared/services/billing.service';
 import { TileState, UNPAID_INVOICE_STATUSES } from '../../../dashboard-format';
@@ -29,6 +29,12 @@ interface LastRun {
  * `GET /billing/invoices` has **no `unpaid` filter** — `status` takes a single
  * value — so "unpaid" is defined here as ISSUED ∪ SENT ∪ OVERDUE and costs one
  * `limit=1` count per status.
+ *
+ * Each count is of consumer INVOICES only (`type`): a producer statement is
+ * what the community owes a producer and a credit note is owed to a member, so
+ * neither is money the community is still owed. A count cannot be filtered
+ * client-side, so against a billing backend that predates the `type` filter
+ * this figure still includes them.
  *
  * The two halves fail differently, on purpose: a failed COUNT fails the tile,
  * because a wrong money figure is worse than no figure, while a failed last-run
@@ -75,7 +81,7 @@ export class UnpaidInvoicesTile {
     const counts = forkJoin(
       UNPAID_INVOICE_STATUSES.map((status) =>
         this.billingService
-          .listInvoices({ page: 1, limit: 1, status })
+          .listInvoices({ page: 1, limit: 1, status, type: InvoiceType.INVOICE })
           .pipe(map((response) => response.pagination.total)),
       ),
     );

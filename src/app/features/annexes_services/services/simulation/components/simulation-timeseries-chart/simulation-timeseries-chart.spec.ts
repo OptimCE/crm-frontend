@@ -7,7 +7,7 @@ import { SimulationTimeseriesChart } from './simulation-timeseries-chart';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
-function series(length: number, value = 1): number[] {
+function series(length: number, value: number | null = 1): (number | null)[] {
   return Array.from({ length }, () => value);
 }
 
@@ -35,10 +35,14 @@ describe('SimulationTimeseriesChart', () => {
   let component: SimulationTimeseriesChart;
   let fixture: ComponentFixture<SimulationTimeseriesChart>;
 
-  async function createWith(iterations: SimulationIterationTimeseriesDTO[]): Promise<void> {
+  async function createWith(
+    iterations: SimulationIterationTimeseriesDTO[],
+    stride?: number,
+  ): Promise<void> {
     fixture = TestBed.createComponent(SimulationTimeseriesChart);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('iterations', iterations);
+    if (stride !== undefined) fixture.componentRef.setInput('stride', stride);
     await fixture.whenStable();
   }
 
@@ -149,6 +153,25 @@ describe('SimulationTimeseriesChart', () => {
       data?.datasets.forEach((d) => expect(d.data.length).toBe(data?.labels.length));
     });
 
+    // The service samples the series for the chart: value i is timestep
+    // i * stride, and the axis must say which timestep it is.
+    it('should label the values with the timesteps the service sampled', async () => {
+      await createWith([buildIteration({ consumption: series(4) })], 24);
+      expect(component.chartData()?.labels).toEqual(['1', '25', '49', '73']);
+    });
+
+    it('should keep the labels of a sampled series it samples again', async () => {
+      await createWith([buildIteration({ consumption: series(3000) })], 2);
+      const labels = component.chartData()?.labels;
+      expect(labels?.length).toBe(1500);
+      expect(labels?.slice(0, 3)).toEqual(['1', '5', '9']);
+    });
+
+    it('should keep a missing value as a gap', async () => {
+      await createWith([buildIteration({ consumption: [1, null, 3] })]);
+      expect(component.chartData()?.datasets[0].data).toEqual([1, null, 3]);
+    });
+
     it('should follow the selected iteration', async () => {
       await createWith([
         buildIteration({ number: 1, consumption: series(3) }),
@@ -196,6 +219,15 @@ describe('SimulationTimeseriesChart', () => {
         raw: 1234.5,
       });
       expect(label).toBe(`Surplus: 1${String.fromCharCode(0x202f)}234,50 kWh`);
+    });
+
+    it('writes a gap as no value, not 0 kWh', async () => {
+      await createWith([buildIteration()]);
+      const label = component.options.plugins.tooltip.callbacks.label({
+        dataset: { label: 'Surplus' },
+        raw: null,
+      });
+      expect(label).toBe('Surplus: –');
     });
   });
 });

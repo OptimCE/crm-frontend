@@ -9,26 +9,37 @@ import { CommunityServicesStore } from '../../../../../core/services/community-s
 import { UserContextService } from '../../../../../core/services/authorization/authorization.service';
 import { DashboardTile } from '../../../../dashboard/components/tiles/dashboard-tile/dashboard-tile';
 import { TileState } from '../../../../dashboard/dashboard-format';
-import { InvoiceOut, InvoiceStatus } from '../../../../../shared/dtos/billing.dtos';
+import { InvoiceOut, InvoiceStatus, InvoiceType } from '../../../../../shared/dtos/billing.dtos';
 import { MyCommunityDTO } from '../../../../../shared/dtos/community.dtos';
 import { BillingService } from '../../../../../shared/services/billing.service';
+import { memberPays } from '../../../../billing/billing-format';
 import { envelopeData } from '../../../home-format';
 
-/** Issued, sent or overdue — an invoice the member still owes. */
+/**
+ * Issued, sent or overdue. The status alone does not make a document payable:
+ * a producer statement or a credit note goes through the same states, which is
+ * why the rows are also filtered with `memberPays`.
+ */
 const UNPAID: readonly InvoiceStatus[] = [
   InvoiceStatus.ISSUED,
   InvoiceStatus.SENT,
   InvoiceStatus.OVERDUE,
 ];
 
-/** One community's unpaid invoices, for a per-community sub-list. */
+/** One community's invoices still to pay, for a per-community sub-list. */
 export interface CommunityInvoices {
   community: MyCommunityDTO;
   invoices: InvoiceOut[];
 }
 
 /**
- * "Mes factures" — unpaid invoices across every community, via a fan-out.
+ * "Mes factures à payer" — unpaid bills across every community, via a fan-out.
+ *
+ * Bills only: `/invoices/mine` also holds the member's producer statements
+ * (the community pays THEM) and credit notes. The read asks for
+ * `type: INVOICE`; a billing backend that predates that filter ignores it, so
+ * the rows are still checked with `memberPays`. A community left with nothing
+ * to pay gets no row.
  *
  * `/billing/invoices/mine` is member-scoped but resolves its tenant from
  * `X-Community-ID`, so there is no single call that spans communities. Each is
@@ -102,6 +113,7 @@ export class MyInvoicesPanel {
                 this.billingService
                   .listMyInvoicesForCommunity(community.auth_community_id, {
                     status,
+                    type: InvoiceType.INVOICE,
                     page: 1,
                     limit: 20,
                   })
@@ -109,9 +121,9 @@ export class MyInvoicesPanel {
               ),
             ).pipe(
               switchMap((responses) => {
-                const invoices = responses.flatMap(
-                  (response) => envelopeData<InvoiceOut[]>(response) ?? [],
-                );
+                const invoices = responses
+                  .flatMap((response) => envelopeData<InvoiceOut[]>(response) ?? [])
+                  .filter((invoice) => memberPays(invoice.type));
                 return of<CommunityInvoices | null>(
                   invoices.length > 0 ? { community, invoices } : null,
                 );

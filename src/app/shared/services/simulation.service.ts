@@ -18,6 +18,13 @@ import { ServiceBase } from './service.base';
 
 const CACHE_PREFIX = 'simulation';
 
+/**
+ * The most points the time-series chart draws per series. The service samples
+ * the series down to it, keeping only each iteration's own: the whole stored
+ * object, per-consumer series included, reaches 400 MB for a large run.
+ */
+export const SIMULATION_CHART_MAX_POINTS = 1500;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -46,10 +53,12 @@ export class SimulationService extends ServiceBase {
     );
   }
 
+  /** Each iteration's own series, sampled for the chart (no per-consumer series). */
   getTimeseries(id: number): Observable<ApiResponse<SimulationTimeseriesDTO | string>> {
     return this.cachedGet<ApiResponse<SimulationTimeseriesDTO | string>>(
       `${CACHE_PREFIX}:timeseries:${id}`,
       `${this.apiAddress}/${id}/timeseries`,
+      { max_points: SIMULATION_CHART_MAX_POINTS },
     );
   }
 

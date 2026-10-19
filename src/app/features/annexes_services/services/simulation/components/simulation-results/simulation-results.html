@@ -205,7 +205,7 @@
         </p>
       } @else if (timeseries(); as ts) {
         @defer (on viewport) {
-          <app-simulation-timeseries-chart [iterations]="ts.iterations" />
+          <app-simulation-timeseries-chart [iterations]="ts.iterations" [stride]="ts.stride ?? 1" />
         } @placeholder {
           <p-skeleton width="100%" height="22rem" />
         } @loading {

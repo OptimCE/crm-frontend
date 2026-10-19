@@ -180,9 +180,7 @@
       <div>
         <span class="field-label">{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}</span>
         @if (meterData().grd) {
-          <span class="field-value" data-testid="meter-data-view__text--grd">{{
-            meterData().grd
-          }}</span>
+          <span class="field-value" data-testid="meter-data-view__text--grd">{{ grd() }}</span>
         } @else {
           <span class="field-empty">--</span>
         }

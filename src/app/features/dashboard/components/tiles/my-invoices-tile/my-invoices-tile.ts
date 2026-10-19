@@ -4,9 +4,9 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { catchError, forkJoin, map, of } from 'rxjs';
 
-import { InvoiceOut } from '../../../../../shared/dtos/billing.dtos';
+import { InvoiceOut, InvoiceType } from '../../../../../shared/dtos/billing.dtos';
 import { BillingService } from '../../../../../shared/services/billing.service';
-import { invoiceStatusLabelKey } from '../../../../billing/billing-format';
+import { invoiceStatusLabelKey, memberPays } from '../../../../billing/billing-format';
 import { TileState, UNPAID_INVOICE_STATUSES } from '../../../dashboard-format';
 import { DashboardTile } from '../dashboard-tile/dashboard-tile';
 import { LocaleNumberPipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
@@ -14,13 +14,24 @@ import { LocaleNumberPipe } from '../../../../../shared/pipes/locale-format/loca
 const VISIBLE_LIMIT = 3;
 
 /**
- * The member's own invoices, unpaid first.
+ * Read per status, wider than what is shown. The server filters on `type`, but
+ * an older backend ignores that filter and the documents that are not bills are
+ * then dropped AFTER the read, so reading only VISIBLE_LIMIT could let three
+ * producer statements hide a bill that is due later.
+ */
+const FETCH_LIMIT = 20;
+
+/**
+ * The member's own bills still to pay, earliest due first.
  *
  * Uses `/billing/invoices/mine`, which resolves the caller's members server-side
  * — the manager's `/billing/invoices` would show the whole community ledger.
  *
  * "Unpaid" is ISSUED ∪ SENT ∪ OVERDUE: `status` takes one value per request, so
- * the definition costs one small read each.
+ * the definition costs one small read each. "To pay" also needs the type: a
+ * producer statement or a credit note in those states is not something the
+ * member pays. The read asks for `type: INVOICE`, and the rows are still
+ * checked with `memberPays` for a backend that predates that filter.
  */
 @Component({
   selector: 'app-my-invoices-tile',
@@ -62,8 +73,18 @@ export class MyInvoicesTile {
     forkJoin(
       UNPAID_INVOICE_STATUSES.map((status) =>
         this.billingService
-          .listMyInvoices({ page: 1, limit: VISIBLE_LIMIT, status, sort: 'due_date', order: 'asc' })
-          .pipe(map((response) => (Array.isArray(response.data) ? response.data : []))),
+          .listMyInvoices({
+            page: 1,
+            limit: FETCH_LIMIT,
+            status,
+            type: InvoiceType.INVOICE,
+            sort: 'due_date',
+            order: 'asc',
+          })
+          .pipe(
+            map((response) => (Array.isArray(response.data) ? response.data : [])),
+            map((invoices) => invoices.filter((invoice) => memberPays(invoice.type))),
+          ),
       ),
     )
       .pipe(

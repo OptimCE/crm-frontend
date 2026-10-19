@@ -2,11 +2,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
+import { ApiResponse } from '../../../../core/dtos/api.response';
 import { LocaleService } from '../../../../core/services/language/locale.service';
-import { InvoiceOut, InvoiceStatus, InvoiceType } from '../../../../shared/dtos/billing.dtos';
+import {
+  InvoiceOut,
+  InvoiceStatus,
+  InvoiceType,
+  IssueOut,
+} from '../../../../shared/dtos/billing.dtos';
 import { BillingService } from '../../../../shared/services/billing.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -61,7 +67,11 @@ describe('InvoiceList', () => {
     // HttpClient fails with an HttpErrorResponse; the backend's message is in its body.
     billing.sendInvoice.mockReturnValue(
       throwError(
-        () => new HttpErrorResponse({ status: 422, error: { data: message, error_code: 6122 } }),
+        () =>
+          new HttpErrorResponse({
+            status: 422,
+            error: { data: message, error_code: 6122 },
+          }),
       ),
     );
     const changed = vi.fn();
@@ -71,5 +81,54 @@ describe('InvoiceList', () => {
 
     expect(errorHandler.handleError).toHaveBeenCalledWith(message);
     expect(changed).not.toHaveBeenCalled();
+  });
+
+  it('confirms an issue without an OGM when the document has none', () => {
+    // Only a consumer invoice gets a structured communication; the toast for a
+    // producer statement read "Invoice DP-2026-00001 issued (OGM )".
+    const snackbar = TestBed.inject(SnackbarNotification) as unknown as {
+      openSnackBar: ReturnType<typeof vi.fn>;
+    };
+    const service = billing as typeof billing & {
+      issueInvoice: ReturnType<typeof vi.fn>;
+    };
+    const issueOut = (structured: string | null): IssueOut => ({
+      id: 43,
+      number: structured ? 'F-2026-0043' : 'DP-2026-00001',
+      status: InvoiceStatus.ISSUED,
+      due_date: '2026-11-07',
+      structured_comm: structured,
+    });
+
+    service.issueInvoice = vi.fn(() => of(new ApiResponse(issueOut(null))));
+    component.issue({ ...issued, status: InvoiceStatus.DRAFT });
+    expect(snackbar.openSnackBar).toHaveBeenLastCalledWith(
+      'BILLING.ISSUE.SUCCESS_NO_OGM',
+      expect.anything(),
+    );
+
+    service.issueInvoice = vi.fn(() => of(new ApiResponse(issueOut('+++090/9337/55493+++'))));
+    component.issue({ ...issued, status: InvoiceStatus.DRAFT });
+    expect(snackbar.openSnackBar).toHaveBeenLastCalledWith(
+      'BILLING.ISSUE.SUCCESS',
+      expect.anything(),
+    );
+  });
+
+  it('offers nothing on a credited invoice but a download and a re-render', () => {
+    // A credit note was issued for it: the backend refuses send, payment, a
+    // second credit note and deleting the PDF the credit note refers to.
+    const credited: InvoiceOut = { ...issued, status: InvoiceStatus.CREDITED };
+
+    expect(component.canIssue(credited)).toBe(false);
+    expect(component.canSend(credited)).toBe(false);
+    expect(component.canPay(credited)).toBe(false);
+    expect(component.canCreditNote(credited)).toBe(false);
+    expect(component.canDeletePdf(credited)).toBe(false);
+    expect(component.canDownloadPdf(credited)).toBe(true);
+    expect(component.canGeneratePdf(credited)).toBe(true);
+    // Against the same invoice before it was credited.
+    expect(component.canCreditNote(issued)).toBe(true);
+    expect(component.canDeletePdf(issued)).toBe(true);
   });
 });

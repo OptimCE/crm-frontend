@@ -9,6 +9,7 @@ import en from '../../../../../assets/i18n/en.json';
 import fr from '../../../../../assets/i18n/fr.json';
 import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
 import { ERROR_TYPE } from '../../../../core/dtos/notification';
+import { InvoiceOut, InvoiceStatus, InvoiceType } from '../../../../shared/dtos/billing.dtos';
 import { BillingService } from '../../../../shared/services/billing.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { invoiceStatusLabelKey } from '../../billing-format';
@@ -21,6 +22,27 @@ function lookup(bundle: unknown, key: string): string {
     .reduce<unknown>((node, part) => (node as Record<string, unknown>)?.[part], bundle);
   if (typeof value !== 'string') throw new Error(`no string at ${key}`);
   return value;
+}
+
+function invoice(overrides: Partial<InvoiceOut>): InvoiceOut {
+  return {
+    id: 1,
+    id_billing_run: 1,
+    id_member: 1,
+    type: InvoiceType.INVOICE,
+    status: InvoiceStatus.SENT,
+    number: 'F-2026-00001',
+    currency: 'EUR',
+    subtotal: '53.08',
+    vat_rate: '0.21',
+    vat_amount: '11.15',
+    total: '64.23',
+    structured_comm: '+++000/0000/00101+++',
+    issued_at: '2026-10-01T08:00:00Z',
+    due_date: '2026-10-31',
+    pdf_ready: false,
+    ...overrides,
+  };
 }
 
 const SORT_KEYS: Record<string, string> = {
@@ -110,6 +132,94 @@ describe('BillingMemberInvoices', () => {
 
       expect(lookup(en, key)).not.toBe(lookup(fr, key));
       expect(ariaLabelOf('my-invoices__select--sort')).toBe(lookup(en, key));
+    });
+  });
+
+  // A producer statement (the community pays the producer) and a credit note
+  // are issued like a bill, structured communication included. The list used to
+  // show that communication under "Communication structurée" on all three, as if
+  // the member had to pay each of them.
+  describe('documents the member does not pay', () => {
+    const BILL = invoice({ id: 1, number: 'F-2026-00001' });
+    const STATEMENT = invoice({
+      id: 2,
+      type: InvoiceType.PRODUCER_STATEMENT,
+      number: 'DP-2026-00019',
+      structured_comm: '+++000/0000/00202+++',
+    });
+    const CREDIT_NOTE = invoice({
+      id: 3,
+      type: InvoiceType.CREDIT_NOTE,
+      number: 'NC-2026-00001',
+      total: '-64.23',
+      structured_comm: '+++000/0000/00303+++',
+    });
+
+    function cards(): Record<string, HTMLElement> {
+      const list = (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
+        '[data-testid="my-invoices__card"]',
+      );
+      return Object.fromEntries(
+        Array.from(list).map((card): [string, HTMLElement] => [
+          card.querySelector('.font-semibold')?.textContent?.trim() ?? '',
+          card,
+        ]),
+      );
+    }
+
+    function text(card: HTMLElement, testId: string): string | null {
+      return card.querySelector(`[data-testid="${testId}"]`)?.textContent?.trim() ?? null;
+    }
+
+    beforeEach(async () => {
+      const billing = TestBed.inject(BillingService) as unknown as {
+        listMyInvoices: ReturnType<typeof vi.fn>;
+      };
+      billing.listMyInvoices.mockReturnValue(
+        of(new ApiResponsePaginated([BILL, STATEMENT, CREDIT_NOTE], new Pagination(1, 20, 3, 1))),
+      );
+      component.applyFilters();
+      await fixture.whenStable();
+    });
+
+    it('should show payment instructions on the bill only', () => {
+      const shown = cards();
+
+      expect(Object.keys(shown)).toEqual(['F-2026-00001', 'DP-2026-00019', 'NC-2026-00001']);
+      expect(text(shown['F-2026-00001'], 'my-invoices__ogm')).toContain('+++000/0000/00101+++');
+      expect(text(shown['DP-2026-00019'], 'my-invoices__ogm')).toBeNull();
+      expect(text(shown['NC-2026-00001'], 'my-invoices__ogm')).toBeNull();
+      expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('00202');
+      expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('00303');
+    });
+
+    it('should say a producer statement is to be received', () => {
+      const card = cards()['DP-2026-00019'];
+
+      expect(text(card, 'my-invoices__tag--type')).toBe('Décompte producteur');
+      expect(text(card, 'my-invoices__settlement')).toBe('À recevoir');
+    });
+
+    it('should say a credit note is in the member’s favour', () => {
+      const card = cards()['NC-2026-00001'];
+
+      expect(text(card, 'my-invoices__tag--type')).toBe('Note de crédit');
+      expect(text(card, 'my-invoices__settlement')).toBe('En votre faveur');
+    });
+
+    it('should give a bill neither a type tag nor a settlement label', () => {
+      const card = cards()['F-2026-00001'];
+
+      expect(text(card, 'my-invoices__tag--type')).toBeNull();
+      expect(text(card, 'my-invoices__settlement')).toBeNull();
+    });
+
+    it('should switch the settlement label with the language', async () => {
+      translate.use('en');
+      await fixture.whenStable();
+
+      expect(text(cards()['DP-2026-00019'], 'my-invoices__settlement')).toBe('To receive');
+      expect(text(cards()['NC-2026-00001'], 'my-invoices__settlement')).toBe('In your favour');
     });
   });
 

@@ -123,8 +123,12 @@
                 <span class="font-semibold">{{
                   inv.number || ('BILLING.DRAFT_PLACEHOLDER' | translate)
                 }}</span>
-                @if (isCreditNote(inv)) {
-                  <p-tag severity="contrast" [value]="typeLabelKey(inv) | translate" />
+                @if (!pays(inv)) {
+                  <p-tag
+                    severity="contrast"
+                    [value]="typeLabelKey(inv) | translate"
+                    data-testid="my-invoices__tag--type"
+                  />
                 }
                 <p-tag [value]="statusLabelKey(inv) | translate" [severity]="statusSeverity(inv)" />
               </div>
@@ -144,7 +148,16 @@
               </div>
             </div>
             <div class="flex items-center gap-3">
-              <span class="text-lg font-semibold text-surface-800">{{ money(inv) }}</span>
+              <div class="flex flex-col items-end">
+                <span class="text-lg font-semibold text-surface-800">{{ money(inv) }}</span>
+                @if (settlementKey(inv); as key) {
+                  <span
+                    class="text-xs font-medium text-primary-700"
+                    data-testid="my-invoices__settlement"
+                    >{{ key | translate }}</span
+                  >
+                }
+              </div>
               @if (inv.pdf_ready) {
                 <p-button
                   size="small"
@@ -157,8 +170,13 @@
             </div>
           </div>
 
-          @if (inv.structured_comm) {
-            <div class="rounded-lg bg-surface-50 border border-surface-200 px-3 py-2">
+          <!-- Payment instructions on a bill only: a producer statement or a
+               credit note has a structured communication too, but nothing to pay. -->
+          @if (inv.structured_comm && pays(inv)) {
+            <div
+              class="rounded-lg bg-surface-50 border border-surface-200 px-3 py-2"
+              data-testid="my-invoices__ogm"
+            >
               <span class="text-xs text-surface-500 block">{{
                 'BILLING.MEMBER_VIEW.OGM_LABEL' | translate
               }}</span>

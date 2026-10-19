@@ -60,30 +60,42 @@ export interface SimulationDetailDTO extends SimulationPartialDTO {
   key_result: SimulationKeyResultDTO | null;
 }
 
+/**
+ * One value per timestep. null where the run's input had no number: an empty
+ * cell of an uploaded file, in a run made before the service refused those.
+ */
+export type SimulationSeries = (number | null)[];
+
 export interface SimulationConsumerTimeseriesDTO {
   name: string;
-  consumption: number[];
-  energy_allocated: number[];
-  energy_allocated_consumed: number[];
-  residual_volume: number[];
-  surplus: number[];
+  consumption: SimulationSeries;
+  energy_allocated: SimulationSeries;
+  energy_allocated_consumed: SimulationSeries;
+  residual_volume: SimulationSeries;
+  surplus: SimulationSeries;
 }
 
 export interface SimulationIterationTimeseriesDTO {
   number: number;
-  consumption: number[];
-  energy_allocated: number[];
-  energy_allocated_consumed: number[];
-  residual_volume: number[];
-  surplus: number[];
-  sharing_rate: number[];
-  self_sufficiency_rate: number[];
+  consumption: SimulationSeries;
+  energy_allocated: SimulationSeries;
+  energy_allocated_consumed: SimulationSeries;
+  residual_volume: SimulationSeries;
+  surplus: SimulationSeries;
+  sharing_rate: SimulationSeries;
+  self_sufficiency_rate: SimulationSeries;
+  /** Empty when the series were asked with `max_points`. */
   consumers: SimulationConsumerTimeseriesDTO[];
 }
 
 /** Per-timestep series for charting (one object per run in object storage). */
 export interface SimulationTimeseriesDTO {
   iterations: SimulationIterationTimeseriesDTO[];
+  /**
+   * Value i of every series is timestep i * stride (from 0). Above 1 when the
+   * service sampled the series (`max_points`); absent from an older service.
+   */
+  stride?: number;
 }
 
 export interface SimulationQuery {

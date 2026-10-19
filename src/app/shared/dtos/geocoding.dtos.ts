@@ -41,6 +41,11 @@ export interface AddressSuggestionDTO {
   precision?: AddressGeoPrecision;
   best_address_id?: string;
   nis_code?: number;
+  /**
+   * The locality inside the commune, for the GRD lookup: the Flemish postal name,
+   * else the Walloon part-of-municipality name. Address rows only.
+   */
+  post_name?: string;
 }
 
 /**
