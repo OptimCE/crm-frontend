@@ -106,9 +106,10 @@
           </label>
           <p-select
             id="selectGrd"
-            [options]="grdAvailable"
+            [options]="grdAvailable()"
             formControlName="grd"
             optionLabel="name"
+            optionValue="id"
             [filter]="true"
             filterBy="name"
             placeholder="{{ 'METER.INFORMATIONS.GRD_LABEL' | translate }}"

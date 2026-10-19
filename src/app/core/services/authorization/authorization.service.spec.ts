@@ -141,6 +141,27 @@ describe('UserContextService', () => {
       expect(cache.get('me:meters:{}')).toEqual(['kept']);
     });
 
+    it('drops GRD lookups but keeps the operator catalogue on switch', () => {
+      // A lookup's warnings compare the address with the active community's
+      // regulator; the catalogue is the same national list for everyone.
+      orgs = [
+        org('org-a', 'Alpha', [Role.GESTIONNAIRE]),
+        org('org-b', 'Beta', [Role.GESTIONNAIRE]),
+      ];
+      const service = build();
+      const cache = TestBed.inject(CacheService);
+      service.refreshUserContext();
+      service.switchCommunity('org-a');
+
+      cache.set('dso-resolve:{"postcode":"4000"}', ['stale'], 60_000);
+      cache.set('dso-operators', ['kept'], 60_000);
+
+      service.switchCommunity('org-b');
+
+      expect(cache.get('dso-resolve:{"postcode":"4000"}')).toBeNull();
+      expect(cache.get('dso-operators')).toEqual(['kept']);
+    });
+
     it('does not invalidate when the community does not actually change', () => {
       orgs = [org('org-a', 'Alpha', [Role.GESTIONNAIRE])];
       const service = build();

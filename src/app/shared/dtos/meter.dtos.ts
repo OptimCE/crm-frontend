@@ -14,6 +14,9 @@ import {
 } from '../types/meter.types';
 import { SharingOperationPartialDTO } from './sharing_operation.dtos';
 
+/** Provenance of `meter_data.grd`. */
+export type GrdSource = 'auto' | 'manual';
+
 /**
  * Query parameters for filtering and paginating a list of meters.
  */
@@ -151,7 +154,12 @@ export interface MetersDataDTO {
   production_chain: ProductionChain | null;
   totalGenerating_capacity: number;
   member?: MembersPartialDTO;
+  /** Stable operator id ("ores", "fluvius-imewo", "elia"); a legacy name on older records. */
   grd: string;
+  /** How `grd` was set: prefilled from the address, or chosen by hand. `null` = unknown. */
+  grd_source?: GrdSource | null;
+  /** belgian-dso-map version that prefilled `grd`, when `grd_source` is `auto`. */
+  grd_data_version?: string | null;
   sharing_operation?: SharingOperationPartialDTO;
 }
 
@@ -237,7 +245,14 @@ export interface CreateMeterDataDTO {
 
   amperage?: number;
 
+  /** Stable operator id. Omitted on a PATCH = keep the previous one with its provenance. */
   grd?: string;
+
+  /** Sent with `grd`: `auto` when the address lookup chose it and the user kept it. */
+  grd_source?: GrdSource;
+
+  /** Sent with `grd_source: 'auto'` only (`2026.10.0`, `-draft` on unreleased data). */
+  grd_data_version?: string;
 
   injection_status?: InjectionStatus;
 

@@ -1144,8 +1144,9 @@
       "PRODUCTION_CHAIN_TOOLTIP": "Type d'installation renouvelable ou bas-carbone raccordée à ce compteur. Choisissez « Aucune » s'il s'agit d'un compteur consommation uniquement.",
       "INJECTION_STATUS_LABEL": "Statut d'injection",
       "INJECTION_STATUS_TOOLTIP": "Décrit la relation du compteur avec une installation de production et qui détient les droits d'injection : propriétaire, titulaire d'un droit d'usage ou aucun.",
-      "GRD_LABEL": "GRD",
+      "GRD_LABEL": "Gestionnaire de réseau",
       "GRD_TOOLTIP": "Gestionnaire de Réseau de Distribution : l'entreprise réglementée qui gère le réseau électrique dans votre zone (ex. : Ores, Fluvius, Sibelga).",
+      "GRD_ELIA_OPTION": "Elia — réseau de transport local (30–70 kV)",
       "RATE_LABEL": "Tarif",
       "RATE_TOOLTIP": "Tarif simple : un prix unique 24h/24. Double horaire : prix jour et nuit différents. Nuit exclusive : toute l'énergie est facturée au tarif nuit (utilisé pour le stockage ou le chauffage).",
       "USAGE_LABEL": "Usage",
@@ -1158,6 +1159,20 @@
       "ERROR": {
         "INVALID_EAN": "L'EAN doit comporter exactement 18 chiffres."
       }
+    },
+    "GRD_LOOKUP": {
+      "LOADING": "Recherche du gestionnaire de réseau de cette adresse…",
+      "PREFILLED": "{{name}}, prérempli d'après l'adresse. Vérifiez-le et changez-le si besoin.",
+      "CHOOSE_SECTION": "Le gestionnaire dépend de la localité. Choisissez celle du compteur :",
+      "CHOOSE_COMMUNE": "Ce code postal couvre plusieurs communes. Choisissez celle du compteur :",
+      "NOT_FOUND": "Aucun gestionnaire trouvé pour ce code postal : choisissez-le dans la liste.",
+      "UNAVAILABLE": "La recherche du gestionnaire est indisponible pour le moment : choisissez-le dans la liste.",
+      "TO_CONFIRM": "Cette information reste à confirmer : vérifiez le gestionnaire sur une facture d'énergie récente.",
+      "ATTRIBUTION": "Gestionnaires de réseau (données {{version}}) : Statbel (CC BY 4.0, modifiées), Fluvius, ORES, régulateurs CWaPE, VREG et Brugel"
+    },
+    "GRD_WARNING": {
+      "REGION_OUTSIDE_COMMUNITY_REGULATOR": "Cette adresse relève de {{address_regulator}}, alors que la communauté est rattachée à {{community_regulator}}. Vérifiez l'adresse du compteur.",
+      "EAN_SIBELGA_OUTSIDE_BRUSSELS": "Cet EAN commence par le préfixe de Sibelga (Bruxelles), mais l'adresse n'est pas à Bruxelles. Vérifiez l'EAN et l'adresse."
     },
     "CATEGORIES": {
       "PRODUCTION_CHAIN": {

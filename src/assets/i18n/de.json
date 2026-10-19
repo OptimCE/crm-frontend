@@ -1144,8 +1144,9 @@
       "PRODUCTION_CHAIN_TOOLTIP": "Art der erneuerbaren oder kohlenstoffarmen Anlage, die an diesen Zähler angeschlossen ist. Wählen Sie „Keine für reine Verbrauchszähler.",
       "INJECTION_STATUS_LABEL": "Einspeisestatus",
       "INJECTION_STATUS_TOOLTIP": "Beschreibt die Beziehung des Zählers zu einer Erzeugungsanlage und wer die Einspeiserechte hält: Eigentümer, Nutzungsrechtsinhaber oder keiner.",
-      "GRD_LABEL": "GRD",
+      "GRD_LABEL": "Netzbetreiber",
       "GRD_TOOLTIP": "Verteilnetzbetreiber: das regulierte Versorgungsunternehmen, das das Stromnetz in Ihrem Gebiet betreibt (z. B. Ores, Fluvius, Sibelga).",
+      "GRD_ELIA_OPTION": "Elia — lokales Übertragungsnetz (30–70 kV)",
       "RATE_LABEL": "Tarif",
       "RATE_TOOLTIP": "Eintarif: ein Preis rund um die Uhr. Doppeltarif: unterschiedliche Tag- und Nachtpreise. Nachttarif exklusiv: gesamte Energie zum Nachttarif (für Speicher- oder Heizsysteme).",
       "USAGE_LABEL": "Nutzung",
@@ -1158,6 +1159,20 @@
       "ERROR": {
         "INVALID_EAN": "Der EAN muss genau 18 Ziffern enthalten."
       }
+    },
+    "GRD_LOOKUP": {
+      "LOADING": "Netzbetreiber dieser Adresse wird gesucht…",
+      "PREFILLED": "{{name}}, anhand der Adresse vorausgefüllt. Bitte prüfen und bei Bedarf ändern.",
+      "CHOOSE_SECTION": "Der Netzbetreiber hängt vom Ortsteil ab. Wählen Sie den des Zählers:",
+      "CHOOSE_COMMUNE": "Diese Postleitzahl umfasst mehrere Gemeinden. Wählen Sie die des Zählers:",
+      "NOT_FOUND": "Für diese Postleitzahl wurde kein Netzbetreiber gefunden: Wählen Sie ihn aus der Liste.",
+      "UNAVAILABLE": "Die Suche nach dem Netzbetreiber ist derzeit nicht verfügbar: Wählen Sie ihn aus der Liste.",
+      "TO_CONFIRM": "Diese Angabe ist noch zu bestätigen: Prüfen Sie den Netzbetreiber auf einer aktuellen Energierechnung.",
+      "ATTRIBUTION": "Netzbetreiber (Daten {{version}}): Statbel (CC BY 4.0, verändert), Fluvius, ORES, Regulierungsbehörden CWaPE, VREG und Brugel"
+    },
+    "GRD_WARNING": {
+      "REGION_OUTSIDE_COMMUNITY_REGULATOR": "Diese Adresse fällt unter {{address_regulator}}, die Gemeinschaft aber unter {{community_regulator}}. Prüfen Sie die Adresse des Zählers.",
+      "EAN_SIBELGA_OUTSIDE_BRUSSELS": "Diese EAN beginnt mit dem Präfix von Sibelga (Brüssel), die Adresse liegt aber nicht in Brüssel. Prüfen Sie EAN und Adresse."
     },
     "CATEGORIES": {
       "PRODUCTION_CHAIN": {

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormErrorSummaryComponent } from '../../../../shared/components/summary-error.handler/summary-error.handler.component';
@@ -36,8 +36,11 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
-import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
-import { findGrdOption, GRD_OPTIONS, GrdOption } from '../../../../shared/constants/grd';
+import {
+  translatedOptions,
+  translationChanges,
+} from '../../../../shared/utils/translated-options.utils';
+import { findGrdOption, grdSelectOptions } from '../../../../shared/constants/grd';
 import {
   MeterDataStatus,
   ClientType,
@@ -76,7 +79,8 @@ interface MeterDataFormValue {
   dateStart: string | Date;
   status: MeterDataStatus;
   injectionStatus: MeterDataCategory<InjectionStatus>;
-  grd: GrdOption;
+  /** A stable operator id, `optionValue` of the GRD select. */
+  grd: string;
 }
 
 @Component({
@@ -146,8 +150,18 @@ export class MeterDataUpdate implements OnInit {
     { id: InjectionStatus.INJECTION_RIGHTS, name: '' },
     { id: InjectionStatus.NONE, name: '' },
   ]);
-  // A copy: p-select takes a mutable array.
-  readonly grdAvailable: GrdOption[] = [...GRD_OPTIONS];
+  private readonly translationChanged = translationChanges();
+  // The static list, then Elia under its translated label (a new array: p-select takes a
+  // mutable one).
+  readonly grdAvailable = computed(() => {
+    this.translationChanged();
+    return grdSelectOptions(
+      null,
+      this.translate.instant('METER.INFORMATIONS.GRD_ELIA_OPTION') as string,
+    );
+  });
+  /** The select's value on opening: an untouched select leaves `grd` out of the PATCH. */
+  private initialGrd = '';
   readonly membersList = signal<MembersPartialDTO[]>([]);
   constructor() {
     const data = this.config.data as MeterDataUpdateDialogData;
@@ -209,10 +223,12 @@ export class MeterDataUpdate implements OnInit {
         injectionStatus: this.injectionStatusCategory().find((p) => p.id === injectionStatus),
         rate: this.rateCategory().find((p) => p.id === this.meterData?.rate),
         clientType: this.clientCategory().find((p) => p.id === this.meterData?.client_type),
-        // Case-insensitive; a stored value that is not a GRD (e.g. ELIA) leaves it to pick.
-        grd: findGrdOption(this.meterData.grd),
+        // An id or a legacy name ("RESA", "ELIA"); one that names no operator (a bare
+        // "Fluvius") leaves the select empty, to pick.
+        grd: findGrdOption(this.meterData.grd)?.id ?? '',
         status: this.meterData.status,
       });
+      this.initialGrd = (this.metersForm.get('grd')?.value as string | null) ?? '';
       // Reopen it as the coupling below left it. A legacy record with an injection status but no
       // chain stays editable: locking it to "Aucun" would rewrite it on an unrelated save.
       if (productionChain === ProductionChain.NONE && injectionStatus === InjectionStatus.NONE) {
@@ -399,7 +415,7 @@ export class MeterDataUpdate implements OnInit {
       client_type: formValue.clientType.id,
       description: formValue.description,
       end_date: undefined,
-      grd: formValue.grd.name,
+      ...this.grdPatch(formValue.grd),
       // "Aucun" is null, not absent: the backend keeps an omitted field from the previous record.
       injection_status: injectionStatusForPatch(formValue.injectionStatus.id),
       member_id: formValue.member ? formValue.member.id : undefined,
@@ -423,6 +439,15 @@ export class MeterDataUpdate implements OnInit {
       return;
     }
     this.performSave(updateMeterData);
+  }
+
+  /**
+   * The GRD fields of the PATCH. An untouched select sends none, so the backend keeps the
+   * stored operator together with how it was set (a prefill stays `auto`, with its data
+   * version). A changed one is the user's own choice.
+   */
+  private grdPatch(grd: string): Pick<PatchMeterDataDTO, 'grd' | 'grd_source'> {
+    return grd === this.initialGrd ? {} : { grd, grd_source: 'manual' };
   }
 
   private confirmHolderChange(

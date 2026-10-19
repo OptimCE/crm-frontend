@@ -11,6 +11,7 @@ import { MeterDataStatus } from '../../../../../shared/types/meter.types';
 import { MemberType } from '../../../../../shared/types/member.types';
 import { MapNumberStringPipe } from '../../../../../shared/pipes/map-number-string/map-number-string-pipe';
 import { LocaleDatePipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
+import { grdLabel } from '../../../../../shared/constants/grd';
 
 @Component({
   selector: 'app-meter-data-view',
@@ -31,6 +32,8 @@ export class MeterDataView {
   protected readonly injectionStatus = computed(() =>
     injectionStatusFromApi(this.meterData().injection_status),
   );
+  // `grd` holds a stable id ("fluvius-imewo"), or a legacy name on older records.
+  protected readonly grd = computed(() => grdLabel(this.meterData().grd));
   protected readonly MeterStatus = MeterDataStatus;
   protected readonly MemberType = MemberType;
 }

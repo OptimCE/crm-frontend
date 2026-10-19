@@ -97,6 +97,55 @@ describe('AddressPickStore', () => {
     expect(store.geoFor(other)?.best_address_id).toBe('best:2');
   });
 
+  describe('dsoHintFor', () => {
+    it('gives nothing before anything is picked', () => {
+      expect(store.dsoHintFor(FIELDS)).toBeNull();
+    });
+
+    it("gives the pick's commune code and locality while the form still matches it", () => {
+      store.remember(pick({ nis_code: 21004, post_name: 'Bruxelles' }));
+
+      expect(store.dsoHintFor(FIELDS)).toEqual({ nis_code: 21004, post_name: 'Bruxelles' });
+    });
+
+    it('gives nothing once the user edited away from the pick, like geoFor', () => {
+      // The postcode alone can move the meter to another commune or GRD.
+      store.remember(pick({ nis_code: 21004, post_name: 'Bruxelles' }));
+
+      expect(store.dsoHintFor({ ...FIELDS, postcode: '1020' })).toBeNull();
+      expect(store.dsoHintFor({ ...FIELDS, number: '18' })).toBeNull();
+    });
+
+    it('survives a purely cosmetic re-typing', () => {
+      store.remember(pick({ nis_code: 21004 }));
+
+      expect(store.dsoHintFor({ ...FIELDS, city: '  BRUXELLES ' })).toEqual({ nis_code: 21004 });
+    });
+
+    it('sends only what the pick carried', () => {
+      // A street row has no locality; a Walloon address may have no postal name.
+      store.remember(pick({ nis_code: 62063, post_name: '  ' }));
+      expect(store.dsoHintFor(FIELDS)).toEqual({ nis_code: 62063 });
+
+      store.remember(pick({ post_name: 'Zondereigen' }));
+      expect(store.dsoHintFor(FIELDS)).toEqual({ post_name: 'Zondereigen' });
+    });
+
+    it('gives nothing for a pick that carried neither', () => {
+      store.remember(pick());
+
+      expect(store.dsoHintFor(FIELDS)).toBeNull();
+    });
+
+    it('is forgotten by clear()', () => {
+      store.remember(pick({ nis_code: 21004 }));
+
+      store.clear();
+
+      expect(store.dsoHintFor(FIELDS)).toBeNull();
+    });
+  });
+
   it('tracks what the strip is saying', () => {
     store.observe({ kind: 'not_found', suggestions: [] });
 

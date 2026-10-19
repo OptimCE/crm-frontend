@@ -1,5 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subscription } from 'rxjs';
 import { ErrorAdded, ErrorSummaryAdded } from '../../../../shared/types/error.types';
 import {
   AbstractControl,
@@ -29,6 +30,7 @@ import {
 import {
   CreateMeterDataDTO,
   CreateMeterDTO,
+  GrdSource,
   injectionStatusForApi,
   productionChainForApi,
 } from '../../../../shared/dtos/meter.dtos';
@@ -63,12 +65,58 @@ import { Step } from 'primeng/stepper';
 import { StepPanel } from 'primeng/stepper';
 import { StepPanels } from 'primeng/stepper';
 import { FieldLabelHelper } from '../../../../shared/components/field-label-helper/field-label-helper';
-import { GRD_OPTIONS, GrdOption } from '../../../../shared/constants/grd';
+import { ELIA_OPTION_ID, grdSelectOptions } from '../../../../shared/constants/grd';
+import { Message } from 'primeng/message';
+import { DsoService } from '../../../../shared/services/dso.service';
+import {
+  DsoCommuneDTO,
+  DsoNames,
+  DsoOperatorDTO,
+  DsoRegion,
+  DsoResolutionDTO,
+  DsoResolveQuery,
+  DsoSectionDTO,
+  DsoWarningDTO,
+} from '../../../../shared/dtos/dso.dtos';
+import { translationChanges } from '../../../../shared/utils/translated-options.utils';
 
 interface ListRadio {
   id: number;
   name: string;
 }
+
+/** The GRD lookup, from the moment step 1 is validated. */
+type GrdLookupState =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'done'; resolution: DsoResolutionDTO };
+
+/** A `choose_commune` answer, offered as inline radios. */
+interface GrdCommuneChoice {
+  communes: DsoCommuneDTO[];
+  selected: string | null;
+}
+
+/** A `choose_section` answer whose sections disagree, offered as inline radios. */
+interface GrdSectionChoice {
+  /** The commune the sections belong to, when the answer named it. */
+  ins: string | null;
+  region: DsoRegion | null;
+  sections: DsoSectionDTO[];
+  selected: string | null;
+}
+
+export interface GrdChoiceOption {
+  value: string;
+  label: string;
+}
+
+/** What the form shows when the lookup could not answer: nothing changes. */
+const GRD_LOOKUP_UNAVAILABLE: DsoResolutionDTO = {
+  available: false,
+  status: 'unavailable',
+  warnings: [],
+};
 
 interface MeterFormValue {
   address_street: string;
@@ -116,6 +164,7 @@ interface MeterFormValue {
     StepPanels,
     FieldLabelHelper,
     AddressAutocomplete,
+    Message,
   ],
   templateUrl: './meter-creation.html',
   styleUrl: './meter-creation.css',
@@ -127,7 +176,9 @@ export class MeterCreation implements OnInit {
   private ref = inject(DynamicDialogRef);
   private translate = inject(TranslateService);
   private errorHandler = inject(ErrorMessageHandler);
+  private dsoService = inject(DsoService);
   private destroyRef = inject(DestroyRef);
+  private readonly translationChanged = translationChanges();
 
   errorsSummaryAdded: ErrorSummaryAdded = {};
   errorMemberAdd: ErrorAdded = {};
@@ -144,8 +195,30 @@ export class MeterCreation implements OnInit {
 
   minDate = new Date();
   holder_id?: number;
-  // A copy: p-select takes a mutable array.
-  readonly grdAvailable: GrdOption[] = [...GRD_OPTIONS];
+
+  /** The dso-lookup operator catalogue once it has loaded; until then, the static list. */
+  private readonly grdCatalogue = signal<DsoOperatorDTO[] | null>(null);
+  /** The GRD select's options: ORES first, Elia last (a new array: p-select takes a mutable one). */
+  readonly grdAvailable = computed(() => {
+    this.translationChanged();
+    return grdSelectOptions(
+      this.grdCatalogue(),
+      this.translate.instant('METER.INFORMATIONS.GRD_ELIA_OPTION') as string,
+    );
+  });
+  /**
+   * How the GRD got its value: `auto` once the lookup filled it in, `manual` as soon as
+   * the user picks one. A manual choice is never overwritten by a later answer.
+   */
+  readonly grdSource = signal<GrdSource | null>(null);
+  /** The data version an `auto` value came from; it travels with it on submit. */
+  private grdDataVersion: string | null = null;
+  readonly grdLookup = signal<GrdLookupState>({ kind: 'idle' });
+  readonly grdCommuneChoice = signal<GrdCommuneChoice | null>(null);
+  readonly grdSectionChoice = signal<GrdSectionChoice | null>(null);
+  /** The query built from step 1, which a commune or section choice then narrows. */
+  private grdBaseQuery: DsoResolveQuery = {};
+  private grdLookupSubscription: Subscription | null = null;
 
   constructor() {
     this.holder_id = undefined;
@@ -179,6 +252,7 @@ export class MeterCreation implements OnInit {
       injectionStatus: new FormControl({ value: '', disabled: true }, [Validators.required]),
     });
     this.syncAddressDetailsVisibility();
+    this.loadGrdCatalogue();
 
     this.memberService
       .getMembersList({ page: 1, limit: 100 })
@@ -505,7 +579,285 @@ export class MeterCreation implements OnInit {
       // 600 ms after typing stops, while the user is still on this step and the
       // fields are still on screen to correct.
       activateCallback(1);
+      // Not awaited: step 2 opens at once and the GRD fills in if and when the answer
+      // comes. Here rather than on a pick, so a typed address is looked up too.
+      this.resolveGrd();
     }
+  }
+
+  // ── GRD lookup ──────────────────────────────────────────────────────────
+  //
+  // Advisory only. The select stays free, a manual pick always wins, and no answer
+  // (nor its absence) can block the submit: POST /meters never calls the lookup.
+
+  /**
+   * The catalogue replaces the static list once it loads. Any failure, or the empty
+   * list crm-backend answers when dso-lookup is off, keeps the static list.
+   */
+  private loadGrdCatalogue(): void {
+    this.dsoService
+      .getOperators()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (Array.isArray(response?.data) && response.data.length > 0) {
+            this.grdCatalogue.set(response.data);
+          }
+        },
+        error: () => undefined,
+      });
+  }
+
+  /** Wire to the GRD select's `(onChange)`: only a user's pick fires it. */
+  onGrdChange(): void {
+    this.grdSource.set('manual');
+    this.grdDataVersion = null;
+  }
+
+  /**
+   * Ask which GRD serves the address of step 1.
+   *
+   * A still-valid register pick adds its commune code and locality name; the typed
+   * postcode and city always go, so a hand-typed address is looked up as well. The
+   * EAN adds an informative prefix check. The same address twice in a row (back,
+   * then next again) keeps the answer, and any choice made in it.
+   */
+  resolveGrd(): void {
+    const fields = readAddressFields(this.addressSource());
+    const ean = (this.metersForm.get('EAN')?.value as string | null)?.trim() ?? '';
+    const query: DsoResolveQuery = {
+      ...this.addressPick.dsoHintFor(fields),
+      postcode: fields.postcode.trim() || undefined,
+      city: fields.city.trim() || undefined,
+      ean: ean || undefined,
+    };
+    const state = this.grdLookup();
+    const answered =
+      state.kind === 'loading' || (state.kind === 'done' && state.resolution.available);
+    if (answered && JSON.stringify(query) === JSON.stringify(this.grdBaseQuery)) {
+      return;
+    }
+    this.grdBaseQuery = query;
+    this.grdCommuneChoice.set(null);
+    this.grdSectionChoice.set(null);
+    this.runGrdLookup(query);
+  }
+
+  /** Wire to the commune radios of a `choose_commune` answer. */
+  chooseGrdCommune(ins: string): void {
+    const choice = this.grdCommuneChoice();
+    if (!choice?.communes.some((commune) => commune.ins === ins)) {
+      return;
+    }
+    this.grdCommuneChoice.set({ ...choice, selected: ins });
+    this.grdSectionChoice.set(null);
+    this.runGrdLookup(this.narrowedGrdQuery({ ins }));
+  }
+
+  /** Wire to the section radios of a `choose_section` answer. */
+  chooseGrdSection(sectionKey: string): void {
+    const choice = this.grdSectionChoice();
+    const section = choice?.sections.find((candidate) => candidate.section_key === sectionKey);
+    if (!choice || !section) {
+      return;
+    }
+    this.grdSectionChoice.set({ ...choice, selected: sectionKey });
+    // A section listed for the commune as a whole may not cover the typed postcode,
+    // and the lookup by postcode would then find nothing.
+    const typed = this.grdBaseQuery.postcode;
+    const postcode = typed && section.postcodes.includes(typed) ? typed : section.postcodes[0];
+    this.runGrdLookup(
+      this.narrowedGrdQuery({
+        ...(choice.ins ? { ins: choice.ins } : {}),
+        section: sectionKey,
+        postcode,
+      }),
+    );
+  }
+
+  /**
+   * The step-1 query narrowed by a choice. Without the register hints: crm-backend
+   * resolves a `nis_code` by address and would ignore `ins` and `section`.
+   */
+  private narrowedGrdQuery(narrow: DsoResolveQuery): DsoResolveQuery {
+    const { nis_code: _nisCode, post_name: _postName, ...typed } = this.grdBaseQuery;
+    return { ...typed, ...narrow };
+  }
+
+  private runGrdLookup(query: DsoResolveQuery): void {
+    // A newer question supersedes an unanswered one, whose late answer is dropped.
+    this.grdLookupSubscription?.unsubscribe();
+    this.grdLookup.set({ kind: 'loading' });
+    this.grdLookupSubscription = this.dsoService
+      .resolve(query)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => this.applyGrdResolution(response?.data, query),
+        // A gateway timeout or a route not deployed yet: the select stays as it is.
+        error: () => this.applyGrdResolution(undefined, query),
+      });
+  }
+
+  private applyGrdResolution(
+    data: DsoResolutionDTO | string | undefined,
+    query: DsoResolveQuery,
+  ): void {
+    const resolution = data && typeof data === 'object' ? data : GRD_LOOKUP_UNAVAILABLE;
+    this.grdLookup.set({ kind: 'done', resolution });
+
+    if (resolution.status === 'choose_commune' && resolution.communes?.length) {
+      this.grdCommuneChoice.set({ communes: resolution.communes, selected: null });
+      this.grdSectionChoice.set(null);
+    }
+    const operator = this.grdOperatorOf(resolution);
+    if (resolution.status === 'choose_section' && !operator && resolution.sections?.length) {
+      const commune = resolution.communes?.[0];
+      this.grdSectionChoice.set({
+        ins: commune?.ins ?? query.ins ?? paddedNis(query.nis_code),
+        region: commune?.region ?? null,
+        sections: resolution.sections,
+        selected: null,
+      });
+    }
+    if (operator) {
+      this.prefillGrd(operator, resolution.result?.data_version ?? resolution.data_version);
+    }
+  }
+
+  /**
+   * The ELECTRICITY OPERATOR the answer gives for the meter: the one that runs the
+   * network, never the designated GRD of a note and never gas. A `choose_section`
+   * whose sections all share one operator needs no choice (Baarle-Hertog).
+   */
+  private grdOperatorOf(resolution: DsoResolutionDTO): string | null {
+    if (resolution.status === 'ok') {
+      return resolution.result?.elec.operator || null;
+    }
+    if (resolution.status === 'choose_section' && resolution.sections?.length) {
+      const operators = new Set(resolution.sections.map((section) => section.elec_operator));
+      const [only] = [...operators];
+      return operators.size === 1 && only ? only : null;
+    }
+    return null;
+  }
+
+  private prefillGrd(operator: string, dataVersion: string | undefined): void {
+    if (this.grdSource() === 'manual' || operator === ELIA_OPTION_ID) {
+      return;
+    }
+    if (!this.grdAvailable().some((option) => option.id === operator)) {
+      return;
+    }
+    this.metersForm.get('grd')?.setValue(operator);
+    this.grdSource.set('auto');
+    this.grdDataVersion = dataVersion ?? null;
+    this.grdPrefilled.set(operator);
+  }
+
+  /** The operator the lookup put in the select, for the "prefilled" line. */
+  private readonly grdPrefilled = signal<string | null>(null);
+
+  /** The answer on screen, once there is one. */
+  private readonly grdResolution = computed(() => {
+    const state = this.grdLookup();
+    return state.kind === 'done' ? state.resolution : null;
+  });
+
+  readonly grdLookupLoading = computed(() => this.grdLookup().kind === 'loading');
+
+  /** `not_found` or `unavailable`: the select is left as it was. */
+  readonly grdLookupStatus = computed(() => this.grdResolution()?.status ?? null);
+
+  /** The prefilled operator's name while the user keeps it. */
+  readonly grdPrefilledName = computed(() => {
+    const prefilled = this.grdPrefilled();
+    if (this.grdSource() !== 'auto' || !prefilled) {
+      return null;
+    }
+    return this.grdAvailable().find((option) => option.id === prefilled)?.name ?? null;
+  });
+
+  readonly grdChoices = computed(() => {
+    this.translationChanged();
+    const lang = this.currentLang();
+    const communes = this.grdCommuneChoice();
+    const sections = this.grdSectionChoice();
+    return {
+      communes: communes
+        ? {
+            selected: communes.selected,
+            options: communes.communes.map(
+              (commune): GrdChoiceOption => ({
+                value: commune.ins,
+                label: placeName(commune.names, lang, commune.region),
+              }),
+            ),
+          }
+        : null,
+      sections: sections
+        ? {
+            selected: sections.selected,
+            options: sections.sections.map(
+              (section): GrdChoiceOption => ({
+                value: section.section_key,
+                label: placeName(section.names, lang, sections.region),
+              }),
+            ),
+          }
+        : null,
+    };
+  });
+
+  /** The data's own note on this commune or section, in the reader's language (fr fallback). */
+  readonly grdNote = computed(() => {
+    this.translationChanged();
+    const note = this.grdResolution()?.result?.note;
+    if (!note) {
+      return null;
+    }
+    const lang = this.currentLang();
+    const own = lang === 'nl' || lang === 'de' || lang === 'en' ? note[lang] : '';
+    return own || note.fr || null;
+  });
+
+  readonly grdToConfirm = computed(
+    () => this.grdResolution()?.result?.flags.includes('to_confirm') ?? false,
+  );
+
+  /** Translated; a code this build has no text for (a newer backend) is left out. */
+  readonly grdWarnings = computed(() => {
+    this.translationChanged();
+    return (this.grdResolution()?.warnings ?? [])
+      .map((warning) => this.grdWarningText(warning))
+      .filter((text): text is string => text !== null);
+  });
+
+  /** The data version behind the answer, for the attribution line. */
+  readonly grdDataVersionShown = computed(() => {
+    const resolution = this.grdResolution();
+    return resolution?.available ? (resolution.data_version ?? null) : null;
+  });
+
+  private grdWarningText(warning: DsoWarningDTO): string | null {
+    const regulator = (code: string | undefined): string => {
+      if (!code) {
+        return '';
+      }
+      const key = 'REGULATORS.' + code;
+      const label = this.translate.instant(key) as string;
+      return label === key ? code : label;
+    };
+    const key = 'METER.GRD_WARNING.' + warning.code;
+    const text = this.translate.instant(key, {
+      ...warning.params,
+      address_regulator: regulator(warning.params['address_regulator']),
+      community_regulator: regulator(warning.params['community_regulator']),
+    }) as string;
+    return text === key ? null : text;
+  }
+
+  private currentLang(): string {
+    return this.translate.getCurrentLang() || 'fr';
   }
 
   onSubmit(): void {
@@ -526,6 +878,7 @@ export class MeterCreation implements OnInit {
       production_chain: productionChainForApi(formValue.productionChain.id),
       total_generating_capacity: formValue.totalGeneratingCapacity,
       grd: formValue.grd,
+      ...this.grdProvenance(),
       member_id: formValue.member ? formValue.member.id : undefined,
       end_date: undefined,
     };
@@ -573,6 +926,20 @@ export class MeterCreation implements OnInit {
       });
   }
 
+  /**
+   * `auto` only for a value the lookup filled in and the user kept, with the data
+   * version it came from. Anything else in the select was chosen by a person.
+   */
+  private grdProvenance(): Pick<CreateMeterDataDTO, 'grd_source' | 'grd_data_version'> {
+    if (this.grdSource() !== 'auto') {
+      return { grd_source: 'manual' };
+    }
+    return {
+      grd_source: 'auto',
+      ...(this.grdDataVersion ? { grd_data_version: this.grdDataVersion } : {}),
+    };
+  }
+
   onChangeProductionChain(): void {
     const formValue = this.metersForm.getRawValue() as MeterFormValue;
     if (
@@ -590,4 +957,17 @@ export class MeterCreation implements OnInit {
       this.metersForm.get('injectionStatus')?.enable();
     }
   }
+}
+
+function paddedNis(nisCode: number | undefined): string | null {
+  return nisCode === undefined ? null : String(nisCode).padStart(5, '0');
+}
+
+/**
+ * A commune or section name in the reader's language. English, and a language the
+ * register has no name in, read the region's own: Dutch in Flanders, French elsewhere.
+ */
+function placeName(names: DsoNames, lang: string, region: DsoRegion | null): string {
+  const own = lang === 'fr' || lang === 'nl' || lang === 'de' ? names[lang] : '';
+  return own || (region === 'VLA' ? names.nl : names.fr) || names.fr || names.nl;
 }

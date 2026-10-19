@@ -38,11 +38,11 @@ const ACTIVE_COMMUNITY_STORAGE_KEY = 'activeCommunityId';
  * literal key a service builds — `'sharing-operations'` (plural) matched nothing,
  * because every key is `sharing-operation-list:`, `sharing-operation-keys:`, etc.
  *
- * Deliberately absent: `me:*`, `own-*`, `users`, `regulators` and
- * `municipalities-search`. The first two are user-scoped and cross-community by
- * design; the rest are global reference data. Dropping them would only cost a
- * refetch. `annexes-services` is owned by `CommunityServicesStore`, which
- * invalidates and refetches it from its own effect.
+ * Deliberately absent: `me:*`, `own-*`, `users`, `regulators`,
+ * `municipalities-search` and `dso-operators`. The first two are user-scoped and
+ * cross-community by design; the rest are global reference data. Dropping them
+ * would only cost a refetch. `annexes-services` is owned by
+ * `CommunityServicesStore`, which invalidates and refetches it from its own effect.
  */
 const COMMUNITY_SCOPED_CACHE_PREFIXES = [
   'communities',
@@ -55,6 +55,9 @@ const COMMUNITY_SCOPED_CACHE_PREFIXES = [
   'documents',
   'audit-logs-list',
   'dashboard',
+  // The GRD of an address is national data, but the answer carries warnings
+  // computed against the active community's regulator.
+  'dso-resolve',
   // Annexe services. Their catalogs are per-community too, and only
   // `administrative-document` keys its entries by community id today.
   'billing',

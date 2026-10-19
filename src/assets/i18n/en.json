@@ -1144,8 +1144,9 @@
       "PRODUCTION_CHAIN_TOOLTIP": "Type of renewable or low-carbon installation connected to this meter. Choose \"None\" if this is a consumption-only meter.",
       "INJECTION_STATUS_LABEL": "Injection status",
       "INJECTION_STATUS_TOOLTIP": "Describes the meter's relationship to a production installation and who holds the injection rights: owner of the installation, holder of a right-of-use, or none.",
-      "GRD_LABEL": "DSO",
+      "GRD_LABEL": "Network operator",
       "GRD_TOOLTIP": "Distribution System Operator: the regulated utility company that owns and manages the electricity grid in your area (e.g., Ores, Fluvius, Sibelga).",
+      "GRD_ELIA_OPTION": "Elia — local transmission grid (30–70 kV)",
       "RATE_LABEL": "Tariff",
       "RATE_TOOLTIP": "Single-rate: one price 24/7. Dual-hourly: day and night prices differ. Exclusive night: all energy is billed at the night rate (typically used with large storage or heating systems).",
       "USAGE_LABEL": "Usage",
@@ -1158,6 +1159,20 @@
       "ERROR": {
         "INVALID_EAN": "The EAN must be exactly 18 digits."
       }
+    },
+    "GRD_LOOKUP": {
+      "LOADING": "Looking up the network operator for this address…",
+      "PREFILLED": "{{name}}, prefilled from the address. Check it and change it if needed.",
+      "CHOOSE_SECTION": "The operator depends on the locality. Choose the meter's:",
+      "CHOOSE_COMMUNE": "This postcode covers several municipalities. Choose the meter's:",
+      "NOT_FOUND": "No operator found for this postcode: choose it from the list.",
+      "UNAVAILABLE": "The operator lookup is unavailable right now: choose it from the list.",
+      "TO_CONFIRM": "This information is still to be confirmed: check the operator on a recent energy bill.",
+      "ATTRIBUTION": "Network operators (data {{version}}): Statbel (CC BY 4.0, modified), Fluvius, ORES, regulators CWaPE, VREG and Brugel"
+    },
+    "GRD_WARNING": {
+      "REGION_OUTSIDE_COMMUNITY_REGULATOR": "This address falls under {{address_regulator}}, while the community is under {{community_regulator}}. Check the meter's address.",
+      "EAN_SIBELGA_OUTSIDE_BRUSSELS": "This EAN starts with Sibelga's prefix (Brussels), but the address is not in Brussels. Check the EAN and the address."
     },
     "CATEGORIES": {
       "PRODUCTION_CHAIN": {

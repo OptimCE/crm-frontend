@@ -311,6 +311,46 @@ describe('MeterDataView', () => {
       expect(hasGrd).toBe(true);
     });
 
+    // `grd` stores a stable id since the DSO lookup; older records keep a name.
+    function grdText(): string | undefined {
+      return getEl(fixture)
+        .querySelector('[data-testid="meter-data-view__text--grd"]')
+        ?.textContent?.trim();
+    }
+
+    it("shows the operator's name for a stored id, not the id", () => {
+      setInputs(fixture, buildMeterData({ grd: 'fluvius-imewo' }));
+      fixture.detectChanges();
+
+      expect(grdText()).toBe('Fluvius Imewo');
+    });
+
+    it('shows Elia by its name', () => {
+      setInputs(fixture, buildMeterData({ grd: 'elia' }));
+      fixture.detectChanges();
+
+      expect(grdText()).toBe('Elia');
+    });
+
+    it('shows a legacy name in its canonical spelling', () => {
+      setInputs(fixture, buildMeterData({ grd: 'resa' }));
+      fixture.detectChanges();
+
+      expect(grdText()).toBe('RESA');
+    });
+
+    it('falls back to the raw value it does not know', () => {
+      // A bare "Fluvius" names no entity; an operator newer than this build has an id
+      // the static list does not know yet. Either is shown as stored, never hidden.
+      setInputs(fixture, buildMeterData({ grd: 'Fluvius' }));
+      fixture.detectChanges();
+      expect(grdText()).toBe('Fluvius');
+
+      setInputs(fixture, buildMeterData({ grd: 'fluvius-noord' }));
+      fixture.detectChanges();
+      expect(grdText()).toBe('fluvius-noord');
+    });
+
     it('should display "--" when grd is empty', () => {
       setInputs(fixture, buildMeterData({ grd: '' }));
       fixture.detectChanges();

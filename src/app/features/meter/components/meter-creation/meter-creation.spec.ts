@@ -3,14 +3,23 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormControl } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { of, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { MeterCreation } from './meter-creation';
 import { MemberService } from '../../../../shared/services/member.service';
 import { MeterService } from '../../../../shared/services/meter.service';
+import { DsoService } from '../../../../shared/services/dso.service';
+import {
+  DsoNames,
+  DsoOperatorDTO,
+  DsoResolutionDTO,
+  DsoResolveQuery,
+  DsoResultDTO,
+  DsoSectionDTO,
+} from '../../../../shared/dtos/dso.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { MembersPartialDTO } from '../../../../shared/dtos/member.dtos';
 import { CreateMeterDTO } from '../../../../shared/dtos/meter.dtos';
@@ -48,7 +57,7 @@ function fillFormCompletely(component: MeterCreation): void {
     address_postcode: '1000',
     address_city: 'Brussels',
     EAN: '541448200000000001',
-    grd: 'RESA',
+    grd: 'resa',
     meterNumber: 'MTR-001',
     tarifGroup: { id: 1, name: 'Low Voltage' },
     phasesNumber: { id: 1, name: 'Single Phase' },
@@ -70,6 +79,90 @@ function fillFormCompletely(component: MeterCreation): void {
   });
 }
 
+// ── GRD lookup fixtures ──────────────────────────────────────────────
+
+type DsoAnswer = Observable<ApiResponse<DsoResolutionDTO | string>>;
+
+function placeNames(fr: string, nl = fr, de = fr): DsoNames {
+  return { fr, nl, de };
+}
+
+function dsoResult(operator: string, over: Partial<DsoResultDTO> = {}): DsoResultDTO {
+  return {
+    ins: '62063',
+    commune: placeNames('Liège', 'Luik', 'Lüttich'),
+    section: null,
+    region: 'WAL',
+    regulator: 'BE-WAL-CWAPE',
+    elec: { operator, designated: operator },
+    gas: { status: 'designated', operator },
+    flags: [],
+    note: null,
+    source_ids: ['cwape-2026'],
+    valid_from: null,
+    data_version: '2026.10.0',
+    ...over,
+  };
+}
+
+function dsoResolution(over: Partial<DsoResolutionDTO> = {}): DsoResolutionDTO {
+  return { available: true, status: 'ok', warnings: [], data_version: '2026.10.0', ...over };
+}
+
+function answer(resolution: DsoResolutionDTO): DsoAnswer {
+  return of(new ApiResponse<DsoResolutionDTO | string>(resolution));
+}
+
+function dsoSection(key: string, fr: string, operator: string, postcodes: string[]): DsoSectionDTO {
+  return { section_key: key, names: placeNames(fr), postcodes, elec_operator: operator };
+}
+
+function dsoOperator(id: string, name: string, over: Partial<DsoOperatorDTO> = {}): DsoOperatorDTO {
+  return {
+    id,
+    kind: 'grd',
+    name,
+    legal_name: name,
+    region: 'WAL',
+    elec: true,
+    gas: false,
+    website: '',
+    regulator: 'BE-WAL-CWAPE',
+    tariffs_url: '',
+    lookup: true,
+    replaced_by: null,
+    ...over,
+  };
+}
+
+/** Step 1 as a user leaves it: a typed (not picked) Liège address, and the identity. */
+function fillStep1(component: MeterCreation): void {
+  component.metersForm.patchValue({
+    address_street: 'Rue Léopold',
+    address_number: '1',
+    address_postcode: '4000',
+    address_city: 'Liège',
+    EAN: ' 541448200000000001 ',
+    meterNumber: 'MTR-001',
+    tarifGroup: { id: 1, name: 'Low Voltage' },
+    phasesNumber: { id: 1, name: 'Single Phase' },
+    readingFrequency: { id: 1, name: 'Monthly' },
+  });
+}
+
+/** Fill step 2 too, keeping whatever the lookup put in the GRD select. */
+function fillStep2(component: MeterCreation): void {
+  const grd = component.metersForm.get('grd')?.value as string;
+  fillFormCompletely(component);
+  component.metersForm.patchValue({
+    address_street: 'Rue Léopold',
+    address_number: '1',
+    address_postcode: '4000',
+    address_city: 'Liège',
+    grd,
+  });
+}
+
 // ── Test Suite ───────────────────────────────────────────────────────
 
 /**
@@ -84,6 +177,7 @@ function pickAddress(
   component: object,
   handler: string,
   fields: { street: string; number: string; postcode: string; city: string },
+  extra: Partial<AddressSuggestionDTO> = {},
 ): void {
   const suggestion: AddressSuggestionDTO = {
     id: 'best:42',
@@ -98,6 +192,7 @@ function pickAddress(
     longitude: 4.366538,
     precision: AddressGeoPrecision.ROOFTOP,
     best_address_id: 'best:42',
+    ...extra,
   };
   const full = { ...fields, supplement: '' };
   (component as Record<string, (e: AddressPicked) => void>)[handler]({
@@ -127,6 +222,10 @@ describe('MeterCreation', () => {
   let memberServiceSpy: { getMembersList: ReturnType<typeof vi.fn> };
   let meterServiceSpy: { addMeter: ReturnType<typeof vi.fn> };
   let errorHandlerSpy: { handleError: ReturnType<typeof vi.fn> };
+  let dsoServiceSpy: {
+    getOperators: ReturnType<typeof vi.fn>;
+    resolve: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
     dialogRefSpy = { close: vi.fn() };
@@ -134,6 +233,13 @@ describe('MeterCreation', () => {
     memberServiceSpy = { getMembersList: vi.fn().mockReturnValue(of(membersResponse())) };
     meterServiceSpy = { addMeter: vi.fn().mockReturnValue(of(new ApiResponse('ok'))) };
     errorHandlerSpy = { handleError: vi.fn() };
+    // dso-lookup off, as crm-backend answers it: an empty catalogue, `unavailable`.
+    dsoServiceSpy = {
+      getOperators: vi.fn().mockReturnValue(of(new ApiResponse<DsoOperatorDTO[]>([]))),
+      resolve: vi
+        .fn()
+        .mockReturnValue(answer({ available: false, status: 'unavailable', warnings: [] })),
+    };
 
     await TestBed.configureTestingModule({
       imports: [MeterCreation, TranslateModule.forRoot()],
@@ -143,6 +249,7 @@ describe('MeterCreation', () => {
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: MeterService, useValue: meterServiceSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
+        { provide: DsoService, useValue: dsoServiceSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
@@ -231,10 +338,19 @@ describe('MeterCreation', () => {
       expect(component.metersForm.get('injectionStatus')?.disabled).toBe(true);
     });
 
-    it('should offer the GRDs of every region but not ELIA, the transmission operator', () => {
-      const names = component.grdAvailable.map((g) => g.name);
-      expect(names).not.toContain('ELIA');
-      expect(names).toEqual(expect.arrayContaining(['ORES', 'Sibelga', 'Fluvius Antwerpen']));
+    it('offers the GRDs of every region, then Elia apart and last', () => {
+      const options = component.grdAvailable();
+      expect(options[0].id).toBe('ores');
+      expect(options.map((g) => g.name)).toEqual(
+        expect.arrayContaining(['ORES', 'Sibelga', 'Fluvius Antwerpen']),
+      );
+      // No translations are loaded, so Elia's label reads as its key.
+      expect(options.at(-1)).toEqual({
+        id: 'elia',
+        name: 'METER.INFORMATIONS.GRD_ELIA_OPTION',
+        kind: 'grtl',
+      });
+      expect(options.filter((g) => g.kind === 'grtl')).toHaveLength(1);
     });
   });
 
@@ -574,6 +690,518 @@ describe('MeterCreation', () => {
     });
   });
 
+  // ── 8b. GRD lookup ──────────────────────────────────────────────────
+
+  describe('GRD lookup', () => {
+    /** Validate step 1 as "next" does; the callback opens step 2. */
+    function next(): ReturnType<typeof vi.fn> {
+      const activate = vi.fn();
+      component.validateStep1(activate);
+      return activate;
+    }
+
+    function lastQuery(): DsoResolveQuery {
+      return dsoServiceSpy.resolve.mock.calls.at(-1)?.[0] as DsoResolveQuery;
+    }
+
+    function grd(): unknown {
+      return component.metersForm.get('grd')?.value;
+    }
+
+    function submitted(): Record<string, unknown> {
+      return (meterServiceSpy.addMeter.mock.calls.at(-1)?.[0] as CreateMeterDTO)
+        .initial_data as unknown as Record<string, unknown>;
+    }
+
+    describe('the operator catalogue', () => {
+      function withCatalogue(response: unknown): MeterCreation {
+        dsoServiceSpy.getOperators.mockReturnValue(response);
+        const created = TestBed.createComponent(MeterCreation).componentInstance;
+        created.ngOnInit();
+        return created;
+      }
+
+      it('replaces the static list, sorted back to ORES first, Elia last', () => {
+        // A catalogue may list AIEG first (dso-lookup pins only kind and region
+        // order); the e2e scenarios pick the first option, which must stay ORES.
+        const created = withCatalogue(
+          of(
+            new ApiResponse([
+              dsoOperator('aieg', 'AIEG'),
+              dsoOperator('ores', 'ORES'),
+              dsoOperator('fluvius-new', 'Fluvius New', { region: 'VLA' }),
+              dsoOperator('sibelga', 'Sibelga', { region: 'BRU' }),
+              dsoOperator('enexis', 'Enexis', { kind: 'gas_foreign', elec: false }),
+              dsoOperator('elia', 'Elia', { kind: 'grtl', lookup: false }),
+            ]),
+          ),
+        );
+
+        expect(created.grdAvailable().map((option) => option.id)).toEqual([
+          'ores',
+          'aieg',
+          'sibelga',
+          'fluvius-new',
+          'elia',
+        ]);
+      });
+
+      it('keeps the static list when the catalogue is empty or fails', () => {
+        const empty = withCatalogue(of(new ApiResponse<DsoOperatorDTO[]>([])));
+        const failed = withCatalogue(throwError(() => new Error('404')));
+
+        for (const created of [empty, failed]) {
+          expect(created.grdAvailable()).toHaveLength(15);
+          expect(created.grdAvailable()[0].id).toBe('ores');
+        }
+      });
+    });
+
+    describe('the query', () => {
+      it('asks once step 1 is valid, AFTER opening step 2, with the typed address and EAN', () => {
+        fillStep1(component);
+
+        const activate = next();
+
+        expect(activate).toHaveBeenCalledWith(1);
+        expect(dsoServiceSpy.resolve).toHaveBeenCalledTimes(1);
+        expect(activate.mock.invocationCallOrder[0]).toBeLessThan(
+          dsoServiceSpy.resolve.mock.invocationCallOrder[0],
+        );
+        expect(lastQuery()).toEqual({
+          postcode: '4000',
+          city: 'Liège',
+          ean: '541448200000000001',
+        });
+      });
+
+      it('does not ask while step 1 is invalid', () => {
+        next();
+
+        expect(dsoServiceSpy.resolve).not.toHaveBeenCalled();
+      });
+
+      it("adds the pick's commune code and locality while the address still matches it", () => {
+        fillStep1(component);
+        const fields = { street: 'Rue Léopold', number: '1', postcode: '4000', city: 'Liège' };
+        pickAddress(component, 'onAddressPicked', fields, {
+          nis_code: 62063,
+          post_name: 'Liège',
+        });
+
+        next();
+
+        expect(lastQuery()).toEqual({
+          nis_code: 62063,
+          post_name: 'Liège',
+          postcode: '4000',
+          city: 'Liège',
+          ean: '541448200000000001',
+        });
+      });
+
+      it('drops them once the address was edited away from the pick', () => {
+        fillStep1(component);
+        const fields = { street: 'Rue Léopold', number: '1', postcode: '4000', city: 'Liège' };
+        pickAddress(component, 'onAddressPicked', fields, { nis_code: 62063, post_name: 'Liège' });
+        component.metersForm.patchValue({ address_postcode: '4020' });
+
+        next();
+
+        expect(lastQuery()).not.toHaveProperty('nis_code');
+        expect(lastQuery()).not.toHaveProperty('post_name');
+        expect(lastQuery()).toMatchObject({ postcode: '4020' });
+      });
+
+      it('does not ask again for the same address (back, then next)', () => {
+        dsoServiceSpy.resolve.mockReturnValue(answer(dsoResolution({ result: dsoResult('ores') })));
+        fillStep1(component);
+        next();
+        next();
+
+        expect(dsoServiceSpy.resolve).toHaveBeenCalledTimes(1);
+      });
+
+      it('asks again for the same address when the lookup was unavailable', () => {
+        fillStep1(component);
+        next();
+        next();
+
+        expect(dsoServiceSpy.resolve).toHaveBeenCalledTimes(2);
+      });
+
+      it('asks again once the address changed, and drops the late answer to the first', () => {
+        const first = new Subject<ApiResponse<DsoResolutionDTO | string>>();
+        const second = new Subject<ApiResponse<DsoResolutionDTO | string>>();
+        dsoServiceSpy.resolve.mockReturnValueOnce(first).mockReturnValueOnce(second);
+        fillStep1(component);
+        next();
+        component.metersForm.patchValue({ address_postcode: '4020' });
+        next();
+
+        first.next(new ApiResponse(dsoResolution({ result: dsoResult('ores') })));
+        expect(grd()).toBe('');
+        second.next(new ApiResponse(dsoResolution({ result: dsoResult('resa') })));
+
+        expect(grd()).toBe('resa');
+        expect(dsoServiceSpy.resolve).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('an "ok" answer', () => {
+      it('prefills the operator and submits it as auto, with the data version', () => {
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(dsoResolution({ result: dsoResult('resa'), data_version: '2026.10.0' })),
+        );
+        fillStep1(component);
+        next();
+
+        expect(grd()).toBe('resa');
+        expect(component.grdSource()).toBe('auto');
+        expect(component.grdPrefilledName()).toBe('RESA');
+        expect(component.grdDataVersionShown()).toBe('2026.10.0');
+
+        fillStep2(component);
+        component.onSubmit();
+
+        expect(submitted()).toMatchObject({
+          grd: 'resa',
+          grd_source: 'auto',
+          grd_data_version: '2026.10.0',
+        });
+      });
+
+      it("prefills the network's OPERATOR, never the designated GRD", () => {
+        // Namur's four sections run by AIEG while ORES is the designated GRD.
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(
+            dsoResolution({
+              result: dsoResult('aieg', {
+                elec: { operator: 'aieg', designated: 'ores' },
+                gas: { status: 'designated', operator: 'ores' },
+                flags: ['operator_differs'],
+              }),
+            }),
+          ),
+        );
+        fillStep1(component);
+        next();
+
+        expect(grd()).toBe('aieg');
+      });
+
+      it('keeps a draft data version as is', () => {
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(
+            dsoResolution({
+              result: dsoResult('ores', { data_version: '2026.10.0-draft' }),
+              data_version: '2026.10.0-draft',
+            }),
+          ),
+        );
+        fillStep1(component);
+        next();
+        fillStep2(component);
+        component.onSubmit();
+
+        expect(submitted()).toMatchObject({ grd_data_version: '2026.10.0-draft' });
+      });
+
+      it('never overwrites a GRD the user picked', () => {
+        dsoServiceSpy.resolve.mockReturnValue(answer(dsoResolution({ result: dsoResult('ores') })));
+        fillStep1(component);
+        component.metersForm.patchValue({ grd: 'resa' });
+        component.onGrdChange();
+
+        next();
+
+        expect(grd()).toBe('resa');
+        expect(component.grdSource()).toBe('manual');
+        expect(component.grdPrefilledName()).toBeNull();
+      });
+
+      it('never overwrites a GRD picked while the answer was on its way', () => {
+        const pending = new Subject<ApiResponse<DsoResolutionDTO | string>>();
+        dsoServiceSpy.resolve.mockReturnValue(pending);
+        fillStep1(component);
+        next();
+        component.metersForm.patchValue({ grd: 'aiesh' });
+        component.onGrdChange();
+
+        pending.next(new ApiResponse(dsoResolution({ result: dsoResult('ores') })));
+
+        expect(grd()).toBe('aiesh');
+        expect(component.grdSource()).toBe('manual');
+      });
+
+      it('turns a prefilled value into a manual one when the user changes it', () => {
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(dsoResolution({ result: dsoResult('ores'), data_version: '2026.10.0' })),
+        );
+        fillStep1(component);
+        next();
+        component.metersForm.patchValue({ grd: 'rew' });
+        component.onGrdChange();
+        fillStep2(component);
+
+        component.onSubmit();
+
+        expect(submitted()).toMatchObject({ grd: 'rew', grd_source: 'manual' });
+        expect(submitted()).not.toHaveProperty('grd_data_version');
+      });
+
+      it('never prefills Elia, nor an operator the select does not offer', () => {
+        for (const operator of ['elia', 'unknown-operator']) {
+          dsoServiceSpy.resolve.mockReturnValue(
+            answer(dsoResolution({ result: dsoResult(operator) })),
+          );
+          const created = TestBed.createComponent(MeterCreation).componentInstance;
+          created.ngOnInit();
+          fillStep1(created);
+          created.validateStep1(vi.fn());
+
+          expect(created.metersForm.get('grd')?.value, operator).toBe('');
+          expect(created.grdSource(), operator).toBeNull();
+        }
+      });
+    });
+
+    describe('a "choose_section" answer', () => {
+      const flawinne = dsoSection('92094|flawinne', 'Flawinne', 'aieg', ['5020']);
+      const namur = dsoSection('92094|namur', 'Namur', 'ores', ['5000', '5020']);
+      const namurCommune = {
+        ins: '92094',
+        names: placeNames('Namur', 'Namen', 'Namür'),
+        region: 'WAL' as const,
+        province: 'BE-WNA',
+      };
+
+      it('prefills when every section has the same operator (Baarle-Hertog)', () => {
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(
+            dsoResolution({
+              status: 'choose_section',
+              sections: [
+                dsoSection('13002|baarle-hertog', 'Baarle-Hertog', 'fluvius-antwerpen', ['2387']),
+                dsoSection('13002|zondereigen', 'Zondereigen', 'fluvius-antwerpen', ['2387']),
+              ],
+            }),
+          ),
+        );
+        fillStep1(component);
+        next();
+
+        expect(grd()).toBe('fluvius-antwerpen');
+        expect(component.grdSource()).toBe('auto');
+        expect(component.grdChoices().sections).toBeNull();
+      });
+
+      it('offers the sections as radios when their operators differ, and prefills nothing', () => {
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(
+            dsoResolution({
+              status: 'choose_section',
+              communes: [namurCommune],
+              sections: [flawinne, namur],
+            }),
+          ),
+        );
+        fillStep1(component);
+        next();
+
+        expect(grd()).toBe('');
+        expect(component.grdSource()).toBeNull();
+        expect(component.grdChoices().sections).toEqual({
+          selected: null,
+          options: [
+            { value: '92094|flawinne', label: 'Flawinne' },
+            { value: '92094|namur', label: 'Namur' },
+          ],
+        });
+      });
+
+      it('asks again for the chosen section, by commune and section, and prefills it', () => {
+        dsoServiceSpy.resolve.mockReturnValueOnce(
+          answer(
+            dsoResolution({
+              status: 'choose_section',
+              communes: [namurCommune],
+              sections: [flawinne, namur],
+            }),
+          ),
+        );
+        fillStep1(component);
+        const fields = { street: 'Rue Léopold', number: '1', postcode: '4000', city: 'Liège' };
+        pickAddress(component, 'onAddressPicked', fields, { nis_code: 92094 });
+        next();
+        dsoServiceSpy.resolve.mockReturnValueOnce(
+          answer(dsoResolution({ result: dsoResult('aieg', { ins: '92094', section: flawinne }) })),
+        );
+
+        component.chooseGrdSection('92094|flawinne');
+
+        // Without the register hints, which would route the backend to the address
+        // lookup and ignore ins/section; with a postcode the section covers.
+        expect(lastQuery()).toEqual({
+          ins: '92094',
+          section: '92094|flawinne',
+          postcode: '5020',
+          city: 'Liège',
+          ean: '541448200000000001',
+        });
+        expect(grd()).toBe('aieg');
+        expect(component.grdSource()).toBe('auto');
+        expect(component.grdChoices().sections?.selected).toBe('92094|flawinne');
+      });
+    });
+
+    describe('a "choose_commune" answer', () => {
+      it('offers the communes as radios, then asks again for the chosen one', () => {
+        dsoServiceSpy.resolve.mockReturnValueOnce(
+          answer(
+            dsoResolution({
+              status: 'choose_commune',
+              communes: [
+                { ins: '23104', names: placeNames('Lennik'), region: 'VLA', province: 'BE-VBR' },
+                {
+                  ins: '23106',
+                  names: placeNames('Pajottegem'),
+                  region: 'VLA',
+                  province: 'BE-VBR',
+                },
+              ],
+            }),
+          ),
+        );
+        fillStep1(component);
+        next();
+
+        expect(grd()).toBe('');
+        expect(component.grdChoices().communes?.options).toEqual([
+          { value: '23104', label: 'Lennik' },
+          { value: '23106', label: 'Pajottegem' },
+        ]);
+
+        dsoServiceSpy.resolve.mockReturnValueOnce(
+          answer(dsoResolution({ result: dsoResult('fluvius-halle-vilvoorde') })),
+        );
+        component.chooseGrdCommune('23106');
+
+        expect(lastQuery()).toMatchObject({ ins: '23106', postcode: '4000' });
+        expect(grd()).toBe('fluvius-halle-vilvoorde');
+        expect(component.grdChoices().communes?.selected).toBe('23106');
+      });
+    });
+
+    describe('no answer', () => {
+      it.each([
+        ['unavailable', answer({ available: false, status: 'unavailable', warnings: [] })],
+        ['not_found', answer(dsoResolution({ status: 'not_found' }))],
+        ['an HTTP error', throwError(() => new HttpErrorResponse({ status: 404 }))],
+      ])('changes nothing on %s', (_label, response) => {
+        dsoServiceSpy.resolve.mockReturnValue(response);
+        fillStep1(component);
+        component.metersForm.patchValue({ grd: 'ores' });
+
+        next();
+
+        expect(grd()).toBe('ores');
+        expect(component.grdSource()).toBeNull();
+        expect(component.grdLookupLoading()).toBe(false);
+      });
+
+      it('says why it left the select alone', () => {
+        fillStep1(component);
+        next();
+
+        expect(component.grdLookupStatus()).toBe('unavailable');
+        expect(component.grdDataVersionShown()).toBeNull();
+      });
+
+      it('submits a GRD chosen without any lookup as manual, without a data version', () => {
+        fillFormCompletely(component);
+
+        component.onSubmit();
+
+        expect(submitted()).toMatchObject({ grd: 'resa', grd_source: 'manual' });
+        expect(submitted()).not.toHaveProperty('grd_data_version');
+      });
+    });
+
+    describe('what comes with the answer', () => {
+      it("shows the data's note in the reader's language, else in French", () => {
+        const note = { key: 'wal-namur', fr: 'Note FR', nl: 'Notitie NL', de: '', en: 'Note EN' };
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(dsoResolution({ result: dsoResult('ores', { note }) })),
+        );
+        fillStep1(component);
+        next();
+        const translate = TestBed.inject(TranslateService);
+
+        translate.use('nl');
+        expect(component.grdNote()).toBe('Notitie NL');
+        translate.use('de');
+        expect(component.grdNote()).toBe('Note FR');
+      });
+
+      it('flags data still to confirm', () => {
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(
+            dsoResolution({ result: dsoResult('ores', { flags: ['transition', 'to_confirm'] }) }),
+          ),
+        );
+        fillStep1(component);
+        next();
+
+        expect(component.grdToConfirm()).toBe(true);
+      });
+
+      it('translates the warnings, with the regulators by name', () => {
+        const translate = TestBed.inject(TranslateService);
+        translate.setTranslation('fr', {
+          METER: {
+            GRD_WARNING: {
+              REGION_OUTSIDE_COMMUNITY_REGULATOR: '{{address_regulator}} / {{community_regulator}}',
+              EAN_SIBELGA_OUTSIDE_BRUSSELS: 'Sibelga hors de Bruxelles ({{region}})',
+            },
+          },
+          REGULATORS: { 'BE-WAL-CWAPE': 'CWaPE (Wallonie)' },
+        });
+        translate.use('fr');
+        dsoServiceSpy.resolve.mockReturnValue(
+          answer(
+            dsoResolution({
+              result: dsoResult('resa'),
+              warnings: [
+                {
+                  code: 'REGION_OUTSIDE_COMMUNITY_REGULATOR',
+                  params: { address_regulator: 'BE-WAL-CWAPE', community_regulator: 'BE-XX-NEW' },
+                },
+                { code: 'EAN_SIBELGA_OUTSIDE_BRUSSELS', params: { region: 'WAL' } },
+                // A code from a newer backend that this build cannot word.
+                {
+                  code: 'SOMETHING_NEW' as 'EAN_SIBELGA_OUTSIDE_BRUSSELS',
+                  params: {},
+                },
+              ],
+            }),
+          ),
+        );
+        fillStep1(component);
+        next();
+
+        // An unknown regulator code is shown as is rather than as a missing key, and
+        // a warning without a text is left out.
+        expect(component.grdWarnings()).toEqual([
+          'CWaPE (Wallonie) / BE-XX-NEW',
+          'Sibelga hors de Bruxelles (WAL)',
+        ]);
+        // Warnings never block, nor change the prefill.
+        expect(grd()).toBe('resa');
+      });
+    });
+  });
+
   // ── 9. Address details disclosure ───────────────────────────────────
 
   describe('address details disclosure', () => {
@@ -640,13 +1268,24 @@ describe('MeterCreation rendered', () => {
   // them, so a missing postcode blocked the step with no message at all.
   let component: MeterCreation;
   let fixture: ComponentFixture<MeterCreation>;
+  let resolveSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    resolveSpy = vi
+      .fn()
+      .mockReturnValue(answer({ available: false, status: 'unavailable', warnings: [] }));
     await TestBed.configureTestingModule({
       imports: [MeterCreation, TranslateModule.forRoot()],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        {
+          provide: DsoService,
+          useValue: {
+            getOperators: vi.fn().mockReturnValue(of(new ApiResponse<DsoOperatorDTO[]>([]))),
+            resolve: resolveSpy,
+          },
+        },
         { provide: DynamicDialogRef, useValue: { close: vi.fn() } },
         { provide: DynamicDialogConfig, useValue: { data: {} } },
         {
@@ -867,5 +1506,87 @@ describe('MeterCreation rendered', () => {
     for (const inputId of step1) {
       expect(radio(inputId), inputId).toEqual(CHECKED);
     }
+  });
+
+  // ── GRD lookup ──
+
+  async function moveToStep2(): Promise<void> {
+    fillIdentity();
+    pickAddress(component, 'onAddressPicked', {
+      street: 'Rue de Fernelmont',
+      number: '2',
+      postcode: '5020',
+      city: 'Namur',
+    });
+    await settle();
+    await pressNext();
+  }
+
+  function rendered(testId: string): HTMLElement | null {
+    return (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+      `[data-testid="${testId}"]`,
+    );
+  }
+
+  it('shows the prefilled operator in the select, with the attribution', async () => {
+    resolveSpy.mockReturnValue(
+      answer(dsoResolution({ result: dsoResult('ores'), data_version: '2026.10.0' })),
+    );
+
+    await moveToStep2();
+
+    expect(onStep2()).toBe(true);
+    expect(component.metersForm.get('grd')?.value).toBe('ores');
+    expect(byTestId('meter-creation__select--grd').textContent).toContain('ORES');
+    expect(byTestId('meter-creation__grd-lookup--prefilled').textContent).toContain(
+      'METER.GRD_LOOKUP.PREFILLED',
+    );
+    expect(byTestId('meter-creation__grd-lookup--attribution')).toBeTruthy();
+  });
+
+  it('lets the user choose the locality with a radio, then prefills its operator', async () => {
+    resolveSpy.mockReturnValueOnce(
+      answer(
+        dsoResolution({
+          status: 'choose_section',
+          communes: [
+            { ins: '92094', names: placeNames('Namur'), region: 'WAL', province: 'BE-WNA' },
+          ],
+          sections: [
+            dsoSection('92094|flawinne', 'Flawinne', 'aieg', ['5020']),
+            dsoSection('92094|namur', 'Namur', 'ores', ['5000', '5020']),
+          ],
+        }),
+      ),
+    );
+    await moveToStep2();
+    expect(component.metersForm.get('grd')?.value).toBe('');
+    const sections = byTestId('meter-creation__grd-lookup--sections');
+    expect(sections.textContent).toContain('Flawinne');
+    expect(sections.textContent).toContain('Namur');
+
+    resolveSpy.mockReturnValueOnce(answer(dsoResolution({ result: dsoResult('aieg') })));
+    sections.querySelector<HTMLLabelElement>('label[for="grdSection0"]')?.click();
+    await settle();
+
+    expect(resolveSpy).toHaveBeenLastCalledWith(
+      expect.objectContaining({ ins: '92094', section: '92094|flawinne', postcode: '5020' }),
+    );
+    expect(component.metersForm.get('grd')?.value).toBe('aieg');
+    expect(
+      (sections.querySelector<HTMLInputElement>('input#grdSection0') as HTMLInputElement).checked,
+    ).toBe(true);
+    // The card radios of the form keep their own state.
+    expect(rendered('meter-creation__grd-lookup--prefilled')).toBeTruthy();
+  });
+
+  it('shows nothing but a quiet line when the lookup is unavailable', async () => {
+    await moveToStep2();
+
+    expect(onStep2()).toBe(true);
+    expect(rendered('meter-creation__grd-lookup--unavailable')).toBeTruthy();
+    expect(rendered('meter-creation__grd-lookup--prefilled')).toBeNull();
+    expect(rendered('meter-creation__grd-lookup--sections')).toBeNull();
+    expect(component.metersForm.get('grd')?.value).toBe('');
   });
 });

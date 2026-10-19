@@ -395,41 +395,106 @@ describe('MeterDataUpdate', () => {
   // ── Stored GRD ───────────────────────────────────────────────────
 
   describe('with a stored GRD', () => {
-    it('should not offer ELIA, the transmission operator', async () => {
+    function lastPayload(): Record<string, unknown> {
+      return meterServiceSpy.patchMeterData.mock.calls.at(-1)?.[0] as Record<string, unknown>;
+    }
+
+    it('offers the 14 GRDs, then Elia last under its own label', async () => {
       await configureTestBed(buildMeterData());
 
-      expect(component.grdAvailable.map((g) => g.name)).not.toContain('ELIA');
+      const options = component.grdAvailable();
+      expect(options).toHaveLength(15);
+      expect(options[0].id).toBe('ores');
+      // No translations are loaded, so the label reads as its key.
+      expect(options.at(-1)).toEqual({
+        id: 'elia',
+        name: 'METER.INFORMATIONS.GRD_ELIA_OPTION',
+        kind: 'grtl',
+      });
     });
 
-    it('should leave a legacy ELIA empty and require a real GRD', async () => {
+    it('selects the stored id', async () => {
+      await configureTestBed(buildMeterData({ grd: 'fluvius-limburg' }));
+      initAndEmitMembers();
+
+      expect(component.metersForm.get('grd')?.value).toBe('fluvius-limburg');
+    });
+
+    it('selects the id of a legacy name, ignoring case', async () => {
+      await configureTestBed(buildMeterData({ grd: 'resa' }));
+      initAndEmitMembers();
+
+      expect(component.metersForm.get('grd')?.value).toBe('resa');
+    });
+
+    it('selects Elia for a legacy ELIA, now that it is an option', async () => {
       await configureTestBed(buildMeterData({ grd: 'ELIA' }));
       initAndEmitMembers();
 
+      expect(component.metersForm.get('grd')?.value).toBe('elia');
+    });
+
+    it('leaves a value that names no operator empty, and requires a pick', async () => {
+      await configureTestBed(buildMeterData({ grd: 'Fluvius' }));
+      initAndEmitMembers();
+
       const grdControl = component.metersForm.get('grd');
-      expect(grdControl?.value).toBeFalsy();
+      expect(grdControl?.value).toBe('');
       expect(grdControl?.hasError('required')).toBe(true);
       expect(component.metersForm.valid).toBe(false);
     });
 
-    it('should match the stored value ignoring case and save its canonical name', async () => {
-      await configureTestBed(buildMeterData({ grd: 'resa' }));
+    it('leaves the GRD out of the PATCH when the select is untouched', async () => {
+      // The backend then keeps the stored operator WITH its provenance: a prefilled
+      // `auto` and its data version survive an edit of another field.
+      await configureTestBed(
+        buildMeterData({ grd: 'resa', grd_source: 'auto', grd_data_version: '2026.10.0' }),
+      );
       initAndEmitMembers();
-      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1) });
-
-      expect(component.metersForm.get('grd')?.value).toEqual({ name: 'RESA' });
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1), amperage: 32 });
 
       component.onSubmit();
 
-      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledWith(
-        expect.objectContaining({ grd: 'RESA' }),
-      );
+      expect(meterServiceSpy.patchMeterData).toHaveBeenCalledTimes(1);
+      expect(lastPayload()).toMatchObject({ amperage: 32 });
+      expect(lastPayload()).not.toHaveProperty('grd');
+      expect(lastPayload()).not.toHaveProperty('grd_source');
+      expect(lastPayload()).not.toHaveProperty('grd_data_version');
     });
 
-    it('should pre-fill a Flemish operator', async () => {
-      await configureTestBed(buildMeterData({ grd: 'Fluvius Limburg' }));
+    it('sends a changed GRD as a manual choice, without a data version', async () => {
+      await configureTestBed(buildMeterData({ grd: 'resa', grd_source: 'auto' }));
       initAndEmitMembers();
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1), grd: 'aieg' });
 
-      expect(component.metersForm.get('grd')?.value).toEqual({ name: 'Fluvius Limburg' });
+      component.onSubmit();
+
+      expect(lastPayload()).toMatchObject({ grd: 'aieg', grd_source: 'manual' });
+      expect(lastPayload()).not.toHaveProperty('grd_data_version');
+    });
+
+    it('sends a GRD picked over a legacy value that named no operator', async () => {
+      await configureTestBed(buildMeterData({ grd: 'Fluvius' }));
+      initAndEmitMembers();
+      component.metersForm.patchValue({
+        dateStart: new Date(2024, 0, 1),
+        grd: 'fluvius-west',
+      });
+
+      component.onSubmit();
+
+      expect(lastPayload()).toMatchObject({ grd: 'fluvius-west', grd_source: 'manual' });
+    });
+
+    it('sends nothing when a GRD is changed and then put back', async () => {
+      await configureTestBed(buildMeterData({ grd: 'ores' }));
+      initAndEmitMembers();
+      component.metersForm.patchValue({ dateStart: new Date(2024, 0, 1), grd: 'resa' });
+      component.metersForm.patchValue({ grd: 'ores' });
+
+      component.onSubmit();
+
+      expect(lastPayload()).not.toHaveProperty('grd');
     });
   });
 
@@ -522,7 +587,7 @@ describe('MeterDataUpdate', () => {
         clientType: component.clientCategory()[0],
         status: MeterDataStatus.ACTIVE,
         injectionStatus: component.injectionStatusCategory()[0],
-        grd: component.grdAvailable[0],
+        grd: component.grdAvailable()[0].id,
         dateStart: new Date(2024, 0, 1),
       });
     }
