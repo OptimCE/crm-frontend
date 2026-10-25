@@ -3375,6 +3375,10 @@
     "LATER": "Plus tard",
     "CLOSE": "Fermer",
     "HINT": "Vous pourrez relancer ce tour à tout moment depuis « {{help}} ».",
-    "BANNER_LABEL": "Proposition de visite guidée"
+    "BANNER_LABEL": "Proposition de visite guidée",
+    "FIRST_STEPS": {
+      "TITLE": "Premiers pas",
+      "DESCRIPTION": "Les visites de découverte, à relancer quand vous voulez."
+    }
   }
 }

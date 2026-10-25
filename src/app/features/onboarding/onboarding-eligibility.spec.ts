@@ -1,5 +1,10 @@
 import { Role } from '../../core/dtos/role';
-import { EligibilityInput, pickOnboardingTour, roleToursFor } from './onboarding-eligibility';
+import {
+  EligibilityInput,
+  pickOnboardingTour,
+  replayableTours,
+  roleToursFor,
+} from './onboarding-eligibility';
 import { ONBOARDING_TOUR_KEYS, OnboardingTourKey } from './onboarding-tours';
 
 const ALL = new Set<OnboardingTourKey>(ONBOARDING_TOUR_KEYS);
@@ -129,5 +134,24 @@ describe('roleToursFor', () => {
       'community_manager',
       'community_member',
     ]);
+  });
+});
+
+describe('replayableTours', () => {
+  it('should list welcome for a user without a community', () => {
+    expect(replayableTours(false, new Set(), ALL)).toEqual(['welcome']);
+  });
+
+  it('should list the role tours of the active community, highest role first', () => {
+    expect(replayableTours(true, roleToursFor([Role.ADMIN], true), ALL)).toEqual([
+      'community_admin',
+      'community_member',
+    ]);
+  });
+
+  it('should leave out the tours that do not ship', () => {
+    expect(
+      replayableTours(true, roleToursFor([Role.ADMIN], true), new Set(['community_member'])),
+    ).toEqual(['community_member']);
   });
 });

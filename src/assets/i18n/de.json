@@ -3375,6 +3375,10 @@
     "LATER": "Später",
     "CLOSE": "Schließen",
     "HINT": "Sie können diesen Rundgang jederzeit über „{{help}}“ erneut starten.",
-    "BANNER_LABEL": "Vorschlag für einen Rundgang"
+    "BANNER_LABEL": "Vorschlag für einen Rundgang",
+    "FIRST_STEPS": {
+      "TITLE": "Erste Schritte",
+      "DESCRIPTION": "Die Einführungsrundgänge, jederzeit erneut zu starten."
+    }
   }
 }

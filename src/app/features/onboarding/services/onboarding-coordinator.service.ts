@@ -16,7 +16,7 @@ import { CommunityService } from '../../../shared/services/community.service';
 import { MeService } from '../../../shared/services/me.service';
 import { MemberStatus } from '../../../shared/types/member.types';
 import { OnboardingCheckpoint, pickOnboardingTour, roleToursFor } from '../onboarding-eligibility';
-import { OnboardingOutcome, OnboardingTourKey, tourKeyOf } from '../onboarding-tours';
+import { OnboardingOutcome, OnboardingTourKey, RoleTourKey, tourKeyOf } from '../onboarding-tours';
 import { OnboardingApiService } from './onboarding-api.service';
 import { OnboardingTourInfo, OnboardingToursService } from './onboarding-tours.service';
 
@@ -218,6 +218,7 @@ export class OnboardingCoordinator {
       const active = this.userContext.activeCommunity();
       if (!active || active.orgId !== orgId) return;
       community = active.name;
+      // The member record lookup costs two requests: only when it can change the answer.
       const memberUnknown =
         !active.roles.includes(Role.MEMBER) &&
         !recorded.has('community_member') &&
@@ -240,6 +241,16 @@ export class OnboardingCoordinator {
     if (sequence !== this.sequence[kind] || !this.canOffer()) return;
     if (pathOf(this.router.url) !== path || this.userContext.activeCommunityId() !== orgId) return;
     this.offer.set({ key, kind: key === 'welcome' ? 'welcome' : 'role', tour, community, path });
+  }
+
+  /** The role tours of the active community (empty without one), for the Help dialog's replay list. */
+  async activeRoleTours(): Promise<Set<RoleTourKey>> {
+    const active = this.userContext.activeCommunity();
+    if (!active) return new Set();
+    const linked = active.roles.includes(Role.MEMBER)
+      ? false
+      : await this.hasActiveLinkedMember(active.orgId);
+    return roleToursFor(active.roles, linked);
   }
 
   /** An ACTIVE member record linked to the user in this community (an admin can be a member too). */

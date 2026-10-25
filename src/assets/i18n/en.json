@@ -3375,6 +3375,10 @@
     "LATER": "Later",
     "CLOSE": "Close",
     "HINT": "You can start this tour again at any time from \"{{help}}\".",
-    "BANNER_LABEL": "Guided tour suggestion"
+    "BANNER_LABEL": "Guided tour suggestion",
+    "FIRST_STEPS": {
+      "TITLE": "First steps",
+      "DESCRIPTION": "The discovery tours, to start again whenever you like."
+    }
   }
 }

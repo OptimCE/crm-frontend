@@ -3375,6 +3375,10 @@
     "LATER": "Later",
     "CLOSE": "Sluiten",
     "HINT": "U kunt deze rondleiding op elk moment opnieuw starten via “{{help}}”.",
-    "BANNER_LABEL": "Voorstel voor een rondleiding"
+    "BANNER_LABEL": "Voorstel voor een rondleiding",
+    "FIRST_STEPS": {
+      "TITLE": "Eerste stappen",
+      "DESCRIPTION": "De kennismakingsrondleidingen, opnieuw te starten wanneer u wilt."
+    }
   }
 }

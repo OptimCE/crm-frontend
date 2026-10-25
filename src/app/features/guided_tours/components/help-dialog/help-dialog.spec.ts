@@ -6,6 +6,14 @@ import { Role } from '../../../../core/dtos/role';
 import { GuidedToursService, GuidedToursState } from '../../services/guided-tours.service';
 import { TourManifest } from '../../tour-catalog';
 import { HelpDialog, USER_GUIDE_URL } from './help-dialog';
+import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { OnboardingCoordinator } from '../../../onboarding/services/onboarding-coordinator.service';
+import { OnboardingToursService } from '../../../onboarding/services/onboarding-tours.service';
+import {
+  ONBOARDING_TOUR_KEYS,
+  OnboardingTourKey,
+  RoleTourKey,
+} from '../../../onboarding/onboarding-tours';
 
 const MANIFEST: TourManifest = {
   defaultLocale: 'fr',
@@ -40,7 +48,32 @@ const MANIFEST: TourManifest = {
       entry: { route: '/home' },
       title: { fr: 'Votre accueil' },
     },
+    {
+      id: 'onboarding-welcome',
+      role: 'newcomer',
+      entry: { route: '/home' },
+      title: { fr: 'Bienvenue sur OptimCE' },
+    },
+    {
+      id: 'onboarding-manager',
+      role: 'manager',
+      entry: { route: '/home' },
+      title: { fr: 'Vous êtes gestionnaire' },
+    },
+    {
+      id: 'onboarding-member',
+      role: 'member',
+      entry: { route: '/home' },
+      title: { fr: 'Vous êtes membre' },
+    },
   ],
+};
+
+/** What the onboarding services report: which tours ship, the user's communities and roles. */
+let onboarding: {
+  available: Set<OnboardingTourKey>;
+  communities: Record<string, unknown>;
+  roles: Set<RoleTourKey>;
 };
 
 function state(
@@ -88,15 +121,72 @@ describe('HelpDialog', () => {
       providers: [
         { provide: GuidedToursService, useValue: { load } },
         { provide: DynamicDialogRef, useValue: refSpy },
+        {
+          provide: OnboardingToursService,
+          useValue: { available: () => Promise.resolve(onboarding.available) },
+        },
+        {
+          provide: OnboardingCoordinator,
+          useValue: { activeRoleTours: () => Promise.resolve(onboarding.roles) },
+        },
+        {
+          provide: UserContextService,
+          useValue: { communitiesById: () => onboarding.communities },
+        },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(HelpDialog);
     fixture.detectChanges();
     await fixture.whenStable();
+    // The first-steps lookup chains two promises of its own.
+    await new Promise((resolve) => setTimeout(resolve, 0));
     fixture.detectChanges();
   }
 
+  beforeEach(() => {
+    onboarding = {
+      available: new Set(ONBOARDING_TOUR_KEYS),
+      communities: { 'org-1': {} },
+      roles: new Set(),
+    };
+  });
+
   afterEach(() => TestBed.resetTestingModule());
+
+  describe('first steps (onboarding tours)', () => {
+    it('should list the welcome tour for a user without a community, catalogue apart', async () => {
+      onboarding.communities = {};
+      await render(state({ role: null }));
+      expect(query('help-dialog__first-steps').textContent).toContain('Bienvenue sur OptimCE');
+      expect(el().querySelector('[data-testid="help-dialog__no-community"]')).toBeTruthy();
+    });
+
+    it("should list the active community's role tours, and never in the catalogue", async () => {
+      onboarding.roles = new Set(['community_manager', 'community_member']);
+      await render(state());
+      const rows = Array.from(
+        query('help-dialog__first-steps').querySelectorAll('[data-testid^="help-dialog__row--"]'),
+      ).map((e) => e.getAttribute('data-testid'));
+      expect(rows).toEqual([
+        'help-dialog__row--onboarding-manager',
+        'help-dialog__row--onboarding-member',
+      ]);
+      expect(query('help-dialog__tours').textContent).not.toContain('Vous êtes');
+    });
+
+    it('should start a replay like any other tour', async () => {
+      onboarding.roles = new Set(['community_manager']);
+      await render(state());
+      query('help-dialog__btn--start--onboarding-manager', 'button').click();
+      expect(refSpy.close).toHaveBeenCalledWith({ tourId: 'onboarding-manager' });
+    });
+
+    it('should not show the section when no onboarding tour applies or ships', async () => {
+      onboarding.roles = new Set(['community_admin']); // onboarding-admin is not in MANIFEST
+      await render(state());
+      expect(el().querySelector('[data-testid="help-dialog__first-steps"]')).toBeNull();
+    });
+  });
 
   it('should link to the online guide in a new tab', async () => {
     await render(state());

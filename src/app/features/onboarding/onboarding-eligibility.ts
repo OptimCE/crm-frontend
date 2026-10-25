@@ -62,3 +62,20 @@ export function roleToursFor(
   if (roles.includes(Role.MEMBER) || hasActiveLinkedMember) tours.add('community_member');
   return tours;
 }
+
+/**
+ * The onboarding tours the Help dialog lists for a replay, whatever was
+ * recorded: `welcome` while the user has no community (the only state its
+ * steps exist in), then the role tours of the active community.
+ */
+export function replayableTours(
+  hasCommunity: boolean,
+  roles: ReadonlySet<RoleTourKey>,
+  available: ReadonlySet<OnboardingTourKey>,
+): OnboardingTourKey[] {
+  const keys: OnboardingTourKey[] = [
+    ...(hasCommunity ? [] : (['welcome'] as const)),
+    ...ROLE_TOUR_PRIORITY.filter((key) => roles.has(key)),
+  ];
+  return keys.filter((key) => available.has(key));
+}

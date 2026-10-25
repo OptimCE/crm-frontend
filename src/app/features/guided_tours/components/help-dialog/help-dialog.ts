@@ -7,7 +7,18 @@ import { Skeleton } from 'primeng/skeleton';
 
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import { GuidedToursService, GuidedToursState } from '../../services/guided-tours.service';
-import { filterSelection, OfferedTour, selectTours, TourSelection } from '../../tour-catalog';
+import {
+  filterSelection,
+  OfferedTour,
+  selectTours,
+  tourTitle,
+  TourSelection,
+} from '../../tour-catalog';
+import { UserContextService } from '../../../../core/services/authorization/authorization.service';
+import { replayableTours } from '../../../onboarding/onboarding-eligibility';
+import { ONBOARDING_TOURS, OnboardingTourKey } from '../../../onboarding/onboarding-tours';
+import { OnboardingCoordinator } from '../../../onboarding/services/onboarding-coordinator.service';
+import { OnboardingToursService } from '../../../onboarding/services/onboarding-tours.service';
 
 /** The guide the sidebar's "User guide" link opens. */
 export const USER_GUIDE_URL = 'https://guide.optimce.be';
@@ -19,8 +30,9 @@ export interface HelpDialogResult {
 }
 
 /**
- * The Help dialog: the online guide, and the in-app tours this user can start
- * from where they are. It only picks a tour; the navbar starts it once the
+ * The Help dialog: the online guide, the onboarding tours ("First steps",
+ * listed whatever was answered to their offer), and the in-app tours this user
+ * can start from where they are. It only picks a tour; the navbar starts it once the
  * dialog is closed, so the modal never sits over the tour's first step.
  */
 @Component({
@@ -33,10 +45,27 @@ export class HelpDialog implements OnInit {
   private readonly ref = inject(DynamicDialogRef);
   private readonly guidedTours = inject(GuidedToursService);
   private readonly locale = inject(LocaleService).locale;
+  private readonly userContext = inject(UserContextService);
+  private readonly onboardingTours = inject(OnboardingToursService);
+  private readonly onboarding = inject(OnboardingCoordinator);
 
   protected readonly guideUrl = USER_GUIDE_URL;
   protected readonly state = signal<GuidedToursState | null>(null);
   protected readonly query = signal('');
+  /** The onboarding tours this user can replay here; null while loading. */
+  private readonly firstStepKeys = signal<OnboardingTourKey[] | null>(null);
+
+  protected readonly firstSteps = computed<OfferedTour[]>(() => {
+    const manifest = this.state()?.manifest;
+    const keys = this.firstStepKeys();
+    if (!manifest || !keys) return [];
+    return keys.flatMap((key) => {
+      const entry = manifest.tours.find((t) => t.id === ONBOARDING_TOURS[key]);
+      if (!entry) return [];
+      const title = tourTitle(entry, this.locale(), manifest.defaultLocale);
+      return [{ id: entry.id, title, area: 'home' as const }];
+    });
+  });
 
   /** Recomputed on a language switch, so the titles follow it while open. */
   private readonly selection = computed<TourSelection | null>(() => {
@@ -83,6 +112,16 @@ export class HelpDialog implements OnInit {
 
   ngOnInit(): void {
     void this.guidedTours.load().then((state) => this.state.set(state));
+    void this.loadFirstSteps();
+  }
+
+  private async loadFirstSteps(): Promise<void> {
+    const hasCommunity = Object.keys(this.userContext.communitiesById()).length > 0;
+    const [available, roles] = await Promise.all([
+      this.onboardingTours.available(),
+      this.onboarding.activeRoleTours(),
+    ]);
+    this.firstStepKeys.set(replayableTours(hasCommunity, roles, available));
   }
 
   protected onSearch(event: Event): void {

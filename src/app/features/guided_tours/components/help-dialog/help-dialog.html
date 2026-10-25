@@ -11,6 +11,31 @@
     <i class="pi pi-external-link text-xs"></i>
   </a>
 
+  @if (firstSteps().length) {
+    <section class="mt-6" data-testid="help-dialog__first-steps">
+      <h3 class="text-base font-semibold text-primary-800">
+        {{ 'ONBOARDING.FIRST_STEPS.TITLE' | translate }}
+      </h3>
+      <p class="mt-1 text-sm text-primary-600">
+        {{ 'ONBOARDING.FIRST_STEPS.DESCRIPTION' | translate }}
+      </p>
+      <ul class="help-dialog__list">
+        @for (tour of firstSteps(); track tour.id) {
+          <li class="help-dialog__row" [attr.data-testid]="'help-dialog__row--' + tour.id">
+            <span class="flex-1 min-w-0 text-sm text-primary-800">{{ tour.title }}</span>
+            <p-button
+              size="small"
+              icon="pi pi-play"
+              [label]="'HELP.TOURS.START' | translate"
+              [attr.data-testid]="'help-dialog__btn--start--' + tour.id"
+              (onClick)="start(tour)"
+            />
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
   <section class="mt-6" data-testid="help-dialog__tours">
     <h3 class="text-base font-semibold text-primary-800">{{ 'HELP.TOURS.TITLE' | translate }}</h3>
     <p class="mt-1 text-sm text-primary-600">{{ 'HELP.TOURS.DESCRIPTION' | translate }}</p>
