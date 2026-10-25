@@ -11,6 +11,7 @@ import {
 import { INFO_TYPE, VALIDATION_TYPE } from './core/dtos/notification';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+import { SteppyToursComponent, TourErrorDetail } from '@steppy/angular';
 
 /**
  * How each snackbar type is shown. Anything unrecognised stays an error, as it
@@ -30,7 +31,7 @@ function snackStyle(type: number): { severity: string; icon: string; life: numbe
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Toast],
+  imports: [RouterOutlet, Navbar, Toast, SteppyToursComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
   providers: [MessageService],
@@ -65,6 +66,24 @@ export class App implements OnInit, OnDestroy {
     this.eventBus.on<SnackNotificationEvent<string>>(
       'snack-notification',
       this.onSnackNotification,
+    );
+  }
+
+  /**
+   * The overlay reports a step it could not show (`target-timeout`), a refused
+   * entry route (`entry-params`) or a file it rejected, but never logs it. Say
+   * which tour, step and test-id broke, so a tour that stops can be traced
+   * from the console line alone.
+   */
+  onTourError(detail: TourErrorDetail): void {
+    const where = [
+      detail.tourId && `tour "${detail.tourId}"`,
+      detail.stepId && `step "${detail.stepId}"`,
+      detail.testId && `test-id "${detail.testId}"${detail.kind === 'waitFor' ? ' (waitFor)' : ''}`,
+    ].filter(Boolean);
+    console.warn(
+      `[tours] tour-error ${detail.reason}: ${where.join(', ')}. ${detail.message}`,
+      detail,
     );
   }
 

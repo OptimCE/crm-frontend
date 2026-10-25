@@ -1,0 +1,60 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-generation/nl.html",
+  "id": "algorithm-delete-generation",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "De generatie wordt weergegeven met een groene stip die aangeeft dat ze met succes is voltooid. Met de verwijderknop (×) rechtsboven in de rij kunt u de volledige generatie met al haar sleutels verwijderen.",
+      "title": "Generatie voltooid",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-generation-button",
+      "target": null,
+      "text": "Klik op de knop × van de generatie om ze te verwijderen. Alle bijbehorende sleutels worden eveneens verwijderd. U wordt om een bevestiging gevraagd.",
+      "title": "Generatie verwijderen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Er verschijnt een bevestigingsvenster. Klik op de bevestigingsknop om de generatie en alle verdeelsleutels die ze bevat definitief te verwijderen.",
+      "title": "Verwijdering bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Bevestig uw keuze in het bevestigingsvenster.",
+      "title": "Bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__empty--generations",
+      "target": "algorithm-hub__empty--generations",
+      "text": "De lijst met generaties is opnieuw leeg: de generatie en al haar verdeelsleutels zijn definitief verwijderd.",
+      "title": "Generatie verwijderd"
+    }
+  ],
+  "title": "Een generatie verwijderen"
+}

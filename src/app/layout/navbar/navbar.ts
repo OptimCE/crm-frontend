@@ -27,6 +27,14 @@ import { Tooltip } from 'primeng/tooltip';
 import { OverlayBadge } from 'primeng/overlaybadge';
 import { NotificationBell } from '../../features/notifications/components/notification-bell/notification-bell';
 import { NotificationStore } from '../../features/notifications/services/notification.store';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SteppyTours } from '@steppy/angular';
+import {
+  HelpDialog,
+  HelpDialogResult,
+} from '../../features/guided_tours/components/help-dialog/help-dialog';
+import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../core/dtos/notification';
 
 interface RouteActiveState {
   dashboard: boolean;
@@ -88,6 +96,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
+  providers: [DialogService],
 })
 export class Navbar implements OnInit {
   private router = inject(Router);
@@ -98,6 +107,10 @@ export class Navbar implements OnInit {
   private readonly keycloak = inject(Keycloak);
   private destroyRef = inject(DestroyRef);
   protected readonly notificationStore = inject(NotificationStore);
+  private readonly dialogService = inject(DialogService);
+  private readonly tours = inject(SteppyTours);
+  private readonly snackbar = inject(SnackbarNotification);
+  private helpRef: DynamicDialogRef | null = null;
 
   readonly sidebarPinChanged = output<boolean>();
 
@@ -160,6 +173,8 @@ export class Navbar implements OnInit {
         if (!this.hovered) this.collapse();
       });
     });
+
+    this.destroyRef.onDestroy(() => this.helpRef?.destroy());
   }
 
   ngOnInit(): void {
@@ -264,6 +279,46 @@ export class Navbar implements OnInit {
     if (this.mobile()) {
       this.visibleSideBar.set(false);
       this.sidebarOpen.set(false);
+    }
+  }
+
+  /**
+   * The footer's "User guide" link opens the Help dialog on a plain click. It
+   * stays the same link (same element, href and look), so nothing changes in
+   * the guide's sidebar screenshots, and a ctrl-, shift- or middle-click still
+   * opens the guide in a new tab.
+   */
+  openHelp(event: MouseEvent): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+      return;
+    event.preventDefault();
+    if (this.helpRef) return;
+
+    this.helpRef = this.dialogService.open(HelpDialog, {
+      header: this.translateService.instant('HELP.TITLE') as string,
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      dismissableMask: true,
+      width: '40rem',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+    });
+    this.helpRef?.onClose.subscribe((result?: HelpDialogResult) => {
+      this.helpRef = null;
+      if (result) void this.startTour(result);
+    });
+  }
+
+  /** After the dialog has closed, so the tour's first step is not under it. */
+  private async startTour({ tourId, params }: HelpDialogResult): Promise<void> {
+    // The mobile drawer would cover the page; the tours open it themselves when a step needs it.
+    this.closeSideBar();
+    const started = await this.tours.start(tourId, params ? { params } : undefined);
+    if (!started) {
+      this.snackbar.openSnackBar(
+        this.translateService.instant('HELP.TOURS.START_FAILED') as string,
+        ERROR_TYPE,
+      );
     }
   }
 

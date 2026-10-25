@@ -1,0 +1,195 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-poll-create/nl.html",
+  "id": "news-poll-create",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Klik op “Opstellen” om het venster “Nieuw bericht” te openen.",
+      "title": "Het opstelvenster openen",
+      "waitFor": "news-board__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__kind--poll",
+      "target": "news-compose__kind--poll",
+      "text": "Schakel bovenaan het venster over naar het tabblad “Peiling”. Er verschijnen extra velden: vraag, antwoordopties, sluitingsdatum en zichtbaarheid.",
+      "title": "Het type “Peiling” kiezen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "ask-the-question",
+      "target": null,
+      "text": "Typ de vraag van de peiling in de editor, net als bij een gewoon nieuwsbericht.",
+      "title": "De vraag stellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__poll-type--single",
+      "target": "news-compose__poll-type--single",
+      "text": "Kies of de leden één antwoord (“Enkele keuze”) of meerdere antwoorden (“Meerkeuze”) kunnen selecteren. Wij houden “Enkele keuze” aan.",
+      "title": "Enkele keuze of meerkeuze"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--0",
+      "target": "news-compose__option-input--0",
+      "text": "Voer het eerste mogelijke antwoord in.",
+      "title": "Eerste optie"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--1",
+      "target": "news-compose__option-input--1",
+      "text": "Voer het tweede mogelijke antwoord in.",
+      "title": "Tweede optie"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__add-option",
+      "target": "news-compose__add-option",
+      "text": "Voeg zoveel antwoorden toe als nodig.",
+      "title": "Een optie toevoegen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--2",
+      "target": "news-compose__option-input--2",
+      "text": "Vul minstens twee antwoordopties in. Met de knop “Optie toevoegen” voegt u er meer toe, met het prullenbakpictogram verwijdert u er een.",
+      "title": "De antwoordopties toevoegen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-a-closing-date",
+      "target": null,
+      "text": "Kies de sluitingsdatum en het sluitingsuur in de kalender. Na deze termijn wordt geen enkele stem meer aanvaard en kunnen de resultaten, afhankelijk van de gekozen zichtbaarheid, zichtbaar worden.",
+      "title": "Een sluitingsdatum instellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__preset--anonymous",
+      "target": "news-compose__preset--anonymous",
+      "text": "Drie voorinstellingen dekken de meest voorkomende gevallen. Elke voorinstelling combineert wat de beheerders zien, wat de leden zien, en wanneer.",
+      "title": "Kiezen wie de resultaten ziet"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-2",
+      "target": "news-compose__preset--anonymous",
+      "text": "De leden zien alleen het totale aantal stemmen per optie, en pas nadat ze zelf hebben gestemd. Niemand ziet wie wat heeft gestemd — ook de beheerders krijgen alleen de totalen. Ideaal voor een vertrouwelijke stemming.",
+      "title": "Anoniem sentiment"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--transparent",
+      "target": "news-compose__preset--transparent",
+      "text": "Iedereen ziet meteen de volledige resultaten, inclusief wie voor welke optie heeft gestemd, zelfs nog vóór het stemmen. Ideaal voor een open beslissing waarbij iedereen achter zijn keuze staat.",
+      "title": "Transparant"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--on_close",
+      "target": "news-compose__preset--on_close",
+      "text": "De leden zien de totalen pas zodra de peiling gesloten is; tot dan blijven de resultaten verborgen. De beheerders zien daarentegen op elk moment het detail (wie wat heeft gestemd) om de deelname te volgen.",
+      "title": "Resultaten bij sluiting"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__advanced-toggle",
+      "target": "news-compose__advanced-toggle",
+      "text": "De knop “Geavanceerde instellingen” toont drie onafhankelijke instellingen. Een voorinstelling is slechts een snelkoppeling voor deze drie velden — u kunt ze vrij combineren.",
+      "title": "Fijnafstelling (geavanceerd)"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__admin-vis",
+      "target": "news-compose__admin-vis",
+      "text": "Wat de beheerders zien. “Alleen totalen”: uitsluitend de totalen per optie. “Detail per stemmer”: het detail op naam, d.w.z. wie voor elke optie heeft gestemd.",
+      "title": "Zichtbaarheid voor beheerders"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-vis",
+      "target": "news-compose__member-vis",
+      "text": "Wat de leden mogen zien. “Geen resultaten”: nooit resultaten. “Alleen totalen”: de totalen. “Detail per stemmer”: het detail van de stemmen per persoon.",
+      "title": "Zichtbaarheid voor leden"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-display",
+      "target": "news-compose__member-display",
+      "text": "Het moment waarop de leden zien wat ze mogen zien. “Nooit”, “Voor het stemmen”, “Na het stemmen” of “Bij sluiting”. Het is deze instelling die bijvoorbeeld een stemming onderscheidt waarvan het resultaat pas verschijnt zodra de deelname is geregistreerd.",
+      "title": "Weergave voor leden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-3",
+      "target": "news-compose__preset--anonymous",
+      "text": "Tot slot kiezen we opnieuw de voorinstelling “Anoniem sentiment”, die de geavanceerde instellingen sluit en een samenhangende combinatie toepast die klaar is om te publiceren.",
+      "title": "Terug naar een voorinstelling"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Klik op “Publiceren”. De peiling wordt naar alle leden verspreid, die een melding krijgen met de uitnodiging om te stemmen.",
+      "title": "De peiling publiceren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-poll",
+      "target": "news-poll",
+      "text": "De peiling verschijnt met haar opties op het nieuwsbord. De leden kunnen nu stemmen; de resultaten worden getoond volgens de zichtbaarheid die u hebt gekozen.",
+      "title": "Uw peiling staat online"
+    }
+  ],
+  "title": "Een peiling aanmaken"
+}

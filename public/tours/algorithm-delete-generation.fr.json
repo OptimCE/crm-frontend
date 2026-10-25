@@ -1,0 +1,60 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-generation/fr.html",
+  "id": "algorithm-delete-generation",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "La génération s'affiche avec un point vert indiquant qu'elle s'est terminée avec succès. Le bouton de suppression (×) en haut à droite de la ligne permet de supprimer l'ensemble de la génération et toutes ses clés.",
+      "title": "Génération terminée",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-generation-button",
+      "target": null,
+      "text": "Cliquez sur le bouton × de la génération pour lancer sa suppression. Toutes les clés associées seront également supprimées. Une confirmation vous sera demandée.",
+      "title": "Supprimer la génération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Une fenêtre de confirmation s'affiche. Cliquez sur le bouton de validation pour supprimer définitivement la génération et toutes les clés de répartition qu'elle contient.",
+      "title": "Confirmer la suppression"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Confirmez votre choix dans la fenêtre de confirmation.",
+      "title": "Confirmer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__empty--generations",
+      "target": "algorithm-hub__empty--generations",
+      "text": "La liste des générations est à nouveau vide : la génération et toutes ses clés de répartition ont été supprimées définitivement.",
+      "title": "Génération supprimée"
+    }
+  ],
+  "title": "Supprimer une génération"
+}

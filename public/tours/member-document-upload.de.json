@@ -1,0 +1,60 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members/:memberId"
+  },
+  "guideUrl": "https://guide.optimce.be/member-document-upload/de.html",
+  "id": "member-document-upload",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-tabs__tab--documents",
+      "target": "member-view-tabs__tab--documents",
+      "text": "Öffnen Sie die Registerkarte „Dokumente“ auf der Detailseite des Mitglieds. Dort können Sie die vorhandenen Dokumente einsehen und neue hinzufügen.",
+      "title": "Registerkarte Dokumente"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-documents-tab__btn--add",
+      "target": "member-view-documents-tab__btn--add",
+      "text": "Klicken Sie auf „Dokument hinzufügen“, um das Upload-Fenster zu öffnen.",
+      "title": "Dokument hinzufügen",
+      "waitFor": "member-view-documents-tab__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-add-document__label--drag-drop",
+      "target": "member-add-document__label--drag-drop",
+      "text": "Wählen Sie die hochzuladende Datei auf Ihrem Computer aus (oder ziehen Sie sie in den dafür vorgesehenen Bereich).",
+      "title": "Datei auswählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-add-document__btn--submit",
+      "target": "member-add-document__btn--submit",
+      "text": "Klicken Sie auf „Dieses Dokument hochladen“: Das Dokument wird gespeichert und dem Mitglied zugeordnet.",
+      "title": "Hochladen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-documents-tab__table",
+      "target": "member-view-documents-tab__table",
+      "text": "Das Dokument „e2e-document.pdf“ erscheint jetzt in der Dokumentenliste des Mitglieds.",
+      "title": "Dokument hinzugefügt"
+    }
+  ],
+  "title": "Dokument zu einem Mitglied hinzufügen"
+}

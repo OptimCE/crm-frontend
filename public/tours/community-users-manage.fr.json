@@ -1,0 +1,212 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/communities/users"
+  },
+  "guideUrl": "https://guide.optimce.be/community-users-manage/fr.html",
+  "id": "community-users-manage",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__row--desktop--0",
+      "text": "Cette page liste tous les utilisateurs ayant accès à la communauté, avec leur rôle : administrateur, gestionnaire ou membre. Vous pouvez inviter, changer un rôle ou retirer un accès.",
+      "title": "Les utilisateurs de la communauté",
+      "waitFor": "users-community-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__card--mobile--0",
+      "text": "Cette page liste les comptes rattachés à la communauté et leur rôle. C'est ici que vous invitez un gestionnaire, changez un rôle ou retirez un accès.",
+      "title": "Les utilisateurs de la communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Cliquez sur « Inviter un gestionnaire » pour envoyer une invitation par e-mail à une personne qui aidera à gérer la communauté.",
+      "title": "Inviter un gestionnaire"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-invitation__input--email",
+      "target": "community-invitation__input--email",
+      "text": "Renseignez l'adresse e-mail de la personne à inviter. Elle recevra une invitation à rejoindre la communauté en tant que gestionnaire.",
+      "title": "Saisir l'adresse e-mail"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-invitation__btn--submit",
+      "target": "community-invitation__btn--submit",
+      "text": "Envoyez l'invitation : la personne la reçoit par e-mail.",
+      "title": "Envoyer l'invitation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "Le bouton « Voir les invitations en attente » ouvre la liste des invitations envoyées mais pas encore acceptées, membres et gestionnaires confondus.",
+      "title": "Voir les invitations en attente"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-the-managers-tab",
+      "target": null,
+      "text": "Ouvrez l'onglet des gestionnaires pour voir les invitations en attente.",
+      "title": "Invitations de gestionnaires",
+      "waitFor": "community-pending-invitation__tab--managers"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invitation-appears-in-the-pending-managers-list",
+      "target": null,
+      "text": "L'onglet « Gestionnaires » regroupe les invitations envoyées mais pas encore acceptées. Tant qu'une invitation est en attente, vous pouvez l'annuler depuis cette liste.",
+      "title": "Invitations en attente"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "close-the-pending-invitations-dialog",
+      "target": null,
+      "text": "Fermez la fenêtre quand vous avez terminé.",
+      "title": "Fermer"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "users-community-list__input--search",
+      "target": "users-community-list__input--search",
+      "text": "Recherchez l'utilisateur dont vous voulez changer le rôle.",
+      "title": "Rechercher un utilisateur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--edit-role--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--edit-role--0",
+      "text": "Le crayon à côté d'un utilisateur ouvre l'éditeur de rôle. Vous pouvez promouvoir un membre en gestionnaire, ou rétrograder un gestionnaire en membre.",
+      "title": "Modifier un rôle",
+      "waitFor": "users-community-list__row--desktop--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-edit-role--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-edit-role--0",
+      "text": "Sur la carte de l'utilisateur, le bouton « Modifier le rôle » ouvre l'éditeur de rôle.",
+      "title": "Modifier un rôle"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "users-community-list__select--dialog-role",
+      "target": "users-community-list__select--dialog-role",
+      "text": "Choisissez le nouveau rôle dans la liste.",
+      "title": "Choisir le rôle"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--dialog-save",
+      "target": "users-community-list__btn--dialog-save",
+      "text": "Choisissez le nouveau rôle dans la liste puis cliquez sur « Enregistrer ». Le changement prend effet immédiatement.",
+      "title": "Enregistrer le rôle"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--delete--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "text": "L'utilisateur est désormais un membre : sa pastille de rôle a changé et l'action de suppression est maintenant disponible sur sa ligne.",
+      "title": "Rôle mis à jour"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--card-delete--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "text": "L'utilisateur est désormais un membre : sa pastille de rôle a changé et l'action de suppression est maintenant disponible sur sa carte.",
+      "title": "Rôle mis à jour"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--delete--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "text": "La croix rouge retire immédiatement l'utilisateur de la communauté — son accès est révoqué sur-le-champ, sans confirmation supplémentaire.",
+      "title": "Retirer un utilisateur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-delete--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "text": "Sur la carte, le bouton « Supprimer » retire immédiatement l'utilisateur de la communauté.",
+      "title": "Retirer un utilisateur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__empty--message",
+      "target": "users-community-list__empty--message",
+      "text": "La recherche sur cet e-mail ne renvoie plus aucun résultat : l'utilisateur n'a plus accès à la communauté.",
+      "title": "Utilisateur retiré"
+    }
+  ],
+  "title": "Gérer les utilisateurs de la communauté"
+}

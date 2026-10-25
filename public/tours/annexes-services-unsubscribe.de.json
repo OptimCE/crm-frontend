@@ -1,0 +1,59 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services"
+  },
+  "guideUrl": "https://guide.optimce.be/annexes-unsubscribe/de.html",
+  "id": "annexes-services-unsubscribe",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__card--algorithm",
+      "target": "annexes-services-list__card--algorithm",
+      "text": "Die Karte „Generierung von Verteilschlüsseln“ ist mit dem Badge „Aktiviert“ sichtbar. Die Schaltfläche zum Deaktivieren (×) befindet sich oben rechts auf der Karte.",
+      "title": "Aktives Modul"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "annexes-services-list__btn--unsubscribe-algorithm",
+      "target": "annexes-services-list__btn--unsubscribe-algorithm",
+      "text": "Klicken Sie auf die Schaltfläche × oben rechts auf der Karte, um das Modul zu deaktivieren. Vor dem Entfernen werden Sie um eine Bestätigung gebeten.",
+      "title": "Modul deaktivieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Ein Bestätigungsfenster wird angezeigt. Klicken Sie auf „Bestätigen“, um die Deaktivierung des Moduls und den Zugriffsverlust für die Mitglieder zu bestätigen.",
+      "title": "Deaktivierung bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deactivation",
+      "target": null,
+      "text": "Bestätigen Sie Ihre Auswahl im Bestätigungsdialog.",
+      "title": "Bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__empty",
+      "target": "annexes-services-list__empty",
+      "text": "Das Raster ist wieder leer: Das Modul „Generierung von Verteilschlüsseln“ wurde deaktiviert und ist in der Gemeinschaft nicht mehr zugänglich.",
+      "title": "Modul deaktiviert"
+    }
+  ],
+  "title": "Zusatzdienst abbestellen"
+}

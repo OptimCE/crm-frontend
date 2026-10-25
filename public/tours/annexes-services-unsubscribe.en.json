@@ -1,0 +1,59 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services"
+  },
+  "guideUrl": "https://guide.optimce.be/annexes-unsubscribe/en.html",
+  "id": "annexes-services-unsubscribe",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__card--algorithm",
+      "target": "annexes-services-list__card--algorithm",
+      "text": "The \"Allocation key generation\" card is visible with the \"Activated\" badge. The deactivation button (×) is available at the top right of the card.",
+      "title": "Module active"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "annexes-services-list__btn--unsubscribe-algorithm",
+      "target": "annexes-services-list__btn--unsubscribe-algorithm",
+      "text": "Click the × button at the top right of the card to deactivate the module. A confirmation will be required before removal.",
+      "title": "Deactivate the module"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "A confirmation dialog appears. Click \"Validate\" to confirm deactivating the module and revoking member access.",
+      "title": "Confirm deactivation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deactivation",
+      "target": null,
+      "text": "Confirm your choice in the confirmation dialog.",
+      "title": "Confirm"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__empty",
+      "target": "annexes-services-list__empty",
+      "text": "The grid is empty again — the \"Allocation key generation\" module has been deactivated and is no longer accessible from the community.",
+      "title": "Module deactivated"
+    }
+  ],
+  "title": "Unsubscribe from an annexe service"
+}

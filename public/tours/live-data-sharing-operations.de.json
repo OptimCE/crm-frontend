@@ -1,0 +1,34 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-sharing-operations/de.html",
+  "id": "live-data-sharing-operations",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-dashboard__scope-select",
+      "target": "live-dashboard__scope-select",
+      "text": "Oben in der Übersicht wechselt der „Bereich“ von der gesamten Gemeinschaft zu einer ihrer Teilungsoperationen. Alle Zahlen und Diagramme folgen dieser Auswahl.",
+      "title": "Eine Teilungsoperation wählen",
+      "waitFor": "live-offtake-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__operation-shared",
+      "target": "live-dashboard__operation-shared",
+      "text": "Für die gewählte Operation: ihre Erzeugung in der letzten vollen Stunde, ihr Austausch mit dem Netz, die geteilte Energie (Schätzung) und wie viele ihrer Zähler überwacht werden. Netzaustausch und Teilen bleiben ausgeblendet, solange die Operation zu wenige Mitglieder hat.",
+      "title": "Die Zahlen der Operation",
+      "waitFor": "live-dashboard__operation-cards"
+    }
+  ],
+  "title": "Teilen innerhalb eines Teilungsvorgangs verfolgen"
+}

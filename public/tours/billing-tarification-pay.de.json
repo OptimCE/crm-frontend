@@ -1,0 +1,244 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/billing"
+  },
+  "guideUrl": "https://guide.optimce.be/billing-tarification-pay/de.html",
+  "id": "billing-tarification-pay",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "billing__tab--tariffs",
+      "target": "billing__tab--tariffs",
+      "text": "Das Modul öffnet sich auf der Registerkarte „Tarife“. Hier legen Sie den Preis der geteilten Energie fest, bevor Sie die Rechnungen erstellen. Danach folgen die Registerkarten „Rechnung erstellen“ und „Übersicht“.",
+      "title": "Das Abrechnungsmodul",
+      "waitFor": "tariffs-panel__select--operation"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "tariffs-panel__select--operation",
+      "target": "tariffs-panel__select--operation",
+      "text": "Wählen Sie die abzurechnende Teilungsoperation. Tarife und Rechnungen sind immer einer Operation zugeordnet.",
+      "title": "Die Teilungsoperation wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariffs-panel__btn--add",
+      "target": "tariffs-panel__btn--add",
+      "text": "Klicken Sie auf „Neuer Tarif“, um das Erstellungsfenster zu öffnen. Standardmäßig betrifft der Tarif den Verkauf an Verbraucher und gilt für die gesamte Operation.",
+      "title": "Einen Tarif hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-tariff-start-of-validity-01-01-2025",
+      "target": null,
+      "text": "Wählen Sie im Kalender das Datum, ab dem dieser Tarif gilt.",
+      "title": "Beginn der Gültigkeit",
+      "waitFor": "tariff-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--price",
+      "target": "tariff-dialog__input--price",
+      "text": "Geben Sie den Preis pro kWh für diesen Tarif ein.",
+      "title": "Preis pro kWh"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--label",
+      "target": "tariff-dialog__input--label",
+      "text": "Geben Sie den Preis pro geteilter kWh (0,1200 €), den Beginn der Gültigkeit und eine Bezeichnung ein. Die Art „Verkaufspreis für Verbraucher“ und der Geltungsbereich „Global“ eignen sich, um die gesamte Operation abzurechnen.",
+      "title": "Den Tarif ausfüllen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariff-dialog__btn--submit",
+      "target": "tariff-dialog__btn--submit",
+      "text": "Klicken Sie auf „Tarif erstellen“. Er erscheint sofort in der Liste und wird zur Berechnung der Rechnungen verwendet.",
+      "title": "Den Tarif erstellen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariffs-panel__btn--add-2",
+      "target": "tariffs-panel__btn--add",
+      "text": "Die Windoperation umfasst Erzeuger: Auch ihre geteilte Einspeisung braucht einen Tarif. Öffnen Sie erneut „Neuer Tarif“, um einen Rückkauftarif zu erstellen.",
+      "title": "Einen Rückkauftarif hinzufügen",
+      "waitFor": "tariffs-panel__table"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "tariff-dialog__select--kind",
+      "target": "tariff-dialog__select--kind",
+      "text": "Wählen Sie die Art „Rückkaufpreis für Erzeuger“. Dieser Tarif vergütet die Energie, die die Erzeuger einspeisen und mit der Gemeinschaft teilen.",
+      "title": "Die Art „Rückkaufpreis für Erzeuger“ wählen",
+      "waitFor": "tariff-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "22e-set-the-buyback-tariff-start-of-validity",
+      "target": null,
+      "text": "Wählen Sie das Datum, ab dem der Rückkauftarif gilt.",
+      "title": "Beginn der Gültigkeit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--price-2",
+      "target": "tariff-dialog__input--price",
+      "text": "Geben Sie den Rückkaufpreis pro kWh ein.",
+      "title": "Rückkaufpreis"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--label-2",
+      "target": "tariff-dialog__input--label",
+      "text": "Geben Sie dem Rückkauftarif einen Namen, der ihn in der Liste unterscheidet.",
+      "title": "Den Tarif benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariff-dialog__btn--submit-2",
+      "target": "tariff-dialog__btn--submit",
+      "text": "Bestätigen Sie, um den Rückkauftarif hinzuzufügen.",
+      "title": "Den Tarif erstellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "tariffs-panel__table",
+      "target": "tariffs-panel__table",
+      "text": "Die Operation verfügt jetzt über einen Verkaufstarif für Verbraucher und einen Rückkauftarif für Erzeuger. Gehen wir zur Erstellung der Rechnungen über.",
+      "title": "Die Tarife sind gespeichert"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "billing__tab--generate",
+      "target": "billing__tab--generate",
+      "text": "Öffnen Sie die Registerkarte „Rechnung erstellen“. Hier importieren Sie die Verbrauchsdaten und starten die Berechnung der Rechnungen für einen Zeitraum.",
+      "title": "Zur Erstellung"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "run-generate__select--operation",
+      "target": "run-generate__select--operation",
+      "text": "Wählen Sie die abzurechnende Operation: Der Importbereich für die Verbrauchsmesswerte erscheint.",
+      "title": "Die abzurechnende Operation wählen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "consumption-upload__dropzone",
+      "target": "consumption-upload__dropzone",
+      "text": "Legen Sie die RESA-Datei der Operation (die Viertelstundenwerte des Monats) im Importbereich ab. Sie liefert die geteilte Energie, die abgerechnet wird.",
+      "title": "Die RESA-Messwerte importieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-upload",
+      "target": null,
+      "text": "Laden Sie die Datei mit den Messwerten hoch, um die Abdeckung des Zeitraums zu berechnen.",
+      "title": "Die Datei hochladen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-billing-period-february-2025",
+      "target": null,
+      "text": "Wählen Sie den abzurechnenden Zeitraum — hier Februar 2025, den Monat, den die importierte Datei abdeckt. Die Abrechnung umfasst die geteilte Energie dieses Zeitraums.",
+      "title": "Den Zeitraum festlegen",
+      "waitFor": "consumption-coverage__grid"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "run-generate__btn--generate",
+      "target": "run-generate__btn--generate",
+      "text": "Klicken Sie auf „Erstellen“. Die Berechnung läuft im Hintergrund: Sobald sie abgeschlossen ist, erscheinen die Rechnungen jedes Mitglieds der Operation.",
+      "title": "Die Rechnungen erstellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invoices-are-generated-draft",
+      "target": null,
+      "text": "Jedes Mitglied der Operation hat jetzt eine Rechnung mit dem Status „Entwurf“. Es bleibt, sie auszustellen und anschließend ihre Zahlung zu erfassen.",
+      "title": "Die Rechnungen sind erstellt"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "issue-the-first-invoice",
+      "target": null,
+      "text": "Klicken Sie bei einer Rechnung auf das Symbol „Ausstellen“. Sie erhält eine gesetzliche Nummer und eine strukturierte Mitteilung, und ihr Status wechselt zu „Ausgestellt“.",
+      "title": "Die Rechnung ausstellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "open-the-payment-dialog-on-the-issued-invoice",
+      "target": null,
+      "text": "Sobald die Rechnung ausgestellt ist, erscheint das Symbol „Zahlung erfassen“ (Geldbörse). Klicken Sie darauf, um das Zahlungsfenster zu öffnen.",
+      "title": "Eine Zahlung erfassen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "payment-dialog__btn--submit",
+      "target": "payment-dialog__btn--submit",
+      "text": "Der Betrag ist mit dem Gesamtbetrag der Rechnung vorausgefüllt und die Standard-Zahlungsmethode ist „Banküberweisung“. Klicken Sie auf „Zahlung erfassen“: Die Rechnung erhält den Status „Bezahlt“.",
+      "title": "Die Zahlung bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invoice-is-marked-paid",
+      "target": null,
+      "text": "Die Zahlung ist erfasst und die Rechnung trägt nun den Status „Bezahlt“. Der gesamte Zyklus — Tarif, Erstellung, Ausstellung, Zahlungseingang — ist abgeschlossen.",
+      "title": "Die Rechnung ist bezahlt"
+    }
+  ],
+  "title": "Teilungsoperation abrechnen, vom Tarif bis zur Zahlung"
+}

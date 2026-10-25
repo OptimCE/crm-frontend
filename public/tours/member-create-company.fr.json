@@ -1,0 +1,238 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create-company/fr.html",
+  "id": "member-create-company",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Cliquez sur « Ajouter un membre » pour ouvrir l'assistant de création en quatre étapes.",
+      "title": "Ajouter un membre",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--company",
+      "target": "new-member-type__card--company",
+      "text": "Sélectionnez « Société » pour créer un membre personne morale. Les champs de l'étape suivante seront adaptés : numéro d'entreprise et numéro de TVA au lieu du numéro national.",
+      "title": "Choisir le type « Société »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-number",
+      "target": "new-member-informations__input--company-number",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-name",
+      "target": "new-member-informations__input--company-name",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--vat-number",
+      "target": "new-member-informations__input--vat-number",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-nrn",
+      "target": "new-member-informations__input--manager-nrn",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-surname",
+      "target": "new-member-informations__input--manager-surname",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-name",
+      "target": "new-member-informations__input--manager-name",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-email",
+      "target": "new-member-informations__input--manager-email",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-phone",
+      "target": "new-member-informations__input--manager-phone",
+      "text": "Saisissez le numéro d'entreprise, la dénomination sociale et le numéro de TVA. Une société étant une personne morale, indiquez aussi son représentant légal : numéro national, nom, e-mail et téléphone.",
+      "title": "Renseigner la société"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Complétez l'adresse du siège social. Cochez « Même adresse » pour réutiliser cette adresse comme adresse de facturation.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Complétez l'adresse du siège social. Cochez « Même adresse » pour réutiliser cette adresse comme adresse de facturation.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Complétez l'adresse du siège social. Cochez « Même adresse » pour réutiliser cette adresse comme adresse de facturation.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Complétez l'adresse du siège social. Cochez « Même adresse » pour réutiliser cette adresse comme adresse de facturation.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Cochez cette case si l'adresse de facturation est la même que l'adresse du domicile.",
+      "title": "Même adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Saisissez l'IBAN de la société, utilisé pour les remboursements liés aux opérations de partage.",
+      "title": "Renseigner l'IBAN"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Cliquez sur « Valider » pour créer la société et l'associer à la communauté active.",
+      "title": "Valider la création"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "skip-adding-a-meter-for-now",
+      "target": null,
+      "text": "Une fenêtre propose d'ajouter un compteur dans la foulée. Choisissez « Non » pour terminer ici.",
+      "title": "Reporter l'ajout d'un compteur"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Recherchez la nouvelle société dans la liste des membres.",
+      "title": "Retrouver la société",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "« E2E Company SA » figure désormais dans la liste des membres, avec l'étiquette de type « Société ».",
+      "title": "La société est créée"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "« E2E Company SA » figure désormais dans la liste des membres, avec l'étiquette de type « Société ».",
+      "title": "La société est créée"
+    }
+  ],
+  "title": "Créer un membre entreprise"
+}

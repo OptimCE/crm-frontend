@@ -1,0 +1,60 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/notification-preferences/nl.html",
+  "id": "notification-preferences",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--notifications",
+      "target": "profile-tabs__tab--notifications",
+      "text": "Het laatste tabblad van uw profiel bepaalt hoe OptimCE u op de hoogte brengt.",
+      "title": "Tabblad Meldingen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__row--news_post",
+      "target": "notification-preferences__row--news_post",
+      "text": "Elke rij is een activiteitencategorie — nieuws, facturen, termijnen… — en elke kolom een kanaal. “Al het overige” dekt de categorieën die geen eigen rij hebben. Essentiële berichten (facturen, uitnodigingen, overschreden termijnen) worden altijd verzonden.",
+      "title": "Categorieën en kanalen",
+      "waitFor": "notification-preferences__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__email--news_post",
+      "target": "notification-preferences__email--news_post",
+      "text": "Zet “E-mail” uit op de rij “Nieuwsberichten”: u blijft de berichten in de applicatie zien, maar ontvangt er geen e-mail meer over.",
+      "title": "Een kanaal uitschakelen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-preferences__save",
+      "target": "notification-preferences__save",
+      "text": "Er wordt niets toegepast zolang u niet hebt opgeslagen. Klik op “Voorkeuren opslaan”.",
+      "title": "Opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__saved",
+      "target": "notification-preferences__saved",
+      "text": "Er verschijnt een bevestigingsbericht naast de knop. Het verdwijnt zodra u opnieuw een instelling wijzigt.",
+      "title": "Voorkeuren opgeslagen"
+    }
+  ],
+  "title": "Uw meldingen instellen"
+}

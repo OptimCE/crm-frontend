@@ -1,4 +1,4 @@
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -11,6 +11,7 @@ import { UserContextService } from './core/services/authorization/authorization.
 import { EventBusService } from './core/services/event_bus/eventbus.service';
 import { Navbar } from './layout/navbar/navbar';
 import { Toast } from 'primeng/toast';
+import { SteppyToursComponent, TourErrorDetail } from '@steppy/angular';
 import { VALIDATION_TYPE, ERROR_TYPE, INFO_TYPE } from './core/dtos/notification';
 
 // ── Stubs ──────────────────────────────────────────────────────────
@@ -20,6 +21,12 @@ class NavbarStub {}
 
 @Component({ selector: 'app-toast-stub', standalone: true, template: '' })
 class ToastStub {}
+
+// eslint-disable-next-line @angular-eslint/component-selector -- must match @steppy/angular's element
+@Component({ selector: 'steppy-tours', standalone: true, template: '' })
+class SteppyToursStub {
+  readonly tourError = output<TourErrorDetail>();
+}
 
 // ── Test Suite ─────────────────────────────────────────────────────
 
@@ -55,9 +62,9 @@ describe('App', () => {
       ],
     })
       .overrideComponent(App, {
-        remove: { imports: [Navbar, Toast], providers: [MessageService] },
+        remove: { imports: [Navbar, Toast, SteppyToursComponent], providers: [MessageService] },
         add: {
-          imports: [NavbarStub, ToastStub],
+          imports: [NavbarStub, ToastStub, SteppyToursStub],
           schemas: [NO_ERRORS_SCHEMA],
           providers: [{ provide: MessageService, useValue: messageServiceMock }],
         },
@@ -240,6 +247,70 @@ describe('App', () => {
       fixture.detectChanges();
       const toast = (fixture.nativeElement as HTMLElement).querySelector('p-toast');
       expect(toast).toBeTruthy();
+    });
+
+    it('should keep the same <steppy-tours> when the navbar branch switches', () => {
+      // Destroying it would suspend a running tour (e.g. a step that leaves /auth).
+      component.showNavbar = true;
+      fixture.detectChanges();
+      const host = fixture.nativeElement as HTMLElement;
+      const before = host.querySelectorAll('steppy-tours');
+      expect(before.length).toBe(1);
+
+      component.showNavbar = false;
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+      const after = host.querySelectorAll('steppy-tours');
+      expect(after.length).toBe(1);
+      expect(after[0]).toBe(before[0]);
+    });
+  });
+
+  // ── 8. Tour errors ──────────────────────────────────────────────
+
+  describe('onTourError', () => {
+    it('should log the tour, step and test-id the overlay reports', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      fixture.detectChanges();
+      const detail: TourErrorDetail = {
+        reason: 'target-timeout',
+        fatal: false,
+        message: 'the target did not appear in time',
+        tourId: 'key-update',
+        stepId: 'keys-list__row--desktop--1',
+        testId: 'keys-list__row--mobile--1',
+        kind: 'waitFor',
+      };
+
+      fixture.debugElement
+        .query((el) => el.name === 'steppy-tours')
+        .triggerEventHandler('tourError', detail);
+
+      expect(warn).toHaveBeenCalledWith(
+        '[tours] tour-error target-timeout: tour "key-update", step "keys-list__row--desktop--1", ' +
+          'test-id "keys-list__row--mobile--1" (waitFor). the target did not appear in time',
+        detail,
+      );
+    });
+
+    it('should still log an error that names no step', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      fixture.detectChanges();
+      const detail: TourErrorDetail = {
+        reason: 'load-failed',
+        fatal: true,
+        message: 'HTTP 404',
+        tourId: 'x',
+      };
+
+      fixture.debugElement
+        .query((el) => el.name === 'steppy-tours')
+        .triggerEventHandler('tourError', detail);
+
+      expect(warn).toHaveBeenCalledWith(
+        '[tours] tour-error load-failed: tour "x". HTTP 404',
+        detail,
+      );
     });
   });
 });

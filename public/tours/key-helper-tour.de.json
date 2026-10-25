@@ -1,0 +1,43 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-helper-tour/de.html",
+  "id": "key-helper-tour",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "text": "In der Anwendung zeigen manche Felder oder Spalten ein Symbol ⓘ. Es weist darauf hin, dass eine zusätzliche Erklärung verfügbar ist — klicken Sie einfach darauf, um sie zu lesen.",
+      "title": "Das Symbol ⓘ erkennen",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "header-helper__btn--help",
+      "target": "header-helper__btn--help",
+      "text": "Klicken Sie auf das Symbol ⓘ, um mehr über dieses Feld zu erfahren. Ein Infofenster mit dem Titel und der vollständigen Beschreibung erscheint.",
+      "title": "Auf ⓘ klicken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-helper__title--label",
+      "target": "header-helper__title--label",
+      "text": "Das Infofenster zeigt den Namen des Feldes und eine ausführliche Erklärung. So verstehen Sie die Bedeutung jedes Werts, ohne die Seite zu verlassen. Das Symbol ⓘ funktioniert überall in der Anwendung, wo es erscheint, auf diese Weise.",
+      "title": "Das Infofenster erscheint",
+      "waitFor": "header-helper__popover--content"
+    }
+  ],
+  "title": "Kontexthilfe — das (i)-Symbol"
+}

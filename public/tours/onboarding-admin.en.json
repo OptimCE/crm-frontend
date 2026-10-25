@@ -1,0 +1,121 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/dashboard"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-admin/en.html",
+  "id": "onboarding-admin",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "module-discovery-strip",
+      "target": "module-discovery-strip",
+      "text": "You have everything a manager has, plus a few decisions that are yours alone. The first one: modules. In \"Available modules\", \"Enable\" subscribes the community to a module; a manager is told to ask you instead.",
+      "title": "You are an administrator"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--management",
+      "text": "In the \"Management\" section, click \"Users\".",
+      "title": "The community's users"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tap the menu icon to open the navigation."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--management",
+      "text": "In the menu's \"Management\" section, tap \"Users\".",
+      "title": "The community's users"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Only an administrator can bring in a manager: \"Invite a manager\" sends them an invitation by email, which they accept from their invitations.",
+      "title": "Invite a manager"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "\"View pending invitations\" shows who has not answered yet. In the list, you alone can change a user's role — member, manager or administrator — or remove them from the community.",
+      "title": "Invitations and roles"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "text": "In the \"Community\" section, click \"Community info\".",
+      "title": "The community info"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tap the menu icon to open the navigation."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "text": "In the menu's \"Community\" section, tap \"Community info\".",
+      "title": "The community info"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Members and managers read this information; only you can change it. \"Edit\" opens the name, description, address, company number and IBAN — what then appears on invoices and official documents.",
+      "title": "The legal details",
+      "waitFor": "community-info__card--view"
+    }
+  ],
+  "title": "You are an administrator"
+}

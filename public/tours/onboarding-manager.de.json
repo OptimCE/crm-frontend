@@ -1,0 +1,139 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-manager/de.html",
+  "id": "onboarding-manager",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Sie verwalten jetzt diese Gemeinschaft: Ihre Karte zeigt Ihre neue Rolle. Klicken Sie auf „Meine Gemeinschaft öffnen“ — ihre Übersicht ist nicht mehr die eines Mitglieds.",
+      "title": "Sie sind Manager"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "readiness-tile",
+      "target": "readiness-tile",
+      "text": "Die Übersicht fasst jetzt die ganze Gemeinschaft zusammen. „Zu prüfende Punkte“ listet auf, was blockiert, mit einem Link zu dem Bildschirm, auf dem Sie es beheben; danach folgen die geteilte Energie, die Operationen und die letzte Aktivität.",
+      "title": "Die Übersicht für Manager"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Ihre Rolle hat den Abschnitt „Verwaltung“ in die Seitenleiste gebracht: die Verteilungsschlüssel, die Mitglieder, Zähler und Teilungsoperationen, die Benutzer der Gemeinschaft und das Audit-Protokoll. Fahren Sie über die Leiste, um die Beschriftungen zu lesen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Ihre Rolle hat den Abschnitt „Verwaltung“ ins Menü gebracht: die Verteilungsschlüssel, die Mitglieder, Zähler und Teilungsoperationen, die Benutzer der Gemeinschaft und das Audit-Protokoll.",
+      "title": "Der Abschnitt „Verwaltung“"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__container",
+      "target": "sidebar-multi-elements__container",
+      "text": "„Mitgliederverwaltung“ fasst die tägliche Arbeit der Gemeinschaft zusammen: „Mitglieder verwalten“, „Zähler verwalten“ und „Teilungsoperationen“.",
+      "title": "Mitglieder, Zähler, Operationen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__submenu-link--0",
+      "target": "sidebar-multi-elements__submenu-link--0",
+      "text": "Klicken Sie auf „Mitglieder verwalten“.",
+      "title": "Die Mitglieder öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__btn--invite",
+      "target": "members-list__btn--invite",
+      "text": "Hier führen Sie die Mitgliederliste. „Hinzufügen“ legt einen Datensatz an; „Neues Mitglied einladen“ sendet eine E-Mail, damit die Person ihn selbst vervollständigt und Zugang zu ihrem eigenen Bereich erhält.",
+      "title": "Mitglieder hinzufügen und einladen",
+      "waitFor": "members-list__btn--add"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management-3",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Klicken Sie im Abschnitt „Verwaltung“ auf „Verteilungsschlüsselverwaltung“.",
+      "title": "Die Verteilungsschlüssel"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management-4",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Tippen Sie im Abschnitt „Verwaltung“ des Menüs auf „Verteilungsschlüsselverwaltung“.",
+      "title": "Die Verteilungsschlüssel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Ein Verteilungsschlüssel legt fest, wie die geteilte Energie auf die Verbraucher einer Operation aufgeteilt wird. Mit „Hinzufügen“ wählen Sie zwischen dem vollständigen Formular und einem Schritt-für-Schritt-Assistenten. Das „Benutzerhandbuch“ bietet für jeden dieser Bildschirme eine ausführliche Tour.",
+      "title": "Die Verteilungsschlüssel",
+      "waitFor": "keys-list__table--keys"
+    }
+  ],
+  "title": "Sie sind Manager"
+}

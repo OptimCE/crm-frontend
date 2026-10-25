@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users/communities"
+  },
+  "guideUrl": "https://guide.optimce.be/community-create/fr.html",
+  "id": "community-create",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-communities__button--create",
+      "target": "user-communities__button--create",
+      "text": "Cliquez sur « Créer une communauté » en haut de la liste pour ouvrir la fenêtre de création.",
+      "title": "Créer une communauté",
+      "waitFor": "user-communities__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-dialog__input--name",
+      "target": "community-dialog__input--name",
+      "text": "Saisissez le nom de la communauté. Le régulateur est présélectionné (CWaPE pour la Wallonie) ; adaptez-le si votre communauté dépend d'un autre régulateur régional.",
+      "title": "Nommer la communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-dialog__button--submit",
+      "target": "community-dialog__button--submit",
+      "text": "Cliquez sur « Valider ». La communauté est créée dans le CRM et dans le fournisseur d'identité, et vous en devenez automatiquement l'administrateur.",
+      "title": "Valider la création"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-communities__input--search",
+      "target": "user-communities__input--search",
+      "text": "Recherchez la nouvelle communauté dans la liste.",
+      "title": "Retrouver la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "user-communities__table",
+      "target": "user-communities__table",
+      "text": "« E2E Community » figure maintenant dans votre liste. Il ne reste plus qu'à l'activer pour commencer à la configurer.",
+      "title": "Votre nouvelle communauté",
+      "waitFor": "user-communities__row--mobile--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "activate-the-new-community-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Activez la nouvelle communauté : ses menus de gestion apparaissent dans la barre latérale.",
+      "title": "Activer la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-activate-the-new-community-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Activez la nouvelle communauté : ses menus de gestion apparaissent dans la barre latérale.",
+      "title": "Activer la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "text": "La section « Gestion » apparaît dans la barre latérale : en tant que créateur, vous êtes administrateur de la communauté et avez accès à tous ses outils.",
+      "title": "Vous êtes administrateur"
+    }
+  ],
+  "title": "Créer une communauté"
+}

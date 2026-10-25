@@ -1,0 +1,144 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-submit-deadline/nl.html",
+  "id": "admin-doc-submit-deadline",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Open het dossier waarvan u de indiening wilt vastleggen.",
+      "title": "Het dossier openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status",
+      "target": "dossier-detail__tag--status",
+      "text": "Zolang het dossier “In voorbereiding” is, verwacht de regulator niets van u. De knoppen bovenaan bieden alleen de statuswijzigingen aan die in dit stadium zijn toegestaan.",
+      "title": "Een dossier in voorbereiding",
+      "waitFor": "dossier-detail__btn--transition-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__btn--transition-2",
+      "target": "dossier-detail__btn--transition-2",
+      "text": "U dient het dossier via uw gebruikelijke kanalen in bij de bevoegde overheid; hier legt u vast dat die indiening heeft plaatsgevonden.",
+      "title": "Het dossier als ingediend markeren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-submission-date-to-today",
+      "target": null,
+      "text": "De datum van indiening is geen formaliteit: vanaf die datum lopen de reglementaire termijnen. Kies de werkelijke datum van de indiening.",
+      "title": "De datum van indiening",
+      "waitFor": "transition-dialog__date--submission"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "transition-dialog__btn--submit",
+      "target": "transition-dialog__btn--submit",
+      "text": "Bevestig om de statuswijziging te registreren.",
+      "title": "De overgang bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status-2",
+      "target": "dossier-detail__tag--status",
+      "text": "De status verandert en de voorgestelde acties veranderen mee: een ingediend dossier kan volledig worden verklaard, worden gecorrigeerd of vervallen.",
+      "title": "Het dossier is ingediend"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__tab--deadlines",
+      "target": "dossier-detail__tab--deadlines",
+      "text": "Het tabblad “Termijnen” toont wat de indiening zojuist in gang heeft gezet.",
+      "title": "De termijnen bekijken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-deadlines-panel__btn--met-1",
+      "target": "dossier-deadlines-panel__btn--met-1",
+      "text": "U voert een termijn nooit handmatig in: OptimCE berekent hem op basis van het dossiertype, het gewest en de datum die u zojuist hebt vastgelegd.",
+      "title": "Er is een termijn verschenen",
+      "waitFor": "dossier-deadlines-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "back-arrow__link",
+      "target": "back-arrow__link",
+      "text": "Keer terug naar de lijst met dossiers.",
+      "title": "Terug naar de lijst"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "administrative-document-hub__tab--deadlines",
+      "target": "administrative-document-hub__tab--deadlines",
+      "text": "Het tabblad “Termijnen” van de hoofdpagina bundelt de termijnen van alle dossiers, zodat u in één oogopslag ziet wat binnenkort vervalt.",
+      "title": "Alle termijnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__btn--met-1",
+      "target": "deadline-dashboard__btn--met-1",
+      "text": "Elke rij verwijst naar het bijbehorende dossier en vermeldt de vervaldatum. De filter toont standaard de termijnen die nog openstaan.",
+      "title": "Het overzicht van de termijnen",
+      "waitFor": "deadline-dashboard__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "deadline-dashboard__btn--met-1-2",
+      "target": "deadline-dashboard__btn--met-1",
+      "text": "Wanneer aan de verplichting is voldaan, markeert u de termijn als nagekomen. Hij verdwijnt uit de lijst van openstaande termijnen, maar blijft in de historiek bewaard.",
+      "title": "Een termijn afsluiten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm",
+      "target": null,
+      "text": "Bevestig: de termijn krijgt de status “Nagekomen” en het overzicht van de openstaande termijnen wordt leeg.",
+      "title": "Bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__empty--message",
+      "target": "deadline-dashboard__empty--message",
+      "text": "Het overzicht toont geen openstaande termijn meer. De historiek van het dossier houdt wel bij wat er is gedaan en wanneer.",
+      "title": "Niets meer in afwachting"
+    }
+  ],
+  "title": "Een dossier indienen en de termijn opvolgen"
+}

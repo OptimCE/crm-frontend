@@ -1,0 +1,68 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-update/en.html",
+  "id": "key-update",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--update",
+      "target": "key-view__btn--update",
+      "text": "Click \"Update\" — the key opens in the same editor used for creation, pre-filled with the existing values.",
+      "title": "Switch to edit mode"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Edit the name and description to reflect the key's new purpose. These fields appear in the list and make it easier to find.",
+      "title": "Rename the key"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Edit the name and description to reflect the key's new purpose. These fields appear in the list and make it easier to find.",
+      "title": "Rename the key"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Double-click the consumer percentages to edit them — here we move from 50/50 to 60/40. The per-iteration total must still equal 100%.",
+      "title": "Rebalance the consumers"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "text": "Scan the whole grid: name, description and the new percentages must match what you intended before you save.",
+      "title": "Review before saving"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Click the save button — the app validates the percentages and redirects you back to the keys list.",
+      "title": "Save the changes"
+    }
+  ],
+  "title": "Edit an allocation key"
+}

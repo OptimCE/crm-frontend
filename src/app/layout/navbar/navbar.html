@@ -322,12 +322,16 @@
         <app-language-selector></app-language-selector>
       </div>
     }
+    <!-- A plain click opens the Help dialog (the guide and the guided tours);
+         a modified or middle click still opens the guide itself. -->
     <a
       data-testid="navbar__btn--user-guide"
       href="https://guide.optimce.be"
       target="_blank"
       rel="noopener noreferrer"
+      aria-haspopup="dialog"
       class="sidebar__guide-btn"
+      (click)="openHelp($event)"
       [pTooltip]="sidebarOpen() ? null : ('NAVBAR.USER_GUIDE' | translate)"
       tooltipPosition="right"
     >

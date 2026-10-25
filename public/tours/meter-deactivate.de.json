@@ -1,0 +1,68 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters/:meterEan"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-deactivate/de.html",
+  "id": "meter-deactivate",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--deactivate",
+      "target": "meter-view__btn--deactivate",
+      "text": "Öffnen Sie die Detailseite des Zählers, den Sie deaktivieren möchten. Mit der Schaltfläche „Zähler deaktivieren“ planen Sie das Ende seiner Aktivität zu einem bestimmten Datum.",
+      "title": "Detailseite des Zählers"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--deactivate-2",
+      "target": "meter-view__btn--deactivate",
+      "text": "Öffnen Sie den Dialog zum Deaktivieren des Zählers.",
+      "title": "Deaktivieren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__datepicker--date",
+      "target": "meter-deactivation__datepicker--date",
+      "text": "Wählen Sie das Datum, ab dem der Zähler nicht mehr aktiv ist.",
+      "title": "Enddatum wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__button--submit",
+      "target": "meter-deactivation__button--submit",
+      "text": "Klicken Sie auf „Deaktivieren“: Dem Zähler wird ab dem gewählten Datum ein inaktiver Zeitraum hinzugefügt.",
+      "title": "Deaktivierung bestätigen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__tab--future",
+      "target": "meter-view__tab--future",
+      "text": "Öffnen Sie die Registerkarte der künftigen Daten: Dort erscheint die geplante Deaktivierung.",
+      "title": "Künftige Daten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-upcoming-deactivation-is-listed-on-the-future-tab",
+      "target": null,
+      "text": "Die Registerkarte „Zukünftige Daten“ zeigt den bevorstehenden inaktiven Zeitraum: Der Zähler bleibt bis zum gewählten Datum aktiv und wird danach deaktiviert.",
+      "title": "Geplante Deaktivierung"
+    }
+  ],
+  "title": "Zähler deaktivieren"
+}

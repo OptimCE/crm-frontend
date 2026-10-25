@@ -1,0 +1,129 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-update/fr.html",
+  "id": "meter-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Cliquez sur la ligne du compteur que vous souhaitez modifier pour ouvrir sa fiche détaillée.",
+      "title": "Ouvrir la fiche du compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Touchez la carte du compteur que vous souhaitez modifier pour ouvrir sa fiche détaillée.",
+      "title": "Ouvrir la fiche du compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero",
+      "target": "meter-view__hero",
+      "text": "La fiche détaillée affiche les informations actuelles du compteur : EAN, adresse d'installation et caractéristiques techniques.",
+      "title": "Fiche initiale"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--modify",
+      "target": "meter-view__btn--modify",
+      "text": "Cliquez sur « Modifier » : un dialogue s'ouvre avec les champs modifiables du compteur (adresse, numéro, EAN et caractéristiques).",
+      "title": "Ouvrir le formulaire"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--street",
+      "target": "meter-update__input--street",
+      "text": "Modifiez les champs souhaités — ici l'adresse d'installation et le numéro physique du compteur. L'EAN et les caractéristiques techniques restent inchangés.",
+      "title": "Mettre à jour l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-number",
+      "target": "meter-update__input--address-number",
+      "text": "Modifiez les champs souhaités — ici l'adresse d'installation et le numéro physique du compteur. L'EAN et les caractéristiques techniques restent inchangés.",
+      "title": "Mettre à jour l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-supplement",
+      "target": "meter-update__input--address-supplement",
+      "text": "Modifiez les champs souhaités — ici l'adresse d'installation et le numéro physique du compteur. L'EAN et les caractéristiques techniques restent inchangés.",
+      "title": "Mettre à jour l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--postcode",
+      "target": "meter-update__input--postcode",
+      "text": "Modifiez les champs souhaités — ici l'adresse d'installation et le numéro physique du compteur. L'EAN et les caractéristiques techniques restent inchangés.",
+      "title": "Mettre à jour l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--city",
+      "target": "meter-update__input--city",
+      "text": "Modifiez les champs souhaités — ici l'adresse d'installation et le numéro physique du compteur. L'EAN et les caractéristiques techniques restent inchangés.",
+      "title": "Mettre à jour l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--meter-number",
+      "target": "meter-update__input--meter-number",
+      "text": "Modifiez les champs souhaités — ici l'adresse d'installation et le numéro physique du compteur. L'EAN et les caractéristiques techniques restent inchangés.",
+      "title": "Mettre à jour l'adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-update__btn--submit",
+      "target": "meter-update__btn--submit",
+      "text": "Cliquez sur « Valider » pour envoyer les modifications au CRM. Le dialogue se ferme une fois la mise à jour confirmée.",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero-2",
+      "target": "meter-view__hero",
+      "text": "De retour sur la fiche du compteur, la nouvelle adresse et le nouveau numéro sont visibles immédiatement — la modification est persistée côté serveur.",
+      "title": "Compteur mis à jour",
+      "waitFor": "meter-view__card--location"
+    }
+  ],
+  "title": "Modifier un compteur"
+}

@@ -1,0 +1,42 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/community-activate/nl.html",
+  "id": "community-activate",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "text": "Na het aanmelden komt u op uw startpagina terecht. Die toont de gemeenschappen waarvan u deel uitmaakt, met uw rol in elk ervan.",
+      "title": "Uw gemeenschappen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Klik op de knop op de kaart van de Test Community om ze te openen. Zij wordt uw actieve gemeenschap: het beheermenu en alle volgende pagina's hebben erop betrekking.",
+      "title": "De gemeenschap betreden"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "text": "Er verschijnt een nieuw menu “Beheer” in de zijbalk, dat toegang geeft tot de verdeelsleutels, meters en deeloperaties van de gemeenschap.",
+      "title": "Beheermenu ontgrendeld",
+      "waitFor": "dashboard-tile"
+    }
+  ],
+  "title": "Een gemeenschap activeren"
+}

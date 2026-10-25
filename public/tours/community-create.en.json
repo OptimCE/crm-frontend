@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users/communities"
+  },
+  "guideUrl": "https://guide.optimce.be/community-create/en.html",
+  "id": "community-create",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-communities__button--create",
+      "target": "user-communities__button--create",
+      "text": "Click \"Create a community\" above the list to open the creation dialog.",
+      "title": "Create a community",
+      "waitFor": "user-communities__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-dialog__input--name",
+      "target": "community-dialog__input--name",
+      "text": "Enter the community name. The regulator is preselected (CWaPE for Wallonia); change it if your community reports to a different regional regulator.",
+      "title": "Name the community"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-dialog__button--submit",
+      "target": "community-dialog__button--submit",
+      "text": "Click \"Confirm\". The community is created in the CRM and the identity provider, and you automatically become its administrator.",
+      "title": "Confirm the creation"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-communities__input--search",
+      "target": "user-communities__input--search",
+      "text": "Search for the new community in the list.",
+      "title": "Find the community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "user-communities__table",
+      "target": "user-communities__table",
+      "text": "\"E2E Community\" now appears in your list. All that's left is to activate it and start setting it up.",
+      "title": "Your new community",
+      "waitFor": "user-communities__row--mobile--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "activate-the-new-community-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Activate the new community: its management menus appear in the sidebar.",
+      "title": "Activate the community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-activate-the-new-community-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Activate the new community: its management menus appear in the sidebar.",
+      "title": "Activate the community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "text": "The \"Management\" section appears in the sidebar: as its creator, you are the community administrator and have access to all its tools.",
+      "title": "You are the administrator"
+    }
+  ],
+  "title": "Create a community"
+}

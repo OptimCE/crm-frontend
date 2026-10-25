@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-status-lifecycle/fr.html",
+  "id": "member-status-lifecycle",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Recherchez le membre par son nom. Nous prenons ici un membre sans compteur actif, car un membre rattaché à un compteur actif ne peut pas être désactivé.",
+      "title": "Rechercher le membre",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "Cliquez sur la ligne du membre dans le tableau pour ouvrir sa fiche.",
+      "title": "Ouvrir la fiche du membre"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "Touchez la carte du membre pour ouvrir sa fiche.",
+      "title": "Ouvrir la fiche du membre"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-tabs__tab--meter",
+      "target": "member-view-tabs__tab--meter",
+      "text": "Le membre est actif : sa pastille de statut est verte et un onglet « Compteur » est disponible. Les boutons d'action permettent de le désactiver ou de le mettre en attente.",
+      "title": "Fiche du membre actif",
+      "waitFor": "member-view__btn--deactivate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--deactivate",
+      "target": "member-view__btn--deactivate",
+      "text": "Cliquez sur « Désactiver ». Le changement de statut est immédiat, sans confirmation supplémentaire.",
+      "title": "Désactiver le membre"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-inactive",
+      "target": "member-view__tag--status-inactive",
+      "text": "La pastille passe à « Inactif » et l'onglet « Compteur » disparaît : un membre inactif ne peut plus être rattaché à un compteur.",
+      "title": "Membre désactivé"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--activate",
+      "target": "member-view__btn--activate",
+      "text": "Le bouton « Activer » réactive le membre. Vous pouvez ainsi gérer tout le cycle de vie d'un membre depuis sa fiche.",
+      "title": "Réactiver le membre"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-active",
+      "target": "member-view__tag--status-active",
+      "text": "La pastille repasse à « Actif » et l'onglet « Compteur » réapparaît. Le membre est de nouveau pleinement opérationnel.",
+      "title": "Membre réactivé"
+    }
+  ],
+  "title": "Désactiver et réactiver un membre"
+}

@@ -1,0 +1,60 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-generation/de.html",
+  "id": "algorithm-delete-generation",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "Die Generierung wird mit einem grünen Punkt angezeigt, der angibt, dass sie erfolgreich abgeschlossen wurde. Mit der Löschschaltfläche (×) oben rechts in der Zeile können Sie die gesamte Generierung samt all ihren Schlüsseln löschen.",
+      "title": "Generierung abgeschlossen",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-generation-button",
+      "target": null,
+      "text": "Klicken Sie bei der Generierung auf die Schaltfläche ×, um sie zu löschen. Alle zugehörigen Schlüssel werden ebenfalls gelöscht. Sie werden um eine Bestätigung gebeten.",
+      "title": "Generierung löschen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Ein Bestätigungsdialog wird angezeigt. Klicken Sie auf die Bestätigungsschaltfläche, um die Generierung und alle darin enthaltenen Verteilungsschlüssel endgültig zu löschen.",
+      "title": "Löschen bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Bestätigen Sie Ihre Auswahl im Bestätigungsdialog.",
+      "title": "Bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__empty--generations",
+      "target": "algorithm-hub__empty--generations",
+      "text": "Die Liste der Generierungen ist wieder leer: Die Generierung und alle ihre Verteilungsschlüssel wurden endgültig gelöscht.",
+      "title": "Generierung gelöscht"
+    }
+  ],
+  "title": "Generierung löschen"
+}

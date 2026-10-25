@@ -1,0 +1,101 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-explore/fr.html",
+  "id": "live-data-explore",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-data-hub__indicative",
+      "target": "live-data-hub__indicative",
+      "text": "Cette console suit, quart d'heure par quart d'heure, ce que mesurent les appareils installés chez les membres. Ces chiffres sont indicatifs : seules les données du gestionnaire de réseau servent aux clés de répartition et à la facturation.",
+      "title": "La console des données en direct",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__no-data",
+      "target": "live-dashboard__no-data",
+      "text": "Le tableau de bord résume la dernière heure complète : production, puissance, échanges avec le réseau et état du parc. Tant qu'aucun appareil n'a transmis de mesure, chaque case affiche un tiret plutôt qu'un zéro — « pas encore mesuré » n'est pas « rien produit ».",
+      "title": "Le tableau de bord"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-the-chart-to-30-days",
+      "target": null,
+      "text": "Les graphiques — production et injection, puis consommation prélevée sur le réseau — couvrent 24 heures (par quart d'heure), 7 jours (par heure) ou 30 jours (par jour). Tant que rien n'a été mesuré, ils le disent au lieu de tracer une ligne plate à zéro.",
+      "title": "Choisir la période du graphique",
+      "waitFor": "live-dashboard__forecast"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "L'onglet « Appareils » liste les boîtiers raccordés aux compteurs des membres, avec leur état de transmission.",
+      "title": "Les appareils",
+      "waitFor": "live-dashboard__chart-empty"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "text": "La communauté n'a encore aucun appareil. Le bouton « Ajouter un appareil » crée un appareil pour un compteur et délivre son code d'enrôlement — voir le guide « Connecter un appareil ».",
+      "title": "Aucun appareil pour le moment",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--ops",
+      "target": "live-data-hub__tab--ops",
+      "text": "L'onglet « État du parc » est l'écran de maintenance : il dit si les chiffres sont à jour, quels appareils demandent une intervention et ce qui n'a pas pu être enregistré.",
+      "title": "L'état du parc"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-ops__empty",
+      "target": "live-ops__empty",
+      "text": "Sans appareil, rien n'a encore été calculé et aucun appareil ne demande d'attention. Dès qu'un appareil transmet, cet écran indique depuis quand les chiffres ont été recalculés et signale les appareils silencieux, hors ligne ou dont des mesures sont rejetées.",
+      "title": "Un parc vide",
+      "waitFor": "live-ops__readings-rejected-none"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--settings",
+      "target": "live-data-hub__tab--settings",
+      "text": "Ouvrez l'onglet des paramètres.",
+      "title": "Paramètres"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-settings__btn--save",
+      "target": "live-settings__btn--save",
+      "text": "Les paramètres décident de ce que les membres pourront voir et du nombre minimum de membres en dessous duquel les échanges avec le réseau restent masqués, pour qu'aucun foyer ne soit identifiable. Tant qu'ils n'ont pas été enregistrés, ce sont les valeurs par défaut de la plateforme.",
+      "title": "Les paramètres de visibilité",
+      "waitFor": "live-settings__is-default"
+    }
+  ],
+  "title": "Découvrir les données en direct"
+}

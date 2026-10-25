@@ -1,0 +1,100 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-device-enrol/de.html",
+  "id": "live-data-device-enrol",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "Öffnen Sie in der Live-Daten-Konsole die Registerkarte „Geräte“. Ein Gerät ist die Box, die am Zähler eines Mitglieds (P1-Anschluss) oder an dessen Wechselrichter angeschlossen ist: Sie sendet jede Viertelstunde einen Messwert.",
+      "title": "Registerkarte Geräte öffnen",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "text": "Klicken Sie auf „Gerät hinzufügen“.",
+      "title": "Gerät hinzufügen",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "device-create-dialog__input--name",
+      "target": "device-create-dialog__input--name",
+      "text": "Geben Sie dem Gerät einen Namen, an dem Sie es erkennen.",
+      "title": "Das Gerät benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__select--ean",
+      "target": "device-create-dialog__select--ean",
+      "text": "Öffnen Sie die Liste der Zähler der Gemeinschaft.",
+      "title": "Den Zähler wählen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "choose-the-member-s-meter",
+      "target": null,
+      "text": "Wählen Sie den Zähler, an den das Gerät angeschlossen ist. Ein Zähler, der bereits ein Gerät hat, ist ausgegraut.",
+      "title": "Den Zähler wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__btn--submit",
+      "target": "device-create-dialog__btn--submit",
+      "text": "Klicken Sie auf „Anlegen“. Kreuzen Sie das Kästchen für reine Einspeisung („Hinter diesem Zähler wird nichts verbraucht“) nur bei einem Standort an, der nichts verbraucht: Fälschlich angekreuzt, würde es die Erzeugung der Gemeinschaft unterschätzen, ohne dass ein Fehler sichtbar wird.",
+      "title": "Gerät anlegen",
+      "waitFor": "device-create-dialog__select--ean"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "device-token-dialog__qr",
+      "target": "device-token-dialog__qr",
+      "text": "Das Gerät ist angelegt und sein Registrierungscode wird sofort angezeigt, als Klartext und als QR-Code. Geben Sie ihn am Gerät ein (oder scannen Sie ihn). Er wird nur ein einziges Mal angezeigt, funktioniert nur einmal und läuft nach 72 Stunden ab; geht er verloren, stellen Sie in der Liste einen neuen aus — der alte funktioniert dann nicht mehr.",
+      "title": "Der Registrierungscode",
+      "waitFor": "device-token-dialog__code"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-token-dialog__btn--close",
+      "target": "device-token-dialog__btn--close",
+      "text": "Schließen Sie das Fenster, wenn Sie fertig sind.",
+      "title": "Schließen",
+      "waitFor": "device-token-dialog__once"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "it-is-waiting-for-its-first-contact",
+      "target": null,
+      "text": "Solange das Gerät seinen Code nicht verwendet hat, steht es auf „Wartet auf Registrierung“ und „Nie gesehen“. Der Hinweiskasten erklärt, was zu prüfen ist: Ist das Gerät mit Strom versorgt und mit dem Netzwerk verbunden?",
+      "title": "Wartet auf Registrierung"
+    }
+  ],
+  "title": "Gerät verbinden"
+}

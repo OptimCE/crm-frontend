@@ -1,0 +1,101 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-explore/nl.html",
+  "id": "live-data-explore",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-data-hub__indicative",
+      "target": "live-data-hub__indicative",
+      "text": "Deze console volgt kwartier per kwartier wat de apparaten meten die bij de leden zijn geïnstalleerd. Deze cijfers zijn indicatief: alleen de gegevens van de netbeheerder dienen voor de verdeelsleutels en de facturatie.",
+      "title": "De console voor live gegevens",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__no-data",
+      "target": "live-dashboard__no-data",
+      "text": "Het dashboard vat het laatste volledige uur samen: productie, vermogen, uitwisselingen met het net en de status van de apparaten. Zolang geen enkel apparaat een meting heeft doorgestuurd, toont elke kaart een streepje in plaats van een nul — “nog niet gemeten” is niet hetzelfde als “niets geproduceerd”.",
+      "title": "Het dashboard"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-the-chart-to-30-days",
+      "target": null,
+      "text": "De grafieken — productie en injectie, daarna verbruik afgenomen van het net — beslaan 24 uur (per kwartier), 7 dagen (per uur) of 30 dagen (per dag). Zolang er niets gemeten is, zeggen ze dat in plaats van een vlakke lijn op nul te tekenen.",
+      "title": "De periode van de grafiek kiezen",
+      "waitFor": "live-dashboard__forecast"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "Het tabblad “Apparaten” toont de kastjes die op de meters van de leden zijn aangesloten, met hun rapportagestatus.",
+      "title": "De apparaten",
+      "waitFor": "live-dashboard__chart-empty"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "text": "De gemeenschap heeft nog geen enkel apparaat. De knop “Apparaat toevoegen” maakt een apparaat aan voor een meter en levert de aanmeldcode ervan — zie de handleiding “Een apparaat koppelen”.",
+      "title": "Nog geen apparaten",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--ops",
+      "target": "live-data-hub__tab--ops",
+      "text": "Het tabblad “Status apparaten” is het onderhoudsscherm: het toont of de cijfers actueel zijn, welke apparaten een ingreep vereisen en wat niet kon worden opgeslagen.",
+      "title": "Status apparaten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-ops__empty",
+      "target": "live-ops__empty",
+      "text": "Zonder apparaten is er nog niets berekend en vraagt geen enkel apparaat aandacht. Zodra een apparaat rapporteert, toont dit scherm sinds wanneer de cijfers zijn herberekend en signaleert het apparaten die stil of offline zijn of waarvan metingen worden geweigerd.",
+      "title": "Een leeg apparatenpark",
+      "waitFor": "live-ops__readings-rejected-none"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--settings",
+      "target": "live-data-hub__tab--settings",
+      "text": "Open het tabblad met de instellingen.",
+      "title": "Instellingen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-settings__btn--save",
+      "target": "live-settings__btn--save",
+      "text": "De instellingen bepalen wat de leden kunnen zien en het minimumaantal leden waaronder de uitwisselingen met het net verborgen blijven, zodat geen enkel gezin herkenbaar is. Zolang ze niet zijn opgeslagen, gelden de standaardwaarden van het platform.",
+      "title": "De zichtbaarheidsinstellingen",
+      "waitFor": "live-settings__is-default"
+    }
+  ],
+  "title": "Live gegevens ontdekken"
+}

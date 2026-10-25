@@ -1,0 +1,178 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-generate/de.html",
+  "id": "algorithm-generate",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__panel--start",
+      "target": "algorithm-hub__panel--start",
+      "text": "Die Seite zur Generierung von Verteilungsschlüsseln wird mit dem Konfigurationsformular angezeigt. Wählen Sie den Algorithmus aus, geben Sie die Parameter ein und importieren Sie Ihre Datendatei, um eine neue Generierung zu starten.",
+      "title": "Seite zur Schlüsselgenerierung",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "algorithm-hub__select--algorithm",
+      "target": "algorithm-hub__select--algorithm",
+      "text": "Klicken Sie auf die Auswahlliste „Algorithmus“ und wählen Sie „OLAGSA“. Daraufhin erscheint das Formular mit den Parametern dieses genetischen Algorithmus.",
+      "title": "OLAGSA-Algorithmus auswählen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--generation-name",
+      "target": "algorithm-hub__input--generation-name",
+      "text": "Geben Sie dieser Generierung einen Namen, um sie im Verlauf wiederzufinden.",
+      "title": "Die Generierung benennen",
+      "waitFor": "algo-form__grid--main"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--injection-name",
+      "target": "algorithm-hub__input--injection-name",
+      "text": "Geben Sie den Namen der Spalte in Ihrer Datendatei ein, die die erzeugte Energie enthält.",
+      "title": "Name der Einspeisung"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algo-form__input--iterations",
+      "target": "algo-form__input--iterations",
+      "text": "Geben Sie „3“ in das Feld „Anzahl der Iterationen“ ein. Dieser Parameter legt die Anzahl unabhängiger Lösungen fest, die der genetische Algorithmus OLAGSA berechnet.",
+      "title": "Anzahl der Iterationen festlegen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algo-form__btn--toggle-advanced",
+      "target": "algo-form__btn--toggle-advanced",
+      "text": "Klicken Sie auf „Erweiterte Optionen“, um die Hyperparameter des genetischen Algorithmus anzuzeigen: Populationsgröße, Kreuzungsrate, Mutationsrate usw.",
+      "title": "Erweiterte Optionen öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algo-form__grid--advanced",
+      "target": "algo-form__grid--advanced",
+      "text": "Die erweiterten Parameter von OLAGSA werden angezeigt: Generationen, Populationsgröße, artenübergreifende und arteninterne Kreuzungsrate, Mutationsrate, erwartete Artenanzahl und maximale Anzahl an Generationen ohne Verbesserung. Die Standardwerte eignen sich für die meisten Anwendungsfälle.",
+      "title": "Hyperparameter des genetischen Algorithmus"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__dropzone",
+      "target": "algorithm-hub__dropzone",
+      "text": "Ziehen Sie Ihre CSV-Datei in den Importbereich oder klicken Sie darauf, um die Datendatei für die Generierung auszuwählen.",
+      "title": "Datendatei importieren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--submit",
+      "target": "algorithm-hub__btn--submit",
+      "text": "Klicken Sie auf „Generierung starten“, um die Aufgabe an die OLAGSA-Engine zu übermitteln. Die Generierung erscheint sofort in der Liste mit dem Status „Ausstehend“.",
+      "title": "Generierung starten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-row-has-appeared",
+      "target": null,
+      "text": "Die Generierung „Test Run 1“ erscheint in der Liste. Ein blinkender orangefarbener Punkt zeigt an, dass sie auf die Verarbeitung wartet; er wird grün, sobald die OLAGSA-Engine fertig ist.",
+      "title": "Generierung übermittelt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--refresh",
+      "target": "algorithm-hub__btn--refresh",
+      "text": "Die Berechnung dauert einen Moment: Aktualisieren Sie die Liste, um das Ergebnis zu sehen.",
+      "title": "Aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-completed-successfully",
+      "target": null,
+      "text": "Der Punkt wird grün: Die Generierung ist abgeschlossen. Die Verteilungsschlüssel wurden berechnet und können durch Aufklappen der Zeile eingesehen werden.",
+      "title": "Generierung erfolgreich abgeschlossen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Klicken Sie auf die Generierung, um die von ihr erzeugten Schlüssel anzuzeigen.",
+      "title": "Generierung aufklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "Die Liste der berechneten Schlüssel erscheint unter der Generierung. Jeder Schlüssel entspricht einer optimierten OLAGSA-Lösung. Klicken Sie auf einen Schlüssel, um seine detaillierte Verteilung anzuzeigen.",
+      "title": "Generierte Verteilungsschlüssel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Klicken Sie auf einen Schlüssel, um seine Verteilung anzuzeigen.",
+      "title": "Schlüssel aufklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "Die Verteilungstabelle dieses Schlüssels wird angezeigt, mit den vom Algorithmus berechneten Werten. Mit der Schaltfläche „Schlüssel in /keys speichern“ legen Sie diesen Schlüssel in der Verteilungsschlüsselverwaltung ab.",
+      "title": "Schlüsseldetail und Verteilung pro Iteration"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "save-the-key",
+      "target": null,
+      "text": "Klicken Sie auf „Schlüssel in /keys speichern“, um diesen Verteilungsschlüssel in der Verteilungsschlüsselverwaltung abzulegen, wo er über die Verwaltung der Gemeinschaft zugänglich ist.",
+      "title": "Schlüssel im Modul speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "45b-save-confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Ein Bestätigungsdialog wird angezeigt. Klicken Sie auf die Bestätigungsschaltfläche, um diesen Verteilungsschlüssel endgültig in der Verteilungsschlüsselverwaltung zu speichern.",
+      "title": "Speichern bestätigen"
+    }
+  ],
+  "title": "Verteilungsschlüssel generieren (OLAGSA)"
+}

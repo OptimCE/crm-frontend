@@ -1,0 +1,1554 @@
+{
+  "buildId": "8b68d55fb608",
+  "defaultLocale": "fr",
+  "guideOrigin": "https://guide.optimce.be",
+  "kind": "steppy-tours-manifest",
+  "layouts": {
+    "desktop": "(min-width: 1024px)",
+    "mobile": "(max-width: 1023.98px)"
+  },
+  "locales": [
+    "fr",
+    "en",
+    "nl",
+    "de"
+  ],
+  "schema": 1,
+  "testIdAttribute": "data-testid",
+  "tours": [
+    {
+      "entry": {
+        "route": "/administrative-document"
+      },
+      "files": {
+        "de": "admin-doc-document-generate.de.json",
+        "en": "admin-doc-document-generate.en.json",
+        "fr": "admin-doc-document-generate.fr.json",
+        "nl": "admin-doc-document-generate.nl.json"
+      },
+      "id": "admin-doc-document-generate",
+      "integrity": {
+        "de": "sha384-iF0G+eGPlNzcIkkI5LUSZg8OpgDFZLvUpnW9VqSTxJWt5iLMdE1+XeNAP9djpNFi",
+        "en": "sha384-INmvQEKTLC3Q3ZF1J67JDKSS7c90b11WDhjR9W/OiRwJujI2CN2mgxvGk74dX0J5",
+        "fr": "sha384-S9SyoOLQQeS2gduovnlGSvD1bqEuuyCHCQ5XyA/jtK9/xs9uP/UqP0+a3dKnjyXH",
+        "nl": "sha384-xwnBLy+eg4lRncTqLJW3ykEXpuBBwBi3TYvUgMv2Hztyel1tjG3na9M/9QLZlgaR"
+      },
+      "role": "admin",
+      "steps": 16,
+      "title": {
+        "de": "Dokument aus dem CRM erzeugen",
+        "en": "Generate a document from the CRM",
+        "fr": "Générer un document depuis le CRM",
+        "nl": "Een document genereren vanuit het CRM"
+      }
+    },
+    {
+      "entry": {
+        "route": "/administrative-document"
+      },
+      "files": {
+        "de": "admin-doc-dossier-create.de.json",
+        "en": "admin-doc-dossier-create.en.json",
+        "fr": "admin-doc-dossier-create.fr.json",
+        "nl": "admin-doc-dossier-create.nl.json"
+      },
+      "id": "admin-doc-dossier-create",
+      "integrity": {
+        "de": "sha384-zmYVNSyLotr59Q/H//tcS8LOFojn+c7mp0VY6Qo602z4PZPNeRFgyFhEiiRUUaRa",
+        "en": "sha384-dmT3cyHoQx0erMBY5H/r3iD1jmNEJNq67y3bG9YG3Id/6HMP+dDi5OXrfDSl3RkA",
+        "fr": "sha384-0ybtQCoUWMxcNnqrHNKybdHgWKvaaR6XPJOYz6+RCAEkp/QS9Oojd6HDlmS2ICGp",
+        "nl": "sha384-kH5iSi4DO51ghtW7IpDgmm+NuragpvMk9x8rNqbHa0Yfiv9JFLc8vYqN1nus2gvm"
+      },
+      "role": "admin",
+      "steps": 10,
+      "title": {
+        "de": "Verwaltungsdossier anlegen",
+        "en": "Create an administrative dossier",
+        "fr": "Créer un dossier administratif",
+        "nl": "Een administratief dossier aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/administrative-document"
+      },
+      "files": {
+        "de": "admin-doc-my-filings.de.json",
+        "en": "admin-doc-my-filings.en.json",
+        "fr": "admin-doc-my-filings.fr.json",
+        "nl": "admin-doc-my-filings.nl.json"
+      },
+      "id": "admin-doc-my-filings",
+      "integrity": {
+        "de": "sha384-hTM4B4/MNkr4/z2mWuwB6cRJhjNhONHWpKo+ySIw4KWmU15pOloBsWSBCyvToR9X",
+        "en": "sha384-GtoylqurgCd2SwSSqMh7Z7iKL5lGLUij2J3ghEmB7zPTxBivK1IggWccNPz04D+r",
+        "fr": "sha384-ASzDVZkuDwZORb/ULjREX+yGUvEQVtb7dDJwdbzhmDUNEDlB6+pjVxGjgCiC8kg5",
+        "nl": "sha384-60lb48n5v5D3Y6NUukrxOjbrgQZRX2fSmaSDExQzbcN3Yr+OKEbn5dy45pHdC3Oh"
+      },
+      "role": "member",
+      "steps": 2,
+      "title": {
+        "de": "Sehen, was über Sie eingereicht wurde",
+        "en": "See what has been filed about you",
+        "fr": "Voir ce qui a été déclaré à son sujet",
+        "nl": "Zien wat er over u is ingediend"
+      }
+    },
+    {
+      "entry": {
+        "route": "/administrative-document"
+      },
+      "files": {
+        "de": "admin-doc-submit-deadline.de.json",
+        "en": "admin-doc-submit-deadline.en.json",
+        "fr": "admin-doc-submit-deadline.fr.json",
+        "nl": "admin-doc-submit-deadline.nl.json"
+      },
+      "id": "admin-doc-submit-deadline",
+      "integrity": {
+        "de": "sha384-u6tF3JJZsDyNJCmweaDOakmIxGRYQR+TwXJmv/n8jbJ2jNo/9Cyv5X2fD+Px8x/1",
+        "en": "sha384-wlVvLLyXNeAkLXuts5c9KgbpvpbV1yZvEqVTBjJIcA/JKvJEXlCpHcNZ3KkUIM28",
+        "fr": "sha384-0xK0nk1ovTEzWdiSJauK6EOPs8N6i20IGqYsXIG34jWP0OIGsfFKdToB+3sNsyLz",
+        "nl": "sha384-owR2tnw9v8C+tmH4w8/Rk1b+TV3CAAYzSYOmj3v8+WCOT84sLGShhnmXqK2qYWCn"
+      },
+      "role": "admin",
+      "steps": 14,
+      "title": {
+        "de": "Dossier einreichen und Frist verfolgen",
+        "en": "File a dossier and follow its deadline",
+        "fr": "Déposer un dossier et suivre son échéance",
+        "nl": "Een dossier indienen en de termijn opvolgen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/administrative-document"
+      },
+      "files": {
+        "de": "admin-doc-upload-version.de.json",
+        "en": "admin-doc-upload-version.en.json",
+        "fr": "admin-doc-upload-version.fr.json",
+        "nl": "admin-doc-upload-version.nl.json"
+      },
+      "id": "admin-doc-upload-version",
+      "integrity": {
+        "de": "sha384-+2B6f9y20PCm4QlucfI7WhZ7FBrFnlFP/YThuTiH2RjuJkbiCQNe6nEqT5sjAvZ0",
+        "en": "sha384-we2vOaHpI2+PgCRk+zGVIava6rv5n/ZCovizUWlxK0cTQ8lVSrC5EEt9FhxU2EwT",
+        "fr": "sha384-JJwdH2ucZ8OsKh9fue4P+1WOgoSgkY90KSbAWV8k6+E+pfn1GXmjHG+ne+it0sWF",
+        "nl": "sha384-ITOi7ERvdXaM6/cfhv4VszcPtc9SCVc0JYCr+V3Mxsj0/O8ZxuTRmEppbxIhXBFw"
+      },
+      "role": "admin",
+      "steps": 12,
+      "title": {
+        "de": "Vorhandenes Dokument anhängen",
+        "en": "Attach a document you already have",
+        "fr": "Joindre un document existant",
+        "nl": "Een bestaand document bijvoegen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/annexes-services/algorithm"
+      },
+      "files": {
+        "de": "algorithm-delete-generation.de.json",
+        "en": "algorithm-delete-generation.en.json",
+        "fr": "algorithm-delete-generation.fr.json",
+        "nl": "algorithm-delete-generation.nl.json"
+      },
+      "id": "algorithm-delete-generation",
+      "integrity": {
+        "de": "sha384-IZdZlajsf4ugMdym6G9kNiMz6JzXDHZ6C8EzchNcxuY59eacy1X1ObeVzSlIvaS3",
+        "en": "sha384-e0hOteStze5ToHACPACeIIJHXjhOXcI8b0Rymne/TDeUEJuE2egZWRNc/9R5sA1G",
+        "fr": "sha384-OAyexDMPIIjeY9pysDKjzPyXX8KYyCpnvIcUovZ3uniyV07N/dW8gMhYWLsGIPJ5",
+        "nl": "sha384-l1LVjnM1WaQBD4ClwGlKFIz8A7ckRhh9axMKEvELzoiwP0Erpd4qA04fSrnnQM1B"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Generierung löschen",
+        "en": "Delete a generation",
+        "fr": "Supprimer une génération",
+        "nl": "Een generatie verwijderen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/annexes-services/algorithm"
+      },
+      "files": {
+        "de": "algorithm-delete-key.de.json",
+        "en": "algorithm-delete-key.en.json",
+        "fr": "algorithm-delete-key.fr.json",
+        "nl": "algorithm-delete-key.nl.json"
+      },
+      "id": "algorithm-delete-key",
+      "integrity": {
+        "de": "sha384-tFgSftMVnvPdrdHZ8X05SF5KpqhU+2DBu0wBvmc6+sF0J2jXV7e9QEk+HlbAC137",
+        "en": "sha384-xA3i8JFoQFEmjHfQJaKbNKFHSJBCpf+ecP+BxXJrjBkSmLYwIWt/9kqknysBgLkb",
+        "fr": "sha384-i/spXdU998fOhz1Ll0JwHWwqY/lCRKp/TgDjhfbM5vHr8EBFusUCAth8braR+wNv",
+        "nl": "sha384-XYrqitxhonrQ8IoVCsgQ2aeC2j8h15FclwNr7yTJbPqdzOZpOgRTvJJdHkKhedqz"
+      },
+      "role": "admin",
+      "steps": 9,
+      "title": {
+        "de": "Generierten Schlüssel löschen",
+        "en": "Delete a generated key",
+        "fr": "Supprimer une clé générée",
+        "nl": "Een gegenereerde sleutel verwijderen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/annexes-services/algorithm"
+      },
+      "files": {
+        "de": "algorithm-generate.de.json",
+        "en": "algorithm-generate.en.json",
+        "fr": "algorithm-generate.fr.json",
+        "nl": "algorithm-generate.nl.json"
+      },
+      "id": "algorithm-generate",
+      "integrity": {
+        "de": "sha384-pTfF+Pp49c3lPPG0wo6uTGQr5nAxYLbk6n5Dcp4G5N+K64/jzQedg2wcyTsvmfK9",
+        "en": "sha384-KiL0tpLQxJjvQyGrQIxBi3cEepbiFNjb0Zo6gWByrfP43odKhH3+SsZyyFn7ZW72",
+        "fr": "sha384-Aoeq9tlCrOCDOMiH5kU/JyHSUHzD4ls+YUo4y50QW0JYV7sEsr4YdO2xCajCflic",
+        "nl": "sha384-45AwUt3LyNfCbU/BjmgKRLpIvhlDqO0V7qw7stqzuyjelHwDmesN1hXRJ2Hza2bX"
+      },
+      "role": "admin",
+      "steps": 18,
+      "title": {
+        "de": "Verteilungsschlüssel generieren (OLAGSA)",
+        "en": "Generate keys (OLAGSA)",
+        "fr": "Générer des clés (OLAGSA)",
+        "nl": "Verdeelsleutels genereren (OLAGSA)"
+      }
+    },
+    {
+      "entry": {
+        "route": "/annexes-services"
+      },
+      "files": {
+        "de": "annexes-services-subscribe.de.json",
+        "en": "annexes-services-subscribe.en.json",
+        "fr": "annexes-services-subscribe.fr.json",
+        "nl": "annexes-services-subscribe.nl.json"
+      },
+      "id": "annexes-services-subscribe",
+      "integrity": {
+        "de": "sha384-wNOtWV3uU4V7tHahsyitKTj66JR4PHzQbcOQ/391SOffwTsNlxZlKMx8Y6fE5uwR",
+        "en": "sha384-PnvF28z4+pb/eADr6vnel+BsInPLXgedyp8dhrXyvo7gjR+5CkXxWnIfgqhyVX+8",
+        "fr": "sha384-EE6zDXKxw5n0gFR2PkCdvVLKoA9nnwK7wWiUbw2FDtCYZBy7EFl+nFh2ApBCRLgT",
+        "nl": "sha384-H2L2iFBbY6eouTNeU7jAwNfRC72HAbwmYUYMDmuQJXbdjGAV96OQ5W+4izl0Uo0s"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Zusatzdienst abonnieren",
+        "en": "Subscribe to an annexe service",
+        "fr": "S'abonner à un service annexe",
+        "nl": "Abonneren op een annexdienst"
+      }
+    },
+    {
+      "entry": {
+        "route": "/annexes-services"
+      },
+      "files": {
+        "de": "annexes-services-unsubscribe.de.json",
+        "en": "annexes-services-unsubscribe.en.json",
+        "fr": "annexes-services-unsubscribe.fr.json",
+        "nl": "annexes-services-unsubscribe.nl.json"
+      },
+      "id": "annexes-services-unsubscribe",
+      "integrity": {
+        "de": "sha384-X2rBZ068+GNz6ImJ56hIEcwveUiZCJUt92zlv5DdmhvkU4rWoditZQF9YtFHML3M",
+        "en": "sha384-MPCIuGVgP3rBuBV1c/iDrs4OofKwrhXByqdXfH+rtH9DbP48sLwjpQgcav5f/QSV",
+        "fr": "sha384-fhHfLIfJzV10N/RZG1QckSAiqzQGqs9C+OXVJtSQyHfVG1nOo5ZZeF66bBOuZJST",
+        "nl": "sha384-iKxq7GtdqIbrgUlfexRIkO9zACctMbetdDmQx9eJ9y5J0ZQ6sgpC10QQwUiNschu"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Zusatzdienst abbestellen",
+        "en": "Unsubscribe from an annexe service",
+        "fr": "Se désabonner d'un service annexe",
+        "nl": "Een annexdienst opzeggen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/audit-logs"
+      },
+      "files": {
+        "de": "audit-log-inspect.de.json",
+        "en": "audit-log-inspect.en.json",
+        "fr": "audit-log-inspect.fr.json",
+        "nl": "audit-log-inspect.nl.json"
+      },
+      "id": "audit-log-inspect",
+      "integrity": {
+        "de": "sha384-Oz+7j9mrQ26G/o9xC+YeBNZyDrqwAsi8YIJdMgzqozrZbY2OFwQWGanqAbTxzbrL",
+        "en": "sha384-HclqbCpm/YyzayINBSHUtEZPa+5vQ5AQR3hx+jfhpxrZmen3XBS24di+uBMQ4NZO",
+        "fr": "sha384-DVSDZ7WGzMJ6r63NpUzHbcS3/5Mfv0T4OeB/UEW19lgcnqYA9JGqjVoWyJuyu6Cu",
+        "nl": "sha384-42hk5jgmnODWr4mWL2xBKaD4dTO2HRgbsRpxdcLAcw0yzFfKcy9Y4BbM/g53h+IH"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Audit-Protokoll einsehen",
+        "en": "Consult the audit log",
+        "fr": "Consulter le journal d'audit",
+        "nl": "Het auditlogboek raadplegen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/billing"
+      },
+      "files": {
+        "de": "billing-member-view.de.json",
+        "en": "billing-member-view.en.json",
+        "fr": "billing-member-view.fr.json",
+        "nl": "billing-member-view.nl.json"
+      },
+      "id": "billing-member-view",
+      "integrity": {
+        "de": "sha384-W6tcYcCfVsGl4x4NAKKcf4JBVSJQSa2C5AR0nSAKnFjKx3GKxHQac4ZHZD1CLHrZ",
+        "en": "sha384-N7Qb6iOWCC4EOBJl8i3kQgo7hPm1Eac1wS8hsnokpmEG482EUB0ZeIxO4NBT+H0l",
+        "fr": "sha384-Iy19sqhC/XufXUU6hbRZluoO9zPn6NxOyWnKpyOIeZluHoo1BJ9hSkKajR8IBrc3",
+        "nl": "sha384-W+FN+uPzbas7VStYmGhOQ9wHJqnkT2l+X6FF/X49idaC+ykbY/Yq8+FPYVW8wO6o"
+      },
+      "role": "member",
+      "steps": 1,
+      "title": {
+        "de": "Ihre Rechnung einsehen",
+        "en": "View your own bill",
+        "fr": "Consulter sa facture",
+        "nl": "Uw factuur bekijken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/billing"
+      },
+      "files": {
+        "de": "billing-tarification-pay.de.json",
+        "en": "billing-tarification-pay.en.json",
+        "fr": "billing-tarification-pay.fr.json",
+        "nl": "billing-tarification-pay.nl.json"
+      },
+      "id": "billing-tarification-pay",
+      "integrity": {
+        "de": "sha384-p6W58UHdR3ilhESYtfaNE1FhbVsYt1Zfbsqci5CrOFc+Br/2HLQ0h2Gd20a6JjxZ",
+        "en": "sha384-JPaKenCguGkOMo7/y9/g8JoUqYduBAUF2GirkJzwI2DBqzi7f3GYGfcf/xU7KXZl",
+        "fr": "sha384-8XGdLLVUUJbbbgpdfSILCsuMzN9EySsf2B59AHdM1Bwn9Sywc8UPSCn57YhvkBXH",
+        "nl": "sha384-B15vjZX3v2fhbQq6LXbAVM3xpjPeO950xcjNJ40FTFH+j7Ctqjcffb3VtKJjYfb6"
+      },
+      "role": "admin",
+      "steps": 25,
+      "title": {
+        "de": "Teilungsoperation abrechnen, vom Tarif bis zur Zahlung",
+        "en": "Bill a sharing operation, from tariff to payment",
+        "fr": "Facturer une opération, du tarif à l'encaissement",
+        "nl": "Een deeloperatie factureren, van tarief tot betaling"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "community-activate.de.json",
+        "en": "community-activate.en.json",
+        "fr": "community-activate.fr.json",
+        "nl": "community-activate.nl.json"
+      },
+      "id": "community-activate",
+      "integrity": {
+        "de": "sha384-QacGou9A90PpQSesCpwqJXB7Gf/FkfHmFieD3ROmBEHdyPxTxe51qKjLh08Wpc+Q",
+        "en": "sha384-zlmYSUudKgb9B5LzjNEHz1xgbzOyjC9zCL2t517pVhGL/9V1o7Y1cNqT2Obvartf",
+        "fr": "sha384-OWF0NePIPNJ8/wNpHFG9AgaO2Nw6XJKz5y8udi/JnfM8HG6kim8VnCt8od8r5/GH",
+        "nl": "sha384-9nhJba+z0UE5phialGOyowavW+V4lGGxTaclqweyoooccwEg4rQRRemP6ddRqmdd"
+      },
+      "role": "admin",
+      "steps": 3,
+      "title": {
+        "de": "Gemeinschaft aktivieren",
+        "en": "Activate a community",
+        "fr": "Activer une communauté",
+        "nl": "Een gemeenschap activeren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/users/communities"
+      },
+      "files": {
+        "de": "community-create.de.json",
+        "en": "community-create.en.json",
+        "fr": "community-create.fr.json",
+        "nl": "community-create.nl.json"
+      },
+      "id": "community-create",
+      "integrity": {
+        "de": "sha384-kVAPBKmWRIREQNWxF1I72JyppTUJwW/Yqik0yBWi2oSPkWue8Xwo9uOqwm5yAQ16",
+        "en": "sha384-oYVvMfqtf1dk0cPC5iEmDzDmt1O8Bi1yESYkEllhj6OXVm4iXOoUa/EuPJ77cALD",
+        "fr": "sha384-F7nTQUEV3vssGLQcDqJsuBv74LXXZjGC0GCI8EqjjRgMhBpk7dnv2KikKnmuAcMX",
+        "nl": "sha384-pkfWSrRY5Goajcvd1Q96vhXYY/Lv+FMMiQrDBvJinlKEpbmtNplNu3QSP8qIHr/m"
+      },
+      "role": "admin",
+      "steps": 8,
+      "title": {
+        "de": "Gemeinschaft erstellen",
+        "en": "Create a community",
+        "fr": "Créer une communauté",
+        "nl": "Een gemeenschap aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/members"
+      },
+      "files": {
+        "de": "community-create-member.de.json",
+        "en": "community-create-member.en.json",
+        "fr": "community-create-member.fr.json",
+        "nl": "community-create-member.nl.json"
+      },
+      "id": "community-create-member",
+      "integrity": {
+        "de": "sha384-IQsKvvXWOcYLP6t65Edac1EQLLRhTF88sral1eKjF4rwUgx/CWp6ItQ1RT9g4Ts9",
+        "en": "sha384-btnDw9Q02BFnCsbnDo4yJOfK4SYfGyowopmM2BVQxjNmOAX5lz+XeErEOtMwvqTA",
+        "fr": "sha384-s87HmtuONf2PeghPE8GOx4KuwcA4R8XRzll0+STc/jwwIzw7Nw7MzesIIJQslsX1",
+        "nl": "sha384-IiPxs6NVPVeRmiHRoTsZ29QCDg0D/FhqMxgBNdE79GkwgXR74+qh9gU7Q8NdaBU3"
+      },
+      "role": "admin",
+      "steps": 20,
+      "title": {
+        "de": "Mitglied anlegen",
+        "en": "Create a member",
+        "fr": "Créer un membre",
+        "nl": "Een lid aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/communities/info"
+      },
+      "files": {
+        "de": "community-info-update.de.json",
+        "en": "community-info-update.en.json",
+        "fr": "community-info-update.fr.json",
+        "nl": "community-info-update.nl.json"
+      },
+      "id": "community-info-update",
+      "integrity": {
+        "de": "sha384-VmgMNGcgdxgZRXjYo1OfQFs5KXHKzyNEKhw96XWvQeIrM9N5+w/3g0YtYPNEMpJ+",
+        "en": "sha384-jm74zBimfdge+uhrUhvX6OH2sKK7UikfdTIssSU9oJOWrKjojvekZWdvu4Ft9AJw",
+        "fr": "sha384-3HLTjRocp/MWYJsPWf8VNbRyhUmdgByBvoupaenbgn/Y43qIHa5QC6NU4UUUCvuf",
+        "nl": "sha384-dymVI+Rg4k/ALg6StII1aDtJSk97V3joP3tQu0GiOSk8tZKwxFoRxjwaQXFVAiu/"
+      },
+      "role": "admin",
+      "steps": 10,
+      "title": {
+        "de": "Gemeinschaftsinfo aktualisieren",
+        "en": "Update community info",
+        "fr": "Mettre à jour les infos de la communauté",
+        "nl": "De gemeenschapsinfo bijwerken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/keys/:keyId"
+      },
+      "files": {
+        "de": "community-join-inspect-key.de.json",
+        "en": "community-join-inspect-key.en.json",
+        "fr": "community-join-inspect-key.fr.json",
+        "nl": "community-join-inspect-key.nl.json"
+      },
+      "id": "community-join-inspect-key",
+      "integrity": {
+        "de": "sha384-sgjuhiX4jyYiRMC8DaFp6zvnauS/cC4l4WCoqlh3n4zRqhVqZLjm+blY/SC5SefS",
+        "en": "sha384-ZYE+08tEj19NLI4bacCYqmVYcWYnwcDaa7uyvZkP8jhGI4/07iWE7Ms+OpyY+ehD",
+        "fr": "sha384-SW2Af9pJzjD5ff5KTYlLNc6pxfEZ9kg5aQK5z9mvJBzBJ3ZGJHNb1GlVm2WBQzgI",
+        "nl": "sha384-NOXu9EXzBkgcICC+aQdZAl/bIHMP2Sib7PXuY1UL9yhSEVBSlZajo1LnFMmZHuV+"
+      },
+      "role": "admin",
+      "steps": 2,
+      "title": {
+        "de": "Einer Gemeinschaft beitreten — Verteilungsschlüssel prüfen",
+        "en": "Join a community — verify the allocation key",
+        "fr": "Rejoindre une communauté — vérifier la clé",
+        "nl": "Lid worden van een gemeenschap — de verdeelsleutel controleren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/meters"
+      },
+      "files": {
+        "de": "community-join-inspect-meter.de.json",
+        "en": "community-join-inspect-meter.en.json",
+        "fr": "community-join-inspect-meter.fr.json",
+        "nl": "community-join-inspect-meter.nl.json"
+      },
+      "id": "community-join-inspect-meter",
+      "integrity": {
+        "de": "sha384-CdBysHOWL4QTbkFqWFQLStwjImUho63Bvepc8UELzFZNiQhZ7X1lHH9Aor9N57rD",
+        "en": "sha384-fOZ7/BleOJ2Dr9AjknV1gDfJj0UrGJME7fbRxkPvEG7mAMHqLBjsDNPwyiBWWV88",
+        "fr": "sha384-DfZ30JJs6bXMnluNGrsbwtDRYVPuJoGww7VQ4WPGVuFn7yEXVIw9j8b3eZrfPZ0T",
+        "nl": "sha384-zbo33errv99TGUFF+fcLBCWu0VNxCaVXuDr3NwuKI3AJHjSN1EQKq+oIMn8o6uc9"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Einer Gemeinschaft beitreten — Zähler prüfen",
+        "en": "Join a community — verify the meter",
+        "fr": "Rejoindre une communauté — vérifier le compteur",
+        "nl": "Lid worden van een gemeenschap — de meter controleren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/communities/managers"
+      },
+      "files": {
+        "de": "community-managers-view.de.json",
+        "en": "community-managers-view.en.json",
+        "fr": "community-managers-view.fr.json",
+        "nl": "community-managers-view.nl.json"
+      },
+      "id": "community-managers-view",
+      "integrity": {
+        "de": "sha384-IMGyyDmHqgZIjpL6xOgKoVb5ss2zQqCyrkcLk2eWSrC4GynwfHpEQazyW7boKd6h",
+        "en": "sha384-c701BIwOKcpYEcgCOFm2dBOO1kSQ5FGCzhZkG12WeVIa6vpbNb74s+K/K+0WvYSE",
+        "fr": "sha384-QtxbhgZH3ZGYMajh7p4MIdkng70UTN0Xb7uPtXcyos8OI0InsAaJhwz2asQukEqz",
+        "nl": "sha384-sHphn9vV48fwPxBnLFvyqciRxcZr+ym6wuptec6aKdiJsj3UcQAiuZZglI+dLyKd"
+      },
+      "role": "member",
+      "steps": 4,
+      "title": {
+        "de": "Manager Ihrer Gemeinschaft ansehen",
+        "en": "See your community's managers",
+        "fr": "Voir les gestionnaires de sa communauté",
+        "nl": "De beheerders van uw gemeenschap bekijken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/communities/users"
+      },
+      "files": {
+        "de": "community-users-manage.de.json",
+        "en": "community-users-manage.en.json",
+        "fr": "community-users-manage.fr.json",
+        "nl": "community-users-manage.nl.json"
+      },
+      "id": "community-users-manage",
+      "integrity": {
+        "de": "sha384-tG0sH6UYD/rhtimU0FX3g3hnnkkAMDQxxcFXw8vcShPCinyTYJqY7LRbGaTfTl6p",
+        "en": "sha384-5/P9Dg7rlcwiyABZYM7t/o1PifbiVg6F9BFkUOEAlsBAe9P2RYGCEB8NywCl/5X+",
+        "fr": "sha384-IcqrUCJiMK1sM/pN4rIyvwfRNt0pf2OAhcegvRLo2/sesKlZbILzuS8iFwap+tdg",
+        "nl": "sha384-KsPrsLHewcgfZV/Wi/V8MRYsBQIbfjIJW1GRMHE6LzoS32dH9rOXI96n8LR7RCpl"
+      },
+      "role": "admin",
+      "steps": 19,
+      "title": {
+        "de": "Benutzer der Gemeinschaft verwalten",
+        "en": "Manage the community's users",
+        "fr": "Gérer les utilisateurs de la communauté",
+        "nl": "De gebruikers van de gemeenschap beheren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "dashboard-manager-tour.de.json",
+        "en": "dashboard-manager-tour.en.json",
+        "fr": "dashboard-manager-tour.fr.json",
+        "nl": "dashboard-manager-tour.nl.json"
+      },
+      "id": "dashboard-manager-tour",
+      "integrity": {
+        "de": "sha384-qRdhWjxxaU2sYMXwObmYEU8piJa9JOaCm8brl093GFWYWfk4cf2RxO15b8KwHCgA",
+        "en": "sha384-K2cdTSri+Fp8Tu2BNcQPWolVXU9YyNJNQhUHQNX10+qIe1fROWCOJgyGFPrSlDzA",
+        "fr": "sha384-hXRPm0kses1ZiVBZjRnI3Aow4gL9NwXtQewfM6Ps1jiXfSThwEhs5gVnyUE+lQVz",
+        "nl": "sha384-P0lp3zDHIcAl2hXj5vTMmf9bik6qgmPll+7iJxPCpz9hflS1fikqRXDLTBA1O8M0"
+      },
+      "role": "admin",
+      "steps": 10,
+      "title": {
+        "de": "Die Übersicht für Manager",
+        "en": "The manager dashboard",
+        "fr": "Le tableau de bord du gestionnaire",
+        "nl": "Het beheerdersdashboard"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "dashboard-member-tour.de.json",
+        "en": "dashboard-member-tour.en.json",
+        "fr": "dashboard-member-tour.fr.json",
+        "nl": "dashboard-member-tour.nl.json"
+      },
+      "id": "dashboard-member-tour",
+      "integrity": {
+        "de": "sha384-68JWdWVTpp+EL3aGDo7zFQ89qMtRWVna1oyauyuA7sMNFZsxI51qt8htLxB55sHH",
+        "en": "sha384-N7Aw2S6Rq3FpDi78d6W96HE7ntvns3R/qRubrDLmaqPSTfIhSv+lbIpAQSHzzJil",
+        "fr": "sha384-p0QVjQ6H4R18JJiIyZydy07yxoTPc8IDlxk/yriMl8rIieromsxuCIPlzwepRDpD",
+        "nl": "sha384-hTIZKeIsmYaQoWdN18+jOZEmMH4R2Th4kfoPKktbSnKSy9/PmdGTXjSq9WUzRgYz"
+      },
+      "role": "member",
+      "steps": 9,
+      "title": {
+        "de": "Die Übersicht für Mitglieder",
+        "en": "The member dashboard",
+        "fr": "Le tableau de bord du membre",
+        "nl": "Het ledendashboard"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "home-overview.de.json",
+        "en": "home-overview.en.json",
+        "fr": "home-overview.fr.json",
+        "nl": "home-overview.nl.json"
+      },
+      "id": "home-overview",
+      "integrity": {
+        "de": "sha384-xeTRC9E1nUi0wdf5oYiFlc5kRZYo7Wq9jPKdCrgIxuMS97J9PAL8MbwdiTwmG4E3",
+        "en": "sha384-g4z5x8q+yg1rrq3VVQMeyqF01NnLCJN3lOK36y65VtcqyREBZgtMSe9ioDux7Aqh",
+        "fr": "sha384-PfKS4S4ug7vmu89r9hLQh+L83AvXIM7txIFexiRohwxYCjSnpjOH/v8oz6uU84M4",
+        "nl": "sha384-iNOHKTxJmXZJArwVTABMRiHsAVCF+XO+C1hb/mWiz2oL5aG/ftIu1C+OqZ2JqBU/"
+      },
+      "role": "member",
+      "steps": 8,
+      "title": {
+        "de": "Ihre Startseite",
+        "en": "Your home page",
+        "fr": "Sa page d'accueil",
+        "nl": "Uw startpagina"
+      }
+    },
+    {
+      "entry": {
+        "route": "/keys"
+      },
+      "files": {
+        "de": "key-create-gridform.de.json",
+        "en": "key-create-gridform.en.json",
+        "fr": "key-create-gridform.fr.json",
+        "nl": "key-create-gridform.nl.json"
+      },
+      "id": "key-create-gridform",
+      "integrity": {
+        "de": "sha384-i9CAtMROVODNACO4VZg4imCOL+aIndIpUYUMmJ/Lol5Ud1HdVcvk7o5mhGleM+Cj",
+        "en": "sha384-pNgIUv0L0bME/vqGNMP+qusrk6sy4EWLjUZavXdrac6OKMXBserAlt0QIgmiS8oK",
+        "fr": "sha384-bToFqc/YIt/WhtO1noGH466xJJ/us4bL8pJUIRwHQufmYMGicuPRjq/cNoo223BE",
+        "nl": "sha384-9h3esuCsg3CSv+8ETaRQW7Vs1cUvs5AljCP1dBkCdqvjKY8vfxrcJZFXH+LUzVSQ"
+      },
+      "role": "admin",
+      "steps": 14,
+      "title": {
+        "de": "Verteilungsschlüssel erstellen (Formular)",
+        "en": "Create an allocation key (form)",
+        "fr": "Créer une clé (formulaire)",
+        "nl": "Een verdeelsleutel aanmaken (formulier)"
+      }
+    },
+    {
+      "entry": {
+        "route": "/keys"
+      },
+      "files": {
+        "de": "key-create-wizard.de.json",
+        "en": "key-create-wizard.en.json",
+        "fr": "key-create-wizard.fr.json",
+        "nl": "key-create-wizard.nl.json"
+      },
+      "id": "key-create-wizard",
+      "integrity": {
+        "de": "sha384-zePzwN9NmU45IchsHkSkQrdM8kZ6rBPDP+rBmMMXJ4xIF2v1Y4MleffFvCH54EDS",
+        "en": "sha384-vIELWuhvt3ehtI466lJStgUegbIHAXVENtHZxZnuNFuR4JIIsMb6W8lwncmzkvOa",
+        "fr": "sha384-dTvcvHJTDScpoXXC/6G6kaVOFFSGLIZwWDcNh+03rWL4yydc4vEochZKf56G+Q5Y",
+        "nl": "sha384-3EJtc20NdkmKm35sRPCXX5j65fveyHgXX3V6m+71F4+dYFshr8TdBfce8jDL4eaB"
+      },
+      "role": "admin",
+      "steps": 19,
+      "title": {
+        "de": "Verteilungsschlüssel erstellen (Assistent)",
+        "en": "Create an allocation key (wizard)",
+        "fr": "Créer une clé (assistant)",
+        "nl": "Een verdeelsleutel aanmaken (wizard)"
+      }
+    },
+    {
+      "entry": {
+        "route": "/keys/:keyId"
+      },
+      "files": {
+        "de": "key-delete.de.json",
+        "en": "key-delete.en.json",
+        "fr": "key-delete.fr.json",
+        "nl": "key-delete.nl.json"
+      },
+      "id": "key-delete",
+      "integrity": {
+        "de": "sha384-dYshuEv9vJ+JneAlpOnc42bdHHwXBjOTCxW57cRszjqbY/1DL5atC41z+MYxIZ/w",
+        "en": "sha384-bFxCXWZFmh9zkxqYL0NsqXNWHo1KSnaY8lIXTFA48xAP/NFnkob+dk8BaYjp0D+U",
+        "fr": "sha384-otxtRhx/7l+cjPJxpKN4VE0SElz9Q6rzsjecfazi2u47y7jluLF+6cnQhOH6Lrxa",
+        "nl": "sha384-Om5LB2YPxmv4WXF/SiqkS4SGHAEYj8XNvgl7rQAsR15FxHnUDB04o8EKnba4kwXp"
+      },
+      "role": "admin",
+      "steps": 3,
+      "title": {
+        "de": "Verteilungsschlüssel löschen",
+        "en": "Delete an allocation key",
+        "fr": "Supprimer une clé de répartition",
+        "nl": "Een verdeelsleutel verwijderen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/keys/:keyId"
+      },
+      "files": {
+        "de": "key-helper-tour.de.json",
+        "en": "key-helper-tour.en.json",
+        "fr": "key-helper-tour.fr.json",
+        "nl": "key-helper-tour.nl.json"
+      },
+      "id": "key-helper-tour",
+      "integrity": {
+        "de": "sha384-CvaSFE0A0CQMNn5WVCgIgpCMh4QlPWeRtnNXVUrqHLbhVjUc/HXMVp4GXX55PaTb",
+        "en": "sha384-wmpaQNV6UF++30F7xQEVd1oMRDFZosWTuWNfPlpJh1AJenJUtnAOWAsTNZU8BCOS",
+        "fr": "sha384-KfFbIV3a7rcJs5bcyavUVLE/H7Z2j43sg7eBNnSIyZ1sM1iAbXCGLO81saoespuZ",
+        "nl": "sha384-Wfwpz/l7rc6RkOAoNx581dWQvY8jsM5stWJWcZZyN1JeY3XWC5usLH+WRSlYwzNF"
+      },
+      "role": "admin",
+      "steps": 3,
+      "title": {
+        "de": "Kontexthilfe — das (i)-Symbol",
+        "en": "Contextual help — the (i) icon",
+        "fr": "Aide contextuelle — l'icône (i)",
+        "nl": "Contextuele hulp — het (i)-pictogram"
+      }
+    },
+    {
+      "entry": {
+        "route": "/keys/:keyId"
+      },
+      "files": {
+        "de": "key-update.de.json",
+        "en": "key-update.en.json",
+        "fr": "key-update.fr.json",
+        "nl": "key-update.nl.json"
+      },
+      "id": "key-update",
+      "integrity": {
+        "de": "sha384-rGY7WMeODQFgcrZK875NFMmp3tc0LKlkFC8c40DDUmGJwc8b4Yo+kJCvSYQQoHp3",
+        "en": "sha384-aUpWru7++8gXuW+5fJB9dyYNEnWJfYJKrdD74+Hx0hFfveyGyDrZIrNuvKLhQJVm",
+        "fr": "sha384-sWkaNsUZKW6WLzQ93Itr0WJozPLFexT2L4XNGfDeCZXDui6UkZOAHtGchoA8GOR5",
+        "nl": "sha384-fum5sOc9sNytkwoOhleE1znncwSm0mYYp6hd+dddoWnID4i/kdDOdQ3PSedoz19z"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Verteilungsschlüssel bearbeiten",
+        "en": "Edit an allocation key",
+        "fr": "Modifier une clé de répartition",
+        "nl": "Een verdeelsleutel bewerken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/live-data"
+      },
+      "files": {
+        "de": "live-data-device-enrol.de.json",
+        "en": "live-data-device-enrol.en.json",
+        "fr": "live-data-device-enrol.fr.json",
+        "nl": "live-data-device-enrol.nl.json"
+      },
+      "id": "live-data-device-enrol",
+      "integrity": {
+        "de": "sha384-Nu53eJffGIiJFiCzPEEa/+eJuD9lv7Rl4Jd+7mqTf19FUr06JAaeP7sgzz1MPT2y",
+        "en": "sha384-HYQuqqKHtuTFVNoLfsfGBrZh83yCSt+3kHUGmvAYZ3c5AWVDvBAfNi/KHUlSr8F+",
+        "fr": "sha384-eKuamEHUHC8fyiT5cvdyjTXB3ETf1FB+AniHcfHIwd0eUBVIylqoV4hJwnWK7yf3",
+        "nl": "sha384-qLywDstlLR9IwHZK3G51j1X3KlJsG+kqd9k8Etg60bv/9jkTQJjD0W+vuI7HWWne"
+      },
+      "role": "admin",
+      "steps": 9,
+      "title": {
+        "de": "Gerät verbinden",
+        "en": "Connect a device",
+        "fr": "Connecter un appareil",
+        "nl": "Een apparaat koppelen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/live-data"
+      },
+      "files": {
+        "de": "live-data-explore.de.json",
+        "en": "live-data-explore.en.json",
+        "fr": "live-data-explore.fr.json",
+        "nl": "live-data-explore.nl.json"
+      },
+      "id": "live-data-explore",
+      "integrity": {
+        "de": "sha384-1p/02pjU/Sy+1h0bo/FPd/u7pIyQIlO1IR4akQwJM5u/v9WOe/PvT7vBAKOyQPct",
+        "en": "sha384-72MrfDJDqq9vzG4nOZAzseuaghRBohGfr9ylUzsDvigGAjoVeowMJkY/VkMwhGI5",
+        "fr": "sha384-fiOD8moD4ws4mSPHeDUhDeFO2GEkOsVIXkKTTVYh3IvodDbS9KonL1VoGbVDtvfL",
+        "nl": "sha384-5WIxOydqi1F3FpLftWRUF0KYkIN7gNnK0VWqj3AM2kRDWcWKapALdNSyPF6DdkW7"
+      },
+      "role": "admin",
+      "steps": 9,
+      "title": {
+        "de": "Live-Daten entdecken",
+        "en": "Discover Live data",
+        "fr": "Découvrir les données en direct",
+        "nl": "Live gegevens ontdekken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/live-data"
+      },
+      "files": {
+        "de": "live-data-member-view.de.json",
+        "en": "live-data-member-view.en.json",
+        "fr": "live-data-member-view.fr.json",
+        "nl": "live-data-member-view.nl.json"
+      },
+      "id": "live-data-member-view",
+      "integrity": {
+        "de": "sha384-X2X8Jb0iLvuZ5cFs8l/yklM65mkUovCZ8E9kcZvGWCkA3t8bVFJ8NSyx5UxNWG+g",
+        "en": "sha384-nZdn/9UwmlayfI9/G+HhOFU0SK2m4chqxMfC8Q4Yo35s5VgCkB9YfFz//fLqPHOm",
+        "fr": "sha384-Pz7TwJ5WpbBVbU9nyIOyCen7FiHx9/tZjg/xx7A2fbBWZfZfvvSw9f/6pvK06A8j",
+        "nl": "sha384-wwNf8ruYzcPdzOm4dZJVo066b386RJO7widr5qu+XVjJDUqck5xqoym3jeFxnNLl"
+      },
+      "role": "member",
+      "steps": 2,
+      "title": {
+        "de": "Erzeugung meines Teilungsvorgangs ansehen",
+        "en": "See my operation's production",
+        "fr": "Voir la production de mon opération",
+        "nl": "De productie van mijn deelactiviteit bekijken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/live-data"
+      },
+      "files": {
+        "de": "live-data-sharing-operations.de.json",
+        "en": "live-data-sharing-operations.en.json",
+        "fr": "live-data-sharing-operations.fr.json",
+        "nl": "live-data-sharing-operations.nl.json"
+      },
+      "id": "live-data-sharing-operations",
+      "integrity": {
+        "de": "sha384-PGRUERjaLFU4ad+9fXYisX7rsP4JC/QSidyQs8GN86G4m0OOtzWLgVxxSNxAUpql",
+        "en": "sha384-uqSe/NPWMMaORN2XNjk0c01zhZjBrIBY9+b/ZWSJaJM1rPjM7quR8Ax4L3yZuflW",
+        "fr": "sha384-2bf77oVxFTUzVbgwnCqMoE3eTseZbXQFhedghOiVw59ouieJWgTHGkmhL+dScM3P",
+        "nl": "sha384-ypXm7mAmL+mC0Ioc1y6qyIsTP9FsYV5NnIxRbA1R46pg1N/izYSFDYuDowRRk6yc"
+      },
+      "role": "admin",
+      "steps": 2,
+      "title": {
+        "de": "Teilen innerhalb eines Teilungsvorgangs verfolgen",
+        "en": "Follow sharing within an operation",
+        "fr": "Suivre le partage dans une opération",
+        "nl": "Het delen binnen een deelactiviteit volgen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/members"
+      },
+      "files": {
+        "de": "member-create-company.de.json",
+        "en": "member-create-company.en.json",
+        "fr": "member-create-company.fr.json",
+        "nl": "member-create-company.nl.json"
+      },
+      "id": "member-create-company",
+      "integrity": {
+        "de": "sha384-GN6y+VcFTL/ZFcZ1CqF1hHoJBYbg5PFZOxGuDg3D35TFriFx6mSQHa6HaSiJoVnL",
+        "en": "sha384-UzcNAJnywmQz34pCfJEaWfyrqlEiM7U20WwPXlRPhfvmG335RRPsE6zVSHm6N794",
+        "fr": "sha384-Z7OGIugPdmJ4u6VsEhUNzBP4WBbjg+sNzXMUABs4e1VM53bH6QlZtTI5JRR1V1ad",
+        "nl": "sha384-cT2ATVPTr+H7gUSVsZjq8LkbeDCdTLCbdpiovoAB9Ay6n7oiuhzu7973wlRwmtyp"
+      },
+      "role": "admin",
+      "steps": 24,
+      "title": {
+        "de": "Unternehmen als Mitglied anlegen",
+        "en": "Create a company member",
+        "fr": "Créer un membre entreprise",
+        "nl": "Een bedrijf als lid aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/members/:memberId"
+      },
+      "files": {
+        "de": "member-document-upload.de.json",
+        "en": "member-document-upload.en.json",
+        "fr": "member-document-upload.fr.json",
+        "nl": "member-document-upload.nl.json"
+      },
+      "id": "member-document-upload",
+      "integrity": {
+        "de": "sha384-OiSKQ5bGio84VC9gz2QOaY7qqMaPlnxasv0ii4TEcU+v8Bj9HuUNljbUOiKq3+8f",
+        "en": "sha384-gQ6SZy9Fu9HU9DKGUKvZegK2Z0wGf0TE420zuaPk3MDsC0OYIy8Dw15lSOaQNDbx",
+        "fr": "sha384-UG9ZO2E2beGNNSdMJO7rCHkEFo8PpFgf3t36OaI2pUVYhCL47E8vLXYCEg7LrQIC",
+        "nl": "sha384-T87+BKDqACxRg7w3LFphl62NrsclP7YBavxbSjEpeErFKm05PF7SM6iPJFGnYkZX"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Dokument zu einem Mitglied hinzufügen",
+        "en": "Upload a document to a member",
+        "fr": "Ajouter un document à un membre",
+        "nl": "Een document aan een lid toevoegen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/users"
+      },
+      "files": {
+        "de": "member-self-views.de.json",
+        "en": "member-self-views.en.json",
+        "fr": "member-self-views.fr.json",
+        "nl": "member-self-views.nl.json"
+      },
+      "id": "member-self-views",
+      "integrity": {
+        "de": "sha384-0C1pfNahPzgzAPtGtA7b2QkpcJTIRHjMvhMXAwCwIBNWiqkw1U1/usl1IRdm2LHd",
+        "en": "sha384-/p5DuCaXBUNjTcq7Yp6M42B/41Pi5K5hgfwnuGHCHUjhjHdz7sRqtqUCqm5tC86a",
+        "fr": "sha384-r+7Ssj1NpsJRe+J/AY9iQ/jPuzeAAF57KTaGnNzAJknXVczNIYifxuDUdNVGncCl",
+        "nl": "sha384-xXIsfbE9WHuT9SymspVqyAqqvHrUQaWXWblItII9nGV2HFIqlRslo0RzFYw0bcu7"
+      },
+      "role": "member",
+      "steps": 6,
+      "title": {
+        "de": "Ihren Datensatz und Zähler einsehen",
+        "en": "Consult your own record and meter",
+        "fr": "Consulter sa fiche et son compteur",
+        "nl": "Uw eigen fiche en meter raadplegen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/members"
+      },
+      "files": {
+        "de": "member-status-lifecycle.de.json",
+        "en": "member-status-lifecycle.en.json",
+        "fr": "member-status-lifecycle.fr.json",
+        "nl": "member-status-lifecycle.nl.json"
+      },
+      "id": "member-status-lifecycle",
+      "integrity": {
+        "de": "sha384-XtWYENMaupOFuA+LEk4YA9bi9MQAf3WuuWvktF+d14WkYfLsPkUnoK02HbpMp1GI",
+        "en": "sha384-oHWh+9E0fs40fv5S9bEDQiGp7qV21sXZka2YUklfBC5aj9jp26OtLwqH2PapXUnu",
+        "fr": "sha384-J+YvF5wsHr9SdPeZSOGkC6LM61OoLCnO1eMqIYtVErvve+TPWKga4fn/fxMX9tzF",
+        "nl": "sha384-GB/h0RJe6rAnoDaLqHTfmJOaUyyYh/oDQ65c5ee1TctjFura/4n0NzDHJNEHioTK"
+      },
+      "role": "admin",
+      "steps": 8,
+      "title": {
+        "de": "Mitglied deaktivieren und reaktivieren",
+        "en": "Deactivate and reactivate a member",
+        "fr": "Désactiver et réactiver un membre",
+        "nl": "Een lid deactiveren en opnieuw activeren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/members"
+      },
+      "files": {
+        "de": "member-update.de.json",
+        "en": "member-update.en.json",
+        "fr": "member-update.fr.json",
+        "nl": "member-update.nl.json"
+      },
+      "id": "member-update",
+      "integrity": {
+        "de": "sha384-sSDOEQgp21gOP/uo9cYjibRtd0I5CN4VXKa8HAV77rZ75egXiB2vOa1TMsHQJJ3d",
+        "en": "sha384-sN8OlyrzwKFpgkdR+wHT+Sb+zJXw+VsGXjrP4BUVyHEu0SoczVqRmpHHpAtDeCf+",
+        "fr": "sha384-igMCjYWO5gH16rEqgiA+vidQ/u1uKI7JlikgZONP1vqrRlDmIQ8cdBq3TftlB1Uc",
+        "nl": "sha384-dE3TQOnrCi/bHehEiBGulr1NRA3AxrclNH3AaOxUPLVE3I5pgzrE+xR4Yug4mGUx"
+      },
+      "role": "admin",
+      "steps": 9,
+      "title": {
+        "de": "Mitglied bearbeiten",
+        "en": "Edit a member",
+        "fr": "Modifier un membre",
+        "nl": "Een lid wijzigen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/meters"
+      },
+      "files": {
+        "de": "meter-address-repair.de.json",
+        "en": "meter-address-repair.en.json",
+        "fr": "meter-address-repair.fr.json",
+        "nl": "meter-address-repair.nl.json"
+      },
+      "id": "meter-address-repair",
+      "integrity": {
+        "de": "sha384-u/X++4Of3gZTrw/4mr1TmCQTFRyGZa3CWUdMbLSoHYfbTpFDkOSjTXzvtswVCNC9",
+        "en": "sha384-7aebaj8hXFx+AANLuTcg7eWGeLEzd5C9K11z1/wgQJja021Mypg4V77KFcUFRiSm",
+        "fr": "sha384-JOcVJ7NlV0xQXATBBtLmvjfy9y4xfJD2G9dKie2i5DVLY8t3ijNsacYIe48eEquA",
+        "nl": "sha384-pVgNpdMo3V64qD1FuSCgeSOtTOy9GgvvXj26NS75o+b/PtxlgiX4SWSJSUYoE4IU"
+      },
+      "role": "admin",
+      "steps": 12,
+      "title": {
+        "de": "Zähleradressen korrigieren",
+        "en": "Fix meter addresses",
+        "fr": "Corriger les adresses des compteurs",
+        "nl": "De adressen van meters corrigeren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/meters"
+      },
+      "files": {
+        "de": "meter-create.de.json",
+        "en": "meter-create.en.json",
+        "fr": "meter-create.fr.json",
+        "nl": "meter-create.nl.json"
+      },
+      "id": "meter-create",
+      "integrity": {
+        "de": "sha384-caWTzzubTCAGMXdjYiR6J42G7XxVDZ5w7b0my82m2SfnYYLYA9sgdn6XomuQYPCX",
+        "en": "sha384-WKwDqlJZmkIPZ1yzbhiPJho4BJOmnpvbWSkF4VujuabHviC5OI1TjZtW4Se8e4ea",
+        "fr": "sha384-CZWe0zIMFpTtf/8mdfi3+NFUaLyIfV394qbTwWu5BwJ8wVYVrITQxtLlMSF3hxL+",
+        "nl": "sha384-+Re/6QigiTdwfik5ELQv5iucfNZ7+fcgmYLvGPhDYDtVj8C9Tld/QV01Py7+Gt7+"
+      },
+      "role": "admin",
+      "steps": 29,
+      "title": {
+        "de": "Zähler anlegen",
+        "en": "Create a meter",
+        "fr": "Créer un compteur",
+        "nl": "Een meter aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/meters"
+      },
+      "files": {
+        "de": "meter-data-update.de.json",
+        "en": "meter-data-update.en.json",
+        "fr": "meter-data-update.fr.json",
+        "nl": "meter-data-update.nl.json"
+      },
+      "id": "meter-data-update",
+      "integrity": {
+        "de": "sha384-Atbw+mdwOd9hGl3HOleGlVML0baZvxy+LaET7dTxjbtUCRgdj3gY3JVd5ehxWMRW",
+        "en": "sha384-wqK0gmlxkcjN0nvKIqCZfXB7Lp7XAkw52irZgAL5YZ0dHrunLyRN/RkrvcJX19FH",
+        "fr": "sha384-Souv7lBVw+nX6P2sUB2M+rHIoMfnEm7pKRvPcexSBx3TwIg8kJLSCVnu46KQ9ia5",
+        "nl": "sha384-f8kDtYQtLen2Pq+5kPKLLhtASd7tVIXi/26uLpOnjTIMSNeFu+T6gQBFLXaYVR+3"
+      },
+      "role": "admin",
+      "steps": 14,
+      "title": {
+        "de": "Zählerdaten bearbeiten",
+        "en": "Update meter data",
+        "fr": "Modifier les données du compteur",
+        "nl": "De metergegevens wijzigen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/meters/:meterEan"
+      },
+      "files": {
+        "de": "meter-deactivate.de.json",
+        "en": "meter-deactivate.en.json",
+        "fr": "meter-deactivate.fr.json",
+        "nl": "meter-deactivate.nl.json"
+      },
+      "id": "meter-deactivate",
+      "integrity": {
+        "de": "sha384-gy6JXCk12MMpYDKYseHY5VSLBtQd6Xa2P3aurUUioHhQ4+kkcxsQuKs3sj6W6S3q",
+        "en": "sha384-nQ/lEhd9u0SNYI7c0ReN4IhTNP7PWKphbrvB23XjiQEO/f0/71iKlk2k1uSGtUOa",
+        "fr": "sha384-q+N6Vpc9zpf9OeSSTRHtW40aa4IDFmU/qP7SM/4vyl2xN/BVTK7FTfvQtmywehkl",
+        "nl": "sha384-rUV7uoIzJrfr07w4OVlAD40CdBLcmnb0a+mNrUO9WGMatStskbtbtOdnqxlMruH5"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Zähler deaktivieren",
+        "en": "Deactivate a meter",
+        "fr": "Désactiver un compteur",
+        "nl": "Een meter deactiveren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/meters"
+      },
+      "files": {
+        "de": "meter-update.de.json",
+        "en": "meter-update.en.json",
+        "fr": "meter-update.fr.json",
+        "nl": "meter-update.nl.json"
+      },
+      "id": "meter-update",
+      "integrity": {
+        "de": "sha384-dOOvDurUspWpHLzSSNusxXvQO3MVEnP5R1jdtxM0fgA/iukMd4Dc2s5dB946jrKy",
+        "en": "sha384-CQVFLCl3E9cWmXk/6mA56RfM7Nb1WdOZLkBAbEznbG0EIuEr4Y2OeFPLE+dBH+7L",
+        "fr": "sha384-5DezoMXgIDct3bR9NPHgeLuQ+CROwyAmBXQ9P9X6+3LA4Zfvu2j6rjw1NkrwVeiC",
+        "nl": "sha384-b/3BxX2pGNW8yvVJBeu1lqJtIfMEyKqbspdT7gqj/N0768pAt7VPx9NJHqc6EzoM"
+      },
+      "role": "admin",
+      "steps": 12,
+      "title": {
+        "de": "Zähler bearbeiten",
+        "en": "Edit a meter",
+        "fr": "Modifier un compteur",
+        "nl": "Een meter wijzigen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/news"
+      },
+      "files": {
+        "de": "news-create.de.json",
+        "en": "news-create.en.json",
+        "fr": "news-create.fr.json",
+        "nl": "news-create.nl.json"
+      },
+      "id": "news-create",
+      "integrity": {
+        "de": "sha384-ev7UPk2NcqxTjL7wGajoZqntPLK1RhIJvhBKfDPhzSyW5PjmQ/unnhH3eSeYvKsP",
+        "en": "sha384-3svLz17tyShaMwCt5NLpMYP5+xvWgpZf/bcB3lVUODxnGwYZzM9nrcF0HSLnd+qM",
+        "fr": "sha384-bhhMhTtHH0Pw1DaC24FDhk8Y1f4DHCoxwMtW8hpAsFL43WPegTRBqR9oNPRslPbg",
+        "nl": "sha384-lwGDdemirXnKm9UhSqOJrAGr+23UIuJbuau6ZHdUxU6KeI8mKc2TpqnWoMzvuz3L"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Beitrag veröffentlichen",
+        "en": "Publish a news",
+        "fr": "Publier une actualité",
+        "nl": "Een nieuwsbericht publiceren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/news"
+      },
+      "files": {
+        "de": "news-poll-create.de.json",
+        "en": "news-poll-create.en.json",
+        "fr": "news-poll-create.fr.json",
+        "nl": "news-poll-create.nl.json"
+      },
+      "id": "news-poll-create",
+      "integrity": {
+        "de": "sha384-+6BA3aFPhPQbw9xzQvI/JF+/2u2tVaqNJB6i5WyGfl67deTuukfbYvARwjWl384P",
+        "en": "sha384-KqGl4T0PHd4nAkC4s0+3HsE/bfESCR1YQU/L/ZLky9fEcezhmvEM9Ae1Krsv4a79",
+        "fr": "sha384-wKKt2vwTEhkp7GHL10KjlpP5s4klmyxTIiqC/s3ioEniYfOD4U8lv5R2NXoCG/4D",
+        "nl": "sha384-wT5TP6rR/gzz9ZUW5n/AAS5EjSEpqz4LVaTe2jFCcGjDaAPEZTwgUfK3XjBqmv6I"
+      },
+      "role": "admin",
+      "steps": 20,
+      "title": {
+        "de": "Umfrage erstellen",
+        "en": "Create a poll",
+        "fr": "Créer un sondage",
+        "nl": "Een peiling aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/users"
+      },
+      "files": {
+        "de": "notification-preferences.de.json",
+        "en": "notification-preferences.en.json",
+        "fr": "notification-preferences.fr.json",
+        "nl": "notification-preferences.nl.json"
+      },
+      "id": "notification-preferences",
+      "integrity": {
+        "de": "sha384-lKdf4KqGHhMQNz6eJJy15OsoG2GX0QkOmJifbHvmle/lKsNNtmq24bKVlwcf10H1",
+        "en": "sha384-YCqW0/+y/3s8SoujMTXj749ZfDRCQ4cEyjVwWdZ1pmCRWX981PRJmbSkV3Z3BerH",
+        "fr": "sha384-BdHc+dtNSeF2513t6zfCTs1zaFROM8xfr/LHcN1sMTIxHJUt9c9weK62JL/wnpy3",
+        "nl": "sha384-G5Nz2FVh660Vu1luG/cVH8eETAsOn+CDLayfqFBzA8L7Ak77l9rQYUUoLfBkjNkB"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Ihre Benachrichtigungen einstellen",
+        "en": "Choose your notifications",
+        "fr": "Choisir ses notifications",
+        "nl": "Uw meldingen instellen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/users"
+      },
+      "files": {
+        "de": "notification-view.de.json",
+        "en": "notification-view.en.json",
+        "fr": "notification-view.fr.json",
+        "nl": "notification-view.nl.json"
+      },
+      "id": "notification-view",
+      "integrity": {
+        "de": "sha384-+SSN/4y5MlMHGpW0Hau/WZvO5OYFPQPp+wUYL0/LUj6iiqjMsK9wNsA71A6UmfBn",
+        "en": "sha384-G4+Q9L8KK9deSJyBeAbjRJevTT+004KGq6yKt6B0YLMkWnO00ODOsLIUq11gAkCt",
+        "fr": "sha384-09heIJctv0fE/JI50rq8BAunO20klUHKsV/K7Pt+33SABWpO08BeocrXAjp1ztOa",
+        "nl": "sha384-xl78nFAndXIcWd0P8W0hvTI2RWyaZA3FHR8XPtGsJjq6BCCxbqg+GBT9XF8NT+sR"
+      },
+      "role": "member",
+      "steps": 6,
+      "title": {
+        "de": "Ihre Benachrichtigungen ansehen",
+        "en": "View your notifications",
+        "fr": "Consulter ses notifications",
+        "nl": "Uw meldingen bekijken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/dashboard"
+      },
+      "files": {
+        "de": "onboarding-admin.de.json",
+        "en": "onboarding-admin.en.json",
+        "fr": "onboarding-admin.fr.json",
+        "nl": "onboarding-admin.nl.json"
+      },
+      "id": "onboarding-admin",
+      "integrity": {
+        "de": "sha384-fToO5l/i0/kVNDapnXEyZeu872nR0MxwQESsqz8+I48Ul0s3Vl/xQzrkJNZ00wt3",
+        "en": "sha384-8L5/SLOA+OtIHDG+RS4/mqkpAgFXeiPehdcOzSdnGWli+DO43fAsgyQO+QkIO+El",
+        "fr": "sha384-n3Bk1ms88cC9eRiV45U0B2gvDoLx2BSeMcV0CdcyMgSvONccnoUryVNeeidNR3t7",
+        "nl": "sha384-y5P7CEHmQIEIY6UjEjk2/7+9kIPBL6KUqD5V0jPi0/UaE1NN42Lxm96YXMKCgSo2"
+      },
+      "role": "admin",
+      "steps": 10,
+      "title": {
+        "de": "Sie sind Administrator",
+        "en": "You are an administrator",
+        "fr": "Vous êtes administrateur",
+        "nl": "U bent beheerder"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "onboarding-manager.de.json",
+        "en": "onboarding-manager.en.json",
+        "fr": "onboarding-manager.fr.json",
+        "nl": "onboarding-manager.nl.json"
+      },
+      "id": "onboarding-manager",
+      "integrity": {
+        "de": "sha384-SpqwnD6bHZ/TCIo3c/dDKxyPfeSx5TGEH0PnRD4XXHz+ibTA6DdwtViErBm/MU8V",
+        "en": "sha384-ux70g+XbsVDnFmz5L+kmSvoE3G9cT3lA7wg6oQmP5VLG4Kt5hCEPVhHfYB1YD4uH",
+        "fr": "sha384-xkt+u2DQOfyTxafbUYRKivPRryfl6V6Ye0Al9YCCkr4rDQ3OBip8CYixZUO3i5G1",
+        "nl": "sha384-IxzHfhgUyz7VrYy2vlCDpfbZDHE1Q4c3+jYfBXwDmU9i9QPSecj4y0yymQZP79SR"
+      },
+      "role": "manager",
+      "steps": 12,
+      "title": {
+        "de": "Sie sind Manager",
+        "en": "You are a manager",
+        "fr": "Vous êtes gestionnaire",
+        "nl": "U bent manager"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "onboarding-member.de.json",
+        "en": "onboarding-member.en.json",
+        "fr": "onboarding-member.fr.json",
+        "nl": "onboarding-member.nl.json"
+      },
+      "id": "onboarding-member",
+      "integrity": {
+        "de": "sha384-9DWfJBJAt02KhYa8/fL3r94ZYROs1TNpn0SkIKTnmUAosbe7c68QwGI1yYmXi0FK",
+        "en": "sha384-jIohe72zwUCmbrLoICphlitW+PmrUncx4woTsKKvfhpGw7t+KZdsPDwHj+Zic7bg",
+        "fr": "sha384-j7bD/L9Y0zjLZtxXK9pS44opTmDXTGkTKlZM9lVVDayfhVzJ0zPDpJg+EBi+MJmq",
+        "nl": "sha384-mmQLzneuDyyavZNZz3SWN2DUzWvhWZdL4hQFVKlxLIObvSOL/zPii+PkpRXctWTM"
+      },
+      "role": "member",
+      "steps": 11,
+      "title": {
+        "de": "Sie sind Mitglied",
+        "en": "You are a member",
+        "fr": "Vous êtes membre",
+        "nl": "U bent lid"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "onboarding-welcome.de.json",
+        "en": "onboarding-welcome.en.json",
+        "fr": "onboarding-welcome.fr.json",
+        "nl": "onboarding-welcome.nl.json"
+      },
+      "id": "onboarding-welcome",
+      "integrity": {
+        "de": "sha384-iFcBhKpZWWJpxFJcgkt70lv7xwHpqFRF4wUkBnMRRI7LT5eeX0yFkwJ9OwPmeNT/",
+        "en": "sha384-7tv4snyaWk+j9YjdHch9ryoNJ85egFovehwNnG+SGomH/IF1p5Ckgg+eG3TAgqiP",
+        "fr": "sha384-99e5eBSf2crTxnTKeGtRLXzU7+AjbRwmCI62GuqG7IkuPY6AGhNg0qa0M0Nd+B+W",
+        "nl": "sha384-vHIE/Gc8e9+OXOLnM3njjXTgrEhL9uL7hhZM7rvtQ7uC55akKF52UgTwNq4DfGOi"
+      },
+      "role": "newcomer",
+      "steps": 15,
+      "title": {
+        "de": "Willkommen bei OptimCE",
+        "en": "Welcome to OptimCE",
+        "fr": "Bienvenue sur OptimCE",
+        "nl": "Welkom bij OptimCE"
+      }
+    },
+    {
+      "entry": {
+        "route": "/users"
+      },
+      "files": {
+        "de": "profile-update.de.json",
+        "en": "profile-update.en.json",
+        "fr": "profile-update.fr.json",
+        "nl": "profile-update.nl.json"
+      },
+      "id": "profile-update",
+      "integrity": {
+        "de": "sha384-u4Y3PEXKoV59lQDeJ9oW/G0RoZKojSV+ArEogvzMTeRC2zSqqC/7QxZQM9tv50aw",
+        "en": "sha384-FZ6dLOnsLU3dhiaPsK1sLMaPSY1DbskCWNrTizpXfzJO8t5IsM/jGPx4mXNtzbKM",
+        "fr": "sha384-pwxq+G1ZhbAmK2jo3kaKTOF7SfbfcmHzdvRqJxu1xucBZhm5bVF+3BwsjNHF6qaT",
+        "nl": "sha384-HGKxADSmFEQCGyCAZ1vXGKv5UXpbgeThnGOAJO44/M5n4j5ZvzIttkmPo5Kizxzm"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Ihr Profil aktualisieren",
+        "en": "Update your profile",
+        "fr": "Mettre à jour son profil",
+        "nl": "Uw profiel bijwerken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/communities/public"
+      },
+      "files": {
+        "de": "public-communities-browse.de.json",
+        "en": "public-communities-browse.en.json",
+        "fr": "public-communities-browse.fr.json",
+        "nl": "public-communities-browse.nl.json"
+      },
+      "id": "public-communities-browse",
+      "integrity": {
+        "de": "sha384-4RVH619SNfkuvT2xnOVpHRyYXXWXFyU1kD5hbXRMm0Ianotnqyurz5qsQpfaLft/",
+        "en": "sha384-4bbBla1lTAYEURsdmpt0a7aWBmCappLGoLHeRZLHi+eleVeDchAYVnU+RElbN7Pk",
+        "fr": "sha384-q62dC1z4oIGMbWTTvsEM+w+NdhkkOIS83dgVdRwWj0OgvJizA/ZZX+79isijC9Sz",
+        "nl": "sha384-SemSCnNlkDw++Ve/wq/3nFAYUfyfvmMyW5WSET8vxyu6Qan9zEcAPCMmciQ82FiY"
+      },
+      "role": "admin",
+      "steps": 5,
+      "title": {
+        "de": "Öffentliche Gemeinschaften erkunden",
+        "en": "Explore the public communities directory",
+        "fr": "Explorer les communautés publiques",
+        "nl": "Openbare gemeenschappen verkennen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/sharing_operations"
+      },
+      "files": {
+        "de": "sharing-op-create.de.json",
+        "en": "sharing-op-create.en.json",
+        "fr": "sharing-op-create.fr.json",
+        "nl": "sharing-op-create.nl.json"
+      },
+      "id": "sharing-op-create",
+      "integrity": {
+        "de": "sha384-AulsFYRTmGaPUKL7Uz96ep50bPpi0o2Nx14ZKUkZJx2HbpOgjMZmEUBwpSaex7rT",
+        "en": "sha384-m16m/5efLKBDWTXuPfk5gq/WqEx6zzRJ6WtkPum3Jv9ixAYv8UrwHe3TbR3Oe6Kt",
+        "fr": "sha384-Siermhm0pVfndTiBoOjuqiZqmg850aocF8IVDoakVlWcyCmcaTRtynX/2+jAEa+T",
+        "nl": "sha384-yZTJhuufTqpq82OfRaunS0TcmOWspdx+JMn79QYUrCmrcTBSvlkIFnVMaxV+Kffo"
+      },
+      "role": "admin",
+      "steps": 9,
+      "title": {
+        "de": "Teilungsoperation erstellen",
+        "en": "Create a sharing operation",
+        "fr": "Créer une opération de partage",
+        "nl": "Een deeloperatie aanmaken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/sharing_operations/:operationId"
+      },
+      "files": {
+        "de": "sharing-op-inspect.de.json",
+        "en": "sharing-op-inspect.en.json",
+        "fr": "sharing-op-inspect.fr.json",
+        "nl": "sharing-op-inspect.nl.json"
+      },
+      "id": "sharing-op-inspect",
+      "integrity": {
+        "de": "sha384-7A00yxB8RQGPkL8b4Nm2xNmsjIm521PhoPf2y2Za6sULJcs6/b7gZheci4btlN3p",
+        "en": "sha384-O3uMRAGWxOei1XWycbK2b1QVXMsrIqosX2Xw612opCedJzU8vAiLPIIH4lMd/Ie5",
+        "fr": "sha384-zAmAefaJg5kw/vEnfFTRzugrj8DFPSLJKmh8VYQjFGFsOhM3pr0QSwqjMVKU7oIk",
+        "nl": "sha384-n+LNlfUbZ58sp69DwgBkTNcQ1YFDOJ0Bv1o3arLTzo9/AbxwgGmXrZuMWM8Idfij"
+      },
+      "role": "admin",
+      "steps": 2,
+      "title": {
+        "de": "Teilungsoperation im Detail ansehen",
+        "en": "Inspect a sharing operation",
+        "fr": "Inspecter une opération de partage",
+        "nl": "Een deeloperatie inspecteren"
+      }
+    },
+    {
+      "entry": {
+        "route": "/sharing_operations"
+      },
+      "files": {
+        "de": "sharing-op-set-public.de.json",
+        "en": "sharing-op-set-public.en.json",
+        "fr": "sharing-op-set-public.fr.json",
+        "nl": "sharing-op-set-public.nl.json"
+      },
+      "id": "sharing-op-set-public",
+      "integrity": {
+        "de": "sha384-gegaAVy162iRdMUr0zPaxVLCUpJyT3KC2sBEVfiucDrq9Wr0xvxzH+UmLWf+NXKX",
+        "en": "sha384-RdJxsscan6dbZs7MlXLZVRDLaSgu4nucH64muBl86+vJOa0j+M82nPw0jH1nkYI7",
+        "fr": "sha384-lZhwn9isgpCiz37QefTSY4R4jALb4pcLfofGCoOIuwzTHgIy0iYpwacr7GUBNDyz",
+        "nl": "sha384-xN8Trxv2rQS2sE8WmCwjxZJqEqvfdGwIp4AbJGUjSfAyw+fIk31F/LMoKl4Scfcp"
+      },
+      "role": "admin",
+      "steps": 11,
+      "title": {
+        "de": "Teilungsoperation öffentlich machen",
+        "en": "Make a sharing operation public",
+        "fr": "Rendre une opération de partage publique",
+        "nl": "Een deeloperatie openbaar maken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/sharing_operations/:operationId"
+      },
+      "files": {
+        "de": "sharing-op-update.de.json",
+        "en": "sharing-op-update.en.json",
+        "fr": "sharing-op-update.fr.json",
+        "nl": "sharing-op-update.nl.json"
+      },
+      "id": "sharing-op-update",
+      "integrity": {
+        "de": "sha384-nkQfeNX2SGWQsExNpGqU/bi/KoJ/x65xSo9s7DE4HrxVa67De9Vis1sbiUzFqo2w",
+        "en": "sha384-/g5C5qoob7LxzClYmGkQwBFMgR4shgkI1WRAD0zZBO6ifH9uTFquyVblg192vwdd",
+        "fr": "sha384-f5JJi392H8nJmQaGPchcV4lhZUUMjXC+47EUT4FEoYX5wiwyVS65In4nXzuamr0Q",
+        "nl": "sha384-WtRa6lmMOTSRb7QfnDJ60rpeX5yWI2elL0NM1AiqEdgOJ3iZixgekvIoyrXi48Of"
+      },
+      "role": "admin",
+      "steps": 9,
+      "title": {
+        "de": "Teilungsoperation bearbeiten",
+        "en": "Edit a sharing operation",
+        "fr": "Modifier une opération de partage",
+        "nl": "Een deeloperatie bewerken"
+      }
+    },
+    {
+      "entry": {
+        "route": "/sharing_operations/:operationId"
+      },
+      "files": {
+        "de": "sharing-operation-add-meter.de.json",
+        "en": "sharing-operation-add-meter.en.json",
+        "fr": "sharing-operation-add-meter.fr.json",
+        "nl": "sharing-operation-add-meter.nl.json"
+      },
+      "id": "sharing-operation-add-meter",
+      "integrity": {
+        "de": "sha384-CJnfn0TscX9frmglhXSHM79U0rnT3SmkdvYYTlBiodjTnNU+vgtlXIleJgSbl1F9",
+        "en": "sha384-ljxZnlpvhfS2mg5+SMKlOCRnlPaYddz+6mHq/7LmIgJrPZwCGbfjnkSo5/JPwKiY",
+        "fr": "sha384-Q7rzufZpneyPq5DKIVrtKA+SuDuSkvgFywdjdWdLAOb6VsXYPSxq80ahAZlxL6xe",
+        "nl": "sha384-F0Y0RLjTIUopNy5osUIH2ANI+ef6nMmatDIzUudjpRQ6PwMks4CYBmejmENuxnLE"
+      },
+      "role": "admin",
+      "steps": 8,
+      "title": {
+        "de": "Zähler zu einer Teilungsoperation hinzufügen",
+        "en": "Add a meter to a sharing operation",
+        "fr": "Ajouter un compteur à une opération",
+        "nl": "Een meter aan een deeloperatie toevoegen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/annexes-services/simulation"
+      },
+      "files": {
+        "de": "simulation-run.de.json",
+        "en": "simulation-run.en.json",
+        "fr": "simulation-run.fr.json",
+        "nl": "simulation-run.nl.json"
+      },
+      "id": "simulation-run",
+      "integrity": {
+        "de": "sha384-hXftd/wGwq+T4KdfglE0eWYOaDqS7kgZGe1vMnZivNJpmTprGbGffb04a0hvpM6g",
+        "en": "sha384-OogyKShGT1+o8qoFrPyZQdwssMXINyce4WAykFatL62yDlpy+zyJMzomESXRFdlU",
+        "fr": "sha384-9vhC+Nd981mc8gnDHj/Ao8MnZ8Z6HgOvNm4PBkvDyej+bTAOSVRY6KL0ggjwycEn",
+        "nl": "sha384-yE/3rGm2nryDOZT+NDO3aagDQB7BRjYEIKmdbb7iTEFAYfrKaX/VeO8Bre7FOOqr"
+      },
+      "role": "admin",
+      "steps": 11,
+      "title": {
+        "de": "Verteilungsschlüssel simulieren",
+        "en": "Simulate an allocation key",
+        "fr": "Simuler une clé de répartition",
+        "nl": "Een verdeelsleutel simuleren"
+      }
+    }
+  ]
+}

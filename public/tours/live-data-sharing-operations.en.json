@@ -1,0 +1,34 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-sharing-operations/en.html",
+  "id": "live-data-sharing-operations",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-dashboard__scope-select",
+      "target": "live-dashboard__scope-select",
+      "text": "At the top of the dashboard, the \"Scope\" switches from the whole community to one of its sharing operations. Every figure and chart follows that choice.",
+      "title": "Choose a sharing operation",
+      "waitFor": "live-offtake-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__operation-shared",
+      "target": "live-dashboard__operation-shared",
+      "text": "For the chosen operation: its production over the last full hour, its exchanges with the grid, the shared energy (estimate) and how many of its meters are monitored. Grid exchanges and sharing stay hidden while the operation has too few members.",
+      "title": "The operation's figures",
+      "waitFor": "live-dashboard__operation-cards"
+    }
+  ],
+  "title": "Follow sharing within an operation"
+}

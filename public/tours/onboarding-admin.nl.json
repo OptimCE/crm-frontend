@@ -1,0 +1,121 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/dashboard"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-admin/nl.html",
+  "id": "onboarding-admin",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "module-discovery-strip",
+      "target": "module-discovery-strip",
+      "text": "U hebt alles wat een manager heeft, plus enkele beslissingen die alleen u neemt. De eerste: de modules. In “Beschikbare modules” abonneert “Activeren” de gemeenschap op een module; een manager wordt gevraagd het aan u te vragen.",
+      "title": "U bent beheerder"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Klik in de sectie “Beheer” op “Gebruikers”.",
+      "title": "De gebruikers van de gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tik op het menupictogram om de navigatie te openen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Tik in de sectie “Beheer” van het menu op “Gebruikers”.",
+      "title": "De gebruikers van de gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Alleen een beheerder kan een manager toevoegen: “Een manager uitnodigen” stuurt hem een uitnodiging per e-mail, die hij aanvaardt vanuit zijn uitnodigingen.",
+      "title": "Een manager uitnodigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "“Uitnodigingen in behandeling bekijken” toont wie nog niet heeft geantwoord. In de lijst kunt alleen u de rol van een gebruiker wijzigen — lid, manager of beheerder — of hem uit de gemeenschap verwijderen.",
+      "title": "Uitnodigingen en rollen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "text": "Klik in de sectie “Gemeenschap” op “Gemeenschapsinfo”.",
+      "title": "De gemeenschapsinfo"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tik op het menupictogram om de navigatie te openen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "text": "Tik in de sectie “Gemeenschap” van het menu op “Gemeenschapsinfo”.",
+      "title": "De gemeenschapsinfo"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Leden en managers lezen deze gegevens; alleen u kunt ze wijzigen. “Bewerken” opent de naam, de beschrijving, het adres, het ondernemingsnummer en het IBAN — wat daarna op de facturen en de officiële documenten staat.",
+      "title": "De juridische gegevens",
+      "waitFor": "community-info__card--view"
+    }
+  ],
+  "title": "U bent beheerder"
+}

@@ -1,0 +1,23 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/billing"
+  },
+  "guideUrl": "https://guide.optimce.be/billing-member-view/nl.html",
+  "id": "billing-member-view",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices__card",
+      "target": "my-invoices__card",
+      "text": "Dit is de ruimte “Mijn facturen”. Elke kaart stelt een van uw facturen voor, met het nummer, het bedrag, de status en de gestructureerde mededeling. U ziet alleen uw eigen facturen.",
+      "title": "Uw facturen"
+    }
+  ],
+  "title": "Uw factuur bekijken"
+}

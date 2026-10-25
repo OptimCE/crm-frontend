@@ -1,0 +1,188 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-wizard/en.html",
+  "id": "key-create-wizard",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Click \"Add\" — OptimCE first asks how you want to build the new allocation key.",
+      "title": "Start the creation",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--step",
+      "target": "key-creation-mode__card--step",
+      "text": "Pick \"Step-by-step wizard\" — both modes produce the same key, but the wizard walks you through four steps instead of dropping you on a blank grid.",
+      "title": "Launch the wizard"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--nb-consumers",
+      "target": "key-creation__input--nb-consumers",
+      "text": "Indicate how many consumers will share the energy. This count drives the size of every iteration the wizard creates — three here.",
+      "title": "Number of consumers"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step0-validate",
+      "target": "key-creation__btn--step0-validate",
+      "text": "Click \"Validate\" to confirm the consumer count and proceed to the next step.",
+      "title": "Confirm the step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--0",
+      "target": "key-creation__input--consumer-name--0",
+      "text": "Enter a name for each consumer. These names carry over to every subsequent iteration.",
+      "title": "Name the consumers"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--1",
+      "target": "key-creation__input--consumer-name--1",
+      "text": "Enter a name for each consumer. These names carry over to every subsequent iteration.",
+      "title": "Name the consumers"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--2",
+      "target": "key-creation__input--consumer-name--2",
+      "text": "Enter a name for each consumer. These names carry over to every subsequent iteration.",
+      "title": "Name the consumers"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step1-validate",
+      "target": "key-creation__btn--step1-validate",
+      "text": "Click \"Validate\" to lock in the consumer names and move on to configuring the iterations.",
+      "title": "Confirm the names"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__radio--type-prorata--0",
+      "target": "key-creation__radio--type-prorata--0",
+      "text": "Select \"Prorata\" for this first iteration: the energy will be split automatically between consumers based on their actual consumption.",
+      "title": "Pick prorata mode",
+      "waitFor": "key-creation__card--iteration--0"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--inj-percentage--0",
+      "target": "key-creation__input--inj-percentage--0",
+      "text": "Enter the share of the available energy this iteration receives. The iterations must add up to 100%.",
+      "title": "Iteration weight"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step2-validate",
+      "target": "key-creation__btn--step2-validate",
+      "text": "The wizard sees the total is still below 100% and spawns a second iteration to configure. It will keep adding rows until the sum is reached.",
+      "title": "Next iteration generated"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__radio--type-prorata--1",
+      "target": "key-creation__radio--type-prorata--1",
+      "text": "Pick \"Prorata\" again for the second iteration so it uses the same automatic split logic.",
+      "title": "Prorata mode (iter. 2)",
+      "waitFor": "key-creation__card--iteration--1"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--inj-percentage--1",
+      "target": "key-creation__input--inj-percentage--1",
+      "text": "Enter the remaining share: the iterations must add up to 100% to unlock the finalisation step.",
+      "title": "Complete to 100%"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step2-validate-2",
+      "target": "key-creation__btn--step2-validate",
+      "text": "Click \"Validate\": the total reaches 100% and the wizard opens the final finalisation step.",
+      "title": "Confirm iterations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--key-name",
+      "target": "key-creation__input--key-name",
+      "text": "Give the new allocation key a name and a description. This metadata appears in the key list and makes the key easier to reuse.",
+      "title": "Name the key"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__textarea--key-description",
+      "target": "key-creation__textarea--key-description",
+      "text": "Give the new allocation key a name and a description. This metadata appears in the key list and makes the key easier to reuse.",
+      "title": "Name the key"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step3-submit",
+      "target": "key-creation__btn--step3-submit",
+      "text": "Submit the wizard to materialise the full grid: a review page opens so you can re-read the configuration before persisting it.",
+      "title": "Submit the wizard"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Click \"Create\" to save the key. The grid pre-filled by the wizard is sent to the CRM as-is.",
+      "title": "Save the key"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "keys-list__table--keys",
+      "target": "keys-list__table--keys",
+      "text": "The new \"E2E wizard key\" shows up in the community's allocation keys list, ready to be associated with a sharing operation.",
+      "title": "Key created"
+    }
+  ],
+  "title": "Create an allocation key (wizard)"
+}

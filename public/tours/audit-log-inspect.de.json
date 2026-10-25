@@ -1,0 +1,69 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/audit-logs"
+  },
+  "guideUrl": "https://guide.optimce.be/audit-log-inspect/de.html",
+  "id": "audit-log-inspect",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-audit-log-lists-the-community-change",
+      "target": null,
+      "text": "Jede Zeile beschreibt eine Aktion: Datum, Art der Aktion, betroffene Entität, Urheber und Quelle. Die Änderung, die Sie gerade vorgenommen haben, steht ganz oben in der Liste.",
+      "title": "Das Audit-Protokoll",
+      "waitFor": "audit-log-list__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__row--0",
+      "target": "audit-log-list__row--0",
+      "text": "Klicken Sie auf eine Zeile, um die Details des Ereignisses anzuzeigen.",
+      "title": "Details eines Ereignisses"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "audit-log-list__row-expansion--0",
+      "target": "audit-log-list__row-expansion--0",
+      "text": "Ein Klick auf eine Zeile klappt ihre Nutzdaten (Payload) im JSON-Format auf: hier die Liste der geänderten Felder. Das ist der vollständige technische Nachweis dessen, was sich geändert hat.",
+      "title": "Details der Aktion"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "audit-log-list__input--entity-type",
+      "target": "audit-log-list__input--entity-type",
+      "text": "Grenzen Sie mit den Filtern ein, was Sie suchen, zum Beispiel nach Entitätstyp, Aktion, ID oder Zeitraum.",
+      "title": "Protokoll filtern"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__btn--clear-filters",
+      "target": "audit-log-list__btn--clear-filters",
+      "text": "Die Schaltfläche „Filter zurücksetzen“ löscht alle Kriterien auf einmal und zeigt wieder das gesamte Protokoll an.",
+      "title": "Filter zurücksetzen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__btn--export",
+      "target": "audit-log-list__btn--export",
+      "text": "Die Schaltfläche „CSV exportieren“ lädt das vollständige Protokoll im CSV-Format herunter — praktisch für die Archivierung oder zur Weitergabe an Ihre Regulierungsbehörde.",
+      "title": "Protokoll exportieren"
+    }
+  ],
+  "title": "Audit-Protokoll einsehen"
+}

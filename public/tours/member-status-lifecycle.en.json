@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-status-lifecycle/en.html",
+  "id": "member-status-lifecycle",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Search the member by name. Here we pick a member with no active meter, because a member tied to an active meter cannot be deactivated.",
+      "title": "Find the member",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "Click the member's row in the table to open their record.",
+      "title": "Open the member record"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "Tap the member's card to open their record.",
+      "title": "Open the member record"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-tabs__tab--meter",
+      "target": "member-view-tabs__tab--meter",
+      "text": "The member is active: its status badge is green and a \"Meter\" tab is available. The action buttons let you deactivate it or put it on hold.",
+      "title": "Active member record",
+      "waitFor": "member-view__btn--deactivate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--deactivate",
+      "target": "member-view__btn--deactivate",
+      "text": "Click \"Deactivate\". The status change is immediate, with no extra confirmation.",
+      "title": "Deactivate the member"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-inactive",
+      "target": "member-view__tag--status-inactive",
+      "text": "The badge switches to \"Inactive\" and the \"Meter\" tab disappears: an inactive member can no longer be tied to a meter.",
+      "title": "Member deactivated"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--activate",
+      "target": "member-view__btn--activate",
+      "text": "The \"Activate\" button reactivates the member. You can manage a member's whole lifecycle from its record.",
+      "title": "Reactivate the member"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-active",
+      "target": "member-view__tag--status-active",
+      "text": "The badge returns to \"Active\" and the \"Meter\" tab reappears. The member is fully operational again.",
+      "title": "Member reactivated"
+    }
+  ],
+  "title": "Deactivate and reactivate a member"
+}

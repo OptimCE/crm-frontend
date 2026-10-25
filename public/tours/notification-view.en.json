@@ -1,0 +1,83 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/notification-view/en.html",
+  "id": "notification-view",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__sidebar",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__sidebar",
+      "text": "Move the mouse over the sidebar to expand it: the notification bell appears.",
+      "title": "Expand the sidebar",
+      "waitFor": "profile__avatar"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__trigger",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "notification-bell__trigger",
+      "text": "Click the bell in the sidebar to open the notifications panel. The invitation to join the community appears here, with the community name and when it was received.",
+      "title": "Open notifications"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Open the navigation menu.",
+      "title": "Open the menu"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__trigger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "notification-bell__trigger",
+      "text": "Tap the bell to open the notifications panel. The invitation to join the community appears here.",
+      "title": "Open notifications"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__see-all",
+      "target": "notification-bell__see-all",
+      "text": "Open the page that lists all your notifications.",
+      "title": "All notifications",
+      "waitFor": "notification-bell__panel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-full-notifications-page-lists-the-invitation-notification",
+      "target": null,
+      "text": "The notifications page gathers all of your notifications. The invitation to join the community appears here, with the community name and the date it was received.",
+      "title": "View the notifications page",
+      "waitFor": "notifications-page"
+    }
+  ],
+  "title": "View your notifications"
+}

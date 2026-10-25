@@ -1,0 +1,96 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-key/nl.html",
+  "id": "algorithm-delete-key",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "De eerder gestarte generatie wordt weergegeven met een groene stip, die aangeeft dat ze succesvol is voltooid. Klap ze open om de gegenereerde sleutels te bekijken.",
+      "title": "Generatie voltooid",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Klik op de generatie om de sleutels te tonen die ze heeft aangemaakt.",
+      "title": "Generatie openklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "De door OLAGSA berekende sleutels staan onder de generatie. Elke sleutel kan afzonderlijk worden bekeken, opgeslagen of verwijderd.",
+      "title": "Verdeelsleutels beschikbaar"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Klik op een sleutel om de verdeling ervan te tonen.",
+      "title": "Sleutel openklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "De verdeeltabel van de sleutel wordt weergegeven. Met de verwijderknop (×) rechtsboven in de rij verwijdert u deze sleutel definitief.",
+      "title": "Geselecteerde sleutel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-key-button",
+      "target": null,
+      "text": "Klik op de knop × van de sleutel om het verwijderen te starten. U wordt om een bevestiging gevraagd voordat de sleutel definitief wordt verwijderd.",
+      "title": "Sleutel verwijderen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Er verschijnt een bevestigingsvenster. Klik op de bevestigingsknop om deze verdeelsleutel definitief te verwijderen.",
+      "title": "Verwijdering bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Bevestig uw keuze in het bevestigingsvenster.",
+      "title": "Bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-has-been-deleted",
+      "target": null,
+      "text": "De sleutel is definitief verwijderd. Hij verschijnt niet meer in de resultatenlijst van de generatie en kan niet worden hersteld.",
+      "title": "Sleutel verwijderd"
+    }
+  ],
+  "title": "Een gegenereerde sleutel verwijderen"
+}

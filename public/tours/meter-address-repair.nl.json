@@ -1,0 +1,126 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-address-repair/nl.html",
+  "id": "meter-address-repair",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-map__button--repair",
+      "target": "meters-map__button--repair",
+      "text": "De balk boven de kaart geeft aan hoeveel meters er nog niet op staan. Klik op “Adressen corrigeren” om de lijst te openen met de meters die opnieuw moeten worden geplaatst.",
+      "title": "Adressen corrigeren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__subtitle",
+      "target": "unlocated-meters__subtitle",
+      "text": "Het venster toont precies de meters die de kaart niet kan plaatsen: meters zonder enige coördinaat, maar ook meters die alleen in het centrum van hun gemeente zijn geplaatst.",
+      "title": "De correctielijst"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Klik op een rij om het adres ervan in het formulier rechts te laden. De correctie gebeurt meter per meter.",
+      "title": "Een meter kiezen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--not-found",
+      "target": "unlocated-meters__autocomplete--address--not-found",
+      "text": "OptimCE raadpleegt het federale register BeSt Address. Dit adres komt daarin met niets overeen: daarom verschijnt de meter niet op de kaart.",
+      "title": "Adres niet gevonden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--541448200000000004",
+      "target": "unlocated-meters__row--541448200000000004",
+      "text": "Ga naar een andere meter in de lijst.",
+      "title": "Een andere meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432-2",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Ga terug naar de meter waarvan het adres niet gevonden werd, om het te verbeteren.",
+      "title": "Terug naar de meter",
+      "waitFor": "unlocated-meters__autocomplete--address--approximate"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "search-the-best-address-register-for-a-real-address",
+      "target": null,
+      "text": "Typ de eerste woorden van het werkelijke adres. De voorstellen komen rechtstreeks uit het officiële register van de Belgische adressen.",
+      "title": "Het juiste adres zoeken",
+      "waitFor": "unlocated-meters__autocomplete--address--not-found"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-suggestion",
+      "target": null,
+      "text": "Klik op het overeenkomende voorstel. De vijf detailvelden worden ingevuld met de officiële spelling van het register.",
+      "title": "Het voorstel kiezen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--located",
+      "target": "unlocated-meters__autocomplete--address--located",
+      "text": "Het groene bericht bevestigt dat het adres nauwkeurig is gelokaliseerd: de meter verschijnt op de kaart zodra de correctie is opgeslagen.",
+      "title": "Adres gevonden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--save",
+      "target": "unlocated-meters__button--save",
+      "text": "“Opslaan en volgende” past de correctie toe en gaat naar de volgende meter in de lijst, zonder het venster te sluiten.",
+      "title": "Opslaan en doorgaan"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--close",
+      "target": "unlocated-meters__button--close",
+      "text": "Sluit het venster wanneer u klaar bent.",
+      "title": "Sluiten",
+      "waitFor": "unlocated-meters__row--541448200000000004"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-map__strip--partial",
+      "target": "meters-map__strip--partial",
+      "text": "Terug op de kaart is het aantal in de balk gedaald: de gecorrigeerde meter is nu geplaatst en alleen de meter in het centrum van zijn gemeente blijft over.",
+      "title": "De kaart is bijgewerkt",
+      "waitFor": "map-canvas__host"
+    }
+  ],
+  "title": "De adressen van meters corrigeren"
+}

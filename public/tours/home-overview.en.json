@@ -1,0 +1,86 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/home-overview/en.html",
+  "id": "home-overview",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "you-land-on-your-home-page",
+      "target": null,
+      "text": "Whatever your role, signing in brings you here. This page is not about one community: it gathers what concerns you, personally, across all of them.",
+      "title": "Your home page"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you__band",
+      "target": "needs-you__band",
+      "text": "The band at the top counts what is waiting on you: invitations received, a record to complete, unread notifications. When there is nothing, it collapses to a single reassuring line.",
+      "title": "What needs you"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "text": "Each card shows a community and your role in it. The button opens it: that community becomes your active one and you land on its dashboard.",
+      "title": "My communities"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-energy-all-communities-together",
+      "target": null,
+      "text": "The panel gathers your meters across every community for the latest month with readings. A meter with no reading says \"no reading yet\" rather than showing a misleading zero.",
+      "title": "My energy"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-invoices-and-your-documents",
+      "target": null,
+      "text": "Invoices to pay and the documents shared with you are gathered here. Invoices only show up for communities that use the billing module.",
+      "title": "My invoices and my documents"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings-panel__btn--open",
+      "target": "my-filings-panel__btn--open",
+      "text": "The last panel flags the official documents sent to the regulator that mention you. The button opens the detail inside the community concerned.",
+      "title": "What has been filed about me"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "needs-you__action",
+      "target": "needs-you__action",
+      "text": "Every row of the band is a shortcut to the screen where the action happens: the invitations list, your member record, or your notifications.",
+      "title": "Deal with what is waiting"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-matching-page-opens",
+      "target": null,
+      "text": "Here, an unread notification: the shortcut opens the notifications page, where you can read it and mark it as read.",
+      "title": "Straight to the right place"
+    }
+  ],
+  "title": "Your home page"
+}

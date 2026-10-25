@@ -1,0 +1,33 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/community-join-inspect-key/fr.html",
+  "id": "community-join-inspect-key",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__text--description",
+      "target": "key-view__text--description",
+      "text": "La fiche affiche le nom et la description de la clé telle qu'elle a été configurée — ces métadonnées aident à la retrouver dans la liste.",
+      "title": "Identification de la clé",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "text": "Le tableau détaille les itérations et les consommateurs associés à cette clé, avec les pourcentages d'allocation calculés ou saisis.",
+      "title": "Itérations et consommateurs"
+    }
+  ],
+  "title": "Rejoindre une communauté — vérifier la clé"
+}

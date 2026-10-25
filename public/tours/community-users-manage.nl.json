@@ -1,0 +1,212 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/communities/users"
+  },
+  "guideUrl": "https://guide.optimce.be/community-users-manage/nl.html",
+  "id": "community-users-manage",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__row--desktop--0",
+      "text": "Deze pagina toont alle gebruikers die toegang hebben tot de gemeenschap, met hun rol: beheerder, manager of lid. U kunt iemand uitnodigen, een rol wijzigen of een toegang intrekken.",
+      "title": "De gebruikers van de gemeenschap",
+      "waitFor": "users-community-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__card--mobile--0",
+      "text": "Deze pagina toont de accounts die aan de gemeenschap gekoppeld zijn, met hun rol. Hier nodigt u een manager uit, wijzigt u een rol of trekt u een toegang in.",
+      "title": "De gebruikers van de gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Klik op “Een manager uitnodigen” om per e-mail een uitnodiging te sturen naar iemand die zal helpen de gemeenschap te beheren.",
+      "title": "Een manager uitnodigen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-invitation__input--email",
+      "target": "community-invitation__input--email",
+      "text": "Vul het e-mailadres in van de persoon die u wilt uitnodigen. Die persoon ontvangt een uitnodiging om zich als manager bij de gemeenschap aan te sluiten.",
+      "title": "Het e-mailadres invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-invitation__btn--submit",
+      "target": "community-invitation__btn--submit",
+      "text": "Verstuur de uitnodiging: de persoon ontvangt ze per e-mail.",
+      "title": "De uitnodiging versturen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "De knop “Uitnodigingen in behandeling bekijken” opent de lijst met verzonden maar nog niet aanvaarde uitnodigingen, voor leden en managers samen.",
+      "title": "Uitnodigingen in behandeling bekijken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-the-managers-tab",
+      "target": null,
+      "text": "Open het tabblad van de managers om de openstaande uitnodigingen te zien.",
+      "title": "Uitnodigingen voor managers",
+      "waitFor": "community-pending-invitation__tab--managers"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invitation-appears-in-the-pending-managers-list",
+      "target": null,
+      "text": "Het tabblad “Manager” groepeert de verzonden maar nog niet aanvaarde uitnodigingen. Zolang een uitnodiging in behandeling is, kunt u ze vanuit deze lijst annuleren.",
+      "title": "Uitnodigingen in behandeling"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "close-the-pending-invitations-dialog",
+      "target": null,
+      "text": "Sluit het venster wanneer u klaar bent.",
+      "title": "Sluiten"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "users-community-list__input--search",
+      "target": "users-community-list__input--search",
+      "text": "Zoek de gebruiker van wie u de rol wilt wijzigen.",
+      "title": "Een gebruiker zoeken"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--edit-role--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--edit-role--0",
+      "text": "Het potloodpictogram naast een gebruiker opent de roleditor. U kunt een lid bevorderen tot manager of een manager terugzetten naar lid.",
+      "title": "Een rol wijzigen",
+      "waitFor": "users-community-list__row--desktop--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-edit-role--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-edit-role--0",
+      "text": "Op de kaart van de gebruiker opent de knop “Rol wijzigen” de roleditor.",
+      "title": "Een rol wijzigen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "users-community-list__select--dialog-role",
+      "target": "users-community-list__select--dialog-role",
+      "text": "Kies de nieuwe rol in de lijst.",
+      "title": "De rol kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--dialog-save",
+      "target": "users-community-list__btn--dialog-save",
+      "text": "Kies de nieuwe rol in de lijst en klik vervolgens op “Opslaan”. De wijziging gaat onmiddellijk in.",
+      "title": "De rol opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--delete--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "text": "De gebruiker is nu een lid: het rollabel is gewijzigd en de verwijderactie is nu beschikbaar in de rij van de gebruiker.",
+      "title": "Rol bijgewerkt"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--card-delete--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "text": "De gebruiker is nu een lid: het rollabel is gewijzigd en de verwijderactie is nu beschikbaar op de kaart van de gebruiker.",
+      "title": "Rol bijgewerkt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--delete--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "text": "Het rode kruisje verwijdert de gebruiker onmiddellijk uit de gemeenschap — de toegang wordt meteen ingetrokken, zonder bijkomende bevestiging.",
+      "title": "Een gebruiker verwijderen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-delete--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "text": "Op de kaart verwijdert de knop “Verwijderen” de gebruiker onmiddellijk uit de gemeenschap.",
+      "title": "Een gebruiker verwijderen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__empty--message",
+      "target": "users-community-list__empty--message",
+      "text": "Zoeken op dit e-mailadres levert geen resultaten meer op: de gebruiker heeft geen toegang meer tot de gemeenschap.",
+      "title": "Gebruiker verwijderd"
+    }
+  ],
+  "title": "De gebruikers van de gemeenschap beheren"
+}

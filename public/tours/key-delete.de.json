@@ -1,0 +1,48 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-delete/de.html",
+  "id": "key-delete",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--delete",
+      "target": "key-view__btn--delete",
+      "text": "Die Schaltfläche „Löschen“ entfernt den Schlüssel endgültig aus der Gemeinschaft. War er einer Teilungsoperation zugewiesen, wird diese Zuweisung ebenfalls entfernt.",
+      "title": "Den Schlüssel löschen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-key-is-gone-from-the-list",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Zurück in der Schlüsselliste erscheint „Key 2“ nicht mehr: Das Löschen wurde gespeichert.",
+      "title": "Schlüssel gelöscht",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-the-key-is-gone-from-the-list-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Zurück in der Schlüsselliste erscheint „Key 2“ nicht mehr: Das Löschen wurde gespeichert.",
+      "title": "Schlüssel gelöscht"
+    }
+  ],
+  "title": "Verteilungsschlüssel löschen"
+}

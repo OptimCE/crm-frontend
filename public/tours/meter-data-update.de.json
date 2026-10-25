@@ -1,0 +1,149 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-data-update/de.html",
+  "id": "meter-data-update",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "text": "Öffnen Sie die Zählerliste der aktiven Gemeinschaft. Suchen Sie den Zähler, dessen aktuelle Konfiguration Sie aktualisieren möchten.",
+      "title": "Zählerliste"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klicken Sie auf die Zeile des Zählers (EAN 123456789012345678), um seine Detailansicht zu öffnen und seine aktuellen Daten aufzurufen.",
+      "title": "Zählerdetail öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tippen Sie auf die Karte des Zählers (EAN 123456789012345678), um seine Detailansicht zu öffnen und seine aktuellen Daten aufzurufen.",
+      "title": "Zählerdetail öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--update",
+      "target": "meter-view__btn--update",
+      "text": "Die Detailansicht zeigt die aktuellen Merkmale. Die Schaltfläche „Aktualisieren“ wird nur für einen aktiven Zähler angeboten — das ist unser Einstiegspunkt.",
+      "title": "Aktiver Zähler",
+      "waitFor": "meter-view__hero"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--update-2",
+      "target": "meter-view__btn--update",
+      "text": "Klicken Sie auf „Aktualisieren“: Ein Dialog öffnet sich, vorausgefüllt mit der aktuellen Konfiguration des Zählers — Beschreibung, Leistungen, Tarif, Kundentyp und Inhaber.",
+      "title": "Formular öffnen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__textarea--description",
+      "target": "meter-data-update__textarea--description",
+      "text": "Ändern Sie die Beschreibung, die Entnahmeleistung und die Stromstärke. Diese neuen Werte fließen sofort in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energiewerte anpassen",
+      "waitFor": "meter-data-update__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--sampling-power",
+      "target": "meter-data-update__input--sampling-power",
+      "text": "Ändern Sie die Beschreibung, die Entnahmeleistung und die Stromstärke. Diese neuen Werte fließen sofort in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energiewerte anpassen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--amperage",
+      "target": "meter-data-update__input--amperage",
+      "text": "Ändern Sie die Beschreibung, die Entnahmeleistung und die Stromstärke. Diese neuen Werte fließen sofort in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energiewerte anpassen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__select--grd",
+      "target": "meter-data-update__select--grd",
+      "text": "Wählen Sie im Feld „Netzbetreiber“ den Verteilnetzbetreiber aus, an den der Zähler angeschlossen ist. Dieses Feld ist erforderlich, um die neue Konfiguration zu bestätigen.",
+      "title": "Netzbetreiber auswählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--rate--2",
+      "target": "meter-data-update__radio-card--rate--2",
+      "text": "Wählen Sie den neuen Tarif.",
+      "title": "Tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--client-type--2",
+      "target": "meter-data-update__radio-card--client-type--2",
+      "text": "Stellen Sie den Tarif auf „Zweitarif“ und den Kundentyp auf „Gewerblich“ um, um das neue Verbrauchsprofil des Zählers abzubilden.",
+      "title": "Verbrauchsprofil ändern"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__datepicker--start-date",
+      "target": "meter-data-update__datepicker--start-date",
+      "text": "Wählen Sie das Datum, ab dem die neue Konfiguration gilt. Dieses Datum ist erforderlich, um die Änderung zu bestätigen.",
+      "title": "Gültigkeitsdatum festlegen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__btn--submit",
+      "target": "meter-data-update__btn--submit",
+      "text": "Klicken Sie auf „Bestätigen“: Das Formular wird an das CRM gesendet, das die aktuelle Konfiguration des Zählers ersetzt. Der Dialog schließt sich, sobald die Bestätigung eingeht.",
+      "title": "Aktualisierung speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-data-view__text--rate",
+      "target": "meter-data-view__text--rate",
+      "text": "Zurück in der Detailansicht erscheinen die neue Beschreibung, die Stromstärke von 63 A und der Zweitarif in den Datenkarten — die Änderungen wurden serverseitig gespeichert.",
+      "title": "Aktualisierung bestätigt",
+      "waitFor": "meter-data-view__text--description"
+    }
+  ],
+  "title": "Zählerdaten bearbeiten"
+}

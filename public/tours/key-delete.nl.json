@@ -1,0 +1,48 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-delete/nl.html",
+  "id": "key-delete",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--delete",
+      "target": "key-view__btn--delete",
+      "text": "De knop “Verwijderen” verwijdert de sleutel definitief uit de gemeenschap. Als hij aan een deeloperatie was toegewezen, wordt die toewijzing ook verwijderd.",
+      "title": "De sleutel verwijderen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-key-is-gone-from-the-list",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Terug in de lijst met sleutels staat “Key 2” er niet meer bij: de verwijdering is wel degelijk opgeslagen.",
+      "title": "Sleutel verwijderd",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-the-key-is-gone-from-the-list-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Terug in de lijst met sleutels staat “Key 2” er niet meer bij: de verwijdering is wel degelijk opgeslagen.",
+      "title": "Sleutel verwijderd"
+    }
+  ],
+  "title": "Een verdeelsleutel verwijderen"
+}

@@ -1,0 +1,98 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-add-meter/nl.html",
+  "id": "sharing-operation-add-meter",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--add-meter",
+      "target": "op-view__btn--add-meter",
+      "text": "Klik op de detailpagina op “Meter toevoegen” om het selectievenster te openen.",
+      "title": "Toevoegen van een meter starten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-add-meter__table--meters",
+      "target": "op-add-meter__table--meters",
+      "text": "Het venster toont alle meters van de gemeenschap die nog niet aan deze deeloperatie gekoppeld zijn.",
+      "title": "Beschikbare meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__checkbox--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "op-add-meter__checkbox--0",
+      "text": "Vink het vakje aan van de meter die u wilt koppelen. Indien nodig kunt u er meerdere selecteren voordat u bevestigt.",
+      "title": "De meter aanvinken"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__checkbox-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "op-add-meter__checkbox-mobile--0",
+      "text": "Vink het vakje aan van de meter die u wilt koppelen. Indien nodig kunt u er meerdere selecteren voordat u bevestigt.",
+      "title": "De meter aanvinken"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "op-add-meter__datepicker--start-date",
+      "target": "op-add-meter__datepicker--start-date",
+      "text": "Open de kalender en selecteer de datum van vandaag: de koppeling van de meter gaat dan onmiddellijk in.",
+      "title": "Startdatum vandaag"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__btn--validate",
+      "target": "op-add-meter__btn--validate",
+      "text": "Klik op “Bevestigen” om de meter te koppelen. Een melding bevestigt de update aan serverzijde.",
+      "title": "De toevoeging bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "new-meter-appears-in-the-actuel-tab-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Terug op de detailpagina verschijnt de toegevoegde meter meteen in het tabblad “Huidig” van de meters die aan de operatie gekoppeld zijn.",
+      "title": "Meter gekoppeld"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "26b-new-meter-appears-in-the-actuel-tab-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Terug op de detailpagina verschijnt de kaart van de toegevoegde meter meteen in het tabblad “Huidig” van de meters die aan de operatie gekoppeld zijn.",
+      "title": "Meter gekoppeld"
+    }
+  ],
+  "title": "Een meter aan een deeloperatie toevoegen"
+}

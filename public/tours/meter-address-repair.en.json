@@ -1,0 +1,126 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-address-repair/en.html",
+  "id": "meter-address-repair",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-map__button--repair",
+      "target": "meters-map__button--repair",
+      "text": "The banner above the map says how many meters are not on it yet. Click \"Fix the addresses\" to open the queue of meters to reposition.",
+      "title": "Fix the addresses"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__subtitle",
+      "target": "unlocated-meters__subtitle",
+      "text": "The dialog lists exactly the meters the map cannot place: those with no coordinates at all, and also those pinned only to the centre of their municipality.",
+      "title": "The repair queue"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Click a row to load its address into the form on the right. Repairs are made one meter at a time.",
+      "title": "Pick a meter"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--not-found",
+      "target": "unlocated-meters__autocomplete--address--not-found",
+      "text": "OptimCE queries the federal BeSt Address register. This address matches nothing there, which is why the meter is missing from the map.",
+      "title": "Address not found"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--541448200000000004",
+      "target": "unlocated-meters__row--541448200000000004",
+      "text": "Move on to another meter in the list.",
+      "title": "Another meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432-2",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Go back to the meter whose address was not found, to correct it.",
+      "title": "Back to the meter",
+      "waitFor": "unlocated-meters__autocomplete--address--approximate"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "search-the-best-address-register-for-a-real-address",
+      "target": null,
+      "text": "Type the first words of the real address. The suggestions come straight from the official Belgian address register.",
+      "title": "Search for the right address",
+      "waitFor": "unlocated-meters__autocomplete--address--not-found"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-suggestion",
+      "target": null,
+      "text": "Click the matching suggestion. The five detailed fields are filled with the register's official spelling.",
+      "title": "Choose the suggestion"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--located",
+      "target": "unlocated-meters__autocomplete--address--located",
+      "text": "The green message confirms the address is precisely located: the meter will appear on the map once the repair is saved.",
+      "title": "Address located"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--save",
+      "target": "unlocated-meters__button--save",
+      "text": "\"Save and next\" applies the fix and moves on to the next meter in the queue, without closing the dialog.",
+      "title": "Save and continue"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--close",
+      "target": "unlocated-meters__button--close",
+      "text": "Close the window when you are done.",
+      "title": "Close",
+      "waitFor": "unlocated-meters__row--541448200000000004"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-map__strip--partial",
+      "target": "meters-map__strip--partial",
+      "text": "Back on the map, the banner has gone down: the repaired meter is now placed, and only the one pinned to its municipality centre remains.",
+      "title": "The map is up to date",
+      "waitFor": "map-canvas__host"
+    }
+  ],
+  "title": "Fix meter addresses"
+}

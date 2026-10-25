@@ -1,0 +1,34 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-sharing-operations/fr.html",
+  "id": "live-data-sharing-operations",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-dashboard__scope-select",
+      "target": "live-dashboard__scope-select",
+      "text": "En haut du tableau de bord, le « Périmètre » passe de toute la communauté à l'une de ses opérations de partage. Tous les chiffres et graphiques suivent ce choix.",
+      "title": "Choisir une opération de partage",
+      "waitFor": "live-offtake-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__operation-shared",
+      "target": "live-dashboard__operation-shared",
+      "text": "Pour l'opération choisie : sa production de la dernière heure complète, ses échanges avec le réseau, l'énergie partagée (estimation) et le nombre de compteurs suivis sur l'ensemble de ses compteurs. Les échanges avec le réseau et le partage restent masqués tant que l'opération compte trop peu de membres.",
+      "title": "Les chiffres de l'opération",
+      "waitFor": "live-dashboard__operation-cards"
+    }
+  ],
+  "title": "Suivre le partage dans une opération"
+}

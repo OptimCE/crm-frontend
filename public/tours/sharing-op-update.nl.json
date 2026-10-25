@@ -1,0 +1,95 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-update/nl.html",
+  "id": "sharing-op-update",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--edit",
+      "target": "op-view__btn--edit",
+      "text": "De detailpagina van de operatie toont haar naam, type, meters en gedekte gemeenten. Met de potloodjes kunt u deze gegevens wijzigen.",
+      "title": "Detailpagina van de operatie"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-2",
+      "target": "op-view__btn--edit",
+      "text": "Klik in de koptekst op “Bewerken”: het formulier wordt geopend, vooraf ingevuld met de huidige gegevens van de operatie.",
+      "title": "Het bewerkingsformulier openen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Wijzig de naam van de operatie. U kunt hier ook haar type en gemeenten aanpassen.",
+      "title": "De operatie hernoemen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Sla op om uw wijzigingen toe te passen.",
+      "title": "Opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "text": "Terug op de detailpagina draagt de operatie haar nieuwe naam.",
+      "title": "Naam bijgewerkt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-municipalities",
+      "target": "op-view__btn--edit-municipalities",
+      "text": "Het potlood naast de gemeenten opent de editor voor de gemeenten die door de operatie worden gedekt.",
+      "title": "Gemeenten bewerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-muni-update__autocomplete--municipalities",
+      "target": "op-muni-update__autocomplete--municipalities",
+      "text": "Typ een gemeente en kies ze in de suggesties om ze aan het bereik van de operatie toe te voegen.",
+      "title": "Een gemeente toevoegen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-muni-update__btn--submit",
+      "target": "op-muni-update__btn--submit",
+      "text": "Sla op om uw wijzigingen toe te passen.",
+      "title": "Opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-municipality-appears-on-the-operation",
+      "target": null,
+      "text": "De gemeente “Ixelles” staat nu tussen de gemeenten die door de operatie worden gedekt.",
+      "title": "Gemeente toegevoegd"
+    }
+  ],
+  "title": "Een deeloperatie bewerken"
+}

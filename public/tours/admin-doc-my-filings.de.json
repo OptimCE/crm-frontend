@@ -1,0 +1,32 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-my-filings/de.html",
+  "id": "admin-doc-my-filings",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__doc-type",
+      "target": "my-filings__doc-type",
+      "text": "Als Mitglied sehen Sie die Dossiers der Gemeinschaft nicht: Sie sehen nur die Angaben zu Ihrer Person, die an die Regulierungsbehörde übermittelt wurden, und in welchem Dokument.",
+      "title": "Was über mich eingereicht wurde"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__row",
+      "target": "my-filings__row",
+      "text": "Jeder Block zeigt die Werte so, wie sie zum Zeitpunkt der Einreichung eingefroren wurden. Eine spätere Korrektur im CRM überschreibt nicht, was bereits übermittelt wurde — maßgeblich ist das angezeigte Datum.",
+      "title": "Die übermittelten Werte"
+    }
+  ],
+  "title": "Sehen, was über Sie eingereicht wurde"
+}

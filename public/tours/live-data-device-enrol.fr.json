@@ -1,0 +1,100 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-device-enrol/fr.html",
+  "id": "live-data-device-enrol",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "Dans la console des données en direct, ouvrez l'onglet « Appareils ». Un appareil est le boîtier branché sur le compteur d'un membre (port P1) ou sur son onduleur : il transmet un relevé tous les quarts d'heure.",
+      "title": "Ouvrir l'onglet Appareils",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "text": "Cliquez sur « Ajouter un appareil ».",
+      "title": "Ajouter un appareil",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "device-create-dialog__input--name",
+      "target": "device-create-dialog__input--name",
+      "text": "Donnez à l'appareil un nom qui permet de le reconnaître.",
+      "title": "Nommer l'appareil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__select--ean",
+      "target": "device-create-dialog__select--ean",
+      "text": "Ouvrez la liste des compteurs de la communauté.",
+      "title": "Choisir le compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "choose-the-member-s-meter",
+      "target": null,
+      "text": "Choisissez le compteur auquel l'appareil est raccordé. Un compteur qui a déjà un appareil est grisé.",
+      "title": "Choisir le compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__btn--submit",
+      "target": "device-create-dialog__btn--submit",
+      "text": "Cliquez sur « Créer ». La case « injection pure » ne se coche que pour un site qui ne consomme rien : cochée à tort, elle sous-estimerait la production de la communauté sans aucune erreur visible.",
+      "title": "Créer l'appareil",
+      "waitFor": "device-create-dialog__select--ean"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "device-token-dialog__qr",
+      "target": "device-token-dialog__qr",
+      "text": "L'appareil est créé et son code d'enrôlement s'affiche aussitôt, en clair et en QR code. Saisissez-le (ou scannez-le) dans l'appareil. Il n'est affiché qu'une seule fois, ne sert qu'une fois et expire après 72 heures ; en cas de perte, émettez-en un nouveau depuis la liste — l'ancien cesse alors de fonctionner.",
+      "title": "Le code d'enrôlement",
+      "waitFor": "device-token-dialog__code"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-token-dialog__btn--close",
+      "target": "device-token-dialog__btn--close",
+      "text": "Fermez la fenêtre quand vous avez terminé.",
+      "title": "Fermer",
+      "waitFor": "device-token-dialog__once"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "it-is-waiting-for-its-first-contact",
+      "target": null,
+      "text": "Tant que l'appareil n'a pas utilisé son code, il est « en attente d'enrôlement » et « jamais vu ». L'encadré explique quoi vérifier : l'appareil est-il alimenté et connecté au réseau ?",
+      "title": "En attente d'enrôlement"
+    }
+  ],
+  "title": "Connecter un appareil"
+}

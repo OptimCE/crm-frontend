@@ -1,0 +1,70 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/profile-update/de.html",
+  "id": "profile-update",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "profile__card--account",
+      "target": "profile__card--account",
+      "text": "Das Profil zeigt die Ausgangsdaten: Demo User, demo@example.com und die Adresse in Brüssel, wie sie in der Datenbank vorbelegt wurden.",
+      "title": "Standardprofil",
+      "waitFor": "profile__card--addresses"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile__button--update-profile",
+      "target": "profile__button--update-profile",
+      "text": "Klicken Sie auf „Aktualisieren“: Ein Dialog mit den Feldern Vorname, Name und weiteren änderbaren Angaben wird geöffnet.",
+      "title": "Formular öffnen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-update-dialog__input--first-name",
+      "target": "user-update-dialog__input--first-name",
+      "text": "Ändern Sie Ihren Vornamen.",
+      "title": "Vorname",
+      "waitFor": "user-update-dialog__form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-update-dialog__input--surname",
+      "target": "user-update-dialog__input--surname",
+      "text": "Geben Sie den neuen Vornamen und dann den neuen Namen in die entsprechenden Felder ein. Die Bestätigung wird möglich, sobald beide Felder ausgefüllt sind.",
+      "title": "Neuen Namen eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-update-dialog__button--submit",
+      "target": "user-update-dialog__button--submit",
+      "text": "Klicken Sie auf „Bestätigen“, um die neuen Angaben an das CRM zu senden. Der Dialog schließt sich, sobald die Aktualisierung bestätigt ist.",
+      "title": "Änderungen speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "profile__avatar",
+      "target": "profile__avatar",
+      "text": "Zurück auf der Profilseite sind der neue Vorname und der neue Name sofort sichtbar — die Änderung wurde serverseitig gespeichert.",
+      "title": "Profil aktualisiert"
+    }
+  ],
+  "title": "Ihr Profil aktualisieren"
+}

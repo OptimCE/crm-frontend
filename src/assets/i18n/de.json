@@ -1292,7 +1292,7 @@
     },
     "DEACTIVATE": {
       "END_DATE_METER_LABEL": "Deaktivierungsdatum",
-      "DELETE_BUTTON_LABEL": "Löschen"
+      "DELETE_BUTTON_LABEL": "Deaktivieren"
     },
     "DATA": {
       "ENERGY_CHARACTERISTIC_TITLE": "Energetische Merkmale",
@@ -3281,7 +3281,7 @@
       "EAN_DEVICES_UNKNOWN": "Es konnte nicht geprüft werden, welche Zähler bereits ein Gerät haben. Ein Zähler, der bereits eines hat, wird beim Anlegen abgelehnt.",
       "EAN_HAS_DEVICE": "Hat bereits ein Gerät",
       "PURE_INJECTION": "Hinter diesem Zähler wird nichts verbraucht",
-      "PURE_INJECTION_HELP": "Nur ankreuzen, wenn der Standort alles ins Netz einspeist. An einem Standort, der auch verbraucht, sieht ein P1-Anschluss die Erzeugung gar nicht, und dieses Häkchen würde überschätzen, was die Gemeinschaft erzeugt.",
+      "PURE_INJECTION_HELP": "Nur ankreuzen, wenn der Standort alles ins Netz einspeist. An einem Standort, der auch verbraucht, sieht ein P1-Anschluss die Erzeugung gar nicht, und dieses Häkchen würde unterschätzen, was die Gemeinschaft erzeugt.",
       "SUBMIT": "Anlegen",
       "ERRORS": {
         "REQUIRED": "Bitte geben Sie einen Namen an und wählen Sie einen Zähler."
@@ -3329,6 +3329,22 @@
       "TITLE": "Erzeugungsprognose",
       "NO_METHOD": "Für die Erzeugungstechnologie dieser Gemeinschaft ist noch keine Prognosemethode verfügbar.",
       "UNAVAILABLE": "Keine Prognose verfügbar."
+    }
+  },
+  "HELP": {
+    "TITLE": "Hilfe",
+    "OPEN_GUIDE": "Online-Benutzerhandbuch öffnen",
+    "TOURS": {
+      "TITLE": "Geführte Touren",
+      "DESCRIPTION": "Eine Tour zeigt Ihnen Schritt für Schritt, wo Sie in der Anwendung klicken. Sie behalten die Kontrolle und können sie jederzeit beenden.",
+      "SEARCH": "Touren durchsuchen",
+      "ON_THIS_PAGE": "Auf dieser Seite",
+      "START": "Starten",
+      "NO_MATCH": "Keine Tour entspricht Ihrer Suche.",
+      "EMPTY": "Für Ihre Rolle in dieser Gemeinschaft ist keine geführte Tour verfügbar.",
+      "NO_COMMUNITY": "Öffnen Sie auf Ihrer Startseite eine Gemeinschaft, um ihre geführten Touren zu sehen.",
+      "LOAD_ERROR": "Die geführten Touren konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
+      "START_FAILED": "Diese Tour konnte nicht gestartet werden."
     }
   }
 }

@@ -1,0 +1,238 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create-company/nl.html",
+  "id": "member-create-company",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Klik op “Toevoegen” om de aanmaakwizard in vier stappen te openen.",
+      "title": "Een lid toevoegen",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--company",
+      "target": "new-member-type__card--company",
+      "text": "Selecteer “Bedrijf” om een lid aan te maken dat een rechtspersoon is. De velden van de volgende stap worden aangepast: ondernemingsnummer en btw-nummer in plaats van het rijksregisternummer.",
+      "title": "Het type “Bedrijf” kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-number",
+      "target": "new-member-informations__input--company-number",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-name",
+      "target": "new-member-informations__input--company-name",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--vat-number",
+      "target": "new-member-informations__input--vat-number",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-nrn",
+      "target": "new-member-informations__input--manager-nrn",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-surname",
+      "target": "new-member-informations__input--manager-surname",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-name",
+      "target": "new-member-informations__input--manager-name",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-email",
+      "target": "new-member-informations__input--manager-email",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-phone",
+      "target": "new-member-informations__input--manager-phone",
+      "text": "Voer het ondernemingsnummer, de maatschappelijke benaming en het btw-nummer in. Aangezien een bedrijf een rechtspersoon is, vermeldt u ook de wettelijke vertegenwoordiger: rijksregisternummer, naam, e-mail en telefoon.",
+      "title": "De bedrijfsgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Vul het adres van de maatschappelijke zetel in. Vink “Zelfde adres voor facturering” aan om dit adres ook als factuuradres te gebruiken.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Vul het adres van de maatschappelijke zetel in. Vink “Zelfde adres voor facturering” aan om dit adres ook als factuuradres te gebruiken.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Vul het adres van de maatschappelijke zetel in. Vink “Zelfde adres voor facturering” aan om dit adres ook als factuuradres te gebruiken.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Vul het adres van de maatschappelijke zetel in. Vink “Zelfde adres voor facturering” aan om dit adres ook als factuuradres te gebruiken.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Vink dit vakje aan als het facturatieadres hetzelfde is als het woonadres.",
+      "title": "Zelfde adres"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Voer het IBAN van het bedrijf in; het wordt gebruikt voor terugbetalingen in verband met de deeloperaties.",
+      "title": "Het IBAN invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Klik op “Bevestigen” om het bedrijf aan te maken en aan de actieve gemeenschap te koppelen.",
+      "title": "Het aanmaken bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "skip-adding-a-meter-for-now",
+      "target": null,
+      "text": "Een venster stelt voor om meteen een meter toe te voegen. Kies “Nee” om hier te stoppen.",
+      "title": "Het toevoegen van een meter uitstellen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Zoek het nieuwe bedrijf in de ledenlijst.",
+      "title": "Het bedrijf terugvinden",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "“E2E Company SA” staat nu in de ledenlijst, met het typelabel “Rechtspersoon”.",
+      "title": "Het bedrijf is aangemaakt"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "“E2E Company SA” staat nu in de ledenlijst, met het typelabel “Rechtspersoon”.",
+      "title": "Het bedrijf is aangemaakt"
+    }
+  ],
+  "title": "Een bedrijf als lid aanmaken"
+}

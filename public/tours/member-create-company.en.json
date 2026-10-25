@@ -1,0 +1,238 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create-company/en.html",
+  "id": "member-create-company",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Click \"Add member\" to open the four-step creation wizard.",
+      "title": "Add a member",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--company",
+      "target": "new-member-type__card--company",
+      "text": "Select \"Company\" to create a legal-entity member. The next step adapts its fields: company number and VAT number instead of a national number.",
+      "title": "Pick the \"Company\" type"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Go on to the next step.",
+      "title": "Next step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-number",
+      "target": "new-member-informations__input--company-number",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-name",
+      "target": "new-member-informations__input--company-name",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--vat-number",
+      "target": "new-member-informations__input--vat-number",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-nrn",
+      "target": "new-member-informations__input--manager-nrn",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-surname",
+      "target": "new-member-informations__input--manager-surname",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-name",
+      "target": "new-member-informations__input--manager-name",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-email",
+      "target": "new-member-informations__input--manager-email",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-phone",
+      "target": "new-member-informations__input--manager-phone",
+      "text": "Enter the company number, registered name and VAT number. A company acts through a representative: also give their national number, name, email and phone.",
+      "title": "Fill in the company"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Go on to the next step.",
+      "title": "Next step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Fill in the registered office address. Tick \"Same address\" to reuse it as the billing address.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Fill in the registered office address. Tick \"Same address\" to reuse it as the billing address.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Fill in the registered office address. Tick \"Same address\" to reuse it as the billing address.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Fill in the registered office address. Tick \"Same address\" to reuse it as the billing address.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Tick this box if the billing address is the same as the home address.",
+      "title": "Same address"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Go on to the next step.",
+      "title": "Next step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Enter the company's IBAN, used for refunds tied to sharing operations.",
+      "title": "Enter the IBAN"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Click \"Submit\" to create the company and attach it to the active community.",
+      "title": "Submit the new member"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "skip-adding-a-meter-for-now",
+      "target": null,
+      "text": "A dialog offers to add a meter right away. Pick \"No\" to stop here.",
+      "title": "Skip adding a meter"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Search for the new company in the member list.",
+      "title": "Find the company",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "\"E2E Company SA\" now appears in the members list, tagged with the \"Company\" type.",
+      "title": "The company is created"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "\"E2E Company SA\" now appears in the members list, tagged with the \"Company\" type.",
+      "title": "The company is created"
+    }
+  ],
+  "title": "Create a company member"
+}

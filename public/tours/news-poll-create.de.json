@@ -1,0 +1,195 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-poll-create/de.html",
+  "id": "news-poll-create",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Klicken Sie auf „Verfassen“, um das Fenster „Neuer Beitrag“ zu öffnen.",
+      "title": "Das Beitragsfenster öffnen",
+      "waitFor": "news-board__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__kind--poll",
+      "target": "news-compose__kind--poll",
+      "text": "Wechseln Sie oben im Fenster zum Reiter „Umfrage“. Zusätzliche Felder erscheinen: Frage, Antwortoptionen, Enddatum und Sichtbarkeit.",
+      "title": "Den Typ „Umfrage“ wählen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "ask-the-question",
+      "target": null,
+      "text": "Geben Sie die Frage der Umfrage im Editor ein, genau wie bei einem gewöhnlichen Beitrag.",
+      "title": "Die Frage stellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__poll-type--single",
+      "target": "news-compose__poll-type--single",
+      "text": "Wählen Sie, ob die Mitglieder nur eine Antwort („Einzelauswahl“) oder mehrere („Mehrfachauswahl“) auswählen können. Wir behalten „Einzelauswahl“ bei.",
+      "title": "Einzel- oder Mehrfachauswahl"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--0",
+      "target": "news-compose__option-input--0",
+      "text": "Geben Sie die erste mögliche Antwort ein.",
+      "title": "Erste Option"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--1",
+      "target": "news-compose__option-input--1",
+      "text": "Geben Sie die zweite mögliche Antwort ein.",
+      "title": "Zweite Option"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__add-option",
+      "target": "news-compose__add-option",
+      "text": "Fügen Sie so viele Antworten hinzu wie nötig.",
+      "title": "Eine Option hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--2",
+      "target": "news-compose__option-input--2",
+      "text": "Geben Sie mindestens zwei Antwortoptionen ein. Die Schaltfläche „Option hinzufügen“ fügt weitere hinzu, das Papierkorbsymbol entfernt eine.",
+      "title": "Die Antwortoptionen hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-a-closing-date",
+      "target": null,
+      "text": "Wählen Sie Datum und Uhrzeit des Endes im Kalender. Nach diesem Zeitpunkt werden keine Stimmen mehr angenommen, und je nach gewählter Sichtbarkeit können die Ergebnisse offengelegt werden.",
+      "title": "Ein Enddatum festlegen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__preset--anonymous",
+      "target": "news-compose__preset--anonymous",
+      "text": "Drei Voreinstellungen decken die häufigsten Fälle ab. Jede kombiniert, was die Manager sehen, was die Mitglieder sehen, und wann.",
+      "title": "Festlegen, wer die Ergebnisse sieht"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-2",
+      "target": "news-compose__preset--anonymous",
+      "text": "Die Mitglieder sehen nur die Gesamtzahl der Stimmen pro Option, und erst nachdem sie selbst abgestimmt haben. Niemand sieht, wer wofür gestimmt hat — auch die Manager erhalten nur die Gesamtzahlen. Ideal für eine vertrauliche Abstimmung.",
+      "title": "Anonyme Stimmung"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--transparent",
+      "target": "news-compose__preset--transparent",
+      "text": "Alle sehen sofort die vollständigen Ergebnisse, einschließlich wer für welche Option gestimmt hat, noch bevor sie selbst abgestimmt haben. Ideal für eine offene Entscheidung, bei der alle zu ihrer Wahl stehen.",
+      "title": "Transparent"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--on_close",
+      "target": "news-compose__preset--on_close",
+      "text": "Die Mitglieder sehen die Gesamtzahlen erst nach Ende der Umfrage; bis dahin bleiben die Ergebnisse verborgen. Die Manager hingegen sehen jederzeit die Details (wer wofür gestimmt hat), um die Beteiligung zu verfolgen.",
+      "title": "Ergebnisse bei Ende"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__advanced-toggle",
+      "target": "news-compose__advanced-toggle",
+      "text": "Die Schaltfläche „Erweiterte Einstellungen“ blendet drei unabhängige Einstellungen ein. Eine Voreinstellung ist nur eine Abkürzung für diese drei Felder — Sie können sie frei kombinieren.",
+      "title": "Feineinstellung (erweitert)"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__admin-vis",
+      "target": "news-compose__admin-vis",
+      "text": "Was die Manager sehen. „Nur Gesamtzahlen“: ausschließlich die Gesamtzahlen pro Option. „Details pro Stimme“: die namentliche Aufschlüsselung, also wer für welche Option gestimmt hat.",
+      "title": "Sichtbarkeit für Manager"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-vis",
+      "target": "news-compose__member-vis",
+      "text": "Was die Mitglieder sehen dürfen. „Keine Ergebnisse“: niemals Ergebnisse. „Nur Gesamtzahlen“: die Gesamtzahlen. „Details pro Stimme“: die Aufschlüsselung der Stimmen pro Person.",
+      "title": "Sichtbarkeit für Mitglieder"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-display",
+      "target": "news-compose__member-display",
+      "text": "Der Zeitpunkt, zu dem die Mitglieder sehen, was ihnen erlaubt ist. „Nie“, „Vor der Abstimmung“, „Nach der Abstimmung“ oder „Bei Umfrageende“. Diese Einstellung unterscheidet zum Beispiel eine Abstimmung, deren Ergebnis erst erscheint, sobald die Teilnahme erfasst ist.",
+      "title": "Anzeige für Mitglieder"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-3",
+      "target": "news-compose__preset--anonymous",
+      "text": "Zum Schluss wählen wir erneut die Voreinstellung „Anonyme Stimmung“, die die erweiterten Einstellungen schließt und eine stimmige, veröffentlichungsbereite Kombination anwendet.",
+      "title": "Zurück zu einer Voreinstellung"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Klicken Sie auf „Veröffentlichen“. Die Umfrage wird an alle Mitglieder verteilt, die eine Benachrichtigung mit der Einladung zur Abstimmung erhalten.",
+      "title": "Die Umfrage veröffentlichen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-poll",
+      "target": "news-poll",
+      "text": "Die Umfrage erscheint mit ihren Optionen auf der Neuigkeitenseite. Die Mitglieder können jetzt abstimmen; die Ergebnisse werden gemäß der von Ihnen gewählten Sichtbarkeit angezeigt.",
+      "title": "Ihre Umfrage ist online"
+    }
+  ],
+  "title": "Umfrage erstellen"
+}

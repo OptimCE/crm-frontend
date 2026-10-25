@@ -1,0 +1,59 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/communities/public"
+  },
+  "guideUrl": "https://guide.optimce.be/public-communities-browse/fr.html",
+  "id": "public-communities-browse",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "Chaque carte représente une communauté d'énergie ouverte au public, avec son régulateur. Cliquez sur une carte pour en savoir plus.",
+      "title": "L'annuaire des communautés publiques"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "public-community-list__btn--accordion--0-2",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "En dépliant une communauté, vous voyez sa description, son site web, son siège social et surtout la liste de ses opérations de partage publiques.",
+      "title": "Déplier une communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__detail--0",
+      "target": "public-community-list__detail--0",
+      "text": "La communauté « Test Community » propose plusieurs opérations de partage publiques (solaire, éolien). Chaque opération indique les communes qu'elle couvre.",
+      "title": "Les opérations de partage"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "public-community-list__filter--municipality",
+      "target": "public-community-list__filter--municipality",
+      "text": "Saisissez une commune et choisissez-la dans les suggestions pour ne garder que les communautés actives sur ce territoire. Vous pouvez aussi filtrer par régulateur.",
+      "title": "Filtrer par commune"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0-3",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "« Test Community » exploite une opération de partage à Anderlecht : elle reste donc affichée. Une commune où aucune communauté n'est active afficherait un annuaire vide.",
+      "title": "Résultat filtré"
+    }
+  ],
+  "title": "Explorer les communautés publiques"
+}

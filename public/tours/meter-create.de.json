@@ -1,0 +1,284 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-create/de.html",
+  "id": "meter-create",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__btn--add",
+      "target": "meters-list__btn--add",
+      "text": "Klicken Sie auf „Hinzufügen“, um das Formular zum Anlegen eines neuen Zählers zu öffnen, der der aktiven Gemeinschaft zugeordnet ist.",
+      "title": "Zähler hinzufügen",
+      "waitFor": "meters-list__table--meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__button--address-manual",
+      "target": "meter-creation__button--address-manual",
+      "text": "Öffnen Sie die detaillierten Adressfelder, um die Adresse selbst einzugeben.",
+      "title": "Manuelle Eingabe"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--street",
+      "target": "meter-creation__input--street",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--address-number",
+      "target": "meter-creation__input--address-number",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--box-number",
+      "target": "meter-creation__input--box-number",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--postcode",
+      "target": "meter-creation__input--postcode",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--city",
+      "target": "meter-creation__input--city",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--ean",
+      "target": "meter-creation__input--ean",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--meter-number",
+      "target": "meter-creation__input--meter-number",
+      "text": "Geben Sie die Installationsadresse, den eindeutigen EAN der Messstelle und die physische Zählernummer ein. Diese Felder sind unerlässlich, um das Gerät zu identifizieren.",
+      "title": "Standort beschreiben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--phase--1",
+      "target": "meter-creation__radio-card--phase--1",
+      "text": "Wählen Sie die Anschlussart des Zählers.",
+      "title": "Anschluss"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--reading-freq--1",
+      "target": "meter-creation__radio-card--reading-freq--1",
+      "text": "Wählen Sie, wie oft der Zähler abgelesen wird.",
+      "title": "Ablesehäufigkeit"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--tarif-group--1",
+      "target": "meter-creation__radio-card--tarif-group--1",
+      "text": "Wählen Sie die Anzahl der Phasen, die Ablesefrequenz und die Tarifgruppe — diese Auswahl bestimmt, wie der Verbrauch des Zählers modelliert wird.",
+      "title": "Merkmale wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__btn--next-step",
+      "target": "meter-creation__btn--next-step",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__textarea--description",
+      "target": "meter-creation__textarea--description",
+      "text": "Geben Sie die Entnahmeleistung, die gesamte Erzeugungskapazität und die Stromstärke des Zählers an. Diese Werte fließen in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energetische Merkmale"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--sampling-power",
+      "target": "meter-creation__input--sampling-power",
+      "text": "Geben Sie die Entnahmeleistung, die gesamte Erzeugungskapazität und die Stromstärke des Zählers an. Diese Werte fließen in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energetische Merkmale"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--total-generating-capacity",
+      "target": "meter-creation__input--total-generating-capacity",
+      "text": "Geben Sie die Entnahmeleistung, die gesamte Erzeugungskapazität und die Stromstärke des Zählers an. Diese Werte fließen in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energetische Merkmale"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--amperage",
+      "target": "meter-creation__input--amperage",
+      "text": "Geben Sie die Entnahmeleistung, die gesamte Erzeugungskapazität und die Stromstärke des Zählers an. Diese Werte fließen in die Verteilungsberechnungen der Teilungsoperationen ein.",
+      "title": "Energetische Merkmale"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__select--production-chain",
+      "target": "meter-creation__select--production-chain",
+      "text": "Wählen Sie die Produktionskette des Zählers.",
+      "title": "Produktionskette"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__select--injection-status",
+      "target": "meter-creation__select--injection-status",
+      "text": "Wählen Sie den Einspeisestatus des Zählers.",
+      "title": "Einspeisestatus"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--rate--1",
+      "target": "meter-creation__radio-card--rate--1",
+      "text": "Wählen Sie den Tarif des Zählers.",
+      "title": "Tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--client-type--1",
+      "target": "meter-creation__radio-card--client-type--1",
+      "text": "Wählen Sie den Kundentyp.",
+      "title": "Kundentyp"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-member-as-owner",
+      "target": null,
+      "text": "Wählen Sie den Tarif (Einfach- oder Zweitarif), den Kundentyp (Wohnbereich, gewerblich) und das Mitglied der Gemeinschaft, dem der Zähler gehört.",
+      "title": "Einem Mitglied zuordnen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__datepicker--start-date",
+      "target": "meter-creation__datepicker--start-date",
+      "text": "Wählen Sie das Datum, ab dem der Zähler in der Gemeinschaft als aktiv gilt. Vor diesem Datum erscheint er in keiner Berechnung.",
+      "title": "Aktivierungsdatum festlegen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__btn--submit",
+      "target": "meter-creation__btn--submit",
+      "text": "Klicken Sie auf „Bestätigen“: Das vollständige Formular wird an das CRM gesendet, das den Zähler anlegt und der aktiven Gemeinschaft zuordnet.",
+      "title": "Zähler speichern"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meters-list__input--search",
+      "target": "meters-list__input--search",
+      "text": "Geben Sie den EAN des Zählers in die Suchleiste ein, um die Liste zu filtern und den neu angelegten Zähler sofort wiederzufinden.",
+      "title": "Nach EAN filtern",
+      "waitFor": "meters-list__table--meters"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "text": "Der Zähler „541449123456789012“ erscheint in der gefilterten Tabelle: Die Erstellung ist bestätigt, und die Detailseite ist über die Liste erreichbar.",
+      "title": "Zähler gefunden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klicken Sie auf die Zeile des Zählers, um seine Detailseite zu öffnen und zu den Registerkarten mit den Verbrauchsdaten zu gelangen.",
+      "title": "Detailseite öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tippen Sie auf die Karte des Zählers, um seine Detailseite zu öffnen und zu den Registerkarten mit den Verbrauchsdaten zu gelangen.",
+      "title": "Detailseite öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__tabs",
+      "target": "meter-view__tabs",
+      "text": "Die Detailseite zeigt den EAN des neuen Zählers und bietet die Registerkarten zur Ansicht: aktuelle, historische und zukünftige Daten sowie Verbrauch.",
+      "title": "Zählerseite bereit",
+      "waitFor": "meter-view__hero"
+    }
+  ],
+  "title": "Zähler anlegen"
+}

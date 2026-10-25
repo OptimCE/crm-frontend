@@ -1,0 +1,69 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-create/en.html",
+  "id": "news-create",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-board__empty",
+      "target": "news-board__empty",
+      "text": "The news board is shown. It is still empty — no news has been published yet. As a manager you can create one with the \"New post\" button.",
+      "title": "The news board"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Click \"New post\" in the top right to open the compose dialog.",
+      "title": "Open the composer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__body",
+      "target": "news-compose__body",
+      "text": "The dialog opens on the \"Post\" kind. The \"Poll\" tab would create a poll instead — here we publish a plain news post.",
+      "title": "Compose a news",
+      "waitFor": "news-compose__kind--post"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "write-the-message",
+      "target": null,
+      "text": "Type your news content in the editor. The toolbar lets you format the text (headings, bold, lists, links).",
+      "title": "Write the message"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Click \"Publish\" to broadcast the news to every member of the community.",
+      "title": "Publish"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-post__body",
+      "target": "news-post__body",
+      "text": "The news appears at the top of the board, signed by its author. Every member of the community sees it and receives a notification.",
+      "title": "Your news is published"
+    }
+  ],
+  "title": "Publish a news"
+}

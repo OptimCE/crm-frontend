@@ -1292,7 +1292,7 @@
     },
     "DEACTIVATE": {
       "END_DATE_METER_LABEL": "Deactiveringsdatum",
-      "DELETE_BUTTON_LABEL": "Verwijderen"
+      "DELETE_BUTTON_LABEL": "Deactiveren"
     },
     "DATA": {
       "ENERGY_CHARACTERISTIC_TITLE": "Energiekenmerken",
@@ -3281,7 +3281,7 @@
       "EAN_DEVICES_UNKNOWN": "Kon niet nagaan welke meters al een apparaat hebben. Een meter die er al een heeft, wordt bij het aanmaken geweigerd.",
       "EAN_HAS_DEVICE": "Heeft al een apparaat",
       "PURE_INJECTION": "Achter deze meter wordt niets verbruikt",
-      "PURE_INJECTION_HELP": "Vink dit alleen aan als de site alles op het net injecteert. Op een site die ook verbruikt, ziet een P1-poort de productie helemaal niet, en dit aanvinken zou overschatten wat de gemeenschap opwekt.",
+      "PURE_INJECTION_HELP": "Vink dit alleen aan als de site alles op het net injecteert. Op een site die ook verbruikt, ziet een P1-poort de productie helemaal niet, en dit aanvinken zou onderschatten wat de gemeenschap opwekt.",
       "SUBMIT": "Aanmaken",
       "ERRORS": {
         "REQUIRED": "Geef een naam op en kies een meter."
@@ -3329,6 +3329,22 @@
       "TITLE": "Productieprognose",
       "NO_METHOD": "Er is nog geen prognosemethode beschikbaar voor de productietechnologie van deze gemeenschap.",
       "UNAVAILABLE": "Geen prognose beschikbaar."
+    }
+  },
+  "HELP": {
+    "TITLE": "Help",
+    "OPEN_GUIDE": "De online gebruikershandleiding openen",
+    "TOURS": {
+      "TITLE": "Rondleidingen",
+      "DESCRIPTION": "Een rondleiding toont u stap voor stap waar u in de applicatie klikt. U houdt de controle en kunt ze op elk moment stoppen.",
+      "SEARCH": "Rondleidingen zoeken",
+      "ON_THIS_PAGE": "Op deze pagina",
+      "START": "Starten",
+      "NO_MATCH": "Geen enkele rondleiding komt overeen met uw zoekopdracht.",
+      "EMPTY": "Er is geen rondleiding beschikbaar voor uw rol in deze gemeenschap.",
+      "NO_COMMUNITY": "Open een gemeenschap vanaf uw startpagina om de rondleidingen ervan te zien.",
+      "LOAD_ERROR": "De rondleidingen konden niet worden geladen. Probeer het later opnieuw.",
+      "START_FAILED": "Deze rondleiding kon niet starten."
     }
   }
 }

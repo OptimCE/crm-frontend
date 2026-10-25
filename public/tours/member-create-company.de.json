@@ -1,0 +1,238 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create-company/de.html",
+  "id": "member-create-company",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Klicken Sie auf „Hinzufügen“, um den Erstellungsassistenten in vier Schritten zu öffnen.",
+      "title": "Ein Mitglied hinzufügen",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--company",
+      "target": "new-member-type__card--company",
+      "text": "Wählen Sie „Unternehmen“, um ein Mitglied als juristische Person anzulegen. Die Felder des nächsten Schritts werden angepasst: Unternehmensnummer und MwSt-Nummer statt der Nationalregisternummer.",
+      "title": "Den Typ „Unternehmen“ wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-number",
+      "target": "new-member-informations__input--company-number",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--company-name",
+      "target": "new-member-informations__input--company-name",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--vat-number",
+      "target": "new-member-informations__input--vat-number",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-nrn",
+      "target": "new-member-informations__input--manager-nrn",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-surname",
+      "target": "new-member-informations__input--manager-surname",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-name",
+      "target": "new-member-informations__input--manager-name",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-email",
+      "target": "new-member-informations__input--manager-email",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--manager-phone",
+      "target": "new-member-informations__input--manager-phone",
+      "text": "Geben Sie die Unternehmensnummer, die Firmenbezeichnung und die MwSt-Nummer ein. Da ein Unternehmen eine juristische Person ist, geben Sie auch seinen gesetzlichen Vertreter an: Nationalregisternummer, Name, E-Mail und Telefon.",
+      "title": "Die Unternehmensdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Geben Sie die Adresse des Gesellschaftssitzes ein. Aktivieren Sie „Gleiche Adresse für die Rechnungsstellung“, um diese Adresse als Rechnungsadresse zu übernehmen.",
+      "title": "Die Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Geben Sie die Adresse des Gesellschaftssitzes ein. Aktivieren Sie „Gleiche Adresse für die Rechnungsstellung“, um diese Adresse als Rechnungsadresse zu übernehmen.",
+      "title": "Die Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Geben Sie die Adresse des Gesellschaftssitzes ein. Aktivieren Sie „Gleiche Adresse für die Rechnungsstellung“, um diese Adresse als Rechnungsadresse zu übernehmen.",
+      "title": "Die Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Geben Sie die Adresse des Gesellschaftssitzes ein. Aktivieren Sie „Gleiche Adresse für die Rechnungsstellung“, um diese Adresse als Rechnungsadresse zu übernehmen.",
+      "title": "Die Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Aktivieren Sie dieses Kästchen, wenn die Rechnungsadresse mit der Wohnadresse übereinstimmt.",
+      "title": "Gleiche Adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Geben Sie die IBAN des Unternehmens ein, die für Rückerstattungen im Zusammenhang mit den Teilungsoperationen verwendet wird.",
+      "title": "Die IBAN eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Klicken Sie auf „Bestätigen“, um das Unternehmen anzulegen und mit der aktiven Gemeinschaft zu verknüpfen.",
+      "title": "Die Erstellung bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "skip-adding-a-meter-for-now",
+      "target": null,
+      "text": "Ein Fenster schlägt vor, gleich einen Zähler hinzuzufügen. Wählen Sie „Nein“, um hier abzuschließen.",
+      "title": "Das Hinzufügen eines Zählers verschieben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Suchen Sie das neue Unternehmen in der Mitgliederliste.",
+      "title": "Das Unternehmen finden",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "„E2E Company SA“ erscheint jetzt in der Mitgliederliste, mit der Typangabe „Juristische Person“.",
+      "title": "Das Unternehmen ist angelegt"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "„E2E Company SA“ erscheint jetzt in der Mitgliederliste, mit der Typangabe „Juristische Person“.",
+      "title": "Das Unternehmen ist angelegt"
+    }
+  ],
+  "title": "Unternehmen als Mitglied anlegen"
+}

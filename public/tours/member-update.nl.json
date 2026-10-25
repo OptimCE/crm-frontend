@@ -1,0 +1,97 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-update/nl.html",
+  "id": "member-update",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__table",
+      "target": "members-list__table",
+      "text": "Klik op de rij van het lid dat u wilt bijwerken — hier “Member One” — om de detailfiche te openen.",
+      "title": "Het lid selecteren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--modify",
+      "target": "member-view__btn--modify",
+      "text": "Klik op “Wijzigen” in de kop van de fiche: het venster voor het bijwerken wordt geopend, vooraf ingevuld met de huidige gegevens van het lid.",
+      "title": "Het wijzigingsformulier openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap",
+      "waitFor": "member-creation-update__step--status"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--name",
+      "target": "new-member-informations__input--name",
+      "text": "Verbeter de voornaam indien nodig.",
+      "title": "Voornaam"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--email",
+      "target": "new-member-informations__input--email",
+      "text": "Werk de voornaam en het e-mailadres bij in de overeenkomstige velden. De overige gegevens blijven ongewijzigd en worden behouden zoals ze zijn.",
+      "title": "De nieuwe gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap",
+      "waitFor": "new-member-address__input--home-street"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Controleer of verbeter het IBAN van het lid.",
+      "title": "IBAN"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Doorloop de stappen voor de adressen en de bankgegevens zonder iets te wijzigen en klik vervolgens op “Bevestigen” om de nieuwe gegevens naar het CRM te verzenden.",
+      "title": "De wijzigingen opslaan"
+    }
+  ],
+  "title": "Een lid wijzigen"
+}

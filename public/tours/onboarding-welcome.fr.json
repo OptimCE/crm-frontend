@@ -1,0 +1,166 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-welcome/fr.html",
+  "id": "onboarding-welcome",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__empty",
+      "target": "community-picker__empty",
+      "text": "OptimCE vous aide à partager l'énergie au sein d'une communauté d'énergie. Votre page d'accueil rassemble tout ce qui vous concerne ; pour l'instant, vous ne faites encore partie d'aucune communauté.",
+      "title": "Bienvenue sur OptimCE"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you__clear",
+      "target": "needs-you__clear",
+      "text": "Le bandeau du haut liste ce qui demande une action de votre part, comme une invitation à accepter. Quand il affiche « Rien ne vous attend pour le moment. Tout est en ordre. », vous n'avez rien à faire.",
+      "title": "Ce qui vous attend"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__btn--create",
+      "target": "community-picker__btn--create",
+      "text": "Vous lancez une communauté d'énergie ? « Créer ma communauté » la crée et vous en fait l'administrateur. Vous pourrez ensuite y inviter ses membres et ses gestionnaires.",
+      "title": "Créer sa communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__link--directory",
+      "target": "community-picker__link--directory",
+      "text": "Vous cherchez plutôt à rejoindre une communauté existante ? Cliquez sur « Découvrir les communautés proches de chez moi ».",
+      "title": "Trouver une communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__filter--municipality",
+      "target": "public-community-list__filter--municipality",
+      "text": "Voici les communautés ouvertes au public. Filtrez-les par commune ou par régulateur, puis ouvrez-en une pour lire sa description, son site web et ses opérations de partage.",
+      "title": "Les communautés publiques",
+      "waitFor": "public-community-list__btn--accordion--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__toggle--view",
+      "target": "public-community-list__toggle--view",
+      "text": "Basculez entre « Liste » et « Carte » pour voir où se trouvent les communautés. Pour en rejoindre une, contactez-la : ce sont ses gestionnaires qui vous envoient une invitation.",
+      "title": "Liste ou carte"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--profile",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--profile",
+      "text": "La section « Profil » de la barre latérale vous suit partout : accueil, profil, invitations, vos communautés et les communautés publiques. Survolez la barre pour lire ses libellés, puis ouvrez « Invitations »."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--profile-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--profile",
+      "text": "Touchez l'icône du menu : la section « Profil » regroupe l'accueil, votre profil, vos invitations, vos communautés et les communautés publiques. Touchez « Invitations ».",
+      "title": "Votre profil"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "invitations__tabs",
+      "target": "invitations__tabs",
+      "text": "Quand une communauté vous invite, l'invitation arrive ici — l'onglet « Membres » pour devenir membre, « Gestionnaire » pour la gérer — et la page d'accueil vous la signale. Acceptez-la : la communauté apparaît alors sur votre page d'accueil.",
+      "title": "Vos invitations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--user-guide",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "En bas de la barre latérale, « Guide utilisateur » ouvre l'aide, à tout moment et depuis n'importe quelle page. Cliquez dessus.",
+      "title": "Besoin d'aide ?"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--user-guide-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "En bas du menu, « Guide utilisateur » ouvre l'aide, à tout moment et depuis n'importe quelle page. Touchez-le.",
+      "title": "Besoin d'aide ?"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__link--guide",
+      "target": "help-dialog__link--guide",
+      "text": "« Ouvrir le guide d'utilisation en ligne » ouvre le guide dans un nouvel onglet : chaque tâche de l'application y est décrite pas à pas, avec des captures d'écran, et peut aussi être rejouée en animation.",
+      "title": "Le guide en ligne",
+      "waitFor": "help-dialog__tours"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__tours",
+      "target": "help-dialog__tours",
+      "text": "« Visites guidées » liste les visites comme celle-ci : elles vous montrent une tâche directement dans l'application. Relancez-en une quand vous en avez besoin ; une fois membre d'une communauté, vous y trouverez celles de votre rôle. Fermez cette fenêtre pour commencer.",
+      "title": "Les visites guidées"
+    }
+  ],
+  "title": "Bienvenue sur OptimCE"
+}

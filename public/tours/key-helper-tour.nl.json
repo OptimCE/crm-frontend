@@ -1,0 +1,43 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-helper-tour/nl.html",
+  "id": "key-helper-tour",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "text": "In de applicatie tonen sommige velden of kolommen een pictogram ⓘ. Dat betekent dat er extra uitleg beschikbaar is — u hoeft er alleen maar op te klikken om ze te lezen.",
+      "title": "Het pictogram ⓘ herkennen",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "header-helper__btn--help",
+      "target": "header-helper__btn--help",
+      "text": "Klik op het pictogram ⓘ voor meer informatie over dit veld. Er verschijnt een infovenster met de titel en de volledige beschrijving.",
+      "title": "Klikken op ⓘ"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-helper__title--label",
+      "target": "header-helper__title--label",
+      "text": "Het infovenster toont de naam van het veld en een uitgebreide uitleg. Zo begrijpt u wat elke waarde betekent zonder de pagina te verlaten. Het pictogram ⓘ werkt zo overal waar het in de applicatie verschijnt.",
+      "title": "Het infovenster verschijnt",
+      "waitFor": "header-helper__popover--content"
+    }
+  ],
+  "title": "Contextuele hulp — het (i)-pictogram"
+}

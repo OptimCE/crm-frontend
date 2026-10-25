@@ -1,0 +1,162 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-document-generate/fr.html",
+  "id": "admin-doc-document-generate",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Cliquez sur la ligne du dossier pour ouvrir sa fiche. Les documents s'ajoutent toujours à l'intérieur d'un dossier.",
+      "title": "Ouvrir le dossier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__empty--message",
+      "target": "dossier-documents-panel__empty--message",
+      "text": "L'onglet « Documents » liste les pièces du dossier. Un dossier fraîchement créé n'en contient aucune.",
+      "title": "Un dossier vide",
+      "waitFor": "dossier-documents-panel__btn--add"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "Cliquez sur « Ajouter un document » pour choisir le formulaire réglementaire à préparer.",
+      "title": "Ajouter un document"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "La liste reprend les formulaires publiés par le régulateur pour votre région. Chacun sait quelles données du CRM il doit reprendre.",
+      "title": "Choisir le formulaire"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Donnez au document un titre qui l'identifie dans le dossier.",
+      "title": "Nommer le document"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Validez : le document rejoint le dossier, encore vide de tout contenu.",
+      "title": "Créer le document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--generate-1",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "Le document est créé au statut « Brouillon ». Il n'a encore aucun contenu : les icônes proposent de le générer depuis le CRM ou de téléverser votre propre fichier.",
+      "title": "Un brouillon vous attend",
+      "waitFor": "dossier-documents-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--generate-1-2",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "Cliquez sur l'icône de génération. OptimCE va rassembler les données de la communauté, de l'opération et de ses membres pour remplir le formulaire.",
+      "title": "Générer le document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generate-dialog__field--community_name",
+      "target": "generate-dialog__field--community_name",
+      "text": "Rien n'est déposé sans votre relecture. Les champs sont pré-remplis depuis le CRM et restent modifiables : ce que vous validez ici est exactement ce qui sera figé dans le document.",
+      "title": "Vérifier les données",
+      "waitFor": "generate-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "generate-dialog__field--community_name-2",
+      "target": "generate-dialog__field--community_name",
+      "text": "Une correction faite ici ne vaut que pour ce document. Si une donnée est fausse partout, corrigez-la plutôt dans le CRM puis rechargez le formulaire.",
+      "title": "Corriger une valeur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "generate-dialog__btn--submit",
+      "target": "generate-dialog__btn--submit",
+      "text": "La génération part en arrière-plan. Vous pouvez continuer à travailler : la carte du document affiche « Génération en cours » et se met à jour toute seule.",
+      "title": "Lancer la génération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "text": "Une fois la génération terminée, le document porte une version téléchargeable. Rien n'est écrasé : chaque génération ajoute une nouvelle version.",
+      "title": "Le document est prêt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "L'icône « Versions » ouvre l'historique complet du document.",
+      "title": "Consulter les versions"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Chaque version indique quand elle a été produite et par qui. Les versions générées conservent en plus les données exactes utilisées.",
+      "title": "Une trace de ce qui a été produit",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1-2",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Ouvrez l'instantané pour relire les données telles qu'elles étaient au moment du dépôt. Une modification ultérieure dans le CRM ne réécrit jamais ce qui a été transmis.",
+      "title": "Voir les données figées"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Fermez la fenêtre quand vous avez terminé.",
+      "title": "Fermer"
+    }
+  ],
+  "title": "Générer un document depuis le CRM"
+}

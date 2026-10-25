@@ -1,0 +1,34 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-sharing-operations/nl.html",
+  "id": "live-data-sharing-operations",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-dashboard__scope-select",
+      "target": "live-dashboard__scope-select",
+      "text": "Bovenaan het dashboard schakelt het “Bereik” over van de hele gemeenschap naar een van haar deeloperaties. Alle cijfers en grafieken volgen die keuze.",
+      "title": "Een deeloperatie kiezen",
+      "waitFor": "live-offtake-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__operation-shared",
+      "target": "live-dashboard__operation-shared",
+      "text": "Voor de gekozen operatie: haar productie in het laatste volledige uur, haar uitwisselingen met het net, de gedeelde energie (schatting) en hoeveel van haar meters worden opgevolgd. De uitwisselingen met het net en het delen blijven verborgen zolang de operatie te weinig leden telt.",
+      "title": "De cijfers van de operatie",
+      "waitFor": "live-dashboard__operation-cards"
+    }
+  ],
+  "title": "Het delen binnen een deelactiviteit volgen"
+}

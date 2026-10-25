@@ -1,0 +1,23 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/billing"
+  },
+  "guideUrl": "https://guide.optimce.be/billing-member-view/fr.html",
+  "id": "billing-member-view",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices__card",
+      "target": "my-invoices__card",
+      "text": "Voici l'espace « Mes factures ». Chaque carte correspond à une de vos factures, avec son numéro, son montant, son statut et sa communication structurée. Vous ne voyez que vos propres factures.",
+      "title": "Vos factures"
+    }
+  ],
+  "title": "Consulter sa facture"
+}

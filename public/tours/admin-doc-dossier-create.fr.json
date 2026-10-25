@@ -1,0 +1,107 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-dossier-create/fr.html",
+  "id": "admin-doc-dossier-create",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-list__empty--message",
+      "target": "dossier-list__empty--message",
+      "text": "Cette page suit les dossiers déposés auprès de la CWaPE et du gestionnaire de réseau. Chaque dossier concerne une seule opération de partage : une communauté qui en exploite plusieurs dépose un dossier par opération.",
+      "title": "Aucun dossier pour le moment",
+      "waitFor": "dossier-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__btn--create",
+      "target": "dossier-list__btn--create",
+      "text": "Cliquez sur « Nouveau dossier » pour ouvrir le formulaire de création.",
+      "title": "Créer un dossier"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "dossier-create-dialog__select--type",
+      "target": "dossier-create-dialog__select--type",
+      "text": "Le type détermine les échéances réglementaires qui seront calculées ensuite. Ici, une notification de création de communauté.",
+      "title": "Choisir le type de dossier"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "dossier-create-dialog__select--operation",
+      "target": "dossier-create-dialog__select--operation",
+      "text": "Sélectionnez l'opération de partage concernée. C'est elle qui fournira les membres et les compteurs repris dans les documents du dossier.",
+      "title": "Choisir l'opération de partage"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "dossier-create-dialog__input--title",
+      "target": "dossier-create-dialog__input--title",
+      "text": "Donnez au dossier un titre qui le distingue des autres.",
+      "title": "Nommer le dossier"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "dossier-create-dialog__input--external-ref",
+      "target": "dossier-create-dialog__input--external-ref",
+      "text": "Le titre est libre : il vous sert à retrouver le dossier. La référence est celle attribuée par l'autorité — elle identifie le dossier de façon unique et reste modifiable plus tard.",
+      "title": "Titre et référence"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-create-dialog__btn--submit",
+      "target": "dossier-create-dialog__btn--submit",
+      "text": "Validez : le dossier est créé et vient s'ajouter au tableau de suivi.",
+      "title": "Créer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dossier-appears-in-the-list",
+      "target": null,
+      "text": "Le dossier apparaît dans le tableau avec le statut « En préparation ». Tant qu'il n'est pas soumis, il reste modifiable et aucune échéance ne court.",
+      "title": "Le dossier est créé",
+      "waitFor": "dossier-list__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Cliquez n'importe où sur la ligne pour ouvrir la fiche du dossier.",
+      "title": "Ouvrir le dossier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dossier-detail-page-opens",
+      "target": null,
+      "text": "La fiche rassemble tout ce qui concerne le dossier : ses documents, ses échéances et l'historique de ses changements de statut. Les boutons en haut proposent les seuls changements de statut autorisés à cet instant.",
+      "title": "La fiche du dossier",
+      "waitFor": "dossier-detail__tag--status"
+    }
+  ],
+  "title": "Créer un dossier administratif"
+}

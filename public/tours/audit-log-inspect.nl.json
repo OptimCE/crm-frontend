@@ -1,0 +1,69 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/audit-logs"
+  },
+  "guideUrl": "https://guide.optimce.be/audit-log-inspect/nl.html",
+  "id": "audit-log-inspect",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-audit-log-lists-the-community-change",
+      "target": null,
+      "text": "Elke rij beschrijft één actie: de datum, het type actie, de betrokken entiteit, de uitvoerder en de bron. De wijziging die u zojuist hebt aangebracht, staat bovenaan de lijst.",
+      "title": "Het auditlogboek",
+      "waitFor": "audit-log-list__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__row--0",
+      "target": "audit-log-list__row--0",
+      "text": "Klik op een rij om de details van de gebeurtenis te tonen.",
+      "title": "Details van een gebeurtenis"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "audit-log-list__row-expansion--0",
+      "target": "audit-log-list__row-expansion--0",
+      "text": "Wanneer u op een rij klikt, klapt u de payload in JSON-formaat uit: hier de lijst van gewijzigde velden. Dat is het volledige technische bewijs van wat er is gewijzigd.",
+      "title": "Details van de actie"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "audit-log-list__input--entity-type",
+      "target": "audit-log-list__input--entity-type",
+      "text": "Gebruik de filters om gericht te zoeken, bijvoorbeeld op entiteitstype, actie, ID of datumbereik.",
+      "title": "Logboek filteren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__btn--clear-filters",
+      "target": "audit-log-list__btn--clear-filters",
+      "text": "De knop “Filters wissen” wist alle criteria in één keer en toont opnieuw het volledige logboek.",
+      "title": "Filters wissen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__btn--export",
+      "target": "audit-log-list__btn--export",
+      "text": "De knop “CSV exporteren” downloadt het volledige logboek in CSV-formaat — handig om te archiveren of om aan uw regulator te bezorgen.",
+      "title": "Logboek exporteren"
+    }
+  ],
+  "title": "Het auditlogboek raadplegen"
+}

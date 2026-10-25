@@ -1,0 +1,114 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/simulation"
+  },
+  "guideUrl": "https://guide.optimce.be/simulation-run/en.html",
+  "id": "simulation-run",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__panel--start",
+      "target": "simulation-hub__panel--start",
+      "text": "The simulation page displays its configuration form: pick a saved allocation key, name the simulation, set the injection, and upload the consumption file to simulate.",
+      "title": "Simulation page",
+      "waitFor": "simulation-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "simulation-hub__select--key",
+      "target": "simulation-hub__select--key",
+      "text": "Open the \"Allocation key\" dropdown and select the key you just saved. The simulation will apply this allocation to the imported consumption data.",
+      "title": "Choose the allocation key"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--name",
+      "target": "simulation-hub__input--name",
+      "text": "Give the simulation a name so you can find it in the history.",
+      "title": "Name the simulation"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--injection-name",
+      "target": "simulation-hub__input--injection-name",
+      "text": "Enter the name of the column in your data file that holds the energy produced.",
+      "title": "Injection name"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__dropzone",
+      "target": "simulation-hub__dropzone",
+      "text": "Upload the same \"test_4.csv\" file into the drop zone. The simulation will compute self-consumption and energy sharing from this data and the selected key.",
+      "title": "Import the file to simulate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--submit",
+      "target": "simulation-hub__btn--submit",
+      "text": "Click \"Run simulation\". The simulation is queued and appears in the runs list with a \"Pending\" status until the computation completes.",
+      "title": "Launch the simulation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--refresh",
+      "target": "simulation-hub__btn--refresh",
+      "text": "The computation takes a moment: refresh the list to see its result.",
+      "title": "Refresh"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-simulation-run",
+      "target": null,
+      "text": "Click the finished simulation to show its results.",
+      "title": "Expand the simulation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__metrics",
+      "target": "simulation-results__metrics",
+      "text": "The simulation is complete. The headline metrics are shown: self-consumed energy, surplus, self-sufficiency rate, and sharing rate — computed from the saved key and the imported file.",
+      "title": "Simulation results"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-iteration-breakdown",
+      "target": null,
+      "text": "Expand an iteration to see how the energy was shared in it.",
+      "title": "Per-iteration detail"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__iteration-toggle--1",
+      "target": "simulation-results__iteration-toggle--1",
+      "text": "Each key iteration can be expanded to reveal the per-consumer detail: allocation, consumption, self-consumed energy, surplus, and residual volume. This is where allocation solutions are compared.",
+      "title": "Per-iteration, per-consumer detail"
+    }
+  ],
+  "title": "Simulate an allocation key"
+}

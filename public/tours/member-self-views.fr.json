@@ -1,0 +1,74 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/member-self-views/fr.html",
+  "id": "member-self-views",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--representations",
+      "target": "profile-tabs__tab--representations",
+      "text": "L'onglet « Représentations » liste les membres de la communauté que vous représentez. Cliquez sur une ligne pour ouvrir sa fiche.",
+      "title": "Vos représentations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--meters",
+      "target": "profile-tabs__tab--meters",
+      "text": "L'onglet « Compteurs » liste les compteurs rattachés aux membres que vous représentez. Cliquez sur une ligne pour consulter le compteur en détail.",
+      "title": "Vos compteurs"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters__row--desktop--0",
+      "text": "Cliquez sur la ligne du compteur pour consulter son détail et ses relevés.",
+      "title": "Ouvrir son compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters__row--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters__row--mobile--0",
+      "text": "Touchez la ligne du compteur pour consulter son détail et ses relevés.",
+      "title": "Ouvrir son compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view-me__hero",
+      "target": "meter-view-me__hero",
+      "text": "La vue du compteur affiche ses caractéristiques et son statut. Les onglets vous permettent de voir la configuration actuelle, l'historique, les périodes futures et la consommation.",
+      "title": "Votre compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view-me__tab--consumption",
+      "target": "meter-view-me__tab--consumption",
+      "text": "L'onglet « Consommation » présente les relevés de votre compteur. Lorsqu'aucune donnée n'est encore disponible, un message vous l'indique.",
+      "title": "La consommation"
+    }
+  ],
+  "title": "Consulter sa fiche et son compteur"
+}

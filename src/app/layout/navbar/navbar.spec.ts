@@ -9,6 +9,11 @@ import Keycloak from 'keycloak-js';
 import { Navbar } from './navbar';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
 import { NotificationStore } from '../../features/notifications/services/notification.store';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SteppyTours } from '@steppy/angular';
+import { HelpDialog } from '../../features/guided_tours/components/help-dialog/help-dialog';
+import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../core/dtos/notification';
 
 describe('Navbar', () => {
   let component: Navbar;
@@ -25,6 +30,10 @@ describe('Navbar', () => {
   let keycloakSpy: { logout: ReturnType<typeof vi.fn> };
   let titleSpy: { setTitle: ReturnType<typeof vi.fn> };
   let routerSpy: { events: Subject<NavigationEnd>; url: string };
+  let helpClose$: Subject<unknown>;
+  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
+  let toursSpy: { start: ReturnType<typeof vi.fn> };
+  let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
 
   const mockMatchMedia = (matches: boolean) => {
     const listeners: ((e: MediaQueryListEvent) => void)[] = [];
@@ -58,6 +67,12 @@ describe('Navbar', () => {
     keycloakSpy = { logout: vi.fn().mockResolvedValue(undefined) };
     titleSpy = { setTitle: vi.fn() };
     routerSpy = { events: routerEvents$, url: '/' };
+    helpClose$ = new Subject<unknown>();
+    dialogServiceSpy = {
+      open: vi.fn().mockReturnValue({ onClose: helpClose$.asObservable(), destroy: vi.fn() }),
+    };
+    toursSpy = { start: vi.fn().mockResolvedValue(true) };
+    snackbarSpy = { openSnackBar: vi.fn() };
 
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key: string) => {
       if (key === 'sidebar-pinned') return localStoragePinValue;
@@ -73,6 +88,9 @@ describe('Navbar', () => {
         { provide: Title, useValue: titleSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: {} },
+        { provide: DialogService, useValue: dialogServiceSpy },
+        { provide: SteppyTours, useValue: toursSpy },
+        { provide: SnackbarNotification, useValue: snackbarSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
@@ -523,6 +541,101 @@ describe('Navbar', () => {
       const label = queryGuideLink()?.querySelector('span');
       expect(label).toBeTruthy();
       expect(label?.textContent?.trim()).toBe('NAVBAR.USER_GUIDE');
+    });
+  });
+
+  describe('Help dialog', () => {
+    const click = (init: MouseEventInit = {}) =>
+      new MouseEvent('click', { button: 0, cancelable: true, bubbles: true, ...init });
+
+    beforeEach(async () => {
+      mockMatchMedia(false);
+      await setupTestBed();
+      fixture.detectChanges();
+    });
+
+    it('should open the Help dialog on a plain click of the user guide link, instead of the guide', () => {
+      const link = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>(
+        '[data-testid="navbar__btn--user-guide"]',
+      );
+      const event = click();
+      link?.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(dialogServiceSpy.open).toHaveBeenCalledWith(
+        HelpDialog,
+        expect.objectContaining({ modal: true }),
+      );
+    });
+
+    it('should let a ctrl-, meta-, shift- or middle-click open the guide itself', () => {
+      for (const init of [
+        { ctrlKey: true },
+        { metaKey: true },
+        { shiftKey: true },
+        { button: 1 },
+      ]) {
+        const event = click(init);
+        component.openHelp(event);
+        expect(event.defaultPrevented).toBe(false);
+      }
+      expect(dialogServiceSpy.open).not.toHaveBeenCalled();
+    });
+
+    it('should not open a second dialog while one is open', () => {
+      component.openHelp(click());
+      component.openHelp(click());
+
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(1);
+    });
+
+    it('should start the chosen tour, with its params, once the dialog has closed', async () => {
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'meter-deactivate', params: { meterEan: '541448820000000001' } });
+      await Promise.resolve();
+
+      expect(toursSpy.start).toHaveBeenCalledWith('meter-deactivate', {
+        params: { meterEan: '541448820000000001' },
+      });
+      expect(snackbarSpy.openSnackBar).not.toHaveBeenCalled();
+    });
+
+    it('should start a tour without params as is', async () => {
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'key-update' });
+      await Promise.resolve();
+
+      expect(toursSpy.start).toHaveBeenCalledWith('key-update', undefined);
+    });
+
+    it('should close the mobile drawer before the tour starts', async () => {
+      component['mobile'].set(true);
+      component.openSideBar();
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'home-overview' });
+      await Promise.resolve();
+
+      expect(component['visibleSideBar']()).toBe(false);
+      expect(toursSpy.start).toHaveBeenCalled();
+    });
+
+    it('should say so when the tour cannot start', async () => {
+      toursSpy.start.mockResolvedValue(false);
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'key-update' });
+      await vi.waitFor(() => expect(snackbarSpy.openSnackBar).toHaveBeenCalled());
+
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalledWith('HELP.TOURS.START_FAILED', ERROR_TYPE);
+    });
+
+    it('should start nothing when the dialog is dismissed', async () => {
+      component.openHelp(click());
+      helpClose$.next(undefined);
+      await Promise.resolve();
+
+      expect(toursSpy.start).not.toHaveBeenCalled();
+      component.openHelp(click());
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(2);
     });
   });
 

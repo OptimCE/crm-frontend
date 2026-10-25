@@ -1,0 +1,97 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-create/en.html",
+  "id": "sharing-op-create",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Click \"Add\" to open the dialog that creates a new sharing operation inside the active community.",
+      "title": "Add an operation",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Type a meaningful name for the new sharing operation. This name appears in the list and in every reference to the operation.",
+      "title": "Name the operation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Pick the \"Local\" card to indicate that sharing happens inside a single building, as opposed to remote sharing across the public grid.",
+      "title": "Local type"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Type the first letters of a municipality the operation covers.",
+      "title": "Search a municipality"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17c-pick-the-first-suggestion",
+      "target": null,
+      "text": "Pick the municipality from the suggestions.",
+      "title": "Pick the municipality"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Submit the form to create the sharing operation.",
+      "title": "Create the operation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "text": "The new \"E2E Sharing Op\" shows up in the community's sharing operations list, ready to be edited and activated.",
+      "title": "Operation created"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Click the new operation's row to open its detail page and access the full set of parameters.",
+      "title": "Open the detail"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "text": "The detail page header echoes the name of the operation you just created — it serves as the anchor across every view that references it.",
+      "title": "Operation name",
+      "waitFor": "op-view__hero"
+    }
+  ],
+  "title": "Create a sharing operation"
+}

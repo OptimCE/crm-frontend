@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users/communities"
+  },
+  "guideUrl": "https://guide.optimce.be/community-create/nl.html",
+  "id": "community-create",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-communities__button--create",
+      "target": "user-communities__button--create",
+      "text": "Klik bovenaan de lijst op “Gemeenschap aanmaken” om het aanmaakvenster te openen.",
+      "title": "Gemeenschap aanmaken",
+      "waitFor": "user-communities__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-dialog__input--name",
+      "target": "community-dialog__input--name",
+      "text": "Voer de naam van de gemeenschap in. De regulator is vooraf geselecteerd (CWaPE voor Wallonië); pas dit aan als uw gemeenschap onder een andere gewestelijke regulator valt.",
+      "title": "De gemeenschap een naam geven"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-dialog__button--submit",
+      "target": "community-dialog__button--submit",
+      "text": "Klik op “Bevestigen”. De gemeenschap wordt aangemaakt in het CRM en bij de identiteitsprovider, en u wordt er automatisch de beheerder van.",
+      "title": "Aanmaak bevestigen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-communities__input--search",
+      "target": "user-communities__input--search",
+      "text": "Zoek de nieuwe gemeenschap in de lijst.",
+      "title": "De gemeenschap terugvinden"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "user-communities__table",
+      "target": "user-communities__table",
+      "text": "“E2E Community” staat nu in uw lijst. U hoeft ze alleen nog te activeren om met de configuratie te beginnen.",
+      "title": "Uw nieuwe gemeenschap",
+      "waitFor": "user-communities__row--mobile--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "activate-the-new-community-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Activeer de nieuwe gemeenschap: de beheermenu's verschijnen in de zijbalk.",
+      "title": "De gemeenschap activeren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-activate-the-new-community-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Activeer de nieuwe gemeenschap: de beheermenu's verschijnen in de zijbalk.",
+      "title": "De gemeenschap activeren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "text": "De sectie “Beheer” verschijnt in de zijbalk: als maker bent u beheerder van de gemeenschap en hebt u toegang tot al haar tools.",
+      "title": "U bent beheerder"
+    }
+  ],
+  "title": "Een gemeenschap aanmaken"
+}

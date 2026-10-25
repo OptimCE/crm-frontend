@@ -7,3 +7,8 @@
 .vscode
 dist
 node_modules
+
+# Steppy tour files: copied byte for byte from the e2e project and pinned by
+# SHA-384 in tours.manifest.json. Reformatting them (format, or the lint-staged
+# `prettier --write` on commit) changes the bytes and the overlay rejects them.
+public/tours/

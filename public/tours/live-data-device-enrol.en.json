@@ -1,0 +1,100 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-device-enrol/en.html",
+  "id": "live-data-device-enrol",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "In the Live data console, open the \"Devices\" tab. A device is the box plugged into a member's meter (P1 port) or inverter: it sends a reading every quarter-hour.",
+      "title": "Open the Devices tab",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "text": "Click \"Add a device\".",
+      "title": "Add a device",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "device-create-dialog__input--name",
+      "target": "device-create-dialog__input--name",
+      "text": "Give the device a name you will recognise.",
+      "title": "Name the device"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__select--ean",
+      "target": "device-create-dialog__select--ean",
+      "text": "Open the list of the community's meters.",
+      "title": "Pick the meter"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "choose-the-member-s-meter",
+      "target": null,
+      "text": "Choose the meter the device is connected to. A meter that already has a device is greyed out.",
+      "title": "Pick the meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__btn--submit",
+      "target": "device-create-dialog__btn--submit",
+      "text": "Click \"Create\". Only tick \"pure injection\" for a site that consumes nothing: ticked by mistake, it would understate the community's production without any visible error.",
+      "title": "Create the device",
+      "waitFor": "device-create-dialog__select--ean"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "device-token-dialog__qr",
+      "target": "device-token-dialog__qr",
+      "text": "The device is created and its enrolment code shows immediately, as text and as a QR code. Type it (or scan it) into the device. It is shown only once, works only once and expires after 72 hours; if it is lost, issue a new one from the list — the old one then stops working.",
+      "title": "The enrolment code",
+      "waitFor": "device-token-dialog__code"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-token-dialog__btn--close",
+      "target": "device-token-dialog__btn--close",
+      "text": "Close the window when you are done.",
+      "title": "Close",
+      "waitFor": "device-token-dialog__once"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "it-is-waiting-for-its-first-contact",
+      "target": null,
+      "text": "Until the device has used its code, it is \"awaiting enrolment\" and \"never seen\". The box below says what to check: is the device powered and connected to the network?",
+      "title": "Awaiting enrolment"
+    }
+  ],
+  "title": "Connect a device"
+}

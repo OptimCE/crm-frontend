@@ -1,0 +1,74 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/member-self-views/en.html",
+  "id": "member-self-views",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--representations",
+      "target": "profile-tabs__tab--representations",
+      "text": "The \"Representations\" tab lists the community members you represent. Click a row to open its record.",
+      "title": "Your memberships"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--meters",
+      "target": "profile-tabs__tab--meters",
+      "text": "The \"Meters\" tab lists the meters attached to the members you represent. Click a row to inspect a meter in detail.",
+      "title": "Your meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters__row--desktop--0",
+      "text": "Click the meter's row to consult its detail and its readings.",
+      "title": "Open your meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters__row--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters__row--mobile--0",
+      "text": "Tap the meter's row to consult its detail and its readings.",
+      "title": "Open your meter"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view-me__hero",
+      "target": "meter-view-me__hero",
+      "text": "The meter view shows its characteristics and status. The tabs let you see the current configuration, history, upcoming periods, and consumption.",
+      "title": "Your meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view-me__tab--consumption",
+      "target": "meter-view-me__tab--consumption",
+      "text": "The \"Consumption\" tab presents your meter's readings. When no data is available yet, a message tells you so.",
+      "title": "Consumption"
+    }
+  ],
+  "title": "Consult your own record and meter"
+}

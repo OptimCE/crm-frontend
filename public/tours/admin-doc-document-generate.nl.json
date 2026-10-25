@@ -1,0 +1,162 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-document-generate/nl.html",
+  "id": "admin-doc-document-generate",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Klik op de rij van het dossier om de detailpagina ervan te openen. Documenten worden altijd binnen een dossier toegevoegd.",
+      "title": "Dossier openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__empty--message",
+      "target": "dossier-documents-panel__empty--message",
+      "text": "Het tabblad “Documenten” toont de stukken van het dossier. Een pas aangemaakt dossier bevat er nog geen.",
+      "title": "Een leeg dossier",
+      "waitFor": "dossier-documents-panel__btn--add"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "Klik op “Document toevoegen” om het reglementaire formulier te kiezen dat u wilt voorbereiden.",
+      "title": "Document toevoegen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "De lijst bevat de formulieren die de regulator voor uw regio heeft gepubliceerd. Elk formulier weet welke gegevens uit het CRM het moet overnemen.",
+      "title": "Formulier kiezen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Geef het document een titel waarmee het in het dossier herkenbaar is.",
+      "title": "Het document benoemen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Bevestig: het document wordt aan het dossier toegevoegd, nog zonder enige inhoud.",
+      "title": "Document aanmaken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--generate-1",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "Het document wordt aangemaakt met de status “Concept”. Het heeft nog geen inhoud: via de pictogrammen kunt u het genereren vanuit het CRM of uw eigen bestand uploaden.",
+      "title": "Er wacht een concept op u",
+      "waitFor": "dossier-documents-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--generate-1-2",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "Klik op het pictogram om te genereren. OptimCE verzamelt de gegevens van de gemeenschap, van de deeloperatie en van haar leden om het formulier in te vullen.",
+      "title": "Document genereren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generate-dialog__field--community_name",
+      "target": "generate-dialog__field--community_name",
+      "text": "Niets wordt ingediend zonder dat u het hebt nagelezen. De velden zijn vooraf ingevuld vanuit het CRM en blijven bewerkbaar: wat u hier bevestigt, is precies wat in het document wordt vastgelegd.",
+      "title": "Gegevens controleren",
+      "waitFor": "generate-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "generate-dialog__field--community_name-2",
+      "target": "generate-dialog__field--community_name",
+      "text": "Een correctie die u hier maakt, geldt alleen voor dit document. Is een gegeven overal fout, corrigeer het dan liever in het CRM en laad het formulier daarna opnieuw.",
+      "title": "Een waarde corrigeren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "generate-dialog__btn--submit",
+      "target": "generate-dialog__btn--submit",
+      "text": "Het genereren gebeurt op de achtergrond. U kunt gewoon verder werken: de kaart van het document toont “Bezig met genereren” en wordt vanzelf bijgewerkt.",
+      "title": "Generatie starten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "text": "Zodra het genereren klaar is, heeft het document een downloadbare versie. Er wordt niets overschreven: elke generatie voegt een nieuwe versie toe.",
+      "title": "Het document is klaar"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "Het pictogram “Versies bekijken” opent de volledige historiek van het document.",
+      "title": "Versies bekijken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Elke versie vermeldt wanneer en door wie ze werd gemaakt. Gegenereerde versies bewaren bovendien de exacte gegevens die werden gebruikt.",
+      "title": "Een spoor van wat er werd gemaakt",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1-2",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Open de momentopname om de gegevens na te lezen zoals ze waren op het moment van indiening. Een latere wijziging in het CRM herschrijft nooit wat werd doorgestuurd.",
+      "title": "Vastgelegde gegevens tonen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Sluit het venster wanneer u klaar bent.",
+      "title": "Sluiten"
+    }
+  ],
+  "title": "Een document genereren vanuit het CRM"
+}

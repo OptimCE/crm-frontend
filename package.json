@@ -46,6 +46,8 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "@primeuix/themes": "^2.0.2",
+    "@steppy/angular": "0.6.0",
+    "@steppy/player": "0.6.0",
     "ag-grid-angular": "^35.0.1",
     "chart.js": "^4.4.8",
     "glob": "^13.0.0",

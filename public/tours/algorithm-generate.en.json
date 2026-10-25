@@ -1,0 +1,178 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-generate/en.html",
+  "id": "algorithm-generate",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__panel--start",
+      "target": "algorithm-hub__panel--start",
+      "text": "The allocation key generation page displays the configuration form. Select the algorithm, fill in the parameters, and upload your data file to launch a new generation.",
+      "title": "Key generation page",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "algorithm-hub__select--algorithm",
+      "target": "algorithm-hub__select--algorithm",
+      "text": "Click the \"Algorithm\" dropdown and select \"OLAGSA\". The parameter form specific to this genetic algorithm then appears.",
+      "title": "Select the OLAGSA algorithm"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--generation-name",
+      "target": "algorithm-hub__input--generation-name",
+      "text": "Give this generation a name so you can find it in the history.",
+      "title": "Name the generation",
+      "waitFor": "algo-form__grid--main"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--injection-name",
+      "target": "algorithm-hub__input--injection-name",
+      "text": "Enter the name of the column in your data file that holds the energy produced.",
+      "title": "Injection name"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algo-form__input--iterations",
+      "target": "algo-form__input--iterations",
+      "text": "Enter \"3\" in the \"Iterations\" field. This parameter defines the number of independent solutions computed by the OLAGSA genetic algorithm.",
+      "title": "Set the number of iterations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algo-form__btn--toggle-advanced",
+      "target": "algo-form__btn--toggle-advanced",
+      "text": "Click \"Advanced parameters\" to reveal the genetic algorithm's hyperparameters: population size, crossover rates, mutation rate, and more.",
+      "title": "Open advanced parameters"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algo-form__grid--advanced",
+      "target": "algo-form__grid--advanced",
+      "text": "OLAGSA's advanced parameters are displayed: generations, population size, inter-species and intra-species crossover rates, mutation rate, expected species count, and maximum generations without improvement. Default values suit most use cases.",
+      "title": "Genetic algorithm hyperparameters"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__dropzone",
+      "target": "algorithm-hub__dropzone",
+      "text": "Drag your CSV file into the import zone or click it to select the data file to use for generation.",
+      "title": "Import the data file"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--submit",
+      "target": "algorithm-hub__btn--submit",
+      "text": "Click \"Launch generation\" to submit the task to the OLAGSA engine. The generation immediately appears in the list with a \"Pending\" status.",
+      "title": "Launch the generation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-row-has-appeared",
+      "target": null,
+      "text": "The \"Test Run 1\" generation appears in the list. A pulsing orange dot indicates it is pending processing; it turns green once the OLAGSA engine has finished.",
+      "title": "Generation submitted"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--refresh",
+      "target": "algorithm-hub__btn--refresh",
+      "text": "The computation takes a moment: refresh the list to see its result.",
+      "title": "Refresh"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-completed-successfully",
+      "target": null,
+      "text": "The dot turns green — the generation is complete. The allocation keys have been computed and are ready to view by expanding the row.",
+      "title": "Generation completed"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Click the generation to show the keys it produced.",
+      "title": "Expand the generation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "The list of computed keys appears under the generation. Each key corresponds to one optimised OLAGSA solution. Click a key to view its detailed allocation.",
+      "title": "Allocation keys generated"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Click a key to show its allocation.",
+      "title": "Expand the key"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "The allocation table is shown for this key, detailing the values computed by the algorithm. The \"Save\" button lets you store this key in the Keys module.",
+      "title": "Key detail and per-iteration allocation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "save-the-key",
+      "target": null,
+      "text": "Click \"Save\" to store this allocation key in the Keys module, where it will be accessible from the community management section.",
+      "title": "Save the key to the module"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "45b-save-confirmation-dialog-is-visible",
+      "target": null,
+      "text": "A confirmation dialog appears. Click the confirm button to permanently save this allocation key to the Keys module.",
+      "title": "Confirm saving the key"
+    }
+  ],
+  "title": "Generate keys (OLAGSA)"
+}

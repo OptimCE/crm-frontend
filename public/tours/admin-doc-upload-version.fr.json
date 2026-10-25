@@ -1,0 +1,123 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-upload-version/fr.html",
+  "id": "admin-doc-upload-version",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Ouvrez le dossier auquel la pièce doit être rattachée.",
+      "title": "Ouvrir le dossier"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "Un document produit hors d'OptimCE — un formulaire signé, un courrier du GRD — se déclare d'abord ici, puis reçoit son fichier.",
+      "title": "Déclarer la pièce"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "Choisissez le type de document à ajouter au dossier.",
+      "title": "Type de document"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Choisissez le formulaire correspondant et donnez-lui un intitulé parlant pour vos collègues.",
+      "title": "Nommer la pièce"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Validez pour créer le document dans le dossier.",
+      "title": "Créer le document"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--upload-1",
+      "target": "dossier-documents-panel__btn--upload-1",
+      "text": "L'icône de téléversement permet de joindre votre propre fichier au lieu de laisser OptimCE le générer.",
+      "title": "Téléverser une version"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "upload-version-dialog__dropzone",
+      "target": "upload-version-dialog__dropzone",
+      "text": "Glissez le fichier dans la zone prévue ou cliquez pour le sélectionner sur votre ordinateur.",
+      "title": "Choisir le fichier"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "upload-version-dialog__btn--submit",
+      "target": "upload-version-dialog__btn--submit",
+      "text": "Chaque dépôt crée une version permanente de plus. Un fichier déjà enregistré n'est jamais remplacé : il est conservé, et le nouveau devient la version courante.",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "text": "Le document dispose maintenant d'une version téléchargeable, comme s'il avait été généré.",
+      "title": "La pièce est jointe"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "Ouvrez les versions pour confirmer que le fichier a bien été enregistré, avec son nom d'origine et sa taille.",
+      "title": "Vérifier l'historique"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-uploaded-file-is-version-1",
+      "target": null,
+      "text": "Le fichier téléversé apparaît comme version 1. Contrairement à une version générée, il ne conserve aucun instantané de données : un fichier arbitraire ne dit rien de qui il concerne.",
+      "title": "Une version de plus",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Fermez la fenêtre quand vous avez terminé.",
+      "title": "Fermer"
+    }
+  ],
+  "title": "Joindre un document existant"
+}

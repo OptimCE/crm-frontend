@@ -1,0 +1,162 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-document-generate/en.html",
+  "id": "admin-doc-document-generate",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Click the dossier row to open its page. Documents are always added inside a dossier.",
+      "title": "Open the dossier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__empty--message",
+      "target": "dossier-documents-panel__empty--message",
+      "text": "The \"Documents\" tab lists the dossier's pieces. A freshly created dossier holds none.",
+      "title": "An empty dossier",
+      "waitFor": "dossier-documents-panel__btn--add"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "Click \"Add document\" to choose which regulatory form to prepare.",
+      "title": "Add a document"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "The list holds the forms published by the regulator for your region. Each one knows which CRM data it has to carry.",
+      "title": "Choose the form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Give the document a title that identifies it in the dossier.",
+      "title": "Name the document"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Submit: the document joins the dossier, still without any content.",
+      "title": "Create the document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--generate-1",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "The document is created with the status \"Draft\". It has no content yet: the icons offer to generate it from the CRM or to upload your own file.",
+      "title": "A draft is waiting",
+      "waitFor": "dossier-documents-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--generate-1-2",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "Click the generate icon. OptimCE gathers the data of the community, the operation and its members to fill the form.",
+      "title": "Generate the document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generate-dialog__field--community_name",
+      "target": "generate-dialog__field--community_name",
+      "text": "Nothing is filed without your review. The fields are pre-filled from the CRM and stay editable: what you approve here is exactly what gets frozen into the document.",
+      "title": "Check the data",
+      "waitFor": "generate-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "generate-dialog__field--community_name-2",
+      "target": "generate-dialog__field--community_name",
+      "text": "A correction made here applies to this document only. If a value is wrong everywhere, fix it in the CRM instead and reload the form.",
+      "title": "Correct a value"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "generate-dialog__btn--submit",
+      "target": "generate-dialog__btn--submit",
+      "text": "The generation runs in the background. You can carry on working: the document card shows \"Generating\" and updates on its own.",
+      "title": "Start the generation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "text": "Once the generation finishes, the document carries a downloadable version. Nothing is overwritten: every generation adds a new version.",
+      "title": "The document is ready"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "The \"Versions\" icon opens the document's full history.",
+      "title": "Look at the versions"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Every version records when it was produced and by whom. Generated versions additionally keep the exact data that was used.",
+      "title": "A record of what was produced",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1-2",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Open the snapshot to re-read the data exactly as it was at filing time. A later change in the CRM never rewrites what was submitted.",
+      "title": "See the frozen data"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Close the window when you are done.",
+      "title": "Close"
+    }
+  ],
+  "title": "Generate a document from the CRM"
+}

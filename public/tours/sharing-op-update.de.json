@@ -1,0 +1,95 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-update/de.html",
+  "id": "sharing-op-update",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--edit",
+      "target": "op-view__btn--edit",
+      "text": "Die Detailseite der Operation zeigt ihren Namen, ihren Typ, ihre Zähler und die abgedeckten Gemeinden. Über die Stiftsymbole können Sie diese Angaben ändern.",
+      "title": "Detailseite der Operation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-2",
+      "target": "op-view__btn--edit",
+      "text": "Klicken Sie in der Kopfzeile auf „Bearbeiten“: Das Formular öffnet sich, vorausgefüllt mit den aktuellen Angaben der Operation.",
+      "title": "Bearbeitungsformular öffnen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Ändern Sie den Namen der Operation. Hier können Sie auch ihren Typ und ihre Gemeinden anpassen.",
+      "title": "Operation umbenennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Speichern Sie, um Ihre Änderungen zu übernehmen.",
+      "title": "Speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "text": "Zurück auf der Detailseite trägt die Operation ihren neuen Namen.",
+      "title": "Name aktualisiert"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-municipalities",
+      "target": "op-view__btn--edit-municipalities",
+      "text": "Das Stiftsymbol neben den Gemeinden öffnet den Editor für die von der Operation abgedeckten Gemeinden.",
+      "title": "Gemeinden bearbeiten"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-muni-update__autocomplete--municipalities",
+      "target": "op-muni-update__autocomplete--municipalities",
+      "text": "Geben Sie eine Gemeinde ein und wählen Sie sie in den Vorschlägen aus, um sie dem Geltungsbereich der Operation hinzuzufügen.",
+      "title": "Gemeinde hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-muni-update__btn--submit",
+      "target": "op-muni-update__btn--submit",
+      "text": "Speichern Sie, um Ihre Änderungen zu übernehmen.",
+      "title": "Speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-municipality-appears-on-the-operation",
+      "target": null,
+      "text": "Die Gemeinde „Ixelles“ erscheint jetzt unter den von der Operation abgedeckten Gemeinden.",
+      "title": "Gemeinde hinzugefügt"
+    }
+  ],
+  "title": "Teilungsoperation bearbeiten"
+}

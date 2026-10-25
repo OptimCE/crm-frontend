@@ -1,0 +1,68 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters/:meterEan"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-deactivate/en.html",
+  "id": "meter-deactivate",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--deactivate",
+      "target": "meter-view__btn--deactivate",
+      "text": "Open the detail of the meter to deactivate. The \"Deactivate\" button schedules the end of its activity on a given date.",
+      "title": "Meter detail"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--deactivate-2",
+      "target": "meter-view__btn--deactivate",
+      "text": "Open the meter's deactivation dialog.",
+      "title": "Deactivate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__datepicker--date",
+      "target": "meter-deactivation__datepicker--date",
+      "text": "Select the date from which the meter will no longer be active.",
+      "title": "Choose the end date"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__button--submit",
+      "target": "meter-deactivation__button--submit",
+      "text": "Click \"Deactivate\": an inactive period is added to the meter from the chosen date.",
+      "title": "Confirm the deactivation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__tab--future",
+      "target": "meter-view__tab--future",
+      "text": "Open the future-data tab: the scheduled deactivation shows there.",
+      "title": "Future data"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-upcoming-deactivation-is-listed-on-the-future-tab",
+      "target": null,
+      "text": "The \"Future\" tab shows the upcoming inactive period: the meter stays active until the chosen date, then is deactivated.",
+      "title": "Scheduled deactivation"
+    }
+  ],
+  "title": "Deactivate a meter"
+}

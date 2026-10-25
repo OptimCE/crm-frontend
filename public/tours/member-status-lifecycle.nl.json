@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-status-lifecycle/nl.html",
+  "id": "member-status-lifecycle",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Zoek het lid op naam. We nemen hier een lid zonder actieve meter, want een lid dat aan een actieve meter gekoppeld is, kan niet worden gedeactiveerd.",
+      "title": "Het lid zoeken",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "Klik op de rij van het lid in de tabel om de fiche te openen.",
+      "title": "De ledenfiche openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "Tik op de kaart van het lid om de fiche te openen.",
+      "title": "De ledenfiche openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-tabs__tab--meter",
+      "target": "member-view-tabs__tab--meter",
+      "text": "Het lid is actief: het statuslabel is groen en er is een tabblad “Meters” beschikbaar. Met de actieknoppen kunt u het lid deactiveren of in behandeling plaatsen.",
+      "title": "Fiche van het actieve lid",
+      "waitFor": "member-view__btn--deactivate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--deactivate",
+      "target": "member-view__btn--deactivate",
+      "text": "Klik op “Deactiveren”. De statuswijziging gebeurt onmiddellijk, zonder bijkomende bevestiging.",
+      "title": "Het lid deactiveren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-inactive",
+      "target": "member-view__tag--status-inactive",
+      "text": "Het label verandert in “Gedeactiveerd” en het tabblad “Meters” verdwijnt: een inactief lid kan niet langer aan een meter worden gekoppeld.",
+      "title": "Lid gedeactiveerd"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--activate",
+      "target": "member-view__btn--activate",
+      "text": "De knop “Activeren” activeert het lid opnieuw. Zo beheert u de volledige levenscyclus van een lid vanuit de ledenfiche.",
+      "title": "Het lid opnieuw activeren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-active",
+      "target": "member-view__tag--status-active",
+      "text": "Het label staat weer op “Geactiveerd” en het tabblad “Meters” verschijnt opnieuw. Het lid is opnieuw volledig operationeel.",
+      "title": "Lid opnieuw geactiveerd"
+    }
+  ],
+  "title": "Een lid deactiveren en opnieuw activeren"
+}

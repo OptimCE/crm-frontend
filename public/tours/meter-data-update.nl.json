@@ -1,0 +1,149 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-data-update/nl.html",
+  "id": "meter-data-update",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "text": "Open de lijst met meters van de actieve gemeenschap. Zoek de meter waarvan u de huidige configuratie wilt bijwerken.",
+      "title": "Lijst met meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klik op de rij van de meter (EAN 123456789012345678) om de detailfiche te openen en de huidige gegevens te bekijken.",
+      "title": "De meterfiche openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tik op de kaart van de meter (EAN 123456789012345678) om de detailfiche te openen en de huidige gegevens te bekijken.",
+      "title": "De meterfiche openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--update",
+      "target": "meter-view__btn--update",
+      "text": "De fiche toont de huidige kenmerken. De knop “Bijwerken” wordt alleen aangeboden voor een actieve meter — dat is ons startpunt.",
+      "title": "Actieve meter",
+      "waitFor": "meter-view__hero"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--update-2",
+      "target": "meter-view__btn--update",
+      "text": "Klik op “Bijwerken”: er opent een dialoogvenster, vooraf ingevuld met de huidige configuratie van de meter — beschrijving, vermogens, tarief, klanttype en houder.",
+      "title": "Het formulier openen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__textarea--description",
+      "target": "meter-data-update__textarea--description",
+      "text": "Wijzig de beschrijving, het afnamevermogen en het amperage. Deze nieuwe cijfers worden meteen gebruikt in de verdelingsberekeningen van de deeloperaties.",
+      "title": "De energiewaarden aanpassen",
+      "waitFor": "meter-data-update__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--sampling-power",
+      "target": "meter-data-update__input--sampling-power",
+      "text": "Wijzig de beschrijving, het afnamevermogen en het amperage. Deze nieuwe cijfers worden meteen gebruikt in de verdelingsberekeningen van de deeloperaties.",
+      "title": "De energiewaarden aanpassen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--amperage",
+      "target": "meter-data-update__input--amperage",
+      "text": "Wijzig de beschrijving, het afnamevermogen en het amperage. Deze nieuwe cijfers worden meteen gebruikt in de verdelingsberekeningen van de deeloperaties.",
+      "title": "De energiewaarden aanpassen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__select--grd",
+      "target": "meter-data-update__select--grd",
+      "text": "Selecteer in het veld “Netbeheerder” de distributienetbeheerder waarop de meter is aangesloten. Dit veld is verplicht om de nieuwe configuratie te bevestigen.",
+      "title": "De netbeheerder kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--rate--2",
+      "target": "meter-data-update__radio-card--rate--2",
+      "text": "Kies het nieuwe tarief.",
+      "title": "Tarief"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--client-type--2",
+      "target": "meter-data-update__radio-card--client-type--2",
+      "text": "Zet het tarief op “Tweeuurtarief” en het klanttype op “Professioneel” om het nieuwe verbruiksprofiel van de meter weer te geven.",
+      "title": "Het verbruiksprofiel wijzigen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__datepicker--start-date",
+      "target": "meter-data-update__datepicker--start-date",
+      "text": "Kies de datum vanaf wanneer de nieuwe configuratie geldt. Deze datum is verplicht om de wijziging te bevestigen.",
+      "title": "De ingangsdatum vastleggen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__btn--submit",
+      "target": "meter-data-update__btn--submit",
+      "text": "Klik op “Bevestigen”: het formulier wordt naar het CRM gestuurd, dat de huidige configuratie van de meter vervangt. Het dialoogvenster sluit zodra de wijziging is bevestigd.",
+      "title": "De wijziging opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-data-view__text--rate",
+      "target": "meter-data-view__text--rate",
+      "text": "Terug op de fiche verschijnen de nieuwe beschrijving, het amperage van 63 A en het tweeuurtarief in de gegevenskaarten — de wijzigingen zijn wel degelijk op de server opgeslagen.",
+      "title": "Wijziging bevestigd",
+      "waitFor": "meter-data-view__text--description"
+    }
+  ],
+  "title": "De metergegevens wijzigen"
+}

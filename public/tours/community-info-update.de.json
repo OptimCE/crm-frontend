@@ -1,0 +1,104 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/communities/info"
+  },
+  "guideUrl": "https://guide.optimce.be/community-info-update/de.html",
+  "id": "community-info-update",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__card--view",
+      "target": "community-info__card--view",
+      "text": "Die Seite zeigt die aktuellen Informationen der Gemeinschaft: Name, Beschreibung, Website und Adresse des Hauptsitzes. Klicken Sie auf **Bearbeiten**, um in den Bearbeitungsmodus zu wechseln.",
+      "title": "Informationsseite der Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Schalten Sie die Karte der Gemeinschaft in den Bearbeitungsmodus.",
+      "title": "Bearbeiten"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--description",
+      "target": "community-info__input--description",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--website",
+      "target": "community-info__input--website",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--street",
+      "target": "community-info__input--street",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--number",
+      "target": "community-info__input--number",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--postcode",
+      "target": "community-info__input--postcode",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--city",
+      "target": "community-info__input--city",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--save",
+      "target": "community-info__btn--save",
+      "text": "Speichern Sie, um Ihre Änderungen zu übernehmen.",
+      "title": "Speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__view--description",
+      "target": "community-info__view--description",
+      "text": "Zurück im Ansichtsmodus zeigt die Seite die Beschreibung, die Website und die Adresse genau so an, wie Sie sie eingegeben haben — die Änderungen wurden serverseitig gespeichert.",
+      "title": "Informationen aktualisiert"
+    }
+  ],
+  "title": "Gemeinschaftsinfo aktualisieren"
+}

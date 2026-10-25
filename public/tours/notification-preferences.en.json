@@ -1,0 +1,60 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/notification-preferences/en.html",
+  "id": "notification-preferences",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--notifications",
+      "target": "profile-tabs__tab--notifications",
+      "text": "The last tab of your profile controls how OptimCE tells you about things.",
+      "title": "Notifications tab"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__row--news_post",
+      "target": "notification-preferences__row--news_post",
+      "text": "Each row is a kind of activity — news, invoices, deadlines… — and each column a channel. \"Everything else\" covers the categories without a row of their own. Essential messages (invoices, invitations, missed deadlines) are always delivered.",
+      "title": "Categories and channels",
+      "waitFor": "notification-preferences__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__email--news_post",
+      "target": "notification-preferences__email--news_post",
+      "text": "Switch \"Email\" off on the \"News posts\" row: you will still see the posts inside the application, but no email will be sent.",
+      "title": "Turn a channel off"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-preferences__save",
+      "target": "notification-preferences__save",
+      "text": "Nothing is applied until you save. Click \"Save preferences\".",
+      "title": "Save"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__saved",
+      "target": "notification-preferences__saved",
+      "text": "A confirmation appears next to the button. It clears as soon as you change a setting again.",
+      "title": "Preferences saved"
+    }
+  ],
+  "title": "Choose your notifications"
+}

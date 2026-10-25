@@ -1,0 +1,94 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-status-lifecycle/de.html",
+  "id": "member-status-lifecycle",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "members-list__input--search",
+      "target": "members-list__input--search",
+      "text": "Suchen Sie das Mitglied nach seinem Namen. Wir wählen hier ein Mitglied ohne aktiven Zähler, denn ein Mitglied, das mit einem aktiven Zähler verknüpft ist, kann nicht deaktiviert werden.",
+      "title": "Mitglied suchen",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "members-list__row--desktop--0",
+      "text": "Klicken Sie in der Tabelle auf die Zeile des Mitglieds, um seine Detailseite zu öffnen.",
+      "title": "Detailseite des Mitglieds öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "members-list__card--mobile--0",
+      "text": "Tippen Sie auf die Karte des Mitglieds, um seine Detailseite zu öffnen.",
+      "title": "Detailseite des Mitglieds öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-tabs__tab--meter",
+      "target": "member-view-tabs__tab--meter",
+      "text": "Das Mitglied ist aktiv: Sein Status-Badge ist grün, und eine Registerkarte „Zähler“ ist verfügbar. Mit den Aktionsschaltflächen können Sie es deaktivieren oder in die Warteliste setzen.",
+      "title": "Detailseite des aktiven Mitglieds",
+      "waitFor": "member-view__btn--deactivate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--deactivate",
+      "target": "member-view__btn--deactivate",
+      "text": "Klicken Sie auf „Deaktivieren“. Die Statusänderung erfolgt sofort, ohne zusätzliche Bestätigung.",
+      "title": "Mitglied deaktivieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-inactive",
+      "target": "member-view__tag--status-inactive",
+      "text": "Das Badge wechselt zu „Deaktiviert“, und die Registerkarte „Zähler“ verschwindet: Ein inaktives Mitglied kann nicht mehr mit einem Zähler verknüpft werden.",
+      "title": "Mitglied deaktiviert"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--activate",
+      "target": "member-view__btn--activate",
+      "text": "Die Schaltfläche „Aktivieren“ reaktiviert das Mitglied. So verwalten Sie den gesamten Lebenszyklus eines Mitglieds über seine Detailseite.",
+      "title": "Mitglied reaktivieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view__tag--status-active",
+      "target": "member-view__tag--status-active",
+      "text": "Das Badge wechselt zurück zu „Aktiviert“, und die Registerkarte „Zähler“ erscheint wieder. Das Mitglied ist wieder voll einsatzfähig.",
+      "title": "Mitglied reaktiviert"
+    }
+  ],
+  "title": "Mitglied deaktivieren und reaktivieren"
+}

@@ -1,0 +1,195 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-poll-create/en.html",
+  "id": "news-poll-create",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Click \"New post\" to open the compose dialog.",
+      "title": "Open the composer",
+      "waitFor": "news-board__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__kind--poll",
+      "target": "news-compose__kind--poll",
+      "text": "At the top of the dialog, switch to the \"Poll\" tab. Extra fields appear: question, answer options, closing date, and visibility.",
+      "title": "Switch to a poll"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "ask-the-question",
+      "target": null,
+      "text": "Type the poll question in the editor, just like a regular news post.",
+      "title": "Ask the question"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__poll-type--single",
+      "target": "news-compose__poll-type--single",
+      "text": "Choose whether members can select a single answer (\"Single choice\") or several (\"Multiple choice\"). We keep \"Single choice\".",
+      "title": "Single or multiple choice"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--0",
+      "target": "news-compose__option-input--0",
+      "text": "Enter the first possible answer.",
+      "title": "First option"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--1",
+      "target": "news-compose__option-input--1",
+      "text": "Enter the second possible answer.",
+      "title": "Second option"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__add-option",
+      "target": "news-compose__add-option",
+      "text": "Add as many answers as you need.",
+      "title": "Add an option"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--2",
+      "target": "news-compose__option-input--2",
+      "text": "Provide at least two answer options. The \"Add option\" button adds more, and the trash icon removes one.",
+      "title": "Add the answer options"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-a-closing-date",
+      "target": null,
+      "text": "Pick the closing date and time from the calendar. After this deadline no more votes are accepted and, depending on the chosen visibility, results may be revealed.",
+      "title": "Set a closing date"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__preset--anonymous",
+      "target": "news-compose__preset--anonymous",
+      "text": "Three presets cover the most common cases. Each one combines what managers see, what members see, and when.",
+      "title": "Choose who sees the results"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-2",
+      "target": "news-compose__preset--anonymous",
+      "text": "Members see only the total number of votes per option, and only after they have voted themselves. Nobody sees who voted for what — managers also get totals only. Ideal for a confidential vote.",
+      "title": "Anonymous"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--transparent",
+      "target": "news-compose__preset--transparent",
+      "text": "Everyone sees the full results immediately, including who voted for which option, even before voting. Ideal for an open decision where everyone owns their choice.",
+      "title": "Transparent"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--on_close",
+      "target": "news-compose__preset--on_close",
+      "text": "Members only discover the totals once the poll closes; until then results stay hidden. Managers, however, see the breakdown (who voted for what) at any time to follow participation.",
+      "title": "On close"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__advanced-toggle",
+      "target": "news-compose__advanced-toggle",
+      "text": "The \"Advanced\" button reveals three independent settings. A preset is just a shortcut for these three fields — you can combine them freely.",
+      "title": "Fine-grained control (advanced)"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__admin-vis",
+      "target": "news-compose__admin-vis",
+      "text": "What managers see. \"Aggregate\": only the totals per option. \"Full\": the per-voter breakdown — who voted for each option.",
+      "title": "Manager visibility"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-vis",
+      "target": "news-compose__member-vis",
+      "text": "What members are allowed to see. \"None\": never any results. \"Aggregate\": the totals. \"Full\": the per-voter breakdown.",
+      "title": "Member visibility"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-display",
+      "target": "news-compose__member-display",
+      "text": "When members see what they are allowed to. \"Never\", \"Before vote\", \"After vote\", or \"When the poll ends\". This setting is what distinguishes, for instance, a vote whose result only appears once participation is recorded.",
+      "title": "Member display"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-3",
+      "target": "news-compose__preset--anonymous",
+      "text": "To finish, we pick the \"Anonymous\" preset again, which collapses the advanced settings and applies a consistent, ready-to-publish combination.",
+      "title": "Back to a preset"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Click \"Publish\". The poll is broadcast to every member, who receives a notification inviting them to vote.",
+      "title": "Publish the poll"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-poll",
+      "target": "news-poll",
+      "text": "The poll appears on the board with its options. Members can now vote; results will be shown according to the visibility you chose.",
+      "title": "Your poll is live"
+    }
+  ],
+  "title": "Create a poll"
+}

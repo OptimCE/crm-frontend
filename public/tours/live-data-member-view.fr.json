@@ -1,0 +1,33 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-member-view/fr.html",
+  "id": "live-data-member-view",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-member-s-page",
+      "target": null,
+      "text": "La page montre la production de l'opération de partage à laquelle participe votre compteur, quart d'heure par quart d'heure. Ces chiffres sont indicatifs : les données du gestionnaire de réseau restent la référence pour la répartition et la facturation.",
+      "title": "La production de votre opération de partage",
+      "waitFor": "live-member-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-30-days",
+      "target": null,
+      "text": "Affichez les dernières 24 heures (par quart d'heure), 7 jours (par heure) ou 30 jours (par jour).",
+      "title": "Choisir la période"
+    }
+  ],
+  "title": "Voir la production de mon opération"
+}

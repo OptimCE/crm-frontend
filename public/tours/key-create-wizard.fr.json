@@ -1,0 +1,188 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-wizard/fr.html",
+  "id": "key-create-wizard",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Cliquez sur « Ajouter » : OptimCE vous demande d'abord comment vous souhaitez construire la nouvelle clé de répartition.",
+      "title": "Ouvrir la création",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--step",
+      "target": "key-creation-mode__card--step",
+      "text": "Choisissez « Assistant pas-à-pas » : les deux modes aboutissent à la même clé, mais l'assistant vous guide en quatre étapes au lieu de vous laisser devant une grille vierge.",
+      "title": "Lancer l'assistant"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--nb-consumers",
+      "target": "key-creation__input--nb-consumers",
+      "text": "Indiquez combien de consommateurs se partageront l'énergie. Ce nombre conditionne la taille des itérations générées par l'assistant — ici trois.",
+      "title": "Nombre de consommateurs"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step0-validate",
+      "target": "key-creation__btn--step0-validate",
+      "text": "Cliquez sur « Valider » pour confirmer le nombre de consommateurs et passer à l'étape suivante.",
+      "title": "Valider l'étape"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--0",
+      "target": "key-creation__input--consumer-name--0",
+      "text": "Saisissez un nom pour chaque consommateur. Ces noms seront repris dans toutes les itérations qui suivent.",
+      "title": "Nommer les consommateurs"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--1",
+      "target": "key-creation__input--consumer-name--1",
+      "text": "Saisissez un nom pour chaque consommateur. Ces noms seront repris dans toutes les itérations qui suivent.",
+      "title": "Nommer les consommateurs"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--2",
+      "target": "key-creation__input--consumer-name--2",
+      "text": "Saisissez un nom pour chaque consommateur. Ces noms seront repris dans toutes les itérations qui suivent.",
+      "title": "Nommer les consommateurs"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step1-validate",
+      "target": "key-creation__btn--step1-validate",
+      "text": "Cliquez sur « Valider » pour figer les noms des consommateurs et accéder à la configuration des itérations.",
+      "title": "Valider les noms"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__radio--type-prorata--0",
+      "target": "key-creation__radio--type-prorata--0",
+      "text": "Sélectionnez « Prorata » pour cette première itération : l'énergie sera répartie automatiquement entre les consommateurs selon leur consommation réelle.",
+      "title": "Choisir le mode prorata",
+      "waitFor": "key-creation__card--iteration--0"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--inj-percentage--0",
+      "target": "key-creation__input--inj-percentage--0",
+      "text": "Saisissez la part de l'énergie disponible que reçoit cette itération. Le total des itérations devra atteindre 100%.",
+      "title": "Pondération de l'itération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step2-validate",
+      "target": "key-creation__btn--step2-validate",
+      "text": "L'assistant détecte que le total reste sous 100% et ajoute automatiquement une deuxième itération à configurer. Il continuera tant que la somme ne sera pas atteinte.",
+      "title": "Itération suivante générée"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__radio--type-prorata--1",
+      "target": "key-creation__radio--type-prorata--1",
+      "text": "Sélectionnez à nouveau « Prorata » pour la deuxième itération : la même logique de répartition automatique s'appliquera.",
+      "title": "Mode prorata (itération 2)",
+      "waitFor": "key-creation__card--iteration--1"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--inj-percentage--1",
+      "target": "key-creation__input--inj-percentage--1",
+      "text": "Saisissez la part restante : la somme des itérations doit atteindre 100% pour débloquer la finalisation.",
+      "title": "Compléter à 100%"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step2-validate-2",
+      "target": "key-creation__btn--step2-validate",
+      "text": "Cliquez sur « Valider » : la somme atteint 100% et l'assistant ouvre la dernière étape de finalisation.",
+      "title": "Valider les itérations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--key-name",
+      "target": "key-creation__input--key-name",
+      "text": "Donnez un nom et une description à la nouvelle clé de répartition. Ces informations apparaîtront dans la liste des clés et facilitent sa réutilisation.",
+      "title": "Identifier la clé"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__textarea--key-description",
+      "target": "key-creation__textarea--key-description",
+      "text": "Donnez un nom et une description à la nouvelle clé de répartition. Ces informations apparaîtront dans la liste des clés et facilitent sa réutilisation.",
+      "title": "Identifier la clé"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step3-submit",
+      "target": "key-creation__btn--step3-submit",
+      "text": "Validez l'assistant pour générer la grille complète : une page de revue s'ouvre afin de relire la configuration avant l'enregistrement définitif.",
+      "title": "Soumettre l'assistant"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Cliquez sur « Créer » pour enregistrer la clé. La grille pré-remplie par l'assistant est envoyée telle quelle au CRM.",
+      "title": "Enregistrer la clé"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "keys-list__table--keys",
+      "target": "keys-list__table--keys",
+      "text": "La nouvelle clé « E2E wizard key » apparaît dans la liste des clés de répartition de la communauté, prête à être associée à une opération de partage.",
+      "title": "Clé créée"
+    }
+  ],
+  "title": "Créer une clé (assistant)"
+}

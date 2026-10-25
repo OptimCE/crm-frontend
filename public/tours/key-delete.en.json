@@ -1,0 +1,48 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-delete/en.html",
+  "id": "key-delete",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--delete",
+      "target": "key-view__btn--delete",
+      "text": "The \"Delete\" button permanently removes the key from the community. If it was assigned to a sharing operation, that assignment is removed too.",
+      "title": "Delete the key"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-key-is-gone-from-the-list",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Back on the keys list, \"Key 2\" no longer appears: the deletion has been saved.",
+      "title": "Key deleted",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-the-key-is-gone-from-the-list-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Back on the keys list, \"Key 2\" no longer appears: the deletion has been saved.",
+      "title": "Key deleted"
+    }
+  ],
+  "title": "Delete an allocation key"
+}

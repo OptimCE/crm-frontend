@@ -1,0 +1,43 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-helper-tour/en.html",
+  "id": "key-helper-tour",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "text": "Throughout the app, some fields or columns display an ⓘ icon. This signals that extra information is available — just click it to read the explanation.",
+      "title": "Spot the ⓘ icon",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "header-helper__btn--help",
+      "target": "header-helper__btn--help",
+      "text": "Click the ⓘ icon to get more information about that field. A popover appears with the title and full description.",
+      "title": "Click ⓘ for details"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-helper__title--label",
+      "target": "header-helper__title--label",
+      "text": "The popover shows the field name and its full explanation, letting you understand what each value means without leaving the page. The ⓘ icon works the same way wherever you see it in the app.",
+      "title": "Popover appears",
+      "waitFor": "header-helper__popover--content"
+    }
+  ],
+  "title": "Contextual help — the (i) icon"
+}

@@ -18,6 +18,7 @@ import { LanguageService } from './core/services/language/language.service';
 import { communityContextInterceptor } from './core/interceptors/community.context.inteceptor';
 import { acceptLanguageInterceptor } from './core/interceptors/accept-language.interceptor';
 import { RuntimeConfig } from '../environments/environments';
+import { provideSteppyTours } from '@steppy/angular';
 
 export function initializeLanguage(_languageService: LanguageService) {
   return (): Promise<void> => {
@@ -71,6 +72,12 @@ export function getAppConfig(): ApplicationConfig {
         }),
       }),
       provideZoneChangeDetection({ eventCoalescing: true }),
+      // In-app tours, compiled by Steppy from the e2e guide scenarios and shipped
+      // in public/tours. No `locale`: LanguageService keeps <html lang> in step
+      // with the app's language, and the overlay follows it, mid-tour included.
+      // `appearance: 'light'` starts from Steppy's light palette; the OptimCE
+      // colours on top of it are in styles.css ("In-app tours").
+      provideSteppyTours({ fallbackManifest: 'tours/tours.manifest.json', appearance: 'light' }),
       providePrimeNG({
         theme: {
           preset: OptimcePreset,

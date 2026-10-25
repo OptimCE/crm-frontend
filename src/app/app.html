@@ -11,3 +11,5 @@
   }
 </div>
 <p-toast position="bottom-right" key="br"></p-toast>
+<!-- Outside @if (showNavbar): switching branches would destroy it mid-tour. -->
+<steppy-tours (tourError)="onTourError($event)" />

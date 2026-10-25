@@ -1,0 +1,33 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/community-join-inspect-key/en.html",
+  "id": "community-join-inspect-key",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__text--description",
+      "target": "key-view__text--description",
+      "text": "The detail page shows the key's name and description as configured — this metadata helps you locate it in the list.",
+      "title": "Key identification",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "text": "The grid lists the iterations and consumers linked to this key, along with the allocation percentages — either computed or set manually.",
+      "title": "Iterations and consumers"
+    }
+  ],
+  "title": "Join a community — verify the allocation key"
+}

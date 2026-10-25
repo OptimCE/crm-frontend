@@ -1,0 +1,32 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-my-filings/fr.html",
+  "id": "admin-doc-my-filings",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__doc-type",
+      "target": "my-filings__doc-type",
+      "text": "En tant que membre, vous ne voyez pas les dossiers de la communauté : vous voyez uniquement les informations vous concernant qui ont été transmises au régulateur, et dans quel document.",
+      "title": "Ce qui a été déclaré à mon sujet"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__row",
+      "target": "my-filings__row",
+      "text": "Chaque bloc reprend les valeurs telles qu'elles ont été figées au moment du dépôt. Une correction faite plus tard dans le CRM ne réécrit pas ce qui a déjà été transmis — c'est la date affichée qui fait foi.",
+      "title": "Les valeurs transmises"
+    }
+  ],
+  "title": "Voir ce qui a été déclaré à son sujet"
+}

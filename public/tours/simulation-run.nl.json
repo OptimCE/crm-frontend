@@ -1,0 +1,114 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/simulation"
+  },
+  "guideUrl": "https://guide.optimce.be/simulation-run/nl.html",
+  "id": "simulation-run",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__panel--start",
+      "target": "simulation-hub__panel--start",
+      "text": "De simulatiepagina verschijnt met het configuratieformulier: kies een opgeslagen verdeelsleutel, geef de simulatie een naam, vul de injectie in en importeer het verbruiksbestand dat u wilt simuleren.",
+      "title": "Simulatiepagina",
+      "waitFor": "simulation-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "simulation-hub__select--key",
+      "target": "simulation-hub__select--key",
+      "text": "Open de vervolgkeuzelijst “Verdeelsleutel” en selecteer de sleutel die u net hebt opgeslagen. De simulatie past deze verdeling toe op de geïmporteerde verbruiksgegevens.",
+      "title": "De verdeelsleutel kiezen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--name",
+      "target": "simulation-hub__input--name",
+      "text": "Geef de simulatie een naam om ze in de historiek terug te vinden.",
+      "title": "De simulatie benoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--injection-name",
+      "target": "simulation-hub__input--injection-name",
+      "text": "Voer de naam in van de kolom in uw gegevensbestand die de geproduceerde energie bevat.",
+      "title": "Naam van de injectie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__dropzone",
+      "target": "simulation-hub__dropzone",
+      "text": "Importeer hetzelfde bestand “test_4.csv” in de uploadzone. De simulatie berekent het zelfverbruik en de energiedeling op basis van deze gegevens en de geselecteerde sleutel.",
+      "title": "Het te simuleren bestand importeren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--submit",
+      "target": "simulation-hub__btn--submit",
+      "text": "Klik op “Simulatie uitvoeren”. De simulatie wordt in de wachtrij geplaatst en verschijnt in de lijst met uitvoeringen met de status “Bezig” tot de berekening klaar is.",
+      "title": "De simulatie starten"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--refresh",
+      "target": "simulation-hub__btn--refresh",
+      "text": "De berekening duurt even: vernieuw de lijst om het resultaat te zien.",
+      "title": "Vernieuwen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-simulation-run",
+      "target": null,
+      "text": "Klik op de afgeronde simulatie om de resultaten te tonen.",
+      "title": "Simulatie openklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__metrics",
+      "target": "simulation-results__metrics",
+      "text": "De simulatie is voltooid. De kernindicatoren verschijnen: zelfverbruikte energie, overschot, zelfvoorzieningsgraad en deelpercentage — berekend op basis van de opgeslagen sleutel en het geïmporteerde bestand.",
+      "title": "Simulatieresultaten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-iteration-breakdown",
+      "target": null,
+      "text": "Klap een iteratie open om te zien hoe de energie erin werd verdeeld.",
+      "title": "Detail per iteratie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__iteration-toggle--1",
+      "target": "simulation-results__iteration-toggle--1",
+      "text": "Elke iteratie van de sleutel kan worden uitgeklapt om het detail per verbruiker te tonen: verdeling, verbruik, zelfverbruikte energie, overschot en resterend volume. Hier vergelijkt u de verdelingsoplossingen.",
+      "title": "Detail per iteratie en per verbruiker"
+    }
+  ],
+  "title": "Een verdeelsleutel simuleren"
+}

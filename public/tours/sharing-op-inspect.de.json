@@ -1,0 +1,34 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-inspect/de.html",
+  "id": "sharing-op-inspect",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "text": "Die Detailseite zeigt den Namen der Teilungsoperation so an, wie er konfiguriert wurde. Dieser Name dient als Referenz in Exporten und Berichten.",
+      "title": "Identifikation der Operation",
+      "waitFor": "op-view__hero"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__link--key",
+      "target": "op-view__link--key",
+      "text": "Die Karte „Aktueller Schlüssel“ zeigt den mit dieser Operation verknüpften Verteilungsschlüssel — er bestimmt, wie die Energie unter den Verbrauchern aufgeteilt wird.",
+      "title": "Verknüpfter Schlüssel",
+      "waitFor": "op-view__card--general-info"
+    }
+  ],
+  "title": "Teilungsoperation im Detail ansehen"
+}

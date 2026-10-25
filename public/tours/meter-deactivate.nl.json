@@ -1,0 +1,68 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters/:meterEan"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-deactivate/nl.html",
+  "id": "meter-deactivate",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--deactivate",
+      "target": "meter-view__btn--deactivate",
+      "text": "Open de detailpagina van de meter die u wilt deactiveren. Met de knop “Meter deactiveren” plant u het einde van zijn activiteit op een bepaalde datum.",
+      "title": "Detailpagina van de meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--deactivate-2",
+      "target": "meter-view__btn--deactivate",
+      "text": "Open het venster om de meter te deactiveren.",
+      "title": "Deactiveren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__datepicker--date",
+      "target": "meter-deactivation__datepicker--date",
+      "text": "Selecteer de datum vanaf wanneer de meter niet meer actief zal zijn.",
+      "title": "Einddatum kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__button--submit",
+      "target": "meter-deactivation__button--submit",
+      "text": "Klik op “Deactiveren”: er wordt vanaf de gekozen datum een inactieve periode aan de meter toegevoegd.",
+      "title": "Deactivering bevestigen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__tab--future",
+      "target": "meter-view__tab--future",
+      "text": "Open het tabblad met toekomstige gegevens: de geplande deactivering verschijnt daar.",
+      "title": "Toekomstige gegevens"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-upcoming-deactivation-is-listed-on-the-future-tab",
+      "target": null,
+      "text": "Het tabblad “Toekomstige gegevens” toont de komende inactieve periode: de meter blijft actief tot de gekozen datum en wordt daarna gedeactiveerd.",
+      "title": "Geplande deactivering"
+    }
+  ],
+  "title": "Een meter deactiveren"
+}

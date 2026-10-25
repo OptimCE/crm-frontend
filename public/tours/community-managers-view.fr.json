@@ -1,0 +1,58 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/communities/managers"
+  },
+  "guideUrl": "https://guide.optimce.be/community-managers-view/fr.html",
+  "id": "community-managers-view",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "managers-community-list__row--desktop--0",
+      "text": "Cette page liste les administrateurs et gestionnaires de la communauté avec leur rôle. Vous pouvez filtrer par rôle ou rechercher une personne. C'est une vue de consultation : vous ne pouvez rien modifier.",
+      "title": "Les gestionnaires de votre communauté",
+      "waitFor": "managers-community-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "managers-community-list__card--mobile--0",
+      "text": "Cette page liste les administrateurs et gestionnaires de la communauté avec leur rôle. Vous pouvez filtrer par rôle ou rechercher une personne. C'est une vue de consultation : vous ne pouvez rien modifier.",
+      "title": "Les gestionnaires de votre communauté"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "managers-community-list__input--search",
+      "target": "managers-community-list__input--search",
+      "text": "Saisissez un nom ou une adresse e-mail pour filtrer la liste et retrouver rapidement une personne précise.",
+      "title": "Rechercher dans la liste"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "managers-community-list__btn--clear-filters",
+      "target": "managers-community-list__btn--clear-filters",
+      "text": "Le bouton « Réinitialiser les filtres » efface la recherche et réaffiche l'ensemble des gestionnaires.",
+      "title": "Réinitialiser la recherche",
+      "waitFor": "managers-community-list__row--desktop--0"
+    }
+  ],
+  "title": "Voir les gestionnaires de sa communauté"
+}

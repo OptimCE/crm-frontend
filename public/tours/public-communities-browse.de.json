@@ -1,0 +1,59 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/communities/public"
+  },
+  "guideUrl": "https://guide.optimce.be/public-communities-browse/de.html",
+  "id": "public-communities-browse",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "Jede Karte steht für eine öffentlich zugängliche Energiegemeinschaft mit ihrer Regulierungsbehörde. Klicken Sie auf eine Karte, um mehr zu erfahren.",
+      "title": "Das Verzeichnis der öffentlichen Gemeinschaften"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "public-community-list__btn--accordion--0-2",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "Wenn Sie eine Gemeinschaft aufklappen, sehen Sie ihre Beschreibung, ihre Website, ihren Gesellschaftssitz und vor allem die Liste ihrer öffentlichen Teilungsoperationen.",
+      "title": "Eine Gemeinschaft aufklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__detail--0",
+      "target": "public-community-list__detail--0",
+      "text": "Die Gemeinschaft „Test Community“ bietet mehrere öffentliche Teilungsoperationen an (Solar, Wind). Jede Operation gibt die Gemeinden an, die sie abdeckt.",
+      "title": "Die Teilungsoperationen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "public-community-list__filter--municipality",
+      "target": "public-community-list__filter--municipality",
+      "text": "Geben Sie eine Gemeinde ein und wählen Sie sie aus den Vorschlägen aus, um nur die in diesem Gebiet aktiven Gemeinschaften anzuzeigen. Sie können auch nach Regulierungsbehörde filtern.",
+      "title": "Nach Gemeinde filtern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0-3",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "„Test Community“ betreibt eine Teilungsoperation in Anderlecht und wird daher weiterhin angezeigt. Eine Gemeinde, in der keine Gemeinschaft aktiv ist, würde ein leeres Verzeichnis anzeigen.",
+      "title": "Gefiltertes Ergebnis"
+    }
+  ],
+  "title": "Öffentliche Gemeinschaften erkunden"
+}

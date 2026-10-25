@@ -1,0 +1,115 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-set-public/de.html",
+  "id": "sharing-op-set-public",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Klicken Sie auf „Hinzufügen“, um den Dialog zum Erstellen einer neuen Teilungsoperation zu öffnen. Standardmäßig wird jede neue Operation im privaten Modus erstellt: Sie ist im öffentlichen Verzeichnis noch nicht sichtbar.",
+      "title": "Eine Operation hinzufügen",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Geben Sie einen Namen für die neue Operation ein. Dieser Name ist in der Verwaltungsliste sichtbar und, sobald die Operation öffentlich gemacht wurde, im öffentlichen Verzeichnis.",
+      "title": "Die Operation benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Wählen Sie den Typ „Innerhalb eines Gebäudes“ für eine Teilungsoperation in ein und demselben Gebäude. Wie die Typen CER und CEC kann dieser Typ öffentlich gemacht werden, um im Verzeichnis der Energiegemeinschaften zu erscheinen.",
+      "title": "Typ „Innerhalb eines Gebäudes“ auswählen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Geben Sie die ersten Buchstaben einer Gemeinde ein, die die Operation abdeckt.",
+      "title": "Eine Gemeinde suchen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "19b-pick-the-first-suggestion",
+      "target": null,
+      "text": "Wählen Sie die Gemeinde aus den Vorschlägen.",
+      "title": "Die Gemeinde wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Senden Sie das Formular ab, um die Teilungsoperation zu erstellen.",
+      "title": "Die Operation erstellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "text": "Die neue Operation „E2E Energy Sharing“ erscheint in der Liste. Sie ist vorerst im privaten Modus: Sie ist nur für die Manager der Gemeinschaft sichtbar und erscheint noch nicht im öffentlichen Verzeichnis.",
+      "title": "Operation erstellt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Klicken Sie auf die Zeile der neuen Operation, um ihre Detailseite zu öffnen und zu den Sichtbarkeitseinstellungen zu gelangen.",
+      "title": "Detailseite öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Die graue Schaltfläche „Privat“ im Kopfbereich zeigt an, dass diese Operation im öffentlichen Verzeichnis noch nicht sichtbar ist. Bürger, die eine Teilungsoperation in ihrer Gemeinde suchen, können sie nicht finden, solange sie privat bleibt.",
+      "title": "Standardmäßig privat",
+      "waitFor": "op-view__title--name"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--toggle-visibility-2",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Klicken Sie auf die Sichtbarkeitsschaltfläche, um die Operation in den öffentlichen Modus zu schalten. Diese Änderung wird sofort gespeichert: Die Operation wird für alle Bürger im Verzeichnis der Energiegemeinschaften sichtbar.",
+      "title": "Die Operation öffentlich machen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility-3",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Die Schaltfläche wird grün und zeigt „Öffentlich“. Alle Bürger können diese Operation nun im Verzeichnis der Energiegemeinschaften finden, nach Gemeinde filtern und die Gemeinschaft kontaktieren, um eine Teilnahme anzufragen.",
+      "title": "Die Operation ist jetzt öffentlich"
+    }
+  ],
+  "title": "Teilungsoperation öffentlich machen"
+}

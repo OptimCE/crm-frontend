@@ -1,0 +1,115 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-set-public/fr.html",
+  "id": "sharing-op-set-public",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Cliquez sur « Ajouter » pour ouvrir le dialogue de création d'une nouvelle opération de partage. Par défaut, toute nouvelle opération est créée en mode privé : elle n'est pas encore visible dans l'annuaire public.",
+      "title": "Ajouter une opération",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Saisissez un nom pour la nouvelle opération. Ce nom sera visible dans la liste de gestion et dans l'annuaire public une fois l'opération rendue publique.",
+      "title": "Nommer l'opération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Sélectionnez le type « Local » pour une opération de partage au sein d'un même bâtiment. Ce type, comme les types CER et CEC, peut être rendu public pour apparaître dans l'annuaire des communautés d'énergie.",
+      "title": "Sélectionner le type Local"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Tapez les premières lettres d'une commune couverte par l'opération.",
+      "title": "Rechercher une commune"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "19b-pick-the-first-suggestion",
+      "target": null,
+      "text": "Choisissez la commune dans les suggestions.",
+      "title": "Choisir la commune"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Validez le formulaire pour créer l'opération de partage.",
+      "title": "Créer l'opération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "text": "La nouvelle opération « E2E Energy Sharing » apparaît dans la liste. Elle est pour l'instant en mode privé : elle n'est visible que par les gestionnaires de la communauté et n'apparaît pas encore dans l'annuaire public.",
+      "title": "Opération créée"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Cliquez sur la ligne de la nouvelle opération pour ouvrir sa fiche détaillée et accéder aux paramètres de visibilité.",
+      "title": "Ouvrir la fiche"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Le bouton grisé « PRIVÉ » dans l'en-tête indique que cette opération n'est pas encore visible dans l'annuaire public. Les citoyens qui cherchent une opération de partage dans leur commune ne pourront pas la trouver tant qu'elle reste privée.",
+      "title": "Visibilité privée par défaut",
+      "waitFor": "op-view__title--name"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--toggle-visibility-2",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Cliquez sur le bouton de visibilité pour basculer l'opération en mode public. Ce changement est immédiatement enregistré : l'opération devient visible dans l'annuaire des communautés d'énergie pour tous les citoyens.",
+      "title": "Rendre l'opération publique"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility-3",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Le bouton passe au vert et affiche « PUBLIC ». Tout citoyen peut désormais trouver cette opération dans l'annuaire des communautés d'énergie, filtrer par commune et contacter la communauté pour demander à y participer.",
+      "title": "L'opération est maintenant publique"
+    }
+  ],
+  "title": "Rendre une opération de partage publique"
+}

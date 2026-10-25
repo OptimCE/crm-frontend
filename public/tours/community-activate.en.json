@@ -1,0 +1,42 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/community-activate/en.html",
+  "id": "community-activate",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "text": "After signing in you land on your home page. It lists the communities you belong to, along with your role in each one.",
+      "title": "Your communities"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Click the button on the Test Community card to open it. That community becomes your active one: the management menu and every page that follows relate to it.",
+      "title": "Enter the community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "text": "A new \"Management\" menu appears in the sidebar, granting access to the community's keys, meters and sharing operations.",
+      "title": "Management menu unlocked",
+      "waitFor": "dashboard-tile"
+    }
+  ],
+  "title": "Activate a community"
+}

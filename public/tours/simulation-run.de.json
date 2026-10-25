@@ -1,0 +1,114 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/simulation"
+  },
+  "guideUrl": "https://guide.optimce.be/simulation-run/de.html",
+  "id": "simulation-run",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__panel--start",
+      "target": "simulation-hub__panel--start",
+      "text": "Die Simulationsseite wird mit ihrem Konfigurationsformular angezeigt: Wählen Sie einen gespeicherten Verteilungsschlüssel, benennen Sie die Simulation, geben Sie die Einspeisung an und importieren Sie die zu simulierende Verbrauchsdatei.",
+      "title": "Simulationsseite",
+      "waitFor": "simulation-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "simulation-hub__select--key",
+      "target": "simulation-hub__select--key",
+      "text": "Öffnen Sie die Auswahlliste „Verteilschlüssel“ und wählen Sie den Schlüssel aus, den Sie gerade gespeichert haben. Die Simulation wendet diese Verteilung auf die importierten Verbrauchsdaten an.",
+      "title": "Verteilungsschlüssel auswählen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--name",
+      "target": "simulation-hub__input--name",
+      "text": "Geben Sie der Simulation einen Namen, um sie im Verlauf wiederzufinden.",
+      "title": "Die Simulation benennen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--injection-name",
+      "target": "simulation-hub__input--injection-name",
+      "text": "Geben Sie den Namen der Spalte in Ihrer Datendatei ein, die die erzeugte Energie enthält.",
+      "title": "Name der Einspeisung"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__dropzone",
+      "target": "simulation-hub__dropzone",
+      "text": "Importieren Sie dieselbe Datei „test_4.csv“ in den Ablagebereich. Die Simulation berechnet den Eigenverbrauch und die Energieteilung anhand dieser Daten und des ausgewählten Schlüssels.",
+      "title": "Zu simulierende Datei importieren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--submit",
+      "target": "simulation-hub__btn--submit",
+      "text": "Klicken Sie auf „Simulation starten“. Die Simulation wird in die Warteschlange gestellt und erscheint in der Liste der Läufe mit dem Status „Läuft“, bis die Berechnung abgeschlossen ist.",
+      "title": "Simulation starten"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--refresh",
+      "target": "simulation-hub__btn--refresh",
+      "text": "Die Berechnung dauert einen Moment: Aktualisieren Sie die Liste, um das Ergebnis zu sehen.",
+      "title": "Aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-simulation-run",
+      "target": null,
+      "text": "Klicken Sie auf die abgeschlossene Simulation, um ihre Ergebnisse anzuzeigen.",
+      "title": "Simulation aufklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__metrics",
+      "target": "simulation-results__metrics",
+      "text": "Die Simulation ist abgeschlossen. Die Kennzahlen werden angezeigt: eigenverbrauchte Energie, Überschuss, Autarkiegrad und Teilungsrate — berechnet aus dem gespeicherten Schlüssel und der importierten Datei.",
+      "title": "Simulationsergebnisse"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-iteration-breakdown",
+      "target": null,
+      "text": "Klappen Sie eine Iteration auf, um zu sehen, wie die Energie darin verteilt wurde.",
+      "title": "Detail pro Iteration"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__iteration-toggle--1",
+      "target": "simulation-results__iteration-toggle--1",
+      "text": "Jede Iteration des Schlüssels lässt sich aufklappen, um die Details pro Verbraucher anzuzeigen: Verteilung, Verbrauch, eigenverbrauchte Energie, Überschuss und Restvolumen. Hier werden die Verteilungslösungen verglichen.",
+      "title": "Detail pro Iteration und pro Verbraucher"
+    }
+  ],
+  "title": "Verteilungsschlüssel simulieren"
+}

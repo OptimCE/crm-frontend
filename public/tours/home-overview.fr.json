@@ -1,0 +1,86 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/home-overview/fr.html",
+  "id": "home-overview",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "you-land-on-your-home-page",
+      "target": null,
+      "text": "Quel que soit votre rôle, la connexion vous amène ici. Cette page ne parle pas d'une communauté en particulier : elle rassemble ce qui vous concerne, vous, dans toutes vos communautés.",
+      "title": "Votre page d'accueil"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you__band",
+      "target": "needs-you__band",
+      "text": "Le bandeau en haut compte ce qui demande une action de votre part : invitations reçues, fiche à compléter, notifications non lues. Quand il n'y a rien, il se réduit à une seule ligne rassurante.",
+      "title": "Ce qui vous attend"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "text": "Chaque carte indique une communauté et votre rôle dans celle-ci. Le bouton l'ouvre : elle devient votre communauté active et vous arrivez sur son tableau de bord.",
+      "title": "Mes communautés"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-energy-all-communities-together",
+      "target": null,
+      "text": "Le panneau reprend vos compteurs, toutes communautés confondues, pour le dernier mois relevé. Un compteur sans relevé affiche « pas encore de relevé » plutôt qu'un zéro trompeur.",
+      "title": "Mon énergie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-invoices-and-your-documents",
+      "target": null,
+      "text": "Les factures à payer et les documents qui vous ont été transmis sont regroupés ici. Les factures n'apparaissent que pour les communautés qui utilisent le module de facturation.",
+      "title": "Mes factures et mes documents"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings-panel__btn--open",
+      "target": "my-filings-panel__btn--open",
+      "text": "Le dernier panneau signale les documents officiels transmis au régulateur qui vous mentionnent. Le bouton ouvre le détail dans la communauté concernée.",
+      "title": "Ce qui a été déclaré à mon sujet"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "needs-you__action",
+      "target": "needs-you__action",
+      "text": "Chaque ligne du bandeau est un raccourci vers l'écran où l'action se fait : la liste des invitations, votre fiche membre, ou vos notifications.",
+      "title": "Traiter ce qui attend"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-matching-page-opens",
+      "target": null,
+      "text": "Ici, une notification non lue : le raccourci ouvre directement la page des notifications, où vous pouvez la consulter et la marquer comme lue.",
+      "title": "Arrivé au bon endroit"
+    }
+  ],
+  "title": "Sa page d'accueil"
+}

@@ -1,0 +1,69 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/audit-logs"
+  },
+  "guideUrl": "https://guide.optimce.be/audit-log-inspect/fr.html",
+  "id": "audit-log-inspect",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-audit-log-lists-the-community-change",
+      "target": null,
+      "text": "Chaque ligne retrace une action : la date, le type d'action, l'entité concernée, l'auteur et la source. La modification que vous venez d'effectuer apparaît en tête de liste.",
+      "title": "Le journal d'audit",
+      "waitFor": "audit-log-list__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__row--0",
+      "target": "audit-log-list__row--0",
+      "text": "Cliquez sur une ligne pour afficher le détail de l'événement.",
+      "title": "Détail d'un événement"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "audit-log-list__row-expansion--0",
+      "target": "audit-log-list__row-expansion--0",
+      "text": "En cliquant sur une ligne, vous dépliez sa charge utile (payload) au format JSON : ici, la liste des champs modifiés. C'est la preuve technique complète de ce qui a changé.",
+      "title": "Le détail de l'action"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "audit-log-list__input--entity-type",
+      "target": "audit-log-list__input--entity-type",
+      "text": "Utilisez les filtres pour cibler ce que vous cherchez, par exemple un type d'entité, une action, un identifiant ou une plage de dates.",
+      "title": "Filtrer le journal"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__btn--clear-filters",
+      "target": "audit-log-list__btn--clear-filters",
+      "text": "Le bouton « Réinitialiser les filtres » efface tous les critères d'un coup et réaffiche l'ensemble du journal.",
+      "title": "Réinitialiser les filtres"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "audit-log-list__btn--export",
+      "target": "audit-log-list__btn--export",
+      "text": "Le bouton « Exporter » télécharge le journal complet au format CSV — pratique pour l'archivage ou pour le transmettre à votre régulateur.",
+      "title": "Exporter le journal"
+    }
+  ],
+  "title": "Consulter le journal d'audit"
+}

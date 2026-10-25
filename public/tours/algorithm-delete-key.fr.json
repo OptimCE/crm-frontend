@@ -1,0 +1,96 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-key/fr.html",
+  "id": "algorithm-delete-key",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "La génération précédemment lancée s'affiche avec un point vert indiquant qu'elle s'est terminée avec succès. Déroulez-la pour accéder aux clés générées.",
+      "title": "Génération terminée",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Cliquez sur la génération pour afficher les clés qu'elle a produites.",
+      "title": "Déplier la génération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "Les clés calculées par OLAGSA sont listées sous la génération. Chaque clé peut être consultée, enregistrée ou supprimée individuellement.",
+      "title": "Clés de répartition disponibles"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Cliquez sur une clé pour afficher sa répartition.",
+      "title": "Déplier la clé"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "Le tableau de répartition de la clé s'affiche. Le bouton de suppression (×) en haut à droite de la ligne permet de supprimer définitivement cette clé.",
+      "title": "Clé sélectionnée"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-key-button",
+      "target": null,
+      "text": "Cliquez sur le bouton × de la clé pour lancer la suppression. Une confirmation vous sera demandée avant la suppression définitive.",
+      "title": "Supprimer la clé"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Une fenêtre de confirmation s'affiche. Cliquez sur le bouton de validation pour supprimer définitivement cette clé de répartition.",
+      "title": "Confirmer la suppression"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Confirmez votre choix dans la fenêtre de confirmation.",
+      "title": "Confirmer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-has-been-deleted",
+      "target": null,
+      "text": "La clé a été supprimée définitivement. Elle n'apparaît plus dans la liste des résultats de la génération et ne peut pas être récupérée.",
+      "title": "Clé supprimée"
+    }
+  ],
+  "title": "Supprimer une clé générée"
+}

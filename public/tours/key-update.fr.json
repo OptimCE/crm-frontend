@@ -1,0 +1,68 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-update/fr.html",
+  "id": "key-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--update",
+      "target": "key-view__btn--update",
+      "text": "Cliquez sur « Modifier » : la clé s'ouvre dans le même éditeur que celui utilisé pour la création, mais pré-rempli avec les valeurs existantes.",
+      "title": "Passer en édition"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Modifiez le nom et la description pour refléter le nouvel usage de la clé. Ces champs apparaissent dans la liste et facilitent sa recherche.",
+      "title": "Renommer la clé"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Modifiez le nom et la description pour refléter le nouvel usage de la clé. Ces champs apparaissent dans la liste et facilitent sa recherche.",
+      "title": "Renommer la clé"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Double-cliquez sur les pourcentages des consommateurs pour les modifier — ici on passe de 50/50 à 60/40. La somme par itération doit toujours faire 100%.",
+      "title": "Rééquilibrer les consommateurs"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "text": "Relisez la grille complète : nom, description et nouveaux pourcentages doivent correspondre à l'intention avant l'enregistrement.",
+      "title": "Vérifier avant d'enregistrer"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Cliquez sur le bouton d'enregistrement : l'application valide les pourcentages et renvoie vers la liste des clés.",
+      "title": "Enregistrer les modifications"
+    }
+  ],
+  "title": "Modifier une clé de répartition"
+}

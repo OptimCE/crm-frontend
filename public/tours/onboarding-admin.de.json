@@ -1,0 +1,121 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/dashboard"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-admin/de.html",
+  "id": "onboarding-admin",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "module-discovery-strip",
+      "target": "module-discovery-strip",
+      "text": "Sie haben alles, was ein Manager hat, und dazu einige Entscheidungen, die nur Ihnen zustehen. Die erste: die Module. Unter „Verfügbare Module“ abonniert „Aktivieren“ die Gemeinschaft für ein Modul; ein Manager wird gebeten, sich dafür an Sie zu wenden.",
+      "title": "Sie sind Administrator"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Klicken Sie im Abschnitt „Verwaltung“ auf „Benutzer“.",
+      "title": "Die Benutzer der Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--management-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--management",
+      "text": "Tippen Sie im Abschnitt „Verwaltung“ des Menüs auf „Benutzer“.",
+      "title": "Die Benutzer der Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Nur ein Administrator kann einen Manager hinzufügen: „Einen Manager einladen“ sendet ihm eine Einladung per E-Mail, die er in seinen Einladungen annimmt.",
+      "title": "Einen Manager einladen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "„Ausstehende Einladungen anzeigen“ zeigt, wer noch nicht geantwortet hat. In der Liste können nur Sie die Rolle eines Benutzers ändern — Mitglied, Manager oder Administrator — oder ihn aus der Gemeinschaft entfernen.",
+      "title": "Einladungen und Rollen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "text": "Klicken Sie im Abschnitt „Gemeinschaft“ auf „Gemeinschaftsinfo“.",
+      "title": "Die Gemeinschaftsinfo"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "text": "Tippen Sie im Abschnitt „Gemeinschaft“ des Menüs auf „Gemeinschaftsinfo“.",
+      "title": "Die Gemeinschaftsinfo"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Mitglieder und Manager lesen diese Angaben; nur Sie können sie ändern. „Bearbeiten“ öffnet den Namen, die Beschreibung, die Adresse, die Unternehmensnummer und die IBAN — was danach auf den Rechnungen und den offiziellen Dokumenten erscheint.",
+      "title": "Die rechtlichen Angaben",
+      "waitFor": "community-info__card--view"
+    }
+  ],
+  "title": "Sie sind Administrator"
+}

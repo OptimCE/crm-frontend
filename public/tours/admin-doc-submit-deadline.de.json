@@ -1,0 +1,144 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-submit-deadline/de.html",
+  "id": "admin-doc-submit-deadline",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Öffnen Sie das Dossier, dessen Einreichung Sie erfassen möchten.",
+      "title": "Das Dossier öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status",
+      "target": "dossier-detail__tag--status",
+      "text": "Solange das Dossier „In Vorbereitung“ ist, erwartet die Regulierungsbehörde nichts von Ihnen. Die Schaltflächen oben bieten nur die Statusänderungen an, die in diesem Stadium zulässig sind.",
+      "title": "Ein Dossier in Vorbereitung",
+      "waitFor": "dossier-detail__btn--transition-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__btn--transition-2",
+      "target": "dossier-detail__btn--transition-2",
+      "text": "Sie reichen das Dossier auf Ihrem üblichen Weg bei der Behörde ein; hier erfassen Sie, dass diese Einreichung stattgefunden hat.",
+      "title": "Das Dossier als eingereicht markieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-submission-date-to-today",
+      "target": null,
+      "text": "Das Übermittlungsdatum ist keine Formalität: Mit ihm beginnen die regulatorischen Fristen zu laufen. Wählen Sie das tatsächliche Datum der Einreichung.",
+      "title": "Das Übermittlungsdatum",
+      "waitFor": "transition-dialog__date--submission"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "transition-dialog__btn--submit",
+      "target": "transition-dialog__btn--submit",
+      "text": "Bestätigen Sie, um die Statusänderung zu speichern.",
+      "title": "Den Übergang bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status-2",
+      "target": "dossier-detail__tag--status",
+      "text": "Der Status ändert sich und mit ihm die angebotenen Aktionen: Ein eingereichtes Dossier kann für vollständig erklärt, korrigiert werden oder verfallen.",
+      "title": "Das Dossier ist eingereicht"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__tab--deadlines",
+      "target": "dossier-detail__tab--deadlines",
+      "text": "Die Registerkarte „Fristen“ zeigt, was die Einreichung soeben ausgelöst hat.",
+      "title": "Die Fristen anzeigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-deadlines-panel__btn--met-1",
+      "target": "dossier-deadlines-panel__btn--met-1",
+      "text": "Sie erfassen eine Frist nie von Hand: OptimCE berechnet sie aus dem Dossiertyp, der Region und dem Datum, das Sie soeben erfasst haben.",
+      "title": "Eine Frist ist erschienen",
+      "waitFor": "dossier-deadlines-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "back-arrow__link",
+      "target": "back-arrow__link",
+      "text": "Kehren Sie zur Liste der Akten zurück.",
+      "title": "Zurück zur Liste"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "administrative-document-hub__tab--deadlines",
+      "target": "administrative-document-hub__tab--deadlines",
+      "text": "Die Registerkarte „Fristen“ der Hauptseite fasst die Fristen aller Dossiers zusammen, damit Sie auf einen Blick sehen, was demnächst fällig wird.",
+      "title": "Alle Fristen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__btn--met-1",
+      "target": "deadline-dashboard__btn--met-1",
+      "text": "Jede Zeile verweist auf ihr Dossier und zeigt das Fälligkeitsdatum. Der Filter zeigt standardmäßig die noch offenen Fristen.",
+      "title": "Die Fristenübersicht",
+      "waitFor": "deadline-dashboard__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "deadline-dashboard__btn--met-1-2",
+      "target": "deadline-dashboard__btn--met-1",
+      "text": "Sobald die Verpflichtung erfüllt ist, markieren Sie die Frist als erfüllt. Sie verschwindet aus der Liste der offenen Fristen, bleibt aber im Verlauf erhalten.",
+      "title": "Eine Frist abschließen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm",
+      "target": null,
+      "text": "Bestätigen Sie: Die Frist erhält den Status „Erfüllt“ und die Übersicht der offenen Fristen leert sich.",
+      "title": "Bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__empty--message",
+      "target": "deadline-dashboard__empty--message",
+      "text": "Die Übersicht zeigt keine offene Frist mehr. Der Verlauf des Dossiers hält jedoch fest, was wann getan wurde.",
+      "title": "Nichts mehr ausstehend"
+    }
+  ],
+  "title": "Dossier einreichen und Frist verfolgen"
+}

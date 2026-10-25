@@ -1,0 +1,86 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/home-overview/de.html",
+  "id": "home-overview",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "you-land-on-your-home-page",
+      "target": null,
+      "text": "Unabhängig von Ihrer Rolle landen Sie nach der Anmeldung hier. Diese Seite betrifft keine bestimmte Gemeinschaft: Sie bündelt, was Sie persönlich betrifft, über alle Ihre Gemeinschaften hinweg.",
+      "title": "Ihre Startseite"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you__band",
+      "target": "needs-you__band",
+      "text": "Das Banner oben zählt, was eine Aktion von Ihnen erfordert: erhaltene Einladungen, ein zu vervollständigender Datensatz, ungelesene Benachrichtigungen. Gibt es nichts zu tun, schrumpft es auf eine einzige beruhigende Zeile.",
+      "title": "Was auf Sie wartet"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "text": "Jede Karte zeigt eine Gemeinschaft und Ihre Rolle darin. Die Schaltfläche öffnet sie: Sie wird zu Ihrer aktiven Gemeinschaft, und Sie gelangen auf ihre Übersicht.",
+      "title": "Meine Gemeinschaften"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-energy-all-communities-together",
+      "target": null,
+      "text": "Das Panel fasst Ihre Zähler aus allen Gemeinschaften für den letzten Monat mit Zählerständen zusammen. Ein Zähler ohne Zählerstand zeigt „noch kein Zählerstand“ statt einer irreführenden Null.",
+      "title": "Meine Energie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-invoices-and-your-documents",
+      "target": null,
+      "text": "Die zu zahlenden Rechnungen und die Ihnen übermittelten Dokumente sind hier zusammengefasst. Rechnungen erscheinen nur für Gemeinschaften, die das Abrechnungsmodul nutzen.",
+      "title": "Meine Rechnungen und meine Dokumente"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings-panel__btn--open",
+      "target": "my-filings-panel__btn--open",
+      "text": "Das letzte Panel weist auf die offiziellen Dokumente an die Regulierungsbehörde hin, in denen Sie genannt werden. Die Schaltfläche öffnet die Details in der betreffenden Gemeinschaft.",
+      "title": "Was über mich eingereicht wurde"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "needs-you__action",
+      "target": "needs-you__action",
+      "text": "Jede Zeile des Banners ist eine Verknüpfung zu dem Bildschirm, auf dem die Aktion erfolgt: die Einladungsliste, Ihr Mitgliederdatensatz oder Ihre Benachrichtigungen.",
+      "title": "Erledigen, was ansteht"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-matching-page-opens",
+      "target": null,
+      "text": "Hier eine ungelesene Benachrichtigung: Die Verknüpfung öffnet direkt die Benachrichtigungsseite, auf der Sie sie lesen und als gelesen markieren können.",
+      "title": "Direkt an der richtigen Stelle"
+    }
+  ],
+  "title": "Ihre Startseite"
+}

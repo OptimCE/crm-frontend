@@ -1,0 +1,196 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create/fr.html",
+  "id": "community-create-member",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Cliquez sur « Ajouter un membre » en haut de la liste pour ouvrir l'assistant de création en quatre étapes.",
+      "title": "Lancer la création d'un membre",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--individual",
+      "target": "new-member-type__card--individual",
+      "text": "Sélectionnez « Particulier » pour créer un membre individuel. L'option « Entreprise » est réservée aux personnes morales et demandera des champs différents par la suite.",
+      "title": "Choisir le type de membre"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--nrn",
+      "target": "new-member-informations__input--nrn",
+      "text": "Saisissez le numéro national, le nom, le prénom, l'adresse e-mail et le numéro de téléphone du nouveau membre. Tous ces champs sont obligatoires pour valider l'étape.",
+      "title": "Renseigner les informations personnelles"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--surname",
+      "target": "new-member-informations__input--surname",
+      "text": "Saisissez le numéro national, le nom, le prénom, l'adresse e-mail et le numéro de téléphone du nouveau membre. Tous ces champs sont obligatoires pour valider l'étape.",
+      "title": "Renseigner les informations personnelles"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--name",
+      "target": "new-member-informations__input--name",
+      "text": "Saisissez le numéro national, le nom, le prénom, l'adresse e-mail et le numéro de téléphone du nouveau membre. Tous ces champs sont obligatoires pour valider l'étape.",
+      "title": "Renseigner les informations personnelles"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--email",
+      "target": "new-member-informations__input--email",
+      "text": "Saisissez le numéro national, le nom, le prénom, l'adresse e-mail et le numéro de téléphone du nouveau membre. Tous ces champs sont obligatoires pour valider l'étape.",
+      "title": "Renseigner les informations personnelles"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--phone",
+      "target": "new-member-informations__input--phone",
+      "text": "Saisissez le numéro national, le nom, le prénom, l'adresse e-mail et le numéro de téléphone du nouveau membre. Tous ces champs sont obligatoires pour valider l'étape.",
+      "title": "Renseigner les informations personnelles"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Complétez l'adresse du domicile : rue, numéro, code postal et ville. Si l'adresse de facturation est identique, cochez la case « Même adresse » à l'étape suivante pour la réutiliser automatiquement.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Complétez l'adresse du domicile : rue, numéro, code postal et ville. Si l'adresse de facturation est identique, cochez la case « Même adresse » à l'étape suivante pour la réutiliser automatiquement.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Complétez l'adresse du domicile : rue, numéro, code postal et ville. Si l'adresse de facturation est identique, cochez la case « Même adresse » à l'étape suivante pour la réutiliser automatiquement.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Complétez l'adresse du domicile : rue, numéro, code postal et ville. Si l'adresse de facturation est identique, cochez la case « Même adresse » à l'étape suivante pour la réutiliser automatiquement.",
+      "title": "Renseigner l'adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Cochez cette case si l'adresse de facturation est la même que l'adresse du domicile.",
+      "title": "Même adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Saisissez l'IBAN du membre : il est utilisé pour les remboursements liés aux opérations de partage. Le format est validé en temps réel.",
+      "title": "Renseigner les coordonnées bancaires"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Cliquez sur « Valider » pour envoyer le formulaire au CRM. Le membre est créé immédiatement et associé à la communauté active.",
+      "title": "Valider la création"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "decline-we-don-t-want-to-create-a-meter-right-now",
+      "target": null,
+      "text": "Une fenêtre propose d'enchaîner avec la création d'un compteur. Choisissez « Non » pour terminer ici — vous pourrez toujours ajouter un compteur plus tard depuis la fiche du membre.",
+      "title": "Reporter l'ajout d'un compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "open-the-new-member-s-detail-page",
+      "target": null,
+      "text": "Cliquez sur le nouveau membre dans la liste pour ouvrir sa fiche.",
+      "title": "Ouvrir la fiche",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "hero-heading-shows-the-new-member-s-full-name",
+      "target": null,
+      "text": "La fiche du nouveau membre s'affiche : son nom complet apparaît dans l'en-tête et toutes les informations saisies sont visibles. Le membre est désormais utilisable dans les opérations de partage.",
+      "title": "Membre créé"
+    }
+  ],
+  "title": "Créer un membre"
+}

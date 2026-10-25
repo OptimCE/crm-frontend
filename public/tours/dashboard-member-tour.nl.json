@@ -1,0 +1,95 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/dashboard-member-tour/nl.html",
+  "id": "dashboard-member-tour",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Open vanaf de startpagina de gemeenschap waarvan u de details wilt bekijken.",
+      "title": "Uw gemeenschap openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dashboard-of-a-member",
+      "target": null,
+      "text": "Het dashboard past zich aan uw rol aan. Als lid ziet u niet het beheer van de gemeenschap, maar wel uw eigen situatie daarbinnen.",
+      "title": "Het dashboard"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-tile__link--meter",
+      "target": "my-energy-tile__link--meter",
+      "text": "De eerste tegel telt over de laatste dertig dagen op wat u hebt verbruikt en wat het delen u heeft opgeleverd, en splitst dat vervolgens per meter op.",
+      "title": "Mijn energie hier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-share-of-the-allocation-key",
+      "target": null,
+      "text": "Voor elke deeloperatie toont de tegel het deel dat u toekomt: een vast percentage, een verdeling naar rato van uw verbruik, of de vermelding dat uw meter niet is opgenomen in de geldende sleutel.",
+      "title": "Mijn deelname"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-member-record-tile__link--member",
+      "target": "my-member-record-tile__link--member",
+      "text": "De tegel bevestigt dat uw fiche actief is, of geeft aan dat ze nog op validatie door een beheerder wacht.",
+      "title": "Mijn ledenfiche"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "about-community-tile__link--info",
+      "target": "about-community-tile__link--info",
+      "text": "Aantal leden, regulator, website: genoeg om te weten met wie u te maken hebt. De link opent de volledige fiche van de gemeenschap.",
+      "title": "Over deze gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices-tile__link--all",
+      "target": "my-invoices-tile__link--all",
+      "text": "Deze twee tegels verschijnen alleen als de gemeenschap de bijbehorende modules gebruikt. Ze vatten uw onbetaalde facturen samen, net als de laatste berichten op het nieuwsbord.",
+      "title": "Facturen en nieuws"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-dashboard__btn--refresh",
+      "target": "member-dashboard__btn--refresh",
+      "text": "De knop “Vernieuwen” laadt alle tegels opnieuw zonder de pagina te herladen.",
+      "title": "Vernieuwen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-page__title",
+      "target": "header-page__title",
+      "text": "De tegels laden een voor een opnieuw en tonen weer hun inhoud met de meest recente gegevens.",
+      "title": "Actuele gegevens"
+    }
+  ],
+  "title": "Het ledendashboard"
+}

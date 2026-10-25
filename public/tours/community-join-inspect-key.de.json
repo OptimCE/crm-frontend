@@ -1,0 +1,33 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/community-join-inspect-key/de.html",
+  "id": "community-join-inspect-key",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__text--description",
+      "target": "key-view__text--description",
+      "text": "Die Detailansicht zeigt den Namen und die Beschreibung des Schlüssels so, wie er konfiguriert wurde — diese Metadaten helfen, ihn in der Liste wiederzufinden.",
+      "title": "Identifikation des Schlüssels",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "text": "Die Tabelle zeigt die Iterationen und Verbraucher dieses Schlüssels mit den berechneten oder manuell eingegebenen Zuteilungsprozentsätzen.",
+      "title": "Iterationen und Verbraucher"
+    }
+  ],
+  "title": "Einer Gemeinschaft beitreten — Verteilungsschlüssel prüfen"
+}

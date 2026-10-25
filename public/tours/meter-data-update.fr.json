@@ -1,0 +1,149 @@
+{
+  "buildId": "8b68d55fb608",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-data-update/fr.html",
+  "id": "meter-data-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "text": "Ouvrez la liste des compteurs de la communauté active. Repérez le compteur dont vous souhaitez mettre à jour la configuration courante.",
+      "title": "Liste des compteurs"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Cliquez sur la ligne du compteur (EAN 123456789012345678) pour ouvrir sa fiche détaillée et accéder à ses données actuelles.",
+      "title": "Ouvrir la fiche du compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Touchez la carte du compteur (EAN 123456789012345678) pour ouvrir sa fiche détaillée et accéder à ses données actuelles.",
+      "title": "Ouvrir la fiche du compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--update",
+      "target": "meter-view__btn--update",
+      "text": "La fiche affiche les caractéristiques courantes. Le bouton « Mettre à jour les données » n'est proposé que pour un compteur actif — c'est notre point d'entrée.",
+      "title": "Compteur actif",
+      "waitFor": "meter-view__hero"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--update-2",
+      "target": "meter-view__btn--update",
+      "text": "Cliquez sur « Mettre à jour les données » : un dialogue s'ouvre, pré-rempli avec la configuration courante du compteur — description, puissances, tarif, type de client et propriétaire.",
+      "title": "Ouvrir le formulaire"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__textarea--description",
+      "target": "meter-data-update__textarea--description",
+      "text": "Modifiez la description, la puissance de prélèvement et l'ampérage. Ces nouveaux chiffres alimenteront immédiatement les calculs de répartition des opérations de partage.",
+      "title": "Ajuster les valeurs énergétiques",
+      "waitFor": "meter-data-update__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--sampling-power",
+      "target": "meter-data-update__input--sampling-power",
+      "text": "Modifiez la description, la puissance de prélèvement et l'ampérage. Ces nouveaux chiffres alimenteront immédiatement les calculs de répartition des opérations de partage.",
+      "title": "Ajuster les valeurs énergétiques"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--amperage",
+      "target": "meter-data-update__input--amperage",
+      "text": "Modifiez la description, la puissance de prélèvement et l'ampérage. Ces nouveaux chiffres alimenteront immédiatement les calculs de répartition des opérations de partage.",
+      "title": "Ajuster les valeurs énergétiques"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__select--grd",
+      "target": "meter-data-update__select--grd",
+      "text": "Dans le champ « Gestionnaire de réseau », sélectionnez le gestionnaire du réseau de distribution auquel le compteur est raccordé. Ce champ est obligatoire pour valider la nouvelle configuration.",
+      "title": "Choisir le gestionnaire de réseau"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--rate--2",
+      "target": "meter-data-update__radio-card--rate--2",
+      "text": "Choisissez le nouveau régime tarifaire.",
+      "title": "Tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--client-type--2",
+      "target": "meter-data-update__radio-card--client-type--2",
+      "text": "Basculez le tarif sur « bi-horaire » et le type de client sur « professionnel » pour refléter le nouveau profil de consommation du compteur.",
+      "title": "Changer le profil de consommation"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__datepicker--start-date",
+      "target": "meter-data-update__datepicker--start-date",
+      "text": "Choisissez la date à partir de laquelle la nouvelle configuration s'applique. Cette date est obligatoire pour valider la modification.",
+      "title": "Fixer la date d'effet"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__btn--submit",
+      "target": "meter-data-update__btn--submit",
+      "text": "Cliquez sur « Valider » : le formulaire est envoyé au CRM, qui remplace la configuration courante du compteur. Le dialogue se ferme dès la confirmation.",
+      "title": "Enregistrer la mise à jour"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-data-view__text--rate",
+      "target": "meter-data-view__text--rate",
+      "text": "De retour sur la fiche, la nouvelle description, l'ampérage de 63 A et le tarif bi-horaire apparaissent dans les cartes de données — les modifications sont bien persistées côté serveur.",
+      "title": "Mise à jour confirmée",
+      "waitFor": "meter-data-view__text--description"
+    }
+  ],
+  "title": "Modifier les données du compteur"
+}
