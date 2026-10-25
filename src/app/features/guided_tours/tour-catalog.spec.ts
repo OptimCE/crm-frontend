@@ -18,6 +18,7 @@ import {
   UserContextService,
 } from '../../core/services/authorization/authorization.service';
 import realManifest from '../../../../public/tours/tours.manifest.json';
+import { isOnboardingTourId, ONBOARDING_TOURS } from '../onboarding/onboarding-tours';
 import {
   ENTRY_ROUTES,
   filterSelection,
@@ -293,16 +294,36 @@ describe('filterSelection', () => {
 
 describe('the shipped tours.manifest.json', () => {
   const manifest = realManifest as TourManifest;
+  // The onboarding tours are offered by features/onboarding, not by this catalogue.
+  const catalogueTours = manifest.tours.filter((t) => !isOnboardingTourId(t.id));
+
+  it('should ship the four onboarding tours', () => {
+    const ids = new Set(manifest.tours.map((t) => t.id));
+    expect(Object.values(ONBOARDING_TOURS).filter((id) => !ids.has(id))).toEqual([]);
+  });
+
+  it('should never list an onboarding tour among the catalogue tours', () => {
+    const selections = [Role.MEMBER, Role.GESTIONNAIRE, Role.ADMIN, null].flatMap((role) =>
+      ['/home', '/dashboard'].map((url) =>
+        selectTours(manifest, ctx({ role, activeFeatures: ALL_FEATURES, url }), 'fr'),
+      ),
+    );
+    const offered = selections.flatMap((s) => [
+      ...s.onThisPage,
+      ...s.byArea.flatMap((g) => g.tours),
+    ]);
+    expect(offered.filter((t) => isOnboardingTourId(t.id))).toEqual([]);
+  });
 
   it('should have every entry route in ENTRY_ROUTES (else its tours stay hidden)', () => {
-    const missing = manifest.tours
+    const missing = catalogueTours
       .filter((t) => !ENTRY_ROUTES[t.entry.route])
       .map((t) => `${t.id} ${t.entry.route}`);
     expect(missing).toEqual([]);
   });
 
   it('should only use the two personas the launcher knows', () => {
-    const counts = manifest.tours.reduce<Record<string, number>>((acc, t) => {
+    const counts = catalogueTours.reduce<Record<string, number>>((acc, t) => {
       acc[t.role] = (acc[t.role] ?? 0) + 1;
       return acc;
     }, {});
@@ -368,7 +389,7 @@ describe('the shipped tours.manifest.json', () => {
     );
     const pageBound = (t: TourManifestEntry) => t.entry.route.includes(':') || !!PAGE_ONLY[t.id];
     const hidden = (t: TourManifestEntry) => HIDDEN_TOURS[t.id]?.entry === t.entry.route;
-    const expected = manifest.tours
+    const expected = catalogueTours
       .filter((t) => t.role === 'admin' && !pageBound(t) && !hidden(t))
       .map((t) => t.id);
     expect([...offered].sort()).toEqual(expected.sort());

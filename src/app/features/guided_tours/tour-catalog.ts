@@ -1,5 +1,6 @@
 import { Role } from '../../core/dtos/role';
 import { ROLE_HIERARCHY } from '../../core/services/authorization/authorization.service';
+import { isOnboardingTourId } from '../onboarding/onboarding-tours';
 
 /**
  * Which in-app tours the current user can actually start.
@@ -17,6 +18,9 @@ import { ROLE_HIERARCHY } from '../../core/services/authorization/authorization.
  *   offered only on their own page);
  * - its page condition holds (`PAGE_ONLY`).
  *
+ * The onboarding tours are never in this list: they are offered by
+ * `features/onboarding`, and the Help dialog lists them in their own section.
+ *
  * Pure: everything it needs comes in through `TourContext`.
  */
 
@@ -28,10 +32,16 @@ export interface TourManifestEntry {
   entry: { route: string };
   /** One title per locale. */
   title: Record<string, string>;
+  /** The tour file of each locale, next to the manifest. */
+  files?: Record<string, string>;
+  /** The SHA-384 of each locale's file. */
+  integrity?: Record<string, string>;
 }
 
 export interface TourManifest {
   defaultLocale: string;
+  /** Layout name -> media query; a step limited to layouts plays only where one matches. */
+  layouts?: Record<string, string>;
   tours: TourManifestEntry[];
 }
 
@@ -248,6 +258,7 @@ export function selectTours(
   const elsewhere: OfferedTour[] = [];
 
   for (const entry of manifest.tours) {
+    if (isOnboardingTourId(entry.id)) continue;
     if (hidden[entry.id]?.entry === entry.entry.route) continue;
     const rule = ENTRY_ROUTES[entry.entry.route];
     if (!rule) continue;

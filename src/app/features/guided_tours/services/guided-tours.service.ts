@@ -43,7 +43,8 @@ export class GuidedToursService {
     };
   }
 
-  private async loadManifest(): Promise<TourManifest | null> {
+  /** The shipped manifest, or null when it could not be loaded. Also read by the onboarding offers. */
+  async loadManifest(): Promise<TourManifest | null> {
     if (this.manifest) return this.manifest;
     try {
       this.manifest = await firstValueFrom(this.http.get<TourManifest>(TOUR_MANIFEST_URL));
