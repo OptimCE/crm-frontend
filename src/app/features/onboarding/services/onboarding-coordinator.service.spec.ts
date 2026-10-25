@@ -170,6 +170,27 @@ describe('OnboardingCoordinator', () => {
       expect(coordinator.offer()?.tour.steps).toBe(9);
     });
 
+    it('should offer welcome when the user navigates to the landing page later', async () => {
+      // The checkpoint then runs from the NavigationEnd handler, where the router
+      // still reports the ending navigation as current: it must not wait on it.
+      const coordinator = await startAt('/members');
+      expect(coordinator.offer()).toBeNull();
+      await TestBed.inject(Router).navigateByUrl('/home');
+      await settle();
+      expect(coordinator.offer()?.key).toBe('welcome');
+    });
+
+    it('should offer on the page the initial navigation lands on, when started before it', async () => {
+      // At start-up the shell starts the coordinator before the first navigation ends.
+      activate(SOLEIL);
+      states = [row('welcome', 'backfilled')];
+      const coordinator = TestBed.inject(OnboardingCoordinator);
+      coordinator.start();
+      await TestBed.inject(Router).navigateByUrl('/dashboard');
+      await settle();
+      expect(coordinator.offer()).toMatchObject({ key: 'community_admin', path: '/dashboard' });
+    });
+
     it('should not offer welcome to a user who already has a community', async () => {
       communitiesById.set({ [SOLEIL.orgId]: SOLEIL });
       const coordinator = await startAt('/home');

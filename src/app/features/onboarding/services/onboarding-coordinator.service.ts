@@ -194,8 +194,6 @@ export class OnboardingCoordinator {
   private async checkpoint(kind: OnboardingCheckpoint['kind']): Promise<void> {
     if (!this.canOffer()) return;
     const sequence = ++this.sequence[kind];
-    await this.navigationSettled();
-    const path = pathOf(this.router.url);
     const orgId = this.userContext.activeCommunityId();
 
     const [states, available] = await Promise.all([
@@ -209,7 +207,6 @@ export class OnboardingCoordinator {
     let checkpoint: OnboardingCheckpoint;
     let community: string | null = null;
     if (kind === 'landing') {
-      if (path !== '/home') return;
       checkpoint = {
         kind,
         hasCommunity: Object.keys(this.userContext.communitiesById()).length > 0,
@@ -231,15 +228,23 @@ export class OnboardingCoordinator {
       checkpoint,
       recorded,
       available,
-      welcomeHandledOnScreen: this.welcomeHandledPath === path,
+      welcomeHandledOnScreen: this.welcomeHandledPath === pathOf(this.router.url),
     });
     if (!key) return;
     const tour = await this.tours.describe(key, this.locale.locale());
     if (!tour) return;
 
-    // Anything may have moved while we were waiting on the network.
+    // The offer belongs to the page it shows on: let a navigation in flight land
+    // first (at start-up the initial one may still be running), or its end
+    // would withdraw the offer at once. This runs after the awaits above, so
+    // never inside a NavigationEnd handler, where the router still reports the
+    // navigation that is ending as current.
+    await this.navigationSettled();
+    // Anything may have moved while we were waiting.
     if (sequence !== this.sequence[kind] || !this.canOffer()) return;
-    if (pathOf(this.router.url) !== path || this.userContext.activeCommunityId() !== orgId) return;
+    if (this.userContext.activeCommunityId() !== orgId) return;
+    const path = pathOf(this.router.url);
+    if (kind === 'landing' && path !== '/home') return;
     this.offer.set({ key, kind: key === 'welcome' ? 'welcome' : 'role', tour, community, path });
   }
 
