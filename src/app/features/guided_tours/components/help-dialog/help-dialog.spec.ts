@@ -6,7 +6,6 @@ import { Role } from '../../../../core/dtos/role';
 import { GuidedToursService, GuidedToursState } from '../../services/guided-tours.service';
 import { TourManifest } from '../../tour-catalog';
 import { HelpDialog, USER_GUIDE_URL } from './help-dialog';
-import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 import { OnboardingCoordinator } from '../../../onboarding/services/onboarding-coordinator.service';
 import { OnboardingToursService } from '../../../onboarding/services/onboarding-tours.service';
 import {
@@ -69,10 +68,9 @@ const MANIFEST: TourManifest = {
   ],
 };
 
-/** What the onboarding services report: which tours ship, the user's communities and roles. */
+/** What the onboarding services report: which tours ship, and the roles in the active community. */
 let onboarding: {
   available: Set<OnboardingTourKey>;
-  communities: Record<string, unknown>;
   roles: Set<RoleTourKey>;
 };
 
@@ -129,10 +127,6 @@ describe('HelpDialog', () => {
           provide: OnboardingCoordinator,
           useValue: { activeRoleTours: () => Promise.resolve(onboarding.roles) },
         },
-        {
-          provide: UserContextService,
-          useValue: { communitiesById: () => onboarding.communities },
-        },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(HelpDialog);
@@ -144,30 +138,32 @@ describe('HelpDialog', () => {
   }
 
   beforeEach(() => {
-    onboarding = {
-      available: new Set(ONBOARDING_TOUR_KEYS),
-      communities: { 'org-1': {} },
-      roles: new Set(),
-    };
+    // No onboarding tour by default: the catalogue tests count rows, and
+    // welcome would otherwise always add one.
+    onboarding = { available: new Set(), roles: new Set() };
   });
 
   afterEach(() => TestBed.resetTestingModule());
 
   describe('first steps (onboarding tours)', () => {
+    beforeEach(() => {
+      onboarding.available = new Set(ONBOARDING_TOUR_KEYS);
+    });
+
     it('should list the welcome tour for a user without a community, catalogue apart', async () => {
-      onboarding.communities = {};
       await render(state({ role: null }));
       expect(query('help-dialog__first-steps').textContent).toContain('Bienvenue sur OptimCE');
       expect(el().querySelector('[data-testid="help-dialog__no-community"]')).toBeTruthy();
     });
 
-    it("should list the active community's role tours, and never in the catalogue", async () => {
+    it("should list welcome, then the active community's role tours, and never in the catalogue", async () => {
       onboarding.roles = new Set(['community_manager', 'community_member']);
       await render(state());
       const rows = Array.from(
         query('help-dialog__first-steps').querySelectorAll('[data-testid^="help-dialog__row--"]'),
       ).map((e) => e.getAttribute('data-testid'));
       expect(rows).toEqual([
+        'help-dialog__row--onboarding-welcome',
         'help-dialog__row--onboarding-manager',
         'help-dialog__row--onboarding-member',
       ]);
@@ -182,6 +178,7 @@ describe('HelpDialog', () => {
     });
 
     it('should not show the section when no onboarding tour applies or ships', async () => {
+      onboarding.available = new Set(['community_admin']);
       onboarding.roles = new Set(['community_admin']); // onboarding-admin is not in MANIFEST
       await render(state());
       expect(el().querySelector('[data-testid="help-dialog__first-steps"]')).toBeNull();

@@ -65,16 +65,20 @@ export function roleToursFor(
 
 /**
  * The onboarding tours the Help dialog lists for a replay, whatever was
- * recorded: `welcome` while the user has no community (the only state its
- * steps exist in), then the role tours of the active community.
+ * recorded: `welcome`, always, then the role tours of the active community.
+ *
+ * `welcome` is listed even for a user who already has communities (Eric's
+ * call, 2026-10-25), although its scenario was written for the empty state:
+ * there, its steps on the empty community picker show the player's "cannot
+ * find this element" fallback. It is only OFFERED automatically to a user
+ * with no community (`pickOnboardingTour`).
  */
 export function replayableTours(
-  hasCommunity: boolean,
   roles: ReadonlySet<RoleTourKey>,
   available: ReadonlySet<OnboardingTourKey>,
 ): OnboardingTourKey[] {
   const keys: OnboardingTourKey[] = [
-    ...(hasCommunity ? [] : (['welcome'] as const)),
+    'welcome',
     ...ROLE_TOUR_PRIORITY.filter((key) => roles.has(key)),
   ];
   return keys.filter((key) => available.has(key));

@@ -14,7 +14,6 @@ import {
   tourTitle,
   TourSelection,
 } from '../../tour-catalog';
-import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 import { replayableTours } from '../../../onboarding/onboarding-eligibility';
 import { ONBOARDING_TOURS, OnboardingTourKey } from '../../../onboarding/onboarding-tours';
 import { OnboardingCoordinator } from '../../../onboarding/services/onboarding-coordinator.service';
@@ -45,7 +44,6 @@ export class HelpDialog implements OnInit {
   private readonly ref = inject(DynamicDialogRef);
   private readonly guidedTours = inject(GuidedToursService);
   private readonly locale = inject(LocaleService).locale;
-  private readonly userContext = inject(UserContextService);
   private readonly onboardingTours = inject(OnboardingToursService);
   private readonly onboarding = inject(OnboardingCoordinator);
 
@@ -116,12 +114,11 @@ export class HelpDialog implements OnInit {
   }
 
   private async loadFirstSteps(): Promise<void> {
-    const hasCommunity = Object.keys(this.userContext.communitiesById()).length > 0;
     const [available, roles] = await Promise.all([
       this.onboardingTours.available(),
       this.onboarding.activeRoleTours(),
     ]);
-    this.firstStepKeys.set(replayableTours(hasCommunity, roles, available));
+    this.firstStepKeys.set(replayableTours(roles, available));
   }
 
   protected onSearch(event: Event): void {
