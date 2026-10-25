@@ -8,6 +8,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import Keycloak from 'keycloak-js';
+import { CommunityActivationService } from '../../../../core/services/community-activation.service';
 
 import { UserCommunities } from './user-communities';
 import { ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
@@ -70,6 +71,8 @@ describe('UserCommunities', () => {
     compareWithActiveRole: ReturnType<typeof vi.fn>;
   };
 
+  let activationSpy: { activateCreated: ReturnType<typeof vi.fn> };
+
   let keycloakSpy: {
     updateToken: ReturnType<typeof vi.fn>;
   };
@@ -96,6 +99,8 @@ describe('UserCommunities', () => {
       compareWithActiveRole: vi.fn().mockReturnValue(true),
     };
 
+    activationSpy = { activateCreated: vi.fn().mockResolvedValue('new-org') };
+
     keycloakSpy = {
       updateToken: vi.fn().mockResolvedValue(true),
     };
@@ -114,6 +119,7 @@ describe('UserCommunities', () => {
         { provide: UserContextService, useValue: userContextServiceSpy },
         { provide: Keycloak, useValue: keycloakSpy },
         { provide: Router, useValue: routerSpy },
+        { provide: CommunityActivationService, useValue: activationSpy },
       ],
     })
       .overrideComponent(UserCommunities, {
@@ -471,7 +477,7 @@ describe('UserCommunities', () => {
       );
     });
 
-    it('should refresh keycloak token and reload communities when dialog closes with true', async () => {
+    it('should activate the created community, then reload communities, when dialog closes with true', async () => {
       const onClose$ = new Subject<boolean>();
       dialogServiceSpy.open.mockReturnValue({
         onClose: onClose$.asObservable(),
@@ -482,9 +488,8 @@ describe('UserCommunities', () => {
       communityServiceSpy.getMyCommunities.mockClear();
 
       onClose$.next(true);
+      expect(activationSpy.activateCreated).toHaveBeenCalled();
       await vi.waitFor(() => {
-        expect(keycloakSpy.updateToken).toHaveBeenCalledWith(-1);
-        expect(userContextServiceSpy.refreshUserContext).toHaveBeenCalled();
         expect(communityServiceSpy.getMyCommunities).toHaveBeenCalled();
       });
     });
@@ -501,7 +506,7 @@ describe('UserCommunities', () => {
 
       onClose$.next(false);
 
-      expect(keycloakSpy.updateToken).not.toHaveBeenCalled();
+      expect(activationSpy.activateCreated).not.toHaveBeenCalled();
       expect(communityServiceSpy.getMyCommunities).not.toHaveBeenCalled();
     });
   });

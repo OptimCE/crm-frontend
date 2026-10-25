@@ -1,4 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommunityActivationService } from '../../../../../../core/services/community-activation.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
@@ -47,6 +48,8 @@ describe('InvitationGestionnaire', () => {
   let fixture: ComponentFixture<InvitationGestionnaire>;
   let consoleErrorSpy: MockInstance;
 
+  let activationSpy: { activateJoined: ReturnType<typeof vi.fn> };
+
   let meServiceSpy: {
     getOwnManagerPendingInvitation: ReturnType<typeof vi.fn>;
     acceptInvitationManager: ReturnType<typeof vi.fn>;
@@ -60,6 +63,7 @@ describe('InvitationGestionnaire', () => {
   }
 
   beforeEach(async () => {
+    activationSpy = { activateJoined: vi.fn().mockResolvedValue(null) };
     meServiceSpy = {
       getOwnManagerPendingInvitation: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
       acceptInvitationManager: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
@@ -71,7 +75,10 @@ describe('InvitationGestionnaire', () => {
 
     await TestBed.configureTestingModule({
       imports: [InvitationGestionnaire, TranslateModule.forRoot()],
-      providers: [{ provide: MeService, useValue: meServiceSpy }],
+      providers: [
+        { provide: MeService, useValue: meServiceSpy },
+        { provide: CommunityActivationService, useValue: activationSpy },
+      ],
     })
       .overrideComponent(InvitationGestionnaire, {
         add: { schemas: [NO_ERRORS_SCHEMA] },
@@ -412,6 +419,19 @@ describe('InvitationGestionnaire', () => {
     it('should reload data on success', () => {
       component.acceptGestionnaireInvitation(invitation);
       expect(meServiceSpy.getOwnManagerPendingInvitation).toHaveBeenCalled();
+    });
+
+    it("should activate the invitation's community on success", () => {
+      component.acceptGestionnaireInvitation(invitation);
+      expect(activationSpy.activateJoined).toHaveBeenCalledWith(1);
+    });
+
+    it('should activate nothing when the acceptance fails', () => {
+      meServiceSpy.acceptInvitationManager.mockReturnValue(
+        throwError(() => new Error('accept failed')),
+      );
+      component.acceptGestionnaireInvitation(invitation);
+      expect(activationSpy.activateJoined).not.toHaveBeenCalled();
     });
 
     it('should not reload data when response is falsy', () => {
