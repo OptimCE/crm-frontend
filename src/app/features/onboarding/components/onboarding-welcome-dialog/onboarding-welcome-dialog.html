@@ -1,0 +1,51 @@
+@if (texts(); as t) {
+  <!-- No click handler on the backdrop: a stray click must not dismiss the offer. -->
+  <div
+    class="onboarding-welcome__mask"
+    [class.onboarding-welcome--reduced-motion]="reducedMotion"
+    data-testid="onboarding-welcome__mask"
+  >
+    <div
+      class="onboarding-welcome__dialog"
+      [class.onboarding-welcome__dialog--leaving]="coordinator.launching()"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="titleId"
+      [attr.aria-describedby]="textId"
+      pFocusTrap
+      data-testid="onboarding-welcome__dialog"
+    >
+      <button
+        type="button"
+        class="onboarding-welcome__close"
+        [attr.aria-label]="'ONBOARDING.CLOSE' | translate"
+        (click)="onLater()"
+        data-testid="onboarding-welcome__btn--close"
+      >
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+
+      <img class="onboarding-welcome__logo" src="assets/images/logo.svg" alt="" />
+      <h2 class="onboarding-welcome__title" [id]="titleId">{{ t.title }}</h2>
+      <p class="onboarding-welcome__text" [id]="textId">{{ t.text }}</p>
+
+      <div class="onboarding-welcome__actions">
+        <p-button
+          [label]="t.later"
+          severity="secondary"
+          [text]="true"
+          (onClick)="onLater()"
+          data-testid="onboarding-welcome__btn--later"
+        />
+        <p-button
+          [label]="t.action"
+          icon="pi pi-compass"
+          (onClick)="onAccept()"
+          data-testid="onboarding-welcome__btn--start"
+        />
+      </div>
+
+      <p class="onboarding-welcome__hint">{{ t.hint }}</p>
+    </div>
+  </div>
+}

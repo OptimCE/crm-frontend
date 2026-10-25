@@ -3346,5 +3346,35 @@
       "LOAD_ERROR": "Les visites guidées n'ont pas pu être chargées. Réessayez plus tard.",
       "START_FAILED": "Cette visite n'a pas pu démarrer."
     }
+  },
+  "ONBOARDING": {
+    "WELCOME": {
+      "TITLE": "Bienvenue sur OptimCE",
+      "TEXT": "Faites le tour des principaux écrans en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Faites le tour des principaux écrans.",
+      "ACTION": "Me faire visiter"
+    },
+    "COMMUNITY_ADMIN": {
+      "TITLE": "Espace d'administration de {{community}}",
+      "TEXT": "Découvrez vos outils d'administration en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Découvrez vos outils d'administration.",
+      "ACTION": "Découvrir l'espace admin"
+    },
+    "COMMUNITY_MANAGER": {
+      "TITLE": "Vous gérez désormais {{community}}",
+      "TEXT": "Découvrez vos outils de gestionnaire en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Découvrez vos outils de gestionnaire.",
+      "ACTION": "Découvrir mes outils"
+    },
+    "COMMUNITY_MEMBER": {
+      "TITLE": "Bienvenue dans {{community}}",
+      "TEXT": "Découvrez votre espace membre en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Découvrez votre espace membre.",
+      "ACTION": "Découvrir mon espace"
+    },
+    "LATER": "Plus tard",
+    "CLOSE": "Fermer",
+    "HINT": "Vous pourrez relancer ce tour à tout moment depuis « {{help}} ».",
+    "BANNER_LABEL": "Proposition de visite guidée"
   }
 }

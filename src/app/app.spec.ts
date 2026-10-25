@@ -1,4 +1,4 @@
-import { Component, NO_ERRORS_SCHEMA, output } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, output, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -13,6 +13,9 @@ import { Navbar } from './layout/navbar/navbar';
 import { Toast } from 'primeng/toast';
 import { SteppyToursComponent, TourErrorDetail } from '@steppy/angular';
 import { VALIDATION_TYPE, ERROR_TYPE, INFO_TYPE } from './core/dtos/notification';
+import { OnboardingCoordinator } from './features/onboarding/services/onboarding-coordinator.service';
+import { OnboardingRoleBanner } from './features/onboarding/components/onboarding-role-banner/onboarding-role-banner';
+import { OnboardingWelcomeDialog } from './features/onboarding/components/onboarding-welcome-dialog/onboarding-welcome-dialog';
 
 // ── Stubs ──────────────────────────────────────────────────────────
 
@@ -37,6 +40,7 @@ describe('App', () => {
   let routerEvents$: Subject<NavigationEnd>;
   let keycloakMock: { authenticated: boolean };
   let ctxMock: { refreshUserContext: ReturnType<typeof vi.fn> };
+  let onboardingMock: { offer: ReturnType<typeof signal<null>>; start: ReturnType<typeof vi.fn> };
   let eventBusMock: {
     on: ReturnType<typeof vi.fn>;
     off: ReturnType<typeof vi.fn>;
@@ -48,6 +52,7 @@ describe('App', () => {
     routerEvents$ = new Subject<NavigationEnd>();
     keycloakMock = { authenticated: false };
     ctxMock = { refreshUserContext: vi.fn() };
+    onboardingMock = { offer: signal(null), start: vi.fn() };
     eventBusMock = { on: vi.fn(), off: vi.fn(), emit: vi.fn() };
     messageServiceMock = { add: vi.fn() };
 
@@ -59,10 +64,20 @@ describe('App', () => {
         { provide: UserContextService, useValue: ctxMock },
         { provide: EventBusService, useValue: eventBusMock },
         { provide: MessageService, useValue: messageServiceMock },
+        { provide: OnboardingCoordinator, useValue: onboardingMock },
       ],
     })
       .overrideComponent(App, {
-        remove: { imports: [Navbar, Toast, SteppyToursComponent], providers: [MessageService] },
+        remove: {
+          imports: [
+            Navbar,
+            Toast,
+            SteppyToursComponent,
+            OnboardingRoleBanner,
+            OnboardingWelcomeDialog,
+          ],
+          providers: [MessageService],
+        },
         add: {
           imports: [NavbarStub, ToastStub, SteppyToursStub],
           schemas: [NO_ERRORS_SCHEMA],
@@ -126,6 +141,21 @@ describe('App', () => {
       keycloakMock.authenticated = true;
       fixture.detectChanges();
       expect(ctxMock.refreshUserContext).toHaveBeenCalled();
+    });
+
+    it('should start the onboarding offers after the context refresh, signed in only', () => {
+      keycloakMock.authenticated = true;
+      fixture.detectChanges();
+      expect(onboardingMock.start).toHaveBeenCalledTimes(1);
+      expect(ctxMock.refreshUserContext.mock.invocationCallOrder[0]).toBeLessThan(
+        onboardingMock.start.mock.invocationCallOrder[0],
+      );
+    });
+
+    it('should not start the onboarding offers signed out', () => {
+      keycloakMock.authenticated = false;
+      fixture.detectChanges();
+      expect(onboardingMock.start).not.toHaveBeenCalled();
     });
 
     it('should NOT call refreshUserContext when keycloak is not authenticated', () => {

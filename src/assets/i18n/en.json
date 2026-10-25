@@ -3346,5 +3346,35 @@
       "LOAD_ERROR": "The guided tours could not be loaded. Please try again later.",
       "START_FAILED": "This tour could not start."
     }
+  },
+  "ONBOARDING": {
+    "WELCOME": {
+      "TITLE": "Welcome to OptimCE",
+      "TEXT": "Take a tour of the main screens in {{n}} steps.",
+      "TEXT_NO_COUNT": "Take a tour of the main screens.",
+      "ACTION": "Show me around"
+    },
+    "COMMUNITY_ADMIN": {
+      "TITLE": "Administration area of {{community}}",
+      "TEXT": "Discover your administration tools in {{n}} steps.",
+      "TEXT_NO_COUNT": "Discover your administration tools.",
+      "ACTION": "Discover the admin area"
+    },
+    "COMMUNITY_MANAGER": {
+      "TITLE": "You now manage {{community}}",
+      "TEXT": "Discover your manager tools in {{n}} steps.",
+      "TEXT_NO_COUNT": "Discover your manager tools.",
+      "ACTION": "Discover my tools"
+    },
+    "COMMUNITY_MEMBER": {
+      "TITLE": "Welcome to {{community}}",
+      "TEXT": "Discover your member area in {{n}} steps.",
+      "TEXT_NO_COUNT": "Discover your member area.",
+      "ACTION": "Discover my area"
+    },
+    "LATER": "Later",
+    "CLOSE": "Close",
+    "HINT": "You can start this tour again at any time from \"{{help}}\".",
+    "BANNER_LABEL": "Guided tour suggestion"
   }
 }

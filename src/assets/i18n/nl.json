@@ -3346,5 +3346,35 @@
       "LOAD_ERROR": "De rondleidingen konden niet worden geladen. Probeer het later opnieuw.",
       "START_FAILED": "Deze rondleiding kon niet starten."
     }
+  },
+  "ONBOARDING": {
+    "WELCOME": {
+      "TITLE": "Welkom bij OptimCE",
+      "TEXT": "Maak in {{n}} stappen kennis met de belangrijkste schermen.",
+      "TEXT_NO_COUNT": "Maak kennis met de belangrijkste schermen.",
+      "ACTION": "Rondleiding starten"
+    },
+    "COMMUNITY_ADMIN": {
+      "TITLE": "Beheeromgeving van {{community}}",
+      "TEXT": "Ontdek uw beheertools in {{n}} stappen.",
+      "TEXT_NO_COUNT": "Ontdek uw beheertools.",
+      "ACTION": "Beheeromgeving ontdekken"
+    },
+    "COMMUNITY_MANAGER": {
+      "TITLE": "U beheert voortaan {{community}}",
+      "TEXT": "Ontdek uw managertools in {{n}} stappen.",
+      "TEXT_NO_COUNT": "Ontdek uw managertools.",
+      "ACTION": "Mijn tools ontdekken"
+    },
+    "COMMUNITY_MEMBER": {
+      "TITLE": "Welkom bij {{community}}",
+      "TEXT": "Ontdek uw ledenruimte in {{n}} stappen.",
+      "TEXT_NO_COUNT": "Ontdek uw ledenruimte.",
+      "ACTION": "Mijn ruimte ontdekken"
+    },
+    "LATER": "Later",
+    "CLOSE": "Sluiten",
+    "HINT": "U kunt deze rondleiding op elk moment opnieuw starten via “{{help}}”.",
+    "BANNER_LABEL": "Voorstel voor een rondleiding"
   }
 }

@@ -3346,5 +3346,35 @@
       "LOAD_ERROR": "Die geführten Touren konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
       "START_FAILED": "Diese Tour konnte nicht gestartet werden."
     }
+  },
+  "ONBOARDING": {
+    "WELCOME": {
+      "TITLE": "Willkommen bei OptimCE",
+      "TEXT": "Lernen Sie die wichtigsten Bildschirme in {{n}} Schritten kennen.",
+      "TEXT_NO_COUNT": "Lernen Sie die wichtigsten Bildschirme kennen.",
+      "ACTION": "Rundgang starten"
+    },
+    "COMMUNITY_ADMIN": {
+      "TITLE": "Verwaltungsbereich von {{community}}",
+      "TEXT": "Entdecken Sie Ihre Verwaltungswerkzeuge in {{n}} Schritten.",
+      "TEXT_NO_COUNT": "Entdecken Sie Ihre Verwaltungswerkzeuge.",
+      "ACTION": "Verwaltungsbereich entdecken"
+    },
+    "COMMUNITY_MANAGER": {
+      "TITLE": "Sie verwalten jetzt {{community}}",
+      "TEXT": "Entdecken Sie Ihre Manager-Werkzeuge in {{n}} Schritten.",
+      "TEXT_NO_COUNT": "Entdecken Sie Ihre Manager-Werkzeuge.",
+      "ACTION": "Meine Werkzeuge entdecken"
+    },
+    "COMMUNITY_MEMBER": {
+      "TITLE": "Willkommen bei {{community}}",
+      "TEXT": "Entdecken Sie Ihren Mitgliederbereich in {{n}} Schritten.",
+      "TEXT_NO_COUNT": "Entdecken Sie Ihren Mitgliederbereich.",
+      "ACTION": "Meinen Bereich entdecken"
+    },
+    "LATER": "Später",
+    "CLOSE": "Schließen",
+    "HINT": "Sie können diesen Rundgang jederzeit über „{{help}}“ erneut starten.",
+    "BANNER_LABEL": "Vorschlag für einen Rundgang"
   }
 }
