@@ -79,6 +79,7 @@ describe('OnboardingCoordinator', () => {
           { path: 'home', component: Blank },
           { path: 'dashboard', component: Blank },
           { path: 'members', component: Blank },
+          { path: 'users/communities', component: Blank },
         ]),
         { provide: Keycloak, useValue: { authenticated: true } },
         {
@@ -270,6 +271,53 @@ describe('OnboardingCoordinator', () => {
     it('should offer nothing while a tour is playing', async () => {
       tourActive.set(true);
       expect((await startAt('/home')).offer()).toBeNull();
+    });
+
+    it('should still offer the role banner while a tour is stuck on a missing target', async () => {
+      // A tour on its "cannot find this element" fallback stays active across
+      // pages and reloads: it must not silence the banner for the whole session.
+      tourActive.set(true);
+      states = [row('welcome', 'abandoned')];
+      const coordinator = await startAt('/users/communities');
+      emit('tour-error', 'onboarding-welcome', { fatal: false, reason: 'target-timeout' });
+      activate(SOLEIL); // e.g. the community just created
+      await settle();
+      expect(coordinator.offer()?.key).toBe('community_admin');
+    });
+
+    it('should not show the welcome dialog over a stuck tour', async () => {
+      tourActive.set(true);
+      const coordinator = await startAt('/members');
+      emit('tour-offpath', 'home-overview', { reason: 'target-lost' });
+      await TestBed.inject(Router).navigateByUrl('/home');
+      await settle();
+      expect(coordinator.offer()).toBeNull();
+    });
+
+    it('should offer an activation that came during a playing tour once that tour ends', async () => {
+      tourActive.set(true);
+      states = [row('welcome', 'backfilled')];
+      const coordinator = await startAt('/dashboard');
+      activate(SOLEIL);
+      await settle();
+      expect(coordinator.offer()).toBeNull();
+
+      tourActive.set(false);
+      await settle();
+      expect(coordinator.offer()?.key).toBe('community_admin');
+    });
+
+    it('should offer an activation that came during a playing tour once that tour gets stuck', async () => {
+      tourActive.set(true);
+      states = [row('welcome', 'backfilled')];
+      const coordinator = await startAt('/dashboard');
+      activate(SOLEIL);
+      await settle();
+      expect(coordinator.offer()).toBeNull();
+
+      emit('tour-error', 'key-delete', { fatal: false, reason: 'target-timeout' });
+      await settle();
+      expect(coordinator.offer()?.key).toBe('community_admin');
     });
 
     it('should offer nothing when the recorded answers cannot be read', async () => {

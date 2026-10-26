@@ -64,7 +64,11 @@ const EVENT_OUTCOMES: Partial<Record<SteppyTourEvent['type'], EventTransition>> 
  *
  * Never offers while a tour is playing, while the Steppy kill switch is set
  * (every generated E2E test sets it), or when `onboarding.enabled` is false in
- * the runtime config.
+ * the runtime config. A tour that cannot go on (its target is missing, or it
+ * went off-path) is not "playing": it stays active, across navigations and
+ * reloads, until the user closes it, and it must not silence the role banner
+ * for the whole session. An activation that comes while a tour really plays
+ * is evaluated again once that tour ends or stalls.
  */
 @Injectable({ providedIn: 'root' })
 export class OnboardingCoordinator {
@@ -98,6 +102,13 @@ export class OnboardingCoordinator {
   });
 
   private readonly started = signal(false);
+  /**
+   * The active tour is stuck: its last report was a missing target (the
+   * player's fallback) or an off-path pause, with no step shown since.
+   */
+  private readonly tourStalled = signal(false);
+  /** An activation was skipped because a tour was playing: evaluate it when the tour ends or stalls. */
+  private pendingActivation = false;
   /** Per checkpoint kind, only the latest evaluation may show an offer. */
   private readonly sequence: Record<OnboardingCheckpoint['kind'], number> = {
     landing: 0,
@@ -114,6 +125,12 @@ export class OnboardingCoordinator {
       if (!this.started() || !this.activationKey()) return;
       // Untracked: the checkpoint reads `offer` and the tour state, and closing
       // an offer must not count as an activation (it would offer it again).
+      untracked(() => void this.checkpoint('activation'));
+    });
+    effect(() => {
+      const playing = this.steppy.active() && !this.tourStalled();
+      if (playing || !this.pendingActivation) return;
+      this.pendingActivation = false;
       untracked(() => void this.checkpoint('activation'));
     });
   }
@@ -180,19 +197,21 @@ export class OnboardingCoordinator {
     if (path === '/home') void this.checkpoint('landing');
   }
 
-  private canOffer(): boolean {
-    return (
-      environments.onboarding.enabled &&
-      !killSwitchSet() &&
-      !!this.keycloak.authenticated &&
-      !this.steppy.active() &&
-      !this.launching() &&
-      this.offer() === null
-    );
+  private canOffer(kind: OnboardingCheckpoint['kind']): boolean {
+    if (!environments.onboarding.enabled || killSwitchSet() || !this.keycloak.authenticated) {
+      return false;
+    }
+    if (this.launching() || this.offer() !== null) return false;
+    if (!this.steppy.active()) return true;
+    // A stuck tour lets the (non-blocking) role banner through; the welcome
+    // dialog would sit under the player's fallback popover.
+    if (kind === 'activation' && this.tourStalled()) return true;
+    if (kind === 'activation') this.pendingActivation = true;
+    return false;
   }
 
   private async checkpoint(kind: OnboardingCheckpoint['kind']): Promise<void> {
-    if (!this.canOffer()) return;
+    if (!this.canOffer(kind)) return;
     const sequence = ++this.sequence[kind];
     const orgId = this.userContext.activeCommunityId();
 
@@ -241,7 +260,7 @@ export class OnboardingCoordinator {
     // navigation that is ending as current.
     await this.navigationSettled();
     // Anything may have moved while we were waiting.
-    if (sequence !== this.sequence[kind] || !this.canOffer()) return;
+    if (sequence !== this.sequence[kind] || !this.canOffer(kind)) return;
     if (this.userContext.activeCommunityId() !== orgId) return;
     const path = pathOf(this.router.url);
     if (kind === 'landing' && path !== '/home') return;
@@ -276,6 +295,7 @@ export class OnboardingCoordinator {
   }
 
   private onTourEvent(event: SteppyTourEvent): void {
+    this.trackStall(event);
     const key = tourKeyOf(event.detail.tourId ?? '');
     if (!key) return;
     if (event.type === 'tour-step' || event.type === 'tour-dismiss') this.endLaunch();
@@ -286,6 +306,15 @@ export class OnboardingCoordinator {
     }
     const transition = EVENT_OUTCOMES[event.type];
     if (transition) void this.recordFromEvent(key, transition);
+  }
+
+  /** Any tour, onboarding or not: is the one on screen stuck? */
+  private trackStall(event: SteppyTourEvent): void {
+    if (event.type === 'tour-offpath') this.tourStalled.set(true);
+    else if (event.type === 'tour-error') {
+      // target-timeout is non-fatal: the tour stays up on its fallback popover.
+      this.tourStalled.set(!event.detail.fatal && event.detail.reason === 'target-timeout');
+    } else this.tourStalled.set(false);
   }
 
   /**
