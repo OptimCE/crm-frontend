@@ -1,0 +1,196 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create/nl.html",
+  "id": "community-create-member",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Klik bovenaan de lijst op “Toevoegen” om de wizard te openen waarmee u een lid in vier stappen aanmaakt.",
+      "title": "Een lid aanmaken",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--individual",
+      "target": "new-member-type__card--individual",
+      "text": "Selecteer “Particulier” om een individueel lid aan te maken. De optie “Bedrijf” is bedoeld voor rechtspersonen en vraagt verderop om andere velden.",
+      "title": "Het type lid kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--nrn",
+      "target": "new-member-informations__input--nrn",
+      "text": "Vul het rijksregisternummer, de naam, de voornaam, het e-mailadres en het telefoonnummer van het nieuwe lid in. Al deze velden zijn verplicht om de stap te bevestigen.",
+      "title": "Persoonlijke informatie invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--surname",
+      "target": "new-member-informations__input--surname",
+      "text": "Vul het rijksregisternummer, de naam, de voornaam, het e-mailadres en het telefoonnummer van het nieuwe lid in. Al deze velden zijn verplicht om de stap te bevestigen.",
+      "title": "Persoonlijke informatie invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--name",
+      "target": "new-member-informations__input--name",
+      "text": "Vul het rijksregisternummer, de naam, de voornaam, het e-mailadres en het telefoonnummer van het nieuwe lid in. Al deze velden zijn verplicht om de stap te bevestigen.",
+      "title": "Persoonlijke informatie invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--email",
+      "target": "new-member-informations__input--email",
+      "text": "Vul het rijksregisternummer, de naam, de voornaam, het e-mailadres en het telefoonnummer van het nieuwe lid in. Al deze velden zijn verplicht om de stap te bevestigen.",
+      "title": "Persoonlijke informatie invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--phone",
+      "target": "new-member-informations__input--phone",
+      "text": "Vul het rijksregisternummer, de naam, de voornaam, het e-mailadres en het telefoonnummer van het nieuwe lid in. Al deze velden zijn verplicht om de stap te bevestigen.",
+      "title": "Persoonlijke informatie invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Vul het thuisadres in: straat, nummer, postcode en gemeente. Is het factuuradres hetzelfde, vink dan in de volgende stap het vakje “Zelfde adres voor facturering” aan om het automatisch over te nemen.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Vul het thuisadres in: straat, nummer, postcode en gemeente. Is het factuuradres hetzelfde, vink dan in de volgende stap het vakje “Zelfde adres voor facturering” aan om het automatisch over te nemen.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Vul het thuisadres in: straat, nummer, postcode en gemeente. Is het factuuradres hetzelfde, vink dan in de volgende stap het vakje “Zelfde adres voor facturering” aan om het automatisch over te nemen.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Vul het thuisadres in: straat, nummer, postcode en gemeente. Is het factuuradres hetzelfde, vink dan in de volgende stap het vakje “Zelfde adres voor facturering” aan om het automatisch over te nemen.",
+      "title": "Het adres invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Vink dit vakje aan als het facturatieadres hetzelfde is als het woonadres.",
+      "title": "Zelfde adres"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Vul het IBAN van het lid in: het wordt gebruikt voor terugbetalingen in verband met deeloperaties. Het formaat wordt in realtime gecontroleerd.",
+      "title": "De bankgegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Klik op “Bevestigen” om het formulier naar het CRM te verzenden. Het lid wordt onmiddellijk aangemaakt en gekoppeld aan de actieve gemeenschap.",
+      "title": "Aanmaak bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "decline-we-don-t-want-to-create-a-meter-right-now",
+      "target": null,
+      "text": "Een venster stelt voor om meteen een meter aan te maken. Kies “Nee” om hier te stoppen — u kunt later altijd nog een meter toevoegen vanuit de ledenfiche.",
+      "title": "Meter later toevoegen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "open-the-new-member-s-detail-page",
+      "target": null,
+      "text": "Klik op het nieuwe lid in de lijst om de fiche te openen.",
+      "title": "De fiche openen",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "hero-heading-shows-the-new-member-s-full-name",
+      "target": null,
+      "text": "De fiche van het nieuwe lid wordt weergegeven: de volledige naam staat in de kop en alle ingevoerde gegevens zijn zichtbaar. Het lid kan nu in deeloperaties worden gebruikt.",
+      "title": "Lid aangemaakt"
+    }
+  ],
+  "title": "Een lid aanmaken"
+}

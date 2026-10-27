@@ -1,0 +1,68 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/community-join-inspect-meter/fr.html",
+  "id": "community-join-inspect-meter",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Cliquez sur le premier compteur de la liste pour afficher sa fiche détaillée — la sélection se fait par l'EAN du compteur.",
+      "title": "Ouvrir un compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Touchez la carte du premier compteur pour afficher sa fiche détaillée — la sélection se fait par l'EAN du compteur.",
+      "title": "Ouvrir un compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "L'en-tête de la fiche affiche l'EAN du compteur tel qu'il est enregistré dans la base — c'est l'identifiant unique du point de comptage.",
+      "title": "EAN du compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__card--technical",
+      "target": "meter-view__card--technical",
+      "targetClick": "next",
+      "text": "La carte technique reprend le numéro physique du compteur et la fréquence de relevé — utile pour confirmer que la fiche correspond bien à l'appareil installé.",
+      "title": "Caractéristiques techniques"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__tabs",
+      "target": "meter-view__tabs",
+      "targetClick": "next",
+      "text": "Les onglets permettent de naviguer entre les données actuelles, l'historique, les valeurs futures et la consommation calculée du compteur.",
+      "title": "Onglets de consultation"
+    }
+  ],
+  "title": "Rejoindre une communauté — vérifier le compteur"
+}

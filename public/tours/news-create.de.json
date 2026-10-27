@@ -1,0 +1,72 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-create/de.html",
+  "id": "news-create",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-board__empty",
+      "target": "news-board__empty",
+      "targetClick": "next",
+      "text": "Die Neuigkeiten-Pinnwand wird angezeigt. Sie ist noch leer: Es wurden noch keine Neuigkeiten veröffentlicht. Als Manager können Sie mit der Schaltfläche „Verfassen“ einen Beitrag erstellen.",
+      "title": "Die Neuigkeiten-Pinnwand"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Klicken Sie oben rechts auf „Verfassen“, um das Fenster „Neuer Beitrag“ zu öffnen.",
+      "title": "Das Verfassen-Fenster öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__body",
+      "target": "news-compose__body",
+      "targetClick": "next",
+      "text": "Das Fenster öffnet sich mit dem Typ „Beitrag“. Über die Registerkarte „Umfrage“ würden Sie stattdessen eine Umfrage erstellen — hier veröffentlichen wir eine einfache Neuigkeit.",
+      "title": "Eine Neuigkeit verfassen",
+      "waitFor": "news-compose__kind--post"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "write-the-message",
+      "target": null,
+      "text": "Geben Sie den Inhalt Ihrer Neuigkeit im Editor ein. Über die Symbolleiste können Sie den Text formatieren (Überschriften, Fettdruck, Listen, Links).",
+      "title": "Die Nachricht schreiben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Klicken Sie auf „Veröffentlichen“, um die Neuigkeit an alle Mitglieder der Gemeinschaft zu verbreiten.",
+      "title": "Veröffentlichen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-post__body",
+      "target": "news-post__body",
+      "targetClick": "next",
+      "text": "Die Neuigkeit erscheint oben auf der Pinnwand, unterzeichnet von ihrem Verfasser. Alle Mitglieder der Gemeinschaft sehen sie und erhalten eine Benachrichtigung.",
+      "title": "Ihre Neuigkeit ist veröffentlicht"
+    }
+  ],
+  "title": "Beitrag veröffentlichen"
+}

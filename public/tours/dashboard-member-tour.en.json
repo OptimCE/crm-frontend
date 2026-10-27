@@ -1,0 +1,100 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/dashboard-member-tour/en.html",
+  "id": "dashboard-member-tour",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "From the home page, open the community you want to look at.",
+      "title": "Open your community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dashboard-of-a-member",
+      "target": null,
+      "text": "The dashboard adapts to your role. As a member you do not see the community's management, but your own situation inside it.",
+      "title": "The dashboard"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-tile__link--meter",
+      "target": "my-energy-tile__link--meter",
+      "targetClick": "next",
+      "text": "The first tile totals, over the last thirty days, what you consumed and what the sharing brought you, then breaks it down meter by meter.",
+      "title": "My energy here"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-share-of-the-allocation-key",
+      "target": null,
+      "text": "For each sharing operation the tile shows the share that comes to you: a fixed percentage, a split in proportion to your consumption, or a note that your meter is not part of the key currently in force.",
+      "title": "My participation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-member-record-tile__link--member",
+      "target": "my-member-record-tile__link--member",
+      "targetClick": "next",
+      "text": "The tile confirms your record is active, or flags that it is still waiting for a manager to validate it.",
+      "title": "My member record"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "about-community-tile__link--info",
+      "target": "about-community-tile__link--info",
+      "targetClick": "next",
+      "text": "Member count, regulator, website: enough to know who you are dealing with. The link opens the community's full information page.",
+      "title": "About this community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices-tile__link--all",
+      "target": "my-invoices-tile__link--all",
+      "targetClick": "next",
+      "text": "These two tiles only appear when the community uses the matching modules. Your unpaid invoices are summarised there, as are the latest posts on the news board.",
+      "title": "Invoices and news"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-dashboard__btn--refresh",
+      "target": "member-dashboard__btn--refresh",
+      "text": "The \"Refresh\" button reloads every tile without reloading the page.",
+      "title": "Refresh"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-page__title",
+      "target": "header-page__title",
+      "targetClick": "next",
+      "text": "The tiles reload one by one and settle back with the freshest data.",
+      "title": "Up-to-date data"
+    }
+  ],
+  "title": "The member dashboard"
+}

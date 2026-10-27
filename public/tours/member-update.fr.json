@@ -1,0 +1,97 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-update/fr.html",
+  "id": "member-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__table",
+      "target": "members-list__table",
+      "text": "Cliquez sur la ligne correspondant au membre à mettre à jour — ici « Member One » — pour ouvrir sa fiche détaillée.",
+      "title": "Sélectionner le membre"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view__btn--modify",
+      "target": "member-view__btn--modify",
+      "text": "Cliquez sur « Modifier » dans l'en-tête de la fiche : la fenêtre de mise à jour s'ouvre, pré-remplie avec les informations actuelles du membre.",
+      "title": "Ouvrir le formulaire de modification"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante",
+      "waitFor": "member-creation-update__step--status"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--name",
+      "target": "new-member-informations__input--name",
+      "text": "Corrigez le prénom si nécessaire.",
+      "title": "Prénom"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--email",
+      "target": "new-member-informations__input--email",
+      "text": "Mettez à jour le prénom et l'adresse e-mail dans les champs correspondants. Les autres informations restent inchangées et sont conservées telles quelles.",
+      "title": "Saisir les nouvelles informations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante",
+      "waitFor": "new-member-address__input--home-street"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Vérifiez ou corrigez l'IBAN du membre.",
+      "title": "IBAN"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Parcourez les étapes adresses et coordonnées bancaires sans rien changer, puis cliquez sur « Valider » pour envoyer les nouvelles informations au CRM.",
+      "title": "Enregistrer les modifications"
+    }
+  ],
+  "title": "Modifier un membre"
+}

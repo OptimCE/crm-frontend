@@ -1,0 +1,106 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/info"
+  },
+  "guideUrl": "https://guide.optimce.be/community-info-update/nl.html",
+  "id": "community-info-update",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__card--view",
+      "target": "community-info__card--view",
+      "targetClick": "next",
+      "text": "De pagina toont de huidige gegevens van de gemeenschap: naam, beschrijving, website en adres van de hoofdzetel. Klik op **Bewerken** om naar de bewerkingsmodus over te schakelen.",
+      "title": "Informatiefiche van de gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Zet de fiche van de gemeenschap in bewerkmodus.",
+      "title": "Bewerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--description",
+      "target": "community-info__input--description",
+      "text": "Vul de velden in: **Beschrijving**, **Website** (volledige URL die begint met https://) en de adresvelden van de hoofdzetel — straat, nummer, postcode en gemeente. De vier adresvelden moeten samen worden ingevuld of allemaal leeg blijven.",
+      "title": "De gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--website",
+      "target": "community-info__input--website",
+      "text": "Vul de velden in: **Beschrijving**, **Website** (volledige URL die begint met https://) en de adresvelden van de hoofdzetel — straat, nummer, postcode en gemeente. De vier adresvelden moeten samen worden ingevuld of allemaal leeg blijven.",
+      "title": "De gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--street",
+      "target": "community-info__input--street",
+      "text": "Vul de velden in: **Beschrijving**, **Website** (volledige URL die begint met https://) en de adresvelden van de hoofdzetel — straat, nummer, postcode en gemeente. De vier adresvelden moeten samen worden ingevuld of allemaal leeg blijven.",
+      "title": "De gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--number",
+      "target": "community-info__input--number",
+      "text": "Vul de velden in: **Beschrijving**, **Website** (volledige URL die begint met https://) en de adresvelden van de hoofdzetel — straat, nummer, postcode en gemeente. De vier adresvelden moeten samen worden ingevuld of allemaal leeg blijven.",
+      "title": "De gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--postcode",
+      "target": "community-info__input--postcode",
+      "text": "Vul de velden in: **Beschrijving**, **Website** (volledige URL die begint met https://) en de adresvelden van de hoofdzetel — straat, nummer, postcode en gemeente. De vier adresvelden moeten samen worden ingevuld of allemaal leeg blijven.",
+      "title": "De gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--city",
+      "target": "community-info__input--city",
+      "text": "Vul de velden in: **Beschrijving**, **Website** (volledige URL die begint met https://) en de adresvelden van de hoofdzetel — straat, nummer, postcode en gemeente. De vier adresvelden moeten samen worden ingevuld of allemaal leeg blijven.",
+      "title": "De gegevens invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--save",
+      "target": "community-info__btn--save",
+      "text": "Sla op om uw wijzigingen toe te passen.",
+      "title": "Opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__view--description",
+      "target": "community-info__view--description",
+      "targetClick": "next",
+      "text": "Terug in de weergavemodus toont de fiche de beschrijving, de website en het adres precies zoals u ze hebt ingevoerd — de wijzigingen zijn wel degelijk op de server opgeslagen.",
+      "title": "Gegevens bijgewerkt"
+    }
+  ],
+  "title": "De gemeenschapsinfo bijwerken"
+}

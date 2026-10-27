@@ -1,0 +1,131 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-update/en.html",
+  "id": "meter-update",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Click the row of the meter you want to edit to open its detail page.",
+      "title": "Open the meter detail"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tap the card of the meter you want to edit to open its detail page.",
+      "title": "Open the meter detail"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "The detail page shows the meter's current information: EAN, installation address and technical characteristics.",
+      "title": "Initial detail"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--modify",
+      "target": "meter-view__btn--modify",
+      "text": "Click \"Modify\" to open the dialog containing the meter's editable fields (address, number, EAN and characteristics).",
+      "title": "Open the edit form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--street",
+      "target": "meter-update__input--street",
+      "text": "Edit the fields you want to change — here the installation address and the meter's physical number. The EAN and technical characteristics stay the same.",
+      "title": "Update the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-number",
+      "target": "meter-update__input--address-number",
+      "text": "Edit the fields you want to change — here the installation address and the meter's physical number. The EAN and technical characteristics stay the same.",
+      "title": "Update the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-supplement",
+      "target": "meter-update__input--address-supplement",
+      "text": "Edit the fields you want to change — here the installation address and the meter's physical number. The EAN and technical characteristics stay the same.",
+      "title": "Update the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--postcode",
+      "target": "meter-update__input--postcode",
+      "text": "Edit the fields you want to change — here the installation address and the meter's physical number. The EAN and technical characteristics stay the same.",
+      "title": "Update the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--city",
+      "target": "meter-update__input--city",
+      "text": "Edit the fields you want to change — here the installation address and the meter's physical number. The EAN and technical characteristics stay the same.",
+      "title": "Update the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--meter-number",
+      "target": "meter-update__input--meter-number",
+      "text": "Edit the fields you want to change — here the installation address and the meter's physical number. The EAN and technical characteristics stay the same.",
+      "title": "Update the address"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-update__btn--submit",
+      "target": "meter-update__btn--submit",
+      "text": "Click \"Save\" to send the changes to the CRM. The dialog closes once the update is acknowledged.",
+      "title": "Save"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero-2",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "Back on the meter detail page, the new address and meter number appear immediately — the change has been persisted server-side.",
+      "title": "Meter updated",
+      "waitFor": "meter-view__card--location"
+    }
+  ],
+  "title": "Edit a meter"
+}

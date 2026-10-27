@@ -1,0 +1,106 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-explore/en.html",
+  "id": "live-data-explore",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-data-hub__indicative",
+      "target": "live-data-hub__indicative",
+      "targetClick": "next",
+      "text": "This console follows, quarter-hour by quarter-hour, what the devices installed at members' premises measure. The figures are indicative: only the grid operator's data is used for allocation keys and invoicing.",
+      "title": "The Live data console",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__no-data",
+      "target": "live-dashboard__no-data",
+      "targetClick": "next",
+      "text": "The dashboard sums up the last full hour: production, power, grid exchanges and the state of the fleet. Until a device has sent a reading, every card shows a dash rather than a zero — \"not measured yet\" is not \"nothing produced\".",
+      "title": "The dashboard"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-the-chart-to-30-days",
+      "target": null,
+      "text": "The charts — production and export, then consumption drawn from the grid — cover 24 hours (per quarter-hour), 7 days (per hour) or 30 days (per day). While nothing has been measured, they say so instead of drawing a flat line at zero.",
+      "title": "Choose the chart period",
+      "waitFor": "live-dashboard__forecast"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "The \"Devices\" tab lists the boxes connected to the members' meters, with their reporting state.",
+      "title": "The devices",
+      "waitFor": "live-dashboard__chart-empty"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "targetClick": "next",
+      "text": "The community has no device yet. The \"Add a device\" button creates a device for a meter and issues its enrolment code — see the \"Connect a device\" guide.",
+      "title": "No device yet",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--ops",
+      "target": "live-data-hub__tab--ops",
+      "text": "The \"Fleet status\" tab is the maintenance screen: it tells you whether the figures are up to date, which devices need attention and what could not be stored.",
+      "title": "The fleet status"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-ops__empty",
+      "target": "live-ops__empty",
+      "targetClick": "next",
+      "text": "With no device, nothing has been computed yet and no device needs attention. As soon as a device reports, this screen shows how long ago the figures were recomputed and flags devices that are silent, offline or whose readings are rejected.",
+      "title": "An empty fleet",
+      "waitFor": "live-ops__readings-rejected-none"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--settings",
+      "target": "live-data-hub__tab--settings",
+      "text": "Open the settings tab.",
+      "title": "Settings"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-settings__btn--save",
+      "target": "live-settings__btn--save",
+      "targetClick": "next",
+      "text": "The settings decide what members will be able to see, and the minimum number of members below which grid exchanges stay hidden so that no household can be identified. Until they are saved, the platform defaults apply.",
+      "title": "The visibility settings",
+      "waitFor": "live-settings__is-default"
+    }
+  ],
+  "title": "Discover Live data"
+}

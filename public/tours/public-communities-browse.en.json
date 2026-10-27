@@ -1,0 +1,62 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/public"
+  },
+  "guideUrl": "https://guide.optimce.be/public-communities-browse/en.html",
+  "id": "public-communities-browse",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0",
+      "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
+      "text": "Each card is an energy community open to the public, with its regulator. Click a card to learn more.",
+      "title": "The public communities directory"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "public-community-list__btn--accordion--0-2",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "Expanding a community reveals its description, website, registered office and, above all, the list of its public sharing operations.",
+      "title": "Expand a community"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__detail--0",
+      "target": "public-community-list__detail--0",
+      "targetClick": "next",
+      "text": "The \"Test Community\" offers several public sharing operations (solar, wind). Each operation lists the municipalities it covers.",
+      "title": "The sharing operations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "public-community-list__filter--municipality",
+      "target": "public-community-list__filter--municipality",
+      "text": "Type a municipality and pick it from the suggestions to keep only the communities active there. You can also filter by regulator.",
+      "title": "Filter by municipality"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0-3",
+      "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
+      "text": "\"Test Community\" runs a sharing operation in Anderlecht, so it stays listed. A municipality with no active community would show an empty directory.",
+      "title": "Filtered result"
+    }
+  ],
+  "title": "Explore the public communities directory"
+}

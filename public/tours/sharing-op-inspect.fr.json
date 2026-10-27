@@ -1,0 +1,36 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-inspect/fr.html",
+  "id": "sharing-op-inspect",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "La fiche affiche le nom de l'opération de partage tel qu'il a été configuré. C'est ce nom qui sert de référence dans les exports et les rapports.",
+      "title": "Identification de l'opération",
+      "waitFor": "op-view__hero"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__link--key",
+      "target": "op-view__link--key",
+      "targetClick": "next",
+      "text": "La carte « Gestion des clés » montre la clé de répartition associée à cette opération — c'est elle qui détermine comment l'énergie est partagée entre les consommateurs.",
+      "title": "Clé associée",
+      "waitFor": "op-view__card--general-info"
+    }
+  ],
+  "title": "Inspecter une opération de partage"
+}

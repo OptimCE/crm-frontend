@@ -1,0 +1,62 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members/:memberId"
+  },
+  "guideUrl": "https://guide.optimce.be/member-document-upload/en.html",
+  "id": "member-document-upload",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-tabs__tab--documents",
+      "target": "member-view-tabs__tab--documents",
+      "text": "Open the member's \"Documents\" tab. You can review existing documents and add new ones.",
+      "title": "Documents tab"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-documents-tab__btn--add",
+      "target": "member-view-documents-tab__btn--add",
+      "text": "Click \"Add document\" to open the upload dialog.",
+      "title": "Add a document",
+      "waitFor": "member-view-documents-tab__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-add-document__label--drag-drop",
+      "target": "member-add-document__label--drag-drop",
+      "targetClick": "next",
+      "text": "Select the file to upload from your computer (or drag it into the drop zone).",
+      "title": "Choose the file"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-add-document__btn--submit",
+      "target": "member-add-document__btn--submit",
+      "text": "Click \"Upload\": the document is saved and attached to the member.",
+      "title": "Upload"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-documents-tab__table",
+      "target": "member-view-documents-tab__table",
+      "targetClick": "next",
+      "text": "The document \"e2e-document.pdf\" now appears in the member's document list.",
+      "title": "Document added"
+    }
+  ],
+  "title": "Upload a document to a member"
+}

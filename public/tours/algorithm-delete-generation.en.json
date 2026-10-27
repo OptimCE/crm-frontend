@@ -1,0 +1,61 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-generation/en.html",
+  "id": "algorithm-delete-generation",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "The generation is displayed with a green dot indicating it completed successfully. The delete button (×) at the top right of the row allows deleting the entire generation and all its keys.",
+      "title": "Generation completed",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-generation-button",
+      "target": null,
+      "text": "Click the × button on the generation to initiate its deletion. All associated keys will also be deleted. A confirmation will be required.",
+      "title": "Delete the generation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "A confirmation dialog appears. Click the confirm button to permanently delete the generation and all the allocation keys it contains.",
+      "title": "Confirm deletion"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Confirm your choice in the confirmation dialog.",
+      "title": "Confirm"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__empty--generations",
+      "target": "algorithm-hub__empty--generations",
+      "targetClick": "next",
+      "text": "The generations list is empty again — the generation and all its allocation keys have been permanently deleted.",
+      "title": "Generation deleted"
+    }
+  ],
+  "title": "Delete a generation"
+}

@@ -1,0 +1,99 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-create/de.html",
+  "id": "sharing-op-create",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Klicken Sie auf „Hinzufügen“, um den Dialog zum Erstellen einer neuen Teilungsoperation in der aktiven Gemeinschaft zu öffnen.",
+      "title": "Operation hinzufügen",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Geben Sie einen aussagekräftigen Namen für die neue Teilungsoperation ein. Dieser Name erscheint in der Liste und in allen Verweisen auf diese Operation.",
+      "title": "Operation benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Wählen Sie die Karte „Innerhalb eines Gebäudes“, um anzugeben, dass die Teilung innerhalb desselben Gebäudes erfolgt, im Gegensatz zu einer Teilung auf Distanz über das öffentliche Netz.",
+      "title": "Lokaler Typ"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Geben Sie die ersten Buchstaben einer Gemeinde ein, die die Operation abdeckt.",
+      "title": "Eine Gemeinde suchen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17c-pick-the-first-suggestion",
+      "target": null,
+      "text": "Wählen Sie die Gemeinde aus den Vorschlägen.",
+      "title": "Die Gemeinde wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Senden Sie das Formular ab, um die Teilungsoperation zu erstellen.",
+      "title": "Die Operation erstellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "targetClick": "next",
+      "text": "Die neue Operation „E2E Sharing Op“ erscheint in der Liste der Teilungsoperationen der Gemeinschaft, bereit zur Bearbeitung und Aktivierung.",
+      "title": "Operation erstellt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Klicken Sie auf die Zeile der neuen Operation, um ihre Detailseite zu öffnen und auf alle Parameter zuzugreifen.",
+      "title": "Detailseite öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "Die Kopfzeile der Detailseite zeigt den Namen der Operation, die Sie gerade erstellt haben — er dient als roter Faden in allen Ansichten, die auf sie verweisen.",
+      "title": "Name der Operation",
+      "waitFor": "op-view__hero"
+    }
+  ],
+  "title": "Teilungsoperation erstellen"
+}

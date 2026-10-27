@@ -1,0 +1,181 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/dashboard"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-admin/fr.html",
+  "id": "onboarding-admin",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "readiness-tile",
+      "target": "readiness-tile",
+      "targetClick": "next",
+      "text": "Vous avez tout ce qu'a un gestionnaire, ce tableau de bord compris, plus trois décisions qui n'appartiennent qu'à vous : les modules que la communauté utilise, qui la gère avec vous, et ses informations légales.",
+      "title": "Vous êtes administrateur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--management",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--management",
+      "targetClick": "next",
+      "text": "Comme administrateur, vous gardez la section **« Gestion »** des gestionnaires. Sa page **« Utilisateurs »** est celle où vous choisissez qui gère la communauté avec vous.",
+      "title": "La section « Gestion »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_users",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Dans la section **« Gestion »**, cliquez sur **« Utilisateurs »**.",
+      "title": "Les utilisateurs de la communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--management",
+      "targetClick": "next",
+      "text": "Comme administrateur, vous gardez la section **« Gestion »** des gestionnaires. Sa page **« Utilisateurs »** est celle où vous choisissez qui gère la communauté avec vous.",
+      "title": "La section « Gestion »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_users-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Dans la section **« Gestion »** du menu, touchez **« Utilisateurs »**.",
+      "title": "Les utilisateurs de la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "targetClick": "next",
+      "text": "Seul un administrateur peut faire entrer un gestionnaire : **« Inviter un gestionnaire »** lui envoie une invitation par e-mail, qu'il accepte depuis ses invitations.",
+      "title": "Inviter un gestionnaire"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "targetClick": "next",
+      "text": "**« Voir invitation en attente »** montre qui n'a pas encore répondu. Dans la liste, vous seul pouvez changer le rôle d'un utilisateur — membre, gestionnaire ou administrateur — ou le retirer de la communauté.",
+      "title": "Invitations et rôles"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "La section **« Communauté »** mène au tableau de bord, aux infos de la communauté et à ses services annexes. Sa page **« Infos communauté »** porte les informations légales que vous seul pouvez changer.",
+      "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_info",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Dans la section **« Communauté »**, cliquez sur **« Infos communauté »**.",
+      "title": "Les infos de la communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "La section **« Communauté »** mène au tableau de bord, aux infos de la communauté et à ses services annexes. Sa page **« Infos communauté »** porte les informations légales que vous seul pouvez changer.",
+      "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_info-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Dans la section **« Communauté »** du menu, touchez **« Infos communauté »**.",
+      "title": "Les infos de la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "targetClick": "next",
+      "text": "Membres et gestionnaires lisent ces informations ; vous seul pouvez les changer. **« Modifier »** ouvre le nom, la description, l'adresse, le numéro d'entreprise et l'IBAN — ce qui figure ensuite sur les factures et les documents officiels.",
+      "title": "Les informations légales",
+      "waitFor": "community-info__card--view"
+    }
+  ],
+  "title": "Vous êtes administrateur"
+}

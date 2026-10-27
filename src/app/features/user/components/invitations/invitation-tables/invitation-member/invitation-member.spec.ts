@@ -1,4 +1,5 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommunityActivationService } from '../../../../../../core/services/community-activation.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Table, TablePageEvent } from 'primeng/table';
@@ -33,7 +34,7 @@ function buildInvitation(
     user_email: 'user@test.com',
     created_at: new Date('2025-01-15'),
     to_be_encoded: false,
-    community: { name: 'Test Community' },
+    community: { id: 3, name: 'Test Community' },
     ...overrides,
   } as UserMemberInvitationDTO;
 }
@@ -60,6 +61,8 @@ describe('InvitationMember', () => {
   let component: InvitationMember;
   let fixture: ComponentFixture<InvitationMember>;
 
+  let activationSpy: { activateJoined: ReturnType<typeof vi.fn> };
+
   let meServiceSpy: {
     getOwnMembersPendingInviation: ReturnType<typeof vi.fn>;
     acceptInvitationMember: ReturnType<typeof vi.fn>;
@@ -72,6 +75,7 @@ describe('InvitationMember', () => {
   };
 
   beforeEach(async () => {
+    activationSpy = { activateJoined: vi.fn().mockResolvedValue(null) };
     meServiceSpy = {
       getOwnMembersPendingInviation: vi.fn().mockReturnValue(of(buildPaginatedResponse())),
       acceptInvitationMember: vi.fn().mockReturnValue(of(new ApiResponse('OK'))),
@@ -89,7 +93,10 @@ describe('InvitationMember', () => {
 
     await TestBed.configureTestingModule({
       imports: [InvitationMember, TranslateModule.forRoot()],
-      providers: [{ provide: MeService, useValue: meServiceSpy }],
+      providers: [
+        { provide: MeService, useValue: meServiceSpy },
+        { provide: CommunityActivationService, useValue: activationSpy },
+      ],
     })
       .overrideComponent(InvitationMember, {
         remove: {
@@ -394,6 +401,11 @@ describe('InvitationMember', () => {
       expect(loadSpy).toHaveBeenCalled();
     });
 
+    it("should activate the invitation's community on success", () => {
+      component.acceptInvitation(buildInvitation());
+      expect(activationSpy.activateJoined).toHaveBeenCalledWith(3);
+    });
+
     it('should log error on failure', () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       meServiceSpy.acceptInvitationMember.mockReturnValue(throwError(() => new Error('fail')));
@@ -504,6 +516,7 @@ describe('InvitationMember', () => {
 
       onClose$.next(true);
       expect(loadSpy).toHaveBeenCalled();
+      expect(activationSpy.activateJoined).toHaveBeenCalledWith(3);
     });
 
     it('should not reload invitations when dialog closes with false', () => {
@@ -519,6 +532,7 @@ describe('InvitationMember', () => {
 
       onClose$.next(false);
       expect(loadSpy).not.toHaveBeenCalled();
+      expect(activationSpy.activateJoined).not.toHaveBeenCalled();
     });
   });
 

@@ -1,0 +1,101 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-device-enrol/nl.html",
+  "id": "live-data-device-enrol",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "Open in de console Live gegevens het tabblad “Apparaten”. Een apparaat is het kastje dat op de meter van een lid (P1-poort) of op diens omvormer is aangesloten: het stuurt elk kwartier een meting door.",
+      "title": "Het tabblad Apparaten openen",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "text": "Klik op “Apparaat toevoegen”.",
+      "title": "Apparaat toevoegen",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "device-create-dialog__input--name",
+      "target": "device-create-dialog__input--name",
+      "text": "Geef het toestel een naam waaraan u het herkent.",
+      "title": "Het toestel benoemen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__select--ean",
+      "target": "device-create-dialog__select--ean",
+      "text": "Open de lijst met meters van de gemeenschap.",
+      "title": "De meter kiezen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "choose-the-member-s-meter",
+      "target": null,
+      "text": "Kies de meter waarop het toestel is aangesloten. Een meter die al een toestel heeft, is grijs.",
+      "title": "De meter kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-create-dialog__btn--submit",
+      "target": "device-create-dialog__btn--submit",
+      "text": "Klik op “Aanmaken”. Vink het vakje voor pure injectie (“Achter deze meter wordt niets verbruikt”) alleen aan voor een site die niets verbruikt: ten onrechte aangevinkt, zou het de productie van de gemeenschap onderschatten zonder enige zichtbare fout.",
+      "title": "Apparaat aanmaken",
+      "waitFor": "device-create-dialog__select--ean"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "device-token-dialog__qr",
+      "target": "device-token-dialog__qr",
+      "targetClick": "next",
+      "text": "Het apparaat is aangemaakt en zijn aanmeldcode verschijnt meteen, in leesbare tekst en als QR-code. Voer hem in op het apparaat (of scan hem). Hij wordt maar één keer getoond, werkt maar één keer en verloopt na 72 uur; bent u hem kwijt, geef dan vanuit de lijst een nieuwe uit — de oude werkt dan niet meer.",
+      "title": "De aanmeldcode",
+      "waitFor": "device-token-dialog__code"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "device-token-dialog__btn--close",
+      "target": "device-token-dialog__btn--close",
+      "text": "Sluit het venster wanneer u klaar bent.",
+      "title": "Sluiten",
+      "waitFor": "device-token-dialog__once"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "it-is-waiting-for-its-first-contact",
+      "target": null,
+      "text": "Zolang het apparaat zijn code niet heeft gebruikt, staat het op “Wacht op aanmelding” en “Nooit gezien”. Het kader legt uit wat u moet nagaan: krijgt het apparaat stroom en is het met het netwerk verbonden?",
+      "title": "Wacht op aanmelding"
+    }
+  ],
+  "title": "Een apparaat koppelen"
+}

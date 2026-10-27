@@ -1,0 +1,118 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-set-public/nl.html",
+  "id": "sharing-op-set-public",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Klik op “Toevoegen” om het venster voor het aanmaken van een nieuwe deeloperatie te openen. Standaard wordt elke nieuwe operatie in privémodus aangemaakt: ze is nog niet zichtbaar in de openbare gids.",
+      "title": "Een operatie toevoegen",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Voer een naam in voor de nieuwe operatie. Deze naam is zichtbaar in de beheerlijst en, zodra de operatie openbaar is gemaakt, in de openbare gids.",
+      "title": "De operatie een naam geven"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Selecteer het type “Binnen een gebouw” voor een deeloperatie binnen eenzelfde gebouw. Net als de types CER en CEC kan dit type openbaar worden gemaakt om in de gids van de energiegemeenschappen te verschijnen.",
+      "title": "Type “Binnen een gebouw” selecteren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Typ de eerste letters van een gemeente die de operatie dekt.",
+      "title": "Een gemeente zoeken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "19b-pick-the-first-suggestion",
+      "target": null,
+      "text": "Kies de gemeente uit de suggesties.",
+      "title": "De gemeente kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Bevestig het formulier om de deeloperatie aan te maken.",
+      "title": "De operatie aanmaken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "targetClick": "next",
+      "text": "De nieuwe operatie “E2E Energy Sharing” verschijnt in de lijst. Ze staat voorlopig in privémodus: ze is alleen zichtbaar voor de beheerders van de gemeenschap en verschijnt nog niet in de openbare gids.",
+      "title": "Operatie aangemaakt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Klik op de rij van de nieuwe operatie om haar detailpagina te openen en de zichtbaarheidsinstellingen te bereiken.",
+      "title": "Detailpagina openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility",
+      "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
+      "text": "De grijze knop “Privé” in de kop geeft aan dat deze operatie nog niet zichtbaar is in de openbare gids. Burgers die een deeloperatie in hun gemeente zoeken, kunnen ze niet vinden zolang ze privé blijft.",
+      "title": "Standaard privé",
+      "waitFor": "op-view__title--name"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--toggle-visibility-2",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Klik op de zichtbaarheidsknop om de operatie naar de openbare modus over te schakelen. Deze wijziging wordt meteen opgeslagen: de operatie wordt voor alle burgers zichtbaar in de gids van de energiegemeenschappen.",
+      "title": "De operatie openbaar maken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility-3",
+      "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
+      "text": "De knop wordt groen en toont “Openbaar”. Elke burger kan deze operatie nu vinden in de gids van de energiegemeenschappen, op gemeente filteren en contact opnemen met de gemeenschap om deelname aan te vragen.",
+      "title": "De operatie is nu openbaar"
+    }
+  ],
+  "title": "Een deeloperatie openbaar maken"
+}

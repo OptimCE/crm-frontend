@@ -1,0 +1,156 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-member/fr.html",
+  "id": "onboarding-member",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "Vous voilà membre d'une communauté d'énergie : elle apparaît sur votre page d'accueil, avec votre rôle. Si vous faites partie de plusieurs communautés, chacune a sa carte.",
+      "title": "Votre communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Cliquez sur **« Ouvrir ma communauté »** pour arriver sur son tableau de bord.",
+      "title": "Ouvrir sa communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-tile",
+      "target": "my-energy-tile",
+      "targetClick": "next",
+      "text": "**« Mon énergie ici »** montre ce que vous avez consommé et ce que vous avez reçu en partage dans cette communauté. Le compteur cité mène à son détail.",
+      "title": "Votre énergie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-participation-tile",
+      "target": "my-participation-tile",
+      "targetClick": "next",
+      "text": "**« Ma participation »** liste les opérations de partage auxquelles vos compteurs prennent part, et votre place dans leur clé de répartition.",
+      "title": "Votre participation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-member-record-tile",
+      "target": "my-member-record-tile",
+      "targetClick": "next",
+      "text": "**« Ma fiche membre »** indique si votre fiche est active. Ouvrez-la pour vérifier vos coordonnées : ce sont les gestionnaires qui la tiennent à jour.",
+      "title": "Votre fiche membre"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "about-community-tile",
+      "target": "about-community-tile",
+      "targetClick": "next",
+      "text": "**« À propos de la communauté »** rappelle son nombre de membres, son régulateur et son site web. Les autres tuiles — documents, factures, actualités — dépendent des modules que la communauté utilise.",
+      "title": "À propos de la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "Devenir membre a ajouté la section **« Communauté »** à la barre latérale : le tableau de bord, les infos de la communauté, ses services annexes et, selon ses modules, les actualités, la facturation ou les documents administratifs.",
+      "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "Devenir membre a ajouté la section **« Communauté »** au menu : le tableau de bord, les infos de la communauté, ses services annexes et, selon ses modules, les actualités, la facturation ou les documents administratifs.",
+      "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--member",
+      "target": "navbar__menu--member",
+      "targetClick": "next",
+      "text": "Juste en dessous, la section des membres mène à **« Gestionnaires de la communauté »** : les personnes à contacter pour une question sur votre fiche, vos compteurs ou une facture.",
+      "title": "Qui gère la communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_managers",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Cliquez sur **« Gestionnaires de la communauté »**.",
+      "title": "Ouvrir les gestionnaires"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_managers-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Touchez **« Gestionnaires de la communauté »**.",
+      "title": "Ouvrir les gestionnaires"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__table",
+      "target": "managers-community-list__table",
+      "targetClick": "next",
+      "text": "Chaque gestionnaire et administrateur figure ici avec son e-mail et son rôle. Pour aller plus loin, la page d'accueil et le tableau de bord du membre ont chacun leur visite détaillée dans le **« Guide utilisateur »**.",
+      "title": "Les gestionnaires"
+    }
+  ],
+  "title": "Vous êtes membre"
+}

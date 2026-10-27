@@ -1,0 +1,111 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/dashboard-manager-tour/de.html",
+  "id": "dashboard-manager-tour",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Öffnen Sie auf Ihrer Startseite die Gemeinschaft, in der Sie arbeiten möchten. Sie wird zu Ihrer aktiven Gemeinschaft, und Sie gelangen zu ihrer Übersicht.",
+      "title": "Die Gemeinschaft betreten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dashboard-opens-on-the-community",
+      "target": null,
+      "text": "Die Übersicht fasst den Zustand der aktiven Gemeinschaft zusammen: was Ihre Aufmerksamkeit erfordert, die geteilte Energie, die Operationen und die Module, die die Gemeinschaft abonniert hat.",
+      "title": "Die Übersicht"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
+      "target": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
+      "targetClick": "next",
+      "text": "Die erste Kachel fasst zusammen, was blockiert oder zu blockieren droht: fehlende rechtliche Angaben, Zähler, die auf den Netzbetreiber warten, Operationen ohne Verteilungsschlüssel. Jede Zeile führt direkt zu dem Bildschirm, auf dem Sie es beheben können.",
+      "title": "Zu prüfende Punkte"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "energy-glance-tile__link--operation",
+      "target": "energy-glance-tile__link--operation",
+      "targetClick": "next",
+      "text": "Für jede Teilungsoperation zeigt die Kachel die geteilte und die eingespeiste Energie für den letzten Zeitraum, für den Daten vorliegen. Der Name der Operation führt zu ihrer Detailseite.",
+      "title": "Energie auf einen Blick"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "sharing-operations-tile__link--all",
+      "target": "sharing-operations-tile__link--all",
+      "targetClick": "next",
+      "text": "Die Kachel listet die Operationen der Gemeinschaft mit ihrem Typ auf. Der Link unten öffnet die vollständige Liste.",
+      "title": "Teilungsvorgänge"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "onboarding-funnel-tile__link--members",
+      "target": "onboarding-funnel-tile__link--members",
+      "targetClick": "next",
+      "text": "„Neuzugänge“ zählt die versendeten Einladungen und die noch zu erfassenden Datensätze. „Letzte Aktivität“ zeigt die zuletzt im Audit-Protokoll der Gemeinschaft erfassten Aktionen.",
+      "title": "Neuzugänge und letzte Aktivität"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unpaid-invoices-tile__link--billing",
+      "target": "unpaid-invoices-tile__link--billing",
+      "targetClick": "next",
+      "text": "Abrechnung, Aktuelles, Dossiers und Verwaltungsfristen erscheinen nur, wenn die Gemeinschaft das entsprechende Modul abonniert hat. Eine Gemeinschaft ohne Abonnement sieht diese Kacheln einfach nicht.",
+      "title": "Die aktivierten Module"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "module-discovery-strip",
+      "target": "module-discovery-strip",
+      "targetClick": "next",
+      "text": "Unten in der Übersicht zeigt die Leiste „Verfügbare Module“, was die Gemeinschaft noch nicht nutzt. Ein Administrator kann sie hier aktivieren; ein Manager sieht, an wen er sich wenden muss.",
+      "title": "Verfügbare Module"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "manager-dashboard__btn--refresh",
+      "target": "manager-dashboard__btn--refresh",
+      "text": "Die Schaltfläche „Aktualisieren“ lädt alle Kacheln auf einmal neu, ohne die Seite neu zu laden — praktisch, nachdem Sie auf einem anderen Bildschirm etwas korrigiert haben.",
+      "title": "Aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-page__title",
+      "target": "header-page__title",
+      "targetClick": "next",
+      "text": "Die Kacheln laden nacheinander neu und zeigen wieder ihre gewohnte Ansicht mit den neuesten Daten.",
+      "title": "Aktuelle Daten"
+    }
+  ],
+  "title": "Die Übersicht für Manager"
+}

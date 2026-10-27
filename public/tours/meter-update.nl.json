@@ -1,0 +1,131 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-update/nl.html",
+  "id": "meter-update",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klik op de rij van de meter die u wilt wijzigen om de gedetailleerde fiche ervan te openen.",
+      "title": "De meterfiche openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tik op de kaart van de meter die u wilt wijzigen om de gedetailleerde fiche ervan te openen.",
+      "title": "De meterfiche openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "De gedetailleerde fiche toont de huidige gegevens van de meter: EAN, installatieadres en technische kenmerken.",
+      "title": "Oorspronkelijke fiche"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--modify",
+      "target": "meter-view__btn--modify",
+      "text": "Klik op “Wijzigen”: er opent een dialoogvenster met de wijzigbare velden van de meter (adres, nummer, EAN en kenmerken).",
+      "title": "Het formulier openen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--street",
+      "target": "meter-update__input--street",
+      "text": "Wijzig de gewenste velden — hier het installatieadres en het fysieke nummer van de meter. De EAN en de technische kenmerken blijven ongewijzigd.",
+      "title": "Het adres bijwerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-number",
+      "target": "meter-update__input--address-number",
+      "text": "Wijzig de gewenste velden — hier het installatieadres en het fysieke nummer van de meter. De EAN en de technische kenmerken blijven ongewijzigd.",
+      "title": "Het adres bijwerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-supplement",
+      "target": "meter-update__input--address-supplement",
+      "text": "Wijzig de gewenste velden — hier het installatieadres en het fysieke nummer van de meter. De EAN en de technische kenmerken blijven ongewijzigd.",
+      "title": "Het adres bijwerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--postcode",
+      "target": "meter-update__input--postcode",
+      "text": "Wijzig de gewenste velden — hier het installatieadres en het fysieke nummer van de meter. De EAN en de technische kenmerken blijven ongewijzigd.",
+      "title": "Het adres bijwerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--city",
+      "target": "meter-update__input--city",
+      "text": "Wijzig de gewenste velden — hier het installatieadres en het fysieke nummer van de meter. De EAN en de technische kenmerken blijven ongewijzigd.",
+      "title": "Het adres bijwerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--meter-number",
+      "target": "meter-update__input--meter-number",
+      "text": "Wijzig de gewenste velden — hier het installatieadres en het fysieke nummer van de meter. De EAN en de technische kenmerken blijven ongewijzigd.",
+      "title": "Het adres bijwerken"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-update__btn--submit",
+      "target": "meter-update__btn--submit",
+      "text": "Klik op “Bevestigen” om de wijzigingen naar het CRM te sturen. Het dialoogvenster sluit zodra de update is bevestigd.",
+      "title": "Opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero-2",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "Terug op de meterfiche zijn het nieuwe adres en het nieuwe nummer meteen zichtbaar — de wijziging is aan de serverzijde opgeslagen.",
+      "title": "Meter bijgewerkt",
+      "waitFor": "meter-view__card--location"
+    }
+  ],
+  "title": "Een meter wijzigen"
+}

@@ -1,0 +1,100 @@
+<div class="help-dialog" data-testid="help-dialog">
+  <a
+    data-testid="help-dialog__link--guide"
+    class="help-dialog__guide"
+    [href]="guideUrl"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="pi pi-book text-lg"></i>
+    <span class="flex-1">{{ 'HELP.OPEN_GUIDE' | translate }}</span>
+    <i class="pi pi-external-link text-xs"></i>
+  </a>
+
+  @if (firstSteps().length) {
+    <section class="mt-6" data-testid="help-dialog__first-steps">
+      <h3 class="text-base font-semibold text-primary-800">
+        {{ 'ONBOARDING.FIRST_STEPS.TITLE' | translate }}
+      </h3>
+      <p class="mt-1 text-sm text-primary-600">
+        {{ 'ONBOARDING.FIRST_STEPS.DESCRIPTION' | translate }}
+      </p>
+      <ul class="help-dialog__list">
+        @for (tour of firstSteps(); track tour.id) {
+          <li class="help-dialog__row" [attr.data-testid]="'help-dialog__row--' + tour.id">
+            <span class="flex-1 min-w-0 text-sm text-primary-800">{{ tour.title }}</span>
+            <p-button
+              size="small"
+              icon="pi pi-play"
+              [label]="'HELP.TOURS.START' | translate"
+              [attr.data-testid]="'help-dialog__btn--start--' + tour.id"
+              (onClick)="start(tour)"
+            />
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <section class="mt-6" data-testid="help-dialog__tours">
+    <h3 class="text-base font-semibold text-primary-800">{{ 'HELP.TOURS.TITLE' | translate }}</h3>
+    <p class="mt-1 text-sm text-primary-600">{{ 'HELP.TOURS.DESCRIPTION' | translate }}</p>
+
+    @if (loading()) {
+      <div class="mt-4 flex flex-col gap-2" data-testid="help-dialog__loading">
+        <p-skeleton height="2.25rem" />
+        <p-skeleton height="2.25rem" />
+        <p-skeleton height="2.25rem" />
+      </div>
+    } @else if (failed()) {
+      <p class="help-dialog__note" data-testid="help-dialog__error">
+        {{ 'HELP.TOURS.LOAD_ERROR' | translate }}
+      </p>
+    } @else if (noCommunity()) {
+      <p class="help-dialog__note" data-testid="help-dialog__no-community">
+        {{ 'HELP.TOURS.NO_COMMUNITY' | translate }}
+      </p>
+    } @else if (offersNothing()) {
+      <p class="help-dialog__note" data-testid="help-dialog__empty">
+        {{ 'HELP.TOURS.EMPTY' | translate }}
+      </p>
+    } @else {
+      <input
+        pInputText
+        type="search"
+        class="mt-4 w-full"
+        data-testid="help-dialog__input--search"
+        [attr.aria-label]="'HELP.TOURS.SEARCH' | translate"
+        [placeholder]="'HELP.TOURS.SEARCH' | translate"
+        [value]="query()"
+        (input)="onSearch($event)"
+      />
+
+      @if (noMatch()) {
+        <p class="help-dialog__note" data-testid="help-dialog__no-match">
+          {{ 'HELP.TOURS.NO_MATCH' | translate }}
+        </p>
+      }
+
+      @for (section of sections(); track section.key) {
+        <h4 class="help-dialog__group" [attr.data-testid]="'help-dialog__section--' + section.key">
+          {{ section.label | translate }}
+        </h4>
+        <ul class="help-dialog__list">
+          @for (tour of section.tours; track tour.id) {
+            <li class="help-dialog__row" [attr.data-testid]="'help-dialog__row--' + tour.id">
+              <span class="flex-1 min-w-0 text-sm text-primary-800">{{ tour.title }}</span>
+              <p-button
+                size="small"
+                icon="pi pi-play"
+                [label]="'HELP.TOURS.START' | translate"
+                [attr.data-testid]="'help-dialog__btn--start--' + tour.id"
+                (onClick)="start(tour)"
+              />
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+</div>

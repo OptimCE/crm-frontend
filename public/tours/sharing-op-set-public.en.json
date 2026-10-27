@@ -1,0 +1,118 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-set-public/en.html",
+  "id": "sharing-op-set-public",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Click \"Add\" to open the dialog for creating a new sharing operation. By default, every new operation is created in private mode: it is not yet visible in the public directory.",
+      "title": "Add an operation",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Type a name for the new operation. This name will appear in the management list and in the public directory once the operation is made public.",
+      "title": "Name the operation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Select the \"Local\" type for sharing within a single building. This type, like CER and CEC, can be made public to appear in the energy community directory.",
+      "title": "Select the Local type"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Type the first letters of a municipality the operation covers.",
+      "title": "Search a municipality"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "19b-pick-the-first-suggestion",
+      "target": null,
+      "text": "Pick the municipality from the suggestions.",
+      "title": "Pick the municipality"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Submit the form to create the sharing operation.",
+      "title": "Create the operation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "targetClick": "next",
+      "text": "The new \"E2E Energy Sharing\" appears in the list. It is currently private: visible only to community managers and not yet shown in the public directory.",
+      "title": "Operation created"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Click the new operation's row to open its detail page and access the visibility settings.",
+      "title": "Open the detail"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility",
+      "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
+      "text": "The grey \"PRIVATE\" button in the header shows that this operation is not yet visible in the public directory. Citizens searching for a sharing operation in their municipality cannot find it as long as it remains private.",
+      "title": "Private by default",
+      "waitFor": "op-view__title--name"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--toggle-visibility-2",
+      "target": "op-view__btn--toggle-visibility",
+      "text": "Click the visibility button to switch the operation to public mode. The change is saved immediately: the operation becomes visible in the energy community directory for all citizens.",
+      "title": "Make the operation public"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--toggle-visibility-3",
+      "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
+      "text": "The button turns green and shows \"PUBLIC\". Any citizen can now find this operation in the energy community directory, filter by municipality, and contact the community to request participation.",
+      "title": "Operation is now public"
+    }
+  ],
+  "title": "Make a sharing operation public"
+}

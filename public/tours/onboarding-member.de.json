@@ -1,0 +1,156 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-member/de.html",
+  "id": "onboarding-member",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "Sie sind jetzt Mitglied einer Energiegemeinschaft: Sie erscheint auf Ihrer Startseite, mit Ihrer Rolle. Gehören Sie mehreren Gemeinschaften an, hat jede ihre eigene Karte.",
+      "title": "Ihre Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Klicken Sie auf **„Meine Gemeinschaft öffnen“**, um zu ihrer Übersicht zu gelangen.",
+      "title": "Ihre Gemeinschaft öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-tile",
+      "target": "my-energy-tile",
+      "targetClick": "next",
+      "text": "**„Meine Energie hier“** zeigt, was Sie verbraucht und was Sie durch Teilen in dieser Gemeinschaft erhalten haben. Der genannte Zähler führt zu seinen Details.",
+      "title": "Ihre Energie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-participation-tile",
+      "target": "my-participation-tile",
+      "targetClick": "next",
+      "text": "**„Meine Beteiligung“** listet die Teilungsoperationen auf, an denen Ihre Zähler teilnehmen, und Ihren Platz in deren Verteilungsschlüssel.",
+      "title": "Ihre Beteiligung"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-member-record-tile",
+      "target": "my-member-record-tile",
+      "targetClick": "next",
+      "text": "**„Mein Mitgliederdatensatz“** zeigt, ob Ihr Datensatz aktiv ist. Öffnen Sie ihn, um Ihre Angaben zu prüfen: Die Manager halten ihn auf dem neuesten Stand.",
+      "title": "Ihr Mitgliederdatensatz"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "about-community-tile",
+      "target": "about-community-tile",
+      "targetClick": "next",
+      "text": "**„Über diese Gemeinschaft“** nennt die Zahl ihrer Mitglieder, ihre Regulierungsbehörde und ihre Website. Die anderen Kacheln — Dokumente, Rechnungen, Aktuelles — hängen von den Modulen ab, die die Gemeinschaft nutzt.",
+      "title": "Über die Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "Mit der Mitgliedschaft ist der Abschnitt **„Gemeinschaft“** in der Seitenleiste hinzugekommen: die Übersicht, die Gemeinschaftsinfo, ihre Zusatzdienste und, je nach ihren Modulen, Aktuelles, Abrechnung oder Verwaltungsdokumente.",
+      "title": "Der Abschnitt „Gemeinschaft“"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "Mit der Mitgliedschaft ist der Abschnitt **„Gemeinschaft“** im Menü hinzugekommen: die Übersicht, die Gemeinschaftsinfo, ihre Zusatzdienste und, je nach ihren Modulen, Aktuelles, Abrechnung oder Verwaltungsdokumente.",
+      "title": "Der Abschnitt „Gemeinschaft“"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--member",
+      "target": "navbar__menu--member",
+      "targetClick": "next",
+      "text": "Direkt darunter führt der Abschnitt für Mitglieder zu **„Manager der Gemeinschaft“**: die Personen, an die Sie sich mit Fragen zu Ihrem Datensatz, Ihren Zählern oder einer Rechnung wenden.",
+      "title": "Wer die Gemeinschaft verwaltet"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_managers",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Klicken Sie auf **„Manager der Gemeinschaft“**.",
+      "title": "Die Manager öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_managers-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Tippen Sie auf **„Manager der Gemeinschaft“**.",
+      "title": "Die Manager öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__table",
+      "target": "managers-community-list__table",
+      "targetClick": "next",
+      "text": "Jeder Manager und Administrator ist hier mit E-Mail-Adresse und Rolle aufgeführt. Wenn Sie mehr wissen möchten: Die Startseite und die Mitgliederübersicht haben im **„Benutzerhandbuch“** jeweils eine eigene ausführliche Tour.",
+      "title": "Die Manager"
+    }
+  ],
+  "title": "Sie sind Mitglied"
+}

@@ -1,0 +1,62 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/public"
+  },
+  "guideUrl": "https://guide.optimce.be/public-communities-browse/nl.html",
+  "id": "public-communities-browse",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0",
+      "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
+      "text": "Elke kaart staat voor een energiegemeenschap die openstaat voor het publiek, met haar regulator. Klik op een kaart voor meer informatie.",
+      "title": "Het overzicht van openbare gemeenschappen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "public-community-list__btn--accordion--0-2",
+      "target": "public-community-list__btn--accordion--0",
+      "text": "Wanneer u een gemeenschap openklapt, ziet u haar beschrijving, website, maatschappelijke zetel en vooral de lijst van haar openbare deeloperaties.",
+      "title": "Een gemeenschap openklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__detail--0",
+      "target": "public-community-list__detail--0",
+      "targetClick": "next",
+      "text": "De gemeenschap “Test Community” biedt verschillende openbare deeloperaties aan (zon, wind). Elke operatie vermeldt de gemeenten die ze dekt.",
+      "title": "De deeloperaties"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "public-community-list__filter--municipality",
+      "target": "public-community-list__filter--municipality",
+      "text": "Typ een gemeente en kies ze in de suggesties om alleen de gemeenschappen te behouden die op dat grondgebied actief zijn. U kunt ook filteren op regulator.",
+      "title": "Filteren op gemeente"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__btn--accordion--0-3",
+      "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
+      "text": "“Test Community” beheert een deeloperatie in Anderlecht en blijft dus zichtbaar. Een gemeente waar geen enkele gemeenschap actief is, zou een leeg overzicht tonen.",
+      "title": "Gefilterd resultaat"
+    }
+  ],
+  "title": "Openbare gemeenschappen verkennen"
+}

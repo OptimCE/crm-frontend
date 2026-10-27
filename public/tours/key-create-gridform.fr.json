@@ -1,0 +1,143 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-gridform/fr.html",
+  "id": "key-create-gridform",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Cliquez sur « Ajouter » : OptimCE vous demande d'abord comment vous souhaitez construire la nouvelle clé de répartition.",
+      "title": "Ajouter une clé",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--full",
+      "target": "key-creation-mode__card--full",
+      "text": "Deux manières de construire une clé vous sont proposées. Choisissez « Éditeur complet » pour saisir directement les itérations et les pourcentages dans la grille.",
+      "title": "Choisir le mode"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Donnez un nom et une description à la nouvelle clé de répartition. Ces informations apparaîtront dans la liste des clés et aident à la retrouver plus tard.",
+      "title": "Identifier la clé"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Donnez un nom et une description à la nouvelle clé de répartition. Ces informations apparaîtront dans la liste des clés et aident à la retrouver plus tard.",
+      "title": "Identifier la clé"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-iteration",
+      "target": "key-update__btn--add-iteration",
+      "text": "Cliquez sur « Ajouter une itération » : la grille initialise un nouveau bloc avec un premier consommateur prêt à être édité.",
+      "title": "Ajouter une itération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer",
+      "target": "key-update__btn--add-consumer",
+      "text": "Ajoutez une ligne par consommateur de la clé.",
+      "title": "Ajouter un consommateur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer-2",
+      "target": "key-update__btn--add-consumer",
+      "text": "Cliquez sur « Ajouter un consommateur » autant de fois que nécessaire pour atteindre le nombre voulu — trois lignes dans ce scénario.",
+      "title": "Ajouter des consommateurs"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Saisissez 70% de l'énergie pour cette itération, nommez les trois consommateurs (Cons1, Cons2, Cons3) et fixez manuellement la répartition 40/40/20.",
+      "title": "Configurer l'itération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-prorata-iteration",
+      "target": "key-update__btn--add-prorata-iteration",
+      "text": "Cliquez sur « Ajouter une itération prorata » : les noms des consommateurs sont repris automatiquement et les pourcentages seront calculés selon la consommation réelle.",
+      "title": "Ajouter une itération prorata"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "text": "Saisissez 30% comme pondération de la deuxième itération afin que la somme des deux itérations atteigne 100% de l'énergie.",
+      "title": "Définir la pondération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "iteration-2-is-recalculated",
+      "target": null,
+      "text": "Dès que la pondération est validée (touche Entrée ou clic ailleurs), toute la deuxième itération est recalculée automatiquement selon le mode prorata.",
+      "title": "Itération recalculée"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-3",
+      "target": "key-update__grid--data",
+      "targetClick": "next",
+      "text": "Parcourez la grille complète pour vérifier les itérations, les noms et les pourcentages avant d'enregistrer la clé.",
+      "title": "Relire la configuration"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Enregistrez pour valider vos modifications.",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-key-appears-in-the-list",
+      "target": null,
+      "text": "La nouvelle clé « E2E key » apparaît dans la liste des clés de répartition de la communauté, prête à être utilisée par une opération de partage.",
+      "title": "Clé créée",
+      "waitFor": "keys-list__table--keys"
+    }
+  ],
+  "title": "Créer une clé (formulaire)"
+}

@@ -1,0 +1,63 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services"
+  },
+  "guideUrl": "https://guide.optimce.be/annexes-subscribe/de.html",
+  "id": "annexes-services-subscribe",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__empty",
+      "target": "annexes-services-list__empty",
+      "targetClick": "next",
+      "text": "Die Seite „Zusatzdienste“ ist leer: Für diese Gemeinschaft ist noch kein Zusatzmodul aktiviert.",
+      "title": "Kein Modul aktiviert"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "annexes-services-list__btn--add",
+      "target": "annexes-services-list__btn--add",
+      "text": "Klicken Sie oben rechts auf „Modul hinzufügen“, um den Katalog der für diese Gemeinschaft verfügbaren Module zu öffnen.",
+      "title": "Modul hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "add-annex-dialog__item--algorithm",
+      "target": "add-annex-dialog__item--algorithm",
+      "targetClick": "next",
+      "text": "Der Dialog listet die verfügbaren Module auf. Hier wird das Modul „Generierung von Verteilschlüsseln“ mit seiner Beschreibung angeboten.",
+      "title": "Modul auswählen",
+      "waitFor": "add-annex-dialog__list"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "add-annex-dialog__item--algorithm-2",
+      "target": "add-annex-dialog__item--algorithm",
+      "text": "Klicken Sie neben dem Modul „Generierung von Verteilschlüsseln“ auf „Hinzufügen“, um es für die Gemeinschaft zu aktivieren.",
+      "title": "Modul aktivieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__card--algorithm",
+      "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
+      "text": "Die Karte „Generierung von Verteilschlüsseln“ erscheint mit dem Badge „Aktiviert“ im Raster: Das Modul ist jetzt über diese Seite zugänglich.",
+      "title": "Modul aktiviert"
+    }
+  ],
+  "title": "Zusatzdienst abonnieren"
+}

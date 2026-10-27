@@ -1,0 +1,106 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/info"
+  },
+  "guideUrl": "https://guide.optimce.be/community-info-update/fr.html",
+  "id": "community-info-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__card--view",
+      "target": "community-info__card--view",
+      "targetClick": "next",
+      "text": "La page affiche les informations actuelles de la communauté : nom, description, site web et adresse du siège social. Cliquez sur **Modifier** pour passer en mode édition.",
+      "title": "Fiche d'informations de la communauté"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Passez la fiche de la communauté en mode modification.",
+      "title": "Modifier"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--description",
+      "target": "community-info__input--description",
+      "text": "Remplissez les champs : **Description**, **Site web** (URL complète commençant par https://) et les champs de l'adresse du siège social — rue, numéro, code postal et commune. Les quatre champs d'adresse doivent être renseignés ensemble ou laissés vides.",
+      "title": "Saisir les informations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--website",
+      "target": "community-info__input--website",
+      "text": "Remplissez les champs : **Description**, **Site web** (URL complète commençant par https://) et les champs de l'adresse du siège social — rue, numéro, code postal et commune. Les quatre champs d'adresse doivent être renseignés ensemble ou laissés vides.",
+      "title": "Saisir les informations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--street",
+      "target": "community-info__input--street",
+      "text": "Remplissez les champs : **Description**, **Site web** (URL complète commençant par https://) et les champs de l'adresse du siège social — rue, numéro, code postal et commune. Les quatre champs d'adresse doivent être renseignés ensemble ou laissés vides.",
+      "title": "Saisir les informations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--number",
+      "target": "community-info__input--number",
+      "text": "Remplissez les champs : **Description**, **Site web** (URL complète commençant par https://) et les champs de l'adresse du siège social — rue, numéro, code postal et commune. Les quatre champs d'adresse doivent être renseignés ensemble ou laissés vides.",
+      "title": "Saisir les informations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--postcode",
+      "target": "community-info__input--postcode",
+      "text": "Remplissez les champs : **Description**, **Site web** (URL complète commençant par https://) et les champs de l'adresse du siège social — rue, numéro, code postal et commune. Les quatre champs d'adresse doivent être renseignés ensemble ou laissés vides.",
+      "title": "Saisir les informations"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--city",
+      "target": "community-info__input--city",
+      "text": "Remplissez les champs : **Description**, **Site web** (URL complète commençant par https://) et les champs de l'adresse du siège social — rue, numéro, code postal et commune. Les quatre champs d'adresse doivent être renseignés ensemble ou laissés vides.",
+      "title": "Saisir les informations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--save",
+      "target": "community-info__btn--save",
+      "text": "Enregistrez pour valider vos modifications.",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__view--description",
+      "target": "community-info__view--description",
+      "targetClick": "next",
+      "text": "De retour en mode consultation, la fiche affiche la description, le site web et l'adresse tels que vous les avez saisis — les modifications ont bien été enregistrées côté serveur.",
+      "title": "Informations mises à jour"
+    }
+  ],
+  "title": "Mettre à jour les infos de la communauté"
+}

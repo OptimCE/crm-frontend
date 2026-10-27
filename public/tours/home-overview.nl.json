@@ -1,0 +1,89 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/home-overview/nl.html",
+  "id": "home-overview",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "you-land-on-your-home-page",
+      "target": null,
+      "text": "Ongeacht uw rol komt u na het aanmelden hier terecht. Deze pagina gaat niet over één bepaalde gemeenschap: ze verzamelt wat u persoonlijk aanbelangt, in al uw gemeenschappen.",
+      "title": "Uw startpagina"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you__band",
+      "target": "needs-you__band",
+      "targetClick": "next",
+      "text": "De balk bovenaan telt wat een actie van u vraagt: ontvangen uitnodigingen, een fiche die u moet aanvullen, ongelezen meldingen. Is er niets, dan krimpt hij tot één geruststellende regel.",
+      "title": "Wat op u wacht"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "Elke kaart toont een gemeenschap en uw rol daarin. De knop opent ze: ze wordt uw actieve gemeenschap en u komt op het dashboard ervan terecht.",
+      "title": "Mijn gemeenschappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-energy-all-communities-together",
+      "target": null,
+      "text": "Het paneel toont uw meters over al uw gemeenschappen heen, voor de laatste maand met meterstanden. Een meter zonder meterstand toont “nog geen meterstand” in plaats van een misleidende nul.",
+      "title": "Mijn energie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-invoices-and-your-documents",
+      "target": null,
+      "text": "De te betalen facturen en de documenten die met u zijn gedeeld, staan hier samen. Facturen verschijnen alleen voor gemeenschappen die de facturatiemodule gebruiken.",
+      "title": "Mijn facturen en mijn documenten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings-panel__btn--open",
+      "target": "my-filings-panel__btn--open",
+      "targetClick": "next",
+      "text": "Het laatste paneel toont de officiële documenten aan de regulator waarin u wordt vermeld. De knop opent de details in de betrokken gemeenschap.",
+      "title": "Wat er over mij is ingediend"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "needs-you__action",
+      "target": "needs-you__action",
+      "text": "Elke regel van de balk is een snelkoppeling naar het scherm waar de actie plaatsvindt: de lijst met uitnodigingen, uw ledenfiche of uw meldingen.",
+      "title": "Afhandelen wat wacht"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-matching-page-opens",
+      "target": null,
+      "text": "Hier gaat het om een ongelezen melding: de snelkoppeling opent rechtstreeks de meldingenpagina, waar u ze kunt lezen en als gelezen kunt markeren.",
+      "title": "Meteen op de juiste plek"
+    }
+  ],
+  "title": "Uw startpagina"
+}

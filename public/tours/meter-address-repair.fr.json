@@ -1,0 +1,130 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-address-repair/fr.html",
+  "id": "meter-address-repair",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-map__button--repair",
+      "target": "meters-map__button--repair",
+      "text": "Le bandeau au-dessus de la carte indique combien de compteurs n'y figurent pas encore. Cliquez sur « Corriger les adresses » pour ouvrir la file des compteurs à replacer.",
+      "title": "Corriger les adresses"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__subtitle",
+      "target": "unlocated-meters__subtitle",
+      "targetClick": "next",
+      "text": "La fenêtre liste exactement les compteurs que la carte ne sait pas placer : ceux qui n'ont aucune coordonnée, mais aussi ceux qui ne sont situés qu'au centre de leur commune.",
+      "title": "La file de correction"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Cliquez sur une ligne pour charger son adresse dans le formulaire de droite. La correction se fait un compteur à la fois.",
+      "title": "Choisir un compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--not-found",
+      "target": "unlocated-meters__autocomplete--address--not-found",
+      "targetClick": "next",
+      "text": "OptimCE interroge le registre fédéral BeSt Address. Cette adresse n'y correspond à rien : c'est pourquoi le compteur n'apparaît pas sur la carte.",
+      "title": "Adresse introuvable"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--541448200000000004",
+      "target": "unlocated-meters__row--541448200000000004",
+      "text": "Passez à un autre compteur de la liste.",
+      "title": "Compteur suivant"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432-2",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Revenez au compteur dont l'adresse est introuvable pour la corriger.",
+      "title": "Revenir au compteur",
+      "waitFor": "unlocated-meters__autocomplete--address--approximate"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "search-the-best-address-register-for-a-real-address",
+      "target": null,
+      "text": "Tapez les premiers mots de l'adresse réelle. Les propositions viennent directement du registre officiel des adresses belges.",
+      "title": "Rechercher la bonne adresse",
+      "waitFor": "unlocated-meters__autocomplete--address--not-found"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-suggestion",
+      "target": null,
+      "text": "Cliquez sur la proposition qui correspond. Les cinq champs détaillés se remplissent avec l'orthographe officielle du registre.",
+      "title": "Choisir la proposition"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--located",
+      "target": "unlocated-meters__autocomplete--address--located",
+      "targetClick": "next",
+      "text": "Le message vert confirme que l'adresse est localisée précisément : le compteur apparaîtra bien sur la carte une fois la correction enregistrée.",
+      "title": "Adresse localisée"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--save",
+      "target": "unlocated-meters__button--save",
+      "text": "« Enregistrer et suivant » applique la correction et passe au compteur suivant de la file, sans refermer la fenêtre.",
+      "title": "Enregistrer et continuer"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--close",
+      "target": "unlocated-meters__button--close",
+      "text": "Fermez la fenêtre quand vous avez terminé.",
+      "title": "Fermer",
+      "waitFor": "unlocated-meters__row--541448200000000004"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-map__strip--partial",
+      "target": "meters-map__strip--partial",
+      "targetClick": "next",
+      "text": "De retour sur la carte, le bandeau a diminué : le compteur corrigé est désormais placé, et il ne reste que celui situé au centre de sa commune.",
+      "title": "La carte est à jour",
+      "waitFor": "map-canvas__host"
+    }
+  ],
+  "title": "Corriger les adresses des compteurs"
+}

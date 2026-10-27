@@ -1,0 +1,33 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-member-view/nl.html",
+  "id": "live-data-member-view",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-member-s-page",
+      "target": null,
+      "text": "De pagina toont de productie van de deeloperatie waaraan uw meter deelneemt, kwartier per kwartier. Deze cijfers zijn indicatief: de gegevens van de netbeheerder blijven de referentie voor de verdeling en de facturatie.",
+      "title": "De productie van uw deeloperatie",
+      "waitFor": "live-member-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-30-days",
+      "target": null,
+      "text": "Toon de laatste 24 uur (per kwartier), 7 dagen (per uur) of 30 dagen (per dag).",
+      "title": "Periode kiezen"
+    }
+  ],
+  "title": "De productie van mijn deelactiviteit bekijken"
+}

@@ -29,6 +29,7 @@ import { Pagination } from '../../../../core/dtos/api.response';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { DebouncedPInputComponent } from '../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import Keycloak from 'keycloak-js';
+import { CommunityActivationService } from '../../../../core/services/community-activation.service';
 
 @Component({
   selector: 'app-user-communities',
@@ -50,6 +51,7 @@ export class UserCommunities implements OnInit {
   private communityService = inject(CommunityService);
   protected userContextService = inject(UserContextService);
   private keycloak = inject(Keycloak);
+  private communityActivation = inject(CommunityActivationService);
   private router = inject(Router);
   private dialogService = inject(DialogService);
   private confirmationService = inject(ConfirmationService);
@@ -232,10 +234,8 @@ export class UserCommunities implements OnInit {
     });
     this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: boolean) => {
       if (result) {
-        void this.keycloak.updateToken(-1).then(() => {
-          this.userContextService.refreshUserContext();
-          this.loadCommunities();
-        });
+        // The creator lands in the new community (refreshed token included).
+        void this.communityActivation.activateCreated().then(() => this.loadCommunities());
       }
     });
   }

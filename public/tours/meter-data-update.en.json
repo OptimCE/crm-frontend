@@ -1,0 +1,152 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-data-update/en.html",
+  "id": "meter-data-update",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "targetClick": "next",
+      "text": "Open the active community's meter list and locate the meter whose current configuration you want to update.",
+      "title": "Meters list"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Click the meter row (EAN 123456789012345678) to open its detail page and reach the current meter-data view.",
+      "title": "Open the meter detail"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tap the meter card (EAN 123456789012345678) to open its detail page and reach the current meter-data view.",
+      "title": "Open the meter detail"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--update",
+      "target": "meter-view__btn--update",
+      "targetClick": "next",
+      "text": "The detail page shows the current configuration. The \"Update data\" action is only exposed when the meter is active — that is our entry point.",
+      "title": "Active meter",
+      "waitFor": "meter-view__hero"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--update-2",
+      "target": "meter-view__btn--update",
+      "text": "Click \"Update data\" — a dialog opens, pre-populated with the meter's current configuration: description, powers, rate, client type and owner.",
+      "title": "Open the form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__textarea--description",
+      "target": "meter-data-update__textarea--description",
+      "text": "Edit the description, the sampling power and the amperage. These updated figures feed straight into the sharing-operation allocation calculations.",
+      "title": "Adjust the energy values",
+      "waitFor": "meter-data-update__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--sampling-power",
+      "target": "meter-data-update__input--sampling-power",
+      "text": "Edit the description, the sampling power and the amperage. These updated figures feed straight into the sharing-operation allocation calculations.",
+      "title": "Adjust the energy values"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-data-update__input--amperage",
+      "target": "meter-data-update__input--amperage",
+      "text": "Edit the description, the sampling power and the amperage. These updated figures feed straight into the sharing-operation allocation calculations.",
+      "title": "Adjust the energy values"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__select--grd",
+      "target": "meter-data-update__select--grd",
+      "text": "In the \"Network operator\" field, select the distribution grid operator the meter is connected to. This field is mandatory to validate the new configuration.",
+      "title": "Pick the network operator"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--rate--2",
+      "target": "meter-data-update__radio-card--rate--2",
+      "text": "Choose the new rate.",
+      "title": "Rate"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__radio-card--client-type--2",
+      "target": "meter-data-update__radio-card--client-type--2",
+      "text": "Switch the rate to \"bi-hourly\" and the client type to \"professional\" to mirror the meter's new consumption profile.",
+      "title": "Change the consumption profile"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-data-update__datepicker--start-date",
+      "target": "meter-data-update__datepicker--start-date",
+      "text": "Pick the date from which the new configuration takes effect. This field is required to validate the change.",
+      "title": "Set the effective date"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-data-update__btn--submit",
+      "target": "meter-data-update__btn--submit",
+      "text": "Click \"Validate\" — the form is sent to the CRM, which replaces the meter's current configuration. The dialog closes once the change is acknowledged.",
+      "title": "Save the update"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-data-view__text--rate",
+      "target": "meter-data-view__text--rate",
+      "targetClick": "next",
+      "text": "Back on the detail page, the new description, the 63 A amperage and the bi-hourly rate appear in the data cards — the changes have been persisted server-side.",
+      "title": "Update confirmed",
+      "waitFor": "meter-data-view__text--description"
+    }
+  ],
+  "title": "Update meter data"
+}

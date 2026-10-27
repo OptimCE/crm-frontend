@@ -1,0 +1,99 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-create/fr.html",
+  "id": "sharing-op-create",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__btn--add",
+      "target": "operations-list__btn--add",
+      "text": "Cliquez sur « Ajouter » pour ouvrir le dialogue de création d'une nouvelle opération de partage au sein de la communauté active.",
+      "title": "Ajouter une opération",
+      "waitFor": "operations-list__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Saisissez un nom évocateur pour la nouvelle opération de partage. Ce nom apparaîtra dans la liste et dans toutes les références à cette opération.",
+      "title": "Nommer l'opération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__card--type--0",
+      "target": "op-creation__card--type--0",
+      "text": "Sélectionnez la carte « Local » pour indiquer que le partage se fait au sein d'un même bâtiment, par opposition à un partage à distance via le réseau public.",
+      "title": "Type Local"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-type-anderl-in-the-municipalities-autocomplete",
+      "target": null,
+      "text": "Tapez les premières lettres d'une commune couverte par l'opération.",
+      "title": "Rechercher une commune"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17c-pick-the-first-suggestion",
+      "target": null,
+      "text": "Choisissez la commune dans les suggestions.",
+      "title": "Choisir la commune"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Validez le formulaire pour créer l'opération de partage.",
+      "title": "Créer l'opération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "operations-list__table",
+      "target": "operations-list__table",
+      "targetClick": "next",
+      "text": "La nouvelle opération « E2E Sharing Op » apparaît dans la liste des opérations de partage de la communauté, prête à être éditée et activée.",
+      "title": "Opération créée"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "operations-list__table-2",
+      "target": "operations-list__table",
+      "text": "Cliquez sur la ligne de la nouvelle opération pour ouvrir sa fiche détaillée et accéder à ses paramètres complets.",
+      "title": "Ouvrir la fiche"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "L'en-tête de la fiche reprend le nom de l'opération que vous venez de créer — il sert de fil conducteur dans toutes les vues qui la référencent.",
+      "title": "Nom de l'opération",
+      "waitFor": "op-view__hero"
+    }
+  ],
+  "title": "Créer une opération de partage"
+}

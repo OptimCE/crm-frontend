@@ -1,0 +1,204 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-welcome/nl.html",
+  "id": "onboarding-welcome",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__empty",
+      "target": "community-picker__empty",
+      "targetClick": "next",
+      "text": "OptimCE helpt u energie te delen binnen een energiegemeenschap. Uw startpagina verzamelt alles wat u aanbelangt; voorlopig maakt u nog geen deel uit van een gemeenschap.",
+      "title": "Welkom bij OptimCE"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you__clear",
+      "target": "needs-you__clear",
+      "targetClick": "next",
+      "text": "De bovenste band toont wat een actie van u vraagt, zoals een uitnodiging om te aanvaarden. Staat er “Er wacht niets op u. Alles is in orde.”, dan hoeft u niets te doen.",
+      "title": "Wat op u wacht"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__btn--create",
+      "target": "community-picker__btn--create",
+      "targetClick": "next",
+      "text": "Start u een energiegemeenschap? **“Mijn gemeenschap aanmaken”** maakt ze aan en maakt u tot haar beheerder. Daarna kunt u haar leden en managers uitnodigen.",
+      "title": "Uw gemeenschap aanmaken"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__link--directory",
+      "target": "community-picker__link--directory",
+      "text": "Wilt u liever lid worden van een bestaande gemeenschap? Klik op **“Gemeenschappen in mijn buurt ontdekken”**.",
+      "title": "Een gemeenschap vinden"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__filter--municipality",
+      "target": "public-community-list__filter--municipality",
+      "targetClick": "next",
+      "text": "Hier staan de gemeenschappen die openstaan voor het publiek. Filter ze op gemeente of op regulator en open er een om haar beschrijving, haar website en haar deeloperaties te lezen.",
+      "title": "De openbare gemeenschappen",
+      "waitFor": "public-community-list__btn--accordion--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__toggle--view",
+      "target": "public-community-list__toggle--view",
+      "targetClick": "next",
+      "text": "Schakel tussen **“Lijst”** en **“Kaart”** om te zien waar de gemeenschappen zich bevinden. Om lid te worden, neemt u contact met haar op: haar managers sturen u een uitnodiging.",
+      "title": "Lijst of kaart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--profile",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "De sectie **“Profiel”** van de zijbalk is er altijd: start, profiel, uitnodigingen, uw gemeenschappen en de openbare gemeenschappen.",
+      "title": "Uw profiel"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--users_invitations",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Klik op **“Uitnodigingen”**.",
+      "title": "Uw uitnodigingen openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--profile-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "De sectie **“Profiel”** van het menu bevat de startpagina, uw profiel, uw uitnodigingen, uw gemeenschappen en de openbare gemeenschappen.",
+      "title": "Uw profiel"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--users_invitations-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Tik op **“Uitnodigingen”**.",
+      "title": "Uw uitnodigingen openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "invitations__tabs",
+      "target": "invitations__tabs",
+      "targetClick": "next",
+      "text": "Wanneer een gemeenschap u uitnodigt, komt de uitnodiging hier terecht — het tabblad **“Leden”** om lid te worden, **“Manager”** om haar mee te beheren — en uw startpagina wijst u erop. Aanvaard ze: de gemeenschap verschijnt dan op uw startpagina.",
+      "title": "Uw uitnodigingen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__btn--user-guide",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "Onderaan de zijbalk opent **“Gebruikershandleiding”** de hulp, op elk moment en vanaf elke pagina. Klik erop.",
+      "title": "Hulp nodig?"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--user-guide-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "Onderaan het menu opent **“Gebruikershandleiding”** de hulp, op elk moment en vanaf elke pagina. Tik erop.",
+      "title": "Hulp nodig?"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__link--guide",
+      "target": "help-dialog__link--guide",
+      "targetClick": "next",
+      "text": "**“De online gebruikershandleiding openen”** opent de handleiding in een nieuw tabblad: elke taak in de applicatie wordt er stap voor stap beschreven, met schermafbeeldingen, en kan ook als animatie worden afgespeeld.",
+      "title": "De online handleiding",
+      "waitFor": "help-dialog__tours"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__tours",
+      "target": "help-dialog__tours",
+      "targetClick": "next",
+      "text": "**“Rondleidingen”** toont rondleidingen zoals deze: ze laten u een taak rechtstreeks in de applicatie zien. Start er een opnieuw wanneer u die nodig hebt; zodra u lid bent van een gemeenschap, vindt u hier die voor uw rol. Sluit dit venster om te beginnen.",
+      "title": "Rondleidingen"
+    }
+  ],
+  "title": "Welkom bij OptimCE"
+}

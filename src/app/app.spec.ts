@@ -1,4 +1,4 @@
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, output, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -11,7 +11,11 @@ import { UserContextService } from './core/services/authorization/authorization.
 import { EventBusService } from './core/services/event_bus/eventbus.service';
 import { Navbar } from './layout/navbar/navbar';
 import { Toast } from 'primeng/toast';
+import { SteppyToursComponent, TourErrorDetail } from '@steppy/angular';
 import { VALIDATION_TYPE, ERROR_TYPE, INFO_TYPE } from './core/dtos/notification';
+import { OnboardingCoordinator } from './features/onboarding/services/onboarding-coordinator.service';
+import { OnboardingRoleBanner } from './features/onboarding/components/onboarding-role-banner/onboarding-role-banner';
+import { OnboardingWelcomeDialog } from './features/onboarding/components/onboarding-welcome-dialog/onboarding-welcome-dialog';
 
 // ── Stubs ──────────────────────────────────────────────────────────
 
@@ -20,6 +24,12 @@ class NavbarStub {}
 
 @Component({ selector: 'app-toast-stub', standalone: true, template: '' })
 class ToastStub {}
+
+// eslint-disable-next-line @angular-eslint/component-selector -- must match @steppy/angular's element
+@Component({ selector: 'steppy-tours', standalone: true, template: '' })
+class SteppyToursStub {
+  readonly tourError = output<TourErrorDetail>();
+}
 
 // ── Test Suite ─────────────────────────────────────────────────────
 
@@ -30,6 +40,7 @@ describe('App', () => {
   let routerEvents$: Subject<NavigationEnd>;
   let keycloakMock: { authenticated: boolean };
   let ctxMock: { refreshUserContext: ReturnType<typeof vi.fn> };
+  let onboardingMock: { offer: ReturnType<typeof signal<null>>; start: ReturnType<typeof vi.fn> };
   let eventBusMock: {
     on: ReturnType<typeof vi.fn>;
     off: ReturnType<typeof vi.fn>;
@@ -41,6 +52,7 @@ describe('App', () => {
     routerEvents$ = new Subject<NavigationEnd>();
     keycloakMock = { authenticated: false };
     ctxMock = { refreshUserContext: vi.fn() };
+    onboardingMock = { offer: signal(null), start: vi.fn() };
     eventBusMock = { on: vi.fn(), off: vi.fn(), emit: vi.fn() };
     messageServiceMock = { add: vi.fn() };
 
@@ -52,12 +64,22 @@ describe('App', () => {
         { provide: UserContextService, useValue: ctxMock },
         { provide: EventBusService, useValue: eventBusMock },
         { provide: MessageService, useValue: messageServiceMock },
+        { provide: OnboardingCoordinator, useValue: onboardingMock },
       ],
     })
       .overrideComponent(App, {
-        remove: { imports: [Navbar, Toast], providers: [MessageService] },
+        remove: {
+          imports: [
+            Navbar,
+            Toast,
+            SteppyToursComponent,
+            OnboardingRoleBanner,
+            OnboardingWelcomeDialog,
+          ],
+          providers: [MessageService],
+        },
         add: {
-          imports: [NavbarStub, ToastStub],
+          imports: [NavbarStub, ToastStub, SteppyToursStub],
           schemas: [NO_ERRORS_SCHEMA],
           providers: [{ provide: MessageService, useValue: messageServiceMock }],
         },
@@ -119,6 +141,21 @@ describe('App', () => {
       keycloakMock.authenticated = true;
       fixture.detectChanges();
       expect(ctxMock.refreshUserContext).toHaveBeenCalled();
+    });
+
+    it('should start the onboarding offers after the context refresh, signed in only', () => {
+      keycloakMock.authenticated = true;
+      fixture.detectChanges();
+      expect(onboardingMock.start).toHaveBeenCalledTimes(1);
+      expect(ctxMock.refreshUserContext.mock.invocationCallOrder[0]).toBeLessThan(
+        onboardingMock.start.mock.invocationCallOrder[0],
+      );
+    });
+
+    it('should not start the onboarding offers signed out', () => {
+      keycloakMock.authenticated = false;
+      fixture.detectChanges();
+      expect(onboardingMock.start).not.toHaveBeenCalled();
     });
 
     it('should NOT call refreshUserContext when keycloak is not authenticated', () => {
@@ -240,6 +277,70 @@ describe('App', () => {
       fixture.detectChanges();
       const toast = (fixture.nativeElement as HTMLElement).querySelector('p-toast');
       expect(toast).toBeTruthy();
+    });
+
+    it('should keep the same <steppy-tours> when the navbar branch switches', () => {
+      // Destroying it would suspend a running tour (e.g. a step that leaves /auth).
+      component.showNavbar = true;
+      fixture.detectChanges();
+      const host = fixture.nativeElement as HTMLElement;
+      const before = host.querySelectorAll('steppy-tours');
+      expect(before.length).toBe(1);
+
+      component.showNavbar = false;
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+      const after = host.querySelectorAll('steppy-tours');
+      expect(after.length).toBe(1);
+      expect(after[0]).toBe(before[0]);
+    });
+  });
+
+  // ── 8. Tour errors ──────────────────────────────────────────────
+
+  describe('onTourError', () => {
+    it('should log the tour, step and test-id the overlay reports', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      fixture.detectChanges();
+      const detail: TourErrorDetail = {
+        reason: 'target-timeout',
+        fatal: false,
+        message: 'the target did not appear in time',
+        tourId: 'key-update',
+        stepId: 'keys-list__row--desktop--1',
+        testId: 'keys-list__row--mobile--1',
+        kind: 'waitFor',
+      };
+
+      fixture.debugElement
+        .query((el) => el.name === 'steppy-tours')
+        .triggerEventHandler('tourError', detail);
+
+      expect(warn).toHaveBeenCalledWith(
+        '[tours] tour-error target-timeout: tour "key-update", step "keys-list__row--desktop--1", ' +
+          'test-id "keys-list__row--mobile--1" (waitFor). the target did not appear in time',
+        detail,
+      );
+    });
+
+    it('should still log an error that names no step', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      fixture.detectChanges();
+      const detail: TourErrorDetail = {
+        reason: 'load-failed',
+        fatal: true,
+        message: 'HTTP 404',
+        tourId: 'x',
+      };
+
+      fixture.debugElement
+        .query((el) => el.name === 'steppy-tours')
+        .triggerEventHandler('tourError', detail);
+
+      expect(warn).toHaveBeenCalledWith(
+        '[tours] tour-error load-failed: tour "x". HTTP 404',
+        detail,
+      );
     });
   });
 });

@@ -2,6 +2,7 @@
   @if (showNavbar) {
     <app-navbar (sidebarPinChanged)="sidebarPinned = $event"></app-navbar>
     <main class="app-content" [class.app-content--sidebar-pinned]="sidebarPinned">
+      <app-onboarding-role-banner />
       <router-outlet></router-outlet>
     </main>
   } @else {
@@ -11,3 +12,8 @@
   }
 </div>
 <p-toast position="bottom-right" key="br"></p-toast>
+@if (onboarding.offer()?.kind === 'welcome') {
+  <app-onboarding-welcome-dialog />
+}
+<!-- Outside @if (showNavbar): switching branches would destroy it mid-tour. -->
+<steppy-tours (tourError)="onTourError($event)" />

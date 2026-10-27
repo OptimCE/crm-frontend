@@ -1,0 +1,196 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create/en.html",
+  "id": "community-create-member",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Click \"Add member\" at the top of the list to open the four-step creation wizard.",
+      "title": "Start creating a member",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--individual",
+      "target": "new-member-type__card--individual",
+      "text": "Select \"Individual\" to create a personal member. The \"Company\" option is reserved for legal entities and asks for different fields later.",
+      "title": "Pick the member type"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Go on to the next step.",
+      "title": "Next step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--nrn",
+      "target": "new-member-informations__input--nrn",
+      "text": "Enter the national number, last name, first name, email address and phone number of the new member. All these fields are required to move past this step.",
+      "title": "Fill in the personal information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--surname",
+      "target": "new-member-informations__input--surname",
+      "text": "Enter the national number, last name, first name, email address and phone number of the new member. All these fields are required to move past this step.",
+      "title": "Fill in the personal information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--name",
+      "target": "new-member-informations__input--name",
+      "text": "Enter the national number, last name, first name, email address and phone number of the new member. All these fields are required to move past this step.",
+      "title": "Fill in the personal information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--email",
+      "target": "new-member-informations__input--email",
+      "text": "Enter the national number, last name, first name, email address and phone number of the new member. All these fields are required to move past this step.",
+      "title": "Fill in the personal information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--phone",
+      "target": "new-member-informations__input--phone",
+      "text": "Enter the national number, last name, first name, email address and phone number of the new member. All these fields are required to move past this step.",
+      "title": "Fill in the personal information"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Go on to the next step.",
+      "title": "Next step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Fill in the home address: street, number, postcode and city. If the billing address is identical, tick the \"Same address\" checkbox right after to reuse it automatically.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Fill in the home address: street, number, postcode and city. If the billing address is identical, tick the \"Same address\" checkbox right after to reuse it automatically.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Fill in the home address: street, number, postcode and city. If the billing address is identical, tick the \"Same address\" checkbox right after to reuse it automatically.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Fill in the home address: street, number, postcode and city. If the billing address is identical, tick the \"Same address\" checkbox right after to reuse it automatically.",
+      "title": "Enter the address"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Tick this box if the billing address is the same as the home address.",
+      "title": "Same address"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Go on to the next step.",
+      "title": "Next step"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Enter the member's IBAN — it is used for refunds tied to sharing operations. The format is validated as you type.",
+      "title": "Enter the banking details"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Click \"Submit\" to send the form to the CRM. The member is created immediately and attached to the active community.",
+      "title": "Submit the new member"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "decline-we-don-t-want-to-create-a-meter-right-now",
+      "target": null,
+      "text": "A dialog offers to chain into meter creation. Pick \"No\" to stop here — you can always add a meter later from the member's detail page.",
+      "title": "Skip adding a meter"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "open-the-new-member-s-detail-page",
+      "target": null,
+      "text": "Click the new member in the list to open their record.",
+      "title": "Open the record",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "hero-heading-shows-the-new-member-s-full-name",
+      "target": null,
+      "text": "The new member's detail page is now visible: their full name shows in the header and every field you entered is rendered. The member is ready to use in sharing operations.",
+      "title": "Member created"
+    }
+  ],
+  "title": "Create a member"
+}

@@ -1,0 +1,33 @@
+<div aria-live="polite" data-testid="onboarding-banner__live">
+  @if (texts(); as t) {
+    <section
+      class="mb-4 rounded-xl border border-primary-200 bg-primary-50 p-4 flex flex-wrap items-center gap-3"
+      [attr.aria-label]="'ONBOARDING.BANNER_LABEL' | translate"
+      data-testid="onboarding-banner"
+    >
+      <i class="pi pi-compass text-primary-700 text-xl" aria-hidden="true"></i>
+      <div class="flex flex-col flex-1 min-w-[14rem] gap-1">
+        <h2 class="text-base font-semibold text-primary-800 m-0">{{ t.title }}</h2>
+        <p class="text-sm text-surface-700 m-0">{{ t.text }}</p>
+        <p class="text-xs text-surface-600 m-0">{{ t.hint }}</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <p-button
+          [label]="t.later"
+          severity="secondary"
+          [text]="true"
+          size="small"
+          (onClick)="onLater()"
+          data-testid="onboarding-banner__btn--later"
+        />
+        <p-button
+          [label]="t.action"
+          icon="pi pi-compass"
+          size="small"
+          (onClick)="onAccept()"
+          data-testid="onboarding-banner__btn--start"
+        />
+      </div>
+    </section>
+  }
+</div>

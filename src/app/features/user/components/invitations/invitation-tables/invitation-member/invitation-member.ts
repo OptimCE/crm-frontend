@@ -22,6 +22,7 @@ import { EncodeNewMemberSelfComponent } from './dialogs/encode-new-member/encode
 import { CompanyDTO, IndividualDTO } from '../../../../../../shared/dtos/member.dtos';
 import { InvitationDetailComponent } from './dialogs/invitation-detail/invitation-detail.component';
 import { MeService } from '../../../../../../shared/services/me.service';
+import { CommunityActivationService } from '../../../../../../core/services/community-activation.service';
 import { DebouncedPInputComponent } from '../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { LocaleDatePipe } from '../../../../../../shared/pipes/locale-format/locale-format-pipes';
 import { translatedOptions } from '../../../../../../shared/utils/translated-options.utils';
@@ -46,6 +47,7 @@ import { translatedOptions } from '../../../../../../shared/utils/translated-opt
 export class InvitationMember {
   private invitationService = inject(InvitationService);
   private meService = inject(MeService);
+  private communityActivation = inject(CommunityActivationService);
   private dialogService = inject(DialogService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
@@ -158,6 +160,7 @@ export class InvitationMember {
         next: (response) => {
           if (response) {
             this.loadMemberInvitation();
+            void this.communityActivation.activateJoined(invitation.community.id);
           }
         },
         error: (error: unknown) => {
@@ -219,6 +222,7 @@ export class InvitationMember {
     this.ref?.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: boolean) => {
       if (result) {
         this.loadMemberInvitation();
+        void this.communityActivation.activateJoined(invitation.community.id);
       }
     });
   }

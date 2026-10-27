@@ -1,0 +1,97 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-update/en.html",
+  "id": "sharing-op-update",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--edit",
+      "target": "op-view__btn--edit",
+      "targetClick": "next",
+      "text": "The operation page shows its name, type, meters and covered municipalities. The pencils let you edit this information.",
+      "title": "Operation detail"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-2",
+      "target": "op-view__btn--edit",
+      "text": "Click \"Edit\" in the header — the form opens, pre-filled with the operation's current details.",
+      "title": "Open the edit form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Change the operation's name. You can also adjust its type and municipalities here.",
+      "title": "Rename the operation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Save to apply your changes.",
+      "title": "Save"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "Back on the page, the operation carries its new name.",
+      "title": "Name updated"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-municipalities",
+      "target": "op-view__btn--edit-municipalities",
+      "text": "The pencil next to the municipalities opens the editor for the operation's covered municipalities.",
+      "title": "Edit the municipalities"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-muni-update__autocomplete--municipalities",
+      "target": "op-muni-update__autocomplete--municipalities",
+      "text": "Type a municipality and pick it from the suggestions to add it to the operation's scope.",
+      "title": "Add a municipality"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-muni-update__btn--submit",
+      "target": "op-muni-update__btn--submit",
+      "text": "Save to apply your changes.",
+      "title": "Save"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-municipality-appears-on-the-operation",
+      "target": null,
+      "text": "The municipality \"Ixelles\" now appears among the operation's covered municipalities.",
+      "title": "Municipality added"
+    }
+  ],
+  "title": "Edit a sharing operation"
+}

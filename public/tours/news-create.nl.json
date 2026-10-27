@@ -1,0 +1,72 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-create/nl.html",
+  "id": "news-create",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-board__empty",
+      "target": "news-board__empty",
+      "targetClick": "next",
+      "text": "Het nieuwsbord wordt weergegeven. Het is nog leeg: er is nog geen nieuws gepubliceerd. Als beheerder kunt u een bericht aanmaken met de knop “Opstellen”.",
+      "title": "Het nieuwsbord"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Klik rechtsboven op “Opstellen” om het venster “Nieuw bericht” te openen.",
+      "title": "Het opstelvenster openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__body",
+      "target": "news-compose__body",
+      "targetClick": "next",
+      "text": "Het venster opent op het type “Bericht”. Met het tabblad “Peiling” zou u in plaats daarvan een peiling aanmaken — hier publiceren we een gewoon nieuwsbericht.",
+      "title": "Een nieuwsbericht opstellen",
+      "waitFor": "news-compose__kind--post"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "write-the-message",
+      "target": null,
+      "text": "Typ de inhoud van uw nieuwsbericht in de editor. Met de werkbalk kunt u de tekst opmaken (titels, vet, lijsten, links).",
+      "title": "Het bericht schrijven"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Klik op “Publiceren” om het nieuwsbericht naar alle leden van de gemeenschap te verspreiden.",
+      "title": "Publiceren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-post__body",
+      "target": "news-post__body",
+      "targetClick": "next",
+      "text": "Het nieuwsbericht verschijnt bovenaan het bord, ondertekend door de auteur. Alle leden van de gemeenschap zien het en ontvangen een melding.",
+      "title": "Uw nieuwsbericht is gepubliceerd"
+    }
+  ],
+  "title": "Een nieuwsbericht publiceren"
+}

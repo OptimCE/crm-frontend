@@ -1,0 +1,96 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-key/en.html",
+  "id": "algorithm-delete-key",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "The previously launched generation is displayed with a green dot indicating it completed successfully. Expand it to access the generated keys.",
+      "title": "Generation completed",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Click the generation to show the keys it produced.",
+      "title": "Expand the generation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "The keys computed by OLAGSA are listed under the generation. Each key can be viewed, saved, or deleted individually.",
+      "title": "Allocation keys available"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Click a key to show its allocation.",
+      "title": "Expand the key"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "The key's allocation table is displayed. The delete button (×) at the top right of the row allows permanently deleting this key.",
+      "title": "Key selected"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-key-button",
+      "target": null,
+      "text": "Click the × button on the key to initiate deletion. A confirmation will be required before the key is permanently removed.",
+      "title": "Delete the key"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "A confirmation dialog appears. Click the confirm button to permanently delete this allocation key.",
+      "title": "Confirm deletion"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Confirm your choice in the confirmation dialog.",
+      "title": "Confirm"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-has-been-deleted",
+      "target": null,
+      "text": "The key has been permanently deleted. It no longer appears in the generation's results list and cannot be recovered.",
+      "title": "Key deleted"
+    }
+  ],
+  "title": "Delete a generated key"
+}

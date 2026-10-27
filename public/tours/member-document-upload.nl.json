@@ -1,0 +1,62 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members/:memberId"
+  },
+  "guideUrl": "https://guide.optimce.be/member-document-upload/nl.html",
+  "id": "member-document-upload",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-tabs__tab--documents",
+      "target": "member-view-tabs__tab--documents",
+      "text": "Open het tabblad “Documenten” op de detailpagina van het lid. Hier kunt u de bestaande documenten bekijken en nieuwe toevoegen.",
+      "title": "Tabblad Documenten"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-documents-tab__btn--add",
+      "target": "member-view-documents-tab__btn--add",
+      "text": "Klik op “Document toevoegen” om het uploadvenster te openen.",
+      "title": "Document toevoegen",
+      "waitFor": "member-view-documents-tab__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-add-document__label--drag-drop",
+      "target": "member-add-document__label--drag-drop",
+      "targetClick": "next",
+      "text": "Selecteer het bestand dat u wilt uploaden vanaf uw computer (of sleep het naar de daarvoor bestemde zone).",
+      "title": "Bestand kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-add-document__btn--submit",
+      "target": "member-add-document__btn--submit",
+      "text": "Klik op “Dit document uploaden”: het document wordt opgeslagen en aan het lid gekoppeld.",
+      "title": "Uploaden"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-documents-tab__table",
+      "target": "member-view-documents-tab__table",
+      "targetClick": "next",
+      "text": "Het document “e2e-document.pdf” staat nu in de documentenlijst van het lid.",
+      "title": "Document toegevoegd"
+    }
+  ],
+  "title": "Een document aan een lid toevoegen"
+}

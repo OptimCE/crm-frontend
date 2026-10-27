@@ -1,0 +1,44 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/community-activate/de.html",
+  "id": "community-activate",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "Nach der Anmeldung gelangen Sie auf Ihre Startseite. Sie listet die Gemeinschaften auf, denen Sie angehören, mit Ihrer Rolle in jeder davon.",
+      "title": "Ihre Gemeinschaften"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Klicken Sie auf die Schaltfläche auf der Karte der Test Community, um sie zu öffnen. Sie wird zu Ihrer aktiven Gemeinschaft: Das Verwaltungsmenü und alle folgenden Seiten beziehen sich auf sie.",
+      "title": "Die Gemeinschaft betreten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "targetClick": "next",
+      "text": "Ein neues Menü „Verwaltung“ erscheint in der Seitenleiste und gibt Zugriff auf die Verteilungsschlüssel, Zähler und Teilungsoperationen der Gemeinschaft.",
+      "title": "Verwaltungsmenü freigeschaltet",
+      "waitFor": "dashboard-tile"
+    }
+  ],
+  "title": "Gemeinschaft aktivieren"
+}

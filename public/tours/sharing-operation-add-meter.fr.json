@@ -1,0 +1,99 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-add-meter/fr.html",
+  "id": "sharing-operation-add-meter",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--add-meter",
+      "target": "op-view__btn--add-meter",
+      "text": "Depuis la fiche détaillée, cliquez sur « Ajouter un compteur » pour ouvrir la boîte de dialogue de sélection.",
+      "title": "Lancer l'ajout d'un compteur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-add-meter__table--meters",
+      "target": "op-add-meter__table--meters",
+      "targetClick": "next",
+      "text": "La boîte de dialogue affiche tous les compteurs de la communauté qui ne sont pas encore rattachés à cette opération de partage.",
+      "title": "Compteurs disponibles"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__checkbox--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "op-add-meter__checkbox--0",
+      "text": "Cochez la case du compteur à rattacher. Vous pouvez en sélectionner plusieurs si nécessaire avant de valider.",
+      "title": "Cocher le compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__checkbox-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "op-add-meter__checkbox-mobile--0",
+      "text": "Cochez la case du compteur à rattacher. Vous pouvez en sélectionner plusieurs si nécessaire avant de valider.",
+      "title": "Cocher le compteur"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "op-add-meter__datepicker--start-date",
+      "target": "op-add-meter__datepicker--start-date",
+      "text": "Ouvrez le calendrier et sélectionnez la date du jour : le rattachement du compteur prendra effet immédiatement.",
+      "title": "Date de début aujourd'hui"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__btn--validate",
+      "target": "op-add-meter__btn--validate",
+      "text": "Cliquez sur « Valider » pour rattacher le compteur. Une notification confirme la mise à jour côté serveur.",
+      "title": "Valider l'ajout"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "new-meter-appears-in-the-actuel-tab-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "De retour sur la fiche détaillée, le compteur ajouté apparaît immédiatement dans l'onglet « Actuel » des compteurs rattachés à l'opération.",
+      "title": "Compteur rattaché"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "26b-new-meter-appears-in-the-actuel-tab-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "De retour sur la fiche détaillée, la carte du compteur ajouté apparaît immédiatement dans l'onglet « Actuel » des compteurs rattachés à l'opération.",
+      "title": "Compteur rattaché"
+    }
+  ],
+  "title": "Ajouter un compteur à une opération"
+}

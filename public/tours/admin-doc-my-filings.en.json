@@ -1,0 +1,34 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-my-filings/en.html",
+  "id": "admin-doc-my-filings",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__doc-type",
+      "target": "my-filings__doc-type",
+      "targetClick": "next",
+      "text": "As a member you do not see the community's dossiers: you only see the information about you that was sent to the regulator, and in which document.",
+      "title": "What has been filed about me"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__row",
+      "target": "my-filings__row",
+      "targetClick": "next",
+      "text": "Every block shows the values exactly as they were frozen at filing time. A later correction in the CRM does not rewrite what was already submitted — the date shown is what counts.",
+      "title": "The values that were sent"
+    }
+  ],
+  "title": "See what has been filed about you"
+}

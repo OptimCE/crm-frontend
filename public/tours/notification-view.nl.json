@@ -1,0 +1,84 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/notification-view/nl.html",
+  "id": "notification-view",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__sidebar",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__sidebar",
+      "targetClick": "next",
+      "text": "Beweeg de muis over de zijbalk om ze open te klappen: de meldingenbel verschijnt.",
+      "title": "De zijbalk openklappen",
+      "waitFor": "profile__avatar"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__trigger",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "notification-bell__trigger",
+      "text": "Klik op de bel in de zijbalk om het meldingenpaneel te openen. De melding van de uitnodiging om lid te worden van de gemeenschap verschijnt daar, met de naam van de gemeenschap en het tijdstip van ontvangst.",
+      "title": "De meldingen openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Open het navigatiemenu.",
+      "title": "Het menu openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__trigger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "notification-bell__trigger",
+      "text": "Tik op de bel om het meldingenpaneel te openen. De melding van de uitnodiging om lid te worden van de gemeenschap verschijnt daar.",
+      "title": "De meldingen openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__see-all",
+      "target": "notification-bell__see-all",
+      "text": "Open de pagina met al uw meldingen.",
+      "title": "Alle meldingen",
+      "waitFor": "notification-bell__panel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-full-notifications-page-lists-the-invitation-notification",
+      "target": null,
+      "text": "De meldingenpagina bundelt al uw meldingen. U vindt er de uitnodiging om lid te worden van de gemeenschap terug, met de naam van de gemeenschap en de datum van ontvangst.",
+      "title": "De meldingenpagina bekijken",
+      "waitFor": "notifications-page"
+    }
+  ],
+  "title": "Uw meldingen bekijken"
+}

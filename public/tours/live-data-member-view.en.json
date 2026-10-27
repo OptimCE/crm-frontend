@@ -1,0 +1,33 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-member-view/en.html",
+  "id": "live-data-member-view",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-member-s-page",
+      "target": null,
+      "text": "The page shows the production of the sharing operation your meter takes part in, quarter-hour by quarter-hour. These figures are indicative: the grid operator's data remains the reference for allocation and invoicing.",
+      "title": "The production of your sharing operation",
+      "waitFor": "live-member-chart"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-30-days",
+      "target": null,
+      "text": "Show the last 24 hours (per quarter-hour), 7 days (per hour) or 30 days (per day).",
+      "title": "Choose the period"
+    }
+  ],
+  "title": "See my operation's production"
+}

@@ -1,0 +1,69 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-update/de.html",
+  "id": "key-update",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--update",
+      "target": "key-view__btn--update",
+      "text": "Klicken Sie auf „Aktualisieren“: Der Schlüssel öffnet sich im selben Editor wie bei der Erstellung, jedoch mit den bestehenden Werten vorausgefüllt.",
+      "title": "In den Bearbeitungsmodus wechseln"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Ändern Sie den Namen und die Beschreibung, damit sie den neuen Verwendungszweck des Schlüssels widerspiegeln. Diese Felder erscheinen in der Liste und erleichtern die Suche.",
+      "title": "Den Schlüssel umbenennen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Ändern Sie den Namen und die Beschreibung, damit sie den neuen Verwendungszweck des Schlüssels widerspiegeln. Diese Felder erscheinen in der Liste und erleichtern die Suche.",
+      "title": "Den Schlüssel umbenennen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Doppelklicken Sie auf die Prozentsätze der Verbraucher, um sie zu ändern — hier von 50/50 auf 60/40. Die Summe pro Iteration muss immer 100% ergeben.",
+      "title": "Die Verbraucher neu gewichten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "targetClick": "next",
+      "text": "Prüfen Sie die vollständige Tabelle: Name, Beschreibung und neue Prozentsätze müssen vor dem Speichern Ihrer Absicht entsprechen.",
+      "title": "Vor dem Speichern prüfen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Klicken Sie auf die Schaltfläche zum Speichern: Die Anwendung prüft die Prozentsätze und leitet Sie zur Schlüsselliste zurück.",
+      "title": "Die Änderungen speichern"
+    }
+  ],
+  "title": "Verteilungsschlüssel bearbeiten"
+}

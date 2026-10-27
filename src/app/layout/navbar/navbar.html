@@ -93,6 +93,7 @@
              every page including the ones a failed guard bounces off. Outside the
              "Active community" section, which is gated on having one. -->
         <li
+          data-testid="sidebar-element__link--home"
           appSidebarItem
           (sidebarClose)="closeSideBar()"
           [icon]="'pi pi-compass'"
@@ -102,6 +103,7 @@
           [sidebarOpen]="sidebarOpen()"
         ></li>
         <li
+          data-testid="sidebar-element__link--users"
           appSidebarItem
           (sidebarClose)="closeSideBar()"
           [icon]="'pi pi-user'"
@@ -111,6 +113,7 @@
           [sidebarOpen]="sidebarOpen()"
         ></li>
         <li
+          data-testid="sidebar-element__link--users_invitations"
           appSidebarItem
           (sidebarClose)="closeSideBar()"
           [icon]="'pi pi-envelope'"
@@ -120,6 +123,7 @@
           [sidebarOpen]="sidebarOpen()"
         ></li>
         <li
+          data-testid="sidebar-element__link--users_communities"
           appSidebarItem
           (sidebarClose)="closeSideBar()"
           [icon]="'pi pi-briefcase'"
@@ -129,6 +133,7 @@
           [sidebarOpen]="sidebarOpen()"
         ></li>
         <li
+          data-testid="sidebar-element__link--communities_public"
           appSidebarItem
           (sidebarClose)="closeSideBar()"
           [icon]="'pi pi-address-book'"
@@ -153,6 +158,7 @@
                the condition activeCommunityGuard checks (any role in an active
                community), so the link is never rendered where it would bounce. -->
           <li
+            data-testid="sidebar-element__link--dashboard"
             appSidebarItem
             (sidebarClose)="closeSideBar()"
             [icon]="'pi pi-home'"
@@ -162,6 +168,7 @@
             [sidebarOpen]="sidebarOpen()"
           ></li>
           <li
+            data-testid="sidebar-element__link--communities_info"
             appSidebarItem
             (sidebarClose)="closeSideBar()"
             [icon]="'pi pi-id-card'"
@@ -171,6 +178,7 @@
             [sidebarOpen]="sidebarOpen()"
           ></li>
           <li
+            data-testid="sidebar-element__link--annexes_services"
             appSidebarItem
             (sidebarClose)="closeSideBar()"
             [icon]="'pi pi-th-large'"
@@ -181,6 +189,7 @@
           ></li>
           @if (communityServicesStore.isActive('news')) {
             <li
+              data-testid="sidebar-element__link--news"
               appSidebarItem
               (sidebarClose)="closeSideBar()"
               [icon]="'pi pi-megaphone'"
@@ -192,6 +201,7 @@
           }
           @if (communityServicesStore.isActive('billing')) {
             <li
+              data-testid="sidebar-element__link--billing"
               appSidebarItem
               (sidebarClose)="closeSideBar()"
               [icon]="'pi pi-credit-card'"
@@ -209,6 +219,7 @@
                it never renders a link that bounces to `/`. -->
           @if (communityServicesStore.canReach('live-data')) {
             <li
+              data-testid="sidebar-element__link--live_data"
               appSidebarItem
               (sidebarClose)="closeSideBar()"
               [icon]="'pi pi-bolt'"
@@ -224,6 +235,7 @@
                reason billing uses it — the catalogue minRole is MEMBER. -->
           @if (communityServicesStore.isActive('administrative-document')) {
             <li
+              data-testid="sidebar-element__link--administrative_document"
               appSidebarItem
               (sidebarClose)="closeSideBar()"
               [icon]="'pi pi-folder-open'"
@@ -246,6 +258,7 @@
       >
         <ul data-testid="navbar__menu--management" class="sidebar__menu">
           <li
+            data-testid="sidebar-element__link--keys"
             appSidebarItem
             [name]="'NAVBAR.KEY_HANDLER' | translate"
             [icon]="'pi pi-key'"
@@ -272,6 +285,7 @@
             (keydown.enter)="toggleSublist('members')"
           ></li>
           <li
+            data-testid="sidebar-element__link--communities_users"
             appSidebarItem
             (sidebarClose)="closeSideBar()"
             [icon]="'pi pi-users'"
@@ -281,6 +295,7 @@
             [sidebarOpen]="sidebarOpen()"
           ></li>
           <li
+            data-testid="sidebar-element__link--audit_logs"
             appSidebarItem
             (sidebarClose)="closeSideBar()"
             [icon]="'pi pi-history'"
@@ -302,6 +317,7 @@
       >
         <ul data-testid="navbar__menu--member" class="sidebar__menu">
           <li
+            data-testid="sidebar-element__link--communities_managers"
             appSidebarItem
             (sidebarClose)="closeSideBar()"
             [icon]="'pi pi-users'"
@@ -322,12 +338,16 @@
         <app-language-selector></app-language-selector>
       </div>
     }
+    <!-- A plain click opens the Help dialog (the guide and the guided tours);
+         a modified or middle click still opens the guide itself. -->
     <a
       data-testid="navbar__btn--user-guide"
       href="https://guide.optimce.be"
       target="_blank"
       rel="noopener noreferrer"
+      aria-haspopup="dialog"
       class="sidebar__guide-btn"
+      (click)="openHelp($event)"
       [pTooltip]="sidebarOpen() ? null : ('NAVBAR.USER_GUIDE' | translate)"
       tooltipPosition="right"
     >

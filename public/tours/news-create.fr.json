@@ -1,0 +1,72 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-create/fr.html",
+  "id": "news-create",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-board__empty",
+      "target": "news-board__empty",
+      "targetClick": "next",
+      "text": "Le tableau d'actualités s'affiche. Il est encore vide : aucune actualité n'a été publiée. En tant que gestionnaire, vous pouvez en créer une avec le bouton « Nouvelle publication ».",
+      "title": "Le tableau d'actualités"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Cliquez sur « Nouvelle publication » en haut à droite pour ouvrir la fenêtre de rédaction.",
+      "title": "Ouvrir le compositeur"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__body",
+      "target": "news-compose__body",
+      "targetClick": "next",
+      "text": "La fenêtre s'ouvre sur le type « Publication ». L'onglet « Sondage » permettrait plutôt de créer un sondage — ici nous publions une simple actualité.",
+      "title": "Rédiger une actualité",
+      "waitFor": "news-compose__kind--post"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "write-the-message",
+      "target": null,
+      "text": "Saisissez le contenu de votre actualité dans l'éditeur. La barre d'outils permet de mettre en forme le texte (titres, gras, listes, liens).",
+      "title": "Écrire le message"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Cliquez sur « Publier » pour diffuser l'actualité à tous les membres de la communauté.",
+      "title": "Publier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-post__body",
+      "target": "news-post__body",
+      "targetClick": "next",
+      "text": "L'actualité apparaît en tête du tableau, signée par son auteur. Tous les membres de la communauté la voient et reçoivent une notification.",
+      "title": "Votre actualité est publiée"
+    }
+  ],
+  "title": "Publier une actualité"
+}

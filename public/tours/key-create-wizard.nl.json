@@ -1,0 +1,189 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-wizard/nl.html",
+  "id": "key-create-wizard",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Klik op “Toevoegen”: OptimCE vraagt u eerst hoe u de nieuwe verdeelsleutel wilt opbouwen.",
+      "title": "Aanmaak starten",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--step",
+      "target": "key-creation-mode__card--step",
+      "text": "Kies “Stap-voor-stap aanmaak”: beide methoden leveren dezelfde sleutel op, maar de wizard begeleidt u in vier stappen in plaats van u voor een lege tabel te zetten.",
+      "title": "Wizard starten"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--nb-consumers",
+      "target": "key-creation__input--nb-consumers",
+      "text": "Geef aan hoeveel verbruikers de energie zullen delen. Dit aantal bepaalt de omvang van de iteraties die de wizard aanmaakt — hier drie.",
+      "title": "Aantal verbruikers"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step0-validate",
+      "target": "key-creation__btn--step0-validate",
+      "text": "Klik op “Bevestigen” om het aantal verbruikers vast te leggen en naar de volgende stap te gaan.",
+      "title": "Stap bevestigen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--0",
+      "target": "key-creation__input--consumer-name--0",
+      "text": "Voer een naam in voor elke verbruiker. Deze namen worden overgenomen in alle volgende iteraties.",
+      "title": "Verbruikers benoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--1",
+      "target": "key-creation__input--consumer-name--1",
+      "text": "Voer een naam in voor elke verbruiker. Deze namen worden overgenomen in alle volgende iteraties.",
+      "title": "Verbruikers benoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--consumer-name--2",
+      "target": "key-creation__input--consumer-name--2",
+      "text": "Voer een naam in voor elke verbruiker. Deze namen worden overgenomen in alle volgende iteraties.",
+      "title": "Verbruikers benoemen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step1-validate",
+      "target": "key-creation__btn--step1-validate",
+      "text": "Klik op “Bevestigen” om de namen van de verbruikers vast te leggen en naar de configuratie van de iteraties te gaan.",
+      "title": "Namen bevestigen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__radio--type-prorata--0",
+      "target": "key-creation__radio--type-prorata--0",
+      "text": "Selecteer “Pro-rata” voor deze eerste iteratie: de energie wordt automatisch over de verbruikers verdeeld volgens hun werkelijke verbruik.",
+      "title": "Pro-rata-modus kiezen",
+      "waitFor": "key-creation__card--iteration--0"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--inj-percentage--0",
+      "target": "key-creation__input--inj-percentage--0",
+      "text": "Voer het aandeel van de beschikbare energie in dat deze iteratie krijgt. Samen moeten de iteraties 100% bereiken.",
+      "title": "Gewicht van de iteratie"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step2-validate",
+      "target": "key-creation__btn--step2-validate",
+      "text": "De wizard merkt dat het totaal nog onder 100% ligt en voegt automatisch een tweede iteratie toe om te configureren. Hij gaat zo door zolang de som niet bereikt is.",
+      "title": "Volgende iteratie aangemaakt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__radio--type-prorata--1",
+      "target": "key-creation__radio--type-prorata--1",
+      "text": "Selecteer opnieuw “Pro-rata” voor de tweede iteratie: dezelfde automatische verdeellogica is dan van toepassing.",
+      "title": "Pro-rata-modus (iteratie 2)",
+      "waitFor": "key-creation__card--iteration--1"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--inj-percentage--1",
+      "target": "key-creation__input--inj-percentage--1",
+      "text": "Voer het resterende aandeel in: de som van de iteraties moet 100% bereiken om de afsluiting vrij te geven.",
+      "title": "Aanvullen tot 100%"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step2-validate-2",
+      "target": "key-creation__btn--step2-validate",
+      "text": "Klik op “Bevestigen”: de som bereikt 100% en de wizard opent de laatste stap, de afsluiting.",
+      "title": "Iteraties bevestigen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__input--key-name",
+      "target": "key-creation__input--key-name",
+      "text": "Geef de nieuwe verdeelsleutel een naam en een beschrijving. Deze informatie verschijnt in de lijst van sleutels en maakt hergebruik eenvoudiger.",
+      "title": "Sleutel identificeren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-creation__textarea--key-description",
+      "target": "key-creation__textarea--key-description",
+      "text": "Geef de nieuwe verdeelsleutel een naam en een beschrijving. Deze informatie verschijnt in de lijst van sleutels en maakt hergebruik eenvoudiger.",
+      "title": "Sleutel identificeren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation__btn--step3-submit",
+      "target": "key-creation__btn--step3-submit",
+      "text": "Bevestig de wizard om de volledige tabel te genereren: er opent een controlepagina waarop u de configuratie kunt nalezen voordat u ze definitief opslaat.",
+      "title": "Wizard indienen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Klik op “Aanmaken” om de sleutel op te slaan. De door de wizard vooraf ingevulde tabel wordt ongewijzigd naar het CRM verstuurd.",
+      "title": "Sleutel opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "keys-list__table--keys",
+      "target": "keys-list__table--keys",
+      "targetClick": "next",
+      "text": "De nieuwe sleutel “E2E wizard key” verschijnt in de lijst van verdeelsleutels van de gemeenschap, klaar om aan een deeloperatie te worden gekoppeld.",
+      "title": "Sleutel aangemaakt"
+    }
+  ],
+  "title": "Een verdeelsleutel aanmaken (wizard)"
+}

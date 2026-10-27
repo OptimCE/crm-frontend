@@ -1,0 +1,131 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-update/de.html",
+  "id": "meter-update",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klicken Sie auf die Zeile des Zählers, den Sie ändern möchten, um seine Detailseite zu öffnen.",
+      "title": "Die Zählerdetails öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tippen Sie auf die Karte des Zählers, den Sie ändern möchten, um seine Detailseite zu öffnen.",
+      "title": "Die Zählerdetails öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "Die Detailseite zeigt die aktuellen Angaben des Zählers: EAN, Installationsadresse und technische Merkmale.",
+      "title": "Ausgangszustand"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--modify",
+      "target": "meter-view__btn--modify",
+      "text": "Klicken Sie auf „Bearbeiten“: Ein Dialogfenster mit den bearbeitbaren Feldern des Zählers öffnet sich (Adresse, Nummer, EAN und Merkmale).",
+      "title": "Das Formular öffnen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--street",
+      "target": "meter-update__input--street",
+      "text": "Ändern Sie die gewünschten Felder — hier die Installationsadresse und die physische Nummer des Zählers. Der EAN und die technischen Merkmale bleiben unverändert.",
+      "title": "Die Adresse aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-number",
+      "target": "meter-update__input--address-number",
+      "text": "Ändern Sie die gewünschten Felder — hier die Installationsadresse und die physische Nummer des Zählers. Der EAN und die technischen Merkmale bleiben unverändert.",
+      "title": "Die Adresse aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--address-supplement",
+      "target": "meter-update__input--address-supplement",
+      "text": "Ändern Sie die gewünschten Felder — hier die Installationsadresse und die physische Nummer des Zählers. Der EAN und die technischen Merkmale bleiben unverändert.",
+      "title": "Die Adresse aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--postcode",
+      "target": "meter-update__input--postcode",
+      "text": "Ändern Sie die gewünschten Felder — hier die Installationsadresse und die physische Nummer des Zählers. Der EAN und die technischen Merkmale bleiben unverändert.",
+      "title": "Die Adresse aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--city",
+      "target": "meter-update__input--city",
+      "text": "Ändern Sie die gewünschten Felder — hier die Installationsadresse und die physische Nummer des Zählers. Der EAN und die technischen Merkmale bleiben unverändert.",
+      "title": "Die Adresse aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-update__input--meter-number",
+      "target": "meter-update__input--meter-number",
+      "text": "Ändern Sie die gewünschten Felder — hier die Installationsadresse und die physische Nummer des Zählers. Der EAN und die technischen Merkmale bleiben unverändert.",
+      "title": "Die Adresse aktualisieren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-update__btn--submit",
+      "target": "meter-update__btn--submit",
+      "text": "Klicken Sie auf „Bestätigen“, um die Änderungen an das CRM zu senden. Das Dialogfenster schließt sich, sobald die Aktualisierung bestätigt ist.",
+      "title": "Speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero-2",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "Zurück auf der Detailseite des Zählers sind die neue Adresse und die neue Nummer sofort sichtbar — die Änderung ist serverseitig gespeichert.",
+      "title": "Zähler aktualisiert",
+      "waitFor": "meter-view__card--location"
+    }
+  ],
+  "title": "Zähler bearbeiten"
+}

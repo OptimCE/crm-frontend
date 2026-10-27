@@ -1,0 +1,143 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-gridform/nl.html",
+  "id": "key-create-gridform",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Klik op “Toevoegen”: OptimCE vraagt u eerst hoe u de nieuwe verdeelsleutel wilt opbouwen.",
+      "title": "Een sleutel toevoegen",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--full",
+      "target": "key-creation-mode__card--full",
+      "text": "U krijgt twee manieren aangeboden om een sleutel op te bouwen. Kies “Volledige aanmaak” om de iteraties en de percentages rechtstreeks in de tabel in te voeren.",
+      "title": "De modus kiezen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Geef de nieuwe verdeelsleutel een naam en een beschrijving. Deze gegevens verschijnen in de lijst met sleutels en helpen u om hem later terug te vinden.",
+      "title": "De sleutel benoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Geef de nieuwe verdeelsleutel een naam en een beschrijving. Deze gegevens verschijnen in de lijst met sleutels en helpen u om hem later terug te vinden.",
+      "title": "De sleutel benoemen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-iteration",
+      "target": "key-update__btn--add-iteration",
+      "text": "Klik op “Iteratie toevoegen”: de tabel maakt een nieuw blok aan met een eerste verbruiker die klaar is om te bewerken.",
+      "title": "Een iteratie toevoegen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer",
+      "target": "key-update__btn--add-consumer",
+      "text": "Voeg een rij toe per verbruiker van de sleutel.",
+      "title": "Een verbruiker toevoegen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer-2",
+      "target": "key-update__btn--add-consumer",
+      "text": "Klik zo vaak als nodig op “Verbruiker toevoegen” om het gewenste aantal te bereiken — drie rijen in dit scenario.",
+      "title": "Verbruikers toevoegen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Voer 70% van de energie in voor deze iteratie, geef de drie verbruikers een naam (Cons1, Cons2, Cons3) en stel de verdeling 40/40/20 handmatig in.",
+      "title": "De iteratie instellen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-prorata-iteration",
+      "target": "key-update__btn--add-prorata-iteration",
+      "text": "Klik op “Pro-rata iteratie toevoegen”: de namen van de verbruikers worden automatisch overgenomen en de percentages worden berekend op basis van het werkelijke verbruik.",
+      "title": "Een pro-rata iteratie toevoegen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "text": "Voer 30% in als weging van de tweede iteratie, zodat de twee iteraties samen 100% van de energie bereiken.",
+      "title": "De weging instellen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "iteration-2-is-recalculated",
+      "target": null,
+      "text": "Zodra de weging bevestigd is (Enter-toets of ergens anders klikken), wordt de hele tweede iteratie automatisch herberekend volgens de pro-rata-modus.",
+      "title": "Iteratie herberekend"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-3",
+      "target": "key-update__grid--data",
+      "targetClick": "next",
+      "text": "Overloop de volledige tabel om de iteraties, de namen en de percentages te controleren voordat u de sleutel opslaat.",
+      "title": "De configuratie nakijken"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Sla op om uw wijzigingen toe te passen.",
+      "title": "Opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-key-appears-in-the-list",
+      "target": null,
+      "text": "De nieuwe sleutel “E2E key” verschijnt in de lijst met verdeelsleutels van de gemeenschap, klaar om door een deeloperatie te worden gebruikt.",
+      "title": "Sleutel aangemaakt",
+      "waitFor": "keys-list__table--keys"
+    }
+  ],
+  "title": "Een verdeelsleutel aanmaken (formulier)"
+}

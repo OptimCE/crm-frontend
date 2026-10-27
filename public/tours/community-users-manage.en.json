@@ -1,0 +1,217 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/users"
+  },
+  "guideUrl": "https://guide.optimce.be/community-users-manage/en.html",
+  "id": "community-users-manage",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__row--desktop--0",
+      "targetClick": "next",
+      "text": "This page lists everyone with access to the community and their role: administrator, manager or member. You can invite, change a role, or revoke access.",
+      "title": "The community's users",
+      "waitFor": "users-community-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__card--mobile--0",
+      "targetClick": "next",
+      "text": "This page lists the accounts attached to the community and their role. This is where you invite a manager, change a role or revoke access.",
+      "title": "The community's users"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Click \"Invite a manager\" to email an invitation to someone who will help run the community.",
+      "title": "Invite a manager"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-invitation__input--email",
+      "target": "community-invitation__input--email",
+      "text": "Enter the email address of the person to invite. They will receive an invitation to join the community as a manager.",
+      "title": "Enter the email address"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-invitation__btn--submit",
+      "target": "community-invitation__btn--submit",
+      "text": "Send the invitation: the person receives it by email.",
+      "title": "Send the invitation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "The \"See pending invitations\" button opens the list of invitations that have been sent but not yet accepted, both members and managers.",
+      "title": "See pending invitations"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-the-managers-tab",
+      "target": null,
+      "text": "Open the managers tab to see the pending invitations.",
+      "title": "Manager invitations",
+      "waitFor": "community-pending-invitation__tab--managers"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invitation-appears-in-the-pending-managers-list",
+      "target": null,
+      "text": "The \"Managers\" tab gathers invitations that have been sent but not yet accepted. While an invitation is pending, you can cancel it from this list.",
+      "title": "Pending invitations"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "close-the-pending-invitations-dialog",
+      "target": null,
+      "text": "Close the window when you are done.",
+      "title": "Close"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "users-community-list__input--search",
+      "target": "users-community-list__input--search",
+      "text": "Search for the user whose role you want to change.",
+      "title": "Search a user"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--edit-role--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--edit-role--0",
+      "text": "The pencil next to a user opens the role editor. You can promote a member to manager, or set a manager back to a plain member.",
+      "title": "Change a role",
+      "waitFor": "users-community-list__row--desktop--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-edit-role--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-edit-role--0",
+      "text": "On the user's card, the \"Edit role\" button opens the role editor.",
+      "title": "Change a role"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "users-community-list__select--dialog-role",
+      "target": "users-community-list__select--dialog-role",
+      "text": "Choose the new role from the list.",
+      "title": "Pick the role"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--dialog-save",
+      "target": "users-community-list__btn--dialog-save",
+      "text": "Pick the new role from the list, then click \"Save\". The change takes effect immediately.",
+      "title": "Save the role"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--delete--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "targetClick": "next",
+      "text": "The user is now a member: their role tag has changed and the remove action is now available on their row.",
+      "title": "Role updated"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--card-delete--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "targetClick": "next",
+      "text": "The user is now a member: their role tag has changed and the remove action is now available on their card.",
+      "title": "Role updated"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--delete--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "text": "The red cross removes the user from the community right away — their access is revoked immediately, with no extra confirmation.",
+      "title": "Remove a user"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-delete--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "text": "On the card, the \"Delete\" button removes the user from the community right away.",
+      "title": "Remove a user"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__empty--message",
+      "target": "users-community-list__empty--message",
+      "targetClick": "next",
+      "text": "Searching for that email now returns nothing: the user no longer has access to the community.",
+      "title": "User removed"
+    }
+  ],
+  "title": "Manage the community's users"
+}

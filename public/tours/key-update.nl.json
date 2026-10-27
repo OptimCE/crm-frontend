@@ -1,0 +1,69 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-update/nl.html",
+  "id": "key-update",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-view__btn--update",
+      "target": "key-view__btn--update",
+      "text": "Klik op “Bijwerken”: de sleutel opent in dezelfde editor als bij het aanmaken, maar vooraf ingevuld met de bestaande waarden.",
+      "title": "Naar de bewerkmodus"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Wijzig de naam en de beschrijving zodat ze het nieuwe gebruik van de sleutel weerspiegelen. Deze velden verschijnen in de lijst en maken de sleutel makkelijker terug te vinden.",
+      "title": "De sleutel hernoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Wijzig de naam en de beschrijving zodat ze het nieuwe gebruik van de sleutel weerspiegelen. Deze velden verschijnen in de lijst en maken de sleutel makkelijker terug te vinden.",
+      "title": "De sleutel hernoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Dubbelklik op de percentages van de verbruikers om ze te wijzigen — hier gaan we van 50/50 naar 60/40. De som per iteratie moet altijd 100% bedragen.",
+      "title": "De verbruikers herverdelen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "targetClick": "next",
+      "text": "Controleer de volledige tabel: naam, beschrijving en nieuwe percentages moeten overeenkomen met wat u bedoelt, voordat u opslaat.",
+      "title": "Controleren vóór het opslaan"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Klik op de knop om op te slaan: de applicatie controleert de percentages en brengt u terug naar de lijst met sleutels.",
+      "title": "De wijzigingen opslaan"
+    }
+  ],
+  "title": "Een verdeelsleutel bewerken"
+}

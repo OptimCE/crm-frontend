@@ -1,0 +1,68 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/community-join-inspect-meter/nl.html",
+  "id": "community-join-inspect-meter",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klik op de eerste meter in de lijst om zijn detailpagina te openen — de selectie gebeurt op basis van de EAN van de meter.",
+      "title": "Een meter openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tik op de kaart van de eerste meter om zijn detailpagina te openen — de selectie gebeurt op basis van de EAN van de meter.",
+      "title": "Een meter openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__hero",
+      "target": "meter-view__hero",
+      "targetClick": "next",
+      "text": "De kop van de detailpagina toont de EAN van de meter zoals die in de database is opgeslagen — dit is de unieke identificatie van het meetpunt.",
+      "title": "EAN van de meter"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__card--technical",
+      "target": "meter-view__card--technical",
+      "targetClick": "next",
+      "text": "De technische kaart vermeldt het fysieke meternummer en de leesfrequentie — handig om na te gaan of de pagina wel overeenkomt met het geïnstalleerde toestel.",
+      "title": "Technische kenmerken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__tabs",
+      "target": "meter-view__tabs",
+      "targetClick": "next",
+      "text": "Met de tabbladen navigeert u tussen de actuele gegevens, de historiek, de toekomstige waarden en het berekende verbruik van de meter.",
+      "title": "Raadpleegtabbladen"
+    }
+  ],
+  "title": "Lid worden van een gemeenschap — de meter controleren"
+}

@@ -38,6 +38,17 @@ interface RuntimeMapConfig {
   fontStack: string[];
 }
 
+/** The in-app onboarding offers (features/onboarding). */
+interface RuntimeOnboardingConfig {
+  /**
+   * `false` turns every automatic onboarding offer off, for everyone: nothing is
+   * offered and nothing is recorded. The Help dialog keeps listing the tours.
+   * On by default. Only a literal `false` (or the string "false" envsubst would
+   * render) turns it off, so a missing or empty value never disables it.
+   */
+  enabled: boolean | string;
+}
+
 export interface RuntimeConfig {
   apiUrl: string;
   basePath: string;
@@ -57,6 +68,7 @@ export interface RuntimeConfig {
   realtimeUrl: string;
   map: RuntimeMapConfig;
   keycloak: RuntimeKeycloakConfig;
+  onboarding: RuntimeOnboardingConfig;
 }
 
 // These default values are for local development, need to be overridden using config.json in production (see assets/config/config.json)
@@ -81,6 +93,9 @@ const DEFAULT_CONFIG: RuntimeConfig = {
     urlPattern: '^(http://localhost:8080)(/.*)?$',
     urlPatternFlags: 'i',
   },
+  onboarding: {
+    enabled: true,
+  },
 };
 
 let currentConfig: RuntimeConfig = DEFAULT_CONFIG;
@@ -98,6 +113,10 @@ export function setRuntimeConfig(config: Partial<RuntimeConfig>): void {
     keycloak: {
       ...DEFAULT_CONFIG.keycloak,
       ...config.keycloak,
+    },
+    onboarding: {
+      ...DEFAULT_CONFIG.onboarding,
+      ...config.onboarding,
     },
   };
 
@@ -125,6 +144,10 @@ export const environments = {
       attribution: map.attribution ?? DEFAULT_CONFIG.map.attribution,
       fontStack: map.fontStack?.length ? map.fontStack : DEFAULT_CONFIG.map.fontStack,
     };
+  },
+  get onboarding(): { enabled: boolean } {
+    const enabled = currentConfig.onboarding?.enabled;
+    return { enabled: enabled !== false && String(enabled).trim().toLowerCase() !== 'false' };
   },
   get keycloak(): {
     realm: string;

@@ -1,0 +1,96 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-delete-key/de.html",
+  "id": "algorithm-delete-key",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-is-visible-with-success-status",
+      "target": null,
+      "text": "Die zuvor gestartete Generierung wird mit einem grünen Punkt dargestellt, der signalisiert, dass sie erfolgreich abgeschlossen wurde. Klappen Sie sie auf, um die generierten Schlüssel aufzurufen.",
+      "title": "Generierung abgeschlossen",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Klicken Sie auf die Generierung, um die von ihr erzeugten Schlüssel anzuzeigen.",
+      "title": "Generierung aufklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "Die von OLAGSA berechneten Schlüssel werden unter der Generierung aufgelistet. Jeder Schlüssel kann einzeln angesehen, gespeichert oder gelöscht werden.",
+      "title": "Verteilungsschlüssel verfügbar"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Klicken Sie auf einen Schlüssel, um seine Verteilung anzuzeigen.",
+      "title": "Schlüssel aufklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "Die Verteilungstabelle des Schlüssels wird angezeigt. Mit der Löschschaltfläche (×) oben rechts in der Zeile können Sie diesen Schlüssel endgültig löschen.",
+      "title": "Ausgewählter Schlüssel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "click-the-delete-key-button",
+      "target": null,
+      "text": "Klicken Sie auf die Schaltfläche × des Schlüssels, um das Löschen einzuleiten. Vor dem endgültigen Löschen werden Sie um eine Bestätigung gebeten.",
+      "title": "Schlüssel löschen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Ein Bestätigungsdialog wird angezeigt. Klicken Sie auf die Bestätigungsschaltfläche, um diesen Verteilungsschlüssel endgültig zu löschen.",
+      "title": "Löschen bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deletion",
+      "target": null,
+      "text": "Bestätigen Sie Ihre Auswahl im Bestätigungsdialog.",
+      "title": "Bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-has-been-deleted",
+      "target": null,
+      "text": "Der Schlüssel wurde endgültig gelöscht. Er erscheint nicht mehr in der Ergebnisliste der Generierung und kann nicht wiederhergestellt werden.",
+      "title": "Schlüssel gelöscht"
+    }
+  ],
+  "title": "Generierten Schlüssel löschen"
+}

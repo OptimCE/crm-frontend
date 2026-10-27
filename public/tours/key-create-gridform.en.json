@@ -1,0 +1,143 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-gridform/en.html",
+  "id": "key-create-gridform",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Click \"Add\" — OptimCE first asks how you want to build the new allocation key.",
+      "title": "Add a key",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--full",
+      "target": "key-creation-mode__card--full",
+      "text": "Two ways of building a key are offered. Pick \"Full editor\" to type the iterations and percentages straight into the grid.",
+      "title": "Choose the mode"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Give the new allocation key a name and a description. This metadata appears in the key list and makes it easier to find later.",
+      "title": "Name the key"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Give the new allocation key a name and a description. This metadata appears in the key list and makes it easier to find later.",
+      "title": "Name the key"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-iteration",
+      "target": "key-update__btn--add-iteration",
+      "text": "Click \"Add iteration\" — the grid spawns a fresh iteration block with an initial consumer row ready to edit.",
+      "title": "Add an iteration"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer",
+      "target": "key-update__btn--add-consumer",
+      "text": "Add one row per consumer of the key.",
+      "title": "Add a consumer"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer-2",
+      "target": "key-update__btn--add-consumer",
+      "text": "Click \"Add consumer\" as many times as needed to reach the desired count — three rows in this scenario.",
+      "title": "Add consumers"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Set 70% of the energy for this iteration, name the three consumers (Cons1, Cons2, Cons3) and manually split the share 40/40/20.",
+      "title": "Configure the iteration"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-prorata-iteration",
+      "target": "key-update__btn--add-prorata-iteration",
+      "text": "Click \"Add prorata iteration\" — consumer names are carried over automatically and the percentages will be computed from actual consumption.",
+      "title": "Add a prorata iteration"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "text": "Type 30% as the weight of the second iteration so the two iterations together reach 100% of the energy.",
+      "title": "Set the weight"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "iteration-2-is-recalculated",
+      "target": null,
+      "text": "As soon as the weight is committed (Enter or clicking outside the cell), the whole second iteration is recomputed automatically in prorata mode.",
+      "title": "Iteration recomputed"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-3",
+      "target": "key-update__grid--data",
+      "targetClick": "next",
+      "text": "Scan the full grid to confirm the iterations, names and percentages before saving the key.",
+      "title": "Review the configuration"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Save to apply your changes.",
+      "title": "Save"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-key-appears-in-the-list",
+      "target": null,
+      "text": "The new \"E2E key\" shows up in the community's allocation keys list, ready to be used by a sharing operation.",
+      "title": "Key created",
+      "waitFor": "keys-list__table--keys"
+    }
+  ],
+  "title": "Create an allocation key (form)"
+}

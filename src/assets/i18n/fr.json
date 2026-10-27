@@ -1292,7 +1292,7 @@
     },
     "DEACTIVATE": {
       "END_DATE_METER_LABEL": "Date de désactivation",
-      "DELETE_BUTTON_LABEL": "Supprimer"
+      "DELETE_BUTTON_LABEL": "Désactiver"
     },
     "DATA": {
       "ENERGY_CHARACTERISTIC_TITLE": "Caractéristiques énergétiques",
@@ -3281,7 +3281,7 @@
       "EAN_DEVICES_UNKNOWN": "Impossible de vérifier quels compteurs ont déjà un appareil. Un compteur qui en a déjà un sera refusé à la création.",
       "EAN_HAS_DEVICE": "A déjà un appareil",
       "PURE_INJECTION": "Rien ne consomme derrière ce compteur",
-      "PURE_INJECTION_HELP": "À cocher uniquement si le site injecte tout sur le réseau. Sur un site qui consomme aussi, un port P1 ne voit pas la production, et cocher cette case surestimerait ce que la communauté produit.",
+      "PURE_INJECTION_HELP": "À cocher uniquement si le site injecte tout sur le réseau. Sur un site qui consomme aussi, un port P1 ne voit pas la production, et cocher cette case sous-estimerait ce que la communauté produit.",
       "SUBMIT": "Créer",
       "ERRORS": {
         "REQUIRED": "Veuillez indiquer un nom et choisir un compteur."
@@ -3329,6 +3329,56 @@
       "TITLE": "Prévision de production",
       "NO_METHOD": "Aucune méthode de prévision n'est encore disponible pour la filière de production de cette communauté.",
       "UNAVAILABLE": "Aucune prévision disponible."
+    }
+  },
+  "HELP": {
+    "TITLE": "Aide",
+    "OPEN_GUIDE": "Ouvrir le guide d'utilisation en ligne",
+    "TOURS": {
+      "TITLE": "Visites guidées",
+      "DESCRIPTION": "Une visite vous montre, étape par étape, où cliquer dans l'application. Vous gardez la main et pouvez l'arrêter à tout moment.",
+      "SEARCH": "Rechercher une visite",
+      "ON_THIS_PAGE": "Sur cette page",
+      "START": "Démarrer",
+      "NO_MATCH": "Aucune visite ne correspond à votre recherche.",
+      "EMPTY": "Aucune visite guidée n'est disponible pour votre rôle dans cette communauté.",
+      "NO_COMMUNITY": "Ouvrez une communauté depuis votre page d'accueil pour voir ses visites guidées.",
+      "LOAD_ERROR": "Les visites guidées n'ont pas pu être chargées. Réessayez plus tard.",
+      "START_FAILED": "Cette visite n'a pas pu démarrer."
+    }
+  },
+  "ONBOARDING": {
+    "WELCOME": {
+      "TITLE": "Bienvenue sur OptimCE",
+      "TEXT": "Faites le tour des principaux écrans en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Faites le tour des principaux écrans.",
+      "ACTION": "Me faire visiter"
+    },
+    "COMMUNITY_ADMIN": {
+      "TITLE": "Espace d'administration de {{community}}",
+      "TEXT": "Découvrez vos outils d'administration en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Découvrez vos outils d'administration.",
+      "ACTION": "Découvrir l'espace admin"
+    },
+    "COMMUNITY_MANAGER": {
+      "TITLE": "Vous gérez désormais {{community}}",
+      "TEXT": "Découvrez vos outils de gestionnaire en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Découvrez vos outils de gestionnaire.",
+      "ACTION": "Découvrir mes outils"
+    },
+    "COMMUNITY_MEMBER": {
+      "TITLE": "Bienvenue dans {{community}}",
+      "TEXT": "Découvrez votre espace membre en {{n}} étapes.",
+      "TEXT_NO_COUNT": "Découvrez votre espace membre.",
+      "ACTION": "Découvrir mon espace"
+    },
+    "LATER": "Plus tard",
+    "CLOSE": "Fermer",
+    "HINT": "Vous pourrez relancer ce tour à tout moment depuis « {{help}} ».",
+    "BANNER_LABEL": "Proposition de visite guidée",
+    "FIRST_STEPS": {
+      "TITLE": "Premiers pas",
+      "DESCRIPTION": "Les visites de découverte, à relancer quand vous voulez."
     }
   }
 }

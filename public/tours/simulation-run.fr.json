@@ -1,0 +1,118 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services/simulation"
+  },
+  "guideUrl": "https://guide.optimce.be/simulation-run/fr.html",
+  "id": "simulation-run",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__panel--start",
+      "target": "simulation-hub__panel--start",
+      "targetClick": "next",
+      "text": "La page de simulation s'affiche avec son formulaire de configuration : choisissez une clé de répartition enregistrée, nommez la simulation, indiquez l'injection et importez le fichier de consommation à simuler.",
+      "title": "Page de simulation",
+      "waitFor": "simulation-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "simulation-hub__select--key",
+      "target": "simulation-hub__select--key",
+      "text": "Ouvrez le menu déroulant « Clé de répartition » et sélectionnez la clé que vous venez d'enregistrer. La simulation appliquera cette répartition aux données de consommation importées.",
+      "title": "Choisir la clé de répartition"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--name",
+      "target": "simulation-hub__input--name",
+      "text": "Donnez un nom à la simulation pour la retrouver dans l'historique.",
+      "title": "Nommer la simulation"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "simulation-hub__input--injection-name",
+      "target": "simulation-hub__input--injection-name",
+      "text": "Saisissez le nom de la colonne de votre fichier de données qui contient l'énergie produite.",
+      "title": "Nom de l'injection"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-hub__dropzone",
+      "target": "simulation-hub__dropzone",
+      "targetClick": "next",
+      "text": "Importez le même fichier « test_4.csv » dans la zone de dépôt. La simulation calculera l'autoconsommation et le partage d'énergie à partir de ces données et de la clé sélectionnée.",
+      "title": "Importer le fichier à simuler"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--submit",
+      "target": "simulation-hub__btn--submit",
+      "text": "Cliquez sur « Lancer la simulation ». La simulation est mise en file d'attente et apparaît dans la liste des exécutions avec le statut « En attente » jusqu'à la fin du calcul.",
+      "title": "Lancer la simulation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "simulation-hub__btn--refresh",
+      "target": "simulation-hub__btn--refresh",
+      "text": "Le calcul prend quelques instants : actualisez la liste pour voir son résultat.",
+      "title": "Actualiser"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-simulation-run",
+      "target": null,
+      "text": "Cliquez sur la simulation terminée pour afficher ses résultats.",
+      "title": "Déplier la simulation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__metrics",
+      "target": "simulation-results__metrics",
+      "targetClick": "next",
+      "text": "La simulation est terminée. Les indicateurs clés s'affichent : énergie autoconsommée, surplus, taux d'autosuffisance et taux de partage — calculés à partir de la clé enregistrée et du fichier importé.",
+      "title": "Résultats de la simulation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-iteration-breakdown",
+      "target": null,
+      "text": "Dépliez une itération pour voir comment l'énergie y a été répartie.",
+      "title": "Détail par itération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "simulation-results__iteration-toggle--1",
+      "target": "simulation-results__iteration-toggle--1",
+      "targetClick": "next",
+      "text": "Chaque itération de la clé peut être dépliée pour révéler le détail par consommateur : allocation, consommation, énergie autoconsommée, surplus et volume résiduel. C'est ici que l'on compare les solutions de répartition.",
+      "title": "Détail par itération et par consommateur"
+    }
+  ],
+  "title": "Simuler une clé de répartition"
+}

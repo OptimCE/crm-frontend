@@ -1,0 +1,45 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys/:keyId"
+  },
+  "guideUrl": "https://guide.optimce.be/key-helper-tour/fr.html",
+  "id": "key-helper-tour",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-view__grid--data",
+      "target": "key-view__grid--data",
+      "targetClick": "next",
+      "text": "Dans l'application, certains champs ou colonnes affichent une icône ⓘ. C'est le signe qu'une explication supplémentaire est disponible — il vous suffit de cliquer dessus pour la lire.",
+      "title": "Repérer l'icône ⓘ",
+      "waitFor": "key-view__btn--update"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "header-helper__btn--help",
+      "target": "header-helper__btn--help",
+      "text": "Cliquez sur l'icône ⓘ pour obtenir plus d'informations sur ce champ. Une infobulle s'affiche avec le titre et la description complète.",
+      "title": "Cliquer sur ⓘ"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-helper__title--label",
+      "target": "header-helper__title--label",
+      "targetClick": "next",
+      "text": "L'infobulle donne le nom du champ et son explication détaillée. Vous pouvez ainsi comprendre la signification de chaque valeur sans quitter la page. Cette icône ⓘ est disponible partout où elle apparaît dans l'application.",
+      "title": "L'infobulle s'affiche",
+      "waitFor": "header-helper__popover--content"
+    }
+  ],
+  "title": "Aide contextuelle — l'icône (i)"
+}

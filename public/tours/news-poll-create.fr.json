@@ -1,0 +1,201 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/news"
+  },
+  "guideUrl": "https://guide.optimce.be/news-poll-create/fr.html",
+  "id": "news-poll-create",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-board__compose",
+      "target": "news-board__compose",
+      "text": "Cliquez sur « Nouvelle publication » pour ouvrir la fenêtre de rédaction.",
+      "title": "Ouvrir le compositeur",
+      "waitFor": "news-board__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__kind--poll",
+      "target": "news-compose__kind--poll",
+      "text": "En haut de la fenêtre, basculez sur l'onglet « Sondage ». Des champs supplémentaires apparaissent : question, options de réponse, date de clôture et visibilité.",
+      "title": "Choisir le type « Sondage »"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "ask-the-question",
+      "target": null,
+      "text": "Saisissez la question du sondage dans l'éditeur, comme pour une actualité classique.",
+      "title": "Poser la question"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__poll-type--single",
+      "target": "news-compose__poll-type--single",
+      "targetClick": "next",
+      "text": "Choisissez si les membres peuvent sélectionner une seule réponse (« Choix unique ») ou plusieurs (« Choix multiple »). Nous gardons « Choix unique ».",
+      "title": "Choix unique ou multiple"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--0",
+      "target": "news-compose__option-input--0",
+      "text": "Saisissez la première réponse possible.",
+      "title": "Première option"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--1",
+      "target": "news-compose__option-input--1",
+      "text": "Saisissez la deuxième réponse possible.",
+      "title": "Deuxième option"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__add-option",
+      "target": "news-compose__add-option",
+      "text": "Ajoutez autant de réponses que nécessaire.",
+      "title": "Ajouter une option"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "news-compose__option-input--2",
+      "target": "news-compose__option-input--2",
+      "text": "Renseignez au moins deux options de réponse. Le bouton « Ajouter une option » en ajoute d'autres, et l'icône de corbeille en retire.",
+      "title": "Ajouter les options de réponse"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-a-closing-date",
+      "target": null,
+      "text": "Choisissez la date et l'heure de clôture dans le calendrier. Après cette échéance, plus aucun vote n'est accepté et, selon la visibilité choisie, les résultats peuvent se dévoiler.",
+      "title": "Définir une date de clôture"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__preset--anonymous",
+      "target": "news-compose__preset--anonymous",
+      "targetClick": "next",
+      "text": "Trois préréglages couvrent les cas les plus courants. Chacun combine ce que voient les gestionnaires, ce que voient les membres, et à quel moment.",
+      "title": "Choisir qui voit les résultats"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-2",
+      "target": "news-compose__preset--anonymous",
+      "text": "Les membres ne voient que le nombre total de votes par option, et seulement après avoir voté eux-mêmes. Personne ne voit qui a voté quoi — les gestionnaires aussi n'ont que les totaux. Idéal pour un vote confidentiel.",
+      "title": "Anonyme"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--transparent",
+      "target": "news-compose__preset--transparent",
+      "text": "Tout le monde voit les résultats complets immédiatement, y compris qui a voté pour quelle option, avant même d'avoir voté. Idéal pour une décision ouverte où chacun assume son choix.",
+      "title": "Transparent"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--on_close",
+      "target": "news-compose__preset--on_close",
+      "text": "Les membres ne découvrent les totaux qu'une fois le sondage clôturé ; avant cela, les résultats restent masqués. Les gestionnaires, eux, voient le détail (qui a voté quoi) à tout moment pour suivre la participation.",
+      "title": "À la clôture"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__advanced-toggle",
+      "target": "news-compose__advanced-toggle",
+      "text": "Le bouton « Avancé » dévoile trois réglages indépendants. Un préréglage n'est qu'un raccourci pour ces trois champs — vous pouvez les combiner librement.",
+      "title": "Réglage fin (avancé)"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__admin-vis",
+      "target": "news-compose__admin-vis",
+      "targetClick": "next",
+      "text": "Ce que voient les gestionnaires. « Agrégé » : uniquement les totaux par option. « Complet » : le détail nominatif, c'est-à-dire qui a voté pour chaque option.",
+      "title": "Visibilité gestionnaire"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-vis",
+      "target": "news-compose__member-vis",
+      "targetClick": "next",
+      "text": "Ce que les membres sont autorisés à voir. « Aucun » : jamais de résultats. « Agrégé » : les totaux. « Complet » : le détail des votes par personne.",
+      "title": "Visibilité membre"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-compose__member-display",
+      "target": "news-compose__member-display",
+      "targetClick": "next",
+      "text": "Le moment où les membres voient ce qui leur est autorisé. « Jamais », « Avant de voter », « Après avoir voté », ou « À la clôture du sondage ». C'est ce réglage qui distingue, par exemple, un vote dont le résultat n'apparaît qu'une fois la participation enregistrée.",
+      "title": "Affichage membre"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__preset--anonymous-3",
+      "target": "news-compose__preset--anonymous",
+      "text": "Pour finir, nous reprenons le préréglage « Anonyme », qui referme les réglages avancés et applique une combinaison cohérente prête à être publiée.",
+      "title": "Revenir à un préréglage"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "news-compose__btn--submit",
+      "target": "news-compose__btn--submit",
+      "text": "Cliquez sur « Publier ». Le sondage est diffusé à tous les membres, qui reçoivent une notification les invitant à voter.",
+      "title": "Publier le sondage"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "news-poll",
+      "target": "news-poll",
+      "targetClick": "next",
+      "text": "Le sondage apparaît dans le tableau avec ses options. Les membres peuvent désormais voter ; les résultats s'afficheront selon la visibilité que vous avez choisie.",
+      "title": "Votre sondage est en ligne"
+    }
+  ],
+  "title": "Créer un sondage"
+}

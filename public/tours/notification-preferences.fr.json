@@ -1,0 +1,63 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/notification-preferences/fr.html",
+  "id": "notification-preferences",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--notifications",
+      "target": "profile-tabs__tab--notifications",
+      "text": "Le dernier onglet de votre profil règle la façon dont OptimCE vous prévient.",
+      "title": "Onglet Notifications"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__row--news_post",
+      "target": "notification-preferences__row--news_post",
+      "targetClick": "next",
+      "text": "Chaque ligne est une catégorie d'activité — actualités, factures, échéances… — et chaque colonne un canal. « Tout le reste » couvre les catégories qui n'ont pas leur propre ligne. Les messages essentiels (factures, invitations, échéances dépassées) restent toujours envoyés.",
+      "title": "Catégories et canaux",
+      "waitFor": "notification-preferences__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__email--news_post",
+      "target": "notification-preferences__email--news_post",
+      "targetClick": "next",
+      "text": "Décochez « E-mail » sur la ligne « Actualités » : vous continuerez à voir les publications dans l'application, mais sans recevoir de courriel.",
+      "title": "Couper un canal"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-preferences__save",
+      "target": "notification-preferences__save",
+      "text": "Rien n'est appliqué tant que vous n'avez pas enregistré. Cliquez sur « Enregistrer les préférences ».",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "notification-preferences__saved",
+      "target": "notification-preferences__saved",
+      "targetClick": "next",
+      "text": "Un message de confirmation apparaît à côté du bouton. Il disparaît dès que vous modifiez à nouveau un réglage.",
+      "title": "Préférences enregistrées"
+    }
+  ],
+  "title": "Choisir ses notifications"
+}

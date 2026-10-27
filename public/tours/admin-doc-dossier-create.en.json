@@ -1,0 +1,108 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-dossier-create/en.html",
+  "id": "admin-doc-dossier-create",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-list__empty--message",
+      "target": "dossier-list__empty--message",
+      "targetClick": "next",
+      "text": "This page tracks the dossiers filed with the CWaPE and the grid operator. Every dossier concerns exactly one sharing operation: a community running several operations files one dossier per operation.",
+      "title": "No dossier yet",
+      "waitFor": "dossier-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__btn--create",
+      "target": "dossier-list__btn--create",
+      "text": "Click \"New dossier\" to open the creation form.",
+      "title": "Create a dossier"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "dossier-create-dialog__select--type",
+      "target": "dossier-create-dialog__select--type",
+      "text": "The type decides which regulatory deadlines are derived later. Here, a community creation notification.",
+      "title": "Choose the dossier type"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "dossier-create-dialog__select--operation",
+      "target": "dossier-create-dialog__select--operation",
+      "text": "Pick the sharing operation the filing is about. It supplies the members and meters that the dossier's documents will list.",
+      "title": "Choose the sharing operation"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "dossier-create-dialog__input--title",
+      "target": "dossier-create-dialog__input--title",
+      "text": "Give the dossier a title that sets it apart from the others.",
+      "title": "Name the dossier"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "dossier-create-dialog__input--external-ref",
+      "target": "dossier-create-dialog__input--external-ref",
+      "text": "The title is free text — it is how you will recognise the dossier. The reference is the one assigned by the authority; it identifies the dossier uniquely and stays editable later.",
+      "title": "Title and reference"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-create-dialog__btn--submit",
+      "target": "dossier-create-dialog__btn--submit",
+      "text": "Submit: the dossier is created and joins the tracking table.",
+      "title": "Create"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dossier-appears-in-the-list",
+      "target": null,
+      "text": "The dossier shows up in the table with the status \"In preparation\". Until it is submitted it stays editable and no deadline is running.",
+      "title": "The dossier is created",
+      "waitFor": "dossier-list__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Click anywhere on the row to open the dossier page.",
+      "title": "Open the dossier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dossier-detail-page-opens",
+      "target": null,
+      "text": "The dossier page gathers everything about the filing: its documents, its deadlines and the history of its status changes. The buttons at the top offer only the status changes that are legal right now.",
+      "title": "The dossier page",
+      "waitFor": "dossier-detail__tag--status"
+    }
+  ],
+  "title": "Create an administrative dossier"
+}

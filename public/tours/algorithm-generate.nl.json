@@ -1,0 +1,181 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-generate/nl.html",
+  "id": "algorithm-generate",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__panel--start",
+      "target": "algorithm-hub__panel--start",
+      "targetClick": "next",
+      "text": "De pagina voor het genereren van verdeelsleutels verschijnt met het configuratieformulier. Selecteer het algoritme, vul de parameters in en importeer uw gegevensbestand om een nieuwe generatie te starten.",
+      "title": "Pagina voor sleutelgeneratie",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "algorithm-hub__select--algorithm",
+      "target": "algorithm-hub__select--algorithm",
+      "text": "Klik op de vervolgkeuzelijst “Algoritme” en selecteer “OLAGSA”. Het formulier met de parameters die eigen zijn aan dit genetische algoritme verschijnt dan.",
+      "title": "Het OLAGSA-algoritme selecteren"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--generation-name",
+      "target": "algorithm-hub__input--generation-name",
+      "text": "Geef deze generatie een naam om ze in de historiek terug te vinden.",
+      "title": "De generatie benoemen",
+      "waitFor": "algo-form__grid--main"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--injection-name",
+      "target": "algorithm-hub__input--injection-name",
+      "text": "Voer de naam in van de kolom in uw gegevensbestand die de geproduceerde energie bevat.",
+      "title": "Naam van de injectie"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algo-form__input--iterations",
+      "target": "algo-form__input--iterations",
+      "text": "Voer “3” in het veld “Aantal iteraties” in. Deze parameter bepaalt hoeveel onafhankelijke oplossingen het genetische OLAGSA-algoritme berekent.",
+      "title": "Het aantal iteraties instellen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algo-form__btn--toggle-advanced",
+      "target": "algo-form__btn--toggle-advanced",
+      "text": "Klik op “Geavanceerde opties” om de hyperparameters van het genetische algoritme te tonen: populatiegrootte, kruisingssnelheid, mutatiesnelheid, enz.",
+      "title": "Geavanceerde opties openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algo-form__grid--advanced",
+      "target": "algo-form__grid--advanced",
+      "targetClick": "next",
+      "text": "De geavanceerde parameters van OLAGSA verschijnen: generaties, populatiegrootte, kruisingssnelheid tussen en binnen soorten, mutatiesnelheid, verwacht aantal soorten en maximum aantal generaties zonder verbetering. De standaardwaarden volstaan voor de meeste toepassingen.",
+      "title": "Hyperparameters van het genetische algoritme"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__dropzone",
+      "target": "algorithm-hub__dropzone",
+      "targetClick": "next",
+      "text": "Sleep uw CSV-bestand naar de importzone of klik erop om het gegevensbestand te selecteren dat voor de generatie moet worden gebruikt.",
+      "title": "Het gegevensbestand importeren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--submit",
+      "target": "algorithm-hub__btn--submit",
+      "text": "Klik op “Generatie starten” om de taak naar de OLAGSA-engine te sturen. De generatie verschijnt meteen in de lijst met de status “In behandeling”.",
+      "title": "De generatie starten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-row-has-appeared",
+      "target": null,
+      "text": "De generatie “Test Run 1” verschijnt in de lijst. Een knipperende oranje stip geeft aan dat ze op verwerking wacht; de stip wordt groen zodra de OLAGSA-engine klaar is.",
+      "title": "Generatie ingediend"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--refresh",
+      "target": "algorithm-hub__btn--refresh",
+      "text": "De berekening duurt even: vernieuw de lijst om het resultaat te zien.",
+      "title": "Vernieuwen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-completed-successfully",
+      "target": null,
+      "text": "De stip wordt groen: de generatie is voltooid. De verdeelsleutels zijn berekend en kunnen worden bekeken door de rij uit te klappen.",
+      "title": "Generatie met succes voltooid"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Klik op de generatie om de sleutels te tonen die ze heeft aangemaakt.",
+      "title": "Generatie openklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "De lijst met berekende sleutels verschijnt onder de generatie. Elke sleutel komt overeen met een geoptimaliseerde OLAGSA-oplossing. Klik op een sleutel om de gedetailleerde verdeling te bekijken.",
+      "title": "Gegenereerde verdeelsleutels"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Klik op een sleutel om de verdeling ervan te tonen.",
+      "title": "Sleutel openklappen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "De verdelingstabel van deze sleutel verschijnt, met de waarden die het algoritme heeft berekend. Met de knop “Sleutel opslaan in /keys” bewaart u deze sleutel in Verdeelsleutelbeheer.",
+      "title": "Sleuteldetail en verdeling per iteratie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "save-the-key",
+      "target": null,
+      "text": "Klik op “Sleutel opslaan in /keys” om deze verdeelsleutel te bewaren in Verdeelsleutelbeheer, waar de sleutel toegankelijk is vanuit het beheer van de gemeenschap.",
+      "title": "De sleutel in de module opslaan"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "45b-save-confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Er verschijnt een bevestigingsvenster. Klik op de bevestigingsknop om deze verdeelsleutel definitief op te slaan in Verdeelsleutelbeheer.",
+      "title": "Opslaan bevestigen"
+    }
+  ],
+  "title": "Verdeelsleutels genereren (OLAGSA)"
+}

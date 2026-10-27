@@ -11,6 +11,7 @@ import {
 import { InvitationService } from '../../../../../../shared/services/invitation.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MeService } from '../../../../../../shared/services/me.service';
+import { CommunityActivationService } from '../../../../../../core/services/community-activation.service';
 import { DebouncedPInputComponent } from '../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 
 @Component({
@@ -23,6 +24,7 @@ import { DebouncedPInputComponent } from '../../../../../../shared/components/de
 export class InvitationGestionnaire {
   private invitationService = inject(InvitationService);
   private meService = inject(MeService);
+  private communityActivation = inject(CommunityActivationService);
   private destroyRef = inject(DestroyRef);
 
   readonly pagination = signal<Pagination>({ page: 1, total: 0, total_pages: 1, limit: 10 });
@@ -110,6 +112,7 @@ export class InvitationGestionnaire {
         next: (response) => {
           if (response) {
             this.loadGestionnaireInvitation();
+            void this.communityActivation.activateJoined(invitation.community.id);
           }
         },
         error: (error) => {

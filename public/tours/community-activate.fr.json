@@ -1,0 +1,44 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/community-activate/fr.html",
+  "id": "community-activate",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "Après la connexion, vous arrivez sur votre page d'accueil. Elle liste les communautés dont vous faites partie, avec votre rôle dans chacune.",
+      "title": "Vos communautés"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Cliquez sur le bouton de la carte de la Test Community pour l'ouvrir. C'est elle qui devient votre communauté active : le menu de gestion et toutes les pages qui suivent s'y rapportent.",
+      "title": "Entrer dans la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "targetClick": "next",
+      "text": "Un nouveau menu « Gestion » apparaît dans la barre latérale, donnant accès aux clés, compteurs et opérations de partage de la communauté.",
+      "title": "Menu de gestion débloqué",
+      "waitFor": "dashboard-tile"
+    }
+  ],
+  "title": "Activer une communauté"
+}

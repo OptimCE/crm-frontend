@@ -1,0 +1,72 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/profile-update/en.html",
+  "id": "profile-update",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "profile__card--account",
+      "target": "profile__card--account",
+      "targetClick": "next",
+      "text": "The profile shows the seeded defaults: Demo User, demo@example.com and the Brussels address as injected by the database fixtures.",
+      "title": "Default profile",
+      "waitFor": "profile__card--addresses"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile__button--update-profile",
+      "target": "profile__button--update-profile",
+      "text": "Click \"Update profile\" to open the dialog containing the editable first name, last name and related fields.",
+      "title": "Open the form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-update-dialog__input--first-name",
+      "target": "user-update-dialog__input--first-name",
+      "text": "Change your first name.",
+      "title": "First name",
+      "waitFor": "user-update-dialog__form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-update-dialog__input--surname",
+      "target": "user-update-dialog__input--surname",
+      "text": "Type the new first name and last name in their respective fields. The save button enables once both fields are populated.",
+      "title": "Enter the new name"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-update-dialog__button--submit",
+      "target": "user-update-dialog__button--submit",
+      "text": "Click \"Save\" to send the updated information to the CRM. The dialog closes once the update is acknowledged.",
+      "title": "Save the changes"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "profile__avatar",
+      "target": "profile__avatar",
+      "targetClick": "next",
+      "text": "Back on the profile page, the new first and last name appear immediately — the change has been persisted server-side.",
+      "title": "Profile updated"
+    }
+  ],
+  "title": "Update your profile"
+}

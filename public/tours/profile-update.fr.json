@@ -1,0 +1,72 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/profile-update/fr.html",
+  "id": "profile-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "profile__card--account",
+      "target": "profile__card--account",
+      "targetClick": "next",
+      "text": "Le profil affiche les données initiales : Demo User, demo@example.com et l'adresse à Bruxelles, telles qu'elles ont été semées par la base de données.",
+      "title": "Profil par défaut",
+      "waitFor": "profile__card--addresses"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile__button--update-profile",
+      "target": "profile__button--update-profile",
+      "text": "Cliquez sur « Modifier le profil » : un dialogue s'ouvre avec les champs prénom, nom et autres informations modifiables.",
+      "title": "Ouvrir le formulaire"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-update-dialog__input--first-name",
+      "target": "user-update-dialog__input--first-name",
+      "text": "Modifiez votre prénom.",
+      "title": "Prénom",
+      "waitFor": "user-update-dialog__form"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-update-dialog__input--surname",
+      "target": "user-update-dialog__input--surname",
+      "text": "Saisissez le nouveau prénom puis le nouveau nom dans les champs correspondants. La validation s'active dès que les deux champs sont remplis.",
+      "title": "Renseigner le nouveau nom"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-update-dialog__button--submit",
+      "target": "user-update-dialog__button--submit",
+      "text": "Cliquez sur « Valider » pour envoyer les nouvelles informations au CRM. Le dialogue se ferme une fois la mise à jour confirmée.",
+      "title": "Enregistrer les modifications"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "profile__avatar",
+      "target": "profile__avatar",
+      "targetClick": "next",
+      "text": "De retour sur la page de profil, le nouveau prénom et le nouveau nom sont visibles immédiatement — la modification est persistée côté serveur.",
+      "title": "Profil mis à jour"
+    }
+  ],
+  "title": "Mettre à jour son profil"
+}

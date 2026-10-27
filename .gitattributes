@@ -15,6 +15,12 @@
 # carry their own copy of the equivalent rule rather than inheriting one.
 * text=auto eol=lf
 
+# The Steppy tour files are copied byte for byte from the e2e project, and
+# tours.manifest.json pins each one by its SHA-384 hash. Git must never convert
+# their line endings, or the overlay rejects them and `steppy tours --check`
+# fails. This line has to come AFTER `* text=auto eol=lf` so it wins.
+public/tours/*.json -text
+
 # The one genuinely binary asset in the tree. `text=auto` would detect it, but
 # saying so costs nothing and removes the guess.
 *.ico binary

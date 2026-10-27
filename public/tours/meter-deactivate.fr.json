@@ -1,0 +1,69 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters/:meterEan"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-deactivate/fr.html",
+  "id": "meter-deactivate",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__btn--deactivate",
+      "target": "meter-view__btn--deactivate",
+      "targetClick": "next",
+      "text": "Ouvrez la fiche du compteur à désactiver. Le bouton « Désactiver » permet de programmer la fin de son activité à une date donnée.",
+      "title": "Fiche du compteur"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__btn--deactivate-2",
+      "target": "meter-view__btn--deactivate",
+      "text": "Ouvrez la fenêtre de désactivation du compteur.",
+      "title": "Désactiver"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__datepicker--date",
+      "target": "meter-deactivation__datepicker--date",
+      "text": "Sélectionnez la date à partir de laquelle le compteur ne sera plus actif.",
+      "title": "Choisir la date de fin"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-deactivation__button--submit",
+      "target": "meter-deactivation__button--submit",
+      "text": "Cliquez sur « Désactiver » : une période inactive est ajoutée au compteur à partir de la date choisie.",
+      "title": "Valider la désactivation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-view__tab--future",
+      "target": "meter-view__tab--future",
+      "text": "Ouvrez l'onglet des données futures : la désactivation planifiée y apparaît.",
+      "title": "Données futures"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-upcoming-deactivation-is-listed-on-the-future-tab",
+      "target": null,
+      "text": "L'onglet « Futur » montre la période inactive à venir : le compteur restera actif jusqu'à la date choisie, puis sera désactivé.",
+      "title": "Désactivation programmée"
+    }
+  ],
+  "title": "Désactiver un compteur"
+}

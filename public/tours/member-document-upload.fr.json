@@ -1,0 +1,62 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members/:memberId"
+  },
+  "guideUrl": "https://guide.optimce.be/member-document-upload/fr.html",
+  "id": "member-document-upload",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-tabs__tab--documents",
+      "target": "member-view-tabs__tab--documents",
+      "text": "Ouvrez l'onglet « Documents » de la fiche du membre. Vous pouvez y consulter les documents existants et en ajouter de nouveaux.",
+      "title": "Onglet Documents"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-view-documents-tab__btn--add",
+      "target": "member-view-documents-tab__btn--add",
+      "text": "Cliquez sur « Ajouter un document » pour ouvrir la fenêtre d'import.",
+      "title": "Ajouter un document",
+      "waitFor": "member-view-documents-tab__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-add-document__label--drag-drop",
+      "target": "member-add-document__label--drag-drop",
+      "targetClick": "next",
+      "text": "Sélectionnez le fichier à téléverser depuis votre ordinateur (ou glissez-le dans la zone prévue).",
+      "title": "Choisir le fichier"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-add-document__btn--submit",
+      "target": "member-add-document__btn--submit",
+      "text": "Cliquez sur « Téléverser » : le document est enregistré et rattaché au membre.",
+      "title": "Téléverser"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "member-view-documents-tab__table",
+      "target": "member-view-documents-tab__table",
+      "targetClick": "next",
+      "text": "Le document « e2e-document.pdf » figure désormais dans la liste des documents du membre.",
+      "title": "Document ajouté"
+    }
+  ],
+  "title": "Ajouter un document à un membre"
+}

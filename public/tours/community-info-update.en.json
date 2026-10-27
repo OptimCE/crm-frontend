@@ -1,0 +1,106 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/info"
+  },
+  "guideUrl": "https://guide.optimce.be/community-info-update/en.html",
+  "id": "community-info-update",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__card--view",
+      "target": "community-info__card--view",
+      "targetClick": "next",
+      "text": "The page shows the community's current information: name, description, website, and registered office address. Click **Edit** to switch to edit mode.",
+      "title": "Community information page"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--edit",
+      "target": "community-info__btn--edit",
+      "text": "Switch the community card to edit mode.",
+      "title": "Edit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--description",
+      "target": "community-info__input--description",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--website",
+      "target": "community-info__input--website",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--street",
+      "target": "community-info__input--street",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--number",
+      "target": "community-info__input--number",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--postcode",
+      "target": "community-info__input--postcode",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--city",
+      "target": "community-info__input--city",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-info__btn--save",
+      "target": "community-info__btn--save",
+      "text": "Save to apply your changes.",
+      "title": "Save"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-info__view--description",
+      "target": "community-info__view--description",
+      "targetClick": "next",
+      "text": "Back in view mode, the page shows the description, website, and address exactly as you entered them — the changes have been successfully saved server-side.",
+      "title": "Information updated"
+    }
+  ],
+  "title": "Update community info"
+}

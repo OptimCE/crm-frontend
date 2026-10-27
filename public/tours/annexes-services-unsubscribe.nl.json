@@ -1,0 +1,61 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services"
+  },
+  "guideUrl": "https://guide.optimce.be/annexes-unsubscribe/nl.html",
+  "id": "annexes-services-unsubscribe",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__card--algorithm",
+      "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
+      "text": "De kaart “Generatie van verdeelsleutels” is zichtbaar met de badge “Geactiveerd”. De knop om de module uit te schakelen (×) staat rechtsboven op de kaart.",
+      "title": "Actieve module"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "annexes-services-list__btn--unsubscribe-algorithm",
+      "target": "annexes-services-list__btn--unsubscribe-algorithm",
+      "text": "Klik op de knop × rechtsboven op de kaart om de module uit te schakelen. Vóór de verwijdering wordt u om een bevestiging gevraagd.",
+      "title": "Module uitschakelen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Er verschijnt een bevestigingsvenster. Klik op “Bevestigen” om de uitschakeling van de module en het verlies van toegang voor de leden te bevestigen.",
+      "title": "Uitschakeling bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deactivation",
+      "target": null,
+      "text": "Bevestig uw keuze in het bevestigingsvenster.",
+      "title": "Bevestigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__empty",
+      "target": "annexes-services-list__empty",
+      "targetClick": "next",
+      "text": "Het raster is weer leeg: de module “Generatie van verdeelsleutels” is uitgeschakeld en is niet langer toegankelijk vanuit de gemeenschap.",
+      "title": "Module uitgeschakeld"
+    }
+  ],
+  "title": "Een annexdienst opzeggen"
+}

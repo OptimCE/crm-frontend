@@ -11,6 +11,10 @@ import {
 import { INFO_TYPE, VALIDATION_TYPE } from './core/dtos/notification';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+import { SteppyToursComponent, TourErrorDetail } from '@steppy/angular';
+import { OnboardingCoordinator } from './features/onboarding/services/onboarding-coordinator.service';
+import { OnboardingRoleBanner } from './features/onboarding/components/onboarding-role-banner/onboarding-role-banner';
+import { OnboardingWelcomeDialog } from './features/onboarding/components/onboarding-welcome-dialog/onboarding-welcome-dialog';
 
 /**
  * How each snackbar type is shown. Anything unrecognised stays an error, as it
@@ -30,7 +34,14 @@ function snackStyle(type: number): { severity: string; icon: string; life: numbe
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Toast],
+  imports: [
+    RouterOutlet,
+    Navbar,
+    Toast,
+    SteppyToursComponent,
+    OnboardingRoleBanner,
+    OnboardingWelcomeDialog,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
   providers: [MessageService],
@@ -43,6 +54,7 @@ export class App implements OnInit, OnDestroy {
   private ctx = inject(UserContextService);
   private eventBus = inject(EventBusService);
   private messageService = inject(MessageService);
+  protected readonly onboarding = inject(OnboardingCoordinator);
 
   private readonly onSnackNotification = (event: CustomEvent<SnackNotificationEvent<string>>) => {
     const { severity, icon, life } = snackStyle(event.detail.type);
@@ -61,10 +73,32 @@ export class App implements OnInit, OnDestroy {
       .subscribe((event) => {
         this.showNavbar = !event.urlAfterRedirects.includes('/auth');
       });
-    if (this.keycloak.authenticated) this.ctx.refreshUserContext();
+    if (this.keycloak.authenticated) {
+      this.ctx.refreshUserContext();
+      // After the refresh: the community it restores is the first activation checkpoint.
+      this.onboarding.start();
+    }
     this.eventBus.on<SnackNotificationEvent<string>>(
       'snack-notification',
       this.onSnackNotification,
+    );
+  }
+
+  /**
+   * The overlay reports a step it could not show (`target-timeout`), a refused
+   * entry route (`entry-params`) or a file it rejected, but never logs it. Say
+   * which tour, step and test-id broke, so a tour that stops can be traced
+   * from the console line alone.
+   */
+  onTourError(detail: TourErrorDetail): void {
+    const where = [
+      detail.tourId && `tour "${detail.tourId}"`,
+      detail.stepId && `step "${detail.stepId}"`,
+      detail.testId && `test-id "${detail.testId}"${detail.kind === 'waitFor' ? ' (waitFor)' : ''}`,
+    ].filter(Boolean);
+    console.warn(
+      `[tours] tour-error ${detail.reason}: ${where.join(', ')}. ${detail.message}`,
+      detail,
     );
   }
 

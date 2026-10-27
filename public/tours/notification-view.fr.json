@@ -1,0 +1,84 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/notification-view/fr.html",
+  "id": "notification-view",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__sidebar",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__sidebar",
+      "targetClick": "next",
+      "text": "Passez la souris sur la barre latérale pour la déplier : la cloche des notifications apparaît.",
+      "title": "Déplier la barre latérale",
+      "waitFor": "profile__avatar"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__trigger",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "notification-bell__trigger",
+      "text": "Cliquez sur la cloche dans la barre latérale pour ouvrir le panneau des notifications. La notification d'invitation à rejoindre la communauté y apparaît, avec le nom de la communauté et le moment de réception.",
+      "title": "Ouvrir les notifications"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Ouvrez le menu de navigation.",
+      "title": "Ouvrir le menu"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__trigger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "notification-bell__trigger",
+      "text": "Touchez la cloche pour ouvrir le panneau des notifications. La notification d'invitation à rejoindre la communauté y apparaît.",
+      "title": "Ouvrir les notifications"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "notification-bell__see-all",
+      "target": "notification-bell__see-all",
+      "text": "Ouvrez la page qui rassemble toutes vos notifications.",
+      "title": "Toutes les notifications",
+      "waitFor": "notification-bell__panel"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-full-notifications-page-lists-the-invitation-notification",
+      "target": null,
+      "text": "La page des notifications regroupe l'ensemble de vos notifications. On y retrouve l'invitation à rejoindre la communauté, avec le nom de la communauté et la date de réception.",
+      "title": "Consulter la page des notifications",
+      "waitFor": "notifications-page"
+    }
+  ],
+  "title": "Consulter ses notifications"
+}

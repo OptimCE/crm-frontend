@@ -1,0 +1,149 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-submit-deadline/fr.html",
+  "id": "admin-doc-submit-deadline",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Ouvrez le dossier dont vous voulez enregistrer le dépôt.",
+      "title": "Ouvrir le dossier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status",
+      "target": "dossier-detail__tag--status",
+      "targetClick": "next",
+      "text": "Tant que le dossier est « En préparation », rien n'est attendu de vous par le régulateur. Les boutons en haut ne proposent que les changements de statut légitimes à ce stade.",
+      "title": "Un dossier en préparation",
+      "waitFor": "dossier-detail__btn--transition-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__btn--transition-2",
+      "target": "dossier-detail__btn--transition-2",
+      "text": "Vous déposez le dossier auprès de l'autorité par vos moyens habituels ; ici, vous enregistrez que ce dépôt a eu lieu.",
+      "title": "Marquer le dossier comme soumis"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-submission-date-to-today",
+      "target": null,
+      "text": "La date de dépôt n'est pas une formalité : c'est elle qui fait courir les délais réglementaires. Choisissez la date réelle du dépôt.",
+      "title": "La date de dépôt",
+      "waitFor": "transition-dialog__date--submission"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "transition-dialog__btn--submit",
+      "target": "transition-dialog__btn--submit",
+      "text": "Validez pour enregistrer le changement de statut.",
+      "title": "Valider le passage"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status-2",
+      "target": "dossier-detail__tag--status",
+      "targetClick": "next",
+      "text": "Le statut change et les actions proposées changent avec lui : un dossier soumis peut être déclaré complet, corrigé, ou devenir caduc.",
+      "title": "Le dossier est soumis"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__tab--deadlines",
+      "target": "dossier-detail__tab--deadlines",
+      "text": "L'onglet « Échéances » montre ce que le dépôt vient de déclencher.",
+      "title": "Voir les échéances"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-deadlines-panel__btn--met-1",
+      "target": "dossier-deadlines-panel__btn--met-1",
+      "targetClick": "next",
+      "text": "Vous n'encodez jamais une échéance à la main : OptimCE la calcule à partir du type de dossier, de la région et de la date que vous venez d'enregistrer.",
+      "title": "Une échéance est apparue",
+      "waitFor": "dossier-deadlines-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "back-arrow__link",
+      "target": "back-arrow__link",
+      "text": "Revenez à la liste des dossiers.",
+      "title": "Retour à la liste"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "administrative-document-hub__tab--deadlines",
+      "target": "administrative-document-hub__tab--deadlines",
+      "text": "L'onglet « Échéances » de la page principale rassemble les échéances de tous les dossiers, pour savoir d'un coup d'œil ce qui arrive à terme.",
+      "title": "Toutes les échéances"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__btn--met-1",
+      "target": "deadline-dashboard__btn--met-1",
+      "targetClick": "next",
+      "text": "Chaque ligne renvoie à son dossier et indique la date limite. Le filtre affiche par défaut les échéances encore ouvertes.",
+      "title": "Le tableau des échéances",
+      "waitFor": "deadline-dashboard__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "deadline-dashboard__btn--met-1-2",
+      "target": "deadline-dashboard__btn--met-1",
+      "text": "Quand l'obligation est remplie, marquez l'échéance comme respectée. Elle quitte la liste des échéances ouvertes sans disparaître de l'historique.",
+      "title": "Clôturer une échéance"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm",
+      "target": null,
+      "text": "Confirmez : l'échéance passe au statut « Respectée » et le tableau des échéances ouvertes se vide.",
+      "title": "Confirmer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__empty--message",
+      "target": "deadline-dashboard__empty--message",
+      "targetClick": "next",
+      "text": "Le tableau ne montre plus d'échéance ouverte. L'historique du dossier, lui, garde la trace de ce qui a été fait et quand.",
+      "title": "Plus rien en attente"
+    }
+  ],
+  "title": "Déposer un dossier et suivre son échéance"
+}

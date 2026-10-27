@@ -1,0 +1,125 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-upload-version/de.html",
+  "id": "admin-doc-upload-version",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Öffnen Sie das Dossier, dem das Schriftstück zugeordnet werden soll.",
+      "title": "Dossier öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "Ein außerhalb von OptimCE erstelltes Dokument — ein unterschriebenes Formular, ein Schreiben des Netzbetreibers — wird zuerst hier erfasst und erhält dann seine Datei.",
+      "title": "Schriftstück erfassen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "Wählen Sie den Typ des Dokuments, das Sie der Akte hinzufügen.",
+      "title": "Dokumenttyp"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Wählen Sie das passende Formular und geben Sie ihm eine Bezeichnung, die für Ihre Kollegen aussagekräftig ist.",
+      "title": "Schriftstück benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Bestätigen Sie, um das Dokument in der Akte anzulegen.",
+      "title": "Das Dokument erstellen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--upload-1",
+      "target": "dossier-documents-panel__btn--upload-1",
+      "text": "Über das Upload-Symbol hängen Sie Ihre eigene Datei an, statt sie von OptimCE erzeugen zu lassen.",
+      "title": "Version hochladen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "upload-version-dialog__dropzone",
+      "target": "upload-version-dialog__dropzone",
+      "targetClick": "next",
+      "text": "Ziehen Sie die Datei in den dafür vorgesehenen Bereich oder klicken Sie, um sie auf Ihrem Computer auszuwählen.",
+      "title": "Datei auswählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "upload-version-dialog__btn--submit",
+      "target": "upload-version-dialog__btn--submit",
+      "text": "Jeder Upload erzeugt eine weitere dauerhafte Version. Eine bereits gespeicherte Datei wird nie ersetzt: Sie bleibt erhalten, und die neue wird zur aktuellen Version.",
+      "title": "Speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
+      "text": "Das Dokument verfügt jetzt über eine herunterladbare Version, als wäre es erzeugt worden.",
+      "title": "Das Schriftstück ist angehängt"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "Öffnen Sie die Versionen, um zu prüfen, ob die Datei mit ihrem ursprünglichen Namen und ihrer Größe gespeichert wurde.",
+      "title": "Verlauf prüfen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-uploaded-file-is-version-1",
+      "target": null,
+      "text": "Die hochgeladene Datei erscheint als Version 1. Anders als eine erzeugte Version speichert sie keinen Datenschnappschuss: Eine beliebige Datei sagt nichts darüber aus, wen sie betrifft.",
+      "title": "Eine Version mehr",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Schließen Sie das Fenster, wenn Sie fertig sind.",
+      "title": "Schließen"
+    }
+  ],
+  "title": "Vorhandenes Dokument anhängen"
+}

@@ -1,0 +1,34 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-my-filings/nl.html",
+  "id": "admin-doc-my-filings",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__doc-type",
+      "target": "my-filings__doc-type",
+      "targetClick": "next",
+      "text": "Als lid ziet u de dossiers van de gemeenschap niet: u ziet alleen de informatie over u die aan de regulator is bezorgd, en in welk document.",
+      "title": "Wat er over mij is ingediend"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-filings__row",
+      "target": "my-filings__row",
+      "targetClick": "next",
+      "text": "Elk blok toont de waarden zoals ze op het moment van indiening werden vastgelegd. Een latere correctie in het CRM herschrijft niet wat al is ingediend — de getoonde datum is bepalend.",
+      "title": "De ingediende waarden"
+    }
+  ],
+  "title": "Zien wat er over u is ingediend"
+}

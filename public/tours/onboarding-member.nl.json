@@ -1,0 +1,156 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-member/nl.html",
+  "id": "onboarding-member",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "U bent nu lid van een energiegemeenschap: ze verschijnt op uw startpagina, met uw rol. Maakt u deel uit van meerdere gemeenschappen, dan heeft elk haar eigen kaart.",
+      "title": "Uw gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Klik op **“Mijn gemeenschap openen”** om naar haar dashboard te gaan.",
+      "title": "Uw gemeenschap openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-tile",
+      "target": "my-energy-tile",
+      "targetClick": "next",
+      "text": "**“Mijn energie hier”** toont wat u hebt verbruikt en wat u via delen hebt ontvangen in deze gemeenschap. De vermelde meter leidt naar zijn details.",
+      "title": "Uw energie"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-participation-tile",
+      "target": "my-participation-tile",
+      "targetClick": "next",
+      "text": "**“Mijn deelname”** toont de deeloperaties waaraan uw meters deelnemen, en uw plaats in hun verdeelsleutel.",
+      "title": "Uw deelname"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-member-record-tile",
+      "target": "my-member-record-tile",
+      "targetClick": "next",
+      "text": "**“Mijn ledenfiche”** geeft aan of uw fiche actief is. Open ze om uw gegevens na te kijken: de managers houden ze bij.",
+      "title": "Uw ledenfiche"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "about-community-tile",
+      "target": "about-community-tile",
+      "targetClick": "next",
+      "text": "**“Over deze gemeenschap”** vermeldt haar aantal leden, haar regulator en haar website. De andere tegels — documenten, facturen, nieuws — hangen af van de modules die de gemeenschap gebruikt.",
+      "title": "Over de gemeenschap"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--community",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "Door lid te worden is de sectie **“Gemeenschap”** aan de zijbalk toegevoegd: het dashboard, de gemeenschapsinfo, haar annexdiensten en, afhankelijk van haar modules, nieuws, facturatie of administratieve documenten.",
+      "title": "De sectie “Gemeenschap”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--community-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--community",
+      "targetClick": "next",
+      "text": "Door lid te worden is de sectie **“Gemeenschap”** aan het menu toegevoegd: het dashboard, de gemeenschapsinfo, haar annexdiensten en, afhankelijk van haar modules, nieuws, facturatie of administratieve documenten.",
+      "title": "De sectie “Gemeenschap”"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--member",
+      "target": "navbar__menu--member",
+      "targetClick": "next",
+      "text": "Net daaronder leidt de sectie voor leden naar **“Managers van de gemeenschap”**: de personen die u contacteert met een vraag over uw fiche, uw meters of een factuur.",
+      "title": "Wie de gemeenschap beheert"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_managers",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Klik op **“Managers van de gemeenschap”**.",
+      "title": "De managers openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_managers-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Tik op **“Managers van de gemeenschap”**.",
+      "title": "De managers openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__table",
+      "target": "managers-community-list__table",
+      "targetClick": "next",
+      "text": "Elke manager en beheerder staat hier met zijn e-mailadres en rol. Wilt u meer weten, dan hebben de startpagina en het ledendashboard elk hun eigen uitgebreide rondleiding in de **“Gebruikershandleiding”**.",
+      "title": "De managers"
+    }
+  ],
+  "title": "U bent lid"
+}

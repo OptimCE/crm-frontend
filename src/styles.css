@@ -384,3 +384,66 @@
 .skip-link:focus {
   left: 0;
 }
+
+/* ------------------------------------------------------------------
+   In-app tours (Steppy overlay, <steppy-tour-host>)
+   The overlay is Shadow DOM: only its --steppy-tour-* properties and its
+   ::part()s reach in, and only from a global stylesheet. Reference: the
+   steppy-template skill, "In-app tour overlay". It looks like our dialogs:
+   white card, palette border and shadow, green actions.
+   Keep text at 4.5:1 or more on the white bubble. That is why the button is
+   primary-600 (5.1:1 under white text; primary-500 is 3.3:1) and the muted
+   text is surface-600 (7.4:1; the app's #6e7e70 is 4.3:1). The focus ring is
+   primary-500, 3.3:1, above the 3:1 an outline needs. The font is not set:
+   the bubble inherits the app's.
+   ------------------------------------------------------------------ */
+/* The tour overlay's dimming, shared with the onboarding welcome dialog's
+   backdrop so the dialog hands over to the tour without a change of shade. */
+:root {
+  --app-tour-scrim: rgb(14 18 14 / 0.45);
+}
+steppy-tour-host {
+  --steppy-tour-bubble-bg: var(--p-surface-0);
+  --steppy-tour-bubble-fg: var(--p-surface-700);
+  --steppy-tour-muted: var(--p-surface-600);
+  --steppy-tour-accent: var(--p-primary-600);
+  --steppy-tour-accent-fg: var(--p-surface-0);
+  --steppy-tour-focus: var(--p-primary-500);
+  --steppy-tour-link: var(--p-primary-600);
+  /* Bold step text (instructions, quoted labels): brand green, like the guides. */
+  --steppy-tour-strong-weight: 700;
+  --steppy-tour-strong-color: var(--p-primary-600);
+  --steppy-tour-scrim: var(--app-tour-scrim);
+  --steppy-tour-border: 1px solid var(--p-surface-200);
+  --steppy-tour-radius: 12px;
+  --steppy-tour-shadow: var(--p-overlay-modal-shadow);
+  --steppy-tour-width: 340px;
+  --steppy-tour-padding: 14px 16px;
+  --steppy-tour-line-height: 1.5;
+  --steppy-tour-title-size: 1.0625em;
+  --steppy-tour-title-weight: 600;
+  --steppy-tour-button-radius: var(--p-button-border-radius);
+  --steppy-tour-button-padding: 6px 12px;
+  --steppy-tour-button-weight: 500;
+  --steppy-tour-ring-width: 3px;
+  --steppy-tour-spotlight-radius: 8px;
+}
+steppy-tour-host::part(title) {
+  color: var(--p-primary-800);
+}
+steppy-tour-host::part(primary):hover {
+  background: var(--p-primary-700);
+}
+/* The outlined buttons. "Skip this step" is styled as secondary, but in
+   Steppy 0.6.0 its parts are only `button skip`, so it is named here too. */
+steppy-tour-host::part(secondary),
+steppy-tour-host::part(skip) {
+  border-color: var(--p-surface-300);
+}
+steppy-tour-host::part(secondary):hover,
+steppy-tour-host::part(skip):hover {
+  background: var(--p-surface-100);
+}
+steppy-tour-host::part(close):hover {
+  color: var(--p-primary-700);
+}

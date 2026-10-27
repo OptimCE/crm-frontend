@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
@@ -9,6 +9,11 @@ import Keycloak from 'keycloak-js';
 import { Navbar } from './navbar';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
 import { NotificationStore } from '../../features/notifications/services/notification.store';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SteppyTours, TourPosition } from '@steppy/angular';
+import { HelpDialog } from '../../features/guided_tours/components/help-dialog/help-dialog';
+import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../core/dtos/notification';
 
 describe('Navbar', () => {
   let component: Navbar;
@@ -25,6 +30,14 @@ describe('Navbar', () => {
   let keycloakSpy: { logout: ReturnType<typeof vi.fn> };
   let titleSpy: { setTitle: ReturnType<typeof vi.fn> };
   let routerSpy: { events: Subject<NavigationEnd>; url: string };
+  let helpClose$: Subject<unknown>;
+  let dialogServiceSpy: { open: ReturnType<typeof vi.fn> };
+  let toursSpy: {
+    start: ReturnType<typeof vi.fn>;
+    active: WritableSignal<boolean>;
+    current: WritableSignal<TourPosition | null>;
+  };
+  let snackbarSpy: { openSnackBar: ReturnType<typeof vi.fn> };
 
   const mockMatchMedia = (matches: boolean) => {
     const listeners: ((e: MediaQueryListEvent) => void)[] = [];
@@ -58,6 +71,16 @@ describe('Navbar', () => {
     keycloakSpy = { logout: vi.fn().mockResolvedValue(undefined) };
     titleSpy = { setTitle: vi.fn() };
     routerSpy = { events: routerEvents$, url: '/' };
+    helpClose$ = new Subject<unknown>();
+    dialogServiceSpy = {
+      open: vi.fn().mockReturnValue({ onClose: helpClose$.asObservable(), destroy: vi.fn() }),
+    };
+    toursSpy = {
+      start: vi.fn().mockResolvedValue(true),
+      active: signal(false),
+      current: signal<TourPosition | null>(null),
+    };
+    snackbarSpy = { openSnackBar: vi.fn() };
 
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key: string) => {
       if (key === 'sidebar-pinned') return localStoragePinValue;
@@ -73,6 +96,9 @@ describe('Navbar', () => {
         { provide: Title, useValue: titleSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: {} },
+        { provide: DialogService, useValue: dialogServiceSpy },
+        { provide: SteppyTours, useValue: toursSpy },
+        { provide: SnackbarNotification, useValue: snackbarSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
@@ -372,6 +398,216 @@ describe('Navbar', () => {
     });
   });
 
+  // The overlay takes the pointer events outside the highlighted element, so the
+  // rail gets a mouseleave between steps and on the way to the popover's buttons.
+  // While a tour runs, the rail follows the step shown instead of the pointer.
+  describe('During a guided tour', () => {
+    /** A link of the rail, always rendered. */
+    const RAIL_STEP = 'sidebar-element__link--home';
+    const PAGE_STEP = 'page__element';
+    let pageElement: HTMLElement;
+
+    const setTour = (active: boolean) => {
+      toursSpy.active.set(active);
+      if (!active) toursSpy.current.set(null);
+      TestBed.tick();
+    };
+    /** The step's id is its own; only `testId` says where it points (null: a centred step). */
+    const showStep = (testId: string | null, stepId = `step-${testId}`) => {
+      toursSpy.current.set({ tourId: 'tour', stepId, testId, index: 0, total: 2 });
+      TestBed.tick();
+    };
+
+    beforeEach(() => {
+      pageElement = document.createElement('div');
+      pageElement.dataset['testid'] = PAGE_STEP;
+      document.body.appendChild(pageElement);
+    });
+
+    afterEach(() => {
+      pageElement.remove();
+      vi.useRealTimers();
+    });
+
+    describe('on desktop', () => {
+      beforeEach(async () => {
+        vi.useFakeTimers();
+        mockMatchMedia(false);
+        await setupTestBed();
+        fixture.detectChanges();
+      });
+
+      it('should expand the sidebar while the step shown points inside it', () => {
+        setTour(true);
+        expect(component.sidebarOpen()).toBe(false);
+
+        showStep(RAIL_STEP);
+        expect(component.sidebarOpen()).toBe(true);
+
+        showStep(PAGE_STEP);
+        expect(component.sidebarOpen()).toBe(false);
+
+        showStep(RAIL_STEP, 'sidebar-element__link--home-2');
+        expect(component.sidebarOpen()).toBe(true);
+
+        showStep(null);
+        expect(component.sidebarOpen()).toBe(false);
+      });
+
+      it('should collapse a hover-expanded sidebar when a step on the page shows', () => {
+        component.onMouseEnter();
+        vi.advanceTimersByTime(120);
+        expect(component.sidebarOpen()).toBe(true);
+
+        setTour(true);
+        showStep(PAGE_STEP);
+
+        expect(component.sidebarOpen()).toBe(false);
+      });
+
+      it('should not expand on hover while a step on the page shows', () => {
+        setTour(true);
+        showStep(PAGE_STEP);
+
+        component.onMouseEnter();
+        vi.advanceTimersByTime(200);
+
+        expect(component.sidebarOpen()).toBe(false);
+      });
+
+      it('should not collapse nor close the submenu on mouse leave while a rail step shows', () => {
+        setTour(true);
+        showStep(RAIL_STEP);
+        component.onMouseEnter();
+        component.toggleSublist('members');
+
+        component.onMouseLeave();
+        vi.advanceTimersByTime(200);
+
+        expect(component.sidebarOpen()).toBe(true);
+        expect(component.activeSublist()).toBe('members');
+      });
+
+      it('should keep the submenu for a later rail step when a page step collapses the rail', () => {
+        setTour(true);
+        showStep(RAIL_STEP);
+        component.toggleSublist('members');
+
+        showStep(PAGE_STEP);
+        component.onMouseLeave();
+        expect(component.sidebarOpen()).toBe(false);
+
+        showStep(RAIL_STEP);
+        expect(component.sidebarOpen()).toBe(true);
+        expect(component.activeSublist()).toBe('members');
+      });
+
+      it('should not collapse when the notification popover closes while a rail step shows', () => {
+        const store = TestBed.inject(NotificationStore);
+        setTour(true);
+        showStep(RAIL_STEP);
+        store.popoverOpen.set(true);
+        TestBed.tick();
+        component.onMouseLeave();
+
+        store.popoverOpen.set(false);
+        TestBed.tick();
+
+        expect(component.sidebarOpen()).toBe(true);
+      });
+
+      it('should stay open on a step inside the open notification popover, and collapse once it closes', () => {
+        const store = TestBed.inject(NotificationStore);
+        setTour(true);
+        showStep(RAIL_STEP);
+        store.popoverOpen.set(true);
+        TestBed.tick();
+
+        showStep(PAGE_STEP);
+        expect(component.sidebarOpen()).toBe(true);
+
+        store.popoverOpen.set(false);
+        TestBed.tick();
+        expect(component.sidebarOpen()).toBe(false);
+      });
+
+      it('should collapse when the tour ends with the pointer outside, and follow the hover rules again', () => {
+        setTour(true);
+        showStep(RAIL_STEP);
+        component.toggleSublist('members');
+        component.onMouseLeave();
+
+        setTour(false);
+
+        expect(component.sidebarOpen()).toBe(false);
+        expect(component.activeSublist()).toBeNull();
+
+        component.onMouseEnter();
+        vi.advanceTimersByTime(120);
+        expect(component.sidebarOpen()).toBe(true);
+        component.onMouseLeave();
+        expect(component.sidebarOpen()).toBe(false);
+      });
+
+      it('should stay open when the tour ends with the pointer over the sidebar', () => {
+        setTour(true);
+        showStep(RAIL_STEP);
+        component.onMouseLeave();
+        component.onMouseEnter();
+
+        setTour(false);
+
+        expect(component.sidebarOpen()).toBe(true);
+      });
+
+      it('should keep a pinned sidebar open and pinned through page steps and the end', () => {
+        component.togglePin();
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        vi.mocked(localStorage.setItem).mockClear();
+        setTour(true);
+        showStep(PAGE_STEP);
+        component.onMouseLeave();
+        expect(component.sidebarOpen()).toBe(true);
+
+        setTour(false);
+
+        expect(component.sidebarOpen()).toBe(true);
+        expect(component.pinned()).toBe(true);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(localStorage.setItem).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('on mobile', () => {
+      beforeEach(async () => {
+        mockMatchMedia(true);
+        await setupTestBed();
+        fixture.detectChanges();
+      });
+
+      it('should leave the drawer closed when a step points inside it', () => {
+        setTour(true);
+        showStep(RAIL_STEP);
+
+        expect(component.sidebarOpen()).toBe(false);
+        expect(component.visibleSideBar()).toBe(false);
+      });
+    });
+
+    it('should open the sidebar when the window widens to desktop on a rail step', async () => {
+      const { listeners } = mockMatchMedia(true);
+      await setupTestBed();
+      fixture.detectChanges();
+      setTour(true);
+      showStep(RAIL_STEP);
+
+      listeners.forEach((cb) => cb({ matches: false } as MediaQueryListEvent));
+
+      expect(component.mobile()).toBe(false);
+      expect(component.sidebarOpen()).toBe(true);
+    });
+  });
+
   describe('Pin Toggle', () => {
     beforeEach(async () => {
       mockMatchMedia(false);
@@ -523,6 +759,101 @@ describe('Navbar', () => {
       const label = queryGuideLink()?.querySelector('span');
       expect(label).toBeTruthy();
       expect(label?.textContent?.trim()).toBe('NAVBAR.USER_GUIDE');
+    });
+  });
+
+  describe('Help dialog', () => {
+    const click = (init: MouseEventInit = {}) =>
+      new MouseEvent('click', { button: 0, cancelable: true, bubbles: true, ...init });
+
+    beforeEach(async () => {
+      mockMatchMedia(false);
+      await setupTestBed();
+      fixture.detectChanges();
+    });
+
+    it('should open the Help dialog on a plain click of the user guide link, instead of the guide', () => {
+      const link = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>(
+        '[data-testid="navbar__btn--user-guide"]',
+      );
+      const event = click();
+      link?.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(dialogServiceSpy.open).toHaveBeenCalledWith(
+        HelpDialog,
+        expect.objectContaining({ modal: true }),
+      );
+    });
+
+    it('should let a ctrl-, meta-, shift- or middle-click open the guide itself', () => {
+      for (const init of [
+        { ctrlKey: true },
+        { metaKey: true },
+        { shiftKey: true },
+        { button: 1 },
+      ]) {
+        const event = click(init);
+        component.openHelp(event);
+        expect(event.defaultPrevented).toBe(false);
+      }
+      expect(dialogServiceSpy.open).not.toHaveBeenCalled();
+    });
+
+    it('should not open a second dialog while one is open', () => {
+      component.openHelp(click());
+      component.openHelp(click());
+
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(1);
+    });
+
+    it('should start the chosen tour, with its params, once the dialog has closed', async () => {
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'meter-deactivate', params: { meterEan: '541448820000000001' } });
+      await Promise.resolve();
+
+      expect(toursSpy.start).toHaveBeenCalledWith('meter-deactivate', {
+        params: { meterEan: '541448820000000001' },
+      });
+      expect(snackbarSpy.openSnackBar).not.toHaveBeenCalled();
+    });
+
+    it('should start a tour without params as is', async () => {
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'key-update' });
+      await Promise.resolve();
+
+      expect(toursSpy.start).toHaveBeenCalledWith('key-update', undefined);
+    });
+
+    it('should close the mobile drawer before the tour starts', async () => {
+      component['mobile'].set(true);
+      component.openSideBar();
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'home-overview' });
+      await Promise.resolve();
+
+      expect(component['visibleSideBar']()).toBe(false);
+      expect(toursSpy.start).toHaveBeenCalled();
+    });
+
+    it('should say so when the tour cannot start', async () => {
+      toursSpy.start.mockResolvedValue(false);
+      component.openHelp(click());
+      helpClose$.next({ tourId: 'key-update' });
+      await vi.waitFor(() => expect(snackbarSpy.openSnackBar).toHaveBeenCalled());
+
+      expect(snackbarSpy.openSnackBar).toHaveBeenCalledWith('HELP.TOURS.START_FAILED', ERROR_TYPE);
+    });
+
+    it('should start nothing when the dialog is dismissed', async () => {
+      component.openHelp(click());
+      helpClose$.next(undefined);
+      await Promise.resolve();
+
+      expect(toursSpy.start).not.toHaveBeenCalled();
+      component.openHelp(click());
+      expect(dialogServiceSpy.open).toHaveBeenCalledTimes(2);
     });
   });
 

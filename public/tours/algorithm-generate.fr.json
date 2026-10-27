@@ -1,0 +1,181 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services/algorithm"
+  },
+  "guideUrl": "https://guide.optimce.be/algorithm-generate/fr.html",
+  "id": "algorithm-generate",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__panel--start",
+      "target": "algorithm-hub__panel--start",
+      "targetClick": "next",
+      "text": "La page de génération de clés de répartition s'affiche avec le formulaire de configuration. Sélectionnez l'algorithme, renseignez les paramètres et importez votre fichier de données pour lancer une nouvelle génération.",
+      "title": "Page de génération de clés",
+      "waitFor": "algorithm-hub__container"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "algorithm-hub__select--algorithm",
+      "target": "algorithm-hub__select--algorithm",
+      "text": "Cliquez sur le menu déroulant « Algorithme » et sélectionnez « OLAGSA ». Le formulaire de paramètres propres à cet algorithme génétique s'affiche alors.",
+      "title": "Sélectionner l'algorithme OLAGSA"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--generation-name",
+      "target": "algorithm-hub__input--generation-name",
+      "text": "Donnez un nom à cette génération pour la retrouver dans l'historique.",
+      "title": "Nommer la génération",
+      "waitFor": "algo-form__grid--main"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algorithm-hub__input--injection-name",
+      "target": "algorithm-hub__input--injection-name",
+      "text": "Saisissez le nom de la colonne de votre fichier de données qui contient l'énergie produite.",
+      "title": "Nom de l'injection"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "algo-form__input--iterations",
+      "target": "algo-form__input--iterations",
+      "text": "Saisissez « 3 » dans le champ « Itérations ». Ce paramètre définit le nombre de solutions indépendantes calculées par l'algorithme génétique OLAGSA.",
+      "title": "Définir le nombre d'itérations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algo-form__btn--toggle-advanced",
+      "target": "algo-form__btn--toggle-advanced",
+      "text": "Cliquez sur « Paramètres avancés » pour afficher les hyperparamètres de l'algorithme génétique : taille de population, taux de croisement, taux de mutation, etc.",
+      "title": "Ouvrir les paramètres avancés"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algo-form__grid--advanced",
+      "target": "algo-form__grid--advanced",
+      "targetClick": "next",
+      "text": "Les paramètres avancés d'OLAGSA s'affichent : générations, taille de population, taux de croisement inter-espèces et intra-espèces, taux de mutation, nombre d'espèces attendues et nombre maximum de générations sans amélioration. Les valeurs par défaut conviennent pour la plupart des usages.",
+      "title": "Hyperparamètres de l'algorithme génétique"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "algorithm-hub__dropzone",
+      "target": "algorithm-hub__dropzone",
+      "targetClick": "next",
+      "text": "Glissez votre fichier CSV dans la zone d'import ou cliquez dessus pour sélectionner le fichier de données à utiliser pour la génération.",
+      "title": "Importer le fichier de données"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--submit",
+      "target": "algorithm-hub__btn--submit",
+      "text": "Cliquez sur « Lancer la génération » pour soumettre la tâche au moteur OLAGSA. La génération apparaît immédiatement dans la liste avec le statut « En attente ».",
+      "title": "Lancer la génération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-row-has-appeared",
+      "target": null,
+      "text": "La génération « Test Run 1 » apparaît dans la liste. Un point orange clignotant indique qu'elle est en attente de traitement ; il devient vert dès que le moteur OLAGSA a terminé.",
+      "title": "Génération soumise"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "algorithm-hub__btn--refresh",
+      "target": "algorithm-hub__btn--refresh",
+      "text": "Le calcul prend quelques instants : actualisez la liste pour voir son résultat.",
+      "title": "Actualiser"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generation-completed-successfully",
+      "target": null,
+      "text": "Le point passe au vert : la génération est terminée. Les clés de répartition ont été calculées et sont prêtes à être consultées en déroulant la ligne.",
+      "title": "Génération terminée avec succès"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-generation-row",
+      "target": null,
+      "text": "Cliquez sur la génération pour afficher les clés qu'elle a produites.",
+      "title": "Déplier la génération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generated-keys-are-visible",
+      "target": null,
+      "text": "La liste des clés calculées apparaît sous la génération. Chaque clé correspond à une solution OLAGSA optimisée. Cliquez sur une clé pour afficher sa répartition détaillée.",
+      "title": "Clés de répartition générées"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "expand-the-first-key",
+      "target": null,
+      "text": "Cliquez sur une clé pour afficher sa répartition.",
+      "title": "Déplier la clé"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-detail-is-visible",
+      "target": null,
+      "text": "Le tableau de répartition s'affiche pour cette clé, détaillant les valeurs calculées par l'algorithme. Le bouton « Enregistrer » permet de sauvegarder cette clé dans le module Clés.",
+      "title": "Détail de la clé et répartition par itération"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "save-the-key",
+      "target": null,
+      "text": "Cliquez sur « Enregistrer » pour sauvegarder cette clé de répartition dans le module Clés, où elle sera accessible depuis la gestion de la communauté.",
+      "title": "Enregistrer la clé dans le module"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "45b-save-confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Une fenêtre de confirmation s'affiche. Cliquez sur le bouton de validation pour enregistrer définitivement cette clé de répartition dans le module Clés.",
+      "title": "Confirmer l'enregistrement"
+    }
+  ],
+  "title": "Générer des clés (OLAGSA)"
+}

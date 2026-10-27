@@ -1,0 +1,167 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-document-generate/de.html",
+  "id": "admin-doc-document-generate",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Klicken Sie auf die Zeile des Dossiers, um seine Detailseite zu öffnen. Dokumente werden immer innerhalb eines Dossiers hinzugefügt.",
+      "title": "Dossier öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__empty--message",
+      "target": "dossier-documents-panel__empty--message",
+      "targetClick": "next",
+      "text": "Die Registerkarte „Dokumente“ listet die Unterlagen des Dossiers auf. Ein frisch angelegtes Dossier enthält noch keine.",
+      "title": "Ein leeres Dossier",
+      "waitFor": "dossier-documents-panel__btn--add"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "Klicken Sie auf „Dokument hinzufügen“, um das regulatorische Formular auszuwählen, das Sie vorbereiten möchten.",
+      "title": "Dokument hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "Die Liste enthält die Formulare, die die Regulierungsbehörde für Ihre Region veröffentlicht hat. Jedes Formular weiß, welche Daten aus dem CRM es übernehmen muss.",
+      "title": "Formular auswählen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Geben Sie dem Dokument einen Titel, an dem es in der Akte erkennbar ist.",
+      "title": "Das Dokument benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Bestätigen Sie: Das Dokument wird dem Dossier hinzugefügt, noch ganz ohne Inhalt.",
+      "title": "Dokument anlegen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--generate-1",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "targetClick": "next",
+      "text": "Das Dokument wird mit dem Status „Entwurf“ angelegt. Es hat noch keinen Inhalt: Über die Symbole können Sie es aus dem CRM erzeugen oder Ihre eigene Datei hochladen.",
+      "title": "Ein Entwurf wartet auf Sie",
+      "waitFor": "dossier-documents-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--generate-1-2",
+      "target": "dossier-documents-panel__btn--generate-1",
+      "text": "Klicken Sie auf das Symbol zum Erzeugen. OptimCE trägt die Daten der Gemeinschaft, der Teilungsoperation und ihrer Mitglieder zusammen, um das Formular auszufüllen.",
+      "title": "Dokument erzeugen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "generate-dialog__field--community_name",
+      "target": "generate-dialog__field--community_name",
+      "targetClick": "next",
+      "text": "Nichts wird ohne Ihre Prüfung eingereicht. Die Felder sind aus dem CRM vorausgefüllt und bleiben bearbeitbar: Was Sie hier bestätigen, wird genau so im Dokument eingefroren.",
+      "title": "Daten prüfen",
+      "waitFor": "generate-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "generate-dialog__field--community_name-2",
+      "target": "generate-dialog__field--community_name",
+      "text": "Eine hier vorgenommene Korrektur gilt nur für dieses Dokument. Ist eine Angabe überall falsch, korrigieren Sie sie besser im CRM und laden Sie das Formular anschließend neu.",
+      "title": "Einen Wert korrigieren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "generate-dialog__btn--submit",
+      "target": "generate-dialog__btn--submit",
+      "text": "Die Erzeugung läuft im Hintergrund. Sie können weiterarbeiten: Die Karte des Dokuments zeigt „Wird erzeugt“ an und aktualisiert sich von selbst.",
+      "title": "Erzeugung starten"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
+      "text": "Sobald die Erzeugung abgeschlossen ist, verfügt das Dokument über eine herunterladbare Version. Nichts wird überschrieben: Jede Erzeugung fügt eine neue Version hinzu.",
+      "title": "Das Dokument ist fertig"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "Das Symbol „Versionen ansehen“ öffnet den vollständigen Verlauf des Dokuments.",
+      "title": "Versionen ansehen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "targetClick": "next",
+      "text": "Jede Version gibt an, wann und von wem sie erstellt wurde. Erzeugte Versionen bewahren zusätzlich die genauen Daten, die verwendet wurden.",
+      "title": "Ein Nachweis dessen, was erzeugt wurde",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--snapshot-1-2",
+      "target": "document-detail-dialog__btn--snapshot-1",
+      "text": "Öffnen Sie die Momentaufnahme, um die Daten so nachzulesen, wie sie zum Zeitpunkt der Einreichung waren. Eine spätere Änderung im CRM schreibt nie um, was übermittelt wurde.",
+      "title": "Eingefrorene Daten anzeigen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Schließen Sie das Fenster, wenn Sie fertig sind.",
+      "title": "Schließen"
+    }
+  ],
+  "title": "Dokument aus dem CRM erzeugen"
+}

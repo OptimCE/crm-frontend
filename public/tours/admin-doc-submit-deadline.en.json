@@ -1,0 +1,149 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-submit-deadline/en.html",
+  "id": "admin-doc-submit-deadline",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Open the dossier whose filing you want to record.",
+      "title": "Open the dossier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status",
+      "target": "dossier-detail__tag--status",
+      "targetClick": "next",
+      "text": "While the dossier is \"In preparation\", the regulator expects nothing from you. The buttons at the top only offer the status changes that make sense at this stage.",
+      "title": "A dossier in preparation",
+      "waitFor": "dossier-detail__btn--transition-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__btn--transition-2",
+      "target": "dossier-detail__btn--transition-2",
+      "text": "You file the dossier with the authority through your usual channel; here you record that the filing happened.",
+      "title": "Mark the dossier as submitted"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-submission-date-to-today",
+      "target": null,
+      "text": "The filing date is not a formality: it is what starts the regulatory clocks. Pick the date the dossier was really filed.",
+      "title": "The filing date",
+      "waitFor": "transition-dialog__date--submission"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "transition-dialog__btn--submit",
+      "target": "transition-dialog__btn--submit",
+      "text": "Confirm to record the status change.",
+      "title": "Confirm the transition"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-detail__tag--status-2",
+      "target": "dossier-detail__tag--status",
+      "targetClick": "next",
+      "text": "The status changes and the available actions change with it: a submitted dossier can be declared complete, corrected, or lapse.",
+      "title": "The dossier is submitted"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-detail__tab--deadlines",
+      "target": "dossier-detail__tab--deadlines",
+      "text": "The \"Deadlines\" tab shows what the filing has just triggered.",
+      "title": "See the deadlines"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-deadlines-panel__btn--met-1",
+      "target": "dossier-deadlines-panel__btn--met-1",
+      "targetClick": "next",
+      "text": "You never enter a deadline by hand: OptimCE derives it from the dossier type, the region and the date you have just recorded.",
+      "title": "A deadline has appeared",
+      "waitFor": "dossier-deadlines-panel__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "back-arrow__link",
+      "target": "back-arrow__link",
+      "text": "Go back to the list of dossiers.",
+      "title": "Back to the list"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "administrative-document-hub__tab--deadlines",
+      "target": "administrative-document-hub__tab--deadlines",
+      "text": "The \"Deadlines\" tab of the main page gathers the deadlines of every dossier, so you can see at a glance what is coming due.",
+      "title": "Every deadline"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__btn--met-1",
+      "target": "deadline-dashboard__btn--met-1",
+      "targetClick": "next",
+      "text": "Every row links back to its dossier and shows the due date. The filter shows the still-open deadlines by default.",
+      "title": "The deadline board",
+      "waitFor": "deadline-dashboard__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "deadline-dashboard__btn--met-1-2",
+      "target": "deadline-dashboard__btn--met-1",
+      "text": "Once the obligation is fulfilled, mark the deadline as met. It leaves the open list without disappearing from the record.",
+      "title": "Close a deadline"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm",
+      "target": null,
+      "text": "Confirm: the deadline moves to \"Met\" and the open-deadline board empties.",
+      "title": "Confirm"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "deadline-dashboard__empty--message",
+      "target": "deadline-dashboard__empty--message",
+      "targetClick": "next",
+      "text": "The board shows no open deadline any more. The dossier history still keeps a record of what was done and when.",
+      "title": "Nothing pending"
+    }
+  ],
+  "title": "File a dossier and follow its deadline"
+}

@@ -1,0 +1,217 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/users"
+  },
+  "guideUrl": "https://guide.optimce.be/community-users-manage/de.html",
+  "id": "community-users-manage",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__row--desktop--0",
+      "targetClick": "next",
+      "text": "Diese Seite listet alle Benutzer mit Zugriff auf die Gemeinschaft und ihre Rolle auf: Administrator, Manager oder Mitglied. Sie können jemanden einladen, eine Rolle ändern oder einen Zugriff entziehen.",
+      "title": "Die Benutzer der Gemeinschaft",
+      "waitFor": "users-community-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__card--mobile--0",
+      "targetClick": "next",
+      "text": "Diese Seite listet die mit der Gemeinschaft verknüpften Konten und ihre Rolle auf. Hier laden Sie einen Manager ein, ändern eine Rolle oder entziehen einen Zugriff.",
+      "title": "Die Benutzer der Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--invite-manager",
+      "target": "users-community-list__btn--invite-manager",
+      "text": "Klicken Sie auf „Einen Manager einladen“, um einer Person, die bei der Verwaltung der Gemeinschaft helfen wird, eine Einladung per E-Mail zu senden.",
+      "title": "Einen Manager einladen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-invitation__input--email",
+      "target": "community-invitation__input--email",
+      "text": "Geben Sie die E-Mail-Adresse der einzuladenden Person ein. Sie erhält eine Einladung, der Gemeinschaft als Manager beizutreten.",
+      "title": "E-Mail-Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-invitation__btn--submit",
+      "target": "community-invitation__btn--submit",
+      "text": "Senden Sie die Einladung: Die Person erhält sie per E-Mail.",
+      "title": "Die Einladung senden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--see-pending",
+      "target": "users-community-list__btn--see-pending",
+      "text": "Die Schaltfläche „Ausstehende Einladungen anzeigen“ öffnet die Liste der versendeten, aber noch nicht angenommenen Einladungen, sowohl für Mitglieder als auch für Manager.",
+      "title": "Ausstehende Einladungen anzeigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-to-the-managers-tab",
+      "target": null,
+      "text": "Öffnen Sie die Registerkarte der Manager, um die ausstehenden Einladungen zu sehen.",
+      "title": "Einladungen für Manager",
+      "waitFor": "community-pending-invitation__tab--managers"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invitation-appears-in-the-pending-managers-list",
+      "target": null,
+      "text": "Die Registerkarte „Manager“ bündelt die versendeten, aber noch nicht angenommenen Einladungen. Solange eine Einladung aussteht, können Sie sie in dieser Liste zurückziehen.",
+      "title": "Ausstehende Einladungen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "close-the-pending-invitations-dialog",
+      "target": null,
+      "text": "Schließen Sie das Fenster, wenn Sie fertig sind.",
+      "title": "Schließen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "users-community-list__input--search",
+      "target": "users-community-list__input--search",
+      "text": "Suchen Sie den Benutzer, dessen Rolle Sie ändern möchten.",
+      "title": "Einen Benutzer suchen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--edit-role--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--edit-role--0",
+      "text": "Der Stift neben einem Benutzer öffnet den Rolleneditor. Sie können ein Mitglied zum Manager befördern oder einen Manager zum Mitglied zurückstufen.",
+      "title": "Eine Rolle ändern",
+      "waitFor": "users-community-list__row--desktop--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-edit-role--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-edit-role--0",
+      "text": "Auf der Karte des Benutzers öffnet die Schaltfläche „Rolle ändern“ den Rolleneditor.",
+      "title": "Eine Rolle ändern"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "users-community-list__select--dialog-role",
+      "target": "users-community-list__select--dialog-role",
+      "text": "Wählen Sie die neue Rolle aus der Liste.",
+      "title": "Die Rolle wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--dialog-save",
+      "target": "users-community-list__btn--dialog-save",
+      "text": "Wählen Sie die neue Rolle in der Liste aus und klicken Sie dann auf „Speichern“. Die Änderung wird sofort wirksam.",
+      "title": "Rolle speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--delete--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "targetClick": "next",
+      "text": "Der Benutzer ist jetzt ein Mitglied: Sein Rollen-Badge hat sich geändert, und die Löschaktion ist nun in seiner Zeile verfügbar.",
+      "title": "Rolle aktualisiert"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__btn--card-delete--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "targetClick": "next",
+      "text": "Der Benutzer ist jetzt ein Mitglied: Sein Rollen-Badge hat sich geändert, und die Löschaktion ist nun auf seiner Karte verfügbar.",
+      "title": "Rolle aktualisiert"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--delete--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "users-community-list__btn--delete--0",
+      "text": "Das rote Kreuz entfernt den Benutzer sofort aus der Gemeinschaft — sein Zugriff wird umgehend entzogen, ohne zusätzliche Bestätigung.",
+      "title": "Einen Benutzer entfernen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "users-community-list__btn--card-delete--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "users-community-list__btn--card-delete--0",
+      "text": "Auf der Karte entfernt die Schaltfläche „Löschen“ den Benutzer sofort aus der Gemeinschaft.",
+      "title": "Einen Benutzer entfernen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "users-community-list__empty--message",
+      "target": "users-community-list__empty--message",
+      "targetClick": "next",
+      "text": "Die Suche nach dieser E-Mail-Adresse liefert keine Ergebnisse mehr: Der Benutzer hat keinen Zugriff mehr auf die Gemeinschaft.",
+      "title": "Benutzer entfernt"
+    }
+  ],
+  "title": "Benutzer der Gemeinschaft verwalten"
+}

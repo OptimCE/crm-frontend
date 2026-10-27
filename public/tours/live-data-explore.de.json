@@ -1,0 +1,106 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/live-data"
+  },
+  "guideUrl": "https://guide.optimce.be/live-data-explore/de.html",
+  "id": "live-data-explore",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-data-hub__indicative",
+      "target": "live-data-hub__indicative",
+      "targetClick": "next",
+      "text": "Diese Konsole verfolgt Viertelstunde für Viertelstunde, was die bei den Mitgliedern installierten Geräte messen. Diese Werte sind indikativ: Nur die Daten des Netzbetreibers dienen für die Verteilungsschlüssel und die Abrechnung.",
+      "title": "Die Live-Daten-Konsole",
+      "waitFor": "live-dashboard__signal"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-dashboard__no-data",
+      "target": "live-dashboard__no-data",
+      "targetClick": "next",
+      "text": "Die Übersicht fasst die letzte volle Stunde zusammen: Erzeugung, Leistung, Austausch mit dem Netz und Gerätestatus. Solange kein Gerät einen Messwert gesendet hat, zeigt jede Kachel einen Strich statt einer Null — „noch nicht gemessen“ ist nicht dasselbe wie „nichts erzeugt“.",
+      "title": "Die Übersicht"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "switch-the-chart-to-30-days",
+      "target": null,
+      "text": "Die Diagramme — Erzeugung und Einspeisung, dann aus dem Netz bezogener Verbrauch — umfassen 24 Stunden (pro Viertelstunde), 7 Tage (pro Stunde) oder 30 Tage (pro Tag). Solange nichts gemessen wurde, sagen sie das, statt eine flache Linie bei null zu zeichnen.",
+      "title": "Den Zeitraum des Diagramms wählen",
+      "waitFor": "live-dashboard__forecast"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--devices",
+      "target": "live-data-hub__tab--devices",
+      "text": "Der Reiter „Geräte“ listet die an die Zähler der Mitglieder angeschlossenen Boxen mit ihrem Sendestatus auf.",
+      "title": "Die Geräte",
+      "waitFor": "live-dashboard__chart-empty"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-devices__btn--add",
+      "target": "live-devices__btn--add",
+      "targetClick": "next",
+      "text": "Die Gemeinschaft hat noch kein Gerät. Die Schaltfläche „Gerät hinzufügen“ legt ein Gerät für einen Zähler an und stellt seinen Registrierungscode aus — siehe die Anleitung „Ein Gerät verbinden“.",
+      "title": "Noch keine Geräte",
+      "waitFor": "live-devices__empty"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--ops",
+      "target": "live-data-hub__tab--ops",
+      "text": "Der Reiter „Gerätestatus“ ist der Wartungsbildschirm: Er zeigt, ob die Werte aktuell sind, welche Geräte einen Eingriff erfordern und was nicht gespeichert werden konnte.",
+      "title": "Der Gerätestatus"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-ops__empty",
+      "target": "live-ops__empty",
+      "targetClick": "next",
+      "text": "Ohne Gerät wurde noch nichts berechnet, und kein Gerät erfordert Aufmerksamkeit. Sobald ein Gerät sendet, zeigt dieser Bildschirm, seit wann die Werte neu berechnet wurden, und meldet Geräte, die stumm oder offline sind oder deren Messwerte abgelehnt werden.",
+      "title": "Ein leerer Gerätepark",
+      "waitFor": "live-ops__readings-rejected-none"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "live-data-hub__tab--settings",
+      "target": "live-data-hub__tab--settings",
+      "text": "Öffnen Sie die Registerkarte mit den Einstellungen.",
+      "title": "Einstellungen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "live-settings__btn--save",
+      "target": "live-settings__btn--save",
+      "targetClick": "next",
+      "text": "Die Einstellungen legen fest, was die Mitglieder sehen können, und die Mindestanzahl an Mitgliedern, unterhalb derer der Austausch mit dem Netz verborgen bleibt, damit kein Haushalt identifizierbar ist. Solange sie nicht gespeichert wurden, gelten die Standardwerte der Plattform.",
+      "title": "Die Sichtbarkeitseinstellungen",
+      "waitFor": "live-settings__is-default"
+    }
+  ],
+  "title": "Live-Daten entdecken"
+}

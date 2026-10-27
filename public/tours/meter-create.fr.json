@@ -1,0 +1,286 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-create/fr.html",
+  "id": "meter-create",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__btn--add",
+      "target": "meters-list__btn--add",
+      "text": "Cliquez sur « Ajouter » pour ouvrir le formulaire de création d'un nouveau compteur rattaché à la communauté active.",
+      "title": "Ajouter un compteur",
+      "waitFor": "meters-list__table--meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__button--address-manual",
+      "target": "meter-creation__button--address-manual",
+      "text": "Ouvrez les champs d'adresse détaillés pour saisir l'adresse vous-même.",
+      "title": "Saisie manuelle"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--street",
+      "target": "meter-creation__input--street",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--address-number",
+      "target": "meter-creation__input--address-number",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--box-number",
+      "target": "meter-creation__input--box-number",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--postcode",
+      "target": "meter-creation__input--postcode",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--city",
+      "target": "meter-creation__input--city",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--ean",
+      "target": "meter-creation__input--ean",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--meter-number",
+      "target": "meter-creation__input--meter-number",
+      "text": "Renseignez l'adresse d'installation, l'EAN unique du point de comptage et le numéro physique du compteur. Ces champs sont indispensables pour identifier l'appareil.",
+      "title": "Décrire l'emplacement"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--phase--1",
+      "target": "meter-creation__radio-card--phase--1",
+      "text": "Choisissez le type de raccordement du compteur.",
+      "title": "Raccordement"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--reading-freq--1",
+      "target": "meter-creation__radio-card--reading-freq--1",
+      "text": "Choisissez à quelle fréquence le compteur est relevé.",
+      "title": "Fréquence de relevé"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--tarif-group--1",
+      "target": "meter-creation__radio-card--tarif-group--1",
+      "text": "Sélectionnez le nombre de phases, la fréquence de relevé et le groupe tarifaire — ces choix conditionnent la modélisation des consommations du compteur.",
+      "title": "Choisir les caractéristiques"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__btn--next-step",
+      "target": "meter-creation__btn--next-step",
+      "text": "Passez à l'étape suivante.",
+      "title": "Étape suivante"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__textarea--description",
+      "target": "meter-creation__textarea--description",
+      "text": "Décrivez la puissance de prélèvement, la capacité totale de génération et l'ampérage du compteur. Ces valeurs alimentent les calculs de répartition des opérations de partage.",
+      "title": "Caractéristiques énergétiques"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--sampling-power",
+      "target": "meter-creation__input--sampling-power",
+      "text": "Décrivez la puissance de prélèvement, la capacité totale de génération et l'ampérage du compteur. Ces valeurs alimentent les calculs de répartition des opérations de partage.",
+      "title": "Caractéristiques énergétiques"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--total-generating-capacity",
+      "target": "meter-creation__input--total-generating-capacity",
+      "text": "Décrivez la puissance de prélèvement, la capacité totale de génération et l'ampérage du compteur. Ces valeurs alimentent les calculs de répartition des opérations de partage.",
+      "title": "Caractéristiques énergétiques"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--amperage",
+      "target": "meter-creation__input--amperage",
+      "text": "Décrivez la puissance de prélèvement, la capacité totale de génération et l'ampérage du compteur. Ces valeurs alimentent les calculs de répartition des opérations de partage.",
+      "title": "Caractéristiques énergétiques"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__select--production-chain",
+      "target": "meter-creation__select--production-chain",
+      "text": "Choisissez la chaîne de production du compteur.",
+      "title": "Chaîne de production"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__select--injection-status",
+      "target": "meter-creation__select--injection-status",
+      "text": "Choisissez le statut d'injection du compteur.",
+      "title": "Statut d'injection"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--rate--1",
+      "target": "meter-creation__radio-card--rate--1",
+      "text": "Choisissez le régime tarifaire du compteur.",
+      "title": "Tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--client-type--1",
+      "target": "meter-creation__radio-card--client-type--1",
+      "text": "Choisissez le type de client.",
+      "title": "Type de client"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-member-as-owner",
+      "target": null,
+      "text": "Choisissez le tarif (simple ou bi-horaire), le type de client (résidentiel, professionnel) et le membre de la communauté propriétaire du compteur.",
+      "title": "Associer à un membre"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__datepicker--start-date",
+      "target": "meter-creation__datepicker--start-date",
+      "text": "Choisissez la date à partir de laquelle le compteur sera considéré comme actif dans la communauté. Avant cette date, il n'apparaîtra pas dans les calculs.",
+      "title": "Fixer la date d'activation"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__btn--submit",
+      "target": "meter-creation__btn--submit",
+      "text": "Cliquez sur « Valider » : le formulaire complet est envoyé au CRM, qui crée le compteur et le rattache à la communauté active.",
+      "title": "Enregistrer le compteur"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meters-list__input--search",
+      "target": "meters-list__input--search",
+      "text": "Saisissez l'EAN du compteur dans la barre de recherche pour filtrer la liste et retrouver immédiatement le compteur nouvellement créé.",
+      "title": "Filtrer par EAN",
+      "waitFor": "meters-list__table--meters"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "targetClick": "next",
+      "text": "Le compteur « 541449123456789012 » apparaît dans le tableau filtré : la création est confirmée et la fiche est accessible depuis la liste.",
+      "title": "Compteur trouvé"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Cliquez sur la ligne du compteur pour ouvrir sa fiche détaillée et accéder aux onglets de consultation des consommations.",
+      "title": "Ouvrir la fiche"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Touchez la carte du compteur pour ouvrir sa fiche détaillée et accéder aux onglets de consultation des consommations.",
+      "title": "Ouvrir la fiche"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__tabs",
+      "target": "meter-view__tabs",
+      "targetClick": "next",
+      "text": "La fiche détaillée reprend l'EAN du nouveau compteur et propose les onglets de consultation : données actuelles, historiques, futures et consommation.",
+      "title": "Fiche compteur prête",
+      "waitFor": "meter-view__hero"
+    }
+  ],
+  "title": "Créer un compteur"
+}

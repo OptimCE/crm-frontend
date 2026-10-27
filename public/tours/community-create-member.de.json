@@ -1,0 +1,196 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/members"
+  },
+  "guideUrl": "https://guide.optimce.be/member-create/de.html",
+  "id": "community-create-member",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "members-list__btn--add",
+      "target": "members-list__btn--add",
+      "text": "Klicken Sie oben in der Liste auf „Hinzufügen“, um den Erstellungsassistenten mit vier Schritten zu öffnen.",
+      "title": "Erstellung eines Mitglieds starten",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__card--individual",
+      "target": "new-member-type__card--individual",
+      "text": "Wählen Sie „Privatperson“, um ein Einzelmitglied zu erstellen. Die Option „Unternehmen“ ist juristischen Personen vorbehalten und fragt im weiteren Verlauf andere Felder ab.",
+      "title": "Mitgliedstyp wählen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-type__btn--next",
+      "target": "new-member-type__btn--next",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--nrn",
+      "target": "new-member-informations__input--nrn",
+      "text": "Geben Sie die Nationalregisternummer, den Nachnamen, den Vornamen, die E-Mail-Adresse und die Telefonnummer des neuen Mitglieds ein. Alle diese Felder müssen ausgefüllt sein, um den Schritt abzuschließen.",
+      "title": "Persönliche Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--surname",
+      "target": "new-member-informations__input--surname",
+      "text": "Geben Sie die Nationalregisternummer, den Nachnamen, den Vornamen, die E-Mail-Adresse und die Telefonnummer des neuen Mitglieds ein. Alle diese Felder müssen ausgefüllt sein, um den Schritt abzuschließen.",
+      "title": "Persönliche Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--name",
+      "target": "new-member-informations__input--name",
+      "text": "Geben Sie die Nationalregisternummer, den Nachnamen, den Vornamen, die E-Mail-Adresse und die Telefonnummer des neuen Mitglieds ein. Alle diese Felder müssen ausgefüllt sein, um den Schritt abzuschließen.",
+      "title": "Persönliche Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--email",
+      "target": "new-member-informations__input--email",
+      "text": "Geben Sie die Nationalregisternummer, den Nachnamen, den Vornamen, die E-Mail-Adresse und die Telefonnummer des neuen Mitglieds ein. Alle diese Felder müssen ausgefüllt sein, um den Schritt abzuschließen.",
+      "title": "Persönliche Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-informations__input--phone",
+      "target": "new-member-informations__input--phone",
+      "text": "Geben Sie die Nationalregisternummer, den Nachnamen, den Vornamen, die E-Mail-Adresse und die Telefonnummer des neuen Mitglieds ein. Alle diese Felder müssen ausgefüllt sein, um den Schritt abzuschließen.",
+      "title": "Persönliche Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-informations__btn--next",
+      "target": "new-member-informations__btn--next",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-street",
+      "target": "new-member-address__input--home-street",
+      "text": "Vervollständigen Sie die Wohnadresse: Straße, Hausnummer, Postleitzahl und Ort. Ist die Rechnungsadresse identisch, aktivieren Sie im nächsten Schritt das Kontrollkästchen „Gleiche Adresse für die Rechnungsstellung“, um sie automatisch zu übernehmen.",
+      "title": "Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-number",
+      "target": "new-member-address__input--home-number",
+      "text": "Vervollständigen Sie die Wohnadresse: Straße, Hausnummer, Postleitzahl und Ort. Ist die Rechnungsadresse identisch, aktivieren Sie im nächsten Schritt das Kontrollkästchen „Gleiche Adresse für die Rechnungsstellung“, um sie automatisch zu übernehmen.",
+      "title": "Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-postcode",
+      "target": "new-member-address__input--home-postcode",
+      "text": "Vervollständigen Sie die Wohnadresse: Straße, Hausnummer, Postleitzahl und Ort. Ist die Rechnungsadresse identisch, aktivieren Sie im nächsten Schritt das Kontrollkästchen „Gleiche Adresse für die Rechnungsstellung“, um sie automatisch zu übernehmen.",
+      "title": "Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-address__input--home-city",
+      "target": "new-member-address__input--home-city",
+      "text": "Vervollständigen Sie die Wohnadresse: Straße, Hausnummer, Postleitzahl und Ort. Ist die Rechnungsadresse identisch, aktivieren Sie im nächsten Schritt das Kontrollkästchen „Gleiche Adresse für die Rechnungsstellung“, um sie automatisch zu übernehmen.",
+      "title": "Adresse eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__checkbox--same-address",
+      "target": "new-member-address__checkbox--same-address",
+      "text": "Aktivieren Sie dieses Kästchen, wenn die Rechnungsadresse mit der Wohnadresse übereinstimmt.",
+      "title": "Gleiche Adresse"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-address__btn--next",
+      "target": "new-member-address__btn--next",
+      "text": "Fahren Sie mit dem nächsten Schritt fort.",
+      "title": "Nächster Schritt"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "new-member-banking-info__input--iban",
+      "target": "new-member-banking-info__input--iban",
+      "text": "Geben Sie die IBAN des Mitglieds ein: Sie wird für Rückerstattungen im Zusammenhang mit Teilungsoperationen verwendet. Das Format wird in Echtzeit geprüft.",
+      "title": "Bankdaten eingeben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "new-member-banking-info__btn--submit",
+      "target": "new-member-banking-info__btn--submit",
+      "text": "Klicken Sie auf „Bestätigen“, um das Formular an das CRM zu senden. Das Mitglied wird sofort erstellt und der aktiven Gemeinschaft zugeordnet.",
+      "title": "Erstellung bestätigen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "decline-we-don-t-want-to-create-a-meter-right-now",
+      "target": null,
+      "text": "Ein Fenster schlägt vor, direkt mit dem Erstellen eines Zählers fortzufahren. Wählen Sie „Nein“, um hier abzuschließen — Sie können später jederzeit über die Detailseite des Mitglieds einen Zähler hinzufügen.",
+      "title": "Zähler später hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "open-the-new-member-s-detail-page",
+      "target": null,
+      "text": "Klicken Sie in der Liste auf das neue Mitglied, um seinen Datensatz zu öffnen.",
+      "title": "Den Datensatz öffnen",
+      "waitFor": "members-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "hero-heading-shows-the-new-member-s-full-name",
+      "target": null,
+      "text": "Die Detailseite des neuen Mitglieds wird angezeigt: Der vollständige Name erscheint in der Kopfzeile, und alle eingegebenen Informationen sind sichtbar. Das Mitglied kann nun in Teilungsoperationen verwendet werden.",
+      "title": "Mitglied erstellt"
+    }
+  ],
+  "title": "Mitglied anlegen"
+}

@@ -1,0 +1,125 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-upload-version/en.html",
+  "id": "admin-doc-upload-version",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Open the dossier the piece has to be attached to.",
+      "title": "Open the dossier"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--add",
+      "target": "dossier-documents-panel__btn--add",
+      "text": "A document produced outside OptimCE — a signed form, a letter from the grid operator — is declared here first, then receives its file.",
+      "title": "Declare the piece"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "document-create-dialog__select--doc-type",
+      "target": "document-create-dialog__select--doc-type",
+      "text": "Choose the type of document to add to the dossier.",
+      "title": "Document type"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "document-create-dialog__input--title",
+      "target": "document-create-dialog__input--title",
+      "text": "Pick the matching form and give it a title your colleagues will recognise.",
+      "title": "Name the piece"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-create-dialog__btn--submit",
+      "target": "document-create-dialog__btn--submit",
+      "text": "Submit to create the document in the dossier.",
+      "title": "Create the document"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--upload-1",
+      "target": "dossier-documents-panel__btn--upload-1",
+      "text": "The upload icon lets you attach your own file instead of having OptimCE generate one.",
+      "title": "Upload a version"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "upload-version-dialog__dropzone",
+      "target": "upload-version-dialog__dropzone",
+      "targetClick": "next",
+      "text": "Drop the file in the dedicated area, or click to pick it from your computer.",
+      "title": "Choose the file"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "upload-version-dialog__btn--submit",
+      "target": "upload-version-dialog__btn--submit",
+      "text": "Every upload creates one more permanent version. A file already stored is never replaced: it is kept, and the new one becomes the current version.",
+      "title": "Store it"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__btn--download-1",
+      "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
+      "text": "The document now has a downloadable version, exactly as if it had been generated.",
+      "title": "The piece is attached"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__btn--detail-1",
+      "target": "dossier-documents-panel__btn--detail-1",
+      "text": "Open the versions to confirm the file was stored, with its original name and size.",
+      "title": "Check the history"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-uploaded-file-is-version-1",
+      "target": null,
+      "text": "The uploaded file shows up as version 1. Unlike a generated version it keeps no data snapshot: an arbitrary file says nothing about who it concerns.",
+      "title": "One more version",
+      "waitFor": "document-detail-dialog__row--1"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "document-detail-dialog__btn--close",
+      "target": "document-detail-dialog__btn--close",
+      "text": "Close the window when you are done.",
+      "title": "Close"
+    }
+  ],
+  "title": "Attach a document you already have"
+}

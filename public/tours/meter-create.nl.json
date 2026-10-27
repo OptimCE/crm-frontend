@@ -1,0 +1,286 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-create/nl.html",
+  "id": "meter-create",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__btn--add",
+      "target": "meters-list__btn--add",
+      "text": "Klik op “Toevoegen” om het formulier te openen waarmee u een nieuwe meter aanmaakt die aan de actieve gemeenschap is gekoppeld.",
+      "title": "Meter toevoegen",
+      "waitFor": "meters-list__table--meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__button--address-manual",
+      "target": "meter-creation__button--address-manual",
+      "text": "Open de gedetailleerde adresvelden om het adres zelf in te voeren.",
+      "title": "Handmatige invoer"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--street",
+      "target": "meter-creation__input--street",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--address-number",
+      "target": "meter-creation__input--address-number",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--box-number",
+      "target": "meter-creation__input--box-number",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--postcode",
+      "target": "meter-creation__input--postcode",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--city",
+      "target": "meter-creation__input--city",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--ean",
+      "target": "meter-creation__input--ean",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--meter-number",
+      "target": "meter-creation__input--meter-number",
+      "text": "Vul het installatieadres, de unieke EAN van het meetpunt en het fysieke meternummer in. Deze velden zijn onmisbaar om het toestel te identificeren.",
+      "title": "Locatie beschrijven"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--phase--1",
+      "target": "meter-creation__radio-card--phase--1",
+      "text": "Kies het aansluitingstype van de meter.",
+      "title": "Aansluiting"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--reading-freq--1",
+      "target": "meter-creation__radio-card--reading-freq--1",
+      "text": "Kies hoe vaak de meter wordt opgenomen.",
+      "title": "Opnamefrequentie"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--tarif-group--1",
+      "target": "meter-creation__radio-card--tarif-group--1",
+      "text": "Selecteer het aantal fasen, de leesfrequentie en de tariefgroep — deze keuzes bepalen hoe het verbruik van de meter wordt gemodelleerd.",
+      "title": "Kenmerken kiezen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__btn--next-step",
+      "target": "meter-creation__btn--next-step",
+      "text": "Ga verder naar de volgende stap.",
+      "title": "Volgende stap"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__textarea--description",
+      "target": "meter-creation__textarea--description",
+      "text": "Geef het afnamevermogen, het totale productievermogen en het amperage van de meter op. Deze waarden voeden de verdeelberekeningen van de deeloperaties.",
+      "title": "Energiekenmerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--sampling-power",
+      "target": "meter-creation__input--sampling-power",
+      "text": "Geef het afnamevermogen, het totale productievermogen en het amperage van de meter op. Deze waarden voeden de verdeelberekeningen van de deeloperaties.",
+      "title": "Energiekenmerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--total-generating-capacity",
+      "target": "meter-creation__input--total-generating-capacity",
+      "text": "Geef het afnamevermogen, het totale productievermogen en het amperage van de meter op. Deze waarden voeden de verdeelberekeningen van de deeloperaties.",
+      "title": "Energiekenmerken"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meter-creation__input--amperage",
+      "target": "meter-creation__input--amperage",
+      "text": "Geef het afnamevermogen, het totale productievermogen en het amperage van de meter op. Deze waarden voeden de verdeelberekeningen van de deeloperaties.",
+      "title": "Energiekenmerken"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__select--production-chain",
+      "target": "meter-creation__select--production-chain",
+      "text": "Kies de productieketen van de meter.",
+      "title": "Productieketen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__select--injection-status",
+      "target": "meter-creation__select--injection-status",
+      "text": "Kies de injectiestatus van de meter.",
+      "title": "Injectiestatus"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--rate--1",
+      "target": "meter-creation__radio-card--rate--1",
+      "text": "Kies het tarief van de meter.",
+      "title": "Tarief"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__radio-card--client-type--1",
+      "target": "meter-creation__radio-card--client-type--1",
+      "text": "Kies het type klant.",
+      "title": "Type klant"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-member-as-owner",
+      "target": null,
+      "text": "Kies het tarief (enkelvoudig of tweeuurtarief), het type klant (residentieel, professioneel) en het lid van de gemeenschap aan wie de meter toebehoort.",
+      "title": "Aan een lid koppelen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "meter-creation__datepicker--start-date",
+      "target": "meter-creation__datepicker--start-date",
+      "text": "Kies de datum vanaf wanneer de meter als actief in de gemeenschap wordt beschouwd. Vóór die datum wordt hij niet meegenomen in de berekeningen.",
+      "title": "Activeringsdatum instellen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meter-creation__btn--submit",
+      "target": "meter-creation__btn--submit",
+      "text": "Klik op “Bevestigen”: het volledige formulier wordt naar het CRM verstuurd, dat de meter aanmaakt en aan de actieve gemeenschap koppelt.",
+      "title": "Meter opslaan"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "meters-list__input--search",
+      "target": "meters-list__input--search",
+      "text": "Typ de EAN van de meter in de zoekbalk om de lijst te filteren en de nieuw aangemaakte meter meteen terug te vinden.",
+      "title": "Filteren op EAN",
+      "waitFor": "meters-list__table--meters"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-list__table--meters",
+      "target": "meters-list__table--meters",
+      "targetClick": "next",
+      "text": "De meter “541449123456789012” verschijnt in de gefilterde tabel: de aanmaak is bevestigd en de detailpagina is bereikbaar vanuit de lijst.",
+      "title": "Meter gevonden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Klik op de rij van de meter om de detailpagina te openen en naar de tabbladen met de verbruiksgegevens te gaan.",
+      "title": "Detailpagina openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-list__table--meters-3",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "meters-list__table--meters",
+      "text": "Tik op de kaart van de meter om de detailpagina te openen en naar de tabbladen met de verbruiksgegevens te gaan.",
+      "title": "Detailpagina openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meter-view__tabs",
+      "target": "meter-view__tabs",
+      "targetClick": "next",
+      "text": "De detailpagina toont de EAN van de nieuwe meter en biedt de tabbladen om gegevens te raadplegen: actuele, historische en toekomstige gegevens en verbruik.",
+      "title": "Meterpagina klaar",
+      "waitFor": "meter-view__hero"
+    }
+  ],
+  "title": "Een meter aanmaken"
+}

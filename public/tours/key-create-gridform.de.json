@@ -1,0 +1,143 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/keys"
+  },
+  "guideUrl": "https://guide.optimce.be/key-create-gridform/de.html",
+  "id": "key-create-gridform",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "keys-list__btn--add",
+      "target": "keys-list__btn--add",
+      "text": "Klicken Sie auf „Hinzufügen“: OptimCE fragt Sie zunächst, wie Sie den neuen Verteilungsschlüssel aufbauen möchten.",
+      "title": "Einen Schlüssel hinzufügen",
+      "waitFor": "keys-list__table--keys"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-creation-mode__card--full",
+      "target": "key-creation-mode__card--full",
+      "text": "Ihnen werden zwei Möglichkeiten angeboten, einen Schlüssel aufzubauen. Wählen Sie „Vollständige Erstellung“, um die Iterationen und die Prozentsätze direkt in die Tabelle einzugeben.",
+      "title": "Den Modus wählen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__input--name",
+      "target": "key-update__input--name",
+      "text": "Geben Sie dem neuen Verteilungsschlüssel einen Namen und eine Beschreibung. Diese Angaben erscheinen in der Schlüsselliste und helfen Ihnen, ihn später wiederzufinden.",
+      "title": "Den Schlüssel benennen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__textarea--description",
+      "target": "key-update__textarea--description",
+      "text": "Geben Sie dem neuen Verteilungsschlüssel einen Namen und eine Beschreibung. Diese Angaben erscheinen in der Schlüsselliste und helfen Ihnen, ihn später wiederzufinden.",
+      "title": "Den Schlüssel benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-iteration",
+      "target": "key-update__btn--add-iteration",
+      "text": "Klicken Sie auf „Iteration hinzufügen“: Die Tabelle legt einen neuen Block mit einem ersten Verbraucher an, der bereit zur Bearbeitung ist.",
+      "title": "Eine Iteration hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer",
+      "target": "key-update__btn--add-consumer",
+      "text": "Fügen Sie pro Verbraucher des Schlüssels eine Zeile hinzu.",
+      "title": "Einen Verbraucher hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-consumer-2",
+      "target": "key-update__btn--add-consumer",
+      "text": "Klicken Sie so oft wie nötig auf „Verbraucher hinzufügen“, um die gewünschte Anzahl zu erreichen — in diesem Szenario drei Zeilen.",
+      "title": "Verbraucher hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data",
+      "target": "key-update__grid--data",
+      "text": "Geben Sie 70% der Energie für diese Iteration ein, benennen Sie die drei Verbraucher (Cons1, Cons2, Cons3) und legen Sie die Aufteilung 40/40/20 manuell fest.",
+      "title": "Die Iteration konfigurieren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--add-prorata-iteration",
+      "target": "key-update__btn--add-prorata-iteration",
+      "text": "Klicken Sie auf „Pro-rata-Iteration hinzufügen“: Die Namen der Verbraucher werden automatisch übernommen, und die Prozentsätze werden nach dem tatsächlichen Verbrauch berechnet.",
+      "title": "Eine Pro-rata-Iteration hinzufügen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "key-update__grid--data-2",
+      "target": "key-update__grid--data",
+      "text": "Geben Sie 30% als Gewichtung der zweiten Iteration ein, damit die beiden Iterationen zusammen 100% der Energie ergeben.",
+      "title": "Die Gewichtung festlegen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "iteration-2-is-recalculated",
+      "target": null,
+      "text": "Sobald die Gewichtung bestätigt ist (Eingabetaste oder Klick an eine andere Stelle), wird die gesamte zweite Iteration automatisch im Pro-rata-Modus neu berechnet.",
+      "title": "Iteration neu berechnet"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "key-update__grid--data-3",
+      "target": "key-update__grid--data",
+      "targetClick": "next",
+      "text": "Gehen Sie die vollständige Tabelle durch, um die Iterationen, die Namen und die Prozentsätze zu prüfen, bevor Sie den Schlüssel speichern.",
+      "title": "Die Konfiguration überprüfen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "key-update__btn--submit",
+      "target": "key-update__btn--submit",
+      "text": "Speichern Sie, um Ihre Änderungen zu übernehmen.",
+      "title": "Speichern"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-key-appears-in-the-list",
+      "target": null,
+      "text": "Der neue Schlüssel „E2E key“ erscheint in der Liste der Verteilungsschlüssel der Gemeinschaft, bereit für den Einsatz in einer Teilungsoperation.",
+      "title": "Schlüssel erstellt",
+      "waitFor": "keys-list__table--keys"
+    }
+  ],
+  "title": "Verteilungsschlüssel erstellen (Formular)"
+}

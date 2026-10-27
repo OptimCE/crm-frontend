@@ -1,0 +1,60 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/communities/managers"
+  },
+  "guideUrl": "https://guide.optimce.be/community-managers-view/de.html",
+  "id": "community-managers-view",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__row--desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "managers-community-list__row--desktop--0",
+      "targetClick": "next",
+      "text": "Diese Seite listet die Administratoren und Manager der Gemeinschaft mit ihrer Rolle auf. Sie können nach Rolle filtern oder nach einer Person suchen. Es handelt sich um eine reine Leseansicht: Sie können nichts ändern.",
+      "title": "Die Manager Ihrer Gemeinschaft",
+      "waitFor": "managers-community-list__table"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "managers-community-list__card--mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "managers-community-list__card--mobile--0",
+      "targetClick": "next",
+      "text": "Diese Seite listet die Administratoren und Manager der Gemeinschaft mit ihrer Rolle auf. Sie können nach Rolle filtern oder nach einer Person suchen. Es handelt sich um eine reine Leseansicht: Sie können nichts ändern.",
+      "title": "Die Manager Ihrer Gemeinschaft"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "managers-community-list__input--search",
+      "target": "managers-community-list__input--search",
+      "text": "Geben Sie einen Namen oder eine E-Mail-Adresse ein, um die Liste zu filtern und eine bestimmte Person schnell zu finden.",
+      "title": "In der Liste suchen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "managers-community-list__btn--clear-filters",
+      "target": "managers-community-list__btn--clear-filters",
+      "text": "Die Schaltfläche „Filter löschen“ löscht die Suche und zeigt wieder alle Manager an.",
+      "title": "Suche zurücksetzen",
+      "waitFor": "managers-community-list__row--desktop--0"
+    }
+  ],
+  "title": "Manager Ihrer Gemeinschaft ansehen"
+}

@@ -1,0 +1,36 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-inspect/en.html",
+  "id": "sharing-op-inspect",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "The detail page shows the sharing operation's name as configured. This name is the reference used in exports and reports.",
+      "title": "Operation identification",
+      "waitFor": "op-view__hero"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__link--key",
+      "target": "op-view__link--key",
+      "targetClick": "next",
+      "text": "The \"Key management\" card shows the allocation key linked to this operation — it drives how the energy is shared between consumers.",
+      "title": "Linked key",
+      "waitFor": "op-view__card--general-info"
+    }
+  ],
+  "title": "Inspect a sharing operation"
+}

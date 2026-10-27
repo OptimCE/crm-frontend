@@ -1,0 +1,36 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-inspect/nl.html",
+  "id": "sharing-op-inspect",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "De fiche toont de naam van de deeloperatie zoals die is geconfigureerd. Deze naam dient als referentie in exports en rapporten.",
+      "title": "Identificatie van de operatie",
+      "waitFor": "op-view__hero"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__link--key",
+      "target": "op-view__link--key",
+      "targetClick": "next",
+      "text": "De kaart “Huidige sleutel” toont de verdeelsleutel die aan deze operatie gekoppeld is — die bepaalt hoe de energie over de verbruikers wordt verdeeld.",
+      "title": "Gekoppelde sleutel",
+      "waitFor": "op-view__card--general-info"
+    }
+  ],
+  "title": "Een deeloperatie inspecteren"
+}

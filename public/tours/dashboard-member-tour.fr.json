@@ -1,0 +1,100 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/dashboard-member-tour/fr.html",
+  "id": "dashboard-member-tour",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "text": "Depuis la page d'accueil, ouvrez la communauté dont vous voulez voir le détail.",
+      "title": "Ouvrir sa communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dashboard-of-a-member",
+      "target": null,
+      "text": "Le tableau de bord s'adapte à votre rôle. En tant que membre, vous ne voyez pas la gestion de la communauté mais votre situation dans celle-ci.",
+      "title": "Le tableau de bord"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-tile__link--meter",
+      "target": "my-energy-tile__link--meter",
+      "targetClick": "next",
+      "text": "La première tuile totalise, sur les trente derniers jours, ce que vous avez consommé et ce que le partage vous a apporté, puis détaille compteur par compteur.",
+      "title": "Mon énergie ici"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "your-share-of-the-allocation-key",
+      "target": null,
+      "text": "Pour chaque opération de partage, la tuile indique la part qui vous revient : un pourcentage fixe, une répartition au prorata de votre consommation, ou l'indication que votre compteur n'est pas repris dans la clé en vigueur.",
+      "title": "Ma participation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-member-record-tile__link--member",
+      "target": "my-member-record-tile__link--member",
+      "targetClick": "next",
+      "text": "La tuile confirme que votre fiche est active, ou signale qu'elle attend encore d'être validée par un gestionnaire.",
+      "title": "Ma fiche membre"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "about-community-tile__link--info",
+      "target": "about-community-tile__link--info",
+      "targetClick": "next",
+      "text": "Nombre de membres, régulateur, site web : de quoi savoir à qui vous avez affaire. Le lien ouvre la fiche complète de la communauté.",
+      "title": "À propos de la communauté"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices-tile__link--all",
+      "target": "my-invoices-tile__link--all",
+      "targetClick": "next",
+      "text": "Ces deux tuiles n'apparaissent que si la communauté utilise les modules correspondants. Vos factures impayées y sont résumées, tout comme les dernières publications du tableau d'actualités.",
+      "title": "Factures et actualités"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "member-dashboard__btn--refresh",
+      "target": "member-dashboard__btn--refresh",
+      "text": "Le bouton « Actualiser » recharge toutes les tuiles sans recharger la page.",
+      "title": "Actualiser"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "header-page__title",
+      "target": "header-page__title",
+      "targetClick": "next",
+      "text": "Les tuiles se rechargent une à une et reprennent leur affichage avec les données les plus récentes.",
+      "title": "Données à jour"
+    }
+  ],
+  "title": "Le tableau de bord du membre"
+}

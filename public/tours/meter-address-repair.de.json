@@ -1,0 +1,130 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/meters"
+  },
+  "guideUrl": "https://guide.optimce.be/meter-address-repair/de.html",
+  "id": "meter-address-repair",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "meters-map__button--repair",
+      "target": "meters-map__button--repair",
+      "text": "Die Leiste über der Karte zeigt an, wie viele Zähler noch nicht darauf erscheinen. Klicken Sie auf „Adressen korrigieren“, um die Liste der neu zu platzierenden Zähler zu öffnen.",
+      "title": "Adressen korrigieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__subtitle",
+      "target": "unlocated-meters__subtitle",
+      "targetClick": "next",
+      "text": "Das Fenster listet genau die Zähler auf, die die Karte nicht platzieren kann: Zähler ganz ohne Koordinaten, aber auch Zähler, die nur im Zentrum ihrer Gemeinde platziert sind.",
+      "title": "Die Korrekturliste"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Klicken Sie auf eine Zeile, um ihre Adresse in das Formular rechts zu laden. Die Korrektur erfolgt Zähler für Zähler.",
+      "title": "Einen Zähler wählen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--not-found",
+      "target": "unlocated-meters__autocomplete--address--not-found",
+      "targetClick": "next",
+      "text": "OptimCE fragt das föderale Register BeSt Address ab. Diese Adresse stimmt dort mit nichts überein: Deshalb erscheint der Zähler nicht auf der Karte.",
+      "title": "Adresse nicht gefunden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--541448200000000004",
+      "target": "unlocated-meters__row--541448200000000004",
+      "text": "Wechseln Sie zu einem anderen Zähler der Liste.",
+      "title": "Ein anderer Zähler"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__row--987654321098765432-2",
+      "target": "unlocated-meters__row--987654321098765432",
+      "text": "Kehren Sie zum Zähler zurück, dessen Adresse nicht gefunden wurde, um sie zu korrigieren.",
+      "title": "Zurück zum Zähler",
+      "waitFor": "unlocated-meters__autocomplete--address--approximate"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "search-the-best-address-register-for-a-real-address",
+      "target": null,
+      "text": "Geben Sie die ersten Wörter der tatsächlichen Adresse ein. Die Vorschläge stammen direkt aus dem offiziellen Register der belgischen Adressen.",
+      "title": "Die richtige Adresse suchen",
+      "waitFor": "unlocated-meters__autocomplete--address--not-found"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "pick-the-first-suggestion",
+      "target": null,
+      "text": "Klicken Sie auf den passenden Vorschlag. Die fünf Detailfelder werden mit der offiziellen Schreibweise des Registers ausgefüllt.",
+      "title": "Den Vorschlag wählen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "unlocated-meters__autocomplete--address--located",
+      "target": "unlocated-meters__autocomplete--address--located",
+      "targetClick": "next",
+      "text": "Die grüne Meldung bestätigt, dass die Adresse genau lokalisiert ist: Der Zähler erscheint auf der Karte, sobald die Korrektur gespeichert ist.",
+      "title": "Adresse gefunden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--save",
+      "target": "unlocated-meters__button--save",
+      "text": "„Speichern und weiter“ übernimmt die Korrektur und wechselt zum nächsten Zähler in der Liste, ohne das Fenster zu schließen.",
+      "title": "Speichern und fortfahren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "unlocated-meters__button--close",
+      "target": "unlocated-meters__button--close",
+      "text": "Schließen Sie das Fenster, wenn Sie fertig sind.",
+      "title": "Schließen",
+      "waitFor": "unlocated-meters__row--541448200000000004"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "meters-map__strip--partial",
+      "target": "meters-map__strip--partial",
+      "targetClick": "next",
+      "text": "Zurück auf der Karte ist die Zahl in der Leiste gesunken: Der korrigierte Zähler ist jetzt platziert, und es bleibt nur noch der im Zentrum seiner Gemeinde platzierte.",
+      "title": "Die Karte ist aktuell",
+      "waitFor": "map-canvas__host"
+    }
+  ],
+  "title": "Zähleradressen korrigieren"
+}

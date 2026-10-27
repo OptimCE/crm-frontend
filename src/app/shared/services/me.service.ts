@@ -213,6 +213,7 @@ export class MeService extends ServiceBase {
         tap(() => {
           this.cache.invalidate('own-members-invitation');
           this.cache.invalidate('members-invitation');
+          this.invalidateMemberships();
         }),
       );
   }
@@ -226,6 +227,7 @@ export class MeService extends ServiceBase {
         tap(() => {
           this.cache.invalidate('own-members-invitation');
           this.cache.invalidate('members-invitation');
+          this.invalidateMemberships();
         }),
       );
   }
@@ -237,7 +239,17 @@ export class MeService extends ServiceBase {
         tap(() => {
           this.cache.invalidate('own-managers-invitation');
           this.cache.invalidate('managers-invitation');
+          this.invalidateMemberships();
         }),
       );
+  }
+
+  /**
+   * An accepted invitation adds a membership (and, for a member, a linked
+   * record): the cached "my communities" list and "my members" pages are stale.
+   */
+  private invalidateMemberships(): void {
+    this.cache.invalidate('communities-own');
+    this.cache.invalidate('me:members');
   }
 }

@@ -1,0 +1,247 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/billing"
+  },
+  "guideUrl": "https://guide.optimce.be/billing-tarification-pay/fr.html",
+  "id": "billing-tarification-pay",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "billing__tab--tariffs",
+      "target": "billing__tab--tariffs",
+      "targetClick": "next",
+      "text": "Le module s'ouvre sur l'onglet « Tarifs ». C'est ici que vous définissez le prix de l'énergie partagée avant de générer les factures. Les onglets « Générer une facture » et « Tableau de suivi » viennent ensuite.",
+      "title": "Le module de facturation",
+      "waitFor": "tariffs-panel__select--operation"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "tariffs-panel__select--operation",
+      "target": "tariffs-panel__select--operation",
+      "text": "Sélectionnez l'opération de partage à facturer. Les tarifs et les factures sont toujours rattachés à une opération.",
+      "title": "Choisir l'opération de partage"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariffs-panel__btn--add",
+      "target": "tariffs-panel__btn--add",
+      "text": "Cliquez sur « Nouveau tarif » pour ouvrir la fenêtre de création. Par défaut, le tarif porte sur la vente aux consommateurs et s'applique à toute l'opération.",
+      "title": "Ajouter un tarif"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-tariff-start-of-validity-01-01-2025",
+      "target": null,
+      "text": "Choisissez dans le calendrier la date à partir de laquelle ce tarif s'applique.",
+      "title": "Début de validité",
+      "waitFor": "tariff-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--price",
+      "target": "tariff-dialog__input--price",
+      "text": "Saisissez le prix du kWh pour ce tarif.",
+      "title": "Prix au kWh"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--label",
+      "target": "tariff-dialog__input--label",
+      "text": "Indiquez le prix du kWh partagé (0,1200 €), la date de début de validité et un libellé. Le type « Vente au consommateur » et la portée « Global » conviennent pour facturer toute l'opération.",
+      "title": "Renseigner le tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariff-dialog__btn--submit",
+      "target": "tariff-dialog__btn--submit",
+      "text": "Cliquez sur « Créer le tarif ». Il apparaît aussitôt dans la liste et servira au calcul des factures.",
+      "title": "Créer le tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariffs-panel__btn--add-2",
+      "target": "tariffs-panel__btn--add",
+      "text": "L'opération éolienne compte des producteurs : leur injection partagée doit aussi être tarifée. Ouvrez à nouveau « Nouveau tarif » pour créer un tarif de rachat.",
+      "title": "Ajouter un tarif de rachat",
+      "waitFor": "tariffs-panel__table"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "tariff-dialog__select--kind",
+      "target": "tariff-dialog__select--kind",
+      "text": "Sélectionnez le type « Rachat au producteur ». Ce tarif rémunère l'énergie que les producteurs injectent et partagent avec la communauté.",
+      "title": "Choisir le type « Rachat producteur »",
+      "waitFor": "tariff-dialog__btn--submit"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "22e-set-the-buyback-tariff-start-of-validity",
+      "target": null,
+      "text": "Choisissez la date à partir de laquelle le tarif de rachat s'applique.",
+      "title": "Début de validité"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--price-2",
+      "target": "tariff-dialog__input--price",
+      "text": "Saisissez le prix de rachat au kWh.",
+      "title": "Prix de rachat"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "tariff-dialog__input--label-2",
+      "target": "tariff-dialog__input--label",
+      "text": "Donnez au tarif de rachat un nom qui le distingue dans la liste.",
+      "title": "Nommer le tarif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "tariff-dialog__btn--submit-2",
+      "target": "tariff-dialog__btn--submit",
+      "text": "Validez pour ajouter le tarif de rachat.",
+      "title": "Créer le tarif"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "tariffs-panel__table",
+      "target": "tariffs-panel__table",
+      "targetClick": "next",
+      "text": "L'opération dispose désormais d'un tarif de vente aux consommateurs et d'un tarif de rachat aux producteurs. Passons à la génération des factures.",
+      "title": "Les tarifs sont enregistrés"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "billing__tab--generate",
+      "target": "billing__tab--generate",
+      "text": "Ouvrez l'onglet « Générer une facture ». C'est ici que l'on importe les données de consommation et que l'on lance le calcul des factures sur une période.",
+      "title": "Aller à la génération"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "run-generate__select--operation",
+      "target": "run-generate__select--operation",
+      "text": "Sélectionnez l'opération à facturer : la zone d'import des relevés de consommation apparaît.",
+      "title": "Choisir l'opération à facturer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "consumption-upload__dropzone",
+      "target": "consumption-upload__dropzone",
+      "targetClick": "next",
+      "text": "Déposez le fichier RESA de l'opération (relevés 15 minutes du mois) dans la zone d'import. Il fournit l'énergie partagée qui sera facturée.",
+      "title": "Importer les relevés RESA"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-upload",
+      "target": null,
+      "text": "Envoyez le fichier de relevés pour calculer la couverture de la période.",
+      "title": "Envoyer le fichier"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "set-the-billing-period-february-2025",
+      "target": null,
+      "text": "Choisissez la période à facturer — ici février 2025, le mois couvert par le fichier importé. La facturation portera sur l'énergie partagée de cette période.",
+      "title": "Définir la période",
+      "waitFor": "consumption-coverage__grid"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "run-generate__btn--generate",
+      "target": "run-generate__btn--generate",
+      "text": "Cliquez sur « Générer ». Le calcul s'exécute en arrière-plan : dès qu'il se termine, les factures de chaque membre de l'opération apparaissent.",
+      "title": "Générer les factures"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invoices-are-generated-draft",
+      "target": null,
+      "text": "Chaque membre de l'opération a désormais une facture au statut « Brouillon ». Il reste à l'émettre puis à enregistrer son paiement.",
+      "title": "Les factures sont générées"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "issue-the-first-invoice",
+      "target": null,
+      "text": "Cliquez sur l'icône « Émettre » d'une facture. Un numéro légal et une communication structurée lui sont attribués, et son statut passe à « Émise ».",
+      "title": "Émettre la facture"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "open-the-payment-dialog-on-the-issued-invoice",
+      "target": null,
+      "text": "Une fois la facture émise, l'icône « Enregistrer un paiement » (portefeuille) apparaît. Cliquez dessus pour ouvrir la fenêtre de paiement.",
+      "title": "Enregistrer un paiement"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "payment-dialog__btn--submit",
+      "target": "payment-dialog__btn--submit",
+      "text": "Le montant est pré-rempli avec le total de la facture et le mode de paiement par défaut est « Virement ». Cliquez sur « Enregistrer le paiement » : la facture passe au statut « Payée ».",
+      "title": "Valider le paiement"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-invoice-is-marked-paid",
+      "target": null,
+      "text": "Le paiement est enregistré et la facture porte désormais le statut « Payée ». Le cycle complet — tarif, génération, émission, encaissement — est terminé.",
+      "title": "La facture est payée"
+    }
+  ],
+  "title": "Facturer une opération, du tarif à l'encaissement"
+}

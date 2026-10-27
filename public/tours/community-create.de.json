@@ -1,0 +1,96 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/users/communities"
+  },
+  "guideUrl": "https://guide.optimce.be/community-create/de.html",
+  "id": "community-create",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "user-communities__button--create",
+      "target": "user-communities__button--create",
+      "text": "Klicken Sie oberhalb der Liste auf „Gemeinschaft erstellen“, um das Erstellungsfenster zu öffnen.",
+      "title": "Gemeinschaft erstellen",
+      "waitFor": "user-communities__table"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-dialog__input--name",
+      "target": "community-dialog__input--name",
+      "text": "Geben Sie den Namen der Gemeinschaft ein. Die Regulierungsbehörde ist vorausgewählt (CWaPE für die Wallonie); passen Sie sie an, wenn Ihre Gemeinschaft einer anderen regionalen Regulierungsbehörde untersteht.",
+      "title": "Gemeinschaft benennen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "community-dialog__button--submit",
+      "target": "community-dialog__button--submit",
+      "text": "Klicken Sie auf „Bestätigen“. Die Gemeinschaft wird im CRM und beim Identitätsanbieter angelegt, und Sie werden automatisch ihr Administrator.",
+      "title": "Erstellung bestätigen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "user-communities__input--search",
+      "target": "user-communities__input--search",
+      "text": "Suchen Sie die neue Gemeinschaft in der Liste.",
+      "title": "Die Gemeinschaft finden"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "user-communities__table",
+      "target": "user-communities__table",
+      "targetClick": "next",
+      "text": "„E2E Community“ erscheint jetzt in Ihrer Liste. Sie müssen sie nur noch aktivieren, um mit der Einrichtung zu beginnen.",
+      "title": "Ihre neue Gemeinschaft",
+      "waitFor": "user-communities__row--mobile--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "activate-the-new-community-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Aktivieren Sie die neue Gemeinschaft: Ihre Verwaltungsmenüs erscheinen in der Seitenleiste.",
+      "title": "Die Gemeinschaft aktivieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "17b-activate-the-new-community-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Aktivieren Sie die neue Gemeinschaft: Ihre Verwaltungsmenüs erscheinen in der Seitenleiste.",
+      "title": "Die Gemeinschaft aktivieren"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--management",
+      "target": "navbar__menu--management",
+      "targetClick": "next",
+      "text": "Der Bereich „Verwaltung“ erscheint in der Seitenleiste: Als Ersteller sind Sie Administrator der Gemeinschaft und haben Zugriff auf alle ihre Werkzeuge.",
+      "title": "Sie sind Administrator"
+    }
+  ],
+  "title": "Gemeinschaft erstellen"
+}

@@ -1,0 +1,97 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-update/fr.html",
+  "id": "sharing-op-update",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__btn--edit",
+      "target": "op-view__btn--edit",
+      "targetClick": "next",
+      "text": "La fiche de l'opération affiche son nom, son type, ses compteurs et les communes couvertes. Les crayons permettent de modifier ces informations.",
+      "title": "Fiche de l'opération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-2",
+      "target": "op-view__btn--edit",
+      "text": "Cliquez sur « Modifier » dans l'en-tête : le formulaire s'ouvre, pré-rempli avec les informations actuelles de l'opération.",
+      "title": "Ouvrir le formulaire de modification"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-creation__input--name",
+      "target": "op-creation__input--name",
+      "text": "Modifiez le nom de l'opération. Vous pouvez aussi y ajuster son type et ses communes.",
+      "title": "Renommer l'opération"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-creation__btn--submit",
+      "target": "op-creation__btn--submit",
+      "text": "Enregistrez pour valider vos modifications.",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-view__title--name",
+      "target": "op-view__title--name",
+      "targetClick": "next",
+      "text": "De retour sur la fiche, l'opération porte son nouveau nom.",
+      "title": "Nom mis à jour"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--edit-municipalities",
+      "target": "op-view__btn--edit-municipalities",
+      "text": "Le crayon à côté des communes ouvre l'éditeur des communes couvertes par l'opération.",
+      "title": "Modifier les communes"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "op-muni-update__autocomplete--municipalities",
+      "target": "op-muni-update__autocomplete--municipalities",
+      "text": "Saisissez une commune et choisissez-la dans les suggestions pour l'ajouter au périmètre de l'opération.",
+      "title": "Ajouter une commune"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-muni-update__btn--submit",
+      "target": "op-muni-update__btn--submit",
+      "text": "Enregistrez pour valider vos modifications.",
+      "title": "Enregistrer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-new-municipality-appears-on-the-operation",
+      "target": null,
+      "text": "La commune « Ixelles » apparaît désormais parmi les communes couvertes par l'opération.",
+      "title": "Commune ajoutée"
+    }
+  ],
+  "title": "Modifier une opération de partage"
+}

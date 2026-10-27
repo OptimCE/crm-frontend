@@ -1,0 +1,24 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/billing"
+  },
+  "guideUrl": "https://guide.optimce.be/billing-member-view/de.html",
+  "id": "billing-member-view",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices__card",
+      "target": "my-invoices__card",
+      "targetClick": "next",
+      "text": "Dies ist der Bereich „Meine Rechnungen“. Jede Karte steht für eine Ihrer Rechnungen, mit Nummer, Betrag, Status und strukturierter Mitteilung. Sie sehen nur Ihre eigenen Rechnungen.",
+      "title": "Ihre Rechnungen"
+    }
+  ],
+  "title": "Ihre Rechnung einsehen"
+}

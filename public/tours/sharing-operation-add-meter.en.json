@@ -1,0 +1,99 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/sharing_operations/:operationId"
+  },
+  "guideUrl": "https://guide.optimce.be/sharing-op-add-meter/en.html",
+  "id": "sharing-operation-add-meter",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-view__btn--add-meter",
+      "target": "op-view__btn--add-meter",
+      "text": "From the detail view, click \"Add meter\" to open the meter selection dialog.",
+      "title": "Start adding a meter"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "op-add-meter__table--meters",
+      "target": "op-add-meter__table--meters",
+      "targetClick": "next",
+      "text": "The dialog lists every meter in the community that is not yet attached to this sharing operation.",
+      "title": "Available meters"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__checkbox--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "op-add-meter__checkbox--0",
+      "text": "Tick the checkbox of the meter you want to attach. Multiple meters can be selected before submitting.",
+      "title": "Tick the meter"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__checkbox-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "op-add-meter__checkbox-mobile--0",
+      "text": "Tick the checkbox of the meter you want to attach. Multiple meters can be selected before submitting.",
+      "title": "Tick the meter"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "op-add-meter__datepicker--start-date",
+      "target": "op-add-meter__datepicker--start-date",
+      "text": "Open the calendar and pick today's date so the meter attachment takes effect immediately.",
+      "title": "Start date today"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "op-add-meter__btn--validate",
+      "target": "op-add-meter__btn--validate",
+      "text": "Click \"Validate\" to attach the meter. A toast notification confirms the server-side update.",
+      "title": "Confirm the addition"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "new-meter-appears-in-the-actuel-tab-desktop",
+      "layouts": [
+        "desktop"
+      ],
+      "target": null,
+      "text": "Back on the detail view, the newly attached meter appears immediately in the \"Now\" tab of meters tied to the operation.",
+      "title": "Meter attached"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "26b-new-meter-appears-in-the-actuel-tab-mobile",
+      "layouts": [
+        "mobile"
+      ],
+      "target": null,
+      "text": "Back on the detail view, the card of the newly attached meter appears immediately in the \"Now\" tab of meters tied to the operation.",
+      "title": "Meter attached"
+    }
+  ],
+  "title": "Add a meter to a sharing operation"
+}

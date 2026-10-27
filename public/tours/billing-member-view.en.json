@@ -1,0 +1,24 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/billing"
+  },
+  "guideUrl": "https://guide.optimce.be/billing-member-view/en.html",
+  "id": "billing-member-view",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-invoices__card",
+      "target": "my-invoices__card",
+      "targetClick": "next",
+      "text": "This is the \"My invoices\" space. Each card is one of your invoices, with its number, amount, status and structured communication. You only ever see your own invoices.",
+      "title": "Your invoices"
+    }
+  ],
+  "title": "View your own bill"
+}

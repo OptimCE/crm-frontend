@@ -3,6 +3,7 @@ import {
   computed,
   DestroyRef,
   effect,
+  ElementRef,
   inject,
   OnInit,
   output,
@@ -27,6 +28,14 @@ import { Tooltip } from 'primeng/tooltip';
 import { OverlayBadge } from 'primeng/overlaybadge';
 import { NotificationBell } from '../../features/notifications/components/notification-bell/notification-bell';
 import { NotificationStore } from '../../features/notifications/services/notification.store';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SteppyTours } from '@steppy/angular';
+import {
+  HelpDialog,
+  HelpDialogResult,
+} from '../../features/guided_tours/components/help-dialog/help-dialog';
+import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
+import { ERROR_TYPE } from '../../core/dtos/notification';
 
 interface RouteActiveState {
   dashboard: boolean;
@@ -88,6 +97,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
+  providers: [DialogService],
 })
 export class Navbar implements OnInit {
   private router = inject(Router);
@@ -98,6 +108,11 @@ export class Navbar implements OnInit {
   private readonly keycloak = inject(Keycloak);
   private destroyRef = inject(DestroyRef);
   protected readonly notificationStore = inject(NotificationStore);
+  private readonly dialogService = inject(DialogService);
+  private readonly tours = inject(SteppyTours);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly snackbar = inject(SnackbarNotification);
+  private helpRef: DynamicDialogRef | null = null;
 
   readonly sidebarPinChanged = output<boolean>();
 
@@ -138,6 +153,8 @@ export class Navbar implements OnInit {
   private hoverTimeout: ReturnType<typeof setTimeout> | null = null;
   /** Pointer currently over the <aside>; read when the notification popover closes. */
   private hovered = false;
+  /** Last value of `tours.active()` seen by the effect, so it only acts on a start or an end. */
+  private touring = false;
 
   memberLinks: Links[] = [
     { name: 'NAVBAR.HANDLE_MEMBRE', icon: 'pi pi-users', url: '/members' },
@@ -160,6 +177,34 @@ export class Navbar implements OnInit {
         if (!this.hovered) this.collapse();
       });
     });
+
+    // The tour overlay takes every pointer event outside the highlighted element,
+    // so the rail would get a mouseleave between steps and on the way to the
+    // popover's buttons. While a tour runs, the desktop rail follows the tour
+    // instead: expanded while the step shown points inside it, collapsed on the
+    // other steps so it never covers the page they show (`collapse()` defers to
+    // it meanwhile). Between two steps it keeps its state. It goes back to the
+    // hover rules after. `active` is also true for a tour resumed after a page load.
+    effect(() => {
+      const active = this.tours.active();
+      const step = this.tours.current();
+      untracked(() => {
+        const ended = this.touring && !active;
+        this.touring = active;
+        if (this.mobile() || this.pinned()) return;
+        if (active) {
+          if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+            this.hoverTimeout = null;
+          }
+          if (step) this.sidebarOpen.set(this.tourStepInRail());
+        } else if (ended && !this.hovered && !this.notificationStore.popoverOpen()) {
+          this.collapse();
+        }
+      });
+    });
+
+    this.destroyRef.onDestroy(() => this.helpRef?.destroy());
   }
 
   ngOnInit(): void {
@@ -167,7 +212,7 @@ export class Navbar implements OnInit {
     const handler = (e: MediaQueryListEvent | MediaQueryList) => {
       this.mobile.set(e.matches);
       this.visibleSideBar.set(!e.matches);
-      this.sidebarOpen.set(e.matches ? false : this.pinned());
+      this.sidebarOpen.set(e.matches ? false : this.pinned() || this.tourStepInRail());
     };
     handler(mq);
     mq.addEventListener('change', handler);
@@ -215,7 +260,8 @@ export class Navbar implements OnInit {
 
   onMouseEnter(): void {
     this.hovered = true;
-    if (this.mobile() || this.pinned()) return;
+    // During a tour the step shown decides (see the constructor).
+    if (this.mobile() || this.pinned() || this.tours.active()) return;
     this.hoverTimeout = setTimeout(() => {
       this.sidebarOpen.set(true);
     }, 120);
@@ -237,8 +283,28 @@ export class Navbar implements OnInit {
 
   private collapse(): void {
     if (this.mobile() || this.pinned()) return;
+    // During a tour the step shown decides, not the pointer; the submenu stays
+    // as the tour left it, for a later step inside it.
+    if (this.tours.active()) {
+      this.sidebarOpen.set(this.tourStepInRail());
+      return;
+    }
     this.sidebarOpen.set(false);
     this.activeSublist.set(null);
+  }
+
+  /**
+   * A tour runs and the step it shows points at an element of the navbar, or the
+   * bell's popover is open: it is appended to <body>, and collapsing would hide
+   * the bell right under it (`notification-view` points at its "see all").
+   */
+  private tourStepInRail(): boolean {
+    const step = this.tours.current();
+    if (!this.tours.active() || !step) return false;
+    if (this.notificationStore.popoverOpen()) return true;
+    if (!step.testId) return false;
+    const target = this.host.nativeElement.querySelector(`[data-testid="${step.testId}"]`);
+    return target !== null;
   }
 
   togglePin(): void {
@@ -264,6 +330,46 @@ export class Navbar implements OnInit {
     if (this.mobile()) {
       this.visibleSideBar.set(false);
       this.sidebarOpen.set(false);
+    }
+  }
+
+  /**
+   * The footer's "User guide" link opens the Help dialog on a plain click. It
+   * stays the same link (same element, href and look), so nothing changes in
+   * the guide's sidebar screenshots, and a ctrl-, shift- or middle-click still
+   * opens the guide in a new tab.
+   */
+  openHelp(event: MouseEvent): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+      return;
+    event.preventDefault();
+    if (this.helpRef) return;
+
+    this.helpRef = this.dialogService.open(HelpDialog, {
+      header: this.translateService.instant('HELP.TITLE') as string,
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      dismissableMask: true,
+      width: '40rem',
+      breakpoints: { '1024px': '90vw', '640px': '100vw' },
+    });
+    this.helpRef?.onClose.subscribe((result?: HelpDialogResult) => {
+      this.helpRef = null;
+      if (result) void this.startTour(result);
+    });
+  }
+
+  /** After the dialog has closed, so the tour's first step is not under it. */
+  private async startTour({ tourId, params }: HelpDialogResult): Promise<void> {
+    // The mobile drawer would cover the page; the tours open it themselves when a step needs it.
+    this.closeSideBar();
+    const started = await this.tours.start(tourId, params ? { params } : undefined);
+    if (!started) {
+      this.snackbar.openSnackBar(
+        this.translateService.instant('HELP.TOURS.START_FAILED') as string,
+        ERROR_TYPE,
+      );
     }
   }
 

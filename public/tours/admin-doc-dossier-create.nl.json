@@ -1,0 +1,108 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/administrative-document"
+  },
+  "guideUrl": "https://guide.optimce.be/admin-doc-dossier-create/nl.html",
+  "id": "admin-doc-dossier-create",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-list__empty--message",
+      "target": "dossier-list__empty--message",
+      "targetClick": "next",
+      "text": "Op deze pagina volgt u de dossiers op die bij de CWaPE en de netbeheerder zijn ingediend. Elk dossier betreft één enkele deeloperatie: een gemeenschap die er meerdere beheert, dient per operatie een dossier in.",
+      "title": "Nog geen dossier",
+      "waitFor": "dossier-list__table"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__btn--create",
+      "target": "dossier-list__btn--create",
+      "text": "Klik op “Nieuw dossier” om het aanmaakformulier te openen.",
+      "title": "Dossier aanmaken"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "dossier-create-dialog__select--type",
+      "target": "dossier-create-dialog__select--type",
+      "text": "Het type bepaalt welke wettelijke termijnen daarna worden berekend. Hier een kennisgeving van oprichting van een gemeenschap.",
+      "title": "Type dossier kiezen"
+    },
+    {
+      "advance": {
+        "on": "change"
+      },
+      "id": "dossier-create-dialog__select--operation",
+      "target": "dossier-create-dialog__select--operation",
+      "text": "Selecteer de betrokken deeloperatie. Zij levert de leden en meters die in de documenten van het dossier worden opgenomen.",
+      "title": "Deeloperatie kiezen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "dossier-create-dialog__input--title",
+      "target": "dossier-create-dialog__input--title",
+      "text": "Geef het dossier een titel die het van de andere onderscheidt.",
+      "title": "Het dossier benoemen"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "dossier-create-dialog__input--external-ref",
+      "target": "dossier-create-dialog__input--external-ref",
+      "text": "De titel is vrij te kiezen: hij helpt u het dossier terug te vinden. De referentie is die welke de bevoegde instantie heeft toegekend — ze identificeert het dossier op unieke wijze en kan later nog worden gewijzigd.",
+      "title": "Titel en referentie"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-create-dialog__btn--submit",
+      "target": "dossier-create-dialog__btn--submit",
+      "text": "Bevestig: het dossier wordt aangemaakt en komt in de opvolgingstabel terecht.",
+      "title": "Aanmaken"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dossier-appears-in-the-list",
+      "target": null,
+      "text": "Het dossier verschijnt in de tabel met de status “In voorbereiding”. Zolang het niet is ingediend, blijft het bewerkbaar en loopt er geen enkele termijn.",
+      "title": "Het dossier is aangemaakt",
+      "waitFor": "dossier-list__row--0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-list__row--0",
+      "target": "dossier-list__row--0",
+      "text": "Klik ergens op de rij om de dossierpagina te openen.",
+      "title": "Dossier openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "the-dossier-detail-page-opens",
+      "target": null,
+      "text": "De pagina bundelt alles over het dossier: de documenten, de termijnen en de historiek van de statuswijzigingen. De knoppen bovenaan bieden alleen de statuswijzigingen aan die op dat moment zijn toegestaan.",
+      "title": "De dossierpagina",
+      "waitFor": "dossier-detail__tag--status"
+    }
+  ],
+  "title": "Een administratief dossier aanmaken"
+}

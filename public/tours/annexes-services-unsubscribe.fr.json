@@ -1,0 +1,61 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/annexes-services"
+  },
+  "guideUrl": "https://guide.optimce.be/annexes-unsubscribe/fr.html",
+  "id": "annexes-services-unsubscribe",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__card--algorithm",
+      "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
+      "text": "La carte « Génération de clés de répartition » est visible avec le badge « Activé ». Le bouton de désactivation (×) est disponible en haut à droite de la carte.",
+      "title": "Module actif"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "annexes-services-list__btn--unsubscribe-algorithm",
+      "target": "annexes-services-list__btn--unsubscribe-algorithm",
+      "text": "Cliquez sur le bouton × en haut à droite de la carte pour désactiver le module. Une confirmation vous sera demandée avant la suppression.",
+      "title": "Désactiver le module"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirmation-dialog-is-visible",
+      "target": null,
+      "text": "Une fenêtre de confirmation s'affiche. Cliquez sur « Valider » pour confirmer la désactivation du module et la perte d'accès pour les membres.",
+      "title": "Confirmer la désactivation"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "confirm-the-deactivation",
+      "target": null,
+      "text": "Confirmez votre choix dans la fenêtre de confirmation.",
+      "title": "Confirmer"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "annexes-services-list__empty",
+      "target": "annexes-services-list__empty",
+      "targetClick": "next",
+      "text": "La grille est à nouveau vide : le module « Génération de clés de répartition » a été désactivé et n'est plus accessible depuis la communauté.",
+      "title": "Module désactivé"
+    }
+  ],
+  "title": "Se désabonner d'un service annexe"
+}
