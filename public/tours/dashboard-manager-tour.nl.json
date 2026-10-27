@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
       "target": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
+      "targetClick": "next",
       "text": "De eerste tegel verzamelt wat blokkeert of dreigt te blokkeren: ontbrekende juridische gegevens, meters die op de netbeheerder wachten, operaties zonder verdeelsleutel. Elke regel leidt rechtstreeks naar het scherm waar u het kunt oplossen.",
       "title": "Aandachtspunten"
     },
@@ -42,6 +43,7 @@
       },
       "id": "energy-glance-tile__link--operation",
       "target": "energy-glance-tile__link--operation",
+      "targetClick": "next",
       "text": "Voor elke deeloperatie toont de tegel de gedeelde en de geïnjecteerde energie over de laatste periode waarvoor gegevens beschikbaar zijn. De naam van de operatie leidt naar haar detailpagina.",
       "title": "Energie in één oogopslag"
     },
@@ -51,6 +53,7 @@
       },
       "id": "sharing-operations-tile__link--all",
       "target": "sharing-operations-tile__link--all",
+      "targetClick": "next",
       "text": "De tegel toont de operaties van de gemeenschap met hun type. De link onderaan opent de volledige lijst.",
       "title": "Deelbewerkingen"
     },
@@ -60,6 +63,7 @@
       },
       "id": "onboarding-funnel-tile__link--members",
       "target": "onboarding-funnel-tile__link--members",
+      "targetClick": "next",
       "text": "“Nieuwe deelnemers” telt de verzonden uitnodigingen en de fiches die nog moeten worden ingevuld. “Recente activiteit” toont de laatste acties die in het auditlogboek van de gemeenschap zijn geregistreerd.",
       "title": "Nieuwe deelnemers en recente activiteit"
     },
@@ -69,6 +73,7 @@
       },
       "id": "unpaid-invoices-tile__link--billing",
       "target": "unpaid-invoices-tile__link--billing",
+      "targetClick": "next",
       "text": "Facturatie, nieuws, dossiers en administratieve deadlines verschijnen alleen als de gemeenschap geabonneerd is op de bijbehorende module. Een gemeenschap zonder abonnement ziet deze tegels gewoon niet.",
       "title": "De geactiveerde modules"
     },
@@ -78,6 +83,7 @@
       },
       "id": "module-discovery-strip",
       "target": "module-discovery-strip",
+      "targetClick": "next",
       "text": "Onderaan het dashboard toont de strook “Beschikbare modules” wat de gemeenschap nog niet gebruikt. Een beheerder kan ze hier activeren; een manager ziet aan wie hij ze moet vragen.",
       "title": "Beschikbare modules"
     },
@@ -96,6 +102,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "De tegels laden een voor een opnieuw en krijgen weer hun gewone weergave met de meest recente gegevens.",
       "title": "Bijgewerkte gegevens"
     }

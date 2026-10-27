@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys"
   },
@@ -115,6 +115,7 @@
       },
       "id": "key-update__grid--data-3",
       "target": "key-update__grid--data",
+      "targetClick": "next",
       "text": "Scan the full grid to confirm the iterations, names and percentages before saving the key.",
       "title": "Review the configuration"
     },

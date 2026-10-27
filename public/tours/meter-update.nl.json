@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -39,6 +39,7 @@
       },
       "id": "meter-view__hero",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "De gedetailleerde fiche toont de huidige gegevens van de meter: EAN, installatieadres en technische kenmerken.",
       "title": "Oorspronkelijke fiche"
     },
@@ -120,6 +121,7 @@
       },
       "id": "meter-view__hero-2",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "Terug op de meterfiche zijn het nieuwe adres en het nieuwe nummer meteen zichtbaar — de wijziging is aan de serverzijde opgeslagen.",
       "title": "Meter bijgewerkt",
       "waitFor": "meter-view__card--location"

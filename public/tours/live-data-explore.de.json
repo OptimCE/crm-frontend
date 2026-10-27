@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -15,6 +15,7 @@
       },
       "id": "live-data-hub__indicative",
       "target": "live-data-hub__indicative",
+      "targetClick": "next",
       "text": "Diese Konsole verfolgt Viertelstunde für Viertelstunde, was die bei den Mitgliedern installierten Geräte messen. Diese Werte sind indikativ: Nur die Daten des Netzbetreibers dienen für die Verteilungsschlüssel und die Abrechnung.",
       "title": "Die Live-Daten-Konsole",
       "waitFor": "live-dashboard__signal"
@@ -25,6 +26,7 @@
       },
       "id": "live-dashboard__no-data",
       "target": "live-dashboard__no-data",
+      "targetClick": "next",
       "text": "Die Übersicht fasst die letzte volle Stunde zusammen: Erzeugung, Leistung, Austausch mit dem Netz und Gerätestatus. Solange kein Gerät einen Messwert gesendet hat, zeigt jede Kachel einen Strich statt einer Null — „noch nicht gemessen“ ist nicht dasselbe wie „nichts erzeugt“.",
       "title": "Die Übersicht"
     },
@@ -54,6 +56,7 @@
       },
       "id": "live-devices__btn--add",
       "target": "live-devices__btn--add",
+      "targetClick": "next",
       "text": "Die Gemeinschaft hat noch kein Gerät. Die Schaltfläche „Gerät hinzufügen“ legt ein Gerät für einen Zähler an und stellt seinen Registrierungscode aus — siehe die Anleitung „Ein Gerät verbinden“.",
       "title": "Noch keine Geräte",
       "waitFor": "live-devices__empty"
@@ -73,6 +76,7 @@
       },
       "id": "live-ops__empty",
       "target": "live-ops__empty",
+      "targetClick": "next",
       "text": "Ohne Gerät wurde noch nichts berechnet, und kein Gerät erfordert Aufmerksamkeit. Sobald ein Gerät sendet, zeigt dieser Bildschirm, seit wann die Werte neu berechnet wurden, und meldet Geräte, die stumm oder offline sind oder deren Messwerte abgelehnt werden.",
       "title": "Ein leerer Gerätepark",
       "waitFor": "live-ops__readings-rejected-none"
@@ -92,6 +96,7 @@
       },
       "id": "live-settings__btn--save",
       "target": "live-settings__btn--save",
+      "targetClick": "next",
       "text": "Die Einstellungen legen fest, was die Mitglieder sehen können, und die Mindestanzahl an Mitgliedern, unterhalb derer der Austausch mit dem Netz verborgen bleibt, damit kein Haushalt identifizierbar ist. Solange sie nicht gespeichert wurden, gelten die Standardwerte der Plattform.",
       "title": "Die Sichtbarkeitseinstellungen",
       "waitFor": "live-settings__is-default"

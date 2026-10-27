@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters/:meterEan"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meter-view__btn--deactivate",
       "target": "meter-view__btn--deactivate",
+      "targetClick": "next",
       "text": "Open de detailpagina van de meter die u wilt deactiveren. Met de knop “Meter deactiveren” plant u het einde van zijn activiteit op een bepaalde datum.",
       "title": "Detailpagina van de meter"
     },

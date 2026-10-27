@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -242,6 +242,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "The meter \"541449123456789012\" appears in the filtered table — the creation is confirmed and the detail page is reachable from the list.",
       "title": "Meter found"
     },
@@ -275,6 +276,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "The detail page shows the new meter's EAN and exposes the browsing tabs: actual, historical, future and consumption data.",
       "title": "Meter detail ready",
       "waitFor": "meter-view__hero"

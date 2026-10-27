@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -15,6 +15,7 @@
       },
       "id": "news-board__empty",
       "target": "news-board__empty",
+      "targetClick": "next",
       "text": "Het nieuwsbord wordt weergegeven. Het is nog leeg: er is nog geen nieuws gepubliceerd. Als beheerder kunt u een bericht aanmaken met de knop “Opstellen”.",
       "title": "Het nieuwsbord"
     },
@@ -33,6 +34,7 @@
       },
       "id": "news-compose__body",
       "target": "news-compose__body",
+      "targetClick": "next",
       "text": "Het venster opent op het type “Bericht”. Met het tabblad “Peiling” zou u in plaats daarvan een peiling aanmaken — hier publiceren we een gewoon nieuwsbericht.",
       "title": "Een nieuwsbericht opstellen",
       "waitFor": "news-compose__kind--post"
@@ -61,6 +63,7 @@
       },
       "id": "news-post__body",
       "target": "news-post__body",
+      "targetClick": "next",
       "text": "Het nieuwsbericht verschijnt bovenaan het bord, ondertekend door de auteur. Alle leden van de gemeenschap zien het en ontvangen een melding.",
       "title": "Uw nieuwsbericht is gepubliceerd"
     }

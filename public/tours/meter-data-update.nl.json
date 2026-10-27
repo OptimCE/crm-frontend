@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "Open de lijst met meters van de actieve gemeenschap. Zoek de meter waarvan u de huidige configuratie wilt bijwerken.",
       "title": "Lijst met meters"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__btn--update",
       "target": "meter-view__btn--update",
+      "targetClick": "next",
       "text": "De fiche toont de huidige kenmerken. De knop “Bijwerken” wordt alleen aangeboden voor een actieve meter — dat is ons startpunt.",
       "title": "Actieve meter",
       "waitFor": "meter-view__hero"
@@ -140,6 +142,7 @@
       },
       "id": "meter-data-view__text--rate",
       "target": "meter-data-view__text--rate",
+      "targetClick": "next",
       "text": "Terug op de fiche verschijnen de nieuwe beschrijving, het amperage van 63 A en het tweeuurtarief in de gegevenskaarten — de wijzigingen zijn wel degelijk op de server opgeslagen.",
       "title": "Wijziging bevestigd",
       "waitFor": "meter-data-view__text--description"

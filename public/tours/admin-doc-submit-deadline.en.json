@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-detail__tag--status",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "While the dossier is \"In preparation\", the regulator expects nothing from you. The buttons at the top only offer the status changes that make sense at this stage.",
       "title": "A dossier in preparation",
       "waitFor": "dossier-detail__btn--transition-2"
@@ -62,6 +63,7 @@
       },
       "id": "dossier-detail__tag--status-2",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "The status changes and the available actions change with it: a submitted dossier can be declared complete, corrected, or lapse.",
       "title": "The dossier is submitted"
     },
@@ -80,6 +82,7 @@
       },
       "id": "dossier-deadlines-panel__btn--met-1",
       "target": "dossier-deadlines-panel__btn--met-1",
+      "targetClick": "next",
       "text": "You never enter a deadline by hand: OptimCE derives it from the dossier type, the region and the date you have just recorded.",
       "title": "A deadline has appeared",
       "waitFor": "dossier-deadlines-panel__row--0"
@@ -108,6 +111,7 @@
       },
       "id": "deadline-dashboard__btn--met-1",
       "target": "deadline-dashboard__btn--met-1",
+      "targetClick": "next",
       "text": "Every row links back to its dossier and shows the due date. The filter shows the still-open deadlines by default.",
       "title": "The deadline board",
       "waitFor": "deadline-dashboard__row--0"
@@ -136,6 +140,7 @@
       },
       "id": "deadline-dashboard__empty--message",
       "target": "deadline-dashboard__empty--message",
+      "targetClick": "next",
       "text": "The board shows no open deadline any more. The dossier history still keeps a record of what was done and when.",
       "title": "Nothing pending"
     }

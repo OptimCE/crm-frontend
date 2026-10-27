@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "Ouvrez la liste des compteurs de la communauté active. Repérez le compteur dont vous souhaitez mettre à jour la configuration courante.",
       "title": "Liste des compteurs"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__btn--update",
       "target": "meter-view__btn--update",
+      "targetClick": "next",
       "text": "La fiche affiche les caractéristiques courantes. Le bouton « Mettre à jour les données » n'est proposé que pour un compteur actif — c'est notre point d'entrée.",
       "title": "Compteur actif",
       "waitFor": "meter-view__hero"
@@ -140,6 +142,7 @@
       },
       "id": "meter-data-view__text--rate",
       "target": "meter-data-view__text--rate",
+      "targetClick": "next",
       "text": "De retour sur la fiche, la nouvelle description, l'ampérage de 63 A et le tarif bi-horaire apparaissent dans les cartes de données — les modifications sont bien persistées côté serveur.",
       "title": "Mise à jour confirmée",
       "waitFor": "meter-data-view__text--description"

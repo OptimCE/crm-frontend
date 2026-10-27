@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/members"
   },
@@ -49,6 +49,7 @@
       },
       "id": "member-view-tabs__tab--meter",
       "target": "member-view-tabs__tab--meter",
+      "targetClick": "next",
       "text": "Le membre est actif : sa pastille de statut est verte et un onglet « Compteur » est disponible. Les boutons d'action permettent de le désactiver ou de le mettre en attente.",
       "title": "Fiche du membre actif",
       "waitFor": "member-view__btn--deactivate"
@@ -68,6 +69,7 @@
       },
       "id": "member-view__tag--status-inactive",
       "target": "member-view__tag--status-inactive",
+      "targetClick": "next",
       "text": "La pastille passe à « Inactif » et l'onglet « Compteur » disparaît : un membre inactif ne peut plus être rattaché à un compteur.",
       "title": "Membre désactivé"
     },
@@ -86,6 +88,7 @@
       },
       "id": "member-view__tag--status-active",
       "target": "member-view__tag--status-active",
+      "targetClick": "next",
       "text": "La pastille repasse à « Actif » et l'onglet « Compteur » réapparaît. Le membre est de nouveau pleinement opérationnel.",
       "title": "Membre réactivé"
     }

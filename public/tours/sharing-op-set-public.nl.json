@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/sharing_operations"
   },
@@ -70,6 +70,7 @@
       },
       "id": "operations-list__table",
       "target": "operations-list__table",
+      "targetClick": "next",
       "text": "De nieuwe operatie “E2E Energy Sharing” verschijnt in de lijst. Ze staat voorlopig in privémodus: ze is alleen zichtbaar voor de beheerders van de gemeenschap en verschijnt nog niet in de openbare gids.",
       "title": "Operatie aangemaakt"
     },
@@ -88,6 +89,7 @@
       },
       "id": "op-view__btn--toggle-visibility",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "De grijze knop “Privé” in de kop geeft aan dat deze operatie nog niet zichtbaar is in de openbare gids. Burgers die een deeloperatie in hun gemeente zoeken, kunnen ze niet vinden zolang ze privé blijft.",
       "title": "Standaard privé",
       "waitFor": "op-view__title--name"
@@ -107,6 +109,7 @@
       },
       "id": "op-view__btn--toggle-visibility-3",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "De knop wordt groen en toont “Openbaar”. Elke burger kan deze operatie nu vinden in de gids van de energiegemeenschappen, op gemeente filteren en contact opnemen met de gemeenschap om deelname aan te vragen.",
       "title": "De operatie is nu openbaar"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -15,6 +15,7 @@
       },
       "id": "profile__card--account",
       "target": "profile__card--account",
+      "targetClick": "next",
       "text": "Le profil affiche les données initiales : Demo User, demo@example.com et l'adresse à Bruxelles, telles qu'elles ont été semées par la base de données.",
       "title": "Profil par défaut",
       "waitFor": "profile__card--addresses"
@@ -62,6 +63,7 @@
       },
       "id": "profile__avatar",
       "target": "profile__avatar",
+      "targetClick": "next",
       "text": "De retour sur la page de profil, le nouveau prénom et le nouveau nom sont visibles immédiatement — la modification est persistée côté serveur.",
       "title": "Profil mis à jour"
     }

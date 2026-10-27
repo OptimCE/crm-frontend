@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,7 +15,7 @@
       },
       "id": "community-picker__btn--enter",
       "target": "community-picker__btn--enter",
-      "text": "U beheert voortaan deze gemeenschap: haar kaart toont uw nieuwe rol. Klik op “Mijn gemeenschap openen” — haar dashboard is niet langer dat van een lid.",
+      "text": "U beheert voortaan deze gemeenschap: haar kaart toont uw nieuwe rol. Klik op **“Mijn gemeenschap openen”** — haar dashboard is niet langer dat van een lid.",
       "title": "U bent manager"
     },
     {
@@ -24,19 +24,23 @@
       },
       "id": "readiness-tile",
       "target": "readiness-tile",
-      "text": "Het dashboard vat nu de hele gemeenschap samen. “Aandachtspunten” toont wat blokkeert, met een link naar het scherm waar u het oplost; daarna volgen de gedeelde energie, de operaties en de recente activiteit.",
+      "targetClick": "next",
+      "text": "Het dashboard vat nu de hele gemeenschap samen. **“Aandachtspunten”** toont wat blokkeert, met een link naar het scherm waar u het oplost; daarna volgen de gedeelde energie, de operaties en de recente activiteit.",
       "title": "Het managersdashboard"
     },
     {
       "advance": {
         "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Uw rol heeft de sectie “Beheer” aan de zijbalk toegevoegd: de verdeelsleutels, de leden, meters en deeloperaties, de gebruikers van de gemeenschap en het auditlogboek. Beweeg over de balk om de labels te lezen."
+      "targetClick": "next",
+      "text": "Uw rol heeft de sectie **“Beheer”** aan de zijbalk toegevoegd: de verdeelsleutels, de leden, meters en deeloperaties, de gebruikers van de gemeenschap en het auditlogboek.",
+      "title": "De sectie “Beheer”"
     },
     {
       "advance": {
@@ -47,7 +51,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tik op het menupictogram om de navigatie te openen."
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
     },
     {
       "advance": {
@@ -58,26 +62,55 @@
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Uw rol heeft de sectie “Beheer” aan het menu toegevoegd: de verdeelsleutels, de leden, meters en deeloperaties, de gebruikers van de gemeenschap en het auditlogboek.",
+      "targetClick": "next",
+      "text": "Uw rol heeft de sectie **“Beheer”** aan het menu toegevoegd: de verdeelsleutels, de leden, meters en deeloperaties, de gebruikers van de gemeenschap en het auditlogboek.",
       "title": "De sectie “Beheer”"
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__container",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__container",
-      "text": "“Ledenbeheer” groepeert het dagelijkse werk van de gemeenschap: “Leden beheren”, “Meters beheren” en “Deeloperaties”.",
-      "title": "Leden, meters, operaties"
+      "text": "Klik op **“Ledenbeheer”** om het submenu open te klappen."
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__submenu-link--0",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__submenu-link--0",
-      "text": "Klik op “Leden beheren”.",
-      "title": "De leden openen"
+      "text": "Het submenu groepeert het dagelijkse werk van de gemeenschap: de leden, de meters en de deeloperaties. Klik op **“Leden beheren”**."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__container-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__container",
+      "text": "Tik op **“Ledenbeheer”** om het submenu open te klappen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__submenu-link--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__submenu-link--0",
+      "text": "Het submenu groepeert het dagelijkse werk van de gemeenschap: de leden, de meters en de deeloperaties. Tik op **“Leden beheren”**."
     },
     {
       "advance": {
@@ -85,7 +118,8 @@
       },
       "id": "members-list__btn--invite",
       "target": "members-list__btn--invite",
-      "text": "Hier houdt u de ledenlijst bij. “Toevoegen” maakt een fiche aan; “Nieuw lid uitnodigen” stuurt een e-mail zodat de persoon ze zelf aanvult en toegang krijgt tot zijn eigen ruimte.",
+      "targetClick": "next",
+      "text": "Hier houdt u de ledenlijst bij. **“Toevoegen”** maakt een fiche aan; **“Nieuw lid uitnodigen”** stuurt een e-mail zodat de persoon ze zelf aanvult en toegang krijgt tot zijn eigen ruimte.",
       "title": "Leden toevoegen en uitnodigen",
       "waitFor": "members-list__btn--add"
     },
@@ -93,12 +127,13 @@
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-3",
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--keys",
       "layouts": [
         "desktop"
       ],
-      "target": "navbar__menu--management",
-      "text": "Klik in de sectie “Beheer” op “Verdeelsleutelbeheer”.",
+      "target": "sidebar-element__link--keys",
+      "text": "Klik in de sectie **“Beheer”** op **“Verdeelsleutelbeheer”**.",
       "title": "De verdeelsleutels"
     },
     {
@@ -110,18 +145,18 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tik op het menupictogram om de navigatie te openen."
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-4",
+      "id": "sidebar-element__link--keys-2",
       "layouts": [
         "mobile"
       ],
-      "target": "navbar__menu--management",
-      "text": "Tik in de sectie “Beheer” van het menu op “Verdeelsleutelbeheer”.",
+      "target": "sidebar-element__link--keys",
+      "text": "Tik in de sectie **“Beheer”** van het menu op **“Verdeelsleutelbeheer”**.",
       "title": "De verdeelsleutels"
     },
     {
@@ -130,7 +165,8 @@
       },
       "id": "keys-list__btn--add",
       "target": "keys-list__btn--add",
-      "text": "Een verdeelsleutel bepaalt hoe de gedeelde energie wordt verdeeld over de verbruikers van een operatie. Met “Toevoegen” kiest u tussen het volledige formulier en een stapsgewijze wizard. De “Gebruikershandleiding” biedt een uitgebreide rondleiding voor elk van deze schermen.",
+      "targetClick": "next",
+      "text": "Een verdeelsleutel bepaalt hoe de gedeelde energie wordt verdeeld over de verbruikers van een operatie. Met **“Toevoegen”** kiest u tussen het volledige formulier en een stapsgewijze wizard. De **“Gebruikershandleiding”** biedt een uitgebreide rondleiding voor elk van deze schermen.",
       "title": "De verdeelsleutels",
       "waitFor": "keys-list__table--keys"
     }

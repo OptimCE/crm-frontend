@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,7 +15,7 @@
       },
       "id": "community-picker__btn--enter",
       "target": "community-picker__btn--enter",
-      "text": "Sie verwalten jetzt diese Gemeinschaft: Ihre Karte zeigt Ihre neue Rolle. Klicken Sie auf „Meine Gemeinschaft öffnen“ — ihre Übersicht ist nicht mehr die eines Mitglieds.",
+      "text": "Sie verwalten jetzt diese Gemeinschaft: Ihre Karte zeigt Ihre neue Rolle. Klicken Sie auf **„Meine Gemeinschaft öffnen“** — ihre Übersicht ist nicht mehr die eines Mitglieds.",
       "title": "Sie sind Manager"
     },
     {
@@ -24,19 +24,23 @@
       },
       "id": "readiness-tile",
       "target": "readiness-tile",
-      "text": "Die Übersicht fasst jetzt die ganze Gemeinschaft zusammen. „Zu prüfende Punkte“ listet auf, was blockiert, mit einem Link zu dem Bildschirm, auf dem Sie es beheben; danach folgen die geteilte Energie, die Operationen und die letzte Aktivität.",
+      "targetClick": "next",
+      "text": "Die Übersicht fasst jetzt die ganze Gemeinschaft zusammen. **„Zu prüfende Punkte“** listet auf, was blockiert, mit einem Link zu dem Bildschirm, auf dem Sie es beheben; danach folgen die geteilte Energie, die Operationen und die letzte Aktivität.",
       "title": "Die Übersicht für Manager"
     },
     {
       "advance": {
         "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Ihre Rolle hat den Abschnitt „Verwaltung“ in die Seitenleiste gebracht: die Verteilungsschlüssel, die Mitglieder, Zähler und Teilungsoperationen, die Benutzer der Gemeinschaft und das Audit-Protokoll. Fahren Sie über die Leiste, um die Beschriftungen zu lesen."
+      "targetClick": "next",
+      "text": "Ihre Rolle hat den Abschnitt **„Verwaltung“** in die Seitenleiste gebracht: die Verteilungsschlüssel, die Mitglieder, Zähler und Teilungsoperationen, die Benutzer der Gemeinschaft und das Audit-Protokoll.",
+      "title": "Der Abschnitt „Verwaltung“"
     },
     {
       "advance": {
@@ -47,7 +51,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
     },
     {
       "advance": {
@@ -58,26 +62,55 @@
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Ihre Rolle hat den Abschnitt „Verwaltung“ ins Menü gebracht: die Verteilungsschlüssel, die Mitglieder, Zähler und Teilungsoperationen, die Benutzer der Gemeinschaft und das Audit-Protokoll.",
+      "targetClick": "next",
+      "text": "Ihre Rolle hat den Abschnitt **„Verwaltung“** ins Menü gebracht: die Verteilungsschlüssel, die Mitglieder, Zähler und Teilungsoperationen, die Benutzer der Gemeinschaft und das Audit-Protokoll.",
       "title": "Der Abschnitt „Verwaltung“"
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__container",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__container",
-      "text": "„Mitgliederverwaltung“ fasst die tägliche Arbeit der Gemeinschaft zusammen: „Mitglieder verwalten“, „Zähler verwalten“ und „Teilungsoperationen“.",
-      "title": "Mitglieder, Zähler, Operationen"
+      "text": "Klicken Sie auf **„Mitgliederverwaltung“**, um das Untermenü aufzuklappen."
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__submenu-link--0",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__submenu-link--0",
-      "text": "Klicken Sie auf „Mitglieder verwalten“.",
-      "title": "Die Mitglieder öffnen"
+      "text": "Das Untermenü fasst die tägliche Arbeit der Gemeinschaft zusammen: die Mitglieder, die Zähler und die Teilungsoperationen. Klicken Sie auf **„Mitglieder verwalten“**."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__container-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__container",
+      "text": "Tippen Sie auf **„Mitgliederverwaltung“**, um das Untermenü aufzuklappen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__submenu-link--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__submenu-link--0",
+      "text": "Das Untermenü fasst die tägliche Arbeit der Gemeinschaft zusammen: die Mitglieder, die Zähler und die Teilungsoperationen. Tippen Sie auf **„Mitglieder verwalten“**."
     },
     {
       "advance": {
@@ -85,7 +118,8 @@
       },
       "id": "members-list__btn--invite",
       "target": "members-list__btn--invite",
-      "text": "Hier führen Sie die Mitgliederliste. „Hinzufügen“ legt einen Datensatz an; „Neues Mitglied einladen“ sendet eine E-Mail, damit die Person ihn selbst vervollständigt und Zugang zu ihrem eigenen Bereich erhält.",
+      "targetClick": "next",
+      "text": "Hier führen Sie die Mitgliederliste. **„Hinzufügen“** legt einen Datensatz an; **„Neues Mitglied einladen“** sendet eine E-Mail, damit die Person ihn selbst vervollständigt und Zugang zu ihrem eigenen Bereich erhält.",
       "title": "Mitglieder hinzufügen und einladen",
       "waitFor": "members-list__btn--add"
     },
@@ -93,12 +127,13 @@
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-3",
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--keys",
       "layouts": [
         "desktop"
       ],
-      "target": "navbar__menu--management",
-      "text": "Klicken Sie im Abschnitt „Verwaltung“ auf „Verteilungsschlüsselverwaltung“.",
+      "target": "sidebar-element__link--keys",
+      "text": "Klicken Sie im Abschnitt **„Verwaltung“** auf **„Verteilungsschlüsselverwaltung“**.",
       "title": "Die Verteilungsschlüssel"
     },
     {
@@ -110,18 +145,18 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-4",
+      "id": "sidebar-element__link--keys-2",
       "layouts": [
         "mobile"
       ],
-      "target": "navbar__menu--management",
-      "text": "Tippen Sie im Abschnitt „Verwaltung“ des Menüs auf „Verteilungsschlüsselverwaltung“.",
+      "target": "sidebar-element__link--keys",
+      "text": "Tippen Sie im Abschnitt **„Verwaltung“** des Menüs auf **„Verteilungsschlüsselverwaltung“**.",
       "title": "Die Verteilungsschlüssel"
     },
     {
@@ -130,7 +165,8 @@
       },
       "id": "keys-list__btn--add",
       "target": "keys-list__btn--add",
-      "text": "Ein Verteilungsschlüssel legt fest, wie die geteilte Energie auf die Verbraucher einer Operation aufgeteilt wird. Mit „Hinzufügen“ wählen Sie zwischen dem vollständigen Formular und einem Schritt-für-Schritt-Assistenten. Das „Benutzerhandbuch“ bietet für jeden dieser Bildschirme eine ausführliche Tour.",
+      "targetClick": "next",
+      "text": "Ein Verteilungsschlüssel legt fest, wie die geteilte Energie auf die Verbraucher einer Operation aufgeteilt wird. Mit **„Hinzufügen“** wählen Sie zwischen dem vollständigen Formular und einem Schritt-für-Schritt-Assistenten. Das **„Benutzerhandbuch“** bietet für jeden dieser Bildschirme eine ausführliche Tour.",
       "title": "Die Verteilungsschlüssel",
       "waitFor": "keys-list__table--keys"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -25,6 +25,7 @@
       },
       "id": "live-dashboard__operation-shared",
       "target": "live-dashboard__operation-shared",
+      "targetClick": "next",
       "text": "Pour l'opération choisie : sa production de la dernière heure complète, ses échanges avec le réseau, l'énergie partagée (estimation) et le nombre de compteurs suivis sur l'ensemble de ses compteurs. Les échanges avec le réseau et le partage restent masqués tant que l'opération compte trop peu de membres.",
       "title": "Les chiffres de l'opération",
       "waitFor": "live-dashboard__operation-cards"

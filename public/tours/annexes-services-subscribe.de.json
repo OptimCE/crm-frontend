@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services"
   },
@@ -15,6 +15,7 @@
       },
       "id": "annexes-services-list__empty",
       "target": "annexes-services-list__empty",
+      "targetClick": "next",
       "text": "Die Seite „Zusatzdienste“ ist leer: Für diese Gemeinschaft ist noch kein Zusatzmodul aktiviert.",
       "title": "Kein Modul aktiviert"
     },
@@ -33,6 +34,7 @@
       },
       "id": "add-annex-dialog__item--algorithm",
       "target": "add-annex-dialog__item--algorithm",
+      "targetClick": "next",
       "text": "Der Dialog listet die verfügbaren Module auf. Hier wird das Modul „Generierung von Verteilschlüsseln“ mit seiner Beschreibung angeboten.",
       "title": "Modul auswählen",
       "waitFor": "add-annex-dialog__list"
@@ -52,6 +54,7 @@
       },
       "id": "annexes-services-list__card--algorithm",
       "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
       "text": "Die Karte „Generierung von Verteilschlüsseln“ erscheint mit dem Badge „Aktiviert“ im Raster: Das Modul ist jetzt über diese Seite zugänglich.",
       "title": "Modul aktiviert"
     }

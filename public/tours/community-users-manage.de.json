@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/users"
   },
@@ -18,6 +18,7 @@
         "desktop"
       ],
       "target": "users-community-list__row--desktop--0",
+      "targetClick": "next",
       "text": "Diese Seite listet alle Benutzer mit Zugriff auf die Gemeinschaft und ihre Rolle auf: Administrator, Manager oder Mitglied. Sie können jemanden einladen, eine Rolle ändern oder einen Zugriff entziehen.",
       "title": "Die Benutzer der Gemeinschaft",
       "waitFor": "users-community-list__table"
@@ -31,6 +32,7 @@
         "mobile"
       ],
       "target": "users-community-list__card--mobile--0",
+      "targetClick": "next",
       "text": "Diese Seite listet die mit der Gemeinschaft verknüpften Konten und ihre Rolle auf. Hier laden Sie einen Manager ein, ändern eine Rolle oder entziehen einen Zugriff.",
       "title": "Die Benutzer der Gemeinschaft"
     },
@@ -159,6 +161,7 @@
         "desktop"
       ],
       "target": "users-community-list__btn--delete--0",
+      "targetClick": "next",
       "text": "Der Benutzer ist jetzt ein Mitglied: Sein Rollen-Badge hat sich geändert, und die Löschaktion ist nun in seiner Zeile verfügbar.",
       "title": "Rolle aktualisiert"
     },
@@ -171,6 +174,7 @@
         "mobile"
       ],
       "target": "users-community-list__btn--card-delete--0",
+      "targetClick": "next",
       "text": "Der Benutzer ist jetzt ein Mitglied: Sein Rollen-Badge hat sich geändert, und die Löschaktion ist nun auf seiner Karte verfügbar.",
       "title": "Rolle aktualisiert"
     },
@@ -204,6 +208,7 @@
       },
       "id": "users-community-list__empty--message",
       "target": "users-community-list__empty--message",
+      "targetClick": "next",
       "text": "Die Suche nach dieser E-Mail-Adresse liefert keine Ergebnisse mehr: Der Benutzer hat keinen Zugriff mehr auf die Gemeinschaft.",
       "title": "Benutzer entfernt"
     }

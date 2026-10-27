@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-documents-panel__empty--message",
       "target": "dossier-documents-panel__empty--message",
+      "targetClick": "next",
       "text": "Het tabblad “Documenten” toont de stukken van het dossier. Een pas aangemaakt dossier bevat er nog geen.",
       "title": "Een leeg dossier",
       "waitFor": "dossier-documents-panel__btn--add"
@@ -70,6 +71,7 @@
       },
       "id": "dossier-documents-panel__btn--generate-1",
       "target": "dossier-documents-panel__btn--generate-1",
+      "targetClick": "next",
       "text": "Het document wordt aangemaakt met de status “Concept”. Het heeft nog geen inhoud: via de pictogrammen kunt u het genereren vanuit het CRM of uw eigen bestand uploaden.",
       "title": "Er wacht een concept op u",
       "waitFor": "dossier-documents-panel__row--0"
@@ -89,6 +91,7 @@
       },
       "id": "generate-dialog__field--community_name",
       "target": "generate-dialog__field--community_name",
+      "targetClick": "next",
       "text": "Niets wordt ingediend zonder dat u het hebt nagelezen. De velden zijn vooraf ingevuld vanuit het CRM en blijven bewerkbaar: wat u hier bevestigt, is precies wat in het document wordt vastgelegd.",
       "title": "Gegevens controleren",
       "waitFor": "generate-dialog__btn--submit"
@@ -117,6 +120,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "Zodra het genereren klaar is, heeft het document een downloadbare versie. Er wordt niets overschreven: elke generatie voegt een nieuwe versie toe.",
       "title": "Het document is klaar"
     },
@@ -135,6 +139,7 @@
       },
       "id": "document-detail-dialog__btn--snapshot-1",
       "target": "document-detail-dialog__btn--snapshot-1",
+      "targetClick": "next",
       "text": "Elke versie vermeldt wanneer en door wie ze werd gemaakt. Gegenereerde versies bewaren bovendien de exacte gegevens die werden gebruikt.",
       "title": "Een spoor van wat er werd gemaakt",
       "waitFor": "document-detail-dialog__row--1"

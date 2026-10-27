@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -24,6 +24,7 @@
       },
       "id": "needs-you__band",
       "target": "needs-you__band",
+      "targetClick": "next",
       "text": "Das Banner oben zählt, was eine Aktion von Ihnen erfordert: erhaltene Einladungen, ein zu vervollständigender Datensatz, ungelesene Benachrichtigungen. Gibt es nichts zu tun, schrumpft es auf eine einzige beruhigende Zeile.",
       "title": "Was auf Sie wartet"
     },
@@ -33,6 +34,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Jede Karte zeigt eine Gemeinschaft und Ihre Rolle darin. Die Schaltfläche öffnet sie: Sie wird zu Ihrer aktiven Gemeinschaft, und Sie gelangen auf ihre Übersicht.",
       "title": "Meine Gemeinschaften"
     },
@@ -60,6 +62,7 @@
       },
       "id": "my-filings-panel__btn--open",
       "target": "my-filings-panel__btn--open",
+      "targetClick": "next",
       "text": "Das letzte Panel weist auf die offiziellen Dokumente an die Regulierungsbehörde hin, in denen Sie genannt werden. Die Schaltfläche öffnet die Details in der betreffenden Gemeinschaft.",
       "title": "Was über mich eingereicht wurde"
     },

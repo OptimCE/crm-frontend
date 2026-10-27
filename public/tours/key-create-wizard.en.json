@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys"
   },
@@ -180,6 +180,7 @@
       },
       "id": "keys-list__table--keys",
       "target": "keys-list__table--keys",
+      "targetClick": "next",
       "text": "The new \"E2E wizard key\" shows up in the community's allocation keys list, ready to be associated with a sharing operation.",
       "title": "Key created"
     }

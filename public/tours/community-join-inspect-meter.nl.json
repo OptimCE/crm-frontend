@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -39,6 +39,7 @@
       },
       "id": "meter-view__hero",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "De kop van de detailpagina toont de EAN van de meter zoals die in de database is opgeslagen — dit is de unieke identificatie van het meetpunt.",
       "title": "EAN van de meter"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__card--technical",
       "target": "meter-view__card--technical",
+      "targetClick": "next",
       "text": "De technische kaart vermeldt het fysieke meternummer en de leesfrequentie — handig om na te gaan of de pagina wel overeenkomt met het geïnstalleerde toestel.",
       "title": "Technische kenmerken"
     },
@@ -57,6 +59,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "Met de tabbladen navigeert u tussen de actuele gegevens, de historiek, de toekomstige waarden en het berekende verbruik van de meter.",
       "title": "Raadpleegtabbladen"
     }

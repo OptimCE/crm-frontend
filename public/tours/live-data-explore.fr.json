@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -15,6 +15,7 @@
       },
       "id": "live-data-hub__indicative",
       "target": "live-data-hub__indicative",
+      "targetClick": "next",
       "text": "Cette console suit, quart d'heure par quart d'heure, ce que mesurent les appareils installés chez les membres. Ces chiffres sont indicatifs : seules les données du gestionnaire de réseau servent aux clés de répartition et à la facturation.",
       "title": "La console des données en direct",
       "waitFor": "live-dashboard__signal"
@@ -25,6 +26,7 @@
       },
       "id": "live-dashboard__no-data",
       "target": "live-dashboard__no-data",
+      "targetClick": "next",
       "text": "Le tableau de bord résume la dernière heure complète : production, puissance, échanges avec le réseau et état du parc. Tant qu'aucun appareil n'a transmis de mesure, chaque case affiche un tiret plutôt qu'un zéro — « pas encore mesuré » n'est pas « rien produit ».",
       "title": "Le tableau de bord"
     },
@@ -54,6 +56,7 @@
       },
       "id": "live-devices__btn--add",
       "target": "live-devices__btn--add",
+      "targetClick": "next",
       "text": "La communauté n'a encore aucun appareil. Le bouton « Ajouter un appareil » crée un appareil pour un compteur et délivre son code d'enrôlement — voir le guide « Connecter un appareil ».",
       "title": "Aucun appareil pour le moment",
       "waitFor": "live-devices__empty"
@@ -73,6 +76,7 @@
       },
       "id": "live-ops__empty",
       "target": "live-ops__empty",
+      "targetClick": "next",
       "text": "Sans appareil, rien n'a encore été calculé et aucun appareil ne demande d'attention. Dès qu'un appareil transmet, cet écran indique depuis quand les chiffres ont été recalculés et signale les appareils silencieux, hors ligne ou dont des mesures sont rejetées.",
       "title": "Un parc vide",
       "waitFor": "live-ops__readings-rejected-none"
@@ -92,6 +96,7 @@
       },
       "id": "live-settings__btn--save",
       "target": "live-settings__btn--save",
+      "targetClick": "next",
       "text": "Les paramètres décident de ce que les membres pourront voir et du nombre minimum de membres en dessous duquel les échanges avec le réseau restent masqués, pour qu'aucun foyer ne soit identifiable. Tant qu'ils n'ont pas été enregistrés, ce sont les valeurs par défaut de la plateforme.",
       "title": "Les paramètres de visibilité",
       "waitFor": "live-settings__is-default"

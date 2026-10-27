@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "After signing in you land on your home page. It lists the communities you belong to, along with your role in each one.",
       "title": "Your communities"
     },
@@ -33,6 +34,7 @@
       },
       "id": "navbar__menu--management",
       "target": "navbar__menu--management",
+      "targetClick": "next",
       "text": "A new \"Management\" menu appears in the sidebar, granting access to the community's keys, meters and sharing operations.",
       "title": "Management menu unlocked",
       "waitFor": "dashboard-tile"

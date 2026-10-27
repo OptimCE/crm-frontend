@@ -410,6 +410,9 @@ steppy-tour-host {
   --steppy-tour-accent-fg: var(--p-surface-0);
   --steppy-tour-focus: var(--p-primary-500);
   --steppy-tour-link: var(--p-primary-600);
+  /* Bold step text (instructions, quoted labels): brand green, like the guides. */
+  --steppy-tour-strong-weight: 700;
+  --steppy-tour-strong-color: var(--p-primary-600);
   --steppy-tour-scrim: var(--app-tour-scrim);
   --steppy-tour-border: 1px solid var(--p-surface-200);
   --steppy-tour-radius: 12px;

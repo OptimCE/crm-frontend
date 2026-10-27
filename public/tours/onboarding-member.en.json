@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "You are now a member of an energy community: it shows on your home page, with your role. If you belong to several communities, each one has its own card.",
       "title": "Your community"
     },
@@ -24,7 +25,7 @@
       },
       "id": "community-picker__btn--enter",
       "target": "community-picker__btn--enter",
-      "text": "Click \"Open my community\" to reach its dashboard.",
+      "text": "Click **\"Open my community\"** to reach its dashboard.",
       "title": "Open your community"
     },
     {
@@ -33,7 +34,8 @@
       },
       "id": "my-energy-tile",
       "target": "my-energy-tile",
-      "text": "\"My energy here\" shows what you consumed and what you received through sharing in this community. The meter it names links to its details.",
+      "targetClick": "next",
+      "text": "**\"My energy here\"** shows what you consumed and what you received through sharing in this community. The meter it names links to its details.",
       "title": "Your energy"
     },
     {
@@ -42,7 +44,8 @@
       },
       "id": "my-participation-tile",
       "target": "my-participation-tile",
-      "text": "\"My participation\" lists the sharing operations your meters take part in, and your place in their allocation key.",
+      "targetClick": "next",
+      "text": "**\"My participation\"** lists the sharing operations your meters take part in, and your place in their allocation key.",
       "title": "Your participation"
     },
     {
@@ -51,7 +54,8 @@
       },
       "id": "my-member-record-tile",
       "target": "my-member-record-tile",
-      "text": "\"My member record\" tells you whether your record is active. Open it to check your details: the managers are the ones who keep it up to date.",
+      "targetClick": "next",
+      "text": "**\"My member record\"** tells you whether your record is active. Open it to check your details: the managers are the ones who keep it up to date.",
       "title": "Your member record"
     },
     {
@@ -60,19 +64,23 @@
       },
       "id": "about-community-tile",
       "target": "about-community-tile",
-      "text": "\"About this community\" recalls its number of members, its regulator and its website. The other tiles — documents, invoices, news — depend on the modules the community uses.",
+      "targetClick": "next",
+      "text": "**\"About this community\"** recalls its number of members, its regulator and its website. The other tiles — documents, invoices, news — depend on the modules the community uses.",
       "title": "About the community"
     },
     {
       "advance": {
         "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--community",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--community",
-      "text": "Becoming a member added the \"Community\" section to the sidebar: the dashboard, the community info, its annex services and, depending on its modules, news, billing or administrative documents. Hover the bar to read its labels."
+      "targetClick": "next",
+      "text": "Becoming a member added the **\"Community\"** section to the sidebar: the dashboard, the community info, its annex services and, depending on its modules, news, billing or administrative documents.",
+      "title": "The \"Community\" section"
     },
     {
       "advance": {
@@ -83,7 +91,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tap the menu icon to open the navigation."
+      "text": "Tap the **menu icon ☰** to open the navigation."
     },
     {
       "advance": {
@@ -94,17 +102,44 @@
         "mobile"
       ],
       "target": "navbar__menu--community",
-      "text": "Becoming a member added the \"Community\" section to the menu: the dashboard, the community info, its annex services and, depending on its modules, news, billing or administrative documents.",
+      "targetClick": "next",
+      "text": "Becoming a member added the **\"Community\"** section to the menu: the dashboard, the community info, its annex services and, depending on its modules, news, billing or administrative documents.",
       "title": "The \"Community\" section"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--member",
+      "target": "navbar__menu--member",
+      "targetClick": "next",
+      "text": "Just below, the members' section leads to **\"Community managers\"**: the people to contact about your record, your meters or an invoice.",
+      "title": "Who runs the community"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--member",
-      "target": "navbar__menu--member",
-      "text": "Just below, the members' section opens \"Community managers\": the people to contact about your record, your meters or an invoice.",
-      "title": "Who runs the community"
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_managers",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Click **\"Community managers\"**.",
+      "title": "Open the managers"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_managers-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Tap **\"Community managers\"**.",
+      "title": "Open the managers"
     },
     {
       "advance": {
@@ -112,7 +147,8 @@
       },
       "id": "managers-community-list__table",
       "target": "managers-community-list__table",
-      "text": "Every manager and administrator is listed here with their email and role. To go further, the home page and the member dashboard each have their own detailed tour in the \"User guide\".",
+      "targetClick": "next",
+      "text": "Every manager and administrator is listed here with their email and role. To go further, the home page and the member dashboard each have their own detailed tour in the **\"User guide\"**.",
       "title": "The managers"
     }
   ],

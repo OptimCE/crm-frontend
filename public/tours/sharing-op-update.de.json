@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/sharing_operations/:operationId"
   },
@@ -15,6 +15,7 @@
       },
       "id": "op-view__btn--edit",
       "target": "op-view__btn--edit",
+      "targetClick": "next",
       "text": "Die Detailseite der Operation zeigt ihren Namen, ihren Typ, ihre Zähler und die abgedeckten Gemeinden. Über die Stiftsymbole können Sie diese Angaben ändern.",
       "title": "Detailseite der Operation"
     },
@@ -51,6 +52,7 @@
       },
       "id": "op-view__title--name",
       "target": "op-view__title--name",
+      "targetClick": "next",
       "text": "Zurück auf der Detailseite trägt die Operation ihren neuen Namen.",
       "title": "Name aktualisiert"
     },

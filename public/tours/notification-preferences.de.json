@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -24,6 +24,7 @@
       },
       "id": "notification-preferences__row--news_post",
       "target": "notification-preferences__row--news_post",
+      "targetClick": "next",
       "text": "Jede Zeile ist eine Aktivitätskategorie — Neuigkeiten, Rechnungen, Fristen… — und jede Spalte ein Kanal. „Alles Übrige“ deckt die Kategorien ab, die keine eigene Zeile haben. Wesentliche Nachrichten (Rechnungen, Einladungen, versäumte Fristen) werden immer zugestellt.",
       "title": "Kategorien und Kanäle",
       "waitFor": "notification-preferences__table"
@@ -34,6 +35,7 @@
       },
       "id": "notification-preferences__email--news_post",
       "target": "notification-preferences__email--news_post",
+      "targetClick": "next",
       "text": "Schalten Sie „E-Mail“ in der Zeile „Beiträge“ aus: Sie sehen die Beiträge weiterhin in der Anwendung, erhalten aber keine E-Mail mehr.",
       "title": "Einen Kanal abschalten"
     },
@@ -52,6 +54,7 @@
       },
       "id": "notification-preferences__saved",
       "target": "notification-preferences__saved",
+      "targetClick": "next",
       "text": "Neben der Schaltfläche erscheint eine Bestätigungsmeldung. Sie verschwindet, sobald Sie erneut eine Einstellung ändern.",
       "title": "Einstellungen gespeichert"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -24,6 +24,7 @@
       },
       "id": "unlocated-meters__subtitle",
       "target": "unlocated-meters__subtitle",
+      "targetClick": "next",
       "text": "La fenêtre liste exactement les compteurs que la carte ne sait pas placer : ceux qui n'ont aucune coordonnée, mais aussi ceux qui ne sont situés qu'au centre de leur commune.",
       "title": "La file de correction"
     },
@@ -42,6 +43,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--not-found",
       "target": "unlocated-meters__autocomplete--address--not-found",
+      "targetClick": "next",
       "text": "OptimCE interroge le registre fédéral BeSt Address. Cette adresse n'y correspond à rien : c'est pourquoi le compteur n'apparaît pas sur la carte.",
       "title": "Adresse introuvable"
     },
@@ -89,6 +91,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--located",
       "target": "unlocated-meters__autocomplete--address--located",
+      "targetClick": "next",
       "text": "Le message vert confirme que l'adresse est localisée précisément : le compteur apparaîtra bien sur la carte une fois la correction enregistrée.",
       "title": "Adresse localisée"
     },
@@ -117,6 +120,7 @@
       },
       "id": "meters-map__strip--partial",
       "target": "meters-map__strip--partial",
+      "targetClick": "next",
       "text": "De retour sur la carte, le bandeau a diminué : le compteur corrigé est désormais placé, et il ne reste que celui situé au centre de sa commune.",
       "title": "La carte est à jour",
       "waitFor": "map-canvas__host"

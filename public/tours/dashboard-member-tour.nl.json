@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "my-energy-tile__link--meter",
       "target": "my-energy-tile__link--meter",
+      "targetClick": "next",
       "text": "De eerste tegel telt over de laatste dertig dagen op wat u hebt verbruikt en wat het delen u heeft opgeleverd, en splitst dat vervolgens per meter op.",
       "title": "Mijn energie hier"
     },
@@ -51,6 +52,7 @@
       },
       "id": "my-member-record-tile__link--member",
       "target": "my-member-record-tile__link--member",
+      "targetClick": "next",
       "text": "De tegel bevestigt dat uw fiche actief is, of geeft aan dat ze nog op validatie door een beheerder wacht.",
       "title": "Mijn ledenfiche"
     },
@@ -60,6 +62,7 @@
       },
       "id": "about-community-tile__link--info",
       "target": "about-community-tile__link--info",
+      "targetClick": "next",
       "text": "Aantal leden, regulator, website: genoeg om te weten met wie u te maken hebt. De link opent de volledige fiche van de gemeenschap.",
       "title": "Over deze gemeenschap"
     },
@@ -69,6 +72,7 @@
       },
       "id": "my-invoices-tile__link--all",
       "target": "my-invoices-tile__link--all",
+      "targetClick": "next",
       "text": "Deze twee tegels verschijnen alleen als de gemeenschap de bijbehorende modules gebruikt. Ze vatten uw onbetaalde facturen samen, net als de laatste berichten op het nieuwsbord.",
       "title": "Facturen en nieuws"
     },
@@ -87,6 +91,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "De tegels laden een voor een opnieuw en tonen weer hun inhoud met de meest recente gegevens.",
       "title": "Actuele gegevens"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -25,6 +25,7 @@
       },
       "id": "live-dashboard__operation-shared",
       "target": "live-dashboard__operation-shared",
+      "targetClick": "next",
       "text": "Für die gewählte Operation: ihre Erzeugung in der letzten vollen Stunde, ihr Austausch mit dem Netz, die geteilte Energie (Schätzung) und wie viele ihrer Zähler überwacht werden. Netzaustausch und Teilen bleiben ausgeblendet, solange die Operation zu wenige Mitglieder hat.",
       "title": "Die Zahlen der Operation",
       "waitFor": "live-dashboard__operation-cards"

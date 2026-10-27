@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -25,6 +25,7 @@
       },
       "id": "live-dashboard__operation-shared",
       "target": "live-dashboard__operation-shared",
+      "targetClick": "next",
       "text": "For the chosen operation: its production over the last full hour, its exchanges with the grid, the shared energy (estimate) and how many of its meters are monitored. Grid exchanges and sharing stay hidden while the operation has too few members.",
       "title": "The operation's figures",
       "waitFor": "live-dashboard__operation-cards"

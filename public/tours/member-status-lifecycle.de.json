@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/members"
   },
@@ -49,6 +49,7 @@
       },
       "id": "member-view-tabs__tab--meter",
       "target": "member-view-tabs__tab--meter",
+      "targetClick": "next",
       "text": "Das Mitglied ist aktiv: Sein Status-Badge ist grün, und eine Registerkarte „Zähler“ ist verfügbar. Mit den Aktionsschaltflächen können Sie es deaktivieren oder in die Warteliste setzen.",
       "title": "Detailseite des aktiven Mitglieds",
       "waitFor": "member-view__btn--deactivate"
@@ -68,6 +69,7 @@
       },
       "id": "member-view__tag--status-inactive",
       "target": "member-view__tag--status-inactive",
+      "targetClick": "next",
       "text": "Das Badge wechselt zu „Deaktiviert“, und die Registerkarte „Zähler“ verschwindet: Ein inaktives Mitglied kann nicht mehr mit einem Zähler verknüpft werden.",
       "title": "Mitglied deaktiviert"
     },
@@ -86,6 +88,7 @@
       },
       "id": "member-view__tag--status-active",
       "target": "member-view__tag--status-active",
+      "targetClick": "next",
       "text": "Das Badge wechselt zurück zu „Aktiviert“, und die Registerkarte „Zähler“ erscheint wieder. Das Mitglied ist wieder voll einsatzfähig.",
       "title": "Mitglied reaktiviert"
     }

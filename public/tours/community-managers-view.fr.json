@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/managers"
   },
@@ -18,6 +18,7 @@
         "desktop"
       ],
       "target": "managers-community-list__row--desktop--0",
+      "targetClick": "next",
       "text": "Cette page liste les administrateurs et gestionnaires de la communauté avec leur rôle. Vous pouvez filtrer par rôle ou rechercher une personne. C'est une vue de consultation : vous ne pouvez rien modifier.",
       "title": "Les gestionnaires de votre communauté",
       "waitFor": "managers-community-list__table"
@@ -31,6 +32,7 @@
         "mobile"
       ],
       "target": "managers-community-list__card--mobile--0",
+      "targetClick": "next",
       "text": "Cette page liste les administrateurs et gestionnaires de la communauté avec leur rôle. Vous pouvez filtrer par rôle ou rechercher une personne. C'est une vue de consultation : vous ne pouvez rien modifier.",
       "title": "Les gestionnaires de votre communauté"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/algorithm"
   },
@@ -15,6 +15,7 @@
       },
       "id": "algorithm-hub__panel--start",
       "target": "algorithm-hub__panel--start",
+      "targetClick": "next",
       "text": "The allocation key generation page displays the configuration form. Select the algorithm, fill in the parameters, and upload your data file to launch a new generation.",
       "title": "Key generation page",
       "waitFor": "algorithm-hub__container"
@@ -71,6 +72,7 @@
       },
       "id": "algo-form__grid--advanced",
       "target": "algo-form__grid--advanced",
+      "targetClick": "next",
       "text": "OLAGSA's advanced parameters are displayed: generations, population size, inter-species and intra-species crossover rates, mutation rate, expected species count, and maximum generations without improvement. Default values suit most use cases.",
       "title": "Genetic algorithm hyperparameters"
     },
@@ -80,6 +82,7 @@
       },
       "id": "algorithm-hub__dropzone",
       "target": "algorithm-hub__dropzone",
+      "targetClick": "next",
       "text": "Drag your CSV file into the import zone or click it to select the data file to use for generation.",
       "title": "Import the data file"
     },

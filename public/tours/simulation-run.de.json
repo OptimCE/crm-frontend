@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/simulation"
   },
@@ -15,6 +15,7 @@
       },
       "id": "simulation-hub__panel--start",
       "target": "simulation-hub__panel--start",
+      "targetClick": "next",
       "text": "Die Simulationsseite wird mit ihrem Konfigurationsformular angezeigt: Wählen Sie einen gespeicherten Verteilungsschlüssel, benennen Sie die Simulation, geben Sie die Einspeisung an und importieren Sie die zu simulierende Verbrauchsdatei.",
       "title": "Simulationsseite",
       "waitFor": "simulation-hub__container"
@@ -52,6 +53,7 @@
       },
       "id": "simulation-hub__dropzone",
       "target": "simulation-hub__dropzone",
+      "targetClick": "next",
       "text": "Importieren Sie dieselbe Datei „test_4.csv“ in den Ablagebereich. Die Simulation berechnet den Eigenverbrauch und die Energieteilung anhand dieser Daten und des ausgewählten Schlüssels.",
       "title": "Zu simulierende Datei importieren"
     },
@@ -88,6 +90,7 @@
       },
       "id": "simulation-results__metrics",
       "target": "simulation-results__metrics",
+      "targetClick": "next",
       "text": "Die Simulation ist abgeschlossen. Die Kennzahlen werden angezeigt: eigenverbrauchte Energie, Überschuss, Autarkiegrad und Teilungsrate — berechnet aus dem gespeicherten Schlüssel und der importierten Datei.",
       "title": "Simulationsergebnisse"
     },
@@ -106,6 +109,7 @@
       },
       "id": "simulation-results__iteration-toggle--1",
       "target": "simulation-results__iteration-toggle--1",
+      "targetClick": "next",
       "text": "Jede Iteration des Schlüssels lässt sich aufklappen, um die Details pro Verbraucher anzuzeigen: Verteilung, Verbrauch, eigenverbrauchte Energie, Überschuss und Restvolumen. Hier werden die Verteilungslösungen verglichen.",
       "title": "Detail pro Iteration und pro Verbraucher"
     }

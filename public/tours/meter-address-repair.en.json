@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -24,6 +24,7 @@
       },
       "id": "unlocated-meters__subtitle",
       "target": "unlocated-meters__subtitle",
+      "targetClick": "next",
       "text": "The dialog lists exactly the meters the map cannot place: those with no coordinates at all, and also those pinned only to the centre of their municipality.",
       "title": "The repair queue"
     },
@@ -42,6 +43,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--not-found",
       "target": "unlocated-meters__autocomplete--address--not-found",
+      "targetClick": "next",
       "text": "OptimCE queries the federal BeSt Address register. This address matches nothing there, which is why the meter is missing from the map.",
       "title": "Address not found"
     },
@@ -89,6 +91,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--located",
       "target": "unlocated-meters__autocomplete--address--located",
+      "targetClick": "next",
       "text": "The green message confirms the address is precisely located: the meter will appear on the map once the repair is saved.",
       "title": "Address located"
     },
@@ -117,6 +120,7 @@
       },
       "id": "meters-map__strip--partial",
       "target": "meters-map__strip--partial",
+      "targetClick": "next",
       "text": "Back on the map, the banner has gone down: the repaired meter is now placed, and only the one pinned to its municipality centre remains.",
       "title": "The map is up to date",
       "waitFor": "map-canvas__host"

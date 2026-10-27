@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users/communities"
   },
@@ -52,6 +52,7 @@
       },
       "id": "user-communities__table",
       "target": "user-communities__table",
+      "targetClick": "next",
       "text": "\"E2E Community\" now appears in your list. All that's left is to activate it and start setting it up.",
       "title": "Your new community",
       "waitFor": "user-communities__row--mobile--0"
@@ -86,6 +87,7 @@
       },
       "id": "navbar__menu--management",
       "target": "navbar__menu--management",
+      "targetClick": "next",
       "text": "The \"Management\" section appears in the sidebar: as its creator, you are the community administrator and have access to all its tools.",
       "title": "You are the administrator"
     }

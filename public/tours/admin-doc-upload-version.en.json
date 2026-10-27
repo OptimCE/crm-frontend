@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -69,6 +69,7 @@
       },
       "id": "upload-version-dialog__dropzone",
       "target": "upload-version-dialog__dropzone",
+      "targetClick": "next",
       "text": "Drop the file in the dedicated area, or click to pick it from your computer.",
       "title": "Choose the file"
     },
@@ -87,6 +88,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "The document now has a downloadable version, exactly as if it had been generated.",
       "title": "The piece is attached"
     },

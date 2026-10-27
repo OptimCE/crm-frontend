@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/dashboard"
   },
@@ -13,21 +13,37 @@
       "advance": {
         "on": "manual"
       },
-      "id": "module-discovery-strip",
-      "target": "module-discovery-strip",
-      "text": "Vous avez tout ce qu'a un gestionnaire, plus quelques décisions qui n'appartiennent qu'à vous. La première : les modules. Dans « Modules disponibles », « Activer » abonne la communauté à un module ; un gestionnaire, lui, est invité à vous le demander.",
+      "id": "readiness-tile",
+      "target": "readiness-tile",
+      "targetClick": "next",
+      "text": "Vous avez tout ce qu'a un gestionnaire, ce tableau de bord compris, plus trois décisions qui n'appartiennent qu'à vous : les modules que la communauté utilise, qui la gère avec vous, et ses informations légales.",
       "title": "Vous êtes administrateur"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Dans la section « Gestion », cliquez sur « Utilisateurs ».",
+      "targetClick": "next",
+      "text": "Comme administrateur, vous gardez la section **« Gestion »** des gestionnaires. Sa page **« Utilisateurs »** est celle où vous choisissez qui gère la communauté avec vous.",
+      "title": "La section « Gestion »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_users",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Dans la section **« Gestion »**, cliquez sur **« Utilisateurs »**.",
       "title": "Les utilisateurs de la communauté"
     },
     {
@@ -39,18 +55,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--management-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Dans la section « Gestion » du menu, touchez « Utilisateurs ».",
+      "targetClick": "next",
+      "text": "Comme administrateur, vous gardez la section **« Gestion »** des gestionnaires. Sa page **« Utilisateurs »** est celle où vous choisissez qui gère la communauté avec vous.",
+      "title": "La section « Gestion »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_users-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Dans la section **« Gestion »** du menu, touchez **« Utilisateurs »**.",
       "title": "Les utilisateurs de la communauté"
     },
     {
@@ -59,7 +88,8 @@
       },
       "id": "users-community-list__btn--invite-manager",
       "target": "users-community-list__btn--invite-manager",
-      "text": "Seul un administrateur peut faire entrer un gestionnaire : « Inviter un gestionnaire » lui envoie une invitation par e-mail, qu'il accepte depuis ses invitations.",
+      "targetClick": "next",
+      "text": "Seul un administrateur peut faire entrer un gestionnaire : **« Inviter un gestionnaire »** lui envoie une invitation par e-mail, qu'il accepte depuis ses invitations.",
       "title": "Inviter un gestionnaire"
     },
     {
@@ -68,19 +98,35 @@
       },
       "id": "users-community-list__btn--see-pending",
       "target": "users-community-list__btn--see-pending",
-      "text": "« Voir invitation en attente » montre qui n'a pas encore répondu. Dans la liste, vous seul pouvez changer le rôle d'un utilisateur — membre, gestionnaire ou administrateur — ou le retirer de la communauté.",
+      "targetClick": "next",
+      "text": "**« Voir invitation en attente »** montre qui n'a pas encore répondu. Dans la liste, vous seul pouvez changer le rôle d'un utilisateur — membre, gestionnaire ou administrateur — ou le retirer de la communauté.",
       "title": "Invitations et rôles"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--community",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--community",
-      "text": "Dans la section « Communauté », cliquez sur « Infos communauté ».",
+      "targetClick": "next",
+      "text": "La section **« Communauté »** mène au tableau de bord, aux infos de la communauté et à ses services annexes. Sa page **« Infos communauté »** porte les informations légales que vous seul pouvez changer.",
+      "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_info",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Dans la section **« Communauté »**, cliquez sur **« Infos communauté »**.",
       "title": "Les infos de la communauté"
     },
     {
@@ -92,18 +138,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--community-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--community",
-      "text": "Dans la section « Communauté » du menu, touchez « Infos communauté ».",
+      "targetClick": "next",
+      "text": "La section **« Communauté »** mène au tableau de bord, aux infos de la communauté et à ses services annexes. Sa page **« Infos communauté »** porte les informations légales que vous seul pouvez changer.",
+      "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_info-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Dans la section **« Communauté »** du menu, touchez **« Infos communauté »**.",
       "title": "Les infos de la communauté"
     },
     {
@@ -112,7 +171,8 @@
       },
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
-      "text": "Membres et gestionnaires lisent ces informations ; vous seul pouvez les changer. « Modifier » ouvre le nom, la description, l'adresse, le numéro d'entreprise et l'IBAN — ce qui figure ensuite sur les factures et les documents officiels.",
+      "targetClick": "next",
+      "text": "Membres et gestionnaires lisent ces informations ; vous seul pouvez les changer. **« Modifier »** ouvre le nom, la description, l'adresse, le numéro d'entreprise et l'IBAN — ce qui figure ensuite sur les factures et les documents officiels.",
       "title": "Les informations légales",
       "waitFor": "community-info__card--view"
     }

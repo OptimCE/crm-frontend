@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/algorithm"
   },
@@ -15,6 +15,7 @@
       },
       "id": "algorithm-hub__panel--start",
       "target": "algorithm-hub__panel--start",
+      "targetClick": "next",
       "text": "De pagina voor het genereren van verdeelsleutels verschijnt met het configuratieformulier. Selecteer het algoritme, vul de parameters in en importeer uw gegevensbestand om een nieuwe generatie te starten.",
       "title": "Pagina voor sleutelgeneratie",
       "waitFor": "algorithm-hub__container"
@@ -71,6 +72,7 @@
       },
       "id": "algo-form__grid--advanced",
       "target": "algo-form__grid--advanced",
+      "targetClick": "next",
       "text": "De geavanceerde parameters van OLAGSA verschijnen: generaties, populatiegrootte, kruisingssnelheid tussen en binnen soorten, mutatiesnelheid, verwacht aantal soorten en maximum aantal generaties zonder verbetering. De standaardwaarden volstaan voor de meeste toepassingen.",
       "title": "Hyperparameters van het genetische algoritme"
     },
@@ -80,6 +82,7 @@
       },
       "id": "algorithm-hub__dropzone",
       "target": "algorithm-hub__dropzone",
+      "targetClick": "next",
       "text": "Sleep uw CSV-bestand naar de importzone of klik erop om het gegevensbestand te selecteren dat voor de generatie moet worden gebruikt.",
       "title": "Het gegevensbestand importeren"
     },

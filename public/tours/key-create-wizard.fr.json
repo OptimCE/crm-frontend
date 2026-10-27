@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys"
   },
@@ -180,6 +180,7 @@
       },
       "id": "keys-list__table--keys",
       "target": "keys-list__table--keys",
+      "targetClick": "next",
       "text": "La nouvelle clé « E2E wizard key » apparaît dans la liste des clés de répartition de la communauté, prête à être associée à une opération de partage.",
       "title": "Clé créée"
     }

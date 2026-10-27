@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services"
   },
@@ -15,6 +15,7 @@
       },
       "id": "annexes-services-list__card--algorithm",
       "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
       "text": "La carte « Génération de clés de répartition » est visible avec le badge « Activé ». Le bouton de désactivation (×) est disponible en haut à droite de la carte.",
       "title": "Module actif"
     },
@@ -51,6 +52,7 @@
       },
       "id": "annexes-services-list__empty",
       "target": "annexes-services-list__empty",
+      "targetClick": "next",
       "text": "La grille est à nouveau vide : le module « Génération de clés de répartition » a été désactivé et n'est plus accessible depuis la communauté.",
       "title": "Module désactivé"
     }

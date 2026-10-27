@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/public"
   },
@@ -15,6 +15,7 @@
       },
       "id": "public-community-list__btn--accordion--0",
       "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
       "text": "Elke kaart staat voor een energiegemeenschap die openstaat voor het publiek, met haar regulator. Klik op een kaart voor meer informatie.",
       "title": "Het overzicht van openbare gemeenschappen"
     },
@@ -33,6 +34,7 @@
       },
       "id": "public-community-list__detail--0",
       "target": "public-community-list__detail--0",
+      "targetClick": "next",
       "text": "De gemeenschap “Test Community” biedt verschillende openbare deeloperaties aan (zon, wind). Elke operatie vermeldt de gemeenten die ze dekt.",
       "title": "De deeloperaties"
     },
@@ -51,6 +53,7 @@
       },
       "id": "public-community-list__btn--accordion--0-3",
       "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
       "text": "“Test Community” beheert een deeloperatie in Anderlecht en blijft dus zichtbaar. Een gemeente waar geen enkele gemeenschap actief is, zou een leeg overzicht tonen.",
       "title": "Gefilterd resultaat"
     }

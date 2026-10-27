@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys/:keyId"
   },
@@ -15,6 +15,7 @@
       },
       "id": "key-view__grid--data",
       "target": "key-view__grid--data",
+      "targetClick": "next",
       "text": "In der Anwendung zeigen manche Felder oder Spalten ein Symbol ⓘ. Es weist darauf hin, dass eine zusätzliche Erklärung verfügbar ist — klicken Sie einfach darauf, um sie zu lesen.",
       "title": "Das Symbol ⓘ erkennen",
       "waitFor": "key-view__btn--update"
@@ -34,6 +35,7 @@
       },
       "id": "header-helper__title--label",
       "target": "header-helper__title--label",
+      "targetClick": "next",
       "text": "Das Infofenster zeigt den Namen des Feldes und eine ausführliche Erklärung. So verstehen Sie die Bedeutung jedes Werts, ohne die Seite zu verlassen. Das Symbol ⓘ funktioniert überall in der Anwendung, wo es erscheint, auf diese Weise.",
       "title": "Das Infofenster erscheint",
       "waitFor": "header-helper__popover--content"

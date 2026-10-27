@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -57,6 +57,7 @@
       },
       "id": "meter-view-me__hero",
       "target": "meter-view-me__hero",
+      "targetClick": "next",
       "text": "La vue du compteur affiche ses caractéristiques et son statut. Les onglets vous permettent de voir la configuration actuelle, l'historique, les périodes futures et la consommation.",
       "title": "Votre compteur"
     },

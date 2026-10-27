@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/users"
   },
@@ -18,6 +18,7 @@
         "desktop"
       ],
       "target": "users-community-list__row--desktop--0",
+      "targetClick": "next",
       "text": "This page lists everyone with access to the community and their role: administrator, manager or member. You can invite, change a role, or revoke access.",
       "title": "The community's users",
       "waitFor": "users-community-list__table"
@@ -31,6 +32,7 @@
         "mobile"
       ],
       "target": "users-community-list__card--mobile--0",
+      "targetClick": "next",
       "text": "This page lists the accounts attached to the community and their role. This is where you invite a manager, change a role or revoke access.",
       "title": "The community's users"
     },
@@ -159,6 +161,7 @@
         "desktop"
       ],
       "target": "users-community-list__btn--delete--0",
+      "targetClick": "next",
       "text": "The user is now a member: their role tag has changed and the remove action is now available on their row.",
       "title": "Role updated"
     },
@@ -171,6 +174,7 @@
         "mobile"
       ],
       "target": "users-community-list__btn--card-delete--0",
+      "targetClick": "next",
       "text": "The user is now a member: their role tag has changed and the remove action is now available on their card.",
       "title": "Role updated"
     },
@@ -204,6 +208,7 @@
       },
       "id": "users-community-list__empty--message",
       "target": "users-community-list__empty--message",
+      "targetClick": "next",
       "text": "Searching for that email now returns nothing: the user no longer has access to the community.",
       "title": "User removed"
     }

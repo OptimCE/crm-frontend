@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/algorithm"
   },
@@ -15,6 +15,7 @@
       },
       "id": "algorithm-hub__panel--start",
       "target": "algorithm-hub__panel--start",
+      "targetClick": "next",
       "text": "Die Seite zur Generierung von Verteilungsschlüsseln wird mit dem Konfigurationsformular angezeigt. Wählen Sie den Algorithmus aus, geben Sie die Parameter ein und importieren Sie Ihre Datendatei, um eine neue Generierung zu starten.",
       "title": "Seite zur Schlüsselgenerierung",
       "waitFor": "algorithm-hub__container"
@@ -71,6 +72,7 @@
       },
       "id": "algo-form__grid--advanced",
       "target": "algo-form__grid--advanced",
+      "targetClick": "next",
       "text": "Die erweiterten Parameter von OLAGSA werden angezeigt: Generationen, Populationsgröße, artenübergreifende und arteninterne Kreuzungsrate, Mutationsrate, erwartete Artenanzahl und maximale Anzahl an Generationen ohne Verbesserung. Die Standardwerte eignen sich für die meisten Anwendungsfälle.",
       "title": "Hyperparameter des genetischen Algorithmus"
     },
@@ -80,6 +82,7 @@
       },
       "id": "algorithm-hub__dropzone",
       "target": "algorithm-hub__dropzone",
+      "targetClick": "next",
       "text": "Ziehen Sie Ihre CSV-Datei in den Importbereich oder klicken Sie darauf, um die Datendatei für die Generierung auszuwählen.",
       "title": "Datendatei importieren"
     },

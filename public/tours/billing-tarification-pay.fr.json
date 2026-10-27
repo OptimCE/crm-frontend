@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/billing"
   },
@@ -15,6 +15,7 @@
       },
       "id": "billing__tab--tariffs",
       "target": "billing__tab--tariffs",
+      "targetClick": "next",
       "text": "Le module s'ouvre sur l'onglet « Tarifs ». C'est ici que vous définissez le prix de l'énergie partagée avant de générer les factures. Les onglets « Générer une facture » et « Tableau de suivi » viennent ensuite.",
       "title": "Le module de facturation",
       "waitFor": "tariffs-panel__select--operation"
@@ -136,6 +137,7 @@
       },
       "id": "tariffs-panel__table",
       "target": "tariffs-panel__table",
+      "targetClick": "next",
       "text": "L'opération dispose désormais d'un tarif de vente aux consommateurs et d'un tarif de rachat aux producteurs. Passons à la génération des factures.",
       "title": "Les tarifs sont enregistrés"
     },
@@ -163,6 +165,7 @@
       },
       "id": "consumption-upload__dropzone",
       "target": "consumption-upload__dropzone",
+      "targetClick": "next",
       "text": "Déposez le fichier RESA de l'opération (relevés 15 minutes du mois) dans la zone d'import. Il fournit l'énergie partagée qui sera facturée.",
       "title": "Importer les relevés RESA"
     },

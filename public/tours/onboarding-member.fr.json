@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Vous voilà membre d'une communauté d'énergie : elle apparaît sur votre page d'accueil, avec votre rôle. Si vous faites partie de plusieurs communautés, chacune a sa carte.",
       "title": "Votre communauté"
     },
@@ -24,7 +25,7 @@
       },
       "id": "community-picker__btn--enter",
       "target": "community-picker__btn--enter",
-      "text": "Cliquez sur « Ouvrir ma communauté » pour arriver sur son tableau de bord.",
+      "text": "Cliquez sur **« Ouvrir ma communauté »** pour arriver sur son tableau de bord.",
       "title": "Ouvrir sa communauté"
     },
     {
@@ -33,7 +34,8 @@
       },
       "id": "my-energy-tile",
       "target": "my-energy-tile",
-      "text": "« Mon énergie ici » montre ce que vous avez consommé et ce que vous avez reçu en partage dans cette communauté. Le compteur cité mène à son détail.",
+      "targetClick": "next",
+      "text": "**« Mon énergie ici »** montre ce que vous avez consommé et ce que vous avez reçu en partage dans cette communauté. Le compteur cité mène à son détail.",
       "title": "Votre énergie"
     },
     {
@@ -42,7 +44,8 @@
       },
       "id": "my-participation-tile",
       "target": "my-participation-tile",
-      "text": "« Ma participation » liste les opérations de partage auxquelles vos compteurs prennent part, et votre place dans leur clé de répartition.",
+      "targetClick": "next",
+      "text": "**« Ma participation »** liste les opérations de partage auxquelles vos compteurs prennent part, et votre place dans leur clé de répartition.",
       "title": "Votre participation"
     },
     {
@@ -51,7 +54,8 @@
       },
       "id": "my-member-record-tile",
       "target": "my-member-record-tile",
-      "text": "« Ma fiche membre » indique si votre fiche est active. Ouvrez-la pour vérifier vos coordonnées : ce sont les gestionnaires qui la tiennent à jour.",
+      "targetClick": "next",
+      "text": "**« Ma fiche membre »** indique si votre fiche est active. Ouvrez-la pour vérifier vos coordonnées : ce sont les gestionnaires qui la tiennent à jour.",
       "title": "Votre fiche membre"
     },
     {
@@ -60,19 +64,23 @@
       },
       "id": "about-community-tile",
       "target": "about-community-tile",
-      "text": "« À propos de la communauté » rappelle son nombre de membres, son régulateur et son site web. Les autres tuiles — documents, factures, actualités — dépendent des modules que la communauté utilise.",
+      "targetClick": "next",
+      "text": "**« À propos de la communauté »** rappelle son nombre de membres, son régulateur et son site web. Les autres tuiles — documents, factures, actualités — dépendent des modules que la communauté utilise.",
       "title": "À propos de la communauté"
     },
     {
       "advance": {
         "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--community",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--community",
-      "text": "Devenir membre a ajouté la section « Communauté » à la barre latérale : le tableau de bord, les infos de la communauté, ses services annexes et, selon ses modules, les actualités, la facturation ou les documents administratifs. Survolez la barre pour lire ses libellés."
+      "targetClick": "next",
+      "text": "Devenir membre a ajouté la section **« Communauté »** à la barre latérale : le tableau de bord, les infos de la communauté, ses services annexes et, selon ses modules, les actualités, la facturation ou les documents administratifs.",
+      "title": "La section « Communauté »"
     },
     {
       "advance": {
@@ -83,7 +91,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
     },
     {
       "advance": {
@@ -94,17 +102,44 @@
         "mobile"
       ],
       "target": "navbar__menu--community",
-      "text": "Devenir membre a ajouté la section « Communauté » au menu : le tableau de bord, les infos de la communauté, ses services annexes et, selon ses modules, les actualités, la facturation ou les documents administratifs.",
+      "targetClick": "next",
+      "text": "Devenir membre a ajouté la section **« Communauté »** au menu : le tableau de bord, les infos de la communauté, ses services annexes et, selon ses modules, les actualités, la facturation ou les documents administratifs.",
       "title": "La section « Communauté »"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--member",
+      "target": "navbar__menu--member",
+      "targetClick": "next",
+      "text": "Juste en dessous, la section des membres mène à **« Gestionnaires de la communauté »** : les personnes à contacter pour une question sur votre fiche, vos compteurs ou une facture.",
+      "title": "Qui gère la communauté"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--member",
-      "target": "navbar__menu--member",
-      "text": "Juste en dessous, la section des membres ouvre « Gestionnaires de la communauté » : les personnes à contacter pour une question sur votre fiche, vos compteurs ou une facture.",
-      "title": "Qui gère la communauté"
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_managers",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Cliquez sur **« Gestionnaires de la communauté »**.",
+      "title": "Ouvrir les gestionnaires"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_managers-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_managers",
+      "text": "Touchez **« Gestionnaires de la communauté »**.",
+      "title": "Ouvrir les gestionnaires"
     },
     {
       "advance": {
@@ -112,7 +147,8 @@
       },
       "id": "managers-community-list__table",
       "target": "managers-community-list__table",
-      "text": "Chaque gestionnaire et administrateur figure ici avec son e-mail et son rôle. Pour aller plus loin, la page d'accueil et le tableau de bord du membre ont chacun leur visite détaillée dans le « Guide utilisateur ».",
+      "targetClick": "next",
+      "text": "Chaque gestionnaire et administrateur figure ici avec son e-mail et son rôle. Pour aller plus loin, la page d'accueil et le tableau de bord du membre ont chacun leur visite détaillée dans le **« Guide utilisateur »**.",
       "title": "Les gestionnaires"
     }
   ],

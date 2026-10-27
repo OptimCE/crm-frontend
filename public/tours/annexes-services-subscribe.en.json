@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services"
   },
@@ -15,6 +15,7 @@
       },
       "id": "annexes-services-list__empty",
       "target": "annexes-services-list__empty",
+      "targetClick": "next",
       "text": "The \"Annexe services\" page is empty — no optional module has been activated for this community yet.",
       "title": "No modules active"
     },
@@ -33,6 +34,7 @@
       },
       "id": "add-annex-dialog__item--algorithm",
       "target": "add-annex-dialog__item--algorithm",
+      "targetClick": "next",
       "text": "The dialog lists available modules. Here, the \"Allocation key generation\" module is offered with its description.",
       "title": "Choose a module",
       "waitFor": "add-annex-dialog__list"
@@ -52,6 +54,7 @@
       },
       "id": "annexes-services-list__card--algorithm",
       "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
       "text": "The \"Allocation key generation\" card appears in the grid with the \"Activated\" badge — the module is now accessible from this page.",
       "title": "Module activated"
     }

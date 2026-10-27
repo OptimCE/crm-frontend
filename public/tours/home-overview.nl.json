@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -24,6 +24,7 @@
       },
       "id": "needs-you__band",
       "target": "needs-you__band",
+      "targetClick": "next",
       "text": "De balk bovenaan telt wat een actie van u vraagt: ontvangen uitnodigingen, een fiche die u moet aanvullen, ongelezen meldingen. Is er niets, dan krimpt hij tot één geruststellende regel.",
       "title": "Wat op u wacht"
     },
@@ -33,6 +34,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Elke kaart toont een gemeenschap en uw rol daarin. De knop opent ze: ze wordt uw actieve gemeenschap en u komt op het dashboard ervan terecht.",
       "title": "Mijn gemeenschappen"
     },
@@ -60,6 +62,7 @@
       },
       "id": "my-filings-panel__btn--open",
       "target": "my-filings-panel__btn--open",
+      "targetClick": "next",
       "text": "Het laatste paneel toont de officiële documenten aan de regulator waarin u wordt vermeld. De knop opent de details in de betrokken gemeenschap.",
       "title": "Wat er over mij is ingediend"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,7 +15,7 @@
       },
       "id": "community-picker__btn--enter",
       "target": "community-picker__btn--enter",
-      "text": "You now manage this community: its card shows your new role. Click \"Open my community\" — its dashboard is no longer a member's.",
+      "text": "You now manage this community: its card shows your new role. Click **\"Open my community\"** — its dashboard is no longer a member's.",
       "title": "You are a manager"
     },
     {
@@ -24,19 +24,23 @@
       },
       "id": "readiness-tile",
       "target": "readiness-tile",
-      "text": "The dashboard now sums up the whole community. \"Things to check\" lists what is blocking, with a link to the screen where you fix it; then come the shared energy, the operations and the recent activity.",
+      "targetClick": "next",
+      "text": "The dashboard now sums up the whole community. **\"Things to check\"** lists what is blocking, with a link to the screen where you fix it; then come the shared energy, the operations and the recent activity.",
       "title": "The manager dashboard"
     },
     {
       "advance": {
         "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Your role added the \"Management\" section to the sidebar: the allocation keys, the members, meters and sharing operations, the community's users and the audit log. Hover the bar to read its labels."
+      "targetClick": "next",
+      "text": "Your role added the **\"Management\"** section to the sidebar: the allocation keys, the members, meters and sharing operations, the community's users and the audit log.",
+      "title": "The \"Management\" section"
     },
     {
       "advance": {
@@ -47,7 +51,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tap the menu icon to open the navigation."
+      "text": "Tap the **menu icon ☰** to open the navigation."
     },
     {
       "advance": {
@@ -58,26 +62,55 @@
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Your role added the \"Management\" section to the menu: the allocation keys, the members, meters and sharing operations, the community's users and the audit log.",
+      "targetClick": "next",
+      "text": "Your role added the **\"Management\"** section to the menu: the allocation keys, the members, meters and sharing operations, the community's users and the audit log.",
       "title": "The \"Management\" section"
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__container",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__container",
-      "text": "\"Member manager\" groups the community's day-to-day work: \"Manage members\", \"Manage meters\" and \"Sharing operations\".",
-      "title": "Members, meters, operations"
+      "text": "Click **\"Member manager\"** to unfold its submenu."
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__submenu-link--0",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__submenu-link--0",
-      "text": "Click \"Manage members\".",
-      "title": "Open the members"
+      "text": "The submenu groups the community's day-to-day work: the members, the meters and the sharing operations. Click **\"Manage members\"**."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__container-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__container",
+      "text": "Tap **\"Member manager\"** to unfold its submenu."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__submenu-link--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__submenu-link--0",
+      "text": "The submenu groups the community's day-to-day work: the members, the meters and the sharing operations. Tap **\"Manage members\"**."
     },
     {
       "advance": {
@@ -85,7 +118,8 @@
       },
       "id": "members-list__btn--invite",
       "target": "members-list__btn--invite",
-      "text": "Here you keep the list of members. \"Add\" fills in a record; \"Invite a new member\" sends an email so the person completes it themselves and gets access to their own space.",
+      "targetClick": "next",
+      "text": "Here you keep the list of members. **\"Add\"** fills in a record; **\"Invite a new member\"** sends an email so the person completes it themselves and gets access to their own space.",
       "title": "Add and invite members",
       "waitFor": "members-list__btn--add"
     },
@@ -93,12 +127,13 @@
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-3",
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--keys",
       "layouts": [
         "desktop"
       ],
-      "target": "navbar__menu--management",
-      "text": "In the \"Management\" section, click \"Key manager\".",
+      "target": "sidebar-element__link--keys",
+      "text": "In the **\"Management\"** section, click **\"Key manager\"**.",
       "title": "The allocation keys"
     },
     {
@@ -110,18 +145,18 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tap the menu icon to open the navigation."
+      "text": "Tap the **menu icon ☰** to open the navigation."
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-4",
+      "id": "sidebar-element__link--keys-2",
       "layouts": [
         "mobile"
       ],
-      "target": "navbar__menu--management",
-      "text": "In the menu's \"Management\" section, tap \"Key manager\".",
+      "target": "sidebar-element__link--keys",
+      "text": "In the menu's **\"Management\"** section, tap **\"Key manager\"**.",
       "title": "The allocation keys"
     },
     {
@@ -130,7 +165,8 @@
       },
       "id": "keys-list__btn--add",
       "target": "keys-list__btn--add",
-      "text": "An allocation key sets how the shared energy is split between an operation's consumers. \"Add\" lets you choose between the full form and a step-by-step wizard. The \"User guide\" offers a detailed tour of each of these screens.",
+      "targetClick": "next",
+      "text": "An allocation key sets how the shared energy is split between an operation's consumers. **\"Add\"** lets you choose between the full form and a step-by-step wizard. The **\"User guide\"** offers a detailed tour of each of these screens.",
       "title": "Allocation keys",
       "waitFor": "keys-list__table--keys"
     }

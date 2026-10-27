@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys"
   },
@@ -115,6 +115,7 @@
       },
       "id": "key-update__grid--data-3",
       "target": "key-update__grid--data",
+      "targetClick": "next",
       "text": "Parcourez la grille complète pour vérifier les itérations, les noms et les pourcentages avant d'enregistrer la clé.",
       "title": "Relire la configuration"
     },

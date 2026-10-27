@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/dashboard"
   },
@@ -13,21 +13,37 @@
       "advance": {
         "on": "manual"
       },
-      "id": "module-discovery-strip",
-      "target": "module-discovery-strip",
-      "text": "Sie haben alles, was ein Manager hat, und dazu einige Entscheidungen, die nur Ihnen zustehen. Die erste: die Module. Unter „Verfügbare Module“ abonniert „Aktivieren“ die Gemeinschaft für ein Modul; ein Manager wird gebeten, sich dafür an Sie zu wenden.",
+      "id": "readiness-tile",
+      "target": "readiness-tile",
+      "targetClick": "next",
+      "text": "Sie haben alles, was ein Manager hat, diese Übersicht eingeschlossen, und dazu drei Entscheidungen, die nur Ihnen zustehen: die Module, die die Gemeinschaft nutzt, wer sie mit Ihnen verwaltet, und ihre rechtlichen Angaben.",
       "title": "Sie sind Administrator"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Klicken Sie im Abschnitt „Verwaltung“ auf „Benutzer“.",
+      "targetClick": "next",
+      "text": "Als Administrator behalten Sie den Abschnitt **„Verwaltung“** der Manager. Auf der Seite **„Benutzer“** legen Sie fest, wer die Gemeinschaft mit Ihnen verwaltet.",
+      "title": "Der Abschnitt „Verwaltung“"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_users",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Klicken Sie im Abschnitt **„Verwaltung“** auf **„Benutzer“**.",
       "title": "Die Benutzer der Gemeinschaft"
     },
     {
@@ -39,18 +55,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--management-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Tippen Sie im Abschnitt „Verwaltung“ des Menüs auf „Benutzer“.",
+      "targetClick": "next",
+      "text": "Als Administrator behalten Sie den Abschnitt **„Verwaltung“** der Manager. Auf der Seite **„Benutzer“** legen Sie fest, wer die Gemeinschaft mit Ihnen verwaltet.",
+      "title": "Der Abschnitt „Verwaltung“"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_users-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Tippen Sie im Abschnitt **„Verwaltung“** des Menüs auf **„Benutzer“**.",
       "title": "Die Benutzer der Gemeinschaft"
     },
     {
@@ -59,7 +88,8 @@
       },
       "id": "users-community-list__btn--invite-manager",
       "target": "users-community-list__btn--invite-manager",
-      "text": "Nur ein Administrator kann einen Manager hinzufügen: „Einen Manager einladen“ sendet ihm eine Einladung per E-Mail, die er in seinen Einladungen annimmt.",
+      "targetClick": "next",
+      "text": "Nur ein Administrator kann einen Manager hinzufügen: **„Einen Manager einladen“** sendet ihm eine Einladung per E-Mail, die er in seinen Einladungen annimmt.",
       "title": "Einen Manager einladen"
     },
     {
@@ -68,19 +98,35 @@
       },
       "id": "users-community-list__btn--see-pending",
       "target": "users-community-list__btn--see-pending",
-      "text": "„Ausstehende Einladungen anzeigen“ zeigt, wer noch nicht geantwortet hat. In der Liste können nur Sie die Rolle eines Benutzers ändern — Mitglied, Manager oder Administrator — oder ihn aus der Gemeinschaft entfernen.",
+      "targetClick": "next",
+      "text": "**„Ausstehende Einladungen anzeigen“** zeigt, wer noch nicht geantwortet hat. In der Liste können nur Sie die Rolle eines Benutzers ändern — Mitglied, Manager oder Administrator — oder ihn aus der Gemeinschaft entfernen.",
       "title": "Einladungen und Rollen"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--community",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--community",
-      "text": "Klicken Sie im Abschnitt „Gemeinschaft“ auf „Gemeinschaftsinfo“.",
+      "targetClick": "next",
+      "text": "Der Abschnitt **„Gemeinschaft“** führt zur Übersicht, zur Gemeinschaftsinfo und zu ihren Zusatzdiensten. Auf der Seite **„Gemeinschaftsinfo“** stehen die rechtlichen Angaben, die nur Sie ändern können.",
+      "title": "Der Abschnitt „Gemeinschaft“"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_info",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Klicken Sie im Abschnitt **„Gemeinschaft“** auf **„Gemeinschaftsinfo“**.",
       "title": "Die Gemeinschaftsinfo"
     },
     {
@@ -92,18 +138,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--community-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--community",
-      "text": "Tippen Sie im Abschnitt „Gemeinschaft“ des Menüs auf „Gemeinschaftsinfo“.",
+      "targetClick": "next",
+      "text": "Der Abschnitt **„Gemeinschaft“** führt zur Übersicht, zur Gemeinschaftsinfo und zu ihren Zusatzdiensten. Auf der Seite **„Gemeinschaftsinfo“** stehen die rechtlichen Angaben, die nur Sie ändern können.",
+      "title": "Der Abschnitt „Gemeinschaft“"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_info-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Tippen Sie im Abschnitt **„Gemeinschaft“** des Menüs auf **„Gemeinschaftsinfo“**.",
       "title": "Die Gemeinschaftsinfo"
     },
     {
@@ -112,7 +171,8 @@
       },
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
-      "text": "Mitglieder und Manager lesen diese Angaben; nur Sie können sie ändern. „Bearbeiten“ öffnet den Namen, die Beschreibung, die Adresse, die Unternehmensnummer und die IBAN — was danach auf den Rechnungen und den offiziellen Dokumenten erscheint.",
+      "targetClick": "next",
+      "text": "Mitglieder und Manager lesen diese Angaben; nur Sie können sie ändern. **„Bearbeiten“** öffnet den Namen, die Beschreibung, die Adresse, die Unternehmensnummer und die IBAN — was danach auf den Rechnungen und den offiziellen Dokumenten erscheint.",
       "title": "Die rechtlichen Angaben",
       "waitFor": "community-info__card--view"
     }

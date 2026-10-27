@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -39,6 +39,7 @@
       },
       "id": "meter-view__hero",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "Der Kopfbereich der Detailseite zeigt die EAN des Zählers so, wie sie in der Datenbank gespeichert ist — sie ist die eindeutige Kennung des Zählpunkts.",
       "title": "EAN des Zählers"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__card--technical",
       "target": "meter-view__card--technical",
+      "targetClick": "next",
       "text": "Die technische Karte enthält die physische Zählernummer und die Ablesefrequenz — nützlich, um zu bestätigen, dass die Seite tatsächlich dem installierten Gerät entspricht.",
       "title": "Technische Merkmale"
     },
@@ -57,6 +59,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "Über die Registerkarten wechseln Sie zwischen den aktuellen Daten, dem Verlauf, den zukünftigen Werten und dem berechneten Verbrauch des Zählers.",
       "title": "Ansichtsregisterkarten"
     }

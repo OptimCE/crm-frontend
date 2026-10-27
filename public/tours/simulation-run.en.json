@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/simulation"
   },
@@ -15,6 +15,7 @@
       },
       "id": "simulation-hub__panel--start",
       "target": "simulation-hub__panel--start",
+      "targetClick": "next",
       "text": "The simulation page displays its configuration form: pick a saved allocation key, name the simulation, set the injection, and upload the consumption file to simulate.",
       "title": "Simulation page",
       "waitFor": "simulation-hub__container"
@@ -52,6 +53,7 @@
       },
       "id": "simulation-hub__dropzone",
       "target": "simulation-hub__dropzone",
+      "targetClick": "next",
       "text": "Upload the same \"test_4.csv\" file into the drop zone. The simulation will compute self-consumption and energy sharing from this data and the selected key.",
       "title": "Import the file to simulate"
     },
@@ -88,6 +90,7 @@
       },
       "id": "simulation-results__metrics",
       "target": "simulation-results__metrics",
+      "targetClick": "next",
       "text": "The simulation is complete. The headline metrics are shown: self-consumed energy, surplus, self-sufficiency rate, and sharing rate — computed from the saved key and the imported file.",
       "title": "Simulation results"
     },
@@ -106,6 +109,7 @@
       },
       "id": "simulation-results__iteration-toggle--1",
       "target": "simulation-results__iteration-toggle--1",
+      "targetClick": "next",
       "text": "Each key iteration can be expanded to reveal the per-consumer detail: allocation, consumption, self-consumed energy, surplus, and residual volume. This is where allocation solutions are compared.",
       "title": "Per-iteration, per-consumer detail"
     }

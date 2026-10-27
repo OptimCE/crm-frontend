@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
       "target": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
+      "targetClick": "next",
       "text": "Die erste Kachel fasst zusammen, was blockiert oder zu blockieren droht: fehlende rechtliche Angaben, Zähler, die auf den Netzbetreiber warten, Operationen ohne Verteilungsschlüssel. Jede Zeile führt direkt zu dem Bildschirm, auf dem Sie es beheben können.",
       "title": "Zu prüfende Punkte"
     },
@@ -42,6 +43,7 @@
       },
       "id": "energy-glance-tile__link--operation",
       "target": "energy-glance-tile__link--operation",
+      "targetClick": "next",
       "text": "Für jede Teilungsoperation zeigt die Kachel die geteilte und die eingespeiste Energie für den letzten Zeitraum, für den Daten vorliegen. Der Name der Operation führt zu ihrer Detailseite.",
       "title": "Energie auf einen Blick"
     },
@@ -51,6 +53,7 @@
       },
       "id": "sharing-operations-tile__link--all",
       "target": "sharing-operations-tile__link--all",
+      "targetClick": "next",
       "text": "Die Kachel listet die Operationen der Gemeinschaft mit ihrem Typ auf. Der Link unten öffnet die vollständige Liste.",
       "title": "Teilungsvorgänge"
     },
@@ -60,6 +63,7 @@
       },
       "id": "onboarding-funnel-tile__link--members",
       "target": "onboarding-funnel-tile__link--members",
+      "targetClick": "next",
       "text": "„Neuzugänge“ zählt die versendeten Einladungen und die noch zu erfassenden Datensätze. „Letzte Aktivität“ zeigt die zuletzt im Audit-Protokoll der Gemeinschaft erfassten Aktionen.",
       "title": "Neuzugänge und letzte Aktivität"
     },
@@ -69,6 +73,7 @@
       },
       "id": "unpaid-invoices-tile__link--billing",
       "target": "unpaid-invoices-tile__link--billing",
+      "targetClick": "next",
       "text": "Abrechnung, Aktuelles, Dossiers und Verwaltungsfristen erscheinen nur, wenn die Gemeinschaft das entsprechende Modul abonniert hat. Eine Gemeinschaft ohne Abonnement sieht diese Kacheln einfach nicht.",
       "title": "Die aktivierten Module"
     },
@@ -78,6 +83,7 @@
       },
       "id": "module-discovery-strip",
       "target": "module-discovery-strip",
+      "targetClick": "next",
       "text": "Unten in der Übersicht zeigt die Leiste „Verfügbare Module“, was die Gemeinschaft noch nicht nutzt. Ein Administrator kann sie hier aktivieren; ein Manager sieht, an wen er sich wenden muss.",
       "title": "Verfügbare Module"
     },
@@ -96,6 +102,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "Die Kacheln laden nacheinander neu und zeigen wieder ihre gewohnte Ansicht mit den neuesten Daten.",
       "title": "Aktuelle Daten"
     }

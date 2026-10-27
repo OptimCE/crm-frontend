@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/sharing_operations"
   },
@@ -70,6 +70,7 @@
       },
       "id": "operations-list__table",
       "target": "operations-list__table",
+      "targetClick": "next",
       "text": "De nieuwe operatie “E2E Sharing Op” verschijnt in de lijst van deeloperaties van de gemeenschap, klaar om te worden bewerkt en geactiveerd.",
       "title": "Operatie aangemaakt"
     },
@@ -88,6 +89,7 @@
       },
       "id": "op-view__title--name",
       "target": "op-view__title--name",
+      "targetClick": "next",
       "text": "De kop van de detailpagina toont de naam van de operatie die u zojuist hebt aangemaakt — die naam is de rode draad in alle weergaven die ernaar verwijzen.",
       "title": "Naam van de operatie",
       "waitFor": "op-view__hero"

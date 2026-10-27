@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/billing"
   },
@@ -15,6 +15,7 @@
       },
       "id": "my-invoices__card",
       "target": "my-invoices__card",
+      "targetClick": "next",
       "text": "Voici l'espace « Mes factures ». Chaque carte correspond à une de vos factures, avec son numéro, son montant, son statut et sa communication structurée. Vous ne voyez que vos propres factures.",
       "title": "Vos factures"
     }

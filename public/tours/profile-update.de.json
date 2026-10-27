@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -15,6 +15,7 @@
       },
       "id": "profile__card--account",
       "target": "profile__card--account",
+      "targetClick": "next",
       "text": "Das Profil zeigt die Ausgangsdaten: Demo User, demo@example.com und die Adresse in Brüssel, wie sie in der Datenbank vorbelegt wurden.",
       "title": "Standardprofil",
       "waitFor": "profile__card--addresses"
@@ -62,6 +63,7 @@
       },
       "id": "profile__avatar",
       "target": "profile__avatar",
+      "targetClick": "next",
       "text": "Zurück auf der Profilseite sind der neue Vorname und der neue Name sofort sichtbar — die Änderung wurde serverseitig gespeichert.",
       "title": "Profil aktualisiert"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/sharing_operations"
   },
@@ -70,6 +70,7 @@
       },
       "id": "operations-list__table",
       "target": "operations-list__table",
+      "targetClick": "next",
       "text": "La nouvelle opération « E2E Energy Sharing » apparaît dans la liste. Elle est pour l'instant en mode privé : elle n'est visible que par les gestionnaires de la communauté et n'apparaît pas encore dans l'annuaire public.",
       "title": "Opération créée"
     },
@@ -88,6 +89,7 @@
       },
       "id": "op-view__btn--toggle-visibility",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "Le bouton grisé « PRIVÉ » dans l'en-tête indique que cette opération n'est pas encore visible dans l'annuaire public. Les citoyens qui cherchent une opération de partage dans leur commune ne pourront pas la trouver tant qu'elle reste privée.",
       "title": "Visibilité privée par défaut",
       "waitFor": "op-view__title--name"
@@ -107,6 +109,7 @@
       },
       "id": "op-view__btn--toggle-visibility-3",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "Le bouton passe au vert et affiche « PUBLIC ». Tout citoyen peut désormais trouver cette opération dans l'annuaire des communautés d'énergie, filtrer par commune et contacter la communauté pour demander à y participer.",
       "title": "L'opération est maintenant publique"
     }

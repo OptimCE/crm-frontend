@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/users"
   },
@@ -18,6 +18,7 @@
         "desktop"
       ],
       "target": "users-community-list__row--desktop--0",
+      "targetClick": "next",
       "text": "Deze pagina toont alle gebruikers die toegang hebben tot de gemeenschap, met hun rol: beheerder, manager of lid. U kunt iemand uitnodigen, een rol wijzigen of een toegang intrekken.",
       "title": "De gebruikers van de gemeenschap",
       "waitFor": "users-community-list__table"
@@ -31,6 +32,7 @@
         "mobile"
       ],
       "target": "users-community-list__card--mobile--0",
+      "targetClick": "next",
       "text": "Deze pagina toont de accounts die aan de gemeenschap gekoppeld zijn, met hun rol. Hier nodigt u een manager uit, wijzigt u een rol of trekt u een toegang in.",
       "title": "De gebruikers van de gemeenschap"
     },
@@ -159,6 +161,7 @@
         "desktop"
       ],
       "target": "users-community-list__btn--delete--0",
+      "targetClick": "next",
       "text": "De gebruiker is nu een lid: het rollabel is gewijzigd en de verwijderactie is nu beschikbaar in de rij van de gebruiker.",
       "title": "Rol bijgewerkt"
     },
@@ -171,6 +174,7 @@
         "mobile"
       ],
       "target": "users-community-list__btn--card-delete--0",
+      "targetClick": "next",
       "text": "De gebruiker is nu een lid: het rollabel is gewijzigd en de verwijderactie is nu beschikbaar op de kaart van de gebruiker.",
       "title": "Rol bijgewerkt"
     },
@@ -204,6 +208,7 @@
       },
       "id": "users-community-list__empty--message",
       "target": "users-community-list__empty--message",
+      "targetClick": "next",
       "text": "Zoeken op dit e-mailadres levert geen resultaten meer op: de gebruiker heeft geen toegang meer tot de gemeenschap.",
       "title": "Gebruiker verwijderd"
     }

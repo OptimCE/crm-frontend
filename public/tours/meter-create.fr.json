@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -242,6 +242,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "Le compteur « 541449123456789012 » apparaît dans le tableau filtré : la création est confirmée et la fiche est accessible depuis la liste.",
       "title": "Compteur trouvé"
     },
@@ -275,6 +276,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "La fiche détaillée reprend l'EAN du nouveau compteur et propose les onglets de consultation : données actuelles, historiques, futures et consommation.",
       "title": "Fiche compteur prête",
       "waitFor": "meter-view__hero"

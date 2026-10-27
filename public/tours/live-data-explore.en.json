@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -15,6 +15,7 @@
       },
       "id": "live-data-hub__indicative",
       "target": "live-data-hub__indicative",
+      "targetClick": "next",
       "text": "This console follows, quarter-hour by quarter-hour, what the devices installed at members' premises measure. The figures are indicative: only the grid operator's data is used for allocation keys and invoicing.",
       "title": "The Live data console",
       "waitFor": "live-dashboard__signal"
@@ -25,6 +26,7 @@
       },
       "id": "live-dashboard__no-data",
       "target": "live-dashboard__no-data",
+      "targetClick": "next",
       "text": "The dashboard sums up the last full hour: production, power, grid exchanges and the state of the fleet. Until a device has sent a reading, every card shows a dash rather than a zero — \"not measured yet\" is not \"nothing produced\".",
       "title": "The dashboard"
     },
@@ -54,6 +56,7 @@
       },
       "id": "live-devices__btn--add",
       "target": "live-devices__btn--add",
+      "targetClick": "next",
       "text": "The community has no device yet. The \"Add a device\" button creates a device for a meter and issues its enrolment code — see the \"Connect a device\" guide.",
       "title": "No device yet",
       "waitFor": "live-devices__empty"
@@ -73,6 +76,7 @@
       },
       "id": "live-ops__empty",
       "target": "live-ops__empty",
+      "targetClick": "next",
       "text": "With no device, nothing has been computed yet and no device needs attention. As soon as a device reports, this screen shows how long ago the figures were recomputed and flags devices that are silent, offline or whose readings are rejected.",
       "title": "An empty fleet",
       "waitFor": "live-ops__readings-rejected-none"
@@ -92,6 +96,7 @@
       },
       "id": "live-settings__btn--save",
       "target": "live-settings__btn--save",
+      "targetClick": "next",
       "text": "The settings decide what members will be able to see, and the minimum number of members below which grid exchanges stay hidden so that no household can be identified. Until they are saved, the platform defaults apply.",
       "title": "The visibility settings",
       "waitFor": "live-settings__is-default"

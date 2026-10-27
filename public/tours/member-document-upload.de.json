@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/members/:memberId"
   },
@@ -34,6 +34,7 @@
       },
       "id": "member-add-document__label--drag-drop",
       "target": "member-add-document__label--drag-drop",
+      "targetClick": "next",
       "text": "Wählen Sie die hochzuladende Datei auf Ihrem Computer aus (oder ziehen Sie sie in den dafür vorgesehenen Bereich).",
       "title": "Datei auswählen"
     },
@@ -52,6 +53,7 @@
       },
       "id": "member-view-documents-tab__table",
       "target": "member-view-documents-tab__table",
+      "targetClick": "next",
       "text": "Das Dokument „e2e-document.pdf“ erscheint jetzt in der Dokumentenliste des Mitglieds.",
       "title": "Dokument hinzugefügt"
     }

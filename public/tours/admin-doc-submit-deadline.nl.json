@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-detail__tag--status",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "Zolang het dossier “In voorbereiding” is, verwacht de regulator niets van u. De knoppen bovenaan bieden alleen de statuswijzigingen aan die in dit stadium zijn toegestaan.",
       "title": "Een dossier in voorbereiding",
       "waitFor": "dossier-detail__btn--transition-2"
@@ -62,6 +63,7 @@
       },
       "id": "dossier-detail__tag--status-2",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "De status verandert en de voorgestelde acties veranderen mee: een ingediend dossier kan volledig worden verklaard, worden gecorrigeerd of vervallen.",
       "title": "Het dossier is ingediend"
     },
@@ -80,6 +82,7 @@
       },
       "id": "dossier-deadlines-panel__btn--met-1",
       "target": "dossier-deadlines-panel__btn--met-1",
+      "targetClick": "next",
       "text": "U voert een termijn nooit handmatig in: OptimCE berekent hem op basis van het dossiertype, het gewest en de datum die u zojuist hebt vastgelegd.",
       "title": "Er is een termijn verschenen",
       "waitFor": "dossier-deadlines-panel__row--0"
@@ -108,6 +111,7 @@
       },
       "id": "deadline-dashboard__btn--met-1",
       "target": "deadline-dashboard__btn--met-1",
+      "targetClick": "next",
       "text": "Elke rij verwijst naar het bijbehorende dossier en vermeldt de vervaldatum. De filter toont standaard de termijnen die nog openstaan.",
       "title": "Het overzicht van de termijnen",
       "waitFor": "deadline-dashboard__row--0"
@@ -136,6 +140,7 @@
       },
       "id": "deadline-dashboard__empty--message",
       "target": "deadline-dashboard__empty--message",
+      "targetClick": "next",
       "text": "Het overzicht toont geen openstaande termijn meer. De historiek van het dossier houdt wel bij wat er is gedaan en wanneer.",
       "title": "Niets meer in afwachting"
     }

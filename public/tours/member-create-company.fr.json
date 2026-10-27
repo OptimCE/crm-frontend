@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/members"
   },
@@ -218,6 +218,7 @@
         "desktop"
       ],
       "target": "members-list__row--desktop--0",
+      "targetClick": "next",
       "text": "« E2E Company SA » figure désormais dans la liste des membres, avec l'étiquette de type « Société ».",
       "title": "La société est créée"
     },
@@ -230,6 +231,7 @@
         "mobile"
       ],
       "target": "members-list__card--mobile--0",
+      "targetClick": "next",
       "text": "« E2E Company SA » figure désormais dans la liste des membres, avec l'étiquette de type « Société ».",
       "title": "La société est créée"
     }

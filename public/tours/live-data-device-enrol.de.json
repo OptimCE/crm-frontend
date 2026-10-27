@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -72,6 +72,7 @@
       },
       "id": "device-token-dialog__qr",
       "target": "device-token-dialog__qr",
+      "targetClick": "next",
       "text": "Das Gerät ist angelegt und sein Registrierungscode wird sofort angezeigt, als Klartext und als QR-Code. Geben Sie ihn am Gerät ein (oder scannen Sie ihn). Er wird nur ein einziges Mal angezeigt, funktioniert nur einmal und läuft nach 72 Stunden ab; geht er verloren, stellen Sie in der Liste einen neuen aus — der alte funktioniert dann nicht mehr.",
       "title": "Der Registrierungscode",
       "waitFor": "device-token-dialog__code"

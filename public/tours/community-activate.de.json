@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Nach der Anmeldung gelangen Sie auf Ihre Startseite. Sie listet die Gemeinschaften auf, denen Sie angehören, mit Ihrer Rolle in jeder davon.",
       "title": "Ihre Gemeinschaften"
     },
@@ -33,6 +34,7 @@
       },
       "id": "navbar__menu--management",
       "target": "navbar__menu--management",
+      "targetClick": "next",
       "text": "Ein neues Menü „Verwaltung“ erscheint in der Seitenleiste und gibt Zugriff auf die Verteilungsschlüssel, Zähler und Teilungsoperationen der Gemeinschaft.",
       "title": "Verwaltungsmenü freigeschaltet",
       "waitFor": "dashboard-tile"

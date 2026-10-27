@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -39,6 +39,7 @@
       },
       "id": "meter-view__hero",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "The hero shows the meter's EAN as stored in the database — this is the unique identifier of the metering point.",
       "title": "Meter EAN"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__card--technical",
       "target": "meter-view__card--technical",
+      "targetClick": "next",
       "text": "The technical card lists the physical meter number and the reading frequency — handy for confirming the page matches the installed device.",
       "title": "Technical characteristics"
     },
@@ -57,6 +59,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "The tabs let you switch between actual, historical, future and computed consumption data for this meter.",
       "title": "Browsing tabs"
     }

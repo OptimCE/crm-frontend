@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters/:meterEan"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meter-view__btn--deactivate",
       "target": "meter-view__btn--deactivate",
+      "targetClick": "next",
       "text": "Öffnen Sie die Detailseite des Zählers, den Sie deaktivieren möchten. Mit der Schaltfläche „Zähler deaktivieren“ planen Sie das Ende seiner Aktivität zu einem bestimmten Datum.",
       "title": "Detailseite des Zählers"
     },

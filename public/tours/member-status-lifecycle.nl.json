@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/members"
   },
@@ -49,6 +49,7 @@
       },
       "id": "member-view-tabs__tab--meter",
       "target": "member-view-tabs__tab--meter",
+      "targetClick": "next",
       "text": "Het lid is actief: het statuslabel is groen en er is een tabblad “Meters” beschikbaar. Met de actieknoppen kunt u het lid deactiveren of in behandeling plaatsen.",
       "title": "Fiche van het actieve lid",
       "waitFor": "member-view__btn--deactivate"
@@ -68,6 +69,7 @@
       },
       "id": "member-view__tag--status-inactive",
       "target": "member-view__tag--status-inactive",
+      "targetClick": "next",
       "text": "Het label verandert in “Gedeactiveerd” en het tabblad “Meters” verdwijnt: een inactief lid kan niet langer aan een meter worden gekoppeld.",
       "title": "Lid gedeactiveerd"
     },
@@ -86,6 +88,7 @@
       },
       "id": "member-view__tag--status-active",
       "target": "member-view__tag--status-active",
+      "targetClick": "next",
       "text": "Het label staat weer op “Geactiveerd” en het tabblad “Meters” verschijnt opnieuw. Het lid is opnieuw volledig operationeel.",
       "title": "Lid opnieuw geactiveerd"
     }

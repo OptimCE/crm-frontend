@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -15,6 +15,7 @@
       },
       "id": "dossier-list__empty--message",
       "target": "dossier-list__empty--message",
+      "targetClick": "next",
       "text": "Cette page suit les dossiers déposés auprès de la CWaPE et du gestionnaire de réseau. Chaque dossier concerne une seule opération de partage : une communauté qui en exploite plusieurs dépose un dossier par opération.",
       "title": "Aucun dossier pour le moment",
       "waitFor": "dossier-list__table"

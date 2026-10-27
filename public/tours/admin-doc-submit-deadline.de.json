@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-detail__tag--status",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "Solange das Dossier „In Vorbereitung“ ist, erwartet die Regulierungsbehörde nichts von Ihnen. Die Schaltflächen oben bieten nur die Statusänderungen an, die in diesem Stadium zulässig sind.",
       "title": "Ein Dossier in Vorbereitung",
       "waitFor": "dossier-detail__btn--transition-2"
@@ -62,6 +63,7 @@
       },
       "id": "dossier-detail__tag--status-2",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "Der Status ändert sich und mit ihm die angebotenen Aktionen: Ein eingereichtes Dossier kann für vollständig erklärt, korrigiert werden oder verfallen.",
       "title": "Das Dossier ist eingereicht"
     },
@@ -80,6 +82,7 @@
       },
       "id": "dossier-deadlines-panel__btn--met-1",
       "target": "dossier-deadlines-panel__btn--met-1",
+      "targetClick": "next",
       "text": "Sie erfassen eine Frist nie von Hand: OptimCE berechnet sie aus dem Dossiertyp, der Region und dem Datum, das Sie soeben erfasst haben.",
       "title": "Eine Frist ist erschienen",
       "waitFor": "dossier-deadlines-panel__row--0"
@@ -108,6 +111,7 @@
       },
       "id": "deadline-dashboard__btn--met-1",
       "target": "deadline-dashboard__btn--met-1",
+      "targetClick": "next",
       "text": "Jede Zeile verweist auf ihr Dossier und zeigt das Fälligkeitsdatum. Der Filter zeigt standardmäßig die noch offenen Fristen.",
       "title": "Die Fristenübersicht",
       "waitFor": "deadline-dashboard__row--0"
@@ -136,6 +140,7 @@
       },
       "id": "deadline-dashboard__empty--message",
       "target": "deadline-dashboard__empty--message",
+      "targetClick": "next",
       "text": "Die Übersicht zeigt keine offene Frist mehr. Der Verlauf des Dossiers hält jedoch fest, was wann getan wurde.",
       "title": "Nichts mehr ausstehend"
     }

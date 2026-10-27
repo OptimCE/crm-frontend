@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -18,6 +18,7 @@
         "desktop"
       ],
       "target": "navbar__sidebar",
+      "targetClick": "next",
       "text": "Move the mouse over the sidebar to expand it: the notification bell appears.",
       "title": "Expand the sidebar",
       "waitFor": "profile__avatar"

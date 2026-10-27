@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/public"
   },
@@ -15,6 +15,7 @@
       },
       "id": "public-community-list__btn--accordion--0",
       "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
       "text": "Each card is an energy community open to the public, with its regulator. Click a card to learn more.",
       "title": "The public communities directory"
     },
@@ -33,6 +34,7 @@
       },
       "id": "public-community-list__detail--0",
       "target": "public-community-list__detail--0",
+      "targetClick": "next",
       "text": "The \"Test Community\" offers several public sharing operations (solar, wind). Each operation lists the municipalities it covers.",
       "title": "The sharing operations"
     },
@@ -51,6 +53,7 @@
       },
       "id": "public-community-list__btn--accordion--0-3",
       "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
       "text": "\"Test Community\" runs a sharing operation in Anderlecht, so it stays listed. A municipality with no active community would show an empty directory.",
       "title": "Filtered result"
     }

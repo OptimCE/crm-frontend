@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users/communities"
   },
@@ -52,6 +52,7 @@
       },
       "id": "user-communities__table",
       "target": "user-communities__table",
+      "targetClick": "next",
       "text": "“E2E Community” staat nu in uw lijst. U hoeft ze alleen nog te activeren om met de configuratie te beginnen.",
       "title": "Uw nieuwe gemeenschap",
       "waitFor": "user-communities__row--mobile--0"
@@ -86,6 +87,7 @@
       },
       "id": "navbar__menu--management",
       "target": "navbar__menu--management",
+      "targetClick": "next",
       "text": "De sectie “Beheer” verschijnt in de zijbalk: als maker bent u beheerder van de gemeenschap en hebt u toegang tot al haar tools.",
       "title": "U bent beheerder"
     }

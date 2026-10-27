@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -24,6 +24,7 @@
       },
       "id": "notification-preferences__row--news_post",
       "target": "notification-preferences__row--news_post",
+      "targetClick": "next",
       "text": "Elke rij is een activiteitencategorie — nieuws, facturen, termijnen… — en elke kolom een kanaal. “Al het overige” dekt de categorieën die geen eigen rij hebben. Essentiële berichten (facturen, uitnodigingen, overschreden termijnen) worden altijd verzonden.",
       "title": "Categorieën en kanalen",
       "waitFor": "notification-preferences__table"
@@ -34,6 +35,7 @@
       },
       "id": "notification-preferences__email--news_post",
       "target": "notification-preferences__email--news_post",
+      "targetClick": "next",
       "text": "Zet “E-mail” uit op de rij “Nieuwsberichten”: u blijft de berichten in de applicatie zien, maar ontvangt er geen e-mail meer over.",
       "title": "Een kanaal uitschakelen"
     },
@@ -52,6 +54,7 @@
       },
       "id": "notification-preferences__saved",
       "target": "notification-preferences__saved",
+      "targetClick": "next",
       "text": "Er verschijnt een bevestigingsbericht naast de knop. Het verdwijnt zodra u opnieuw een instelling wijzigt.",
       "title": "Voorkeuren opgeslagen"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -43,6 +43,7 @@
       },
       "id": "news-compose__poll-type--single",
       "target": "news-compose__poll-type--single",
+      "targetClick": "next",
       "text": "Choisissez si les membres peuvent sélectionner une seule réponse (« Choix unique ») ou plusieurs (« Choix multiple »). Nous gardons « Choix unique ».",
       "title": "Choix unique ou multiple"
     },
@@ -97,6 +98,7 @@
       },
       "id": "news-compose__preset--anonymous",
       "target": "news-compose__preset--anonymous",
+      "targetClick": "next",
       "text": "Trois préréglages couvrent les cas les plus courants. Chacun combine ce que voient les gestionnaires, ce que voient les membres, et à quel moment.",
       "title": "Choisir qui voit les résultats"
     },
@@ -142,6 +144,7 @@
       },
       "id": "news-compose__admin-vis",
       "target": "news-compose__admin-vis",
+      "targetClick": "next",
       "text": "Ce que voient les gestionnaires. « Agrégé » : uniquement les totaux par option. « Complet » : le détail nominatif, c'est-à-dire qui a voté pour chaque option.",
       "title": "Visibilité gestionnaire"
     },
@@ -151,6 +154,7 @@
       },
       "id": "news-compose__member-vis",
       "target": "news-compose__member-vis",
+      "targetClick": "next",
       "text": "Ce que les membres sont autorisés à voir. « Aucun » : jamais de résultats. « Agrégé » : les totaux. « Complet » : le détail des votes par personne.",
       "title": "Visibilité membre"
     },
@@ -160,6 +164,7 @@
       },
       "id": "news-compose__member-display",
       "target": "news-compose__member-display",
+      "targetClick": "next",
       "text": "Le moment où les membres voient ce qui leur est autorisé. « Jamais », « Avant de voter », « Après avoir voté », ou « À la clôture du sondage ». C'est ce réglage qui distingue, par exemple, un vote dont le résultat n'apparaît qu'une fois la participation enregistrée.",
       "title": "Affichage membre"
     },
@@ -187,6 +192,7 @@
       },
       "id": "news-poll",
       "target": "news-poll",
+      "targetClick": "next",
       "text": "Le sondage apparaît dans le tableau avec ses options. Les membres peuvent désormais voter ; les résultats s'afficheront selon la visibilité que vous avez choisie.",
       "title": "Votre sondage est en ligne"
     }

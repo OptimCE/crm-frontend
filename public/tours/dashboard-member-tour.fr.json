@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "my-energy-tile__link--meter",
       "target": "my-energy-tile__link--meter",
+      "targetClick": "next",
       "text": "La première tuile totalise, sur les trente derniers jours, ce que vous avez consommé et ce que le partage vous a apporté, puis détaille compteur par compteur.",
       "title": "Mon énergie ici"
     },
@@ -51,6 +52,7 @@
       },
       "id": "my-member-record-tile__link--member",
       "target": "my-member-record-tile__link--member",
+      "targetClick": "next",
       "text": "La tuile confirme que votre fiche est active, ou signale qu'elle attend encore d'être validée par un gestionnaire.",
       "title": "Ma fiche membre"
     },
@@ -60,6 +62,7 @@
       },
       "id": "about-community-tile__link--info",
       "target": "about-community-tile__link--info",
+      "targetClick": "next",
       "text": "Nombre de membres, régulateur, site web : de quoi savoir à qui vous avez affaire. Le lien ouvre la fiche complète de la communauté.",
       "title": "À propos de la communauté"
     },
@@ -69,6 +72,7 @@
       },
       "id": "my-invoices-tile__link--all",
       "target": "my-invoices-tile__link--all",
+      "targetClick": "next",
       "text": "Ces deux tuiles n'apparaissent que si la communauté utilise les modules correspondants. Vos factures impayées y sont résumées, tout comme les dernières publications du tableau d'actualités.",
       "title": "Factures et actualités"
     },
@@ -87,6 +91,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "Les tuiles se rechargent une à une et reprennent leur affichage avec les données les plus récentes.",
       "title": "Données à jour"
     }

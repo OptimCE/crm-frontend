@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/algorithm"
   },
@@ -15,6 +15,7 @@
       },
       "id": "algorithm-hub__panel--start",
       "target": "algorithm-hub__panel--start",
+      "targetClick": "next",
       "text": "La page de génération de clés de répartition s'affiche avec le formulaire de configuration. Sélectionnez l'algorithme, renseignez les paramètres et importez votre fichier de données pour lancer une nouvelle génération.",
       "title": "Page de génération de clés",
       "waitFor": "algorithm-hub__container"
@@ -71,6 +72,7 @@
       },
       "id": "algo-form__grid--advanced",
       "target": "algo-form__grid--advanced",
+      "targetClick": "next",
       "text": "Les paramètres avancés d'OLAGSA s'affichent : générations, taille de population, taux de croisement inter-espèces et intra-espèces, taux de mutation, nombre d'espèces attendues et nombre maximum de générations sans amélioration. Les valeurs par défaut conviennent pour la plupart des usages.",
       "title": "Hyperparamètres de l'algorithme génétique"
     },
@@ -80,6 +82,7 @@
       },
       "id": "algorithm-hub__dropzone",
       "target": "algorithm-hub__dropzone",
+      "targetClick": "next",
       "text": "Glissez votre fichier CSV dans la zone d'import ou cliquez dessus pour sélectionner le fichier de données à utiliser pour la génération.",
       "title": "Importer le fichier de données"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -15,6 +15,7 @@
       },
       "id": "news-board__empty",
       "target": "news-board__empty",
+      "targetClick": "next",
       "text": "Die Neuigkeiten-Pinnwand wird angezeigt. Sie ist noch leer: Es wurden noch keine Neuigkeiten veröffentlicht. Als Manager können Sie mit der Schaltfläche „Verfassen“ einen Beitrag erstellen.",
       "title": "Die Neuigkeiten-Pinnwand"
     },
@@ -33,6 +34,7 @@
       },
       "id": "news-compose__body",
       "target": "news-compose__body",
+      "targetClick": "next",
       "text": "Das Fenster öffnet sich mit dem Typ „Beitrag“. Über die Registerkarte „Umfrage“ würden Sie stattdessen eine Umfrage erstellen — hier veröffentlichen wir eine einfache Neuigkeit.",
       "title": "Eine Neuigkeit verfassen",
       "waitFor": "news-compose__kind--post"
@@ -61,6 +63,7 @@
       },
       "id": "news-post__body",
       "target": "news-post__body",
+      "targetClick": "next",
       "text": "Die Neuigkeit erscheint oben auf der Pinnwand, unterzeichnet von ihrem Verfasser. Alle Mitglieder der Gemeinschaft sehen sie und erhalten eine Benachrichtigung.",
       "title": "Ihre Neuigkeit ist veröffentlicht"
     }

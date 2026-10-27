@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-documents-panel__empty--message",
       "target": "dossier-documents-panel__empty--message",
+      "targetClick": "next",
       "text": "L'onglet « Documents » liste les pièces du dossier. Un dossier fraîchement créé n'en contient aucune.",
       "title": "Un dossier vide",
       "waitFor": "dossier-documents-panel__btn--add"
@@ -70,6 +71,7 @@
       },
       "id": "dossier-documents-panel__btn--generate-1",
       "target": "dossier-documents-panel__btn--generate-1",
+      "targetClick": "next",
       "text": "Le document est créé au statut « Brouillon ». Il n'a encore aucun contenu : les icônes proposent de le générer depuis le CRM ou de téléverser votre propre fichier.",
       "title": "Un brouillon vous attend",
       "waitFor": "dossier-documents-panel__row--0"
@@ -89,6 +91,7 @@
       },
       "id": "generate-dialog__field--community_name",
       "target": "generate-dialog__field--community_name",
+      "targetClick": "next",
       "text": "Rien n'est déposé sans votre relecture. Les champs sont pré-remplis depuis le CRM et restent modifiables : ce que vous validez ici est exactement ce qui sera figé dans le document.",
       "title": "Vérifier les données",
       "waitFor": "generate-dialog__btn--submit"
@@ -117,6 +120,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "Une fois la génération terminée, le document porte une version téléchargeable. Rien n'est écrasé : chaque génération ajoute une nouvelle version.",
       "title": "Le document est prêt"
     },
@@ -135,6 +139,7 @@
       },
       "id": "document-detail-dialog__btn--snapshot-1",
       "target": "document-detail-dialog__btn--snapshot-1",
+      "targetClick": "next",
       "text": "Chaque version indique quand elle a été produite et par qui. Les versions générées conservent en plus les données exactes utilisées.",
       "title": "Une trace de ce qui a été produit",
       "waitFor": "document-detail-dialog__row--1"

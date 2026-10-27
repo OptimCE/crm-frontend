@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -15,6 +15,7 @@
       },
       "id": "news-board__empty",
       "target": "news-board__empty",
+      "targetClick": "next",
       "text": "Le tableau d'actualités s'affiche. Il est encore vide : aucune actualité n'a été publiée. En tant que gestionnaire, vous pouvez en créer une avec le bouton « Nouvelle publication ».",
       "title": "Le tableau d'actualités"
     },
@@ -33,6 +34,7 @@
       },
       "id": "news-compose__body",
       "target": "news-compose__body",
+      "targetClick": "next",
       "text": "La fenêtre s'ouvre sur le type « Publication ». L'onglet « Sondage » permettrait plutôt de créer un sondage — ici nous publions une simple actualité.",
       "title": "Rédiger une actualité",
       "waitFor": "news-compose__kind--post"
@@ -61,6 +63,7 @@
       },
       "id": "news-post__body",
       "target": "news-post__body",
+      "targetClick": "next",
       "text": "L'actualité apparaît en tête du tableau, signée par son auteur. Tous les membres de la communauté la voient et reçoivent une notification.",
       "title": "Votre actualité est publiée"
     }

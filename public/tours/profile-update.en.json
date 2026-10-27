@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -15,6 +15,7 @@
       },
       "id": "profile__card--account",
       "target": "profile__card--account",
+      "targetClick": "next",
       "text": "The profile shows the seeded defaults: Demo User, demo@example.com and the Brussels address as injected by the database fixtures.",
       "title": "Default profile",
       "waitFor": "profile__card--addresses"
@@ -62,6 +63,7 @@
       },
       "id": "profile__avatar",
       "target": "profile__avatar",
+      "targetClick": "next",
       "text": "Back on the profile page, the new first and last name appear immediately — the change has been persisted server-side.",
       "title": "Profile updated"
     }

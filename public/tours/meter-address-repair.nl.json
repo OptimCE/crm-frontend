@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -24,6 +24,7 @@
       },
       "id": "unlocated-meters__subtitle",
       "target": "unlocated-meters__subtitle",
+      "targetClick": "next",
       "text": "Het venster toont precies de meters die de kaart niet kan plaatsen: meters zonder enige coördinaat, maar ook meters die alleen in het centrum van hun gemeente zijn geplaatst.",
       "title": "De correctielijst"
     },
@@ -42,6 +43,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--not-found",
       "target": "unlocated-meters__autocomplete--address--not-found",
+      "targetClick": "next",
       "text": "OptimCE raadpleegt het federale register BeSt Address. Dit adres komt daarin met niets overeen: daarom verschijnt de meter niet op de kaart.",
       "title": "Adres niet gevonden"
     },
@@ -89,6 +91,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--located",
       "target": "unlocated-meters__autocomplete--address--located",
+      "targetClick": "next",
       "text": "Het groene bericht bevestigt dat het adres nauwkeurig is gelokaliseerd: de meter verschijnt op de kaart zodra de correctie is opgeslagen.",
       "title": "Adres gevonden"
     },
@@ -117,6 +120,7 @@
       },
       "id": "meters-map__strip--partial",
       "target": "meters-map__strip--partial",
+      "targetClick": "next",
       "text": "Terug op de kaart is het aantal in de balk gedaald: de gecorrigeerde meter is nu geplaatst en alleen de meter in het centrum van zijn gemeente blijft over.",
       "title": "De kaart is bijgewerkt",
       "waitFor": "map-canvas__host"

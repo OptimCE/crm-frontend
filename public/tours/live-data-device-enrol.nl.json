@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -72,6 +72,7 @@
       },
       "id": "device-token-dialog__qr",
       "target": "device-token-dialog__qr",
+      "targetClick": "next",
       "text": "Het apparaat is aangemaakt en zijn aanmeldcode verschijnt meteen, in leesbare tekst en als QR-code. Voer hem in op het apparaat (of scan hem). Hij wordt maar één keer getoond, werkt maar één keer en verloopt na 72 uur; bent u hem kwijt, geef dan vanuit de lijst een nieuwe uit — de oude werkt dan niet meer.",
       "title": "De aanmeldcode",
       "waitFor": "device-token-dialog__code"

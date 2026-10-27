@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/members"
   },
@@ -49,6 +49,7 @@
       },
       "id": "member-view-tabs__tab--meter",
       "target": "member-view-tabs__tab--meter",
+      "targetClick": "next",
       "text": "The member is active: its status badge is green and a \"Meter\" tab is available. The action buttons let you deactivate it or put it on hold.",
       "title": "Active member record",
       "waitFor": "member-view__btn--deactivate"
@@ -68,6 +69,7 @@
       },
       "id": "member-view__tag--status-inactive",
       "target": "member-view__tag--status-inactive",
+      "targetClick": "next",
       "text": "The badge switches to \"Inactive\" and the \"Meter\" tab disappears: an inactive member can no longer be tied to a meter.",
       "title": "Member deactivated"
     },
@@ -86,6 +88,7 @@
       },
       "id": "member-view__tag--status-active",
       "target": "member-view__tag--status-active",
+      "targetClick": "next",
       "text": "The badge returns to \"Active\" and the \"Meter\" tab reappears. The member is fully operational again.",
       "title": "Member reactivated"
     }

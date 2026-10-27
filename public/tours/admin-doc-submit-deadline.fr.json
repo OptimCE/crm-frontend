@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-detail__tag--status",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "Tant que le dossier est « En préparation », rien n'est attendu de vous par le régulateur. Les boutons en haut ne proposent que les changements de statut légitimes à ce stade.",
       "title": "Un dossier en préparation",
       "waitFor": "dossier-detail__btn--transition-2"
@@ -62,6 +63,7 @@
       },
       "id": "dossier-detail__tag--status-2",
       "target": "dossier-detail__tag--status",
+      "targetClick": "next",
       "text": "Le statut change et les actions proposées changent avec lui : un dossier soumis peut être déclaré complet, corrigé, ou devenir caduc.",
       "title": "Le dossier est soumis"
     },
@@ -80,6 +82,7 @@
       },
       "id": "dossier-deadlines-panel__btn--met-1",
       "target": "dossier-deadlines-panel__btn--met-1",
+      "targetClick": "next",
       "text": "Vous n'encodez jamais une échéance à la main : OptimCE la calcule à partir du type de dossier, de la région et de la date que vous venez d'enregistrer.",
       "title": "Une échéance est apparue",
       "waitFor": "dossier-deadlines-panel__row--0"
@@ -108,6 +111,7 @@
       },
       "id": "deadline-dashboard__btn--met-1",
       "target": "deadline-dashboard__btn--met-1",
+      "targetClick": "next",
       "text": "Chaque ligne renvoie à son dossier et indique la date limite. Le filtre affiche par défaut les échéances encore ouvertes.",
       "title": "Le tableau des échéances",
       "waitFor": "deadline-dashboard__row--0"
@@ -136,6 +140,7 @@
       },
       "id": "deadline-dashboard__empty--message",
       "target": "deadline-dashboard__empty--message",
+      "targetClick": "next",
       "text": "Le tableau ne montre plus d'échéance ouverte. L'historique du dossier, lui, garde la trace de ce qui a été fait et quand.",
       "title": "Plus rien en attente"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys/:keyId"
   },
@@ -15,6 +15,7 @@
       },
       "id": "key-view__text--description",
       "target": "key-view__text--description",
+      "targetClick": "next",
       "text": "De fiche toont de naam en de beschrijving van de sleutel zoals die werd geconfigureerd — deze metagegevens helpen om hem in de lijst terug te vinden.",
       "title": "Identificatie van de sleutel",
       "waitFor": "key-view__btn--update"
@@ -25,6 +26,7 @@
       },
       "id": "key-view__grid--data",
       "target": "key-view__grid--data",
+      "targetClick": "next",
       "text": "De tabel toont de iteraties en de verbruikers die aan deze sleutel gekoppeld zijn, met de berekende of handmatig ingevoerde toewijzingspercentages.",
       "title": "Iteraties en verbruikers"
     }

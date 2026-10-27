@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/users"
   },
@@ -18,6 +18,7 @@
         "desktop"
       ],
       "target": "users-community-list__row--desktop--0",
+      "targetClick": "next",
       "text": "Cette page liste tous les utilisateurs ayant accès à la communauté, avec leur rôle : administrateur, gestionnaire ou membre. Vous pouvez inviter, changer un rôle ou retirer un accès.",
       "title": "Les utilisateurs de la communauté",
       "waitFor": "users-community-list__table"
@@ -31,6 +32,7 @@
         "mobile"
       ],
       "target": "users-community-list__card--mobile--0",
+      "targetClick": "next",
       "text": "Cette page liste les comptes rattachés à la communauté et leur rôle. C'est ici que vous invitez un gestionnaire, changez un rôle ou retirez un accès.",
       "title": "Les utilisateurs de la communauté"
     },
@@ -159,6 +161,7 @@
         "desktop"
       ],
       "target": "users-community-list__btn--delete--0",
+      "targetClick": "next",
       "text": "L'utilisateur est désormais un membre : sa pastille de rôle a changé et l'action de suppression est maintenant disponible sur sa ligne.",
       "title": "Rôle mis à jour"
     },
@@ -171,6 +174,7 @@
         "mobile"
       ],
       "target": "users-community-list__btn--card-delete--0",
+      "targetClick": "next",
       "text": "L'utilisateur est désormais un membre : sa pastille de rôle a changé et l'action de suppression est maintenant disponible sur sa carte.",
       "title": "Rôle mis à jour"
     },
@@ -204,6 +208,7 @@
       },
       "id": "users-community-list__empty--message",
       "target": "users-community-list__empty--message",
+      "targetClick": "next",
       "text": "La recherche sur cet e-mail ne renvoie plus aucun résultat : l'utilisateur n'a plus accès à la communauté.",
       "title": "Utilisateur retiré"
     }

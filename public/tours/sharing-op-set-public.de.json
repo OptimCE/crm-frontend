@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/sharing_operations"
   },
@@ -70,6 +70,7 @@
       },
       "id": "operations-list__table",
       "target": "operations-list__table",
+      "targetClick": "next",
       "text": "Die neue Operation „E2E Energy Sharing“ erscheint in der Liste. Sie ist vorerst im privaten Modus: Sie ist nur für die Manager der Gemeinschaft sichtbar und erscheint noch nicht im öffentlichen Verzeichnis.",
       "title": "Operation erstellt"
     },
@@ -88,6 +89,7 @@
       },
       "id": "op-view__btn--toggle-visibility",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "Die graue Schaltfläche „Privat“ im Kopfbereich zeigt an, dass diese Operation im öffentlichen Verzeichnis noch nicht sichtbar ist. Bürger, die eine Teilungsoperation in ihrer Gemeinde suchen, können sie nicht finden, solange sie privat bleibt.",
       "title": "Standardmäßig privat",
       "waitFor": "op-view__title--name"
@@ -107,6 +109,7 @@
       },
       "id": "op-view__btn--toggle-visibility-3",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "Die Schaltfläche wird grün und zeigt „Öffentlich“. Alle Bürger können diese Operation nun im Verzeichnis der Energiegemeinschaften finden, nach Gemeinde filtern und die Gemeinschaft kontaktieren, um eine Teilnahme anzufragen.",
       "title": "Die Operation ist jetzt öffentlich"
     }

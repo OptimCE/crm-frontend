@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/info"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-info__card--view",
       "target": "community-info__card--view",
+      "targetClick": "next",
       "text": "La page affiche les informations actuelles de la communauté : nom, description, site web et adresse du siège social. Cliquez sur **Modifier** pour passer en mode édition.",
       "title": "Fiche d'informations de la communauté"
     },
@@ -96,6 +97,7 @@
       },
       "id": "community-info__view--description",
       "target": "community-info__view--description",
+      "targetClick": "next",
       "text": "De retour en mode consultation, la fiche affiche la description, le site web et l'adresse tels que vous les avez saisis — les modifications ont bien été enregistrées côté serveur.",
       "title": "Informations mises à jour"
     }

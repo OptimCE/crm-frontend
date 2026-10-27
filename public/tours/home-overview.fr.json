@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -24,6 +24,7 @@
       },
       "id": "needs-you__band",
       "target": "needs-you__band",
+      "targetClick": "next",
       "text": "Le bandeau en haut compte ce qui demande une action de votre part : invitations reçues, fiche à compléter, notifications non lues. Quand il n'y a rien, il se réduit à une seule ligne rassurante.",
       "title": "Ce qui vous attend"
     },
@@ -33,6 +34,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Chaque carte indique une communauté et votre rôle dans celle-ci. Le bouton l'ouvre : elle devient votre communauté active et vous arrivez sur son tableau de bord.",
       "title": "Mes communautés"
     },
@@ -60,6 +62,7 @@
       },
       "id": "my-filings-panel__btn--open",
       "target": "my-filings-panel__btn--open",
+      "targetClick": "next",
       "text": "Le dernier panneau signale les documents officiels transmis au régulateur qui vous mentionnent. Le bouton ouvre le détail dans la communauté concernée.",
       "title": "Ce qui a été déclaré à mon sujet"
     },

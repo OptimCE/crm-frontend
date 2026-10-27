@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -15,6 +15,7 @@
       },
       "id": "profile__card--account",
       "target": "profile__card--account",
+      "targetClick": "next",
       "text": "Het profiel toont de initiële gegevens: Demo User, demo@example.com en het adres in Brussel, zoals ze in de database zijn voorgeladen.",
       "title": "Standaardprofiel",
       "waitFor": "profile__card--addresses"
@@ -62,6 +63,7 @@
       },
       "id": "profile__avatar",
       "target": "profile__avatar",
+      "targetClick": "next",
       "text": "Terug op de profielpagina zijn de nieuwe voornaam en de nieuwe naam meteen zichtbaar — de wijziging is op de server opgeslagen.",
       "title": "Profiel bijgewerkt"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
       "target": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
+      "targetClick": "next",
       "text": "La première tuile rassemble ce qui bloque ou risque de bloquer : informations légales manquantes, compteurs en attente du GRD, opérations sans clé de répartition. Chaque ligne mène directement à l'écran où la corriger.",
       "title": "Points à vérifier"
     },
@@ -42,6 +43,7 @@
       },
       "id": "energy-glance-tile__link--operation",
       "target": "energy-glance-tile__link--operation",
+      "targetClick": "next",
       "text": "Pour chaque opération de partage, la tuile indique l'énergie partagée et l'énergie injectée sur la dernière période disposant de données. Le nom de l'opération renvoie à sa fiche.",
       "title": "Énergie en un coup d'œil"
     },
@@ -51,6 +53,7 @@
       },
       "id": "sharing-operations-tile__link--all",
       "target": "sharing-operations-tile__link--all",
+      "targetClick": "next",
       "text": "La tuile liste les opérations de la communauté avec leur type. Le lien en bas ouvre la liste complète.",
       "title": "Opérations de partage"
     },
@@ -60,6 +63,7 @@
       },
       "id": "onboarding-funnel-tile__link--members",
       "target": "onboarding-funnel-tile__link--members",
+      "targetClick": "next",
       "text": "« Arrivées en cours » compte les invitations envoyées et les fiches encore à encoder. « Activité récente » reprend les dernières actions enregistrées dans le journal d'audit de la communauté.",
       "title": "Arrivées et activité récente"
     },
@@ -69,6 +73,7 @@
       },
       "id": "unpaid-invoices-tile__link--billing",
       "target": "unpaid-invoices-tile__link--billing",
+      "targetClick": "next",
       "text": "Facturation, actualités, dossiers et échéances administratives n'apparaissent que si la communauté est abonnée au module correspondant. Une communauté sans abonnement ne voit tout simplement pas ces tuiles.",
       "title": "Les modules activés"
     },
@@ -78,6 +83,7 @@
       },
       "id": "module-discovery-strip",
       "target": "module-discovery-strip",
+      "targetClick": "next",
       "text": "En bas du tableau de bord, la bande « Modules disponibles » présente ce que la communauté n'utilise pas encore. Un administrateur peut les activer d'ici ; un gestionnaire voit à qui les demander.",
       "title": "Modules disponibles"
     },
@@ -96,6 +102,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "Les tuiles se rechargent une par une et reprennent leur affichage habituel avec les données les plus récentes.",
       "title": "Données à jour"
     }

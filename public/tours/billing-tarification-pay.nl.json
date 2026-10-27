@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/billing"
   },
@@ -15,6 +15,7 @@
       },
       "id": "billing__tab--tariffs",
       "target": "billing__tab--tariffs",
+      "targetClick": "next",
       "text": "De module opent op het tabblad “Tarieven”. Hier legt u de prijs van de gedeelde energie vast voordat u de facturen genereert. Daarna volgen de tabbladen “Factuur genereren” en “Overzicht”.",
       "title": "De facturatiemodule",
       "waitFor": "tariffs-panel__select--operation"
@@ -136,6 +137,7 @@
       },
       "id": "tariffs-panel__table",
       "target": "tariffs-panel__table",
+      "targetClick": "next",
       "text": "De operatie heeft nu een verkooptarief voor verbruikers en een terugkooptarief voor producenten. Tijd om de facturen te genereren.",
       "title": "De tarieven zijn opgeslagen"
     },
@@ -163,6 +165,7 @@
       },
       "id": "consumption-upload__dropzone",
       "target": "consumption-upload__dropzone",
+      "targetClick": "next",
       "text": "Zet het RESA-bestand van de operatie (de kwartierwaarden van de maand) neer in de importzone. Het levert de gedeelde energie die zal worden gefactureerd.",
       "title": "De RESA-meetgegevens importeren"
     },

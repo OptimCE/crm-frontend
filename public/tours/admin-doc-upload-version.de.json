@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -69,6 +69,7 @@
       },
       "id": "upload-version-dialog__dropzone",
       "target": "upload-version-dialog__dropzone",
+      "targetClick": "next",
       "text": "Ziehen Sie die Datei in den dafür vorgesehenen Bereich oder klicken Sie, um sie auf Ihrem Computer auszuwählen.",
       "title": "Datei auswählen"
     },
@@ -87,6 +88,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "Das Dokument verfügt jetzt über eine herunterladbare Version, als wäre es erzeugt worden.",
       "title": "Das Schriftstück ist angehängt"
     },

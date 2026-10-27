@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
       "target": "readiness-tile__link--COMMUNITY_FIELD_MISSING",
+      "targetClick": "next",
       "text": "The first tile gathers what is blocking, or about to: missing legal details, meters waiting on the grid operator, operations without an allocation key. Every row links straight to the screen where you fix it.",
       "title": "Things to check"
     },
@@ -42,6 +43,7 @@
       },
       "id": "energy-glance-tile__link--operation",
       "target": "energy-glance-tile__link--operation",
+      "targetClick": "next",
       "text": "For each sharing operation, the tile shows the shared and injected energy over the latest period with data. The operation name links to its page.",
       "title": "Energy at a glance"
     },
@@ -51,6 +53,7 @@
       },
       "id": "sharing-operations-tile__link--all",
       "target": "sharing-operations-tile__link--all",
+      "targetClick": "next",
       "text": "The tile lists the community's operations with their type. The link at the bottom opens the full list.",
       "title": "Sharing operations"
     },
@@ -60,6 +63,7 @@
       },
       "id": "onboarding-funnel-tile__link--members",
       "target": "onboarding-funnel-tile__link--members",
+      "targetClick": "next",
       "text": "\"People joining\" counts the invitations sent and the records still to be filled in. \"Recent activity\" shows the latest actions recorded in the community's audit log.",
       "title": "Arrivals and recent activity"
     },
@@ -69,6 +73,7 @@
       },
       "id": "unpaid-invoices-tile__link--billing",
       "target": "unpaid-invoices-tile__link--billing",
+      "targetClick": "next",
       "text": "Billing, news, dossiers and administrative deadlines only appear when the community is subscribed to the matching module. A community with no subscription simply does not see these tiles.",
       "title": "The enabled modules"
     },
@@ -78,6 +83,7 @@
       },
       "id": "module-discovery-strip",
       "target": "module-discovery-strip",
+      "targetClick": "next",
       "text": "At the bottom of the dashboard, the \"Available modules\" strip shows what the community is not using yet. An administrator can enable them from here; a manager is told whom to ask.",
       "title": "Available modules"
     },
@@ -96,6 +102,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "The tiles reload one by one and settle back into their usual display with the freshest data.",
       "title": "Up-to-date data"
     }

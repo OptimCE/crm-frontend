@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -57,6 +57,7 @@
       },
       "id": "meter-view-me__hero",
       "target": "meter-view-me__hero",
+      "targetClick": "next",
       "text": "Die Zähleransicht zeigt seine Merkmale und seinen Status. Über die Registerkarten sehen Sie die aktuelle Konfiguration, den Verlauf, die künftigen Zeiträume und den Verbrauch.",
       "title": "Ihr Zähler"
     },

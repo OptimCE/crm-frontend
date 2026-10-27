@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys"
   },
@@ -115,6 +115,7 @@
       },
       "id": "key-update__grid--data-3",
       "target": "key-update__grid--data",
+      "targetClick": "next",
       "text": "Overloop de volledige tabel om de iteraties, de namen en de percentages te controleren voordat u de sleutel opslaat.",
       "title": "De configuratie nakijken"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/keys/:keyId"
   },
@@ -15,6 +15,7 @@
       },
       "id": "key-view__grid--data",
       "target": "key-view__grid--data",
+      "targetClick": "next",
       "text": "Throughout the app, some fields or columns display an ⓘ icon. This signals that extra information is available — just click it to read the explanation.",
       "title": "Spot the ⓘ icon",
       "waitFor": "key-view__btn--update"
@@ -34,6 +35,7 @@
       },
       "id": "header-helper__title--label",
       "target": "header-helper__title--label",
+      "targetClick": "next",
       "text": "The popover shows the field name and its full explanation, letting you understand what each value means without leaving the page. The ⓘ icon works the same way wherever you see it in the app.",
       "title": "Popover appears",
       "waitFor": "header-helper__popover--content"

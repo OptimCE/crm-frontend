@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters/:meterEan"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meter-view__btn--deactivate",
       "target": "meter-view__btn--deactivate",
+      "targetClick": "next",
       "text": "Open the detail of the meter to deactivate. The \"Deactivate\" button schedules the end of its activity on a given date.",
       "title": "Meter detail"
     },

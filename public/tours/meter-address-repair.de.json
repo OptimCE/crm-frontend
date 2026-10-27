@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -24,6 +24,7 @@
       },
       "id": "unlocated-meters__subtitle",
       "target": "unlocated-meters__subtitle",
+      "targetClick": "next",
       "text": "Das Fenster listet genau die Zähler auf, die die Karte nicht platzieren kann: Zähler ganz ohne Koordinaten, aber auch Zähler, die nur im Zentrum ihrer Gemeinde platziert sind.",
       "title": "Die Korrekturliste"
     },
@@ -42,6 +43,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--not-found",
       "target": "unlocated-meters__autocomplete--address--not-found",
+      "targetClick": "next",
       "text": "OptimCE fragt das föderale Register BeSt Address ab. Diese Adresse stimmt dort mit nichts überein: Deshalb erscheint der Zähler nicht auf der Karte.",
       "title": "Adresse nicht gefunden"
     },
@@ -89,6 +91,7 @@
       },
       "id": "unlocated-meters__autocomplete--address--located",
       "target": "unlocated-meters__autocomplete--address--located",
+      "targetClick": "next",
       "text": "Die grüne Meldung bestätigt, dass die Adresse genau lokalisiert ist: Der Zähler erscheint auf der Karte, sobald die Korrektur gespeichert ist.",
       "title": "Adresse gefunden"
     },
@@ -117,6 +120,7 @@
       },
       "id": "meters-map__strip--partial",
       "target": "meters-map__strip--partial",
+      "targetClick": "next",
       "text": "Zurück auf der Karte ist die Zahl in der Leiste gesunken: Der korrigierte Zähler ist jetzt platziert, und es bleibt nur noch der im Zentrum seiner Gemeinde platzierte.",
       "title": "Die Karte ist aktuell",
       "waitFor": "map-canvas__host"

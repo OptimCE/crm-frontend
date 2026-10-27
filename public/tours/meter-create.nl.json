@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -242,6 +242,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "De meter “541449123456789012” verschijnt in de gefilterde tabel: de aanmaak is bevestigd en de detailpagina is bereikbaar vanuit de lijst.",
       "title": "Meter gevonden"
     },
@@ -275,6 +276,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "De detailpagina toont de EAN van de nieuwe meter en biedt de tabbladen om gegevens te raadplegen: actuele, historische en toekomstige gegevens en verbruik.",
       "title": "Meterpagina klaar",
       "waitFor": "meter-view__hero"

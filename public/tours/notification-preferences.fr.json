@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users"
   },
@@ -24,6 +24,7 @@
       },
       "id": "notification-preferences__row--news_post",
       "target": "notification-preferences__row--news_post",
+      "targetClick": "next",
       "text": "Chaque ligne est une catégorie d'activité — actualités, factures, échéances… — et chaque colonne un canal. « Tout le reste » couvre les catégories qui n'ont pas leur propre ligne. Les messages essentiels (factures, invitations, échéances dépassées) restent toujours envoyés.",
       "title": "Catégories et canaux",
       "waitFor": "notification-preferences__table"
@@ -34,6 +35,7 @@
       },
       "id": "notification-preferences__email--news_post",
       "target": "notification-preferences__email--news_post",
+      "targetClick": "next",
       "text": "Décochez « E-mail » sur la ligne « Actualités » : vous continuerez à voir les publications dans l'application, mais sans recevoir de courriel.",
       "title": "Couper un canal"
     },
@@ -52,6 +54,7 @@
       },
       "id": "notification-preferences__saved",
       "target": "notification-preferences__saved",
+      "targetClick": "next",
       "text": "Un message de confirmation apparaît à côté du bouton. Il disparaît dès que vous modifiez à nouveau un réglage.",
       "title": "Préférences enregistrées"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services"
   },
@@ -15,6 +15,7 @@
       },
       "id": "annexes-services-list__card--algorithm",
       "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
       "text": "The \"Allocation key generation\" card is visible with the \"Activated\" badge. The deactivation button (×) is available at the top right of the card.",
       "title": "Module active"
     },
@@ -51,6 +52,7 @@
       },
       "id": "annexes-services-list__empty",
       "target": "annexes-services-list__empty",
+      "targetClick": "next",
       "text": "The grid is empty again — the \"Allocation key generation\" module has been deactivated and is no longer accessible from the community.",
       "title": "Module deactivated"
     }

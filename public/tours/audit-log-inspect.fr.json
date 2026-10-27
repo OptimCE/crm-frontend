@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/audit-logs"
   },
@@ -34,6 +34,7 @@
       },
       "id": "audit-log-list__row-expansion--0",
       "target": "audit-log-list__row-expansion--0",
+      "targetClick": "next",
       "text": "En cliquant sur une ligne, vous dépliez sa charge utile (payload) au format JSON : ici, la liste des champs modifiés. C'est la preuve technique complète de ce qui a changé.",
       "title": "Le détail de l'action"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -15,6 +15,7 @@
       },
       "id": "live-data-hub__indicative",
       "target": "live-data-hub__indicative",
+      "targetClick": "next",
       "text": "Deze console volgt kwartier per kwartier wat de apparaten meten die bij de leden zijn geïnstalleerd. Deze cijfers zijn indicatief: alleen de gegevens van de netbeheerder dienen voor de verdeelsleutels en de facturatie.",
       "title": "De console voor live gegevens",
       "waitFor": "live-dashboard__signal"
@@ -25,6 +26,7 @@
       },
       "id": "live-dashboard__no-data",
       "target": "live-dashboard__no-data",
+      "targetClick": "next",
       "text": "Het dashboard vat het laatste volledige uur samen: productie, vermogen, uitwisselingen met het net en de status van de apparaten. Zolang geen enkel apparaat een meting heeft doorgestuurd, toont elke kaart een streepje in plaats van een nul — “nog niet gemeten” is niet hetzelfde als “niets geproduceerd”.",
       "title": "Het dashboard"
     },
@@ -54,6 +56,7 @@
       },
       "id": "live-devices__btn--add",
       "target": "live-devices__btn--add",
+      "targetClick": "next",
       "text": "De gemeenschap heeft nog geen enkel apparaat. De knop “Apparaat toevoegen” maakt een apparaat aan voor een meter en levert de aanmeldcode ervan — zie de handleiding “Een apparaat koppelen”.",
       "title": "Nog geen apparaten",
       "waitFor": "live-devices__empty"
@@ -73,6 +76,7 @@
       },
       "id": "live-ops__empty",
       "target": "live-ops__empty",
+      "targetClick": "next",
       "text": "Zonder apparaten is er nog niets berekend en vraagt geen enkel apparaat aandacht. Zodra een apparaat rapporteert, toont dit scherm sinds wanneer de cijfers zijn herberekend en signaleert het apparaten die stil of offline zijn of waarvan metingen worden geweigerd.",
       "title": "Een leeg apparatenpark",
       "waitFor": "live-ops__readings-rejected-none"
@@ -92,6 +96,7 @@
       },
       "id": "live-settings__btn--save",
       "target": "live-settings__btn--save",
+      "targetClick": "next",
       "text": "De instellingen bepalen wat de leden kunnen zien en het minimumaantal leden waaronder de uitwisselingen met het net verborgen blijven, zodat geen enkel gezin herkenbaar is. Zolang ze niet zijn opgeslagen, gelden de standaardwaarden van het platform.",
       "title": "De zichtbaarheidsinstellingen",
       "waitFor": "live-settings__is-default"

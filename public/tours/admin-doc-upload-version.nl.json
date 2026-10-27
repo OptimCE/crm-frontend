@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -69,6 +69,7 @@
       },
       "id": "upload-version-dialog__dropzone",
       "target": "upload-version-dialog__dropzone",
+      "targetClick": "next",
       "text": "Sleep het bestand naar het daarvoor bestemde vak of klik om het op uw computer te selecteren.",
       "title": "Bestand kiezen"
     },
@@ -87,6 +88,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "Het document heeft nu een downloadbare versie, net alsof het was gegenereerd.",
       "title": "Het stuk is toegevoegd"
     },

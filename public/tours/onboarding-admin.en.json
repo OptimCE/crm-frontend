@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/dashboard"
   },
@@ -13,21 +13,37 @@
       "advance": {
         "on": "manual"
       },
-      "id": "module-discovery-strip",
-      "target": "module-discovery-strip",
-      "text": "You have everything a manager has, plus a few decisions that are yours alone. The first one: modules. In \"Available modules\", \"Enable\" subscribes the community to a module; a manager is told to ask you instead.",
+      "id": "readiness-tile",
+      "target": "readiness-tile",
+      "targetClick": "next",
+      "text": "You have everything a manager has, this dashboard included, plus three decisions that are yours alone: the modules the community uses, who runs it with you, and its legal details.",
       "title": "You are an administrator"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "In the \"Management\" section, click \"Users\".",
+      "targetClick": "next",
+      "text": "As an administrator, you keep the managers' **\"Management\"** section. Its **\"Users\"** page is where you choose who runs the community with you.",
+      "title": "The \"Management\" section"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_users",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "In the **\"Management\"** section, click **\"Users\"**.",
       "title": "The community's users"
     },
     {
@@ -39,18 +55,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tap the menu icon to open the navigation."
+      "text": "Tap the **menu icon ☰** to open the navigation."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--management-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "In the menu's \"Management\" section, tap \"Users\".",
+      "targetClick": "next",
+      "text": "As an administrator, you keep the managers' **\"Management\"** section. Its **\"Users\"** page is where you choose who runs the community with you.",
+      "title": "The \"Management\" section"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_users-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "In the menu's **\"Management\"** section, tap **\"Users\"**.",
       "title": "The community's users"
     },
     {
@@ -59,7 +88,8 @@
       },
       "id": "users-community-list__btn--invite-manager",
       "target": "users-community-list__btn--invite-manager",
-      "text": "Only an administrator can bring in a manager: \"Invite a manager\" sends them an invitation by email, which they accept from their invitations.",
+      "targetClick": "next",
+      "text": "Only an administrator can bring in a manager: **\"Invite a manager\"** sends them an invitation by email, which they accept from their invitations.",
       "title": "Invite a manager"
     },
     {
@@ -68,19 +98,35 @@
       },
       "id": "users-community-list__btn--see-pending",
       "target": "users-community-list__btn--see-pending",
-      "text": "\"View pending invitations\" shows who has not answered yet. In the list, you alone can change a user's role — member, manager or administrator — or remove them from the community.",
+      "targetClick": "next",
+      "text": "**\"View pending invitations\"** shows who has not answered yet. In the list, you alone can change a user's role — member, manager or administrator — or remove them from the community.",
       "title": "Invitations and roles"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--community",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--community",
-      "text": "In the \"Community\" section, click \"Community info\".",
+      "targetClick": "next",
+      "text": "The **\"Community\"** section leads to the dashboard, the community info and its annex services. Its **\"Community info\"** page holds the legal details only you can change.",
+      "title": "The \"Community\" section"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_info",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "In the **\"Community\"** section, click **\"Community info\"**.",
       "title": "The community info"
     },
     {
@@ -92,18 +138,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tap the menu icon to open the navigation."
+      "text": "Tap the **menu icon ☰** to open the navigation."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--community-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--community",
-      "text": "In the menu's \"Community\" section, tap \"Community info\".",
+      "targetClick": "next",
+      "text": "The **\"Community\"** section leads to the dashboard, the community info and its annex services. Its **\"Community info\"** page holds the legal details only you can change.",
+      "title": "The \"Community\" section"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_info-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "In the menu's **\"Community\"** section, tap **\"Community info\"**.",
       "title": "The community info"
     },
     {
@@ -112,7 +171,8 @@
       },
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
-      "text": "Members and managers read this information; only you can change it. \"Edit\" opens the name, description, address, company number and IBAN — what then appears on invoices and official documents.",
+      "targetClick": "next",
+      "text": "Members and managers read this information; only you can change it. **\"Edit\"** opens the name, description, address, company number and IBAN — what then appears on invoices and official documents.",
       "title": "The legal details",
       "waitFor": "community-info__card--view"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "my-energy-tile__link--meter",
       "target": "my-energy-tile__link--meter",
+      "targetClick": "next",
       "text": "Die erste Kachel summiert über die letzten dreißig Tage, was Sie verbraucht haben und was Ihnen die Teilung eingebracht hat, und schlüsselt dies anschließend Zähler für Zähler auf.",
       "title": "Meine Energie hier"
     },
@@ -51,6 +52,7 @@
       },
       "id": "my-member-record-tile__link--member",
       "target": "my-member-record-tile__link--member",
+      "targetClick": "next",
       "text": "Die Kachel bestätigt, dass Ihr Datensatz aktiv ist, oder weist darauf hin, dass er noch auf die Freigabe durch einen Manager wartet.",
       "title": "Mein Mitgliederdatensatz"
     },
@@ -60,6 +62,7 @@
       },
       "id": "about-community-tile__link--info",
       "target": "about-community-tile__link--info",
+      "targetClick": "next",
       "text": "Mitgliederzahl, Regulierungsbehörde, Website: genug, um zu wissen, mit wem Sie es zu tun haben. Der Link öffnet die vollständige Informationsseite der Gemeinschaft.",
       "title": "Über diese Gemeinschaft"
     },
@@ -69,6 +72,7 @@
       },
       "id": "my-invoices-tile__link--all",
       "target": "my-invoices-tile__link--all",
+      "targetClick": "next",
       "text": "Diese beiden Kacheln erscheinen nur, wenn die Gemeinschaft die entsprechenden Module nutzt. Dort werden Ihre offenen Rechnungen zusammengefasst, ebenso wie die neuesten Beiträge des Nachrichtenbretts.",
       "title": "Rechnungen und Aktuelles"
     },
@@ -87,6 +91,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "Die Kacheln werden nacheinander neu geladen und zeigen ihre Inhalte wieder mit den neuesten Daten an.",
       "title": "Aktuelle Daten"
     }

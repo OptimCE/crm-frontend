@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -72,6 +72,7 @@
       },
       "id": "device-token-dialog__qr",
       "target": "device-token-dialog__qr",
+      "targetClick": "next",
       "text": "L'appareil est créé et son code d'enrôlement s'affiche aussitôt, en clair et en QR code. Saisissez-le (ou scannez-le) dans l'appareil. Il n'est affiché qu'une seule fois, ne sert qu'une fois et expire après 72 heures ; en cas de perte, émettez-en un nouveau depuis la liste — l'ancien cesse alors de fonctionner.",
       "title": "Le code d'enrôlement",
       "waitFor": "device-token-dialog__code"

@@ -33,11 +33,11 @@ describe('stepCountFor', () => {
   const mobile = (query: string) => query === layouts['mobile'];
 
   it('should count only the steps of the current layout, as the player does', () => {
-    // The welcome tour has 9 shared steps, 2 desktop-only and 4 mobile-only.
+    // The welcome tour has 9 shared steps, 3 desktop-only and 5 mobile-only.
     const file = welcomeFr as TourFile;
-    expect(file.steps).toHaveLength(15);
-    expect(stepCountFor(file, layouts, desktop)).toBe(11);
-    expect(stepCountFor(file, layouts, mobile)).toBe(13);
+    expect(file.steps).toHaveLength(17);
+    expect(stepCountFor(file, layouts, desktop)).toBe(12);
+    expect(stepCountFor(file, layouts, mobile)).toBe(14);
   });
 
   it('should give no count for a file without steps', () => {

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -242,6 +242,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "Der Zähler „541449123456789012“ erscheint in der gefilterten Tabelle: Die Erstellung ist bestätigt, und die Detailseite ist über die Liste erreichbar.",
       "title": "Zähler gefunden"
     },
@@ -275,6 +276,7 @@
       },
       "id": "meter-view__tabs",
       "target": "meter-view__tabs",
+      "targetClick": "next",
       "text": "Die Detailseite zeigt den EAN des neuen Zählers und bietet die Registerkarten zur Ansicht: aktuelle, historische und zukünftige Daten sowie Verbrauch.",
       "title": "Zählerseite bereit",
       "waitFor": "meter-view__hero"

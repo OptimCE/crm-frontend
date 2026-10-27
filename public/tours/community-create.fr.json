@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/users/communities"
   },
@@ -52,6 +52,7 @@
       },
       "id": "user-communities__table",
       "target": "user-communities__table",
+      "targetClick": "next",
       "text": "« E2E Community » figure maintenant dans votre liste. Il ne reste plus qu'à l'activer pour commencer à la configurer.",
       "title": "Votre nouvelle communauté",
       "waitFor": "user-communities__row--mobile--0"
@@ -86,6 +87,7 @@
       },
       "id": "navbar__menu--management",
       "target": "navbar__menu--management",
+      "targetClick": "next",
       "text": "La section « Gestion » apparaît dans la barre latérale : en tant que créateur, vous êtes administrateur de la communauté et avez accès à tous ses outils.",
       "title": "Vous êtes administrateur"
     }

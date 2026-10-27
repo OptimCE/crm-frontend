@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/info"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-info__card--view",
       "target": "community-info__card--view",
+      "targetClick": "next",
       "text": "Die Seite zeigt die aktuellen Informationen der Gemeinschaft: Name, Beschreibung, Website und Adresse des Hauptsitzes. Klicken Sie auf **Bearbeiten**, um in den Bearbeitungsmodus zu wechseln.",
       "title": "Informationsseite der Gemeinschaft"
     },
@@ -96,6 +97,7 @@
       },
       "id": "community-info__view--description",
       "target": "community-info__view--description",
+      "targetClick": "next",
       "text": "Zurück im Ansichtsmodus zeigt die Seite die Beschreibung, die Website und die Adresse genau so an, wie Sie sie eingegeben haben — die Änderungen wurden serverseitig gespeichert.",
       "title": "Informationen aktualisiert"
     }

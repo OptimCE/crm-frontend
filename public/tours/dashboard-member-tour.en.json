@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -33,6 +33,7 @@
       },
       "id": "my-energy-tile__link--meter",
       "target": "my-energy-tile__link--meter",
+      "targetClick": "next",
       "text": "The first tile totals, over the last thirty days, what you consumed and what the sharing brought you, then breaks it down meter by meter.",
       "title": "My energy here"
     },
@@ -51,6 +52,7 @@
       },
       "id": "my-member-record-tile__link--member",
       "target": "my-member-record-tile__link--member",
+      "targetClick": "next",
       "text": "The tile confirms your record is active, or flags that it is still waiting for a manager to validate it.",
       "title": "My member record"
     },
@@ -60,6 +62,7 @@
       },
       "id": "about-community-tile__link--info",
       "target": "about-community-tile__link--info",
+      "targetClick": "next",
       "text": "Member count, regulator, website: enough to know who you are dealing with. The link opens the community's full information page.",
       "title": "About this community"
     },
@@ -69,6 +72,7 @@
       },
       "id": "my-invoices-tile__link--all",
       "target": "my-invoices-tile__link--all",
+      "targetClick": "next",
       "text": "These two tiles only appear when the community uses the matching modules. Your unpaid invoices are summarised there, as are the latest posts on the news board.",
       "title": "Invoices and news"
     },
@@ -87,6 +91,7 @@
       },
       "id": "header-page__title",
       "target": "header-page__title",
+      "targetClick": "next",
       "text": "The tiles reload one by one and settle back with the freshest data.",
       "title": "Up-to-date data"
     }

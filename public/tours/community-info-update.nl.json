@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/info"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-info__card--view",
       "target": "community-info__card--view",
+      "targetClick": "next",
       "text": "De pagina toont de huidige gegevens van de gemeenschap: naam, beschrijving, website en adres van de hoofdzetel. Klik op **Bewerken** om naar de bewerkingsmodus over te schakelen.",
       "title": "Informatiefiche van de gemeenschap"
     },
@@ -96,6 +97,7 @@
       },
       "id": "community-info__view--description",
       "target": "community-info__view--description",
+      "targetClick": "next",
       "text": "Terug in de weergavemodus toont de fiche de beschrijving, de website en het adres precies zoals u ze hebt ingevoerd — de wijzigingen zijn wel degelijk op de server opgeslagen.",
       "title": "Gegevens bijgewerkt"
     }

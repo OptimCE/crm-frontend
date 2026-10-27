@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-picker__empty",
       "target": "community-picker__empty",
+      "targetClick": "next",
       "text": "OptimCE hilft Ihnen, Energie innerhalb einer Energiegemeinschaft zu teilen. Ihre Startseite bündelt alles, was Sie betrifft; im Moment gehören Sie noch keiner Gemeinschaft an.",
       "title": "Willkommen bei OptimCE"
     },
@@ -24,6 +25,7 @@
       },
       "id": "needs-you__clear",
       "target": "needs-you__clear",
+      "targetClick": "next",
       "text": "Das obere Band listet auf, was eine Aktion von Ihnen erfordert, etwa eine anzunehmende Einladung. Steht dort „Im Moment wartet nichts auf Sie. Alles ist in Ordnung.“, ist nichts zu tun.",
       "title": "Was auf Sie wartet"
     },
@@ -33,7 +35,8 @@
       },
       "id": "community-picker__btn--create",
       "target": "community-picker__btn--create",
-      "text": "Sie gründen eine Energiegemeinschaft? „Meine Gemeinschaft erstellen“ legt sie an und macht Sie zu ihrem Administrator. Anschließend können Sie ihre Mitglieder und Manager einladen.",
+      "targetClick": "next",
+      "text": "Sie gründen eine Energiegemeinschaft? **„Meine Gemeinschaft erstellen“** legt sie an und macht Sie zu ihrem Administrator. Anschließend können Sie ihre Mitglieder und Manager einladen.",
       "title": "Ihre Gemeinschaft erstellen"
     },
     {
@@ -42,7 +45,7 @@
       },
       "id": "community-picker__link--directory",
       "target": "community-picker__link--directory",
-      "text": "Möchten Sie lieber einer bestehenden Gemeinschaft beitreten? Klicken Sie auf „Gemeinschaften in meiner Nähe entdecken“.",
+      "text": "Möchten Sie lieber einer bestehenden Gemeinschaft beitreten? Klicken Sie auf **„Gemeinschaften in meiner Nähe entdecken“**.",
       "title": "Eine Gemeinschaft finden"
     },
     {
@@ -51,6 +54,7 @@
       },
       "id": "public-community-list__filter--municipality",
       "target": "public-community-list__filter--municipality",
+      "targetClick": "next",
       "text": "Hier sehen Sie die öffentlich zugänglichen Gemeinschaften. Filtern Sie sie nach Gemeinde oder Regulierungsbehörde und öffnen Sie eine, um ihre Beschreibung, ihre Website und ihre Teilungsoperationen zu lesen.",
       "title": "Die öffentlichen Gemeinschaften",
       "waitFor": "public-community-list__btn--accordion--0"
@@ -61,19 +65,36 @@
       },
       "id": "public-community-list__toggle--view",
       "target": "public-community-list__toggle--view",
-      "text": "Wechseln Sie zwischen „Liste“ und „Karte“, um zu sehen, wo sich die Gemeinschaften befinden. Um einer beizutreten, nehmen Sie Kontakt mit ihr auf: Ihre Manager senden Ihnen eine Einladung.",
+      "targetClick": "next",
+      "text": "Wechseln Sie zwischen **„Liste“** und **„Karte“**, um zu sehen, wo sich die Gemeinschaften befinden. Um einer beizutreten, nehmen Sie Kontakt mit ihr auf: Ihre Manager senden Ihnen eine Einladung.",
       "title": "Liste oder Karte"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--profile",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--profile",
-      "text": "Der Abschnitt „Profil“ der Seitenleiste ist immer da: Start, Profil, Einladungen, Ihre Gemeinschaften und die öffentlichen Gemeinschaften. Fahren Sie über die Leiste, um die Beschriftungen zu lesen, und öffnen Sie dann „Einladungen“."
+      "targetClick": "next",
+      "text": "Der Abschnitt **„Profil“** der Seitenleiste ist immer da: Start, Profil, Einladungen, Ihre Gemeinschaften und die öffentlichen Gemeinschaften.",
+      "title": "Ihr Profil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--users_invitations",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Klicken Sie auf **„Einladungen“**.",
+      "title": "Ihre Einladungen öffnen"
     },
     {
       "advance": {
@@ -84,19 +105,32 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--profile-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--profile",
-      "text": "Tippen Sie auf das Menüsymbol: Der Abschnitt „Profil“ enthält die Startseite, Ihr Profil, Ihre Einladungen, Ihre Gemeinschaften und die öffentlichen Gemeinschaften. Tippen Sie auf „Einladungen“.",
+      "targetClick": "next",
+      "text": "Der Abschnitt **„Profil“** des Menüs enthält die Startseite, Ihr Profil, Ihre Einladungen, Ihre Gemeinschaften und die öffentlichen Gemeinschaften.",
       "title": "Ihr Profil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--users_invitations-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Tippen Sie auf **„Einladungen“**.",
+      "title": "Ihre Einladungen öffnen"
     },
     {
       "advance": {
@@ -104,19 +138,21 @@
       },
       "id": "invitations__tabs",
       "target": "invitations__tabs",
-      "text": "Wenn eine Gemeinschaft Sie einlädt, landet die Einladung hier — die Registerkarte „Mitglieder“, um Mitglied zu werden, „Manager“, um sie mitzuverwalten — und Ihre Startseite weist Sie darauf hin. Nehmen Sie sie an: Die Gemeinschaft erscheint dann auf Ihrer Startseite.",
+      "targetClick": "next",
+      "text": "Wenn eine Gemeinschaft Sie einlädt, landet die Einladung hier — die Registerkarte **„Mitglieder“**, um Mitglied zu werden, **„Manager“**, um sie mitzuverwalten — und Ihre Startseite weist Sie darauf hin. Nehmen Sie sie an: Die Gemeinschaft erscheint dann auf Ihrer Startseite.",
       "title": "Ihre Einladungen"
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__btn--user-guide",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__btn--user-guide",
-      "text": "Unten in der Seitenleiste öffnet „Benutzerhandbuch“ die Hilfe, jederzeit und von jeder Seite aus. Klicken Sie darauf.",
+      "text": "Unten in der Seitenleiste öffnet **„Benutzerhandbuch“** die Hilfe, jederzeit und von jeder Seite aus. Klicken Sie darauf.",
       "title": "Brauchen Sie Hilfe?"
     },
     {
@@ -128,7 +164,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tippen Sie auf das Menüsymbol, um die Navigation zu öffnen."
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
     },
     {
       "advance": {
@@ -139,7 +175,7 @@
         "mobile"
       ],
       "target": "navbar__btn--user-guide",
-      "text": "Unten im Menü öffnet „Benutzerhandbuch“ die Hilfe, jederzeit und von jeder Seite aus. Tippen Sie darauf.",
+      "text": "Unten im Menü öffnet **„Benutzerhandbuch“** die Hilfe, jederzeit und von jeder Seite aus. Tippen Sie darauf.",
       "title": "Brauchen Sie Hilfe?"
     },
     {
@@ -148,7 +184,8 @@
       },
       "id": "help-dialog__link--guide",
       "target": "help-dialog__link--guide",
-      "text": "„Online-Benutzerhandbuch öffnen“ öffnet das Handbuch in einem neuen Tab: Jede Aufgabe der Anwendung wird dort Schritt für Schritt mit Bildschirmfotos beschrieben und lässt sich auch als Animation abspielen.",
+      "targetClick": "next",
+      "text": "**„Online-Benutzerhandbuch öffnen“** öffnet das Handbuch in einem neuen Tab: Jede Aufgabe der Anwendung wird dort Schritt für Schritt mit Bildschirmfotos beschrieben und lässt sich auch als Animation abspielen.",
       "title": "Das Online-Handbuch",
       "waitFor": "help-dialog__tours"
     },
@@ -158,7 +195,8 @@
       },
       "id": "help-dialog__tours",
       "target": "help-dialog__tours",
-      "text": "„Geführte Touren“ listet Touren wie diese auf: Sie zeigen Ihnen eine Aufgabe direkt in der Anwendung. Starten Sie eine erneut, wann immer Sie sie brauchen; sobald Sie Mitglied einer Gemeinschaft sind, finden Sie hier die Touren Ihrer Rolle. Schließen Sie dieses Fenster, um zu beginnen.",
+      "targetClick": "next",
+      "text": "**„Geführte Touren“** listet Touren wie diese auf: Sie zeigen Ihnen eine Aufgabe direkt in der Anwendung. Starten Sie eine erneut, wann immer Sie sie brauchen; sobald Sie Mitglied einer Gemeinschaft sind, finden Sie hier die Touren Ihrer Rolle. Schließen Sie dieses Fenster, um zu beginnen.",
       "title": "Geführte Touren"
     }
   ],

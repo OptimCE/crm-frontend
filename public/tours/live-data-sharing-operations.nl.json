@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/live-data"
   },
@@ -25,6 +25,7 @@
       },
       "id": "live-dashboard__operation-shared",
       "target": "live-dashboard__operation-shared",
+      "targetClick": "next",
       "text": "Voor de gekozen operatie: haar productie in het laatste volledige uur, haar uitwisselingen met het net, de gedeelde energie (schatting) en hoeveel van haar meters worden opgevolgd. De uitwisselingen met het net en het delen blijven verborgen zolang de operatie te weinig leden telt.",
       "title": "De cijfers van de operatie",
       "waitFor": "live-dashboard__operation-cards"

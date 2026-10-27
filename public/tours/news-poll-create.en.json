@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -43,6 +43,7 @@
       },
       "id": "news-compose__poll-type--single",
       "target": "news-compose__poll-type--single",
+      "targetClick": "next",
       "text": "Choose whether members can select a single answer (\"Single choice\") or several (\"Multiple choice\"). We keep \"Single choice\".",
       "title": "Single or multiple choice"
     },
@@ -97,6 +98,7 @@
       },
       "id": "news-compose__preset--anonymous",
       "target": "news-compose__preset--anonymous",
+      "targetClick": "next",
       "text": "Three presets cover the most common cases. Each one combines what managers see, what members see, and when.",
       "title": "Choose who sees the results"
     },
@@ -142,6 +144,7 @@
       },
       "id": "news-compose__admin-vis",
       "target": "news-compose__admin-vis",
+      "targetClick": "next",
       "text": "What managers see. \"Aggregate\": only the totals per option. \"Full\": the per-voter breakdown — who voted for each option.",
       "title": "Manager visibility"
     },
@@ -151,6 +154,7 @@
       },
       "id": "news-compose__member-vis",
       "target": "news-compose__member-vis",
+      "targetClick": "next",
       "text": "What members are allowed to see. \"None\": never any results. \"Aggregate\": the totals. \"Full\": the per-voter breakdown.",
       "title": "Member visibility"
     },
@@ -160,6 +164,7 @@
       },
       "id": "news-compose__member-display",
       "target": "news-compose__member-display",
+      "targetClick": "next",
       "text": "When members see what they are allowed to. \"Never\", \"Before vote\", \"After vote\", or \"When the poll ends\". This setting is what distinguishes, for instance, a vote whose result only appears once participation is recorded.",
       "title": "Member display"
     },
@@ -187,6 +192,7 @@
       },
       "id": "news-poll",
       "target": "news-poll",
+      "targetClick": "next",
       "text": "The poll appears on the board with its options. Members can now vote; results will be shown according to the visibility you chose.",
       "title": "Your poll is live"
     }

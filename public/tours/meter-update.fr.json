@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -39,6 +39,7 @@
       },
       "id": "meter-view__hero",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "La fiche détaillée affiche les informations actuelles du compteur : EAN, adresse d'installation et caractéristiques techniques.",
       "title": "Fiche initiale"
     },
@@ -120,6 +121,7 @@
       },
       "id": "meter-view__hero-2",
       "target": "meter-view__hero",
+      "targetClick": "next",
       "text": "De retour sur la fiche du compteur, la nouvelle adresse et le nouveau numéro sont visibles immédiatement — la modification est persistée côté serveur.",
       "title": "Compteur mis à jour",
       "waitFor": "meter-view__card--location"

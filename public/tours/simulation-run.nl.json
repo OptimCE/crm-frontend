@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/simulation"
   },
@@ -15,6 +15,7 @@
       },
       "id": "simulation-hub__panel--start",
       "target": "simulation-hub__panel--start",
+      "targetClick": "next",
       "text": "De simulatiepagina verschijnt met het configuratieformulier: kies een opgeslagen verdeelsleutel, geef de simulatie een naam, vul de injectie in en importeer het verbruiksbestand dat u wilt simuleren.",
       "title": "Simulatiepagina",
       "waitFor": "simulation-hub__container"
@@ -52,6 +53,7 @@
       },
       "id": "simulation-hub__dropzone",
       "target": "simulation-hub__dropzone",
+      "targetClick": "next",
       "text": "Importeer hetzelfde bestand “test_4.csv” in de uploadzone. De simulatie berekent het zelfverbruik en de energiedeling op basis van deze gegevens en de geselecteerde sleutel.",
       "title": "Het te simuleren bestand importeren"
     },
@@ -88,6 +90,7 @@
       },
       "id": "simulation-results__metrics",
       "target": "simulation-results__metrics",
+      "targetClick": "next",
       "text": "De simulatie is voltooid. De kernindicatoren verschijnen: zelfverbruikte energie, overschot, zelfvoorzieningsgraad en deelpercentage — berekend op basis van de opgeslagen sleutel en het geïmporteerde bestand.",
       "title": "Simulatieresultaten"
     },
@@ -106,6 +109,7 @@
       },
       "id": "simulation-results__iteration-toggle--1",
       "target": "simulation-results__iteration-toggle--1",
+      "targetClick": "next",
       "text": "Elke iteratie van de sleutel kan worden uitgeklapt om het detail per verbruiker te tonen: verdeling, verbruik, zelfverbruikte energie, overschot en resterend volume. Hier vergelijkt u de verdelingsoplossingen.",
       "title": "Detail per iteratie en per verbruiker"
     }

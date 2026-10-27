@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Après la connexion, vous arrivez sur votre page d'accueil. Elle liste les communautés dont vous faites partie, avec votre rôle dans chacune.",
       "title": "Vos communautés"
     },
@@ -33,6 +34,7 @@
       },
       "id": "navbar__menu--management",
       "target": "navbar__menu--management",
+      "targetClick": "next",
       "text": "Un nouveau menu « Gestion » apparaît dans la barre latérale, donnant accès aux clés, compteurs et opérations de partage de la communauté.",
       "title": "Menu de gestion débloqué",
       "waitFor": "dashboard-tile"

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "Open the active community's meter list and locate the meter whose current configuration you want to update.",
       "title": "Meters list"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__btn--update",
       "target": "meter-view__btn--update",
+      "targetClick": "next",
       "text": "The detail page shows the current configuration. The \"Update data\" action is only exposed when the meter is active — that is our entry point.",
       "title": "Active meter",
       "waitFor": "meter-view__hero"
@@ -140,6 +142,7 @@
       },
       "id": "meter-data-view__text--rate",
       "target": "meter-data-view__text--rate",
+      "targetClick": "next",
       "text": "Back on the detail page, the new description, the 63 A amperage and the bi-hourly rate appear in the data cards — the changes have been persisted server-side.",
       "title": "Update confirmed",
       "waitFor": "meter-data-view__text--description"

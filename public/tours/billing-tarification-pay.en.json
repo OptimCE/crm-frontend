@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/billing"
   },
@@ -15,6 +15,7 @@
       },
       "id": "billing__tab--tariffs",
       "target": "billing__tab--tariffs",
+      "targetClick": "next",
       "text": "The module opens on the \"Tariffs\" tab. This is where you set the price of the shared energy before generating invoices. The \"Generate\" and \"Tracking\" tabs come next.",
       "title": "The billing module",
       "waitFor": "tariffs-panel__select--operation"
@@ -136,6 +137,7 @@
       },
       "id": "tariffs-panel__table",
       "target": "tariffs-panel__table",
+      "targetClick": "next",
       "text": "The operation now has a consumer-selling tariff and a producer-buyback tariff. Let's move on to generating the invoices.",
       "title": "The tariffs are saved"
     },
@@ -163,6 +165,7 @@
       },
       "id": "consumption-upload__dropzone",
       "target": "consumption-upload__dropzone",
+      "targetClick": "next",
       "text": "Drop the operation's RESA file (the month's 15-minute readings) into the import zone. It provides the shared energy that will be billed.",
       "title": "Import the RESA metering file"
     },

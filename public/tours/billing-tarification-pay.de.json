@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/billing"
   },
@@ -15,6 +15,7 @@
       },
       "id": "billing__tab--tariffs",
       "target": "billing__tab--tariffs",
+      "targetClick": "next",
       "text": "Das Modul öffnet sich auf der Registerkarte „Tarife“. Hier legen Sie den Preis der geteilten Energie fest, bevor Sie die Rechnungen erstellen. Danach folgen die Registerkarten „Rechnung erstellen“ und „Übersicht“.",
       "title": "Das Abrechnungsmodul",
       "waitFor": "tariffs-panel__select--operation"
@@ -136,6 +137,7 @@
       },
       "id": "tariffs-panel__table",
       "target": "tariffs-panel__table",
+      "targetClick": "next",
       "text": "Die Operation verfügt jetzt über einen Verkaufstarif für Verbraucher und einen Rückkauftarif für Erzeuger. Gehen wir zur Erstellung der Rechnungen über.",
       "title": "Die Tarife sind gespeichert"
     },
@@ -163,6 +165,7 @@
       },
       "id": "consumption-upload__dropzone",
       "target": "consumption-upload__dropzone",
+      "targetClick": "next",
       "text": "Legen Sie die RESA-Datei der Operation (die Viertelstundenwerte des Monats) im Importbereich ab. Sie liefert die geteilte Energie, die abgerechnet wird.",
       "title": "Die RESA-Messwerte importieren"
     },

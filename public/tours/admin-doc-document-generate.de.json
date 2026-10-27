@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-documents-panel__empty--message",
       "target": "dossier-documents-panel__empty--message",
+      "targetClick": "next",
       "text": "Die Registerkarte „Dokumente“ listet die Unterlagen des Dossiers auf. Ein frisch angelegtes Dossier enthält noch keine.",
       "title": "Ein leeres Dossier",
       "waitFor": "dossier-documents-panel__btn--add"
@@ -70,6 +71,7 @@
       },
       "id": "dossier-documents-panel__btn--generate-1",
       "target": "dossier-documents-panel__btn--generate-1",
+      "targetClick": "next",
       "text": "Das Dokument wird mit dem Status „Entwurf“ angelegt. Es hat noch keinen Inhalt: Über die Symbole können Sie es aus dem CRM erzeugen oder Ihre eigene Datei hochladen.",
       "title": "Ein Entwurf wartet auf Sie",
       "waitFor": "dossier-documents-panel__row--0"
@@ -89,6 +91,7 @@
       },
       "id": "generate-dialog__field--community_name",
       "target": "generate-dialog__field--community_name",
+      "targetClick": "next",
       "text": "Nichts wird ohne Ihre Prüfung eingereicht. Die Felder sind aus dem CRM vorausgefüllt und bleiben bearbeitbar: Was Sie hier bestätigen, wird genau so im Dokument eingefroren.",
       "title": "Daten prüfen",
       "waitFor": "generate-dialog__btn--submit"
@@ -117,6 +120,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "Sobald die Erzeugung abgeschlossen ist, verfügt das Dokument über eine herunterladbare Version. Nichts wird überschrieben: Jede Erzeugung fügt eine neue Version hinzu.",
       "title": "Das Dokument ist fertig"
     },
@@ -135,6 +139,7 @@
       },
       "id": "document-detail-dialog__btn--snapshot-1",
       "target": "document-detail-dialog__btn--snapshot-1",
+      "targetClick": "next",
       "text": "Jede Version gibt an, wann und von wem sie erstellt wurde. Erzeugte Versionen bewahren zusätzlich die genauen Daten, die verwendet wurden.",
       "title": "Ein Nachweis dessen, was erzeugt wurde",
       "waitFor": "document-detail-dialog__row--1"

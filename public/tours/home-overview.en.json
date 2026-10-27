@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -24,6 +24,7 @@
       },
       "id": "needs-you__band",
       "target": "needs-you__band",
+      "targetClick": "next",
       "text": "The band at the top counts what is waiting on you: invitations received, a record to complete, unread notifications. When there is nothing, it collapses to a single reassuring line.",
       "title": "What needs you"
     },
@@ -33,6 +34,7 @@
       },
       "id": "community-picker__card",
       "target": "community-picker__card",
+      "targetClick": "next",
       "text": "Each card shows a community and your role in it. The button opens it: that community becomes your active one and you land on its dashboard.",
       "title": "My communities"
     },
@@ -60,6 +62,7 @@
       },
       "id": "my-filings-panel__btn--open",
       "target": "my-filings-panel__btn--open",
+      "targetClick": "next",
       "text": "The last panel flags the official documents sent to the regulator that mention you. The button opens the detail inside the community concerned.",
       "title": "What has been filed about me"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -15,6 +15,7 @@
       },
       "id": "news-board__empty",
       "target": "news-board__empty",
+      "targetClick": "next",
       "text": "The news board is shown. It is still empty — no news has been published yet. As a manager you can create one with the \"New post\" button.",
       "title": "The news board"
     },
@@ -33,6 +34,7 @@
       },
       "id": "news-compose__body",
       "target": "news-compose__body",
+      "targetClick": "next",
       "text": "The dialog opens on the \"Post\" kind. The \"Poll\" tab would create a poll instead — here we publish a plain news post.",
       "title": "Compose a news",
       "waitFor": "news-compose__kind--post"
@@ -61,6 +63,7 @@
       },
       "id": "news-post__body",
       "target": "news-post__body",
+      "targetClick": "next",
       "text": "The news appears at the top of the board, signed by its author. Every member of the community sees it and receives a notification.",
       "title": "Your news is published"
     }

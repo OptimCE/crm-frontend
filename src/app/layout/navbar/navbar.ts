@@ -3,6 +3,7 @@ import {
   computed,
   DestroyRef,
   effect,
+  ElementRef,
   inject,
   OnInit,
   output,
@@ -109,6 +110,7 @@ export class Navbar implements OnInit {
   protected readonly notificationStore = inject(NotificationStore);
   private readonly dialogService = inject(DialogService);
   private readonly tours = inject(SteppyTours);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly snackbar = inject(SnackbarNotification);
   private helpRef: DynamicDialogRef | null = null;
 
@@ -151,6 +153,8 @@ export class Navbar implements OnInit {
   private hoverTimeout: ReturnType<typeof setTimeout> | null = null;
   /** Pointer currently over the <aside>; read when the notification popover closes. */
   private hovered = false;
+  /** Last value of `tours.active()` seen by the effect, so it only acts on a start or an end. */
+  private touring = false;
 
   memberLinks: Links[] = [
     { name: 'NAVBAR.HANDLE_MEMBRE', icon: 'pi pi-users', url: '/members' },
@@ -174,6 +178,32 @@ export class Navbar implements OnInit {
       });
     });
 
+    // The tour overlay takes every pointer event outside the highlighted element,
+    // so the rail would get a mouseleave between steps and on the way to the
+    // popover's buttons. While a tour runs, the desktop rail follows the tour
+    // instead: expanded while the step shown points inside it, collapsed on the
+    // other steps so it never covers the page they show (`collapse()` defers to
+    // it meanwhile). Between two steps it keeps its state. It goes back to the
+    // hover rules after. `active` is also true for a tour resumed after a page load.
+    effect(() => {
+      const active = this.tours.active();
+      const step = this.tours.current();
+      untracked(() => {
+        const ended = this.touring && !active;
+        this.touring = active;
+        if (this.mobile() || this.pinned()) return;
+        if (active) {
+          if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+            this.hoverTimeout = null;
+          }
+          if (step) this.sidebarOpen.set(this.tourStepInRail());
+        } else if (ended && !this.hovered && !this.notificationStore.popoverOpen()) {
+          this.collapse();
+        }
+      });
+    });
+
     this.destroyRef.onDestroy(() => this.helpRef?.destroy());
   }
 
@@ -182,7 +212,7 @@ export class Navbar implements OnInit {
     const handler = (e: MediaQueryListEvent | MediaQueryList) => {
       this.mobile.set(e.matches);
       this.visibleSideBar.set(!e.matches);
-      this.sidebarOpen.set(e.matches ? false : this.pinned());
+      this.sidebarOpen.set(e.matches ? false : this.pinned() || this.tourStepInRail());
     };
     handler(mq);
     mq.addEventListener('change', handler);
@@ -230,7 +260,8 @@ export class Navbar implements OnInit {
 
   onMouseEnter(): void {
     this.hovered = true;
-    if (this.mobile() || this.pinned()) return;
+    // During a tour the step shown decides (see the constructor).
+    if (this.mobile() || this.pinned() || this.tours.active()) return;
     this.hoverTimeout = setTimeout(() => {
       this.sidebarOpen.set(true);
     }, 120);
@@ -252,8 +283,28 @@ export class Navbar implements OnInit {
 
   private collapse(): void {
     if (this.mobile() || this.pinned()) return;
+    // During a tour the step shown decides, not the pointer; the submenu stays
+    // as the tour left it, for a later step inside it.
+    if (this.tours.active()) {
+      this.sidebarOpen.set(this.tourStepInRail());
+      return;
+    }
     this.sidebarOpen.set(false);
     this.activeSublist.set(null);
+  }
+
+  /**
+   * A tour runs and the step it shows points at an element of the navbar, or the
+   * bell's popover is open: it is appended to <body>, and collapsing would hide
+   * the bell right under it (`notification-view` points at its "see all").
+   */
+  private tourStepInRail(): boolean {
+    const step = this.tours.current();
+    if (!this.tours.active() || !step) return false;
+    if (this.notificationStore.popoverOpen()) return true;
+    if (!step.testId) return false;
+    const target = this.host.nativeElement.querySelector(`[data-testid="${step.testId}"]`);
+    return target !== null;
   }
 
   togglePin(): void {

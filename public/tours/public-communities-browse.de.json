@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/public"
   },
@@ -15,6 +15,7 @@
       },
       "id": "public-community-list__btn--accordion--0",
       "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
       "text": "Jede Karte steht für eine öffentlich zugängliche Energiegemeinschaft mit ihrer Regulierungsbehörde. Klicken Sie auf eine Karte, um mehr zu erfahren.",
       "title": "Das Verzeichnis der öffentlichen Gemeinschaften"
     },
@@ -33,6 +34,7 @@
       },
       "id": "public-community-list__detail--0",
       "target": "public-community-list__detail--0",
+      "targetClick": "next",
       "text": "Die Gemeinschaft „Test Community“ bietet mehrere öffentliche Teilungsoperationen an (Solar, Wind). Jede Operation gibt die Gemeinden an, die sie abdeckt.",
       "title": "Die Teilungsoperationen"
     },
@@ -51,6 +53,7 @@
       },
       "id": "public-community-list__btn--accordion--0-3",
       "target": "public-community-list__btn--accordion--0",
+      "targetClick": "next",
       "text": "„Test Community“ betreibt eine Teilungsoperation in Anderlecht und wird daher weiterhin angezeigt. Eine Gemeinde, in der keine Gemeinschaft aktiv ist, würde ein leeres Verzeichnis anzeigen.",
       "title": "Gefiltertes Ergebnis"
     }

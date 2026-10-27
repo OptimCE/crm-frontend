@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/audit-logs"
   },
@@ -34,6 +34,7 @@
       },
       "id": "audit-log-list__row-expansion--0",
       "target": "audit-log-list__row-expansion--0",
+      "targetClick": "next",
       "text": "Wanneer u op een rij klikt, klapt u de payload in JSON-formaat uit: hier de lijst van gewijzigde velden. Dat is het volledige technische bewijs van wat er is gewijzigd.",
       "title": "Details van de actie"
     },

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/simulation"
   },
@@ -15,6 +15,7 @@
       },
       "id": "simulation-hub__panel--start",
       "target": "simulation-hub__panel--start",
+      "targetClick": "next",
       "text": "La page de simulation s'affiche avec son formulaire de configuration : choisissez une clé de répartition enregistrée, nommez la simulation, indiquez l'injection et importez le fichier de consommation à simuler.",
       "title": "Page de simulation",
       "waitFor": "simulation-hub__container"
@@ -52,6 +53,7 @@
       },
       "id": "simulation-hub__dropzone",
       "target": "simulation-hub__dropzone",
+      "targetClick": "next",
       "text": "Importez le même fichier « test_4.csv » dans la zone de dépôt. La simulation calculera l'autoconsommation et le partage d'énergie à partir de ces données et de la clé sélectionnée.",
       "title": "Importer le fichier à simuler"
     },
@@ -88,6 +90,7 @@
       },
       "id": "simulation-results__metrics",
       "target": "simulation-results__metrics",
+      "targetClick": "next",
       "text": "La simulation est terminée. Les indicateurs clés s'affichent : énergie autoconsommée, surplus, taux d'autosuffisance et taux de partage — calculés à partir de la clé enregistrée et du fichier importé.",
       "title": "Résultats de la simulation"
     },
@@ -106,6 +109,7 @@
       },
       "id": "simulation-results__iteration-toggle--1",
       "target": "simulation-results__iteration-toggle--1",
+      "targetClick": "next",
       "text": "Chaque itération de la clé peut être dépliée pour révéler le détail par consommateur : allocation, consommation, énergie autoconsommée, surplus et volume résiduel. C'est ici que l'on compare les solutions de répartition.",
       "title": "Détail par itération et par consommateur"
     }

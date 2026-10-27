@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/administrative-document"
   },
@@ -24,6 +24,7 @@
       },
       "id": "dossier-documents-panel__empty--message",
       "target": "dossier-documents-panel__empty--message",
+      "targetClick": "next",
       "text": "The \"Documents\" tab lists the dossier's pieces. A freshly created dossier holds none.",
       "title": "An empty dossier",
       "waitFor": "dossier-documents-panel__btn--add"
@@ -70,6 +71,7 @@
       },
       "id": "dossier-documents-panel__btn--generate-1",
       "target": "dossier-documents-panel__btn--generate-1",
+      "targetClick": "next",
       "text": "The document is created with the status \"Draft\". It has no content yet: the icons offer to generate it from the CRM or to upload your own file.",
       "title": "A draft is waiting",
       "waitFor": "dossier-documents-panel__row--0"
@@ -89,6 +91,7 @@
       },
       "id": "generate-dialog__field--community_name",
       "target": "generate-dialog__field--community_name",
+      "targetClick": "next",
       "text": "Nothing is filed without your review. The fields are pre-filled from the CRM and stay editable: what you approve here is exactly what gets frozen into the document.",
       "title": "Check the data",
       "waitFor": "generate-dialog__btn--submit"
@@ -117,6 +120,7 @@
       },
       "id": "dossier-documents-panel__btn--download-1",
       "target": "dossier-documents-panel__btn--download-1",
+      "targetClick": "next",
       "text": "Once the generation finishes, the document carries a downloadable version. Nothing is overwritten: every generation adds a new version.",
       "title": "The document is ready"
     },
@@ -135,6 +139,7 @@
       },
       "id": "document-detail-dialog__btn--snapshot-1",
       "target": "document-detail-dialog__btn--snapshot-1",
+      "targetClick": "next",
       "text": "Every version records when it was produced and by whom. Generated versions additionally keep the exact data that was used.",
       "title": "A record of what was produced",
       "waitFor": "document-detail-dialog__row--1"

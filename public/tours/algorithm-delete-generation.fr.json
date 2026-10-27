@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services/algorithm"
   },
@@ -52,6 +52,7 @@
       },
       "id": "algorithm-hub__empty--generations",
       "target": "algorithm-hub__empty--generations",
+      "targetClick": "next",
       "text": "La liste des générations est à nouveau vide : la génération et toutes ses clés de répartition ont été supprimées définitivement.",
       "title": "Génération supprimée"
     }

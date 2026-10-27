@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/news"
   },
@@ -43,6 +43,7 @@
       },
       "id": "news-compose__poll-type--single",
       "target": "news-compose__poll-type--single",
+      "targetClick": "next",
       "text": "Kies of de leden één antwoord (“Enkele keuze”) of meerdere antwoorden (“Meerkeuze”) kunnen selecteren. Wij houden “Enkele keuze” aan.",
       "title": "Enkele keuze of meerkeuze"
     },
@@ -97,6 +98,7 @@
       },
       "id": "news-compose__preset--anonymous",
       "target": "news-compose__preset--anonymous",
+      "targetClick": "next",
       "text": "Drie voorinstellingen dekken de meest voorkomende gevallen. Elke voorinstelling combineert wat de beheerders zien, wat de leden zien, en wanneer.",
       "title": "Kiezen wie de resultaten ziet"
     },
@@ -142,6 +144,7 @@
       },
       "id": "news-compose__admin-vis",
       "target": "news-compose__admin-vis",
+      "targetClick": "next",
       "text": "Wat de beheerders zien. “Alleen totalen”: uitsluitend de totalen per optie. “Detail per stemmer”: het detail op naam, d.w.z. wie voor elke optie heeft gestemd.",
       "title": "Zichtbaarheid voor beheerders"
     },
@@ -151,6 +154,7 @@
       },
       "id": "news-compose__member-vis",
       "target": "news-compose__member-vis",
+      "targetClick": "next",
       "text": "Wat de leden mogen zien. “Geen resultaten”: nooit resultaten. “Alleen totalen”: de totalen. “Detail per stemmer”: het detail van de stemmen per persoon.",
       "title": "Zichtbaarheid voor leden"
     },
@@ -160,6 +164,7 @@
       },
       "id": "news-compose__member-display",
       "target": "news-compose__member-display",
+      "targetClick": "next",
       "text": "Het moment waarop de leden zien wat ze mogen zien. “Nooit”, “Voor het stemmen”, “Na het stemmen” of “Bij sluiting”. Het is deze instelling die bijvoorbeeld een stemming onderscheidt waarvan het resultaat pas verschijnt zodra de deelname is geregistreerd.",
       "title": "Weergave voor leden"
     },
@@ -187,6 +192,7 @@
       },
       "id": "news-poll",
       "target": "news-poll",
+      "targetClick": "next",
       "text": "De peiling verschijnt met haar opties op het nieuwsbord. De leden kunnen nu stemmen; de resultaten worden getoond volgens de zichtbaarheid die u hebt gekozen.",
       "title": "Uw peiling staat online"
     }

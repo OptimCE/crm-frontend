@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/billing"
   },
@@ -15,6 +15,7 @@
       },
       "id": "my-invoices__card",
       "target": "my-invoices__card",
+      "targetClick": "next",
       "text": "Dit is de ruimte “Mijn facturen”. Elke kaart stelt een van uw facturen voor, met het nummer, het bedrag, de status en de gestructureerde mededeling. U ziet alleen uw eigen facturen.",
       "title": "Uw facturen"
     }

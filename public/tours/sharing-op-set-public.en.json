@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/sharing_operations"
   },
@@ -70,6 +70,7 @@
       },
       "id": "operations-list__table",
       "target": "operations-list__table",
+      "targetClick": "next",
       "text": "The new \"E2E Energy Sharing\" appears in the list. It is currently private: visible only to community managers and not yet shown in the public directory.",
       "title": "Operation created"
     },
@@ -88,6 +89,7 @@
       },
       "id": "op-view__btn--toggle-visibility",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "The grey \"PRIVATE\" button in the header shows that this operation is not yet visible in the public directory. Citizens searching for a sharing operation in their municipality cannot find it as long as it remains private.",
       "title": "Private by default",
       "waitFor": "op-view__title--name"
@@ -107,6 +109,7 @@
       },
       "id": "op-view__btn--toggle-visibility-3",
       "target": "op-view__btn--toggle-visibility",
+      "targetClick": "next",
       "text": "The button turns green and shows \"PUBLIC\". Any citizen can now find this operation in the energy community directory, filter by municipality, and contact the community to request participation.",
       "title": "Operation is now public"
     }

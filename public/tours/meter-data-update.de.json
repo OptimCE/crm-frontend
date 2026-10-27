@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/meters"
   },
@@ -15,6 +15,7 @@
       },
       "id": "meters-list__table--meters",
       "target": "meters-list__table--meters",
+      "targetClick": "next",
       "text": "Öffnen Sie die Zählerliste der aktiven Gemeinschaft. Suchen Sie den Zähler, dessen aktuelle Konfiguration Sie aktualisieren möchten.",
       "title": "Zählerliste"
     },
@@ -48,6 +49,7 @@
       },
       "id": "meter-view__btn--update",
       "target": "meter-view__btn--update",
+      "targetClick": "next",
       "text": "Die Detailansicht zeigt die aktuellen Merkmale. Die Schaltfläche „Aktualisieren“ wird nur für einen aktiven Zähler angeboten — das ist unser Einstiegspunkt.",
       "title": "Aktiver Zähler",
       "waitFor": "meter-view__hero"
@@ -140,6 +142,7 @@
       },
       "id": "meter-data-view__text--rate",
       "target": "meter-data-view__text--rate",
+      "targetClick": "next",
       "text": "Zurück in der Detailansicht erscheinen die neue Beschreibung, die Stromstärke von 63 A und der Zweitarif in den Datenkarten — die Änderungen wurden serverseitig gespeichert.",
       "title": "Aktualisierung bestätigt",
       "waitFor": "meter-data-view__text--description"

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/dashboard"
   },
@@ -13,21 +13,37 @@
       "advance": {
         "on": "manual"
       },
-      "id": "module-discovery-strip",
-      "target": "module-discovery-strip",
-      "text": "U hebt alles wat een manager heeft, plus enkele beslissingen die alleen u neemt. De eerste: de modules. In “Beschikbare modules” abonneert “Activeren” de gemeenschap op een module; een manager wordt gevraagd het aan u te vragen.",
+      "id": "readiness-tile",
+      "target": "readiness-tile",
+      "targetClick": "next",
+      "text": "U hebt alles wat een manager heeft, dit dashboard inbegrepen, plus drie beslissingen die alleen u neemt: de modules die de gemeenschap gebruikt, wie haar samen met u beheert, en haar juridische gegevens.",
       "title": "U bent beheerder"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Klik in de sectie “Beheer” op “Gebruikers”.",
+      "targetClick": "next",
+      "text": "Als beheerder behoudt u de sectie **“Beheer”** van de managers. Op de pagina **“Gebruikers”** kiest u wie de gemeenschap samen met u beheert.",
+      "title": "De sectie “Beheer”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_users",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Klik in de sectie **“Beheer”** op **“Gebruikers”**.",
       "title": "De gebruikers van de gemeenschap"
     },
     {
@@ -39,18 +55,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tik op het menupictogram om de navigatie te openen."
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--management-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Tik in de sectie “Beheer” van het menu op “Gebruikers”.",
+      "targetClick": "next",
+      "text": "Als beheerder behoudt u de sectie **“Beheer”** van de managers. Op de pagina **“Gebruikers”** kiest u wie de gemeenschap samen met u beheert.",
+      "title": "De sectie “Beheer”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_users-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_users",
+      "text": "Tik in de sectie **“Beheer”** van het menu op **“Gebruikers”**.",
       "title": "De gebruikers van de gemeenschap"
     },
     {
@@ -59,7 +88,8 @@
       },
       "id": "users-community-list__btn--invite-manager",
       "target": "users-community-list__btn--invite-manager",
-      "text": "Alleen een beheerder kan een manager toevoegen: “Een manager uitnodigen” stuurt hem een uitnodiging per e-mail, die hij aanvaardt vanuit zijn uitnodigingen.",
+      "targetClick": "next",
+      "text": "Alleen een beheerder kan een manager toevoegen: **“Een manager uitnodigen”** stuurt hem een uitnodiging per e-mail, die hij aanvaardt vanuit zijn uitnodigingen.",
       "title": "Een manager uitnodigen"
     },
     {
@@ -68,19 +98,35 @@
       },
       "id": "users-community-list__btn--see-pending",
       "target": "users-community-list__btn--see-pending",
-      "text": "“Uitnodigingen in behandeling bekijken” toont wie nog niet heeft geantwoord. In de lijst kunt alleen u de rol van een gebruiker wijzigen — lid, manager of beheerder — of hem uit de gemeenschap verwijderen.",
+      "targetClick": "next",
+      "text": "**“Uitnodigingen in behandeling bekijken”** toont wie nog niet heeft geantwoord. In de lijst kunt alleen u de rol van een gebruiker wijzigen — lid, manager of beheerder — of hem uit de gemeenschap verwijderen.",
       "title": "Uitnodigingen en rollen"
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--community",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--community",
-      "text": "Klik in de sectie “Gemeenschap” op “Gemeenschapsinfo”.",
+      "targetClick": "next",
+      "text": "De sectie **“Gemeenschap”** leidt naar het dashboard, de gemeenschapsinfo en haar annexdiensten. Op de pagina **“Gemeenschapsinfo”** staan de juridische gegevens die alleen u kunt wijzigen.",
+      "title": "De sectie “Gemeenschap”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--communities_info",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Klik in de sectie **“Gemeenschap”** op **“Gemeenschapsinfo”**.",
       "title": "De gemeenschapsinfo"
     },
     {
@@ -92,18 +138,31 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Tik op het menupictogram om de navigatie te openen."
+      "text": "Tik op het **menupictogram ☰** om de navigatie te openen."
     },
     {
       "advance": {
-        "on": "click"
+        "on": "manual"
       },
       "id": "navbar__menu--community-2",
       "layouts": [
         "mobile"
       ],
       "target": "navbar__menu--community",
-      "text": "Tik in de sectie “Gemeenschap” van het menu op “Gemeenschapsinfo”.",
+      "targetClick": "next",
+      "text": "De sectie **“Gemeenschap”** leidt naar het dashboard, de gemeenschapsinfo en haar annexdiensten. Op de pagina **“Gemeenschapsinfo”** staan de juridische gegevens die alleen u kunt wijzigen.",
+      "title": "De sectie “Gemeenschap”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--communities_info-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--communities_info",
+      "text": "Tik in de sectie **“Gemeenschap”** van het menu op **“Gemeenschapsinfo”**.",
       "title": "De gemeenschapsinfo"
     },
     {
@@ -112,7 +171,8 @@
       },
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
-      "text": "Leden en managers lezen deze gegevens; alleen u kunt ze wijzigen. “Bewerken” opent de naam, de beschrijving, het adres, het ondernemingsnummer en het IBAN — wat daarna op de facturen en de officiële documenten staat.",
+      "targetClick": "next",
+      "text": "Leden en managers lezen deze gegevens; alleen u kunt ze wijzigen. **“Bewerken”** opent de naam, de beschrijving, het adres, het ondernemingsnummer en het IBAN — wat daarna op de facturen en de officiële documenten staat.",
       "title": "De juridische gegevens",
       "waitFor": "community-info__card--view"
     }

@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services"
   },
@@ -15,6 +15,7 @@
       },
       "id": "annexes-services-list__card--algorithm",
       "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
       "text": "Die Karte „Generierung von Verteilschlüsseln“ ist mit dem Badge „Aktiviert“ sichtbar. Die Schaltfläche zum Deaktivieren (×) befindet sich oben rechts auf der Karte.",
       "title": "Aktives Modul"
     },
@@ -51,6 +52,7 @@
       },
       "id": "annexes-services-list__empty",
       "target": "annexes-services-list__empty",
+      "targetClick": "next",
       "text": "Das Raster ist wieder leer: Das Modul „Generierung von Verteilschlüsseln“ wurde deaktiviert und ist in der Gemeinschaft nicht mehr zugänglich.",
       "title": "Modul deaktiviert"
     }

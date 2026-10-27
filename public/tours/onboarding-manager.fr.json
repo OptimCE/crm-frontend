@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/home"
   },
@@ -15,7 +15,7 @@
       },
       "id": "community-picker__btn--enter",
       "target": "community-picker__btn--enter",
-      "text": "Vous gérez désormais cette communauté : sa carte affiche votre nouveau rôle. Cliquez sur « Ouvrir ma communauté » — son tableau de bord n'est plus celui d'un membre.",
+      "text": "Vous gérez désormais cette communauté : sa carte affiche votre nouveau rôle. Cliquez sur **« Ouvrir ma communauté »** — son tableau de bord n'est plus celui d'un membre.",
       "title": "Vous êtes gestionnaire"
     },
     {
@@ -24,19 +24,23 @@
       },
       "id": "readiness-tile",
       "target": "readiness-tile",
-      "text": "Le tableau de bord résume maintenant toute la communauté. « Points à vérifier » liste ce qui bloque, avec un lien vers l'écran où le corriger ; suivent l'énergie partagée, les opérations et l'activité récente.",
+      "targetClick": "next",
+      "text": "Le tableau de bord résume maintenant toute la communauté. **« Points à vérifier »** liste ce qui bloque, avec un lien vers l'écran où le corriger ; suivent l'énergie partagée, les opérations et l'activité récente.",
       "title": "Le tableau de bord du gestionnaire"
     },
     {
       "advance": {
         "on": "manual"
       },
+      "hold": "navbar__sidebar",
       "id": "navbar__menu--management",
       "layouts": [
         "desktop"
       ],
       "target": "navbar__menu--management",
-      "text": "Votre rôle a ajouté la section « Gestion » à la barre latérale : les clefs de répartition, les membres, les compteurs et les opérations de partage, les utilisateurs de la communauté et le journal d'audit. Survolez la barre pour lire ses libellés."
+      "targetClick": "next",
+      "text": "Votre rôle a ajouté la section **« Gestion »** à la barre latérale : les clefs de répartition, les membres, les compteurs et les opérations de partage, les utilisateurs de la communauté et le journal d'audit.",
+      "title": "La section « Gestion »"
     },
     {
       "advance": {
@@ -47,7 +51,7 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
     },
     {
       "advance": {
@@ -58,26 +62,55 @@
         "mobile"
       ],
       "target": "navbar__menu--management",
-      "text": "Votre rôle a ajouté la section « Gestion » au menu : les clefs de répartition, les membres, les compteurs et les opérations de partage, les utilisateurs de la communauté et le journal d'audit.",
+      "targetClick": "next",
+      "text": "Votre rôle a ajouté la section **« Gestion »** au menu : les clefs de répartition, les membres, les compteurs et les opérations de partage, les utilisateurs de la communauté et le journal d'audit.",
       "title": "La section « Gestion »"
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__container",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__container",
-      "text": "« Gestionnaire de membres » regroupe le quotidien de la communauté : « Gérer les membres », « Gérer les compteurs » et « Opérations de partage ».",
-      "title": "Membres, compteurs, opérations"
+      "text": "Cliquez sur **« Gestionnaire de membres »** pour déplier son sous-menu."
     },
     {
       "advance": {
         "on": "click"
       },
+      "hold": "navbar__sidebar",
       "id": "sidebar-multi-elements__submenu-link--0",
+      "layouts": [
+        "desktop"
+      ],
       "target": "sidebar-multi-elements__submenu-link--0",
-      "text": "Cliquez sur « Gérer les membres ».",
-      "title": "Ouvrir les membres"
+      "text": "Le sous-menu regroupe le quotidien de la communauté : les membres, les compteurs et les opérations de partage. Cliquez sur **« Gérer les membres »**."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__container-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__container",
+      "text": "Touchez **« Gestionnaire de membres »** pour déplier son sous-menu."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-multi-elements__submenu-link--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-multi-elements__submenu-link--0",
+      "text": "Le sous-menu regroupe le quotidien de la communauté : les membres, les compteurs et les opérations de partage. Touchez **« Gérer les membres »**."
     },
     {
       "advance": {
@@ -85,7 +118,8 @@
       },
       "id": "members-list__btn--invite",
       "target": "members-list__btn--invite",
-      "text": "Ici, vous tenez la liste des membres. « Ajouter » encode une fiche ; « Inviter un nouveau membre » envoie un e-mail pour que la personne la complète elle-même et accède à son espace.",
+      "targetClick": "next",
+      "text": "Ici, vous tenez la liste des membres. **« Ajouter »** encode une fiche ; **« Inviter un nouveau membre »** envoie un e-mail pour que la personne la complète elle-même et accède à son espace.",
       "title": "Ajouter et inviter des membres",
       "waitFor": "members-list__btn--add"
     },
@@ -93,12 +127,13 @@
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-3",
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--keys",
       "layouts": [
         "desktop"
       ],
-      "target": "navbar__menu--management",
-      "text": "Dans la section « Gestion », cliquez sur « Gestionnaire de clefs ».",
+      "target": "sidebar-element__link--keys",
+      "text": "Dans la section **« Gestion »**, cliquez sur **« Gestionnaire de clefs »**.",
       "title": "Les clefs de répartition"
     },
     {
@@ -110,18 +145,18 @@
         "mobile"
       ],
       "target": "navbar__btn--hamburger",
-      "text": "Touchez l'icône du menu pour ouvrir la navigation."
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "navbar__menu--management-4",
+      "id": "sidebar-element__link--keys-2",
       "layouts": [
         "mobile"
       ],
-      "target": "navbar__menu--management",
-      "text": "Dans la section « Gestion » du menu, touchez « Gestionnaire de clefs ».",
+      "target": "sidebar-element__link--keys",
+      "text": "Dans la section **« Gestion »** du menu, touchez **« Gestionnaire de clefs »**.",
       "title": "Les clefs de répartition"
     },
     {
@@ -130,7 +165,8 @@
       },
       "id": "keys-list__btn--add",
       "target": "keys-list__btn--add",
-      "text": "Une clef de répartition fixe comment l'énergie partagée est répartie entre les consommateurs d'une opération. « Ajouter » vous laisse choisir entre le formulaire complet et un assistant pas à pas. Le « Guide utilisateur » propose une visite détaillée de chacun de ces écrans.",
+      "targetClick": "next",
+      "text": "Une clef de répartition fixe comment l'énergie partagée est répartie entre les consommateurs d'une opération. **« Ajouter »** vous laisse choisir entre le formulaire complet et un assistant pas à pas. Le **« Guide utilisateur »** propose une visite détaillée de chacun de ces écrans.",
       "title": "Les clefs de répartition",
       "waitFor": "keys-list__table--keys"
     }

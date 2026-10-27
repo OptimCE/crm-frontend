@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/annexes-services"
   },
@@ -15,6 +15,7 @@
       },
       "id": "annexes-services-list__card--algorithm",
       "target": "annexes-services-list__card--algorithm",
+      "targetClick": "next",
       "text": "De kaart “Generatie van verdeelsleutels” is zichtbaar met de badge “Geactiveerd”. De knop om de module uit te schakelen (×) staat rechtsboven op de kaart.",
       "title": "Actieve module"
     },
@@ -51,6 +52,7 @@
       },
       "id": "annexes-services-list__empty",
       "target": "annexes-services-list__empty",
+      "targetClick": "next",
       "text": "Het raster is weer leeg: de module “Generatie van verdeelsleutels” is uitgeschakeld en is niet langer toegankelijk vanuit de gemeenschap.",
       "title": "Module uitgeschakeld"
     }

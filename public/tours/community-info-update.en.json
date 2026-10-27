@@ -1,5 +1,5 @@
 {
-  "buildId": "8b68d55fb608",
+  "buildId": "e760a2f57765",
   "entry": {
     "route": "/communities/info"
   },
@@ -15,6 +15,7 @@
       },
       "id": "community-info__card--view",
       "target": "community-info__card--view",
+      "targetClick": "next",
       "text": "The page shows the community's current information: name, description, website, and registered office address. Click **Edit** to switch to edit mode.",
       "title": "Community information page"
     },
@@ -96,6 +97,7 @@
       },
       "id": "community-info__view--description",
       "target": "community-info__view--description",
+      "targetClick": "next",
       "text": "Back in view mode, the page shows the description, website, and address exactly as you entered them — the changes have been successfully saved server-side.",
       "title": "Information updated"
     }
