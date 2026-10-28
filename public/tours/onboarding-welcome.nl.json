@@ -23,8 +23,8 @@
       "advance": {
         "on": "manual"
       },
-      "id": "needs-you__clear",
-      "target": "needs-you__clear",
+      "id": "needs-you",
+      "target": "needs-you",
       "targetClick": "next",
       "text": "De bovenste band toont wat een actie van u vraagt, zoals een uitnodiging om te aanvaarden. Staat er “Er wacht niets op u. Alles is in orde.”, dan hoeft u niets te doen.",
       "title": "Wat op u wacht"

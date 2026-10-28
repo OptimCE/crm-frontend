@@ -23,9 +23,9 @@ describe('pickOnboardingTour', () => {
       expect(pick({ checkpoint: { kind: 'landing', hasCommunity: false } })).toBe('welcome');
     });
 
-    it('should not offer welcome to a user who already belongs to a community', () => {
-      // The welcome tour is written for the empty state: its first step is the empty picker.
-      expect(pick({ checkpoint: { kind: 'landing', hasCommunity: true } })).toBeNull();
+    it('should offer welcome to a new user who already belongs to a community', () => {
+      // It then plays its community variant (tourIdOf): the empty-picker one would not find its steps.
+      expect(pick({ checkpoint: { kind: 'landing', hasCommunity: true } })).toBe('welcome');
     });
 
     it('should not offer welcome twice, nor a role tour in its place', () => {
@@ -114,6 +114,34 @@ describe('pickOnboardingTour', () => {
       expect(
         pick({ checkpoint: activation([Role.ADMIN]), welcomeHandledOnScreen: true }),
       ).toBeNull();
+    });
+
+    it('should leave /home to the welcome offer while welcome is still to be offered', () => {
+      // At start-up the restored community's activation races the landing checkpoint.
+      expect(pick({ checkpoint: activation([Role.MEMBER]), onLanding: true })).toBeNull();
+    });
+
+    it('should offer the role tour on /home once welcome was answered', () => {
+      expect(
+        pick({
+          checkpoint: activation([Role.MEMBER]),
+          onLanding: true,
+          recorded: new Set(['welcome']),
+        }),
+      ).toBe('community_member');
+    });
+
+    it('should offer the role tour away from /home although welcome is still to be offered', () => {
+      expect(pick({ checkpoint: activation([Role.MEMBER]), onLanding: false })).toBe(
+        'community_member',
+      );
+    });
+
+    it('should not wait for a welcome tour that does not ship', () => {
+      const available = new Set<OnboardingTourKey>(['community_member']);
+      expect(pick({ checkpoint: activation([Role.MEMBER]), onLanding: true, available })).toBe(
+        'community_member',
+      );
     });
 
     it('should offer nothing in a community where the user holds no role', () => {

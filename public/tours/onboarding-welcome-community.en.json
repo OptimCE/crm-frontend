@@ -1,0 +1,183 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-welcome-community/en.html",
+  "id": "onboarding-welcome-community",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "OptimCE helps you share energy within an energy community. You already belong to a community: its card, under **\"My communities\"**, shows the role you hold there.",
+      "title": "Welcome to OptimCE"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you",
+      "target": "needs-you",
+      "targetClick": "next",
+      "text": "The top of the page lists what needs an action from you, across all your communities: an invitation to accept, a detail missing from your record, unread notifications. When it reads \"Nothing needs you right now. Everything is in order.\", there is nothing to do.",
+      "title": "What needs you"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "targetClick": "next",
+      "text": "This button takes you into your community: its dashboard and its menus. The first time, a tour for your role will show you around."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-panel",
+      "target": "my-energy-panel",
+      "targetClick": "next",
+      "text": "Further down, the home page gathers, for all your communities at once, **\"My energy\"**, **\"My documents\"**, **\"My invoices to pay\"** and **\"What has been filed about me\"**. You do not need to open each community to see them.",
+      "title": "Everything about you"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--profile",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "The sidebar's **\"Profile\"** section is always there: home, profile, invitations, your communities and the public communities.",
+      "title": "Your profile"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--users_invitations",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Click **\"Invitations\"**.",
+      "title": "Open your invitations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tap the **menu icon ☰** to open the navigation."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--profile-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "The menu's **\"Profile\"** section holds the home page, your profile, your invitations, your communities and the public communities.",
+      "title": "Your profile"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--users_invitations-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Tap **\"Invitations\"**.",
+      "title": "Open your invitations"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "invitations__tabs",
+      "target": "invitations__tabs",
+      "targetClick": "next",
+      "text": "When another community invites you, or you are asked to help run yours, the invitation lands here — the **\"Members\"** tab to become a member, **\"Manager\"** to help run it — and your home page points it out.",
+      "title": "Your invitations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__btn--user-guide",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "At the bottom of the sidebar, **\"User guide\"** opens the help, at any time and from any page. Click it.",
+      "title": "Need help?"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tap the **menu icon ☰** to open the navigation."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--user-guide-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "At the bottom of the menu, **\"User guide\"** opens the help, at any time and from any page. Tap it.",
+      "title": "Need help?"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__link--guide",
+      "target": "help-dialog__link--guide",
+      "targetClick": "next",
+      "text": "**\"Open the online user guide\"** opens the guide in a new tab: every task in the application is described there step by step, with screenshots, and can also be played as an animation.",
+      "title": "The online guide",
+      "waitFor": "help-dialog__tours"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__tours",
+      "target": "help-dialog__tours",
+      "targetClick": "next",
+      "text": "**\"Guided tours\"** lists tours like this one: they show you a task right inside the application. You will find the ones for your role in your community here; start one again whenever you need it. Close this window to get started.",
+      "title": "Guided tours"
+    }
+  ],
+  "title": "Welcome to OptimCE"
+}

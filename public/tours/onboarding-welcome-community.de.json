@@ -1,0 +1,183 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-welcome-community/de.html",
+  "id": "onboarding-welcome-community",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "OptimCE hilft Ihnen, Energie innerhalb einer Energiegemeinschaft zu teilen. Sie gehören bereits einer Gemeinschaft an: Ihre Karte unter **„Meine Gemeinschaften“** zeigt die Rolle, die Sie dort haben.",
+      "title": "Willkommen bei OptimCE"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you",
+      "target": "needs-you",
+      "targetClick": "next",
+      "text": "Oben auf der Seite steht, was eine Aktion von Ihnen erfordert, in all Ihren Gemeinschaften: eine anzunehmende Einladung, eine fehlende Angabe in Ihrem Datensatz, ungelesene Benachrichtigungen. Steht dort „Im Moment wartet nichts auf Sie. Alles ist in Ordnung.“, ist nichts zu tun.",
+      "title": "Was auf Sie wartet"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "targetClick": "next",
+      "text": "Diese Schaltfläche bringt Sie in Ihre Gemeinschaft: ihr Dashboard und ihre Menüs. Beim ersten Mal führt Sie eine Tour für Ihre Rolle herum."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-panel",
+      "target": "my-energy-panel",
+      "targetClick": "next",
+      "text": "Weiter unten bündelt die Startseite für all Ihre Gemeinschaften zugleich **„Meine Energie“**, **„Meine Dokumente“**, **„Meine offenen Rechnungen“** und **„Was über mich eingereicht wurde“**. Sie müssen nicht jede Gemeinschaft öffnen, um sie zu sehen.",
+      "title": "Alles, was Sie betrifft"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--profile",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "Der Abschnitt **„Profil“** der Seitenleiste ist immer da: Start, Profil, Einladungen, Ihre Gemeinschaften und die öffentlichen Gemeinschaften.",
+      "title": "Ihr Profil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--users_invitations",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Klicken Sie auf **„Einladungen“**.",
+      "title": "Ihre Einladungen öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--profile-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "Der Abschnitt **„Profil“** des Menüs enthält die Startseite, Ihr Profil, Ihre Einladungen, Ihre Gemeinschaften und die öffentlichen Gemeinschaften.",
+      "title": "Ihr Profil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--users_invitations-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Tippen Sie auf **„Einladungen“**.",
+      "title": "Ihre Einladungen öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "invitations__tabs",
+      "target": "invitations__tabs",
+      "targetClick": "next",
+      "text": "Wenn eine andere Gemeinschaft Sie einlädt oder man Sie bittet, Ihre mitzuverwalten, landet die Einladung hier — die Registerkarte **„Mitglieder“**, um Mitglied zu werden, **„Manager“**, um mitzuverwalten — und Ihre Startseite weist Sie darauf hin.",
+      "title": "Ihre Einladungen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__btn--user-guide",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "Unten in der Seitenleiste öffnet **„Benutzerhandbuch“** die Hilfe, jederzeit und von jeder Seite aus. Klicken Sie darauf.",
+      "title": "Brauchen Sie Hilfe?"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Tippen Sie auf das **Menüsymbol ☰**, um die Navigation zu öffnen."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--user-guide-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "Unten im Menü öffnet **„Benutzerhandbuch“** die Hilfe, jederzeit und von jeder Seite aus. Tippen Sie darauf.",
+      "title": "Brauchen Sie Hilfe?"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__link--guide",
+      "target": "help-dialog__link--guide",
+      "targetClick": "next",
+      "text": "**„Online-Benutzerhandbuch öffnen“** öffnet das Handbuch in einem neuen Tab: Jede Aufgabe der Anwendung wird dort Schritt für Schritt mit Bildschirmfotos beschrieben und lässt sich auch als Animation abspielen.",
+      "title": "Das Online-Handbuch",
+      "waitFor": "help-dialog__tours"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__tours",
+      "target": "help-dialog__tours",
+      "targetClick": "next",
+      "text": "**„Geführte Touren“** listet Touren wie diese auf: Sie zeigen Ihnen eine Aufgabe direkt in der Anwendung. Hier finden Sie die Touren Ihrer Rolle in Ihrer Gemeinschaft; starten Sie eine erneut, wann immer Sie sie brauchen. Schließen Sie dieses Fenster, um zu beginnen.",
+      "title": "Geführte Touren"
+    }
+  ],
+  "title": "Willkommen bei OptimCE"
+}

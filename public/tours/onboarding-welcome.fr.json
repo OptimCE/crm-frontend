@@ -23,8 +23,8 @@
       "advance": {
         "on": "manual"
       },
-      "id": "needs-you__clear",
-      "target": "needs-you__clear",
+      "id": "needs-you",
+      "target": "needs-you",
       "targetClick": "next",
       "text": "Le bandeau du haut liste ce qui demande une action de votre part, comme une invitation à accepter. Quand il affiche « Rien ne vous attend pour le moment. Tout est en ordre. », vous n'avez rien à faire.",
       "title": "Ce qui vous attend"

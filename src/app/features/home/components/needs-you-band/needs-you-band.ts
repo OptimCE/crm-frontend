@@ -30,12 +30,16 @@ import {
  *
  * Every source degrades independently — a dead notification count must not hide
  * a pending invitation, which is the row that actually blocks somebody.
+ *
+ * The host carries `needs-you` whatever the state: the onboarding tours point
+ * at it, and `needs-you__clear` / `__band` each exist in one state only.
  */
 @Component({
   selector: 'app-needs-you-band',
   standalone: true,
   imports: [TranslatePipe, RouterLink],
   templateUrl: './needs-you-band.html',
+  host: { class: 'block', 'data-testid': 'needs-you' },
 })
 export class NeedsYouBand {
   private readonly meService = inject(MeService);

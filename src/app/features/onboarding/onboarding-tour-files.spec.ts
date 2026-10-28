@@ -1,7 +1,9 @@
 import realManifest from '../../../../public/tours/tours.manifest.json';
 import welcomeFr from '../../../../public/tours/onboarding-welcome.fr.json';
+import welcomeCommunityFr from '../../../../public/tours/onboarding-welcome-community.fr.json';
 import { TourManifest, TourManifestEntry } from '../guided_tours/tour-catalog';
 import { stepCountFor, TourFile, tourFileFor, tourVersionOf } from './onboarding-tour-files';
+import { ONBOARDING_TOURS, WELCOME_WITH_COMMUNITY_TOUR } from './onboarding-tours';
 
 const manifest = realManifest as TourManifest;
 const layouts = manifest.layouts ?? {};
@@ -40,6 +42,14 @@ describe('stepCountFor', () => {
     expect(stepCountFor(file, layouts, mobile)).toBe(14);
   });
 
+  it('should count the steps of the community variant of welcome', () => {
+    // 7 shared steps, 3 desktop-only and 5 mobile-only.
+    const file = welcomeCommunityFr as TourFile;
+    expect(file.steps).toHaveLength(15);
+    expect(stepCountFor(file, layouts, desktop)).toBe(10);
+    expect(stepCountFor(file, layouts, mobile)).toBe(12);
+  });
+
   it('should give no count for a file without steps', () => {
     expect(stepCountFor({ steps: [] }, layouts, desktop)).toBeNull();
     expect(stepCountFor({} as TourFile, layouts, desktop)).toBeNull();
@@ -61,7 +71,10 @@ describe('tourVersionOf', () => {
 
   it('should be set for every shipped onboarding tour', () => {
     const onboarding = manifest.tours.filter((t) => t.id.startsWith('onboarding-'));
-    expect(onboarding.length).toBe(4);
+    // Every tour the app plays ships, and the app knows every one that ships.
+    expect(onboarding.map((t) => t.id).sort()).toEqual(
+      [...Object.values(ONBOARDING_TOURS), WELCOME_WITH_COMMUNITY_TOUR].sort(),
+    );
     expect(onboarding.every((t) => tourVersionOf(t, manifest)?.startsWith('sha384-'))).toBe(true);
   });
 });

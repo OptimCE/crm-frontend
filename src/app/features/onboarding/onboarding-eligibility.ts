@@ -7,11 +7,15 @@ import { OnboardingTourKey, ROLE_TOUR_PRIORITY, RoleTourKey } from './onboarding
  *
  * Two checkpoints:
  * - `landing`: the post-login landing page (/home). The only candidate is
- *   `welcome`, and only for a user who belongs to no community yet: the tour is
- *   written for that empty state (its first step is the empty community picker).
+ *   `welcome`. It ships in two variants, one for the empty community picker
+ *   and one for a user who already has a community (`tourIdOf`); which one
+ *   plays does not change whether it is offered.
  * - `activation`: a community just became the active one (picked, created,
  *   joined, or restored at start-up), or the user's roles in it changed. The
  *   candidates are the role tours of THAT community, in ROLE_TOUR_PRIORITY.
+ *   On /home they wait while `welcome` is still to be offered: at start-up the
+ *   restored community's activation and the landing race, and the welcome
+ *   comes first.
  *
  * A candidate is offered when the user has no recorded answer for it ("first
  * time" is per user, across communities) and the tour actually ships. One tour
@@ -30,16 +34,17 @@ export interface EligibilityInput {
   available: ReadonlySet<OnboardingTourKey>;
   /** `welcome` was offered (and answered) on the current screen. */
   welcomeHandledOnScreen?: boolean;
+  /** The current page is the landing page (/home). */
+  onLanding?: boolean;
 }
 
 export function pickOnboardingTour(input: EligibilityInput): OnboardingTourKey | null {
   const { checkpoint, recorded, available } = input;
+  const welcomePending = !recorded.has('welcome') && available.has('welcome');
   const candidates: OnboardingTourKey[] =
     checkpoint.kind === 'landing'
-      ? checkpoint.hasCommunity
-        ? []
-        : ['welcome']
-      : input.welcomeHandledOnScreen
+      ? ['welcome']
+      : input.welcomeHandledOnScreen || (input.onLanding && welcomePending)
         ? []
         : ROLE_TOUR_PRIORITY.filter((key) => checkpoint.roles.has(key));
   return candidates.find((key) => !recorded.has(key) && available.has(key)) ?? null;
@@ -66,12 +71,7 @@ export function roleToursFor(
 /**
  * The onboarding tours the Help dialog lists for a replay, whatever was
  * recorded: `welcome`, always, then the role tours of the active community.
- *
- * `welcome` is listed even for a user who already has communities (Eric's
- * call, 2026-10-25), although its scenario was written for the empty state:
- * there, its steps on the empty community picker show the player's "cannot
- * find this element" fallback. It is only OFFERED automatically to a user
- * with no community (`pickOnboardingTour`).
+ * `available` is the variant the user plays (`OnboardingToursService.available`).
  */
 export function replayableTours(
   roles: ReadonlySet<RoleTourKey>,

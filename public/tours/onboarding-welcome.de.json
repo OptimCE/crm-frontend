@@ -23,8 +23,8 @@
       "advance": {
         "on": "manual"
       },
-      "id": "needs-you__clear",
-      "target": "needs-you__clear",
+      "id": "needs-you",
+      "target": "needs-you",
       "targetClick": "next",
       "text": "Das obere Band listet auf, was eine Aktion von Ihnen erfordert, etwa eine anzunehmende Einladung. Steht dort „Im Moment wartet nichts auf Sie. Alles ist in Ordnung.“, ist nichts zu tun.",
       "title": "Was auf Sie wartet"

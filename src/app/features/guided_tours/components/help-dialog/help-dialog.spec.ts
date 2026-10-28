@@ -54,6 +54,12 @@ const MANIFEST: TourManifest = {
       title: { fr: 'Bienvenue sur OptimCE' },
     },
     {
+      id: 'onboarding-welcome-community',
+      role: 'member',
+      entry: { route: '/home' },
+      title: { fr: 'Bienvenue (communauté)' },
+    },
+    {
       id: 'onboarding-manager',
       role: 'manager',
       entry: { route: '/home' },
@@ -125,7 +131,10 @@ describe('HelpDialog', () => {
         },
         {
           provide: OnboardingCoordinator,
-          useValue: { activeRoleTours: () => Promise.resolve(onboarding.roles) },
+          useValue: {
+            activeRoleTours: () => Promise.resolve(onboarding.roles),
+            hasCommunity: () => onboarding.roles.size > 0,
+          },
         },
       ],
     }).compileComponents();
@@ -163,11 +172,20 @@ describe('HelpDialog', () => {
         query('help-dialog__first-steps').querySelectorAll('[data-testid^="help-dialog__row--"]'),
       ).map((e) => e.getAttribute('data-testid'));
       expect(rows).toEqual([
-        'help-dialog__row--onboarding-welcome',
+        'help-dialog__row--onboarding-welcome-community',
         'help-dialog__row--onboarding-manager',
         'help-dialog__row--onboarding-member',
       ]);
       expect(query('help-dialog__tours').textContent).not.toContain('Vous êtes');
+    });
+
+    it('should list the community variant of welcome to a user who has a community', async () => {
+      onboarding.roles = new Set(['community_member']);
+      await render(state());
+      expect(query('help-dialog__first-steps').textContent).toContain('Bienvenue (communauté)');
+      expect(testIds('help-dialog__row--onboarding-welcome')).toEqual([
+        'help-dialog__row--onboarding-welcome-community',
+      ]);
     });
 
     it('should start a replay like any other tour', async () => {
