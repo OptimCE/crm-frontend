@@ -20,9 +20,9 @@ import { MeService } from '../../../shared/services/me.service';
 import { MemberStatus } from '../../../shared/types/member.types';
 import {
   ONBOARDING_TOUR_KEYS,
-  ONBOARDING_TOURS,
   OnboardingStateDTO,
   OnboardingTourKey,
+  tourIdOf,
 } from '../onboarding-tours';
 import { OnboardingApiService } from './onboarding-api.service';
 import { OnboardingCoordinator } from './onboarding-coordinator.service';
@@ -98,10 +98,10 @@ describe('OnboardingCoordinator', () => {
           provide: OnboardingToursService,
           useValue: {
             available: () => Promise.resolve(new Set(available)),
-            describe: (key: OnboardingTourKey) =>
+            describe: (key: OnboardingTourKey, _lang: string, hasCommunity = false) =>
               Promise.resolve(
                 available.has(key)
-                  ? { key, tourId: ONBOARDING_TOURS[key], steps: 9, version: `sha384-${key}` }
+                  ? { key, tourId: tourIdOf(key, hasCommunity), steps: 9, version: `sha384-${key}` }
                   : null,
               ),
           },
@@ -192,10 +192,18 @@ describe('OnboardingCoordinator', () => {
       expect(coordinator.offer()).toMatchObject({ key: 'community_admin', path: '/dashboard' });
     });
 
-    it('should not offer welcome to a user who already has a community', async () => {
+    it('should offer the community variant of welcome to a user who already has a community', async () => {
       communitiesById.set({ [SOLEIL.orgId]: SOLEIL });
       const coordinator = await startAt('/home');
-      expect(coordinator.offer()).toBeNull();
+      expect(coordinator.offer()).toMatchObject({ key: 'welcome', kind: 'welcome' });
+      expect(coordinator.offer()?.tour.tourId).toBe('onboarding-welcome-community');
+    });
+
+    it('should offer welcome, not the role banner, on /home when the restored community races the landing', async () => {
+      activate(SOLEIL);
+      const coordinator = await startAt('/home');
+      expect(coordinator.offer()?.key).toBe('welcome');
+      expect(coordinator.offer()?.tour.tourId).toBe('onboarding-welcome-community');
     });
 
     it('should not offer welcome on another page than the landing page', async () => {

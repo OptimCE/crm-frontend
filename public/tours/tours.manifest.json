@@ -1328,13 +1328,39 @@
       },
       "id": "onboarding-welcome",
       "integrity": {
-        "de": "sha384-lIiqJw4f2XzuiHzG0WM6wXV46LTdFdYaPEsXA3K1VKi6As+0cQ7k/ZJVZzRYop2T",
-        "en": "sha384-58M0w8tlYAZEy3eApBIkDxFKMMOFagVj6EV4L2kSXcmiq6GfH69myB739/1953I8",
-        "fr": "sha384-uRqyhuVCFBubsPaSTTHr3HOTAr912/5xUIE5RW/szlmIc3eBm89+/l1KbJoqUWhv",
-        "nl": "sha384-DfIN8KzLxHilk8Da3edBq55Al+v9SML2TdbTMNygzpuyArEyYlYkpOQ+Xc/kT3ab"
+        "de": "sha384-OhCWBpJsj2S3Rd1wkab72Li/k1Z+cKUinGmu625JroyCnsegFuf++rxHImZGc8RD",
+        "en": "sha384-AHvmXtE2yB3+UdINYtMHkLry4Es6TPrlPEBPlLXCqcFnsXARQ2cs+Urnkutgeiqc",
+        "fr": "sha384-iqaVV4QIrEECkq+mlttzWWBJy3+RG02tDxn09cgwx+CvvQYIYfFaQ/YCYsJ6vq8X",
+        "nl": "sha384-78oLo1ZXHPzS9NmiJ6NxGN2cRQMKa+98DwoxN2yY8Pnl+BPkn6m0S2WMBYm1dusc"
       },
       "role": "newcomer",
       "steps": 17,
+      "title": {
+        "de": "Willkommen bei OptimCE",
+        "en": "Welcome to OptimCE",
+        "fr": "Bienvenue sur OptimCE",
+        "nl": "Welkom bij OptimCE"
+      }
+    },
+    {
+      "entry": {
+        "route": "/home"
+      },
+      "files": {
+        "de": "onboarding-welcome-community.de.json",
+        "en": "onboarding-welcome-community.en.json",
+        "fr": "onboarding-welcome-community.fr.json",
+        "nl": "onboarding-welcome-community.nl.json"
+      },
+      "id": "onboarding-welcome-community",
+      "integrity": {
+        "de": "sha384-rccxOxTy6WkCe4nTSLmEB5XVneusgPJ0KqEOTfkw1vy999kjEbozA+7mtb0BfNNw",
+        "en": "sha384-e39vWiNVsE7GD1HDV+/wwYFvT7XsDHVEEmITtiBw/NemHsBfPNbxwJXBGjzUokSr",
+        "fr": "sha384-5zTFIVrunlIXg1mOY1vkurZb4F7lRKvQU4Sozd4F4Y6e6MkyNsjwiuMjQ+p8RrJO",
+        "nl": "sha384-zUZgroVf/YF+CvPRO9aqR6poCF09ROST+72eqvG4/jKBNdZ32zw8BZ8fQFF4jHfE"
+      },
+      "role": "member",
+      "steps": 15,
       "title": {
         "de": "Willkommen bei OptimCE",
         "en": "Welcome to OptimCE",

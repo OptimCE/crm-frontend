@@ -3,7 +3,7 @@ import { inject, Injectable, isDevMode } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { GuidedToursService } from '../../guided_tours/services/guided-tours.service';
 import { TourManifest, TourManifestEntry } from '../../guided_tours/tour-catalog';
-import { ONBOARDING_TOUR_KEYS, ONBOARDING_TOURS, OnboardingTourKey } from '../onboarding-tours';
+import { ONBOARDING_TOUR_KEYS, OnboardingTourKey, tourIdOf } from '../onboarding-tours';
 import { stepCountFor, TourFile, tourFileFor, tourVersionOf } from '../onboarding-tour-files';
 
 /** What an offer needs to know about the tour it proposes. */
@@ -29,12 +29,15 @@ export class OnboardingToursService {
 
   private warned = false;
 
-  /** The onboarding tours the manifest lists. Empty when it cannot be loaded. */
-  async available(): Promise<Set<OnboardingTourKey>> {
+  /**
+   * The onboarding tours the manifest lists, in the variant this user plays
+   * (`welcome` depends on `hasCommunity`). Empty when it cannot be loaded.
+   */
+  async available(hasCommunity = false): Promise<Set<OnboardingTourKey>> {
     const manifest = await this.guidedTours.loadManifest();
     const shipped = new Set(manifest?.tours.map((t) => t.id) ?? []);
     const available = new Set(
-      ONBOARDING_TOUR_KEYS.filter((key) => shipped.has(ONBOARDING_TOURS[key])),
+      ONBOARDING_TOUR_KEYS.filter((key) => shipped.has(tourIdOf(key, hasCommunity))),
     );
     if (manifest && !this.warned && isDevMode()) {
       const missing = ONBOARDING_TOUR_KEYS.filter((key) => !available.has(key));
@@ -42,7 +45,7 @@ export class OnboardingToursService {
         this.warned = true;
         console.warn(
           'Onboarding: no Steppy tour for',
-          missing.map((key) => `${key} (${ONBOARDING_TOURS[key]})`).join(', '),
+          missing.map((key) => `${key} (${tourIdOf(key, hasCommunity)})`).join(', '),
           '- these tours are not offered.',
         );
       }
@@ -51,9 +54,13 @@ export class OnboardingToursService {
   }
 
   /** The tour behind `key` as it will play in `lang` on this screen, or null if it does not ship. */
-  async describe(key: OnboardingTourKey, lang: string): Promise<OnboardingTourInfo | null> {
+  async describe(
+    key: OnboardingTourKey,
+    lang: string,
+    hasCommunity = false,
+  ): Promise<OnboardingTourInfo | null> {
     const manifest = await this.guidedTours.loadManifest();
-    const tourId = ONBOARDING_TOURS[key];
+    const tourId = tourIdOf(key, hasCommunity);
     const entry = manifest?.tours.find((t) => t.id === tourId);
     if (!manifest || !entry) return null;
     return {

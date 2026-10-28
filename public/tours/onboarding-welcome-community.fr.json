@@ -1,0 +1,183 @@
+{
+  "buildId": "e760a2f57765",
+  "entry": {
+    "route": "/home"
+  },
+  "guideUrl": "https://guide.optimce.be/onboarding-welcome-community/fr.html",
+  "id": "onboarding-welcome-community",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__card",
+      "target": "community-picker__card",
+      "targetClick": "next",
+      "text": "OptimCE vous aide à partager l'énergie au sein d'une communauté d'énergie. Vous faites déjà partie d'une communauté : sa carte, dans **« Mes communautés »**, indique le rôle que vous y avez.",
+      "title": "Bienvenue sur OptimCE"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "needs-you",
+      "target": "needs-you",
+      "targetClick": "next",
+      "text": "Le haut de la page liste ce qui demande une action de votre part, dans toutes vos communautés : une invitation à accepter, une information qui manque dans votre fiche, des notifications non lues. Quand il affiche « Rien ne vous attend pour le moment. Tout est en ordre. », vous n'avez rien à faire.",
+      "title": "Ce qui vous attend"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "community-picker__btn--enter",
+      "target": "community-picker__btn--enter",
+      "targetClick": "next",
+      "text": "Ce bouton vous emmène dans votre communauté : son tableau de bord et ses menus. La première fois, une visite propre à votre rôle vous y fera faire le tour."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "my-energy-panel",
+      "target": "my-energy-panel",
+      "targetClick": "next",
+      "text": "Plus bas, la page d'accueil rassemble, pour toutes vos communautés à la fois, **« Mon énergie »**, **« Mes documents »**, **« Mes factures à payer »** et **« Ce qui a été déclaré à mon sujet »**. Vous n'avez pas besoin d'ouvrir chaque communauté pour les voir.",
+      "title": "Tout ce qui vous concerne"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__menu--profile",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "La section **« Profil »** de la barre latérale vous suit partout : accueil, profil, invitations, vos communautés et les communautés publiques.",
+      "title": "Votre profil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "sidebar-element__link--users_invitations",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Cliquez sur **« Invitations »**.",
+      "title": "Ouvrir vos invitations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "navbar__menu--profile-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__menu--profile",
+      "targetClick": "next",
+      "text": "La section **« Profil »** du menu regroupe l'accueil, votre profil, vos invitations, vos communautés et les communautés publiques.",
+      "title": "Votre profil"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "sidebar-element__link--users_invitations-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "sidebar-element__link--users_invitations",
+      "text": "Touchez **« Invitations »**.",
+      "title": "Ouvrir vos invitations"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "invitations__tabs",
+      "target": "invitations__tabs",
+      "targetClick": "next",
+      "text": "Quand une autre communauté vous invite, ou quand on vous propose de gérer la vôtre, l'invitation arrive ici — l'onglet **« Membres »** pour devenir membre, **« Gestionnaire »** pour gérer — et la page d'accueil vous la signale.",
+      "title": "Vos invitations"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "hold": "navbar__sidebar",
+      "id": "navbar__btn--user-guide",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "En bas de la barre latérale, **« Guide utilisateur »** ouvre l'aide, à tout moment et depuis n'importe quelle page. Cliquez dessus.",
+      "title": "Besoin d'aide ?"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--hamburger-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--hamburger",
+      "text": "Touchez **l'icône du menu ☰** pour ouvrir la navigation."
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "navbar__btn--user-guide-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "navbar__btn--user-guide",
+      "text": "En bas du menu, **« Guide utilisateur »** ouvre l'aide, à tout moment et depuis n'importe quelle page. Touchez-le.",
+      "title": "Besoin d'aide ?"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__link--guide",
+      "target": "help-dialog__link--guide",
+      "targetClick": "next",
+      "text": "**« Ouvrir le guide d'utilisation en ligne »** ouvre le guide dans un nouvel onglet : chaque tâche de l'application y est décrite pas à pas, avec des captures d'écran, et peut aussi être rejouée en animation.",
+      "title": "Le guide en ligne",
+      "waitFor": "help-dialog__tours"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "help-dialog__tours",
+      "target": "help-dialog__tours",
+      "targetClick": "next",
+      "text": "**« Visites guidées »** liste les visites comme celle-ci : elles vous montrent une tâche directement dans l'application. Vous y trouverez celles de votre rôle dans votre communauté ; relancez-en une quand vous en avez besoin. Fermez cette fenêtre pour commencer.",
+      "title": "Les visites guidées"
+    }
+  ],
+  "title": "Bienvenue sur OptimCE"
+}

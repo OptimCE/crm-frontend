@@ -15,7 +15,7 @@ import {
   TourSelection,
 } from '../../tour-catalog';
 import { replayableTours } from '../../../onboarding/onboarding-eligibility';
-import { ONBOARDING_TOURS, OnboardingTourKey } from '../../../onboarding/onboarding-tours';
+import { OnboardingTourKey, tourIdOf } from '../../../onboarding/onboarding-tours';
 import { OnboardingCoordinator } from '../../../onboarding/services/onboarding-coordinator.service';
 import { OnboardingToursService } from '../../../onboarding/services/onboarding-tours.service';
 
@@ -57,8 +57,9 @@ export class HelpDialog implements OnInit {
     const manifest = this.state()?.manifest;
     const keys = this.firstStepKeys();
     if (!manifest || !keys) return [];
+    const hasCommunity = this.onboarding.hasCommunity();
     return keys.flatMap((key) => {
-      const entry = manifest.tours.find((t) => t.id === ONBOARDING_TOURS[key]);
+      const entry = manifest.tours.find((t) => t.id === tourIdOf(key, hasCommunity));
       if (!entry) return [];
       const title = tourTitle(entry, this.locale(), manifest.defaultLocale);
       return [{ id: entry.id, title, area: 'home' as const }];
@@ -115,7 +116,7 @@ export class HelpDialog implements OnInit {
 
   private async loadFirstSteps(): Promise<void> {
     const [available, roles] = await Promise.all([
-      this.onboardingTours.available(),
+      this.onboardingTours.available(this.onboarding.hasCommunity()),
       this.onboarding.activeRoleTours(),
     ]);
     this.firstStepKeys.set(replayableTours(roles, available));

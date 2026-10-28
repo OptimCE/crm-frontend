@@ -56,6 +56,29 @@ describe('OnboardingToursService', () => {
     expect([...available].sort()).toEqual(['community_admin', 'welcome']);
   });
 
+  it('should count welcome by the variant the user plays', async () => {
+    loadManifest.mockResolvedValue(manifestWith('onboarding-welcome'));
+    const service = TestBed.inject(OnboardingToursService);
+    expect([...(await service.available(false))]).toEqual(['welcome']);
+    expect([...(await service.available(true))]).toEqual([]);
+  });
+
+  it('should describe the community variant of welcome for a user with a community', async () => {
+    loadManifest.mockResolvedValue(
+      manifestWith('onboarding-welcome', 'onboarding-welcome-community'),
+    );
+    const pending = TestBed.inject(OnboardingToursService).describe('welcome', 'fr', true);
+    await vi.waitFor(() =>
+      http.expectOne('tours/onboarding-welcome-community.fr.json').flush({ steps: [{ id: 'a' }] }),
+    );
+    expect(await pending).toEqual({
+      key: 'welcome',
+      tourId: 'onboarding-welcome-community',
+      steps: 1,
+      version: 'sha384-onboarding-welcome-community-fr',
+    });
+  });
+
   it('should warn once, in dev mode, about the tours that do not ship', async () => {
     loadManifest.mockResolvedValue(manifestWith('onboarding-welcome'));
     const service = TestBed.inject(OnboardingToursService);

@@ -23,8 +23,8 @@
       "advance": {
         "on": "manual"
       },
-      "id": "needs-you__clear",
-      "target": "needs-you__clear",
+      "id": "needs-you",
+      "target": "needs-you",
       "targetClick": "next",
       "text": "The top band lists what needs an action from you, such as an invitation to accept. When it reads \"Nothing needs you right now. Everything is in order.\", there is nothing to do.",
       "title": "What needs you"

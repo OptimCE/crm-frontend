@@ -16,7 +16,13 @@ import { CommunityService } from '../../../shared/services/community.service';
 import { MeService } from '../../../shared/services/me.service';
 import { MemberStatus } from '../../../shared/types/member.types';
 import { OnboardingCheckpoint, pickOnboardingTour, roleToursFor } from '../onboarding-eligibility';
-import { OnboardingOutcome, OnboardingTourKey, RoleTourKey, tourKeyOf } from '../onboarding-tours';
+import {
+  OnboardingOutcome,
+  OnboardingTourKey,
+  RoleTourKey,
+  tourIdOf,
+  tourKeyOf,
+} from '../onboarding-tours';
 import { OnboardingApiService } from './onboarding-api.service';
 import { OnboardingTourInfo, OnboardingToursService } from './onboarding-tours.service';
 
@@ -56,7 +62,8 @@ const EVENT_OUTCOMES: Partial<Record<SteppyTourEvent['type'], EventTransition>> 
 /**
  * When to offer an onboarding tour, and what to record of the answer.
  *
- * Checkpoints: landing on /home (candidate `welcome`), and every activation of
+ * Checkpoints: landing on /home (candidate `welcome`, in the variant for a
+ * user with or without a community), and every activation of
  * a community — picked, created, joined, restored at start-up, or the user's
  * roles in it changed (candidates: the role tours of that community).
  * `pickOnboardingTour` decides; this service gathers its inputs, shows at most
@@ -214,10 +221,11 @@ export class OnboardingCoordinator {
     if (!this.canOffer(kind)) return;
     const sequence = ++this.sequence[kind];
     const orgId = this.userContext.activeCommunityId();
+    const hasCommunity = this.hasCommunity();
 
     const [states, available] = await Promise.all([
       firstValueFrom(this.api.getStates()).catch(() => null),
-      this.tours.available(),
+      this.tours.available(hasCommunity),
     ]);
     // Without the recorded answers, offering could repeat one: offer nothing.
     if (!states) return;
@@ -226,10 +234,7 @@ export class OnboardingCoordinator {
     let checkpoint: OnboardingCheckpoint;
     let community: string | null = null;
     if (kind === 'landing') {
-      checkpoint = {
-        kind,
-        hasCommunity: Object.keys(this.userContext.communitiesById()).length > 0,
-      };
+      checkpoint = { kind, hasCommunity };
     } else {
       const active = this.userContext.activeCommunity();
       if (!active || active.orgId !== orgId) return;
@@ -248,9 +253,10 @@ export class OnboardingCoordinator {
       recorded,
       available,
       welcomeHandledOnScreen: this.welcomeHandledPath === pathOf(this.router.url),
+      onLanding: pathOf(this.router.url) === '/home',
     });
     if (!key) return;
-    const tour = await this.tours.describe(key, this.locale.locale());
+    const tour = await this.tours.describe(key, this.locale.locale(), hasCommunity);
     if (!tour) return;
 
     // The offer belongs to the page it shows on: let a navigation in flight land
@@ -265,6 +271,11 @@ export class OnboardingCoordinator {
     const path = pathOf(this.router.url);
     if (kind === 'landing' && path !== '/home') return;
     this.offer.set({ key, kind: key === 'welcome' ? 'welcome' : 'role', tour, community, path });
+  }
+
+  /** The user belongs to a community: `welcome` then plays its community variant (`tourIdOf`). */
+  hasCommunity(): boolean {
+    return Object.keys(this.userContext.communitiesById()).length > 0;
   }
 
   /** The role tours of the active community (empty without one), for the Help dialog's replay list. */
@@ -296,16 +307,17 @@ export class OnboardingCoordinator {
 
   private onTourEvent(event: SteppyTourEvent): void {
     this.trackStall(event);
-    const key = tourKeyOf(event.detail.tourId ?? '');
+    const tourId = event.detail.tourId ?? '';
+    const key = tourKeyOf(tourId);
     if (!key) return;
     if (event.type === 'tour-step' || event.type === 'tour-dismiss') this.endLaunch();
     if (event.type === 'tour-error' && event.detail.fatal) {
       this.endLaunch();
-      void this.recordFromEvent(key, { to: 'abandoned', from: ['started'] });
+      void this.recordFromEvent(key, tourId, { to: 'abandoned', from: ['started'] });
       return;
     }
     const transition = EVENT_OUTCOMES[event.type];
-    if (transition) void this.recordFromEvent(key, transition);
+    if (transition) void this.recordFromEvent(key, tourId, transition);
   }
 
   /** Any tour, onboarding or not: is the one on screen stuck? */
@@ -323,13 +335,19 @@ export class OnboardingCoordinator {
    */
   private async recordFromEvent(
     key: OnboardingTourKey,
+    tourId: string,
     transition: EventTransition,
   ): Promise<void> {
     try {
       const states = await firstValueFrom(this.api.getStates());
       const current = states.find((s) => s.tour_key === key)?.outcome ?? null;
       if (!transition.from.includes(current)) return;
-      const info = await this.tours.describe(key, this.locale.locale());
+      // The version of the variant that played, not of the one the user would play now.
+      const info = await this.tours.describe(
+        key,
+        this.locale.locale(),
+        tourIdOf(key, true) === tourId,
+      );
       await this.record(key, transition.to, info?.version ?? null);
     } catch (error) {
       console.error('Onboarding: could not record the tour outcome', error);

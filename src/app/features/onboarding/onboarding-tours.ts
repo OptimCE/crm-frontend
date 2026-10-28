@@ -26,6 +26,19 @@ export const ONBOARDING_TOURS: Readonly<Record<OnboardingTourKey, string>> = {
 };
 
 /**
+ * The `welcome` tour for a user who already belongs to a community. Same
+ * `tour_key` (the answer is one per user, whichever was played), another
+ * scenario: `onboarding-welcome` is written for the empty community picker,
+ * whose steps a user with a community never sees.
+ */
+export const WELCOME_WITH_COMMUNITY_TOUR = 'onboarding-welcome-community';
+
+/** The Steppy tour that plays `key` for this user. */
+export function tourIdOf(key: OnboardingTourKey, hasCommunity: boolean): string {
+  return key === 'welcome' && hasCommunity ? WELCOME_WITH_COMMUNITY_TOUR : ONBOARDING_TOURS[key];
+}
+
+/**
  * When the user holds several roles in the activated community, the one offered
  * first. One tour per activation; the next one waits for the next activation.
  */
@@ -42,11 +55,12 @@ export const ONBOARDING_TOUR_KEYS: readonly OnboardingTourKey[] = [
 
 /** Whether a Steppy tour id is one of the onboarding tours. */
 export function isOnboardingTourId(tourId: string): boolean {
-  return Object.values(ONBOARDING_TOURS).includes(tourId);
+  return tourKeyOf(tourId) !== null;
 }
 
 /** The onboarding tour a Steppy tour id plays, or null. */
 export function tourKeyOf(tourId: string): OnboardingTourKey | null {
+  if (tourId === WELCOME_WITH_COMMUNITY_TOUR) return 'welcome';
   return ONBOARDING_TOUR_KEYS.find((key) => ONBOARDING_TOURS[key] === tourId) ?? null;
 }
 
