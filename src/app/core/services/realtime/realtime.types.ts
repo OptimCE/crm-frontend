@@ -17,6 +17,14 @@ export const REALTIME_TOPICS = {
   GENERATION_FINISHED: 'generation.finished',
   SIMULATION_FINISHED: 'simulation.finished',
   BILLING_RUN_FINISHED: 'billing_run.finished',
+  /** Espace administratif (managers): a core change was filed into a procedure. */
+  ADMIN_CHANGE_DETECTED: 'admin.change.detected',
+  /** Espace administratif: a procedure changed (filed into, opened by a job). */
+  ADMIN_DOSSIER_UPDATED: 'admin.dossier.updated',
+  /** Espace administratif: a piece's render ended; `hint.status` is `ready` or `failed`. */
+  ADMIN_DOCUMENT_READY: 'admin.document.ready',
+  /** Espace administratif: a deadline is due soon, or went past due. */
+  ADMIN_DEADLINE_DUE: 'admin.deadline.due',
 } as const;
 
 export type RealtimeTopic = (typeof REALTIME_TOPICS)[keyof typeof REALTIME_TOPICS];
