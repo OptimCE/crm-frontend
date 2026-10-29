@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
@@ -7,9 +7,12 @@ import { vi } from 'vitest';
 import en from '../../../../../assets/i18n/en.json';
 import fr from '../../../../../assets/i18n/fr.json';
 import { ApiResponse, ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
+import { ProcedureStatus } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
-import { dossierStatusLabelKey, dossierTypeLabelKey } from '../../administrative-document-format';
+import { modifDefinition, procedureItem } from '../../procedures/procedure-fixtures';
+import { procedureStatusLabelKey } from '../../procedures/procedure-format';
 import { DossierList } from './dossier-list';
 
 /** The string a dotted i18n key points at in a locale bundle. */
@@ -21,57 +24,43 @@ function lookup(bundle: unknown, key: string): string {
   return value;
 }
 
-const SORT_KEYS: Record<string, string> = {
-  created_at: 'ADMINISTRATIVE_DOCUMENT.SORT.CREATED_AT',
-  updated_at: 'ADMINISTRATIVE_DOCUMENT.SORT.UPDATED_AT',
-  submitted_at: 'ADMINISTRATIVE_DOCUMENT.SORT.SUBMITTED_AT',
-  status: 'ADMINISTRATIVE_DOCUMENT.SORT.STATUS',
-  dossier_type: 'ADMINISTRATIVE_DOCUMENT.SORT.TYPE',
-};
-
-describe('DossierList', () => {
+describe('DossierList (all procedures)', () => {
   let fixture: ComponentFixture<DossierList>;
   let component: DossierList;
   let translate: TranslateService;
-
-  function ariaLabelOf(testId: string): string | null {
-    return (
-      (fixture.nativeElement as HTMLElement)
-        .querySelector(`[data-testid="${testId}"] [role="combobox"]`)
-        ?.getAttribute('aria-label') ?? null
-    );
-  }
-
-  function labelsIn(bundle: unknown): Record<string, string[]> {
-    return {
-      status: component.statusOptions().map((o) => lookup(bundle, dossierStatusLabelKey(o.value))),
-      type: component.typeOptions().map((o) => lookup(bundle, dossierTypeLabelKey(o.value))),
-      sort: component.sortOptions().map((o) => lookup(bundle, SORT_KEYS[o.value])),
-    };
-  }
-
-  function shownLabels(): Record<string, string[]> {
-    return {
-      status: component.statusOptions().map((o) => o.label),
-      type: component.typeOptions().map((o) => o.label),
-      sort: component.sortOptions().map((o) => o.label),
-    };
-  }
+  let listProcedures: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    listProcedures = vi
+      .fn()
+      .mockReturnValue(
+        of(new ApiResponsePaginated([procedureItem()], new Pagination(1, 20, 1, 1))),
+      );
     await TestBed.configureTestingModule({
       imports: [DossierList, TranslateModule.forRoot()],
       providers: [
         provideRouter([]),
         {
-          provide: AdministrativeDocumentService,
+          provide: AdministrativeProcedureService,
           useValue: {
-            listDossiers: vi
+            listProcedures,
+            listDefinitions: vi
               .fn()
-              .mockReturnValue(of(new ApiResponsePaginated([], new Pagination(1, 20, 0, 0)))),
-            listSharingOperations: vi.fn().mockReturnValue(of(new ApiResponse([]))),
+              .mockReturnValue(
+                of(
+                  new ApiResponse([
+                    modifDefinition(),
+                    modifDefinition({ version: 2 }),
+                    modifDefinition({ code: 'ETAT_DE_DEPART', purpose: 'baseline' }),
+                  ]),
+                ),
+              ),
             invalidate: vi.fn(),
           },
+        },
+        {
+          provide: AdministrativeDocumentService,
+          useValue: { listSharingOperations: vi.fn().mockReturnValue(of(new ApiResponse([]))) },
         },
         { provide: SnackbarNotification, useValue: { openSnackBar: vi.fn() } },
       ],
@@ -86,31 +75,60 @@ describe('DossierList', () => {
 
     fixture = TestBed.createComponent(DossierList);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  // The labels used to be translated once, in ngOnInit: a language switch left
-  // the filters - and their aria-labels - in the old language until a reload.
-  describe('filter and sort select labels', () => {
-    it('should label every option in the current language', () => {
-      expect(shownLabels()).toEqual(labelsIn(fr));
+  it('lists every procedure, finished ones included: no bucket, no status by default', () => {
+    expect(listProcedures).toHaveBeenCalledWith({ page: 1, limit: 20 });
+    const row = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-testid="dossier-list__row--0"]',
+    );
+    expect(row?.textContent).toContain('Modification du partage');
+    expect(row?.textContent).toContain('Op Centre');
+    expect(row?.textContent).toContain('Brouillon');
+  });
+
+  it('filters by the catalogue’s type and the common status', () => {
+    component.typeFilter = 'PARTAGE_MODIF';
+    component.statusFilter = ProcedureStatus.SENT;
+    component.operationFilter = 3;
+    component.applyFilters();
+
+    expect(listProcedures).toHaveBeenLastCalledWith({
+      page: 1,
+      limit: 20,
+      code: 'PARTAGE_MODIF',
+      status: ProcedureStatus.SENT,
+      operation_id: 3,
+    });
+  });
+
+  it('offers each filing type once, labelled from the catalogue, never the starting state', () => {
+    expect(component.typeOptions()).toEqual([
+      { value: 'PARTAGE_MODIF', label: 'Modification du partage' },
+    ]);
+  });
+
+  it('opens a row on the procedure detail', () => {
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    component.openProcedure(procedureItem({ id: 33 }));
+    expect(navigate).toHaveBeenCalledWith(['/administrative-document/procedures', 33]);
+  });
+
+  // The labels used to be translated once: a language switch left the filters
+  // in the old language until a reload.
+  describe('status filter labels', () => {
+    const labelsIn = (bundle: unknown): string[] =>
+      component.statusOptions().map((o) => lookup(bundle, procedureStatusLabelKey(o.value)));
+
+    it('labels every common status in the current language', () => {
+      expect(component.statusOptions().map((o) => o.label)).toEqual(labelsIn(fr));
     });
 
-    it('should translate the options again when the language changes', () => {
+    it('translates them again when the language changes', () => {
       translate.use('en');
-
-      expect(shownLabels()).toEqual(labelsIn(en));
-    });
-
-    it('should name the default sort in the language now in use', async () => {
-      const key = SORT_KEYS['created_at'];
-      expect(ariaLabelOf('dossier-list__select--sort')).toBe(lookup(fr, key));
-
-      translate.use('en');
-      await fixture.whenStable();
-
-      expect(lookup(en, key)).not.toBe(lookup(fr, key));
-      expect(ariaLabelOf('dossier-list__select--sort')).toBe(lookup(en, key));
+      expect(component.statusOptions().map((o) => o.label)).toEqual(labelsIn(en));
     });
   });
 });

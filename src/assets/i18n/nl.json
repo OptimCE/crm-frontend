@@ -226,9 +226,9 @@
         "SEE_ALL": "Deadlines bekijken"
       },
       "DOSSIERS": {
-        "TITLE": "Administratieve dossiers",
-        "EMPTY": "Nog geen dossier. Maak uw eerste administratieve dossier aan.",
-        "SEE_ALL": "Dossiers bekijken"
+        "TITLE": "Administratieve procedures",
+        "EMPTY": "Geen lopende procedure.",
+        "SEE_ALL": "De procedures bekijken"
       },
       "INVOICES": {
         "TITLE": "Facturatie",
@@ -2258,6 +2258,16 @@
         },
         "deadline_rule": {
           "saved": "Termijnregel opgeslagen"
+        },
+        "regulatory_effect": {
+          "applied": "Regelgevende status in het CRM geschreven"
+        },
+        "baseline": {
+          "confirmed": "Beginsituatie bevestigd"
+        },
+        "change": {
+          "deferred": "Wijziging uitgesteld naar de volgende procedure",
+          "excluded": "Wijziging uitgesloten van de procedures"
         }
       },
       "billing": {
@@ -2402,9 +2412,10 @@
   },
   "ADMINISTRATIVE_DOCUMENT": {
     "TITLE": "Administratieve documenten",
-    "SUBTITLE": "Volg de dossiers bij de CWaPE en de netbeheerder: statussen, termijnen en elke ingediende versie.",
+    "SUBTITLE": "Uw procedures bij de netbeheerder en de CWaPE: wat te doen, en tegen wanneer.",
     "TABS": {
-      "DOSSIERS": "Dossiers",
+      "PROCEDURES": "Procedures",
+      "DOSSIERS": "Alle procedures",
       "DEADLINES": "Termijnen"
     },
     "DOSSIER_TYPE": {
@@ -2480,10 +2491,10 @@
       "DUE_DATE": "Vervaldatum"
     },
     "LIST": {
-      "INTRO": "Elk dossier wordt ingediend voor één deelverrichting.",
-      "CREATE": "Nieuw dossier",
-      "EMPTY": "Nog geen dossier. Maak er een aan om de opvolging te starten.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} dossiers)",
+      "INTRO": "Alle procedures van de gemeenschap, de nieuwste eerst, ook de afgeronde.",
+      "CREATE": "Nieuwe procedure",
+      "EMPTY": "Nog geen procedure.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} procedures)",
       "FILTERS": {
         "OPERATION": "Deelverrichting",
         "ALL_OPERATIONS": "Alle verrichtingen",
@@ -2621,8 +2632,8 @@
     },
     "DIALOGS": {
       "CREATE_DOSSIER": {
-        "TITLE": "Nieuw dossier",
-        "TYPE": "Type dossier",
+        "TITLE": "Nieuwe procedure",
+        "TYPE": "Soort procedure",
         "TYPE_PLACEHOLDER": "Kies een type",
         "OPERATION": "Deelverrichting",
         "OPERATION_PLACEHOLDER": "Kies een verrichting",
@@ -2630,12 +2641,12 @@
         "TITLE_FIELD": "Titel (optioneel)",
         "EXTERNAL_REF": "Dossierreferentie (optioneel)",
         "EXTERNAL_REF_HINT": "De referentie van de CWaPE of de netbeheerder, zodra u ze kent.",
-        "NO_OPERATIONS": "Deze gemeenschap heeft nog geen deelverrichting. Maak er een aan voordat u een dossier indient.",
+        "NO_OPERATIONS": "Deze gemeenschap heeft nog geen deelverrichting. Maak er een aan voordat u deze procedure opent.",
         "SUBMIT": "Aanmaken",
-        "SUCCESS": "Dossier aangemaakt",
+        "SUCCESS": "Procedure aangemaakt",
         "ERRORS": {
-          "TYPE_REQUIRED": "Kies een type dossier.",
-          "OPERATION_REQUIRED": "Kies de deelverrichting waarvoor dit dossier wordt ingediend."
+          "TYPE_REQUIRED": "Kies een soort procedure.",
+          "OPERATION_REQUIRED": "Kies de betrokken deelverrichting."
         }
       },
       "EDIT_DOSSIER": {
@@ -2798,6 +2809,267 @@
         "FILIERE": "Technologie",
         "PART_INJECTEE": "Geïnjecteerd aandeel",
         "DROITS_DE_VOTE": "Stemrechten"
+      }
+    },
+    "PROCEDURES": {
+      "REFRESH": "Vernieuwen",
+      "OVERDUE": "Te laat",
+      "CHOOSE_FILE": "Een bestand kiezen",
+      "REMOVE_FILE": "Het bestand verwijderen",
+      "CHANGES_COUNT": "{{n}} wijziging(en)",
+      "PIECES_PROGRESS": "documenten {{ready}}/{{required}}",
+      "DUE": {
+        "TODAY": "vandaag",
+        "IN_ONE": "binnen 1 werkdag",
+        "IN_MANY": "binnen {{n}} werkdagen",
+        "LATE_ONE": "1 werkdag te laat",
+        "LATE_MANY": "{{n}} werkdagen te laat",
+        "ON": "tegen {{date}}"
+      },
+      "ACTIONS": {
+        "COMPLETE_DOCUMENTS": "Documenten aanvullen",
+        "SEND": "Versturen",
+        "RECORD_RESPONSE": "Een antwoord toevoegen",
+        "CONFIRM_BASELINE": "De beginsituatie bevestigen",
+        "OPEN": "Openen"
+      },
+      "BUCKETS": {
+        "TODO": "Te doen",
+        "WAITING": "In afwachting",
+        "PLANNED": "Gepland",
+        "DONE": "Onlangs afgerond"
+      },
+      "STATUS": {
+        "1": "Concept",
+        "2": "Verstuurd",
+        "5": "Vervallen",
+        "6": "Klaar",
+        "7": "Van kracht",
+        "8": "Geweigerd",
+        "9": "Geannuleerd"
+      },
+      "PIECE_STATUS": {
+        "2": "Klaar",
+        "5": "Ingetrokken",
+        "6": "Ontbreekt",
+        "7": "Verouderd",
+        "8": "Ondertekend",
+        "9": "Geweigerd"
+      },
+      "PIECE_KIND": {
+        "1": "Gegenereerd",
+        "2": "Aan te leveren",
+        "3": "Ontvangen",
+        "UNKNOWN": "Document"
+      },
+      "CHANGE_STATUS": {
+        "1": "In afwachting",
+        "2": "Opgenomen",
+        "3": "Uitgesteld",
+        "4": "Uitgesloten",
+        "5": "Gecompenseerd",
+        "6": "Toegepast",
+        "7": "Geweigerd"
+      },
+      "CHANGE_KIND": {
+        "METER_ADDED": "Meter toegevoegd",
+        "METER_REMOVED": "Meter verwijderd",
+        "KEY_CHANGED": "Nieuwe sleutel",
+        "REPRESENTATIVE_CHANGED": "Nieuwe vertegenwoordiger",
+        "INSTALLATION_ADDED": "Installatie toegevoegd",
+        "INSTALLATION_REMOVED": "Installatie verwijderd",
+        "OPERATION_CLOSED": "Einde van de verrichting",
+        "OTHER": "Wijziging ({{code}})"
+      },
+      "PARTY": {
+        "1": "De gemeenschap",
+        "2": "De netbeheerder",
+        "3": "De regulator",
+        "UNKNOWN": "—"
+      },
+      "VARIANT": {
+        "SIMPLE": "Eenvoudig",
+        "AUTHORIZATION": "Machtiging (netbeheerder, dan CWaPE)",
+        "OTHER": "{{code}}"
+      },
+      "RECIPIENT": {
+        "GRD": "{{name}} (netbeheerder)",
+        "GRD_UNKNOWN": "Referentienetbeheerder te bepalen",
+        "REGULATOR": "De regulator"
+      },
+      "DELAY": {
+        "WORKING_DAYS": "{{label}}: {{n}} werkdagen",
+        "CALENDAR_DAYS": "{{label}}: {{n}} dagen",
+        "MONTHS": "{{label}}: {{n}} maanden"
+      },
+      "DASHBOARD": {
+        "UNSUPPORTED": "De regulator van deze gemeenschap ({{regulator}}) wordt nog niet ondersteund: er wordt geen enkele procedure voor gevolgd.",
+        "BASELINE_PENDING": "Bevestig eerst de beginsituatie: wat de netbeheerder al weet van uw meters en sleutels. Pas daarna worden wijzigingen gevolgd.",
+        "FILTER_GRD": "Netbeheerder",
+        "ALL_GRDS": "Alle netbeheerders",
+        "BANNER": "Volgende termijnen",
+        "EMPTY": "Voorlopig niets te doen: geen lopende procedure."
+      },
+      "LIST": {
+        "NEXT_ACTION": "Volgende stap",
+        "UPDATED_AT": "Bijgewerkt"
+      },
+      "AGENDA": {
+        "INTRO": "Alle termijnen van uw procedures, de dichtstbijzijnde eerst.",
+        "OVERDUE": "{{n}} te laat",
+        "FROM": "Van",
+        "TO": "Tot",
+        "OPEN_HINT": "Zonder periode: wat nog openstaat, ook wat te laat is.",
+        "RANGE_HINT": "In de periode: alle termijnen, ook nageleefde en geannuleerde.",
+        "WHAT": "Wat",
+        "PROCEDURE": "Procedure",
+        "WHO": "Wie",
+        "EMPTY": "Geen termijn."
+      },
+      "DETAIL": {
+        "NOT_FOUND": "Deze procedure bestaat niet of hoort bij een andere gemeenschap.",
+        "RECIPIENT": "Bestemmeling",
+        "OPERATION": "Verrichting",
+        "ROUTE": "Route",
+        "REFERENCE": "OptimCE-referentie",
+        "EXTERNAL_REF": "Externe referentie",
+        "REQUESTED_EFFECT": "Gevraagde ingangsdatum",
+        "EFFECT": "Ingangsdatum",
+        "EFFECT_ERROR": "Het CRM heeft het gevolg van deze procedure geweigerd: een EAN wordt op die data al in een andere verrichting gevolgd. De procedure blijft bij haar stap.",
+        "FROZEN": "Verstuurd op {{date}}: de procedure is vastgelegd. Nieuwe wijzigingen komen in een nieuw concept.",
+        "STEPS": "Stappen",
+        "DEADLINES": "Termijnen",
+        "THREAD": "Activiteit"
+      },
+      "CHANGES": {
+        "TITLE": "Opgenomen wijzigingen",
+        "DEFER": "Uitstellen naar de volgende procedure",
+        "DEFER_CONFIRM": "Deze wijziging verlaat deze procedure en gaat naar de volgende van hetzelfde type, zodra deze verstuurd of geannuleerd is.",
+        "DEFERRED": "Wijziging uitgesteld",
+        "EXCLUDE": "Uitsluiten",
+        "EXCLUDE_INTRO": "Deze wijziging wordt aan niemand gemeld. De reden wordt in het logboek bewaard.",
+        "REASON": "Reden",
+        "EXCLUDED": "Wijziging uitgesloten",
+        "EXCLUDED_BECAUSE": "uitgesloten: {{reason}}",
+        "EFFECTIVE": "ingang op {{date}}",
+        "ERRORS": {
+          "REASON_REQUIRED": "Geef de reden voor de uitsluiting op."
+        }
+      },
+      "PIECES": {
+        "TITLE": "Documenten",
+        "EMPTY": "Deze procedure vraagt geen documenten.",
+        "OPTIONAL": "Facultatief",
+        "VERSIONS": "{{n}} versie(s)"
+      },
+      "THREAD": {
+        "OPENED": "Geopend bij « {{to}} »",
+        "STEP": "« {{from}} » → « {{to}} »",
+        "OUTBOUND": "Verstuurd: {{type}}",
+        "INBOUND": "Ontvangen: {{type}}",
+        "VERSION": "{{piece}}: versie {{n}}"
+      },
+      "SEND": {
+        "TITLE": "De procedure versturen",
+        "INTRO": "Verstuur het bericht vanuit uw eigen mailbox (of het onlineformulier) met de documenten hieronder en markeer het daarna als verstuurd. Dankzij de referentie in het onderwerp kan het antwoord worden gekoppeld.",
+        "SUBJECT": "Onderwerp",
+        "BODY_FIELD": "Bericht",
+        "COPY": "Kopiëren",
+        "PIECES": "Bij te voegen documenten",
+        "NO_PIECES": "Geen document klaar om bij te voegen.",
+        "SENT_ON": "Verstuurd op",
+        "CHANNEL_FIELD": "Kanaal",
+        "CHANNEL": {
+          "EMAIL": "E-mail",
+          "ONLINE_FORM": "Onlineformulier",
+          "POST": "Post"
+        },
+        "FILE": "De verstuurde e-mail (.eml) of de ontvangstbevestiging van het formulier (facultatief)",
+        "FILE_HINT": "Ongewijzigd bewaard als bewijs van verzending.",
+        "SUBMIT": "Markeren als verstuurd",
+        "DONE": "Procedure gemarkeerd als verstuurd",
+        "BODY": "Goedendag,\n\nIn bijlage vindt u onze aanvraag: {{procedure}} (verrichting: {{operation}}).\nGelieve de referentie {{reference}} in uw antwoord te vermelden.\n\nBijlagen:\n{{pieces}}\n\nMet vriendelijke groeten,",
+        "ERRORS": {
+          "DATE_REQUIRED": "Geef de verzenddatum op."
+        }
+      },
+      "RESPONSE": {
+        "TITLE": "Een antwoord toevoegen",
+        "TYPE": "Soort antwoord",
+        "TYPE_PLACEHOLDER": "Kies een soort",
+        "DATE": "Datum",
+        "SUBJECT": "Onderwerp (facultatief)",
+        "BODY": "Tekst van het bericht (facultatief)",
+        "EXTERNAL_REF": "Referentie CWaPE of netbeheerder (facultatief)",
+        "FILE": "Bestand (.eml, .msg, pdf)",
+        "PREVIEWING": "Gevolgen berekenen…",
+        "WILL_MOVE": "De procedure gaat naar de stap « {{step}} ».",
+        "NO_MOVE": "Het wordt aan de activiteit toegevoegd, zonder van stap te veranderen.",
+        "WILL_START": "Nieuwe termijn: {{label}} ({{party}}), tegen {{date}}.",
+        "WILL_MEET": "Termijn nageleefd: {{label}}.",
+        "NOT_NOW": "Dit antwoord past niet bij de huidige stap van de procedure.",
+        "SUBMIT": "Opslaan",
+        "DONE": "Antwoord opgeslagen",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Kies de soort antwoord en de datum."
+        }
+      },
+      "TRANSITION": {
+        "OPEN": "Stap wijzigen",
+        "TITLE": "Stap wijzigen",
+        "INTRO": "Voor wat geen antwoord vastlegt: een correctie, informatie die telefonisch is ontvangen. De reden wordt in het logboek bewaard.",
+        "TO_STEP": "Nieuwe stap",
+        "TO_STEP_PLACEHOLDER": "Kies een stap",
+        "AUTOMATIC": "{{step}} (normaal automatisch)",
+        "ON": "Datum",
+        "REASON": "Reden",
+        "SUBMIT": "Stap wijzigen",
+        "DONE": "Stap gewijzigd",
+        "ERRORS": {
+          "REQUIRED": "Kies de stap en geef de reden op."
+        }
+      },
+      "CREATE": {
+        "REQUESTED_EFFECT": "Gewenste ingangsdatum (facultatief)",
+        "REQUESTED_EFFECT_HINT": "Indicatief: de werkelijke ingangsdatum volgt uit het antwoord van de netbeheerder."
+      },
+      "BASELINE": {
+        "TITLE": "Beginsituatie",
+        "INTRO": "De module is net geactiveerd. Vertel ons voor elke meter en elke sleutel wat de netbeheerder er al van weet: wijzigingen worden pas vanaf dan gevolgd, en niets van daarvoor wordt opnieuw verwerkt.",
+        "REACTIVATION": "De module werd opnieuw geactiveerd: alleen de meters en sleutels die intussen veranderd zijn, worden getoond.",
+        "ALREADY_CONFIRMED": "De beginsituatie is bevestigd.",
+        "EMPTY": "Geen meter en geen sleutel te bevestigen.",
+        "HELP": {
+          "ACTIVE": "Actief: aan de netbeheerder gemeld en van kracht.",
+          "NOT_NOTIFIED": "Nog niet gemeld: het komt in een concept dat nog verstuurd moet worden.",
+          "IN_PROGRESS": "Lopend: al verstuurd, het antwoord wordt verwacht (geef de verzenddatum op).",
+          "ENDED": "Beëindigd: het maakt geen deel meer uit van de verrichting."
+        },
+        "CHOICE": {
+          "ACTIVE": "Actief",
+          "NOT_NOTIFIED": "Nog niet gemeld",
+          "IN_PROGRESS": "Lopend",
+          "ENDED": "Beëindigd"
+        },
+        "CHANGE": {
+          "ADDED": "Sindsdien toegevoegd",
+          "REMOVED": "Sindsdien verwijderd"
+        },
+        "CHOICE_FIELD": "Toestand",
+        "SINCE": "sinds {{date}}",
+        "ACTIVE_SINCE": "Actief sinds",
+        "ENDED_ON": "Beëindigd op",
+        "SENT_ON": "Verstuurd op",
+        "BULK": "Op alle regels toepassen",
+        "BULK_PLACEHOLDER": "Kies een toestand",
+        "BULK_APPLY": "Toepassen",
+        "SUBMIT": "De beginsituatie bevestigen",
+        "CONFIRMED": "Beginsituatie bevestigd",
+        "TO_DASHBOARD": "Terug naar de procedures",
+        "ERRORS": {
+          "SENT_DATE": "Geef de verzenddatum op voor de « Lopend »-elementen: {{refs}}.",
+          "CONFLICT": "Deze EAN's worden op die data al in een andere verrichting gevolgd; er werd niets bevestigd: {{refs}}."
+        }
       }
     }
   },

@@ -398,8 +398,13 @@ export interface TemplateOut {
 
 export interface MyFilingDossierOut {
   id: number;
-  dossier_type: DossierType;
-  status: DossierStatus;
+  /** Null for a procedure of the engine, which names its type by `family`. */
+  dossier_type: DossierType | null;
+  /** The engine's common status (ProcedureStatus) for a procedure. */
+  status: number;
+  family: string | null;
+  /** The regulator's step code. */
+  step: string | null;
   title: string | null;
   external_ref: string | null;
   submitted_at: string | null;

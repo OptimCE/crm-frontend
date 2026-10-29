@@ -7,9 +7,9 @@
   (retry)="load()"
 >
   <ul class="flex flex-col gap-2 m-0 p-0 list-none">
-    @for (entry of nonEmpty(); track entry.status) {
+    @for (entry of nonEmpty(); track entry.bucket) {
       <li class="flex items-center justify-between gap-2 text-sm text-surface-700">
-        <span class="truncate">{{ dossierStatusLabelKey(entry.status) | translate }}</span>
+        <span class="truncate">{{ bucketLabelKey(entry.bucket) | translate }}</span>
         <span class="font-semibold text-surface-800 shrink-0">{{ entry.count }}</span>
       </li>
     }

@@ -1,0 +1,217 @@
+<div class="mx-auto w-full max-w-5xl flex flex-col gap-5">
+  <a
+    routerLink="/administrative-document"
+    class="text-sm text-primary-700 no-underline hover:underline self-start"
+    data-testid="baseline-confirm__link--back"
+  >
+    <i class="pi pi-arrow-left text-xs"></i>
+    {{ 'ADMINISTRATIVE_DOCUMENT.TITLE' | translate }}
+  </a>
+
+  <header class="flex flex-col gap-1">
+    <h1 class="text-xl font-semibold text-surface-900 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.TITLE' | translate }}
+    </h1>
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.INTRO' | translate }}
+    </p>
+  </header>
+
+  @if (loading() && !baseline()) {
+    <p class="text-sm text-surface-500 m-0" role="status">{{ 'COMMON.LOADING' | translate }}</p>
+  } @else if (baseline(); as b) {
+    @if (b.status === 'not_supported') {
+      <p-message severity="warn" data-testid="baseline-confirm__message--unsupported">
+        {{
+          'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DASHBOARD.UNSUPPORTED'
+            | translate: { regulator: ('REGULATORS.' + b.regulator | translate) }
+        }}
+      </p-message>
+    } @else {
+      @if (b.status === 'confirmed') {
+        <p-message severity="success" data-testid="baseline-confirm__message--confirmed">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.ALREADY_CONFIRMED' | translate }}
+        </p-message>
+      } @else if (b.kind === 'reactivation') {
+        <p-message severity="info">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.REACTIVATION' | translate }}
+        </p-message>
+      }
+
+      @if (rows().length === 0) {
+        <p class="text-sm text-surface-500 m-0" data-testid="baseline-confirm__empty">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.EMPTY' | translate }}
+        </p>
+      } @else {
+        @if (pending()) {
+          <!-- Choices explained once, above the lines that use them -->
+          <ul class="text-sm text-surface-600 m-0 pl-5 flex flex-col gap-1">
+            <li>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.ACTIVE' | translate }}</li>
+            <li>
+              {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.NOT_NOTIFIED' | translate }}
+            </li>
+            <li>
+              {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.IN_PROGRESS' | translate }}
+            </li>
+            <li>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.ENDED' | translate }}</li>
+          </ul>
+
+          <div class="flex flex-col sm:flex-row sm:items-end gap-2">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm font-medium" for="baseline-bulk">{{
+                'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.BULK' | translate
+              }}</label>
+              <p-select
+                inputId="baseline-bulk"
+                [options]="bulkOptions()"
+                [(ngModel)]="bulkChoice"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+                class="w-full sm:w-64"
+                [placeholder]="
+                  'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.BULK_PLACEHOLDER' | translate
+                "
+                data-testid="baseline-confirm__select--bulk"
+              />
+            </div>
+            <p-button
+              [outlined]="true"
+              severity="secondary"
+              [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.BULK_APPLY' | translate"
+              [disabled]="!bulkChoice"
+              (onClick)="applyBulk()"
+              data-testid="baseline-confirm__btn--bulk"
+            />
+          </div>
+        }
+
+        @for (group of groups(); track group.id) {
+          <section
+            class="flex flex-col gap-2"
+            [attr.data-testid]="'baseline-confirm__operation--' + group.id"
+          >
+            <h2 class="text-base font-semibold text-surface-800 m-0">{{ group.name }}</h2>
+            <ul class="list-none m-0 p-0 flex flex-col gap-2">
+              @for (row of group.rows; track row.item.key) {
+                <li
+                  class="rounded-lg border p-3 flex flex-col lg:flex-row lg:items-center gap-3"
+                  [class]="isConflict(row) ? 'border-red-300 bg-red-50' : 'border-surface-200'"
+                  [attr.data-testid]="'baseline-confirm__row--' + row.item.key"
+                >
+                  <div class="flex-1 min-w-0 flex flex-col gap-1">
+                    <span class="flex items-center gap-2 flex-wrap text-sm">
+                      <i
+                        [class]="row.item.subject_type === 'key' ? 'pi pi-key' : 'pi pi-bolt'"
+                        class="text-surface-500 text-xs"
+                      ></i>
+                      <span
+                        class="text-surface-800"
+                        [class.font-mono]="row.item.subject_type === 'meter'"
+                        >{{ subject(row) }}</span
+                      >
+                      @if (row.item.change !== 'present') {
+                        <p-tag
+                          [severity]="row.item.change === 'added' ? 'info' : 'warn'"
+                          [value]="
+                            'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.CHANGE.' +
+                              row.item.change.toUpperCase() | translate
+                          "
+                        />
+                      }
+                    </span>
+                    <span class="text-xs text-surface-500">{{ context(row) }}</span>
+                  </div>
+
+                  @if (pending()) {
+                    <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+                      <p-select
+                        [options]="row.options"
+                        [ngModel]="row.choice"
+                        (ngModelChange)="setChoice(row, $event)"
+                        optionLabel="label"
+                        optionValue="value"
+                        appendTo="body"
+                        class="w-full sm:w-56"
+                        [attr.aria-label]="
+                          'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.CHOICE_FIELD' | translate
+                        "
+                        [attr.data-testid]="'baseline-confirm__select--choice-' + row.item.key"
+                      />
+                      @if (needsSentDate(row)) {
+                        <p-datepicker
+                          [(ngModel)]="row.sentDate"
+                          dateFormat="dd/mm/yy"
+                          appendTo="body"
+                          [fluid]="true"
+                          [showIcon]="true"
+                          [maxDate]="today"
+                          [placeholder]="
+                            'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.SENT_ON' | translate
+                          "
+                          [attr.data-testid]="'baseline-confirm__date--sent-' + row.item.key"
+                        />
+                      } @else if (takesEffectiveDate(row)) {
+                        <p-datepicker
+                          [(ngModel)]="row.effectiveDate"
+                          dateFormat="dd/mm/yy"
+                          appendTo="body"
+                          [fluid]="true"
+                          [showIcon]="true"
+                          [maxDate]="today"
+                          [placeholder]="
+                            (row.choice === 'ended'
+                              ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.ENDED_ON'
+                              : 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.ACTIVE_SINCE'
+                            ) | translate
+                          "
+                          [attr.data-testid]="'baseline-confirm__date--effective-' + row.item.key"
+                        />
+                      }
+                    </div>
+                  } @else {
+                    <span class="text-sm text-surface-700 shrink-0">
+                      {{ choiceLabelKey(row.item.chosen) | translate }}
+                      @if (row.item.effective_date) {
+                        &middot; {{ formatApiDate(row.item.effective_date) }}
+                      }
+                      @if (row.item.sent_date) {
+                        &middot; {{ formatApiDate(row.item.sent_date) }}
+                      }
+                    </span>
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      }
+
+      @if (formError()) {
+        <p class="text-red-600 text-sm m-0" data-testid="baseline-confirm__error">
+          <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+        </p>
+      }
+
+      <div class="flex justify-end gap-2">
+        @if (pending()) {
+          <p-button
+            icon="pi pi-check"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.SUBMIT' | translate"
+            [loading]="submitting()"
+            (onClick)="confirm()"
+            data-testid="baseline-confirm__btn--confirm"
+          />
+        } @else {
+          <p-button
+            icon="pi pi-arrow-left"
+            [outlined]="true"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.TO_DASHBOARD' | translate"
+            routerLink="/administrative-document"
+            data-testid="baseline-confirm__btn--dashboard"
+          />
+        }
+      </div>
+    }
+  }
+</div>

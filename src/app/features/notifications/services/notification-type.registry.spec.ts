@@ -52,11 +52,11 @@ describe('presentationFor', () => {
 describe('routeFor', () => {
   it('deep-links a dossier notification from its data', () => {
     expect(routeFor(notification('admin_dossier.acknowledged', { dossier_id: 42 }))).toBe(
-      '/administrative-document/dossiers/42',
+      '/administrative-document/procedures/42',
     );
     // JSONB ids can arrive as strings.
     expect(routeFor(notification('admin_deadline.missed', { dossier_id: '42' }))).toBe(
-      '/administrative-document/dossiers/42',
+      '/administrative-document/procedures/42',
     );
   });
 

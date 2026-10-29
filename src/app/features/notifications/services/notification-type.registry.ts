@@ -67,12 +67,13 @@ function idFrom(data: NotificationData, key: string): string | undefined {
 }
 
 /**
- * Dossier deep link, falling back to the hub when the producer omitted
+ * Procedure deep link (a July dossier became the procedure with its id),
+ * falling back to the hub when the producer omitted
  * `dossier_id` — landing on the list beats a click that does nothing.
  */
 function dossierRoute(data: NotificationData): string {
   const id = idFrom(data, 'dossier_id');
-  return id ? `/administrative-document/dossiers/${id}` : '/administrative-document';
+  return id ? `/administrative-document/procedures/${id}` : '/administrative-document';
 }
 
 const REGISTRY: Record<string, NotificationPresentation> = {

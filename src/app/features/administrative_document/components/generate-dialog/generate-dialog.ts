@@ -9,11 +9,7 @@ import { Message } from 'primeng/message';
 import { Tooltip } from 'primeng/tooltip';
 
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import {
-  DocumentOut,
-  PrefillData,
-  PrefillWarning,
-} from '../../../../shared/dtos/administrative-document.dtos';
+import { PrefillData, PrefillWarning } from '../../../../shared/dtos/administrative-document.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
@@ -39,11 +35,12 @@ import {
   warningLink,
   warningParams,
 } from '../../administrative-document-warnings';
-import { canUploadVersion } from '../../administrative-document-transitions';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
-interface GenerateDialogData {
-  document: DocumentOut;
+/** A piece of a procedure. Whether it may be generated is the caller's to check (canGenerate). */
+export interface GenerateDialogData {
+  documentId: number;
+  title: string;
 }
 
 /**
@@ -90,7 +87,7 @@ export class GenerateDialog implements OnInit {
   readonly dirty = signal<boolean>(false);
   readonly form = signal<PrefillForm>({ fields: [], tables: [] });
 
-  readonly documentTitle = this.dialogData?.document.title ?? '';
+  readonly documentTitle = this.dialogData?.title ?? '';
 
   readonly labelKey = prefillLabelKey;
   readonly tableLabelKey = prefillTableLabelKey;
@@ -102,12 +99,12 @@ export class GenerateDialog implements OnInit {
   readonly warningCount = computed(() => this.warnings().length);
 
   ngOnInit(): void {
-    const document = this.dialogData?.document;
-    if (!document) {
+    const id = this.dialogData?.documentId;
+    if (!id) {
       this.loading.set(false);
       return;
     }
-    this.loadPrefill(document.id);
+    this.loadPrefill(id);
   }
 
   /**
@@ -122,9 +119,9 @@ export class GenerateDialog implements OnInit {
    * serving a stale participant list would mean filing stale data.
    */
   reload(): void {
-    const document = this.dialogData?.document;
-    if (!document || this.dirty()) return;
-    this.loadPrefill(document.id);
+    const id = this.dialogData?.documentId;
+    if (!id || this.dirty()) return;
+    this.loadPrefill(id);
   }
 
   private loadPrefill(documentId: number): void {
@@ -188,23 +185,14 @@ export class GenerateDialog implements OnInit {
 
   submit(): void {
     this.formError.set(null);
-    const document = this.dialogData?.document;
-    if (!document) return;
+    const id = this.dialogData?.documentId;
+    if (!id) return;
 
-    // The caller hides the action, but a document can change status while this
-    // dialog is open — re-check rather than let the request 409.
-    if (!canUploadVersion(document.status)) {
-      this.formError.set(
-        this.translate.instant(
-          'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.ERRORS.NOT_ALLOWED',
-        ) as string,
-      );
-      return;
-    }
-
+    // The procedure may have been sent while this dialog was open: the annex's
+    // 409 (GENERATION_NOT_ALLOWED) then lands in the form, below.
     this.submitting.set(true);
     this.service
-      .generateDocument(document.id, { data: toPayload(this.form(), this.original) })
+      .generateDocument(id, { data: toPayload(this.form(), this.original) })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {

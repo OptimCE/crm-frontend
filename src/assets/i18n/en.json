@@ -226,9 +226,9 @@
         "SEE_ALL": "See deadlines"
       },
       "DOSSIERS": {
-        "TITLE": "Administrative dossiers",
-        "EMPTY": "No dossier yet. Create your first administrative dossier.",
-        "SEE_ALL": "See dossiers"
+        "TITLE": "Administrative procedures",
+        "EMPTY": "No procedure in progress.",
+        "SEE_ALL": "See the procedures"
       },
       "INVOICES": {
         "TITLE": "Billing",
@@ -2258,6 +2258,16 @@
         },
         "deadline_rule": {
           "saved": "Deadline rule saved"
+        },
+        "regulatory_effect": {
+          "applied": "Regulatory status written to the CRM"
+        },
+        "baseline": {
+          "confirmed": "Starting state confirmed"
+        },
+        "change": {
+          "deferred": "Change deferred to the next procedure",
+          "excluded": "Change excluded from the procedures"
         }
       },
       "billing": {
@@ -2402,9 +2412,10 @@
   },
   "ADMINISTRATIVE_DOCUMENT": {
     "TITLE": "Administrative documents",
-    "SUBTITLE": "Track the dossiers filed with the CWaPE and the grid operator: statuses, deadlines and every version sent.",
+    "SUBTITLE": "Your procedures with the DSO and the CWaPE: what to do, and by when.",
     "TABS": {
-      "DOSSIERS": "Dossiers",
+      "PROCEDURES": "Procedures",
+      "DOSSIERS": "All procedures",
       "DEADLINES": "Deadlines"
     },
     "DOSSIER_TYPE": {
@@ -2480,10 +2491,10 @@
       "DUE_DATE": "Due date"
     },
     "LIST": {
-      "INTRO": "Every dossier is filed for one sharing operation.",
-      "CREATE": "New dossier",
-      "EMPTY": "No dossier yet. Create one to start tracking a filing.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} dossiers)",
+      "INTRO": "Every procedure of the community, newest first, finished ones included.",
+      "CREATE": "New procedure",
+      "EMPTY": "No procedure yet.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} procedures)",
       "FILTERS": {
         "OPERATION": "Sharing operation",
         "ALL_OPERATIONS": "All operations",
@@ -2621,8 +2632,8 @@
     },
     "DIALOGS": {
       "CREATE_DOSSIER": {
-        "TITLE": "New dossier",
-        "TYPE": "Dossier type",
+        "TITLE": "New procedure",
+        "TYPE": "Type of procedure",
         "TYPE_PLACEHOLDER": "Select a type",
         "OPERATION": "Sharing operation",
         "OPERATION_PLACEHOLDER": "Select an operation",
@@ -2630,12 +2641,12 @@
         "TITLE_FIELD": "Title (optional)",
         "EXTERNAL_REF": "File reference (optional)",
         "EXTERNAL_REF_HINT": "The CWaPE or DSO reference, once you have it.",
-        "NO_OPERATIONS": "This community has no sharing operation yet. Create one before filing a dossier.",
+        "NO_OPERATIONS": "This community has no sharing operation yet. Create one before opening this procedure.",
         "SUBMIT": "Create",
-        "SUCCESS": "Dossier created",
+        "SUCCESS": "Procedure created",
         "ERRORS": {
-          "TYPE_REQUIRED": "Select a dossier type.",
-          "OPERATION_REQUIRED": "Select the sharing operation this dossier is filed for."
+          "TYPE_REQUIRED": "Select a type of procedure.",
+          "OPERATION_REQUIRED": "Select the sharing operation concerned."
         }
       },
       "EDIT_DOSSIER": {
@@ -2798,6 +2809,267 @@
         "FILIERE": "Technology",
         "PART_INJECTEE": "Injected share",
         "DROITS_DE_VOTE": "Voting rights"
+      }
+    },
+    "PROCEDURES": {
+      "REFRESH": "Refresh",
+      "OVERDUE": "Overdue",
+      "CHOOSE_FILE": "Choose a file",
+      "REMOVE_FILE": "Remove the file",
+      "CHANGES_COUNT": "{{n}} change(s)",
+      "PIECES_PROGRESS": "documents {{ready}}/{{required}}",
+      "DUE": {
+        "TODAY": "today",
+        "IN_ONE": "in 1 working day",
+        "IN_MANY": "in {{n}} working days",
+        "LATE_ONE": "1 working day late",
+        "LATE_MANY": "{{n}} working days late",
+        "ON": "by {{date}}"
+      },
+      "ACTIONS": {
+        "COMPLETE_DOCUMENTS": "Complete the documents",
+        "SEND": "Send",
+        "RECORD_RESPONSE": "Add a response",
+        "CONFIRM_BASELINE": "Confirm the starting state",
+        "OPEN": "Open"
+      },
+      "BUCKETS": {
+        "TODO": "To do",
+        "WAITING": "Waiting",
+        "PLANNED": "Planned",
+        "DONE": "Recently done"
+      },
+      "STATUS": {
+        "1": "Draft",
+        "2": "Sent",
+        "5": "Lapsed",
+        "6": "Ready",
+        "7": "In force",
+        "8": "Refused",
+        "9": "Cancelled"
+      },
+      "PIECE_STATUS": {
+        "2": "Ready",
+        "5": "Withdrawn",
+        "6": "Missing",
+        "7": "Out of date",
+        "8": "Signed",
+        "9": "Rejected"
+      },
+      "PIECE_KIND": {
+        "1": "Generated",
+        "2": "To be supplied",
+        "3": "Received",
+        "UNKNOWN": "Document"
+      },
+      "CHANGE_STATUS": {
+        "1": "Pending",
+        "2": "Included",
+        "3": "Deferred",
+        "4": "Excluded",
+        "5": "Cancelled out",
+        "6": "Applied",
+        "7": "Refused"
+      },
+      "CHANGE_KIND": {
+        "METER_ADDED": "Meter added",
+        "METER_REMOVED": "Meter removed",
+        "KEY_CHANGED": "New key",
+        "REPRESENTATIVE_CHANGED": "New representative",
+        "INSTALLATION_ADDED": "Installation added",
+        "INSTALLATION_REMOVED": "Installation removed",
+        "OPERATION_CLOSED": "Operation ended",
+        "OTHER": "Change ({{code}})"
+      },
+      "PARTY": {
+        "1": "The community",
+        "2": "The DSO",
+        "3": "The regulator",
+        "UNKNOWN": "—"
+      },
+      "VARIANT": {
+        "SIMPLE": "Simple",
+        "AUTHORIZATION": "Authorisation (DSO, then CWaPE)",
+        "OTHER": "{{code}}"
+      },
+      "RECIPIENT": {
+        "GRD": "{{name}} (DSO)",
+        "GRD_UNKNOWN": "Reference DSO to be specified",
+        "REGULATOR": "The regulator"
+      },
+      "DELAY": {
+        "WORKING_DAYS": "{{label}}: {{n}} working days",
+        "CALENDAR_DAYS": "{{label}}: {{n}} days",
+        "MONTHS": "{{label}}: {{n}} months"
+      },
+      "DASHBOARD": {
+        "UNSUPPORTED": "This community's regulator ({{regulator}}) is not supported yet: no procedure is tracked for it.",
+        "BASELINE_PENDING": "Before changes are tracked, confirm the starting state: what the DSO already knows of your meters and keys.",
+        "FILTER_GRD": "DSO",
+        "ALL_GRDS": "All DSOs",
+        "BANNER": "Next deadlines",
+        "EMPTY": "Nothing to do for now: no procedure in progress."
+      },
+      "LIST": {
+        "NEXT_ACTION": "Next action",
+        "UPDATED_AT": "Updated"
+      },
+      "AGENDA": {
+        "INTRO": "Every deadline of your procedures, soonest first.",
+        "OVERDUE": "{{n}} overdue",
+        "FROM": "From",
+        "TO": "To",
+        "OPEN_HINT": "Without a period: what is still owed, late ones included.",
+        "RANGE_HINT": "Over the period: every deadline, met and cancelled ones included.",
+        "WHAT": "What",
+        "PROCEDURE": "Procedure",
+        "WHO": "Who",
+        "EMPTY": "No deadline."
+      },
+      "DETAIL": {
+        "NOT_FOUND": "This procedure does not exist, or belongs to another community.",
+        "RECIPIENT": "Recipient",
+        "OPERATION": "Operation",
+        "ROUTE": "Route",
+        "REFERENCE": "OptimCE reference",
+        "EXTERNAL_REF": "External reference",
+        "REQUESTED_EFFECT": "Requested effective date",
+        "EFFECT": "Effective date",
+        "EFFECT_ERROR": "The CRM refused this procedure's effect: an EAN is already tracked in another operation on those dates. The procedure stays at its step.",
+        "FROZEN": "Sent on {{date}}: the procedure is frozen. New changes go into a new draft.",
+        "STEPS": "Steps",
+        "DEADLINES": "Deadlines",
+        "THREAD": "Activity"
+      },
+      "CHANGES": {
+        "TITLE": "Changes included",
+        "DEFER": "Defer to the next procedure",
+        "DEFER_CONFIRM": "This change leaves this procedure and joins the next one of the same type, once this one is sent or cancelled.",
+        "DEFERRED": "Change deferred",
+        "EXCLUDE": "Exclude",
+        "EXCLUDE_INTRO": "This change will be notified to no one. The reason is kept in the log.",
+        "REASON": "Reason",
+        "EXCLUDED": "Change excluded",
+        "EXCLUDED_BECAUSE": "excluded: {{reason}}",
+        "EFFECTIVE": "effective {{date}}",
+        "ERRORS": {
+          "REASON_REQUIRED": "Give the reason for the exclusion."
+        }
+      },
+      "PIECES": {
+        "TITLE": "Documents",
+        "EMPTY": "This procedure requires no document.",
+        "OPTIONAL": "Optional",
+        "VERSIONS": "{{n}} version(s)"
+      },
+      "THREAD": {
+        "OPENED": "Opened at « {{to}} »",
+        "STEP": "« {{from}} » → « {{to}} »",
+        "OUTBOUND": "Sent: {{type}}",
+        "INBOUND": "Received: {{type}}",
+        "VERSION": "{{piece}}: version {{n}}"
+      },
+      "SEND": {
+        "TITLE": "Send the procedure",
+        "INTRO": "Send the message from your own mailbox (or the online form) with the documents below, then mark it as sent. The reference in the subject ties the answer back to it.",
+        "SUBJECT": "Subject",
+        "BODY_FIELD": "Message",
+        "COPY": "Copy",
+        "PIECES": "Documents to attach",
+        "NO_PIECES": "No document ready to attach.",
+        "SENT_ON": "Sent on",
+        "CHANNEL_FIELD": "Channel",
+        "CHANNEL": {
+          "EMAIL": "Email",
+          "ONLINE_FORM": "Online form",
+          "POST": "Post"
+        },
+        "FILE": "The email sent (.eml) or the form's receipt (optional)",
+        "FILE_HINT": "Kept as is, as proof of the sending.",
+        "SUBMIT": "Mark as sent",
+        "DONE": "Procedure marked as sent",
+        "BODY": "Hello,\n\nPlease find attached our request: {{procedure}} (operation: {{operation}}).\nPlease quote the reference {{reference}} in your answer.\n\nAttached documents:\n{{pieces}}\n\nKind regards,",
+        "ERRORS": {
+          "DATE_REQUIRED": "Give the date it was sent."
+        }
+      },
+      "RESPONSE": {
+        "TITLE": "Add a response",
+        "TYPE": "Type of response",
+        "TYPE_PLACEHOLDER": "Select a type",
+        "DATE": "Date",
+        "SUBJECT": "Subject (optional)",
+        "BODY": "Text of the message (optional)",
+        "EXTERNAL_REF": "CWaPE or DSO reference (optional)",
+        "FILE": "File (.eml, .msg, PDF)",
+        "PREVIEWING": "Working out what follows…",
+        "WILL_MOVE": "The procedure will move to « {{step}} ».",
+        "NO_MOVE": "It is added to the activity, with no change of step.",
+        "WILL_START": "New deadline: {{label}} ({{party}}), by {{date}}.",
+        "WILL_MEET": "Deadline met: {{label}}.",
+        "NOT_NOW": "This response does not fit the procedure's current step.",
+        "SUBMIT": "Record",
+        "DONE": "Response recorded",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Choose the type of response and its date."
+        }
+      },
+      "TRANSITION": {
+        "OPEN": "Change step",
+        "TITLE": "Change step",
+        "INTRO": "For what no response records: a correction, news received by phone. The reason is kept in the log.",
+        "TO_STEP": "New step",
+        "TO_STEP_PLACEHOLDER": "Select a step",
+        "AUTOMATIC": "{{step}} (normally automatic)",
+        "ON": "Date",
+        "REASON": "Reason",
+        "SUBMIT": "Change step",
+        "DONE": "Step changed",
+        "ERRORS": {
+          "REQUIRED": "Choose the step and give the reason."
+        }
+      },
+      "CREATE": {
+        "REQUESTED_EFFECT": "Desired effective date (optional)",
+        "REQUESTED_EFFECT_HINT": "Indicative: the real effective date follows the DSO's answer."
+      },
+      "BASELINE": {
+        "TITLE": "Starting state",
+        "INTRO": "The module has just been switched on. Tell us, for each meter and key, what the DSO already knows of it: changes are tracked from there on, and nothing earlier is replayed.",
+        "REACTIVATION": "The module was switched on again: only the meters and keys that changed in between are listed.",
+        "ALREADY_CONFIRMED": "The starting state is confirmed.",
+        "EMPTY": "No meter and no key to confirm.",
+        "HELP": {
+          "ACTIVE": "Active: notified to the DSO and in force.",
+          "NOT_NOTIFIED": "Not notified yet: it joins a draft, to be sent.",
+          "IN_PROGRESS": "In progress: already sent, the answer is awaited (give the date it was sent).",
+          "ENDED": "Ended: it is no longer part of the operation."
+        },
+        "CHOICE": {
+          "ACTIVE": "Active",
+          "NOT_NOTIFIED": "Not notified yet",
+          "IN_PROGRESS": "In progress",
+          "ENDED": "Ended"
+        },
+        "CHANGE": {
+          "ADDED": "Added since",
+          "REMOVED": "Removed since"
+        },
+        "CHOICE_FIELD": "State",
+        "SINCE": "since {{date}}",
+        "ACTIVE_SINCE": "Active since",
+        "ENDED_ON": "Ended on",
+        "SENT_ON": "Sent on",
+        "BULK": "Apply to every line",
+        "BULK_PLACEHOLDER": "Choose a state",
+        "BULK_APPLY": "Apply",
+        "SUBMIT": "Confirm the starting state",
+        "CONFIRMED": "Starting state confirmed",
+        "TO_DASHBOARD": "Back to the procedures",
+        "ERRORS": {
+          "SENT_DATE": "Give the date it was sent for the « In progress » items: {{refs}}.",
+          "CONFLICT": "These EANs are already tracked in another operation on those dates; nothing was confirmed: {{refs}}."
+        }
       }
     }
   },

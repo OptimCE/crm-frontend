@@ -1,27 +1,25 @@
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import {
-  DossierIn,
-  DossierType,
-  SharingOperationOut,
-} from '../../../../shared/dtos/administrative-document.dtos';
+import { LocaleService } from '../../../../core/services/language/locale.service';
+import { SharingOperationOut } from '../../../../shared/dtos/administrative-document.dtos';
+import { ProcedureDefinitionOut } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
-import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
 import {
-  ERROR_CODE,
-  dossierTypeLabelKey,
   extractApiErrorCode,
   extractApiErrorMessage,
+  toApiDate,
 } from '../../administrative-document-format';
+import { pickLabel } from '../../procedures/procedure-format';
 
 interface DossierCreateDialogData {
   operations: SharingOperationOut[];
@@ -32,59 +30,81 @@ interface SelectOption<T> {
   value: T;
 }
 
+/** Refusals about this choice: shown in the dialog. */
+const INLINE_ERRORS: ReadonlySet<number> = new Set([
+  2307, // SHARING_OPERATION_NOT_FOUND
+  2376, // UNKNOWN_PROCEDURE_TYPE
+  2377, // DRAFT_EXISTS: one open draft per family and operation
+]);
+
+/**
+ * A procedure opened by hand from the regulator's catalogue: an end of
+ * sharing, or one the CRM does not trigger yet. The types are the catalogue's
+ * own (`GET /admin/procedure-definitions`), filings in force only, labelled in
+ * the reader's language: a new type needs no frontend change.
+ *
+ * Closes with the new procedure's id, so the caller can open it.
+ */
 @Component({
   selector: 'app-dossier-create-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe, Button, InputText, Select],
+  imports: [FormsModule, TranslatePipe, Button, DatePicker, Select],
   templateUrl: './dossier-create-dialog.html',
   providers: [ErrorMessageHandler],
 })
-export class DossierCreateDialog {
+export class DossierCreateDialog implements OnInit {
   private readonly ref = inject(DynamicDialogRef);
   private readonly config = inject(DynamicDialogConfig<DossierCreateDialogData>);
-  private readonly service = inject(AdministrativeDocumentService);
+  private readonly service = inject(AdministrativeProcedureService);
   private readonly translate = inject(TranslateService);
   private readonly snackbar = inject(SnackbarNotification);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly lang = inject(LocaleService).locale();
 
   private readonly dialogData = this.config.data as DossierCreateDialogData | undefined;
 
   readonly submitting = signal<boolean>(false);
   readonly formError = signal<string | null>(null);
   readonly operations = signal<SharingOperationOut[]>(this.dialogData?.operations ?? []);
+  readonly definitions = signal<ProcedureDefinitionOut[]>([]);
+  readonly code = signal<string | null>(null);
+
+  operation: number | null = null;
+  requestedEffect: Date | null = null;
 
   readonly operationOptions = computed<SelectOption<number>[]>(() =>
     this.operations().map((op) => ({ label: op.name, value: op.id })),
   );
+  /** One entry per type: the version in force. The starting state is not filed by hand. */
+  readonly typeOptions = computed<SelectOption<string>[]>(() =>
+    this.definitions()
+      .filter((d) => d.in_force && d.purpose === 'filing')
+      .map((d) => ({ value: d.code, label: pickLabel(d.labels, this.lang, d.code) }))
+      .sort((a, b) => a.label.localeCompare(b.label)),
+  );
+  readonly selected = computed(() =>
+    this.definitions().find((d) => d.in_force && d.code === this.code()),
+  );
+  readonly needsOperation = computed(() => this.selected()?.scope === 'operation');
+  readonly hasNoOperations = computed(
+    () => this.needsOperation() && this.operations().length === 0,
+  );
 
-  /** A dossier cannot be filed without an operation, so say so up front. */
-  readonly hasNoOperations = computed(() => this.operations().length === 0);
-
-  readonly typeOptions: SelectOption<DossierType>[] = [
-    DossierType.CREATION_NOTIFICATION,
-    DossierType.MODIFICATION,
-    DossierType.ANNUAL_REPORT,
-    DossierType.SHARING_AUTHORIZATION,
-    DossierType.SHARING_MODIFICATION,
-    DossierType.CESSATION,
-  ].map((value) => ({
-    label: this.translate.instant(dossierTypeLabelKey(value)) as string,
-    value,
-  }));
-
-  readonly form = new FormGroup({
-    dossier_type: new FormControl<DossierType | null>(null),
-    id_sharing_operation: new FormControl<number | null>(null),
-    title: new FormControl<string>('', { nonNullable: true }),
-    external_ref: new FormControl<string>('', { nonNullable: true }),
-  });
+  ngOnInit(): void {
+    this.service
+      .listDefinitions()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => this.definitions.set(Array.isArray(res.data) ? res.data : []),
+        error: (error: unknown) => this.errorHandler.handleError(extractApiErrorMessage(error)),
+      });
+  }
 
   submit(): void {
     this.formError.set(null);
-    const raw = this.form.getRawValue();
-
-    if (raw.dossier_type == null) {
+    const code = this.code();
+    if (!code) {
       this.formError.set(
         this.translate.instant(
           'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.ERRORS.TYPE_REQUIRED',
@@ -92,8 +112,7 @@ export class DossierCreateDialog {
       );
       return;
     }
-    // Required by the backend: every dossier is filed for one sharing operation.
-    if (raw.id_sharing_operation == null) {
+    if (this.needsOperation() && this.operation == null) {
       this.formError.set(
         this.translate.instant(
           'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.ERRORS.OPERATION_REQUIRED',
@@ -102,36 +121,28 @@ export class DossierCreateDialog {
       return;
     }
 
-    const body: DossierIn = {
-      dossier_type: raw.dossier_type,
-      id_sharing_operation: raw.id_sharing_operation,
-      title: raw.title.trim() || null,
-      external_ref: raw.external_ref.trim() || null,
-    };
-
     this.submitting.set(true);
     this.service
-      .createDossier(body)
+      .createProcedure({
+        code,
+        id_sharing_operation: this.needsOperation() ? this.operation : null,
+        requested_effective_date: toApiDate(this.requestedEffect),
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.snackbar.openSnackBar(
             this.translate.instant(
               'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.SUCCESS',
             ) as string,
             VALIDATION_TYPE,
           );
-          this.ref.close(true);
+          this.ref.close(res.data.id);
         },
         error: (error: unknown) => {
           this.submitting.set(false);
-          const code = extractApiErrorCode(error);
-          // A duplicate reference or a rejected operation are field problems —
-          // keep them inline instead of firing a toast the user must chase.
-          if (
-            code === ERROR_CODE.DUPLICATE_EXTERNAL_REF ||
-            code === ERROR_CODE.SHARING_OPERATION_NOT_FOUND
-          ) {
+          const errorCode = extractApiErrorCode(error);
+          if (errorCode !== null && INLINE_ERRORS.has(errorCode)) {
             this.formError.set(extractApiErrorMessage(error));
             return;
           }
@@ -141,6 +152,6 @@ export class DossierCreateDialog {
   }
 
   close(): void {
-    this.ref.close(false);
+    this.ref.close(null);
   }
 }

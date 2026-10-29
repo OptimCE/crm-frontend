@@ -226,9 +226,9 @@
         "SEE_ALL": "Voir les échéances"
       },
       "DOSSIERS": {
-        "TITLE": "Dossiers administratifs",
-        "EMPTY": "Aucun dossier. Créez votre premier dossier administratif.",
-        "SEE_ALL": "Voir les dossiers"
+        "TITLE": "Démarches administratives",
+        "EMPTY": "Aucune démarche en cours.",
+        "SEE_ALL": "Voir les démarches"
       },
       "INVOICES": {
         "TITLE": "Facturation",
@@ -2258,6 +2258,16 @@
         },
         "deadline_rule": {
           "saved": "Règle d'échéance enregistrée"
+        },
+        "regulatory_effect": {
+          "applied": "Statut réglementaire écrit dans le CRM"
+        },
+        "baseline": {
+          "confirmed": "État de départ confirmé"
+        },
+        "change": {
+          "deferred": "Changement reporté à la démarche suivante",
+          "excluded": "Changement exclu des démarches"
         }
       },
       "billing": {
@@ -2402,9 +2412,10 @@
   },
   "ADMINISTRATIVE_DOCUMENT": {
     "TITLE": "Documents administratifs",
-    "SUBTITLE": "Suivez les dossiers déposés auprès de la CWaPE et du GRD : statuts, échéances et chaque version transmise.",
+    "SUBTITLE": "Vos démarches auprès du GRD et de la CWaPE : quoi faire, pour quand.",
     "TABS": {
-      "DOSSIERS": "Dossiers",
+      "PROCEDURES": "Démarches",
+      "DOSSIERS": "Toutes les démarches",
       "DEADLINES": "Échéances"
     },
     "DOSSIER_TYPE": {
@@ -2480,10 +2491,10 @@
       "DUE_DATE": "Date d'échéance"
     },
     "LIST": {
-      "INTRO": "Chaque dossier est déposé pour une opération de partage.",
-      "CREATE": "Nouveau dossier",
-      "EMPTY": "Aucun dossier pour le moment. Créez-en un pour commencer le suivi.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} dossiers)",
+      "INTRO": "Toutes les démarches de la communauté, les plus récentes d'abord, terminées comprises.",
+      "CREATE": "Nouvelle démarche",
+      "EMPTY": "Aucune démarche pour le moment.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} démarches)",
       "FILTERS": {
         "OPERATION": "Opération de partage",
         "ALL_OPERATIONS": "Toutes les opérations",
@@ -2621,8 +2632,8 @@
     },
     "DIALOGS": {
       "CREATE_DOSSIER": {
-        "TITLE": "Nouveau dossier",
-        "TYPE": "Type de dossier",
+        "TITLE": "Nouvelle démarche",
+        "TYPE": "Type de démarche",
         "TYPE_PLACEHOLDER": "Sélectionnez un type",
         "OPERATION": "Opération de partage",
         "OPERATION_PLACEHOLDER": "Sélectionnez une opération",
@@ -2630,12 +2641,12 @@
         "TITLE_FIELD": "Intitulé (facultatif)",
         "EXTERNAL_REF": "Référence dossier (facultatif)",
         "EXTERNAL_REF_HINT": "La référence CWaPE ou GRD, dès que vous la connaissez.",
-        "NO_OPERATIONS": "Cette communauté n'a pas encore d'opération de partage. Créez-en une avant de déposer un dossier.",
+        "NO_OPERATIONS": "Cette communauté n'a pas encore d'opération de partage. Créez-en une avant d'ouvrir cette démarche.",
         "SUBMIT": "Créer",
-        "SUCCESS": "Dossier créé",
+        "SUCCESS": "Démarche créée",
         "ERRORS": {
-          "TYPE_REQUIRED": "Sélectionnez un type de dossier.",
-          "OPERATION_REQUIRED": "Sélectionnez l'opération de partage concernée par ce dossier."
+          "TYPE_REQUIRED": "Sélectionnez un type de démarche.",
+          "OPERATION_REQUIRED": "Sélectionnez l'opération de partage concernée."
         }
       },
       "EDIT_DOSSIER": {
@@ -2798,6 +2809,267 @@
         "FILIERE": "Filière",
         "PART_INJECTEE": "Part injectée",
         "DROITS_DE_VOTE": "Droits de vote"
+      }
+    },
+    "PROCEDURES": {
+      "REFRESH": "Actualiser",
+      "OVERDUE": "En retard",
+      "CHOOSE_FILE": "Choisir un fichier",
+      "REMOVE_FILE": "Retirer le fichier",
+      "CHANGES_COUNT": "{{n}} changement(s)",
+      "PIECES_PROGRESS": "pièces {{ready}}/{{required}}",
+      "DUE": {
+        "TODAY": "aujourd'hui",
+        "IN_ONE": "dans 1 jour ouvrable",
+        "IN_MANY": "dans {{n}} jours ouvrables",
+        "LATE_ONE": "en retard de 1 jour ouvrable",
+        "LATE_MANY": "en retard de {{n}} jours ouvrables",
+        "ON": "pour le {{date}}"
+      },
+      "ACTIONS": {
+        "COMPLETE_DOCUMENTS": "Compléter les pièces",
+        "SEND": "Envoyer",
+        "RECORD_RESPONSE": "Ajouter une réponse",
+        "CONFIRM_BASELINE": "Confirmer l'état de départ",
+        "OPEN": "Ouvrir"
+      },
+      "BUCKETS": {
+        "TODO": "À faire",
+        "WAITING": "En attente",
+        "PLANNED": "Planifié",
+        "DONE": "Terminé récemment"
+      },
+      "STATUS": {
+        "1": "Brouillon",
+        "2": "Envoyé",
+        "5": "Caduc",
+        "6": "Prêt",
+        "7": "En vigueur",
+        "8": "Refusé",
+        "9": "Annulé"
+      },
+      "PIECE_STATUS": {
+        "2": "Prête",
+        "5": "Retirée",
+        "6": "Manquante",
+        "7": "Périmée",
+        "8": "Signée",
+        "9": "Refusée"
+      },
+      "PIECE_KIND": {
+        "1": "Générée",
+        "2": "À fournir",
+        "3": "Reçue du destinataire",
+        "UNKNOWN": "Pièce"
+      },
+      "CHANGE_STATUS": {
+        "1": "En attente",
+        "2": "Inclus",
+        "3": "Reporté",
+        "4": "Exclu",
+        "5": "Compensé",
+        "6": "Appliqué",
+        "7": "Refusé"
+      },
+      "CHANGE_KIND": {
+        "METER_ADDED": "Compteur ajouté",
+        "METER_REMOVED": "Compteur retiré",
+        "KEY_CHANGED": "Nouvelle clé",
+        "REPRESENTATIVE_CHANGED": "Nouveau représentant",
+        "INSTALLATION_ADDED": "Installation ajoutée",
+        "INSTALLATION_REMOVED": "Installation retirée",
+        "OPERATION_CLOSED": "Fin de l'opération",
+        "OTHER": "Changement ({{code}})"
+      },
+      "PARTY": {
+        "1": "La communauté",
+        "2": "Le GRD",
+        "3": "Le régulateur",
+        "UNKNOWN": "—"
+      },
+      "VARIANT": {
+        "SIMPLE": "Simple",
+        "AUTHORIZATION": "Autorisation (GRD puis CWaPE)",
+        "OTHER": "{{code}}"
+      },
+      "RECIPIENT": {
+        "GRD": "{{name}} (GRD)",
+        "GRD_UNKNOWN": "GRD de référence à préciser",
+        "REGULATOR": "Le régulateur"
+      },
+      "DELAY": {
+        "WORKING_DAYS": "{{label}} : {{n}} j. ouvr.",
+        "CALENDAR_DAYS": "{{label}} : {{n}} jours",
+        "MONTHS": "{{label}} : {{n}} mois"
+      },
+      "DASHBOARD": {
+        "UNSUPPORTED": "Le régulateur de cette communauté ({{regulator}}) n'est pas encore pris en charge : aucune démarche n'est suivie pour elle.",
+        "BASELINE_PENDING": "Avant de suivre les changements, confirmez l'état de départ : ce que le GRD connaît déjà de vos compteurs et de vos clés.",
+        "FILTER_GRD": "GRD",
+        "ALL_GRDS": "Tous les GRD",
+        "BANNER": "Prochaines échéances",
+        "EMPTY": "Rien à faire pour le moment : aucune démarche en cours."
+      },
+      "LIST": {
+        "NEXT_ACTION": "Prochaine action",
+        "UPDATED_AT": "Mise à jour"
+      },
+      "AGENDA": {
+        "INTRO": "Toutes les échéances de vos démarches, la plus proche d'abord.",
+        "OVERDUE": "{{n}} en retard",
+        "FROM": "Du",
+        "TO": "Au",
+        "OPEN_HINT": "Sans période : ce qui reste à faire, retards compris.",
+        "RANGE_HINT": "Sur la période : toutes les échéances, respectées et annulées comprises.",
+        "WHAT": "Quoi",
+        "PROCEDURE": "Démarche",
+        "WHO": "Qui",
+        "EMPTY": "Aucune échéance."
+      },
+      "DETAIL": {
+        "NOT_FOUND": "Cette démarche n'existe pas, ou n'appartient pas à cette communauté.",
+        "RECIPIENT": "Destinataire",
+        "OPERATION": "Opération",
+        "ROUTE": "Route",
+        "REFERENCE": "Référence OptimCE",
+        "EXTERNAL_REF": "Référence externe",
+        "REQUESTED_EFFECT": "Date d'effet demandée",
+        "EFFECT": "Date d'effet",
+        "EFFECT_ERROR": "Le CRM a refusé l'effet de cette démarche : un EAN est déjà suivi dans une autre opération à ces dates. La démarche reste à son étape.",
+        "FROZEN": "Envoyée le {{date}} : la démarche est figée. Les nouveaux changements iront dans un nouveau brouillon.",
+        "STEPS": "Étapes",
+        "DEADLINES": "Échéances",
+        "THREAD": "Fil d'activité"
+      },
+      "CHANGES": {
+        "TITLE": "Changements inclus",
+        "DEFER": "Reporter à la prochaine démarche",
+        "DEFER_CONFIRM": "Ce changement sortira de cette démarche et rejoindra la suivante du même type, une fois celle-ci envoyée ou annulée.",
+        "DEFERRED": "Changement reporté",
+        "EXCLUDE": "Exclure",
+        "EXCLUDE_INTRO": "Ce changement ne sera notifié à personne. Le motif est conservé dans le journal.",
+        "REASON": "Motif",
+        "EXCLUDED": "Changement exclu",
+        "EXCLUDED_BECAUSE": "exclu : {{reason}}",
+        "EFFECTIVE": "effet le {{date}}",
+        "ERRORS": {
+          "REASON_REQUIRED": "Indiquez le motif de l'exclusion."
+        }
+      },
+      "PIECES": {
+        "TITLE": "Pièces",
+        "EMPTY": "Cette démarche ne demande aucune pièce.",
+        "OPTIONAL": "Facultative",
+        "VERSIONS": "{{n}} version(s)"
+      },
+      "THREAD": {
+        "OPENED": "Ouverte à l'étape « {{to}} »",
+        "STEP": "« {{from}} » → « {{to}} »",
+        "OUTBOUND": "Envoyé : {{type}}",
+        "INBOUND": "Reçu : {{type}}",
+        "VERSION": "{{piece}} : version {{n}}"
+      },
+      "SEND": {
+        "TITLE": "Envoyer la démarche",
+        "INTRO": "Envoyez le message depuis votre messagerie (ou le formulaire en ligne), avec les pièces ci-dessous, puis marquez-le comme envoyé. La référence dans l'objet permet de rattacher la réponse.",
+        "SUBJECT": "Objet",
+        "BODY_FIELD": "Message",
+        "COPY": "Copier",
+        "PIECES": "Pièces à joindre",
+        "NO_PIECES": "Aucune pièce prête à joindre.",
+        "SENT_ON": "Envoyé le",
+        "CHANNEL_FIELD": "Canal",
+        "CHANNEL": {
+          "EMAIL": "E-mail",
+          "ONLINE_FORM": "Formulaire en ligne",
+          "POST": "Courrier"
+        },
+        "FILE": "L'e-mail envoyé (.eml) ou l'accusé du formulaire (facultatif)",
+        "FILE_HINT": "Conservé tel quel, comme preuve de l'envoi.",
+        "SUBMIT": "Marquer comme envoyé",
+        "DONE": "Démarche marquée comme envoyée",
+        "BODY": "Bonjour,\n\nVeuillez trouver ci-joint notre demande : {{procedure}} (opération : {{operation}}).\nMerci de rappeler la référence {{reference}} dans votre réponse.\n\nPièces jointes :\n{{pieces}}\n\nBien cordialement,",
+        "ERRORS": {
+          "DATE_REQUIRED": "Indiquez la date d'envoi."
+        }
+      },
+      "RESPONSE": {
+        "TITLE": "Ajouter une réponse",
+        "TYPE": "Type de réponse",
+        "TYPE_PLACEHOLDER": "Sélectionnez un type",
+        "DATE": "Date",
+        "SUBJECT": "Objet (facultatif)",
+        "BODY": "Texte du message (facultatif)",
+        "EXTERNAL_REF": "Référence CWaPE ou GRD (facultatif)",
+        "FILE": "Fichier (.eml, .msg, PDF)",
+        "PREVIEWING": "Calcul de la suite…",
+        "WILL_MOVE": "La démarche passera à l'étape « {{step}} ».",
+        "NO_MOVE": "Elle est ajoutée au fil, sans changer d'étape.",
+        "WILL_START": "Nouvelle échéance : {{label}} ({{party}}), pour le {{date}}.",
+        "WILL_MEET": "Échéance respectée : {{label}}.",
+        "NOT_NOW": "Cette réponse ne correspond pas à l'étape actuelle de la démarche.",
+        "SUBMIT": "Enregistrer",
+        "DONE": "Réponse enregistrée",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Choisissez le type de réponse et sa date."
+        }
+      },
+      "TRANSITION": {
+        "OPEN": "Changer d'étape",
+        "TITLE": "Changer d'étape",
+        "INTRO": "Pour ce qu'aucune réponse n'enregistre : une correction, une information reçue par téléphone. Le motif est conservé dans le journal.",
+        "TO_STEP": "Nouvelle étape",
+        "TO_STEP_PLACEHOLDER": "Sélectionnez une étape",
+        "AUTOMATIC": "{{step}} (normalement automatique)",
+        "ON": "Date",
+        "REASON": "Motif",
+        "SUBMIT": "Changer d'étape",
+        "DONE": "Étape modifiée",
+        "ERRORS": {
+          "REQUIRED": "Choisissez l'étape et indiquez le motif."
+        }
+      },
+      "CREATE": {
+        "REQUESTED_EFFECT": "Date d'effet souhaitée (facultatif)",
+        "REQUESTED_EFFECT_HINT": "Indicative : la date d'effet réelle suit la réponse du GRD."
+      },
+      "BASELINE": {
+        "TITLE": "État de départ",
+        "INTRO": "Le module vient d'être activé. Dites-nous, pour chaque compteur et chaque clé, ce que le GRD en sait déjà : les changements ne sont suivis qu'à partir de là, et rien d'antérieur n'est rejoué.",
+        "REACTIVATION": "Le module a été réactivé : seuls les compteurs et clés qui ont changé entre-temps sont listés.",
+        "ALREADY_CONFIRMED": "L'état de départ est confirmé.",
+        "EMPTY": "Aucun compteur ni aucune clé à confirmer.",
+        "HELP": {
+          "ACTIVE": "Actif : notifié au GRD et en vigueur.",
+          "NOT_NOTIFIED": "Pas encore notifié : il rejoint un brouillon, à envoyer.",
+          "IN_PROGRESS": "En cours : déjà envoyé, la réponse est attendue (indiquez la date d'envoi).",
+          "ENDED": "Terminé : il ne fait plus partie de l'opération."
+        },
+        "CHOICE": {
+          "ACTIVE": "Actif",
+          "NOT_NOTIFIED": "Pas encore notifié",
+          "IN_PROGRESS": "En cours",
+          "ENDED": "Terminé"
+        },
+        "CHANGE": {
+          "ADDED": "Ajouté depuis",
+          "REMOVED": "Retiré depuis"
+        },
+        "CHOICE_FIELD": "État",
+        "SINCE": "depuis le {{date}}",
+        "ACTIVE_SINCE": "Actif depuis le",
+        "ENDED_ON": "Terminé le",
+        "SENT_ON": "Envoyé le",
+        "BULK": "Appliquer à toutes les lignes",
+        "BULK_PLACEHOLDER": "Choisir un état",
+        "BULK_APPLY": "Appliquer",
+        "SUBMIT": "Confirmer l'état de départ",
+        "CONFIRMED": "État de départ confirmé",
+        "TO_DASHBOARD": "Retour aux démarches",
+        "ERRORS": {
+          "SENT_DATE": "Indiquez la date d'envoi des éléments « En cours » : {{refs}}.",
+          "CONFLICT": "Ces EAN sont déjà suivis dans une autre opération à ces dates ; rien n'a été confirmé : {{refs}}."
+        }
       }
     }
   },

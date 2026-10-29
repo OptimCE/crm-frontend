@@ -1,0 +1,54 @@
+<form (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (change) {
+    <p class="text-sm text-surface-700 m-0">
+      @if (kind; as k) {
+        <span class="font-medium">{{ k.key | translate: k.params }}</span>
+      }
+      <span class="font-mono">{{ change.subject_ref }}</span>
+    </p>
+  }
+  <p class="text-sm text-surface-600 m-0">
+    {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.EXCLUDE_INTRO' | translate }}
+  </p>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="exclude-reason">{{
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.REASON' | translate
+    }}</label>
+    <textarea
+      pTextarea
+      id="exclude-reason"
+      name="reason"
+      [(ngModel)]="reason"
+      rows="3"
+      [maxlength]="reasonMax"
+      class="w-full"
+      data-testid="change-exclude-dialog__input--reason"
+    ></textarea>
+  </div>
+
+  @if (formError()) {
+    <p class="text-red-600 text-sm m-0" data-testid="change-exclude-dialog__error">
+      <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+    </p>
+  }
+
+  <div class="flex justify-end gap-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+      data-testid="change-exclude-dialog__btn--cancel"
+    />
+    <p-button
+      type="submit"
+      severity="warn"
+      [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.EXCLUDE' | translate"
+      [loading]="submitting()"
+      data-testid="change-exclude-dialog__btn--submit"
+    />
+  </div>
+</form>
