@@ -127,10 +127,9 @@ describe('MyFilingsPanel', () => {
         {
           dossier: {
             id: 1,
-            dossier_type: 1,
             status: 1,
-            family: null,
-            step: null,
+            family: 'PARTAGE_MODIF',
+            step: 'sent',
             title: null,
             external_ref: null,
             submitted_at: null,
@@ -181,10 +180,9 @@ describe('MyFilingsPanel', () => {
           {
             dossier: {
               id: 1,
-              dossier_type: 1,
               status: 1,
-              family: null,
-              step: null,
+              family: 'PARTAGE_MODIF',
+              step: 'sent',
               title: null,
               external_ref: null,
               submitted_at: null,
@@ -221,10 +219,9 @@ describe('MyFilingsPanel', () => {
           {
             dossier: {
               id: 1,
-              dossier_type: 1,
               status: 1,
-              family: null,
-              step: null,
+              family: 'PARTAGE_MODIF',
+              step: 'sent',
               title: null,
               external_ref: null,
               submitted_at: null,

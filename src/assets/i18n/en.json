@@ -2418,32 +2418,6 @@
       "DOSSIERS": "All procedures",
       "DEADLINES": "Deadlines"
     },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Creation notification",
-      "MODIFICATION": "Modification",
-      "ANNUAL_REPORT": "Annual reporting",
-      "SHARING_AUTHORIZATION": "Sharing authorisation",
-      "SHARING_MODIFICATION": "Sharing modification",
-      "CESSATION": "Cessation of activities"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "In preparation",
-      "SUBMITTED": "Submitted",
-      "COMPLETE": "Complete",
-      "CLOSED": "Closed",
-      "LAPSED": "Lapsed"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Draft",
-      "READY": "Ready",
-      "SENT": "Sent",
-      "ACKNOWLEDGED": "Acknowledged",
-      "OBSOLETE": "Obsolete"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Generated",
-      "UPLOADED": "Uploaded"
-    },
     "RENDER_STATE": {
       "PENDING": "Generating",
       "FAILED": "Generation failed"
@@ -2453,15 +2427,6 @@
       "MET": "Met",
       "MISSED": "Missed",
       "CANCELLED": "Cancelled"
-    },
-    "REGION": {
-      "WAL": "Wallonia (CWaPE)",
-      "BRU": "Brussels (Brugel)",
-      "VLA": "Flanders (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Complete dossier",
-      "INCOMPLETE": "Incomplete dossier"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Annex 6 — community notification",
@@ -2476,20 +2441,6 @@
       "SHARING_MODIFICATION": "Sharing modification form",
       "ANNEX7_LEGAL_ENTITY": "Annex 7 - Companies and associations"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Completeness check",
-      "LAPSE": "Lapse",
-      "MODIFICATION_NOTIFICATION": "Modification notification",
-      "ANNUAL_REPORT": "Annual reporting"
-    },
-    "SORT": {
-      "CREATED_AT": "Creation date",
-      "UPDATED_AT": "Last update",
-      "SUBMITTED_AT": "Submission date",
-      "STATUS": "Status",
-      "TYPE": "Type",
-      "DUE_DATE": "Due date"
-    },
     "LIST": {
       "INTRO": "Every procedure of the community, newest first, finished ones included.",
       "CREATE": "New procedure",
@@ -2502,132 +2453,28 @@
         "ALL_TYPES": "All types",
         "STATUS": "Status",
         "ALL_STATUSES": "All statuses",
-        "SORT": "Sort by",
-        "TOGGLE_ORDER": "Reverse sort order",
         "CLEAR": "Clear"
       },
       "COL": {
         "TYPE": "Type",
-        "TITLE": "Title",
         "OPERATION": "Sharing operation",
         "STATUS": "Status",
-        "EXTERNAL_REF": "File reference",
-        "SUBMITTED_AT": "Submitted"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Back to dossiers",
-      "EDIT": "Edit",
-      "OPERATION": "Sharing operation",
-      "EXTERNAL_REF": "File reference",
-      "REGION": "Region",
-      "SUBMITTED_AT": "Submitted on",
-      "CREATED_AT": "Created on",
-      "NOT_SET": "Not set",
-      "ACTIONS": "Actions",
-      "NO_FURTHER_ACTION": "This dossier is closed — no further action is possible.",
-      "NOT_FOUND": "Dossier not found.",
-      "TABS": {
-        "DOCUMENTS": "Documents",
-        "DEADLINES": "Deadlines",
-        "TIMELINE": "History"
+        "EXTERNAL_REF": "File reference"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Add document",
-      "EMPTY": "No document in this dossier yet.",
-      "VERSIONS": "versions",
       "NO_VERSION": "No version yet",
       "UPLOAD": "Upload a version",
-      "DETAIL": "View versions",
       "DOWNLOAD": "Download",
-      "NO_FURTHER_ACTION": "No further action possible.",
-      "CONFIRM_HEADER": "Confirm status change",
-      "CONFIRM_MESSAGE": "Change this document to \"{{status}}\"? The change is recorded in the history.",
-      "STATUS_CHANGED": "Status updated",
-      "COL": {
-        "TYPE": "Document",
-        "STATUS": "Status",
-        "VERSIONS": "Versions",
-        "UPDATED_AT": "Updated",
-        "ACTIONS": "Actions"
-      },
       "GENERATE": "Generate",
       "REGENERATE": "Regenerate",
       "RENDER_DONE": "Document generated",
       "RENDER_FAILED": "Document generation failed"
     },
     "DEADLINES": {
-      "INTRO": "Deadlines are derived automatically from the status changes you record.",
-      "EMPTY": "No deadline matches these filters.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} deadlines)",
-      "SWEEP": "Refresh overdue",
-      "SWEEP_CONFIRM_HEADER": "Refresh overdue deadlines",
-      "SWEEP_CONFIRM_MESSAGE": "Mark every past-due deadline as missed and schedule the next recurring occurrences?",
-      "SWEEP_DONE": "{{missed}} deadline(s) marked missed, {{rolled}} rescheduled.",
-      "RESOLVED": "Deadline updated",
-      "MARK_MET": "Mark as met",
-      "MARK_MET_CONFIRM_HEADER": "Mark deadline as met",
-      "MARK_MET_CONFIRM_MESSAGE": "Confirm this obligation has been fulfilled? A recurring deadline will be rescheduled.",
-      "CANCEL": "Cancel deadline",
-      "CANCEL_CONFIRM_HEADER": "Cancel deadline",
-      "CANCEL_CONFIRM_MESSAGE": "Cancel this deadline? It stays on record but is no longer expected.",
-      "OVERDUE": "Overdue",
-      "RECURRING": "Recurring",
-      "FILTERS": {
-        "STATUS": "Status",
-        "ALL_STATUSES": "All statuses",
-        "TYPE": "Type",
-        "ALL_TYPES": "All types",
-        "OPERATION": "Sharing operation",
-        "ALL_OPERATIONS": "All operations",
-        "CLEAR": "Clear"
-      },
       "COL": {
         "DUE_DATE": "Due date",
-        "TYPE": "Type",
-        "DOSSIER": "Dossier",
-        "STATUS": "Status",
-        "ACTIONS": "Actions"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "History",
-      "INTRO": "Every status change is recorded permanently. Corrections are added, never erased.",
-      "EMPTY": "No history yet.",
-      "CREATED": "Created",
-      "CORRECTIVE": "Correction",
-      "SYSTEM": "System",
-      "SHOW_RAW": "Show details",
-      "HIDE_RAW": "Hide details",
-      "NEWEST_FIRST": "Newest first",
-      "OLDEST_FIRST": "Oldest first",
-      "ENTRY_COUNT": "{{count}} entries",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Submission date",
-        "ACKNOWLEDGED_DATE": "Acknowledgment date",
-        "AUTHORITY_FILE_REF": "File reference",
-        "RESULT": "Result",
-        "REASON": "Reason",
-        "NOTE": "Note"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Change status",
-      "TO_STATUS": "New status",
-      "SUBMIT": "Record",
-      "SUCCESS": "Status recorded",
-      "CORRECTIVE_WARNING": "This is a correction. It is added to the history with your reason — the earlier entry is not erased.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Submission date",
-        "ACKNOWLEDGED_DATE": "Acknowledgment date",
-        "AUTHORITY_FILE_REF": "CWaPE / DSO file reference",
-        "RESULT": "Result",
-        "REASON": "Reason for the correction",
-        "NOTE": "Note (optional)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "\"{{field}}\" is required for this status change."
+        "STATUS": "Status"
       }
     },
     "DIALOGS": {
@@ -2637,33 +2484,12 @@
         "TYPE_PLACEHOLDER": "Select a type",
         "OPERATION": "Sharing operation",
         "OPERATION_PLACEHOLDER": "Select an operation",
-        "OPERATION_HINT": "Fixed once the dossier is created.",
-        "TITLE_FIELD": "Title (optional)",
-        "EXTERNAL_REF": "File reference (optional)",
-        "EXTERNAL_REF_HINT": "The CWaPE or DSO reference, once you have it.",
         "NO_OPERATIONS": "This community has no sharing operation yet. Create one before opening this procedure.",
         "SUBMIT": "Create",
         "SUCCESS": "Procedure created",
         "ERRORS": {
           "TYPE_REQUIRED": "Select a type of procedure.",
           "OPERATION_REQUIRED": "Select the sharing operation concerned."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Edit dossier",
-        "SUBMIT": "Save",
-        "SUCCESS": "Dossier updated",
-        "OPERATION_LOCKED": "The sharing operation cannot be changed after creation."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Add document",
-        "DOC_TYPE": "Document type",
-        "DOC_TYPE_PLACEHOLDER": "Select a document type",
-        "TITLE_FIELD": "Title (optional)",
-        "SUBMIT": "Add",
-        "SUCCESS": "Document added",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Select a document type."
         }
       },
       "UPLOAD_VERSION": {
@@ -2673,34 +2499,14 @@
         "SUBMIT": "Upload",
         "SUCCESS": "Version stored",
         "ERRORS": {
-          "FILE_REQUIRED": "Choose a file to upload.",
-          "NOT_ALLOWED": "This document has already been sent. Roll it back before adding a version."
+          "FILE_REQUIRED": "Choose a file to upload."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Document versions",
-        "CURRENT": "Current",
-        "DOWNLOAD": "Download",
-        "DOWNLOAD_FAILED": "Download failed",
-        "EMPTY": "No version stored yet.",
-        "COL": {
-          "VERSION": "Version",
-          "FILENAME": "File",
-          "SIZE": "Size",
-          "CHECKSUM": "Checksum",
-          "CREATED_AT": "Stored on"
-        },
-        "SNAPSHOT": "View frozen data",
-        "SNAPSHOT_HINT": "The exact data this version was generated from."
       },
       "GENERATE": {
         "TITLE": "Generate the document",
         "REVIEW_HINT": "The data comes from the CRM. Correct it if needed: what you approve here is what gets filed.",
         "SUBMIT": "Generate",
-        "QUEUED": "Generation started",
-        "ERRORS": {
-          "NOT_ALLOWED": "This document has already been sent. Roll it back before regenerating it."
-        }
+        "QUEUED": "Generation started"
       }
     },
     "PREFILL": {

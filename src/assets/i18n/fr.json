@@ -2418,32 +2418,6 @@
       "DOSSIERS": "Toutes les démarches",
       "DEADLINES": "Échéances"
     },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Notification de création",
-      "MODIFICATION": "Modification",
-      "ANNUAL_REPORT": "Rapportage annuel",
-      "SHARING_AUTHORIZATION": "Autorisation de partage",
-      "SHARING_MODIFICATION": "Modification de partage",
-      "CESSATION": "Cessation d'activités"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "En préparation",
-      "SUBMITTED": "Soumis",
-      "COMPLETE": "Complet",
-      "CLOSED": "Clôturé",
-      "LAPSED": "Caduc"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Brouillon",
-      "READY": "Prêt",
-      "SENT": "Transmis",
-      "ACKNOWLEDGED": "Accusé de réception",
-      "OBSOLETE": "Obsolète"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Généré",
-      "UPLOADED": "Téléversé"
-    },
     "RENDER_STATE": {
       "PENDING": "Génération en cours",
       "FAILED": "Génération échouée"
@@ -2453,15 +2427,6 @@
       "MET": "Respectée",
       "MISSED": "Dépassée",
       "CANCELLED": "Annulée"
-    },
-    "REGION": {
-      "WAL": "Wallonie (CWaPE)",
-      "BRU": "Bruxelles (Brugel)",
-      "VLA": "Flandre (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Dossier complet",
-      "INCOMPLETE": "Dossier incomplet"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Annexe 6 — notification de communauté",
@@ -2476,20 +2441,6 @@
       "SHARING_MODIFICATION": "Formulaire de modification de partage",
       "ANNEX7_LEGAL_ENTITY": "Annexe 7 - Sociétés et associations"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Contrôle de complétude",
-      "LAPSE": "Caducité",
-      "MODIFICATION_NOTIFICATION": "Notification de modification",
-      "ANNUAL_REPORT": "Rapportage annuel"
-    },
-    "SORT": {
-      "CREATED_AT": "Date de création",
-      "UPDATED_AT": "Dernière modification",
-      "SUBMITTED_AT": "Date de soumission",
-      "STATUS": "Statut",
-      "TYPE": "Type",
-      "DUE_DATE": "Date d'échéance"
-    },
     "LIST": {
       "INTRO": "Toutes les démarches de la communauté, les plus récentes d'abord, terminées comprises.",
       "CREATE": "Nouvelle démarche",
@@ -2502,132 +2453,28 @@
         "ALL_TYPES": "Tous les types",
         "STATUS": "Statut",
         "ALL_STATUSES": "Tous les statuts",
-        "SORT": "Trier par",
-        "TOGGLE_ORDER": "Inverser l'ordre de tri",
         "CLEAR": "Réinitialiser"
       },
       "COL": {
         "TYPE": "Type",
-        "TITLE": "Intitulé",
         "OPERATION": "Opération de partage",
         "STATUS": "Statut",
-        "EXTERNAL_REF": "Référence dossier",
-        "SUBMITTED_AT": "Soumis le"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Retour aux dossiers",
-      "EDIT": "Modifier",
-      "OPERATION": "Opération de partage",
-      "EXTERNAL_REF": "Référence dossier",
-      "REGION": "Région",
-      "SUBMITTED_AT": "Soumis le",
-      "CREATED_AT": "Créé le",
-      "NOT_SET": "Non renseigné",
-      "ACTIONS": "Actions",
-      "NO_FURTHER_ACTION": "Ce dossier est clôturé — aucune action supplémentaire n'est possible.",
-      "NOT_FOUND": "Dossier introuvable.",
-      "TABS": {
-        "DOCUMENTS": "Documents",
-        "DEADLINES": "Échéances",
-        "TIMELINE": "Historique"
+        "EXTERNAL_REF": "Référence dossier"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Ajouter un document",
-      "EMPTY": "Aucun document dans ce dossier pour le moment.",
-      "VERSIONS": "versions",
       "NO_VERSION": "Aucune version",
       "UPLOAD": "Téléverser une version",
-      "DETAIL": "Voir les versions",
       "DOWNLOAD": "Télécharger",
-      "NO_FURTHER_ACTION": "Aucune action supplémentaire possible.",
-      "CONFIRM_HEADER": "Confirmer le changement de statut",
-      "CONFIRM_MESSAGE": "Passer ce document à « {{status}} » ? Le changement est enregistré dans l'historique.",
-      "STATUS_CHANGED": "Statut mis à jour",
-      "COL": {
-        "TYPE": "Document",
-        "STATUS": "Statut",
-        "VERSIONS": "Versions",
-        "UPDATED_AT": "Modifié le",
-        "ACTIONS": "Actions"
-      },
       "GENERATE": "Générer",
       "REGENERATE": "Régénérer",
       "RENDER_DONE": "Document généré",
       "RENDER_FAILED": "La génération du document a échoué"
     },
     "DEADLINES": {
-      "INTRO": "Les échéances sont calculées automatiquement à partir des changements de statut enregistrés.",
-      "EMPTY": "Aucune échéance ne correspond à ces filtres.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} sur {{total_pages}} ({{total}} échéances)",
-      "SWEEP": "Actualiser les retards",
-      "SWEEP_CONFIRM_HEADER": "Actualiser les échéances dépassées",
-      "SWEEP_CONFIRM_MESSAGE": "Marquer toutes les échéances dépassées comme non respectées et planifier les prochaines occurrences récurrentes ?",
-      "SWEEP_DONE": "{{missed}} échéance(s) marquée(s) dépassée(s), {{rolled}} replanifiée(s).",
-      "RESOLVED": "Échéance mise à jour",
-      "MARK_MET": "Marquer comme respectée",
-      "MARK_MET_CONFIRM_HEADER": "Marquer l'échéance comme respectée",
-      "MARK_MET_CONFIRM_MESSAGE": "Confirmer que cette obligation a été remplie ? Une échéance récurrente sera replanifiée.",
-      "CANCEL": "Annuler l'échéance",
-      "CANCEL_CONFIRM_HEADER": "Annuler l'échéance",
-      "CANCEL_CONFIRM_MESSAGE": "Annuler cette échéance ? Elle reste enregistrée mais n'est plus attendue.",
-      "OVERDUE": "En retard",
-      "RECURRING": "Récurrente",
-      "FILTERS": {
-        "STATUS": "Statut",
-        "ALL_STATUSES": "Tous les statuts",
-        "TYPE": "Type",
-        "ALL_TYPES": "Tous les types",
-        "OPERATION": "Opération de partage",
-        "ALL_OPERATIONS": "Toutes les opérations",
-        "CLEAR": "Réinitialiser"
-      },
       "COL": {
         "DUE_DATE": "Échéance",
-        "TYPE": "Type",
-        "DOSSIER": "Dossier",
-        "STATUS": "Statut",
-        "ACTIONS": "Actions"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "Historique",
-      "INTRO": "Chaque changement de statut est enregistré définitivement. Les corrections s'ajoutent, elles n'effacent rien.",
-      "EMPTY": "Aucun historique.",
-      "CREATED": "Créé",
-      "CORRECTIVE": "Correction",
-      "SYSTEM": "Système",
-      "SHOW_RAW": "Voir le détail",
-      "HIDE_RAW": "Masquer le détail",
-      "NEWEST_FIRST": "Plus récent d'abord",
-      "OLDEST_FIRST": "Plus ancien d'abord",
-      "ENTRY_COUNT": "{{count}} entrées",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Date de transmission",
-        "ACKNOWLEDGED_DATE": "Date d'accusé de réception",
-        "AUTHORITY_FILE_REF": "Référence dossier",
-        "RESULT": "Résultat",
-        "REASON": "Motif",
-        "NOTE": "Note"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Changer le statut",
-      "TO_STATUS": "Nouveau statut",
-      "SUBMIT": "Enregistrer",
-      "SUCCESS": "Statut enregistré",
-      "CORRECTIVE_WARNING": "Il s'agit d'une correction. Elle est ajoutée à l'historique avec votre motif — l'entrée précédente n'est pas effacée.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Date de transmission",
-        "ACKNOWLEDGED_DATE": "Date d'accusé de réception",
-        "AUTHORITY_FILE_REF": "Référence CWaPE / GRD",
-        "RESULT": "Résultat",
-        "REASON": "Motif de la correction",
-        "NOTE": "Note (facultatif)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "« {{field}} » est requis pour ce changement de statut."
+        "STATUS": "Statut"
       }
     },
     "DIALOGS": {
@@ -2637,33 +2484,12 @@
         "TYPE_PLACEHOLDER": "Sélectionnez un type",
         "OPERATION": "Opération de partage",
         "OPERATION_PLACEHOLDER": "Sélectionnez une opération",
-        "OPERATION_HINT": "Définitif une fois le dossier créé.",
-        "TITLE_FIELD": "Intitulé (facultatif)",
-        "EXTERNAL_REF": "Référence dossier (facultatif)",
-        "EXTERNAL_REF_HINT": "La référence CWaPE ou GRD, dès que vous la connaissez.",
         "NO_OPERATIONS": "Cette communauté n'a pas encore d'opération de partage. Créez-en une avant d'ouvrir cette démarche.",
         "SUBMIT": "Créer",
         "SUCCESS": "Démarche créée",
         "ERRORS": {
           "TYPE_REQUIRED": "Sélectionnez un type de démarche.",
           "OPERATION_REQUIRED": "Sélectionnez l'opération de partage concernée."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Modifier le dossier",
-        "SUBMIT": "Enregistrer",
-        "SUCCESS": "Dossier mis à jour",
-        "OPERATION_LOCKED": "L'opération de partage ne peut pas être modifiée après la création."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Ajouter un document",
-        "DOC_TYPE": "Type de document",
-        "DOC_TYPE_PLACEHOLDER": "Sélectionnez un type de document",
-        "TITLE_FIELD": "Intitulé (facultatif)",
-        "SUBMIT": "Ajouter",
-        "SUCCESS": "Document ajouté",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Sélectionnez un type de document."
         }
       },
       "UPLOAD_VERSION": {
@@ -2673,34 +2499,14 @@
         "SUBMIT": "Téléverser",
         "SUCCESS": "Version enregistrée",
         "ERRORS": {
-          "FILE_REQUIRED": "Choisissez un fichier à téléverser.",
-          "NOT_ALLOWED": "Ce document a déjà été transmis. Effectuez une correction avant d'ajouter une version."
+          "FILE_REQUIRED": "Choisissez un fichier à téléverser."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Versions du document",
-        "CURRENT": "Actuelle",
-        "DOWNLOAD": "Télécharger",
-        "DOWNLOAD_FAILED": "Échec du téléchargement",
-        "EMPTY": "Aucune version enregistrée.",
-        "COL": {
-          "VERSION": "Version",
-          "FILENAME": "Fichier",
-          "SIZE": "Taille",
-          "CHECKSUM": "Empreinte",
-          "CREATED_AT": "Enregistrée le"
-        },
-        "SNAPSHOT": "Voir les données figées",
-        "SNAPSHOT_HINT": "Données exactes utilisées pour générer cette version."
       },
       "GENERATE": {
         "TITLE": "Générer le document",
         "REVIEW_HINT": "Les données proviennent du CRM. Corrigez-les si nécessaire : c'est ce que vous validez ici qui sera déposé.",
         "SUBMIT": "Générer",
-        "QUEUED": "Génération lancée",
-        "ERRORS": {
-          "NOT_ALLOWED": "Ce document a déjà été transmis. Effectuez une correction avant de le régénérer."
-        }
+        "QUEUED": "Génération lancée"
       }
     },
     "PREFILL": {

@@ -2418,32 +2418,6 @@
       "DOSSIERS": "Alle Verfahren",
       "DEADLINES": "Fristen"
     },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Gründungsmeldung",
-      "MODIFICATION": "Änderung",
-      "ANNUAL_REPORT": "Jährliche Berichterstattung",
-      "SHARING_AUTHORIZATION": "Teilungsgenehmigung",
-      "SHARING_MODIFICATION": "Änderung der Teilung",
-      "CESSATION": "Einstellung der Tätigkeit"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "In Vorbereitung",
-      "SUBMITTED": "Eingereicht",
-      "COMPLETE": "Vollständig",
-      "CLOSED": "Abgeschlossen",
-      "LAPSED": "Verfallen"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Entwurf",
-      "READY": "Bereit",
-      "SENT": "Übermittelt",
-      "ACKNOWLEDGED": "Bestätigt",
-      "OBSOLETE": "Veraltet"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Generiert",
-      "UPLOADED": "Hochgeladen"
-    },
     "RENDER_STATE": {
       "PENDING": "Wird erzeugt",
       "FAILED": "Erzeugung fehlgeschlagen"
@@ -2453,15 +2427,6 @@
       "MET": "Erfüllt",
       "MISSED": "Versäumt",
       "CANCELLED": "Storniert"
-    },
-    "REGION": {
-      "WAL": "Wallonien (CWaPE)",
-      "BRU": "Brüssel (Brugel)",
-      "VLA": "Flandern (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Vollständiges Dossier",
-      "INCOMPLETE": "Unvollständiges Dossier"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Anlage 6 — Meldung der Gemeinschaft",
@@ -2476,20 +2441,6 @@
       "SHARING_MODIFICATION": "Änderungsformular Sharing",
       "ANNEX7_LEGAL_ENTITY": "Anlage 7 - Gesellschaften und Vereinigungen"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Vollständigkeitsprüfung",
-      "LAPSE": "Verfall",
-      "MODIFICATION_NOTIFICATION": "Änderungsmeldung",
-      "ANNUAL_REPORT": "Jährliche Berichterstattung"
-    },
-    "SORT": {
-      "CREATED_AT": "Erstellungsdatum",
-      "UPDATED_AT": "Letzte Änderung",
-      "SUBMITTED_AT": "Einreichungsdatum",
-      "STATUS": "Status",
-      "TYPE": "Typ",
-      "DUE_DATE": "Fälligkeitsdatum"
-    },
     "LIST": {
       "INTRO": "Alle Verfahren der Gemeinschaft, die neuesten zuerst, abgeschlossene eingeschlossen.",
       "CREATE": "Neues Verfahren",
@@ -2502,132 +2453,28 @@
         "ALL_TYPES": "Alle Typen",
         "STATUS": "Status",
         "ALL_STATUSES": "Alle Status",
-        "SORT": "Sortieren nach",
-        "TOGGLE_ORDER": "Sortierreihenfolge umkehren",
         "CLEAR": "Zurücksetzen"
       },
       "COL": {
         "TYPE": "Typ",
-        "TITLE": "Bezeichnung",
         "OPERATION": "Teilungsoperation",
         "STATUS": "Status",
-        "EXTERNAL_REF": "Aktenzeichen",
-        "SUBMITTED_AT": "Eingereicht am"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Zurück zu den Dossiers",
-      "EDIT": "Bearbeiten",
-      "OPERATION": "Teilungsoperation",
-      "EXTERNAL_REF": "Aktenzeichen",
-      "REGION": "Region",
-      "SUBMITTED_AT": "Eingereicht am",
-      "CREATED_AT": "Erstellt am",
-      "NOT_SET": "Nicht angegeben",
-      "ACTIONS": "Aktionen",
-      "NO_FURTHER_ACTION": "Dieses Dossier ist abgeschlossen — weitere Aktionen sind nicht möglich.",
-      "NOT_FOUND": "Dossier nicht gefunden.",
-      "TABS": {
-        "DOCUMENTS": "Dokumente",
-        "DEADLINES": "Fristen",
-        "TIMELINE": "Verlauf"
+        "EXTERNAL_REF": "Aktenzeichen"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Dokument hinzufügen",
-      "EMPTY": "Noch kein Dokument in diesem Dossier.",
-      "VERSIONS": "Versionen",
       "NO_VERSION": "Noch keine Version",
       "UPLOAD": "Version hochladen",
-      "DETAIL": "Versionen ansehen",
       "DOWNLOAD": "Herunterladen",
-      "NO_FURTHER_ACTION": "Keine weitere Aktion möglich.",
-      "CONFIRM_HEADER": "Statusänderung bestätigen",
-      "CONFIRM_MESSAGE": "Dieses Dokument auf „{{status}}\" setzen? Die Änderung wird im Verlauf festgehalten.",
-      "STATUS_CHANGED": "Status aktualisiert",
-      "COL": {
-        "TYPE": "Dokument",
-        "STATUS": "Status",
-        "VERSIONS": "Versionen",
-        "UPDATED_AT": "Aktualisiert",
-        "ACTIONS": "Aktionen"
-      },
       "GENERATE": "Erzeugen",
       "REGENERATE": "Neu erzeugen",
       "RENDER_DONE": "Dokument erzeugt",
       "RENDER_FAILED": "Die Dokumenterzeugung ist fehlgeschlagen"
     },
     "DEADLINES": {
-      "INTRO": "Fristen werden automatisch aus den erfassten Statusänderungen abgeleitet.",
-      "EMPTY": "Keine Frist entspricht diesen Filtern.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Fristen)",
-      "SWEEP": "Überfällige aktualisieren",
-      "SWEEP_CONFIRM_HEADER": "Überfällige Fristen aktualisieren",
-      "SWEEP_CONFIRM_MESSAGE": "Alle überfälligen Fristen als versäumt markieren und die nächsten wiederkehrenden Termine einplanen?",
-      "SWEEP_DONE": "{{missed}} Frist(en) als versäumt markiert, {{rolled}} neu geplant.",
-      "RESOLVED": "Frist aktualisiert",
-      "MARK_MET": "Als erfüllt markieren",
-      "MARK_MET_CONFIRM_HEADER": "Frist als erfüllt markieren",
-      "MARK_MET_CONFIRM_MESSAGE": "Bestätigen, dass diese Verpflichtung erfüllt wurde? Eine wiederkehrende Frist wird neu geplant.",
-      "CANCEL": "Frist stornieren",
-      "CANCEL_CONFIRM_HEADER": "Frist stornieren",
-      "CANCEL_CONFIRM_MESSAGE": "Diese Frist stornieren? Sie bleibt erfasst, wird aber nicht mehr erwartet.",
-      "OVERDUE": "Überfällig",
-      "RECURRING": "Wiederkehrend",
-      "FILTERS": {
-        "STATUS": "Status",
-        "ALL_STATUSES": "Alle Status",
-        "TYPE": "Typ",
-        "ALL_TYPES": "Alle Typen",
-        "OPERATION": "Teilungsoperation",
-        "ALL_OPERATIONS": "Alle Operationen",
-        "CLEAR": "Zurücksetzen"
-      },
       "COL": {
         "DUE_DATE": "Fälligkeit",
-        "TYPE": "Typ",
-        "DOSSIER": "Dossier",
-        "STATUS": "Status",
-        "ACTIONS": "Aktionen"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "Verlauf",
-      "INTRO": "Jede Statusänderung wird dauerhaft festgehalten. Korrekturen werden ergänzt, nie gelöscht.",
-      "EMPTY": "Noch kein Verlauf.",
-      "CREATED": "Erstellt",
-      "CORRECTIVE": "Korrektur",
-      "SYSTEM": "System",
-      "SHOW_RAW": "Details anzeigen",
-      "HIDE_RAW": "Details ausblenden",
-      "NEWEST_FIRST": "Neueste zuerst",
-      "OLDEST_FIRST": "Älteste zuerst",
-      "ENTRY_COUNT": "{{count}} Einträge",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Übermittlungsdatum",
-        "ACKNOWLEDGED_DATE": "Datum der Bestätigung",
-        "AUTHORITY_FILE_REF": "Aktenzeichen",
-        "RESULT": "Ergebnis",
-        "REASON": "Grund",
-        "NOTE": "Notiz"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Status ändern",
-      "TO_STATUS": "Neuer Status",
-      "SUBMIT": "Erfassen",
-      "SUCCESS": "Status erfasst",
-      "CORRECTIVE_WARNING": "Dies ist eine Korrektur. Sie wird mit Ihrer Begründung dem Verlauf hinzugefügt — der frühere Eintrag bleibt erhalten.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Übermittlungsdatum",
-        "ACKNOWLEDGED_DATE": "Datum der Bestätigung",
-        "AUTHORITY_FILE_REF": "Aktenzeichen CWaPE / Netzbetreiber",
-        "RESULT": "Ergebnis",
-        "REASON": "Grund der Korrektur",
-        "NOTE": "Notiz (optional)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "„{{field}}\" ist für diese Statusänderung erforderlich."
+        "STATUS": "Status"
       }
     },
     "DIALOGS": {
@@ -2637,33 +2484,12 @@
         "TYPE_PLACEHOLDER": "Typ auswählen",
         "OPERATION": "Teilungsoperation",
         "OPERATION_PLACEHOLDER": "Operation auswählen",
-        "OPERATION_HINT": "Nach dem Anlegen des Dossiers unveränderlich.",
-        "TITLE_FIELD": "Bezeichnung (optional)",
-        "EXTERNAL_REF": "Aktenzeichen (optional)",
-        "EXTERNAL_REF_HINT": "Das Aktenzeichen der CWaPE oder des Netzbetreibers, sobald bekannt.",
         "NO_OPERATIONS": "Diese Gemeinschaft hat noch keine Teilungsoperation. Legen Sie eine an, bevor Sie dieses Verfahren eröffnen.",
         "SUBMIT": "Anlegen",
         "SUCCESS": "Verfahren angelegt",
         "ERRORS": {
           "TYPE_REQUIRED": "Wählen Sie eine Art von Verfahren.",
           "OPERATION_REQUIRED": "Wählen Sie die betroffene Teilungsoperation."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Dossier bearbeiten",
-        "SUBMIT": "Speichern",
-        "SUCCESS": "Dossier aktualisiert",
-        "OPERATION_LOCKED": "Die Teilungsoperation kann nach dem Anlegen nicht mehr geändert werden."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Dokument hinzufügen",
-        "DOC_TYPE": "Dokumenttyp",
-        "DOC_TYPE_PLACEHOLDER": "Dokumenttyp auswählen",
-        "TITLE_FIELD": "Bezeichnung (optional)",
-        "SUBMIT": "Hinzufügen",
-        "SUCCESS": "Dokument hinzugefügt",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Wählen Sie einen Dokumenttyp."
         }
       },
       "UPLOAD_VERSION": {
@@ -2673,34 +2499,14 @@
         "SUBMIT": "Hochladen",
         "SUCCESS": "Version gespeichert",
         "ERRORS": {
-          "FILE_REQUIRED": "Wählen Sie eine Datei zum Hochladen.",
-          "NOT_ALLOWED": "Dieses Dokument wurde bereits übermittelt. Nehmen Sie eine Korrektur vor, bevor Sie eine Version hinzufügen."
+          "FILE_REQUIRED": "Wählen Sie eine Datei zum Hochladen."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Dokumentversionen",
-        "CURRENT": "Aktuell",
-        "DOWNLOAD": "Herunterladen",
-        "DOWNLOAD_FAILED": "Download fehlgeschlagen",
-        "EMPTY": "Noch keine Version gespeichert.",
-        "COL": {
-          "VERSION": "Version",
-          "FILENAME": "Datei",
-          "SIZE": "Größe",
-          "CHECKSUM": "Prüfsumme",
-          "CREATED_AT": "Gespeichert am"
-        },
-        "SNAPSHOT": "Eingefrorene Daten anzeigen",
-        "SNAPSHOT_HINT": "Die genauen Daten, aus denen diese Version erzeugt wurde."
       },
       "GENERATE": {
         "TITLE": "Dokument erzeugen",
         "REVIEW_HINT": "Die Daten stammen aus dem CRM. Korrigieren Sie sie bei Bedarf: Was Sie hier freigeben, wird eingereicht.",
         "SUBMIT": "Erzeugen",
-        "QUEUED": "Erzeugung gestartet",
-        "ERRORS": {
-          "NOT_ALLOWED": "Dieses Dokument wurde bereits übermittelt. Nehmen Sie eine Korrektur vor, bevor Sie es neu erzeugen."
-        }
+        "QUEUED": "Erzeugung gestartet"
       }
     },
     "PREFILL": {

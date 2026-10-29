@@ -2418,32 +2418,6 @@
       "DOSSIERS": "Alle procedures",
       "DEADLINES": "Termijnen"
     },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Kennisgeving van oprichting",
-      "MODIFICATION": "Wijziging",
-      "ANNUAL_REPORT": "Jaarlijkse rapportering",
-      "SHARING_AUTHORIZATION": "Deelmachtiging",
-      "SHARING_MODIFICATION": "Wijziging van de deling",
-      "CESSATION": "Stopzetting van de activiteiten"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "In voorbereiding",
-      "SUBMITTED": "Ingediend",
-      "COMPLETE": "Volledig",
-      "CLOSED": "Afgesloten",
-      "LAPSED": "Vervallen"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Concept",
-      "READY": "Gereed",
-      "SENT": "Verzonden",
-      "ACKNOWLEDGED": "Ontvangst bevestigd",
-      "OBSOLETE": "Verouderd"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Gegenereerd",
-      "UPLOADED": "Geüpload"
-    },
     "RENDER_STATE": {
       "PENDING": "Bezig met genereren",
       "FAILED": "Genereren mislukt"
@@ -2453,15 +2427,6 @@
       "MET": "Nagekomen",
       "MISSED": "Overschreden",
       "CANCELLED": "Geannuleerd"
-    },
-    "REGION": {
-      "WAL": "Wallonië (CWaPE)",
-      "BRU": "Brussel (Brugel)",
-      "VLA": "Vlaanderen (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Volledig dossier",
-      "INCOMPLETE": "Onvolledig dossier"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Bijlage 6 — kennisgeving gemeenschap",
@@ -2476,20 +2441,6 @@
       "SHARING_MODIFICATION": "Wijzigingsformulier delen",
       "ANNEX7_LEGAL_ENTITY": "Bijlage 7 - Vennootschappen en verenigingen"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Volledigheidscontrole",
-      "LAPSE": "Verval",
-      "MODIFICATION_NOTIFICATION": "Kennisgeving van wijziging",
-      "ANNUAL_REPORT": "Jaarlijkse rapportering"
-    },
-    "SORT": {
-      "CREATED_AT": "Aanmaakdatum",
-      "UPDATED_AT": "Laatste wijziging",
-      "SUBMITTED_AT": "Indieningsdatum",
-      "STATUS": "Status",
-      "TYPE": "Type",
-      "DUE_DATE": "Vervaldatum"
-    },
     "LIST": {
       "INTRO": "Alle procedures van de gemeenschap, de nieuwste eerst, ook de afgeronde.",
       "CREATE": "Nieuwe procedure",
@@ -2502,132 +2453,28 @@
         "ALL_TYPES": "Alle types",
         "STATUS": "Status",
         "ALL_STATUSES": "Alle statussen",
-        "SORT": "Sorteren op",
-        "TOGGLE_ORDER": "Sorteervolgorde omkeren",
         "CLEAR": "Wissen"
       },
       "COL": {
         "TYPE": "Type",
-        "TITLE": "Titel",
         "OPERATION": "Deelverrichting",
         "STATUS": "Status",
-        "EXTERNAL_REF": "Dossierreferentie",
-        "SUBMITTED_AT": "Ingediend op"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Terug naar dossiers",
-      "EDIT": "Bewerken",
-      "OPERATION": "Deelverrichting",
-      "EXTERNAL_REF": "Dossierreferentie",
-      "REGION": "Regio",
-      "SUBMITTED_AT": "Ingediend op",
-      "CREATED_AT": "Aangemaakt op",
-      "NOT_SET": "Niet ingevuld",
-      "ACTIONS": "Acties",
-      "NO_FURTHER_ACTION": "Dit dossier is afgesloten — verdere actie is niet mogelijk.",
-      "NOT_FOUND": "Dossier niet gevonden.",
-      "TABS": {
-        "DOCUMENTS": "Documenten",
-        "DEADLINES": "Termijnen",
-        "TIMELINE": "Historiek"
+        "EXTERNAL_REF": "Dossierreferentie"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Document toevoegen",
-      "EMPTY": "Nog geen document in dit dossier.",
-      "VERSIONS": "versies",
       "NO_VERSION": "Nog geen versie",
       "UPLOAD": "Versie uploaden",
-      "DETAIL": "Versies bekijken",
       "DOWNLOAD": "Downloaden",
-      "NO_FURTHER_ACTION": "Geen verdere actie mogelijk.",
-      "CONFIRM_HEADER": "Statuswijziging bevestigen",
-      "CONFIRM_MESSAGE": "Dit document naar \"{{status}}\" zetten? De wijziging wordt in de historiek vastgelegd.",
-      "STATUS_CHANGED": "Status bijgewerkt",
-      "COL": {
-        "TYPE": "Document",
-        "STATUS": "Status",
-        "VERSIONS": "Versies",
-        "UPDATED_AT": "Bijgewerkt",
-        "ACTIONS": "Acties"
-      },
       "GENERATE": "Genereren",
       "REGENERATE": "Opnieuw genereren",
       "RENDER_DONE": "Document gegenereerd",
       "RENDER_FAILED": "Genereren van het document is mislukt"
     },
     "DEADLINES": {
-      "INTRO": "Termijnen worden automatisch afgeleid uit de geregistreerde statuswijzigingen.",
-      "EMPTY": "Geen termijn voldoet aan deze filters.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} termijnen)",
-      "SWEEP": "Achterstand bijwerken",
-      "SWEEP_CONFIRM_HEADER": "Verlopen termijnen bijwerken",
-      "SWEEP_CONFIRM_MESSAGE": "Alle verlopen termijnen als overschreden markeren en de volgende terugkerende termijnen inplannen?",
-      "SWEEP_DONE": "{{missed}} termijn(en) als overschreden gemarkeerd, {{rolled}} opnieuw ingepland.",
-      "RESOLVED": "Termijn bijgewerkt",
-      "MARK_MET": "Als nagekomen markeren",
-      "MARK_MET_CONFIRM_HEADER": "Termijn als nagekomen markeren",
-      "MARK_MET_CONFIRM_MESSAGE": "Bevestigen dat deze verplichting is nagekomen? Een terugkerende termijn wordt opnieuw ingepland.",
-      "CANCEL": "Termijn annuleren",
-      "CANCEL_CONFIRM_HEADER": "Termijn annuleren",
-      "CANCEL_CONFIRM_MESSAGE": "Deze termijn annuleren? Hij blijft geregistreerd maar wordt niet meer verwacht.",
-      "OVERDUE": "Te laat",
-      "RECURRING": "Terugkerend",
-      "FILTERS": {
-        "STATUS": "Status",
-        "ALL_STATUSES": "Alle statussen",
-        "TYPE": "Type",
-        "ALL_TYPES": "Alle types",
-        "OPERATION": "Deelverrichting",
-        "ALL_OPERATIONS": "Alle verrichtingen",
-        "CLEAR": "Wissen"
-      },
       "COL": {
         "DUE_DATE": "Vervaldatum",
-        "TYPE": "Type",
-        "DOSSIER": "Dossier",
-        "STATUS": "Status",
-        "ACTIONS": "Acties"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "Historiek",
-      "INTRO": "Elke statuswijziging wordt definitief vastgelegd. Correcties worden toegevoegd, nooit gewist.",
-      "EMPTY": "Nog geen historiek.",
-      "CREATED": "Aangemaakt",
-      "CORRECTIVE": "Correctie",
-      "SYSTEM": "Systeem",
-      "SHOW_RAW": "Details tonen",
-      "HIDE_RAW": "Details verbergen",
-      "NEWEST_FIRST": "Nieuwste eerst",
-      "OLDEST_FIRST": "Oudste eerst",
-      "ENTRY_COUNT": "{{count}} vermeldingen",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Datum van indiening",
-        "ACKNOWLEDGED_DATE": "Datum ontvangstbevestiging",
-        "AUTHORITY_FILE_REF": "Dossierreferentie",
-        "RESULT": "Resultaat",
-        "REASON": "Reden",
-        "NOTE": "Notitie"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Status wijzigen",
-      "TO_STATUS": "Nieuwe status",
-      "SUBMIT": "Vastleggen",
-      "SUCCESS": "Status vastgelegd",
-      "CORRECTIVE_WARNING": "Dit is een correctie. Ze wordt met uw reden aan de historiek toegevoegd — de eerdere vermelding blijft bestaan.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Datum van indiening",
-        "ACKNOWLEDGED_DATE": "Datum ontvangstbevestiging",
-        "AUTHORITY_FILE_REF": "Referentie CWaPE / netbeheerder",
-        "RESULT": "Resultaat",
-        "REASON": "Reden van de correctie",
-        "NOTE": "Notitie (optioneel)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "\"{{field}}\" is vereist voor deze statuswijziging."
+        "STATUS": "Status"
       }
     },
     "DIALOGS": {
@@ -2637,33 +2484,12 @@
         "TYPE_PLACEHOLDER": "Kies een type",
         "OPERATION": "Deelverrichting",
         "OPERATION_PLACEHOLDER": "Kies een verrichting",
-        "OPERATION_HINT": "Ligt vast zodra het dossier is aangemaakt.",
-        "TITLE_FIELD": "Titel (optioneel)",
-        "EXTERNAL_REF": "Dossierreferentie (optioneel)",
-        "EXTERNAL_REF_HINT": "De referentie van de CWaPE of de netbeheerder, zodra u ze kent.",
         "NO_OPERATIONS": "Deze gemeenschap heeft nog geen deelverrichting. Maak er een aan voordat u deze procedure opent.",
         "SUBMIT": "Aanmaken",
         "SUCCESS": "Procedure aangemaakt",
         "ERRORS": {
           "TYPE_REQUIRED": "Kies een soort procedure.",
           "OPERATION_REQUIRED": "Kies de betrokken deelverrichting."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Dossier bewerken",
-        "SUBMIT": "Opslaan",
-        "SUCCESS": "Dossier bijgewerkt",
-        "OPERATION_LOCKED": "De deelverrichting kan na aanmaak niet meer worden gewijzigd."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Document toevoegen",
-        "DOC_TYPE": "Documenttype",
-        "DOC_TYPE_PLACEHOLDER": "Kies een documenttype",
-        "TITLE_FIELD": "Titel (optioneel)",
-        "SUBMIT": "Toevoegen",
-        "SUCCESS": "Document toegevoegd",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Kies een documenttype."
         }
       },
       "UPLOAD_VERSION": {
@@ -2673,34 +2499,14 @@
         "SUBMIT": "Uploaden",
         "SUCCESS": "Versie opgeslagen",
         "ERRORS": {
-          "FILE_REQUIRED": "Kies een bestand om te uploaden.",
-          "NOT_ALLOWED": "Dit document is al verzonden. Voer een correctie uit voordat u een versie toevoegt."
+          "FILE_REQUIRED": "Kies een bestand om te uploaden."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Documentversies",
-        "CURRENT": "Huidig",
-        "DOWNLOAD": "Downloaden",
-        "DOWNLOAD_FAILED": "Downloaden mislukt",
-        "EMPTY": "Nog geen versie opgeslagen.",
-        "COL": {
-          "VERSION": "Versie",
-          "FILENAME": "Bestand",
-          "SIZE": "Grootte",
-          "CHECKSUM": "Controlesom",
-          "CREATED_AT": "Opgeslagen op"
-        },
-        "SNAPSHOT": "Vastgelegde gegevens tonen",
-        "SNAPSHOT_HINT": "De exacte gegevens waaruit deze versie is gegenereerd."
       },
       "GENERATE": {
         "TITLE": "Document genereren",
         "REVIEW_HINT": "De gegevens komen uit de CRM. Corrigeer ze indien nodig: wat u hier goedkeurt, wordt ingediend.",
         "SUBMIT": "Genereren",
-        "QUEUED": "Genereren gestart",
-        "ERRORS": {
-          "NOT_ALLOWED": "Dit document is al verzonden. Voer eerst een correctie uit voordat u het opnieuw genereert."
-        }
+        "QUEUED": "Genereren gestart"
       }
     },
     "PREFILL": {
