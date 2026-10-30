@@ -122,6 +122,10 @@ export const ENTRY_ROUTES: Readonly<Record<string, EntryRouteRule>> = {
     area: 'administrative_document',
     feature: 'administrative-document',
   },
+  '/administrative-document/procedures/:dossierId': {
+    area: 'administrative_document',
+    feature: 'administrative-document',
+  },
   '/keys': { area: 'keys', minRole: Role.GESTIONNAIRE },
   '/keys/:keyId': { area: 'keys', minRole: Role.GESTIONNAIRE },
   '/members': { area: 'members', minRole: Role.GESTIONNAIRE },

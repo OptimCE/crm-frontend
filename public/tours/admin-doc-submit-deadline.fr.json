@@ -1,7 +1,7 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "4c5360479dbc",
   "entry": {
-    "route": "/administrative-document"
+    "route": "/administrative-document/procedures/:dossierId"
   },
   "guideUrl": "https://guide.optimce.be/admin-doc-submit-deadline/fr.html",
   "id": "admin-doc-submit-deadline",
@@ -13,88 +13,50 @@
       "advance": {
         "on": "click"
       },
-      "id": "dossier-list__row--0",
-      "target": "dossier-list__row--0",
-      "text": "Ouvrez le dossier dont vous voulez enregistrer le dépôt.",
-      "title": "Ouvrir le dossier"
+      "id": "procedure-detail__btn--primary",
+      "target": "procedure-detail__btn--primary",
+      "text": "Le bouton principal propose la seule action utile maintenant. La démarche étant prête, c'est « Envoyer ».",
+      "title": "Envoyer"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "dossier-detail__tag--status",
-      "target": "dossier-detail__tag--status",
+      "id": "procedure-send-dialog__input--subject",
+      "target": "procedure-send-dialog__input--subject",
       "targetClick": "next",
-      "text": "Tant que le dossier est « En préparation », rien n'est attendu de vous par le régulateur. Les boutons en haut ne proposent que les changements de statut légitimes à ce stade.",
-      "title": "Un dossier en préparation",
-      "waitFor": "dossier-detail__btn--transition-2"
+      "text": "OptimCE n'envoie rien lui-même. Il prépare le destinataire, l'objet avec sa référence, un texte à copier et les pièces à joindre ; vous envoyez par votre messagerie ou par le formulaire en ligne du régulateur.",
+      "title": "Ce qu'il faut envoyer",
+      "waitFor": "procedure-send-dialog__btn--submit"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-detail__btn--transition-2",
-      "target": "dossier-detail__btn--transition-2",
-      "text": "Vous déposez le dossier auprès de l'autorité par vos moyens habituels ; ici, vous enregistrez que ce dépôt a eu lieu.",
-      "title": "Marquer le dossier comme soumis"
+      "id": "procedure-send-dialog__btn--submit",
+      "target": "procedure-send-dialog__btn--submit",
+      "text": "Indiquez la date et le canal d'envoi, joignez au besoin le courriel envoyé, puis « Marquer comme envoyé ». La démarche est alors figée : un changement arrivé ensuite ira dans une nouvelle démarche.",
+      "title": "Marquer comme envoyé"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "set-the-submission-date-to-today",
-      "target": null,
-      "text": "La date de dépôt n'est pas une formalité : c'est elle qui fait courir les délais réglementaires. Choisissez la date réelle du dépôt.",
-      "title": "La date de dépôt",
-      "waitFor": "transition-dialog__date--submission"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "transition-dialog__btn--submit",
-      "target": "transition-dialog__btn--submit",
-      "text": "Validez pour enregistrer le changement de statut.",
-      "title": "Valider le passage"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "dossier-detail__tag--status-2",
-      "target": "dossier-detail__tag--status",
+      "id": "procedure-detail__deadlines",
+      "target": "procedure-detail__deadlines",
       "targetClick": "next",
-      "text": "Le statut change et les actions proposées changent avec lui : un dossier soumis peut être déclaré complet, corrigé, ou devenir caduc.",
-      "title": "Le dossier est soumis"
+      "text": "L'envoi démarre le délai de contrôle de complétude de la CWaPE, compté en jours ouvrables wallons. La prochaine action devient « Ajouter une réponse » : vous y noterez son accusé ou sa demande de compléments.",
+      "title": "Le délai du régulateur court",
+      "waitFor": "procedure-detail__message--frozen"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-detail__tab--deadlines",
-      "target": "dossier-detail__tab--deadlines",
-      "text": "L'onglet « Échéances » montre ce que le dépôt vient de déclencher.",
-      "title": "Voir les échéances"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "dossier-deadlines-panel__btn--met-1",
-      "target": "dossier-deadlines-panel__btn--met-1",
-      "targetClick": "next",
-      "text": "Vous n'encodez jamais une échéance à la main : OptimCE la calcule à partir du type de dossier, de la région et de la date que vous venez d'enregistrer.",
-      "title": "Une échéance est apparue",
-      "waitFor": "dossier-deadlines-panel__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "back-arrow__link",
-      "target": "back-arrow__link",
-      "text": "Revenez à la liste des dossiers.",
-      "title": "Retour à la liste"
+      "id": "procedure-detail__link--back",
+      "target": "procedure-detail__link--back",
+      "text": "Revenez à la liste des démarches.",
+      "title": "Retour aux démarches"
     },
     {
       "advance": {
@@ -102,48 +64,19 @@
       },
       "id": "administrative-document-hub__tab--deadlines",
       "target": "administrative-document-hub__tab--deadlines",
-      "text": "L'onglet « Échéances » de la page principale rassemble les échéances de tous les dossiers, pour savoir d'un coup d'œil ce qui arrive à terme.",
+      "text": "L'onglet « Échéances » réunit les délais de toutes les démarches : les vôtres comme ceux du régulateur ou du gestionnaire de réseau.",
       "title": "Toutes les échéances"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "deadline-dashboard__btn--met-1",
-      "target": "deadline-dashboard__btn--met-1",
+      "id": "deadline-dashboard__row--0",
+      "target": "deadline-dashboard__row--0",
       "targetClick": "next",
-      "text": "Chaque ligne renvoie à son dossier et indique la date limite. Le filtre affiche par défaut les échéances encore ouvertes.",
-      "title": "Le tableau des échéances",
-      "waitFor": "deadline-dashboard__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "deadline-dashboard__btn--met-1-2",
-      "target": "deadline-dashboard__btn--met-1",
-      "text": "Quand l'obligation est remplie, marquez l'échéance comme respectée. Elle quitte la liste des échéances ouvertes sans disparaître de l'historique.",
-      "title": "Clôturer une échéance"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "confirm",
-      "target": null,
-      "text": "Confirmez : l'échéance passe au statut « Respectée » et le tableau des échéances ouvertes se vide.",
-      "title": "Confirmer"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "deadline-dashboard__empty--message",
-      "target": "deadline-dashboard__empty--message",
-      "targetClick": "next",
-      "text": "Le tableau ne montre plus d'échéance ouverte. L'historique du dossier, lui, garde la trace de ce qui a été fait et quand.",
-      "title": "Plus rien en attente"
+      "text": "Chaque échéance indique qui doit agir et pour quand ; les dépassées remontent en rouge. Elle se clôt d'elle-même quand la réponse attendue est enregistrée dans la démarche.",
+      "title": "L'agenda des échéances"
     }
   ],
-  "title": "Déposer un dossier et suivre son échéance"
+  "title": "Envoyer une démarche et suivre son échéance"
 }

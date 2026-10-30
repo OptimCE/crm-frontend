@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "4c5360479dbc",
   "entry": {
     "route": "/administrative-document"
   },
@@ -16,7 +16,7 @@
       "id": "my-filings__doc-type",
       "target": "my-filings__doc-type",
       "targetClick": "next",
-      "text": "Als Mitglied sehen Sie die Dossiers der Gemeinschaft nicht: Sie sehen nur die Angaben zu Ihrer Person, die an die Regulierungsbehörde übermittelt wurden, und in welchem Dokument.",
+      "text": "Als Mitglied sehen Sie die Verfahren der Gemeinschaft nicht: Sie sehen nur die Angaben zu Ihrer Person, die an die Regulierungsbehörde übermittelt wurden, und in welchem Dokument.",
       "title": "Was über mich eingereicht wurde"
     },
     {

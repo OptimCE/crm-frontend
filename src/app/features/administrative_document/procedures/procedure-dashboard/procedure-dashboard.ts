@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -80,6 +80,7 @@ export class ProcedureDashboard implements OnInit {
   private readonly translate = inject(TranslateService);
   private readonly dialogService = inject(DialogService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly realtime = inject(RealtimeService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly lang = inject(LocaleService).locale;
@@ -144,7 +145,15 @@ export class ProcedureDashboard implements OnInit {
         next: (res) => this.operations.set(Array.isArray(res.data) ? res.data : []),
         error: () => this.operations.set([]),
       });
-    this.load();
+
+    // `/administrative-document?id_sharing_operation=2` from a sharing operation
+    // lands here, the default tab. This subscription owns the first load so
+    // the filter applies to it.
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const operation = Number(params.get('id_sharing_operation'));
+      this.operationFilter = Number.isInteger(operation) && operation > 0 ? operation : null;
+      this.load();
+    });
   }
 
   load(): void {

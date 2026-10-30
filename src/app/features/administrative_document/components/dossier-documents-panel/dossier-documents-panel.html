@@ -7,6 +7,8 @@
       </p>
     </div>
   } @else {
+    <!-- Test-ids by position, not by piece id: an in-app tour points at "the
+         first piece" of whatever procedure the user is on. -->
     @for (piece of detail().pieces; track piece.id; let i = $index) {
       <div
         class="rounded-lg border border-surface-200 p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
@@ -32,7 +34,7 @@
                 [value]="renderLabelKey(state) | translate"
                 [severity]="renderSeverity(state)"
                 [icon]="isRendering(piece) ? 'pi pi-spin pi-spinner' : 'pi pi-times-circle'"
-                [attr.data-testid]="'dossier-documents-panel__tag--render-' + piece.id"
+                [attr.data-testid]="'dossier-documents-panel__tag--render-' + i"
               />
             }
           </div>
@@ -71,7 +73,7 @@
               "
               [disabled]="isRendering(piece)"
               (onClick)="openGenerate(piece)"
-              [attr.data-testid]="'dossier-documents-panel__btn--generate-' + piece.id"
+              [attr.data-testid]="'dossier-documents-panel__btn--generate-' + i"
             />
           }
           @if (canUpload(piece)) {
@@ -84,7 +86,7 @@
               [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
               [disabled]="isRendering(piece)"
               (onClick)="openUpload(piece)"
-              [attr.data-testid]="'dossier-documents-panel__btn--upload-' + piece.id"
+              [attr.data-testid]="'dossier-documents-panel__btn--upload-' + i"
             />
           }
           <!-- Outside the editable rules on purpose: once sent, downloading what
@@ -99,7 +101,7 @@
               [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
               [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
               (onClick)="download(piece)"
-              [attr.data-testid]="'dossier-documents-panel__btn--download-' + piece.id"
+              [attr.data-testid]="'dossier-documents-panel__btn--download-' + i"
             />
           }
         </div>

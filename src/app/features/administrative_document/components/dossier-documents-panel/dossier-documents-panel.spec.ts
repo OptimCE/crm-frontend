@@ -76,22 +76,22 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
   });
 
   it('offers generate and upload before sending, download where there is a version', () => {
-    expect(byTestId('dossier-documents-panel__btn--generate-21')).not.toBeNull();
-    expect(byTestId('dossier-documents-panel__btn--upload-21')).not.toBeNull();
-    expect(byTestId('dossier-documents-panel__btn--download-21')).toBeNull();
-    expect(byTestId('dossier-documents-panel__btn--download-22')).not.toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--generate-0')).not.toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--upload-0')).not.toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--download-0')).toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--download-1')).not.toBeNull();
   });
 
   it('keeps only download once the procedure is frozen', () => {
     fixture.componentInstance.detail.set(procedureDetail({ frozen_at: '2026-10-29T10:00:00Z' }));
     fixture.detectChanges();
-    expect(byTestId('dossier-documents-panel__btn--generate-22')).toBeNull();
-    expect(byTestId('dossier-documents-panel__btn--upload-22')).toBeNull();
-    expect(byTestId('dossier-documents-panel__btn--download-22')).not.toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--generate-1')).toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--upload-1')).toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--download-1')).not.toBeNull();
   });
 
   it('hands the procedure an upload returned to the page', () => {
-    byTestId('dossier-documents-panel__btn--upload-21')?.querySelector('button')?.click();
+    byTestId('dossier-documents-panel__btn--upload-0')?.querySelector('button')?.click();
     const [component, config] = dialogOpen.mock.calls[0] as [unknown, { data: unknown }];
     expect(component).toBe(UploadVersionDialog);
     expect(config.data).toEqual({
@@ -106,11 +106,11 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
   });
 
   it('watches a queued render and asks again as soon as the annex says it ended', () => {
-    byTestId('dossier-documents-panel__btn--generate-21')?.querySelector('button')?.click();
+    byTestId('dossier-documents-panel__btn--generate-0')?.querySelector('button')?.click();
     expect(dialogOpen.mock.calls[0][0]).toBe(GenerateDialog);
     dialogClose.next(true);
     fixture.detectChanges();
-    expect(byTestId('dossier-documents-panel__tag--render-21')).not.toBeNull();
+    expect(byTestId('dossier-documents-panel__tag--render-0')).not.toBeNull();
 
     renderStatus.mockReturnValue(
       of(new ApiResponse({ document_id: 21, render_state: null, current_version_id: 91 })),
@@ -140,7 +140,7 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
 
     expect(renderStatus).toHaveBeenCalledWith(21);
     expect(fixture.componentInstance.stale).toBe(1);
-    expect(byTestId('dossier-documents-panel__tag--render-21')).toBeNull();
+    expect(byTestId('dossier-documents-panel__tag--render-0')).toBeNull();
   });
 
   it('shows a failed render without moving the piece', () => {

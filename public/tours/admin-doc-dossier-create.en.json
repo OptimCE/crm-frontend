@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "4c5360479dbc",
   "entry": {
     "route": "/administrative-document"
   },
@@ -11,59 +11,21 @@
   "steps": [
     {
       "advance": {
-        "on": "manual"
+        "on": "click"
       },
-      "id": "dossier-list__empty--message",
-      "target": "dossier-list__empty--message",
-      "targetClick": "next",
-      "text": "This page tracks the dossiers filed with the CWaPE and the grid operator. Every dossier concerns exactly one sharing operation: a community running several operations files one dossier per operation.",
-      "title": "No dossier yet",
-      "waitFor": "dossier-list__table"
+      "id": "procedure-dashboard__btn--create",
+      "target": "procedure-dashboard__btn--create",
+      "text": "Most procedures open on their own. Those no change in the CRM triggers yet — authorising a new operation, ending a sharing, updating the community's information — open with \"New procedure\".",
+      "title": "Open a procedure by hand"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-list__btn--create",
-      "target": "dossier-list__btn--create",
-      "text": "Click \"New dossier\" to open the creation form.",
-      "title": "Create a dossier"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
       "id": "dossier-create-dialog__select--type",
       "target": "dossier-create-dialog__select--type",
-      "text": "The type decides which regulatory deadlines are derived later. Here, a community creation notification.",
-      "title": "Choose the dossier type"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
-      "id": "dossier-create-dialog__select--operation",
-      "target": "dossier-create-dialog__select--operation",
-      "text": "Pick the sharing operation the filing is about. It supplies the members and meters that the dossier's documents will list.",
-      "title": "Choose the sharing operation"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "dossier-create-dialog__input--title",
-      "target": "dossier-create-dialog__input--title",
-      "text": "Give the dossier a title that sets it apart from the others.",
-      "title": "Name the dossier"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "dossier-create-dialog__input--external-ref",
-      "target": "dossier-create-dialog__input--external-ref",
-      "text": "The title is free text — it is how you will recognise the dossier. The reference is the one assigned by the authority; it identifies the dossier uniquely and stays editable later.",
-      "title": "Title and reference"
+      "text": "Pick the procedure from your regulator's catalogue.",
+      "title": "Type of procedure"
     },
     {
       "advance": {
@@ -71,38 +33,29 @@
       },
       "id": "dossier-create-dialog__btn--submit",
       "target": "dossier-create-dialog__btn--submit",
-      "text": "Submit: the dossier is created and joins the tracking table.",
+      "text": "Submit: OptimCE opens the procedure as a draft and shows its page.",
       "title": "Create"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "the-dossier-appears-in-the-list",
-      "target": null,
-      "text": "The dossier shows up in the table with the status \"In preparation\". Until it is submitted it stays editable and no deadline is running.",
-      "title": "The dossier is created",
-      "waitFor": "dossier-list__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "dossier-list__row--0",
-      "target": "dossier-list__row--0",
-      "text": "Click anywhere on the row to open the dossier page.",
-      "title": "Open the dossier"
+      "id": "procedure-detail__frieze",
+      "target": "procedure-detail__frieze",
+      "targetClick": "next",
+      "text": "At the top, the recipient and the one action that matters now. Below, the steps the regulator sets out, each with its legal delay: the current step is highlighted.",
+      "title": "The procedure page"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "the-dossier-detail-page-opens",
-      "target": null,
-      "text": "The dossier page gathers everything about the filing: its documents, its deadlines and the history of its status changes. The buttons at the top offer only the status changes that are legal right now.",
-      "title": "The dossier page",
-      "waitFor": "dossier-detail__tag--status"
+      "id": "dossier-documents-panel__row--0",
+      "target": "dossier-documents-panel__row--0",
+      "targetClick": "next",
+      "text": "The procedure lists the documents the regulator expects right away, one per member where needed. Each is generated from the CRM or attached as a file; once all are ready, the procedure is ready to send.",
+      "title": "The documents to provide"
     }
   ],
-  "title": "Create an administrative dossier"
+  "title": "Open a procedure"
 }

@@ -1,7 +1,7 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "4c5360479dbc",
   "entry": {
-    "route": "/administrative-document"
+    "route": "/administrative-document/procedures/:dossierId"
   },
   "guideUrl": "https://guide.optimce.be/admin-doc-submit-deadline/nl.html",
   "id": "admin-doc-submit-deadline",
@@ -13,88 +13,50 @@
       "advance": {
         "on": "click"
       },
-      "id": "dossier-list__row--0",
-      "target": "dossier-list__row--0",
-      "text": "Open het dossier waarvan u de indiening wilt vastleggen.",
-      "title": "Het dossier openen"
+      "id": "procedure-detail__btn--primary",
+      "target": "procedure-detail__btn--primary",
+      "text": "De hoofdknop biedt de enige actie aan die nu telt. Omdat de procedure klaar is, is dat “Versturen”.",
+      "title": "Versturen"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "dossier-detail__tag--status",
-      "target": "dossier-detail__tag--status",
+      "id": "procedure-send-dialog__input--subject",
+      "target": "procedure-send-dialog__input--subject",
       "targetClick": "next",
-      "text": "Zolang het dossier “In voorbereiding” is, verwacht de regulator niets van u. De knoppen bovenaan bieden alleen de statuswijzigingen aan die in dit stadium zijn toegestaan.",
-      "title": "Een dossier in voorbereiding",
-      "waitFor": "dossier-detail__btn--transition-2"
+      "text": "OptimCE verstuurt zelf niets. Het bereidt de bestemmeling voor, het onderwerp met zijn referentie, een tekst om te kopiëren en de bij te voegen documenten; u verstuurt ze via uw mailbox of het onlineformulier van de regulator.",
+      "title": "Wat u verstuurt",
+      "waitFor": "procedure-send-dialog__btn--submit"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-detail__btn--transition-2",
-      "target": "dossier-detail__btn--transition-2",
-      "text": "U dient het dossier via uw gebruikelijke kanalen in bij de bevoegde overheid; hier legt u vast dat die indiening heeft plaatsgevonden.",
-      "title": "Het dossier als ingediend markeren"
+      "id": "procedure-send-dialog__btn--submit",
+      "target": "procedure-send-dialog__btn--submit",
+      "text": "Vul de datum en het kanaal in, voeg desgewenst de verstuurde e-mail bij en kies dan “Markeren als verstuurd”. De procedure ligt dan vast: een wijziging die later binnenkomt, gaat naar een nieuwe procedure.",
+      "title": "Markeren als verstuurd"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "set-the-submission-date-to-today",
-      "target": null,
-      "text": "De datum van indiening is geen formaliteit: vanaf die datum lopen de reglementaire termijnen. Kies de werkelijke datum van de indiening.",
-      "title": "De datum van indiening",
-      "waitFor": "transition-dialog__date--submission"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "transition-dialog__btn--submit",
-      "target": "transition-dialog__btn--submit",
-      "text": "Bevestig om de statuswijziging te registreren.",
-      "title": "De overgang bevestigen"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "dossier-detail__tag--status-2",
-      "target": "dossier-detail__tag--status",
+      "id": "procedure-detail__deadlines",
+      "target": "procedure-detail__deadlines",
       "targetClick": "next",
-      "text": "De status verandert en de voorgestelde acties veranderen mee: een ingediend dossier kan volledig worden verklaard, worden gecorrigeerd of vervallen.",
-      "title": "Het dossier is ingediend"
+      "text": "Het versturen start de termijn voor de volledigheidscontrole door de CWaPE, geteld in Waalse werkdagen. De volgende actie wordt “Een antwoord toevoegen”: daar noteert u de bevestiging of het verzoek om aanvullingen.",
+      "title": "De termijn van de regulator loopt",
+      "waitFor": "procedure-detail__message--frozen"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-detail__tab--deadlines",
-      "target": "dossier-detail__tab--deadlines",
-      "text": "Het tabblad “Termijnen” toont wat de indiening zojuist in gang heeft gezet.",
-      "title": "De termijnen bekijken"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "dossier-deadlines-panel__btn--met-1",
-      "target": "dossier-deadlines-panel__btn--met-1",
-      "targetClick": "next",
-      "text": "U voert een termijn nooit handmatig in: OptimCE berekent hem op basis van het dossiertype, het gewest en de datum die u zojuist hebt vastgelegd.",
-      "title": "Er is een termijn verschenen",
-      "waitFor": "dossier-deadlines-panel__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "back-arrow__link",
-      "target": "back-arrow__link",
-      "text": "Keer terug naar de lijst met dossiers.",
-      "title": "Terug naar de lijst"
+      "id": "procedure-detail__link--back",
+      "target": "procedure-detail__link--back",
+      "text": "Ga terug naar de lijst met procedures.",
+      "title": "Terug naar de procedures"
     },
     {
       "advance": {
@@ -102,48 +64,19 @@
       },
       "id": "administrative-document-hub__tab--deadlines",
       "target": "administrative-document-hub__tab--deadlines",
-      "text": "Het tabblad “Termijnen” van de hoofdpagina bundelt de termijnen van alle dossiers, zodat u in één oogopslag ziet wat binnenkort vervalt.",
+      "text": "Het tabblad “Termijnen” bundelt de termijnen van alle procedures: die van u en die van de regulator of de netbeheerder.",
       "title": "Alle termijnen"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "deadline-dashboard__btn--met-1",
-      "target": "deadline-dashboard__btn--met-1",
+      "id": "deadline-dashboard__row--0",
+      "target": "deadline-dashboard__row--0",
       "targetClick": "next",
-      "text": "Elke rij verwijst naar het bijbehorende dossier en vermeldt de vervaldatum. De filter toont standaard de termijnen die nog openstaan.",
-      "title": "Het overzicht van de termijnen",
-      "waitFor": "deadline-dashboard__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "deadline-dashboard__btn--met-1-2",
-      "target": "deadline-dashboard__btn--met-1",
-      "text": "Wanneer aan de verplichting is voldaan, markeert u de termijn als nagekomen. Hij verdwijnt uit de lijst van openstaande termijnen, maar blijft in de historiek bewaard.",
-      "title": "Een termijn afsluiten"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "confirm",
-      "target": null,
-      "text": "Bevestig: de termijn krijgt de status “Nagekomen” en het overzicht van de openstaande termijnen wordt leeg.",
-      "title": "Bevestigen"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "deadline-dashboard__empty--message",
-      "target": "deadline-dashboard__empty--message",
-      "targetClick": "next",
-      "text": "Het overzicht toont geen openstaande termijn meer. De historiek van het dossier houdt wel bij wat er is gedaan en wanneer.",
-      "title": "Niets meer in afwachting"
+      "text": "Elke termijn vermeldt wie moet handelen en tegen wanneer; verstreken termijnen komen in het rood bovenaan. Hij wordt vanzelf afgesloten zodra het verwachte antwoord in de procedure is vastgelegd.",
+      "title": "De agenda van de termijnen"
     }
   ],
-  "title": "Een dossier indienen en de termijn opvolgen"
+  "title": "Een procedure versturen en de termijn opvolgen"
 }

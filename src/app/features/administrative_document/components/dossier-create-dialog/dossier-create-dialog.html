@@ -15,7 +15,15 @@
       class="w-full"
       [placeholder]="'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TYPE_PLACEHOLDER' | translate"
       data-testid="dossier-create-dialog__select--type"
-    />
+    >
+      <!-- One test-id per catalogue code: the labels are sorted per language,
+           so a position picks a different type in each. -->
+      <ng-template #item let-option>
+        <span [attr.data-testid]="'dossier-create-dialog__option--' + option.value">{{
+          option.label
+        }}</span>
+      </ng-template>
+    </p-select>
   </div>
 
   @if (needsOperation()) {

@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "4c5360479dbc",
   "entry": {
     "route": "/administrative-document"
   },
@@ -16,7 +16,7 @@
       "id": "my-filings__doc-type",
       "target": "my-filings__doc-type",
       "targetClick": "next",
-      "text": "En tant que membre, vous ne voyez pas les dossiers de la communauté : vous voyez uniquement les informations vous concernant qui ont été transmises au régulateur, et dans quel document.",
+      "text": "En tant que membre, vous ne voyez pas les démarches de la communauté : vous voyez uniquement les informations vous concernant qui ont été transmises au régulateur, et dans quel document.",
       "title": "Ce qui a été déclaré à mon sujet"
     },
     {

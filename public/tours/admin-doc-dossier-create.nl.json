@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "4c5360479dbc",
   "entry": {
     "route": "/administrative-document"
   },
@@ -11,59 +11,21 @@
   "steps": [
     {
       "advance": {
-        "on": "manual"
+        "on": "click"
       },
-      "id": "dossier-list__empty--message",
-      "target": "dossier-list__empty--message",
-      "targetClick": "next",
-      "text": "Op deze pagina volgt u de dossiers op die bij de CWaPE en de netbeheerder zijn ingediend. Elk dossier betreft één enkele deeloperatie: een gemeenschap die er meerdere beheert, dient per operatie een dossier in.",
-      "title": "Nog geen dossier",
-      "waitFor": "dossier-list__table"
+      "id": "procedure-dashboard__btn--create",
+      "target": "procedure-dashboard__btn--create",
+      "text": "De meeste procedures openen vanzelf. Die welke nog door geen enkele wijziging in het CRM worden gestart — de machtiging van een nieuwe operatie, het einde van een deling, de bijwerking van de gegevens van de gemeenschap — opent u met “Nieuwe procedure”.",
+      "title": "Een procedure met de hand openen"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-list__btn--create",
-      "target": "dossier-list__btn--create",
-      "text": "Klik op “Nieuw dossier” om het aanmaakformulier te openen.",
-      "title": "Dossier aanmaken"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
       "id": "dossier-create-dialog__select--type",
       "target": "dossier-create-dialog__select--type",
-      "text": "Het type bepaalt welke wettelijke termijnen daarna worden berekend. Hier een kennisgeving van oprichting van een gemeenschap.",
-      "title": "Type dossier kiezen"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
-      "id": "dossier-create-dialog__select--operation",
-      "target": "dossier-create-dialog__select--operation",
-      "text": "Selecteer de betrokken deeloperatie. Zij levert de leden en meters die in de documenten van het dossier worden opgenomen.",
-      "title": "Deeloperatie kiezen"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "dossier-create-dialog__input--title",
-      "target": "dossier-create-dialog__input--title",
-      "text": "Geef het dossier een titel die het van de andere onderscheidt.",
-      "title": "Het dossier benoemen"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "dossier-create-dialog__input--external-ref",
-      "target": "dossier-create-dialog__input--external-ref",
-      "text": "De titel is vrij te kiezen: hij helpt u het dossier terug te vinden. De referentie is die welke de bevoegde instantie heeft toegekend — ze identificeert het dossier op unieke wijze en kan later nog worden gewijzigd.",
-      "title": "Titel en referentie"
+      "text": "Kies de procedure in de catalogus van uw regulator.",
+      "title": "Soort procedure"
     },
     {
       "advance": {
@@ -71,38 +33,29 @@
       },
       "id": "dossier-create-dialog__btn--submit",
       "target": "dossier-create-dialog__btn--submit",
-      "text": "Bevestig: het dossier wordt aangemaakt en komt in de opvolgingstabel terecht.",
+      "text": "Bevestig: OptimCE opent de procedure als concept en toont de pagina ervan.",
       "title": "Aanmaken"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "the-dossier-appears-in-the-list",
-      "target": null,
-      "text": "Het dossier verschijnt in de tabel met de status “In voorbereiding”. Zolang het niet is ingediend, blijft het bewerkbaar en loopt er geen enkele termijn.",
-      "title": "Het dossier is aangemaakt",
-      "waitFor": "dossier-list__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "dossier-list__row--0",
-      "target": "dossier-list__row--0",
-      "text": "Klik ergens op de rij om de dossierpagina te openen.",
-      "title": "Dossier openen"
+      "id": "procedure-detail__frieze",
+      "target": "procedure-detail__frieze",
+      "targetClick": "next",
+      "text": "Bovenaan de bestemmeling en de enige actie die nu telt. Daaronder de stappen die de regulator voorschrijft, elk met haar wettelijke termijn: de huidige stap is gemarkeerd.",
+      "title": "De pagina van de procedure"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "the-dossier-detail-page-opens",
-      "target": null,
-      "text": "De pagina bundelt alles over het dossier: de documenten, de termijnen en de historiek van de statuswijzigingen. De knoppen bovenaan bieden alleen de statuswijzigingen aan die op dat moment zijn toegestaan.",
-      "title": "De dossierpagina",
-      "waitFor": "dossier-detail__tag--status"
+      "id": "dossier-documents-panel__row--0",
+      "target": "dossier-documents-panel__row--0",
+      "targetClick": "next",
+      "text": "De procedure somt meteen de documenten op die de regulator verwacht, waar nodig één per lid. Elk document wordt vanuit het CRM gegenereerd of als bestand bijgevoegd; zodra ze allemaal klaar zijn, is de procedure klaar om te versturen.",
+      "title": "De te leveren documenten"
     }
   ],
-  "title": "Een administratief dossier aanmaken"
+  "title": "Een procedure openen"
 }

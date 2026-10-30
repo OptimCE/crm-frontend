@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
 import { Subject, of } from 'rxjs';
 import { vi } from 'vitest';
@@ -52,6 +52,7 @@ describe('ProcedureDashboard', () => {
   async function setup(
     data: InboxOut,
     status: ProcedureModuleStatusOut = moduleStatus(),
+    query: Record<string, string> = {},
   ): Promise<void> {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     events = new Subject<RealtimeEvent>();
@@ -62,6 +63,7 @@ describe('ProcedureDashboard', () => {
       imports: [ProcedureDashboard, TranslateModule.forRoot()],
       providers: [
         provideRouter([]),
+        { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap(query)) } },
         { provide: AdministrativeProcedureService, useValue: { getInbox, getStatus, invalidate } },
         {
           provide: AdministrativeDocumentService,
@@ -228,6 +230,14 @@ describe('ProcedureDashboard', () => {
 
     expect(getInbox).toHaveBeenLastCalledWith({ operation_id: 3, grd: 'ores' });
     expect(component.grdOptions().map((o) => o.value)).toEqual(['ores', 'resa']);
+  });
+
+  it('opens filtered on the operation a sharing operation’s link names', async () => {
+    await setup(inbox(), moduleStatus(), { id_sharing_operation: '2' });
+
+    expect(getInbox).toHaveBeenCalledTimes(1);
+    expect(getInbox).toHaveBeenCalledWith({ operation_id: 2 });
+    expect(fixture.componentInstance.operationFilter).toBe(2);
   });
 
   it('refetches, fresh, on a hint and on a reconnect, once per burst', async () => {
