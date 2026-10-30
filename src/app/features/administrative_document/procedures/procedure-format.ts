@@ -13,9 +13,11 @@ import {
   BaselineChoice,
   Bucket,
   ChangeStatus,
+  CheckOutcome,
   CorrespondenceDirection,
   DeadlineParty,
   DocumentKind,
+  EntrySheetOut,
   Labels,
   NextActionCode,
   PieceOut,
@@ -26,7 +28,9 @@ import {
   ProcedureItemOut,
   ProcedureStatus,
   ThreadEntryOut,
+  VersionStage,
 } from '../../../shared/dtos/administrative-procedure.dtos';
+import { RenderState } from '../../../shared/dtos/administrative-document.dtos';
 import { TagSeverity, formatApiDate } from '../administrative-document-format';
 
 const PREFIX = 'ADMINISTRATIVE_DOCUMENT.PROCEDURES';
@@ -230,12 +234,44 @@ export function pieceStatusSeverity(status: ProcedureDocumentStatus): TagSeverit
     case ProcedureDocumentStatus.SIGNED:
       return 'success';
     case ProcedureDocumentStatus.MISSING:
-    case ProcedureDocumentStatus.STALE:
       return 'warn';
+    // Outdated by a later change: its own colour, it needs regenerating.
+    case ProcedureDocumentStatus.STALE:
     case ProcedureDocumentStatus.REJECTED:
       return 'danger';
     default:
       return 'secondary';
+  }
+}
+
+export function versionStageLabelKey(stage: VersionStage): string {
+  return `${PREFIX}.VERSION_STAGE.${stage}`;
+}
+
+/** A draft is work in progress; a final is what gets sent; a form to sign waits on a participant. */
+export function versionStageSeverity(stage: VersionStage): TagSeverity {
+  switch (stage) {
+    case VersionStage.FINAL:
+      return 'success';
+    case VersionStage.DRAFT:
+      return 'info';
+    default:
+      return 'contrast';
+  }
+}
+
+export function checkOutcomeLabelKey(outcome: CheckOutcome): string {
+  return `${PREFIX}.CHECK_OUTCOME.${outcome}`;
+}
+
+export function checkOutcomeSeverity(outcome: CheckOutcome): TagSeverity {
+  switch (outcome) {
+    case CheckOutcome.IDENTICAL:
+      return 'success';
+    case CheckOutcome.DIFFERENT:
+      return 'danger';
+    default:
+      return 'warn';
   }
 }
 
@@ -343,6 +379,35 @@ export function canGenerate(detail: ProcedureDetailOut, piece: PieceOut): boolea
   return detail.frozen_at === null && piece.template !== null && GENERATABLE.has(piece.status);
 }
 
+/**
+ * One click: a stale piece the annex rendered (an upload has no pre-fill to
+ * carry the reviewer's edits from, so it goes through the review form).
+ */
+export function canRegenerate(detail: ProcedureDetailOut, piece: PieceOut): boolean {
+  return (
+    canGenerate(detail, piece) &&
+    piece.status === ProcedureDocumentStatus.STALE &&
+    piece.current_version?.generated === true &&
+    !isRendering(piece)
+  );
+}
+
+/** Regenerate a rendered final from what it froze and compare the bytes. */
+export function canVerify(piece: PieceOut): boolean {
+  const version = piece.current_version;
+  return (
+    version !== null &&
+    version.generated &&
+    version.stage === VersionStage.FINAL &&
+    !isRendering(piece)
+  );
+}
+
+/** What the server says renders now (the slot outlives a page reload). */
+export function isRendering(piece: PieceOut): boolean {
+  return piece.render?.state === RenderState.PENDING;
+}
+
 /** After sending, only what the recipient sends back still arrives. */
 export function canUpload(detail: ProcedureDetailOut, piece: PieceOut): boolean {
   if (piece.status === ProcedureDocumentStatus.OBSOLETE) return false;
@@ -433,14 +498,36 @@ export function threadLine(
 // The message the admin sends
 // ---------------------------------------------------------------------------
 
-/** The pieces that go with the sending: required, community-supplied, there. */
+/**
+ * The pieces that go with the sending: community-supplied and there (ready or
+ * signed). A form still waiting for its signature is not sent. The annex's own
+ * rule; it refuses to mark as sent until each of these is final.
+ */
 export function piecesToSend(detail: ProcedureDetailOut): PieceOut[] {
   return detail.pieces.filter(
     (p) =>
       p.kind !== DocumentKind.RECEIVED &&
-      p.status !== ProcedureDocumentStatus.OBSOLETE &&
+      (p.status === ProcedureDocumentStatus.READY || p.status === ProcedureDocumentStatus.SIGNED) &&
       p.current_version_id !== null,
   );
+}
+
+/** The pieces still to render as finals (a draft), or rendering. */
+export function piecesNotFinal(detail: ProcedureDetailOut): PieceOut[] {
+  return piecesToSend(detail).filter(
+    (p) => isRendering(p) || p.current_version?.stage !== VersionStage.FINAL,
+  );
+}
+
+/**
+ * A fiche de saisie value as text to read and paste: a box ticked or not in
+ * words, nothing for a blank. `t` resolves a key.
+ */
+export function entryValueText(value: unknown, t: (key: string) => string): string {
+  if (value === null || value === undefined || value === '') return '';
+  if (typeof value === 'boolean') return t(`${PREFIX}.SEND.SHEET.${value ? 'YES' : 'NO'}`);
+  if (typeof value === 'number' || typeof value === 'string') return String(value);
+  return JSON.stringify(value);
 }
 
 /**
@@ -463,4 +550,56 @@ export function sendBody(
     reference: detail.send_preview.reference,
     pieces: pieces || t(`${PREFIX}.SEND.NO_PIECES`),
   });
+}
+
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+
+function escapeHtml(text: string): string {
+  return text.replace(/[&<>"']/g, (ch) => HTML_ESCAPES[ch]);
+}
+
+/**
+ * The fiches de saisie as a standalone printable page (print it, or save it as
+ * PDF from the browser): the same values, labels and order as on screen, and
+ * nothing of the application around them.
+ */
+export function entrySheetsHtml(
+  title: string,
+  sheets: EntrySheetOut[],
+  lang: string,
+  t: (key: string) => string,
+): string {
+  const body = sheets
+    .map((sheet) => {
+      const sections = sheet.sections
+        .map((section) => {
+          const rows = section.fields
+            .map(
+              (field) =>
+                `<tr><th>${escapeHtml(pickLabel(field.labels, lang, field.key))}</th>` +
+                `<td>${escapeHtml(entryValueText(field.value, t))}</td></tr>`,
+            )
+            .join('');
+          return `<h3>${escapeHtml(pickLabel(section.labels, lang, ''))}</h3><table>${rows}</table>`;
+        })
+        .join('');
+      return `<h2>${escapeHtml(pickLabel(sheet.labels, lang, sheet.code))}</h2>${sections}`;
+    })
+    .join('');
+  return (
+    `<!doctype html><html lang="${escapeHtml(lang)}"><head><meta charset="utf-8">` +
+    `<title>${escapeHtml(title)}</title><style>` +
+    'body{font-family:system-ui,sans-serif;font-size:11pt;color:#1f2933;margin:16mm}' +
+    'h1{font-size:15pt}h2{font-size:13pt;margin-top:8mm}h3{font-size:10pt;color:#52606d;' +
+    'text-transform:uppercase;margin:5mm 0 1mm}table{width:100%;border-collapse:collapse}' +
+    'th,td{text-align:left;vertical-align:top;padding:1.5mm 2mm;border-bottom:0.3mm solid #d9e2ec}' +
+    'th{width:40%;font-weight:normal;color:#52606d}td{font-family:ui-monospace,monospace}' +
+    `</style></head><body><h1>${escapeHtml(title)}</h1>${body}</body></html>`
+  );
 }

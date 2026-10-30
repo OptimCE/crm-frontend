@@ -10,10 +10,17 @@ import { LocaleService } from '../../../../core/services/language/locale.service
 import { RealtimeService } from '../../../../core/services/realtime/realtime.service';
 import { REALTIME_TOPICS, RealtimeEvent } from '../../../../core/services/realtime/realtime.types';
 import { RenderState } from '../../../../shared/dtos/administrative-document.dtos';
-import { ProcedureDetailOut } from '../../../../shared/dtos/administrative-procedure.dtos';
+import {
+  CheckOutcome,
+  ProcedureDetailOut,
+  ProcedureDocumentStatus,
+  RenderPurpose,
+  VersionStage,
+} from '../../../../shared/dtos/administrative-procedure.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
 import { procedureDetail } from '../../procedures/procedure-fixtures';
 import { DossierDocumentsPanel } from './dossier-documents-panel';
 import { GenerateDialog } from '../generate-dialog/generate-dialog';
@@ -39,6 +46,8 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
   let renderStatus: ReturnType<typeof vi.fn>;
   let events: Subject<RealtimeEvent>;
   let openSnackBar: ReturnType<typeof vi.fn>;
+  let regenerate: ReturnType<typeof vi.fn>;
+  let verify: ReturnType<typeof vi.fn>;
 
   const root = (): HTMLElement => fixture.nativeElement as HTMLElement;
   const byTestId = (id: string): HTMLElement | null =>
@@ -50,6 +59,8 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
     renderStatus = vi.fn();
     events = new Subject<RealtimeEvent>();
     openSnackBar = vi.fn();
+    regenerate = vi.fn();
+    verify = vi.fn();
     await TestBed.configureTestingModule({
       imports: [Host, TranslateModule.forRoot()],
       providers: [
@@ -57,6 +68,7 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
           provide: AdministrativeDocumentService,
           useValue: { renderStatus, downloadVersion: vi.fn() },
         },
+        { provide: AdministrativeProcedureService, useValue: { regenerate, verify } },
         { provide: RealtimeService, useValue: { live: signal(true), on: () => events } },
         { provide: LocaleService, useValue: { locale: signal('fr') } },
         { provide: SnackbarNotification, useValue: { openSnackBar } },
@@ -167,5 +179,136 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
     });
     expect(openSnackBar).toHaveBeenCalledWith('template missing', expect.anything());
     expect(fixture.componentInstance.stale).toBe(1);
+  });
+
+  // ---- phase 2: drafts, finals, one click, verification ---------------------
+
+  const withPiece = (
+    index: number,
+    piece: Partial<ProcedureDetailOut['pieces'][number]>,
+    rest = {},
+  ) => {
+    const detail = procedureDetail(rest);
+    detail.pieces[index] = { ...detail.pieces[index], ...piece };
+    return detail;
+  };
+
+  it('says what the current version is: a stamped draft here', () => {
+    expect(byTestId('dossier-documents-panel__tag--stage-1')?.textContent).toContain(
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.VERSION_STAGE.1',
+    );
+    expect(byTestId('dossier-documents-panel__tag--stage-0')).toBeNull(); // no version yet
+  });
+
+  it('regenerates a stale piece in one click, and watches the render', () => {
+    fixture.componentInstance.detail.set(withPiece(1, { status: ProcedureDocumentStatus.STALE }));
+    fixture.detectChanges();
+    regenerate.mockReturnValue(
+      of(new ApiResponse({ requested: [22], needs_review: [], in_flight: [] })),
+    );
+
+    byTestId('dossier-documents-panel__btn--regenerate-1')?.querySelector('button')?.click();
+    fixture.detectChanges();
+
+    expect(regenerate).toHaveBeenCalledWith(12, [22]);
+    expect(byTestId('dossier-documents-panel__tag--render-1')).not.toBeNull();
+    expect(dialogOpen).not.toHaveBeenCalled();
+  });
+
+  it('regenerates every stale piece from the banner', () => {
+    fixture.componentInstance.detail.set(withPiece(1, { status: ProcedureDocumentStatus.STALE }));
+    fixture.detectChanges();
+    regenerate.mockReturnValue(
+      of(new ApiResponse({ requested: [22], needs_review: [], in_flight: [] })),
+    );
+
+    byTestId('dossier-documents-panel__btn--regenerate-stale')?.querySelector('button')?.click();
+
+    expect(regenerate).toHaveBeenCalledWith(12, undefined);
+  });
+
+  it('opens the review form when a piece cannot be regenerated in one click', () => {
+    fixture.componentInstance.detail.set(withPiece(1, { status: ProcedureDocumentStatus.STALE }));
+    fixture.detectChanges();
+    regenerate.mockReturnValue(
+      of(new ApiResponse({ requested: [], needs_review: [22], in_flight: [] })),
+    );
+
+    byTestId('dossier-documents-panel__btn--regenerate-1')?.querySelector('button')?.click();
+
+    expect(dialogOpen.mock.calls[0][0]).toBe(GenerateDialog);
+  });
+
+  it('does not offer one click for an uploaded piece: there is nothing to carry over', () => {
+    const detail = withPiece(1, { status: ProcedureDocumentStatus.STALE });
+    detail.pieces[1].current_version = { ...detail.pieces[1].current_version!, generated: false };
+    fixture.componentInstance.detail.set(detail);
+    fixture.detectChanges();
+
+    expect(byTestId('dossier-documents-panel__btn--regenerate-1')).toBeNull();
+    expect(byTestId('dossier-documents-panel__btn--generate-1')).not.toBeNull();
+  });
+
+  it('watches a render the server says is in flight, after a reload', () => {
+    fixture.componentInstance.detail.set(
+      withPiece(1, {
+        render: {
+          state: RenderState.PENDING,
+          purpose: RenderPurpose.RENDER,
+          stage: VersionStage.FINAL,
+          requested_at: '2026-10-30T10:00:00Z',
+          error: null,
+        },
+      }),
+    );
+    fixture.detectChanges();
+
+    expect(byTestId('dossier-documents-panel__tag--render-1')).not.toBeNull();
+    expect(
+      byTestId('dossier-documents-panel__btn--generate-1')?.querySelector('button')?.disabled,
+    ).toBe(true);
+  });
+
+  it('verifies a sent final and shows the outcome', () => {
+    const final = withPiece(
+      1,
+      {
+        current_version: {
+          ...procedureDetail().pieces[1].current_version!,
+          stage: VersionStage.FINAL,
+        },
+        last_check: {
+          outcome: CheckOutcome.IDENTICAL,
+          checked_at: '2026-10-30T10:00:00Z',
+          content_sha256: 'abc',
+        },
+      },
+      { frozen_at: '2026-10-29T10:00:00Z' },
+    );
+    fixture.componentInstance.detail.set(final);
+    fixture.detectChanges();
+    verify.mockReturnValue(of(new ApiResponse({ docgen_request_id: 'r-1' })));
+
+    expect(byTestId('dossier-documents-panel__tag--check-1')?.textContent).toContain(
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHECK_OUTCOME.1',
+    );
+    byTestId('dossier-documents-panel__btn--verify-1')?.querySelector('button')?.click();
+    fixture.detectChanges();
+
+    expect(verify).toHaveBeenCalledWith(12, 22, 90);
+    expect(byTestId('dossier-documents-panel__tag--render-1')).not.toBeNull();
+  });
+
+  it('offers no verification of a draft', () => {
+    expect(byTestId('dossier-documents-panel__btn--verify-1')).toBeNull();
+  });
+
+  it('names the participant of a per-member piece', () => {
+    fixture.componentInstance.detail.set(withPiece(0, { member_name: 'Alice Dupont' }));
+    fixture.detectChanges();
+
+    expect(byTestId('dossier-documents-panel__row--0')?.textContent).toContain(
+      'Formulaire de modification — Alice Dupont',
+    );
   });
 });

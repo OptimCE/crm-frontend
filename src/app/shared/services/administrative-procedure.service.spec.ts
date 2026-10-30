@@ -103,4 +103,49 @@ describe('AdministrativeProcedureService', () => {
     });
     expect(name).toBe('AR ORES.eml');
   });
+
+  // ---- phase 2 ---------------------------------------------------------------
+
+  it('asks for the finals, and invalidates what it read', () => {
+    const invalidate = vi.spyOn(cache, 'invalidate');
+    service.finalize(12).subscribe();
+    const request = http.expectOne(`${API}/dossiers/12/finalize`);
+    expect(request.request.method).toBe('POST');
+    request.flush({ data: { requested: [22], in_flight: [] } });
+    expect(invalidate).toHaveBeenCalledWith('administrative-document');
+  });
+
+  it('regenerates the stale pieces, or the ones named', () => {
+    service.regenerate(12).subscribe();
+    expect(http.expectOne(`${API}/dossiers/12/regenerate`).request.body).toEqual({
+      document_ids: null,
+    });
+    service.regenerate(12, [21]).subscribe();
+    expect(http.expectOne(`${API}/dossiers/12/regenerate`).request.body).toEqual({
+      document_ids: [21],
+    });
+  });
+
+  it('verifies one version of one piece', () => {
+    service.verify(12, 22, 90).subscribe();
+    expect(
+      http.expectOne(`${API}/dossiers/12/documents/22/versions/90/verify`).request.method,
+    ).toBe('POST');
+  });
+
+  it('reads the fiche de saisie uncached', () => {
+    service.getEntrySheets(12).subscribe();
+    http.expectOne(`${API}/dossiers/12/entry-sheet`).flush({ data: [] });
+    service.getEntrySheets(12).subscribe();
+    http.expectOne(`${API}/dossiers/12/entry-sheet`);
+  });
+
+  it('downloads the finals as the archive the annex names', () => {
+    let filename = '';
+    service.downloadFinals(12).subscribe((file) => (filename = file.filename));
+    http.expectOne(`${API}/dossiers/12/finals.zip`).flush(new Blob(['PK']), {
+      headers: { 'Content-Disposition': 'attachment; filename="OPT-12-pieces.zip"' },
+    });
+    expect(filename).toBe('OPT-12-pieces.zip');
+  });
 });

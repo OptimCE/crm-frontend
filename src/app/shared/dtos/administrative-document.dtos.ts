@@ -84,6 +84,8 @@ export interface PrefillOut {
  */
 export interface GenerateIn {
   data: PrefillData;
+  /** Render with the form in force today, not the one the piece was pinned to. */
+  upgrade_template?: boolean;
 }
 
 export interface GenerateAccepted {

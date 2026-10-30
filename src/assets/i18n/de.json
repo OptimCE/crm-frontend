@@ -2506,7 +2506,10 @@
         "TITLE": "Dokument erzeugen",
         "REVIEW_HINT": "Die Daten stammen aus dem CRM. Korrigieren Sie sie bei Bedarf: Was Sie hier freigeben, wird eingereicht.",
         "SUBMIT": "Erzeugen",
-        "QUEUED": "Erzeugung gestartet"
+        "QUEUED": "Erzeugung gestartet",
+        "DRAFT_NOTICE": "Diese Fassung ist ein Entwurf: Sie trägt ein Wasserzeichen. Die endgültige Fassung wird beim Versand erzeugt, aus dem, was Sie hier bestätigen.",
+        "TO_SIGN_NOTICE": "Dieses Formular ist zur Unterschrift durch den Teilnehmer vorausgefüllt; laden Sie danach die unterschriebene Fassung hoch.",
+        "UPGRADE_TEMPLATE": "Die neuere Fassung des Formulars verwenden"
       }
     },
     "PREFILL": {
@@ -2549,13 +2552,68 @@
         "PUISSANCE_KVA": "Leistung (kVA)",
         "FILIERE": "Erzeugungsart",
         "PART_INJECTEE": "Geteilter Einspeise-%",
-        "CONFIGURATION": "Konfiguration"
+        "CONFIGURATION": "Konfiguration",
+        "COMMUNITY_LEGAL_FORM": "Rechtsform",
+        "COMMUNITY_BOX": "Briefkasten",
+        "REPRESENTATIVE_NAME": "Vertreter (Name oder Bezeichnung)",
+        "REPRESENTATIVE_VAT_NUMBER": "Unternehmensnummer des Vertreters",
+        "REPRESENTATIVE_STREET": "Straße des Vertreters",
+        "REPRESENTATIVE_NUMBER": "Nr. (Vertreter)",
+        "REPRESENTATIVE_BOX": "Briefkasten (Vertreter)",
+        "REPRESENTATIVE_POSTCODE": "Postleitzahl (Vertreter)",
+        "REPRESENTATIVE_CITY": "Gemeinde (Vertreter)",
+        "REPRESENTATIVE_COUNTRY": "Land (Vertreter)",
+        "CONTACT_LAST_NAME": "Name der Ansprechperson",
+        "CONTACT_FIRST_NAME": "Vorname der Ansprechperson",
+        "CONTACT_STREET": "Straße (Kontakt)",
+        "CONTACT_NUMBER": "Nr. (Kontakt)",
+        "CONTACT_BOX": "Briefkasten (Kontakt)",
+        "CONTACT_POSTCODE": "Postleitzahl (Kontakt)",
+        "CONTACT_CITY": "Gemeinde (Kontakt)",
+        "CONTACT_PHONE": "Telefon (Kontakt)",
+        "CONTACT_MOBILE": "Mobiltelefon (Kontakt)",
+        "CONTACT_EMAIL": "E-Mail (Kontakt)",
+        "BUILDING_REFERENCE": "Referenz der Teilung (gleiches Gebäude)",
+        "COMMUNITY_REFERENCE": "Referenz der Teilung (Gemeinschaft)",
+        "PROJECT_DESCRIPTION": "Projektbeschreibung",
+        "SHARING_WITHIN_BUILDING": "Teilung innerhalb desselben Gebäudes",
+        "SHARING_WITHIN_COMMUNITY": "Teilung innerhalb einer Energiegemeinschaft",
+        "SINGLE_GRID_OPERATOR": "Ein einziger Netzbetreiber",
+        "CWAPE_REFERENCE_DIGITS": "CWaPE-Referenz (CE-…)",
+        "ENTITY_NAME": "Bezeichnung der Gesellschaft",
+        "ENTITY_VAT_DIGITS": "Unternehmensnummer der Gesellschaft",
+        "CONTROLLING_ENTITY_NAME": "Kontrollierende Einheit",
+        "DECLARANT_NAME": "Name und Vorname des Erklärenden",
+        "DECLARANT_REPRESENTATIVE": "Vertreten durch",
+        "DECLARANT_COMPANY_NAME": "Gesellschaft (falls zutreffend)",
+        "DECLARANT_ADDRESS": "Adresse des Erklärenden",
+        "DECLARANT_PHONE": "Telefon des Erklärenden",
+        "DECLARANT_EMAIL": "E-Mail des Erklärenden",
+        "SIGNED_AT": "Ausgefertigt in",
+        "SIGNED_ON": "Am",
+        "WAIVES_RESIDENTIAL_RIGHT": "Verzichtet auf das Recht des Haushaltskunden",
+        "WILL_REQUEST_METERING_REGIME": "Wird das erforderliche Messregime beantragen",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Wird zum Einspeisedienst wechseln",
+        "GRID_OPERATOR_NAME": "Netzbetreiber",
+        "SHARING_DESCRIPTION": "Beschreibung der Teilung",
+        "DISTRIBUTION_KEY": "Verteilungsschlüssel",
+        "START_DATE": "Datum des Inkrafttretens",
+        "SUSPENSIVE_CONDITION": "Aufschiebende Bedingung",
+        "UNMET_CONDITION": "Nicht erfüllte Bedingung",
+        "KEY_NAME": "Schlüssel",
+        "KEY_DESCRIPTION": "Beschreibung des Schlüssels",
+        "KEY_SINCE": "Angewandt ab",
+        "ITERATION": "Iteration",
+        "PART": "Anteil (%)",
+        "CONSOMMATEUR": "Verbraucher"
       },
       "TABLES": {
         "MEMBERS": "Mitglieder und Anteilseigner",
         "PARTICIPANTS": "Entnahmestellen",
         "INSTALLATIONS": "Erzeugungsanlagen",
-        "STORAGE": "Speicheranlagen"
+        "STORAGE": "Speicheranlagen",
+        "ITERATIONS": "Iterationen",
+        "KEY_SHARES": "Anteile der Verbraucher"
       },
       "WARNINGS": {
         "COUNT": "{{count}} Punkt(e) vor der Einreichung zu korrigieren",
@@ -2766,7 +2824,18 @@
         "TITLE": "Unterlagen",
         "EMPTY": "Dieses Verfahren erfordert keine Unterlagen.",
         "OPTIONAL": "Optional",
-        "VERSIONS": "{{n}} Version(en)"
+        "VERSIONS": "{{n}} Version(en)",
+        "STALE_HINT": "{{n}} Unterlage(n) durch eine spätere Änderung veraltet.",
+        "REGENERATE_STALE": "Veraltete Unterlagen neu erzeugen",
+        "REGENERATE": "Mit einem Klick neu erzeugen (Ihre Korrekturen bleiben erhalten)",
+        "REGENERATE_REQUESTED": "Neuerzeugung angefordert",
+        "REVIEW": "Prüfen und neu erzeugen",
+        "GENERATE_TO_SIGN": "Das zu unterschreibende Formular vorbereiten",
+        "UPLOAD_SIGNED": "Die unterschriebene Fassung hochladen",
+        "VERIFY": "Prüfen, ob die endgültige Fassung identisch neu erzeugt wird",
+        "VERIFY_REQUESTED": "Prüfung angefordert",
+        "VERIFY_DONE": "Prüfung abgeschlossen",
+        "TEMPLATE_SUPERSEDED": "eine neuere Fassung des Formulars ist in Kraft"
       },
       "THREAD": {
         "OPENED": "Eröffnet bei « {{to}} »",
@@ -2797,7 +2866,25 @@
         "BODY": "Guten Tag,\n\nanbei erhalten Sie unseren Antrag: {{procedure}} (Operation: {{operation}}).\nBitte geben Sie in Ihrer Antwort die Referenz {{reference}} an.\n\nAnlagen:\n{{pieces}}\n\nMit freundlichen Grüßen",
         "ERRORS": {
           "DATE_REQUIRED": "Geben Sie das Versanddatum an."
-        }
+        },
+        "FINALS": {
+          "TITLE": "Beizufügende Unterlagen",
+          "GENERATE": "Die endgültigen Fassungen erzeugen",
+          "RENDERING": "Die endgültigen Fassungen werden erzeugt… (noch {{n}})",
+          "READY": "Alle Unterlagen sind endgültig: laden Sie sie herunter und fügen Sie sie Ihrem Versand bei.",
+          "HINT": "Erzeugte Unterlagen sind Entwürfe mit einem Wasserzeichen. Erzeugen Sie ihre endgültigen Fassungen, bevor Sie sie beifügen.",
+          "ZIP": "Alles herunterladen (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Eingabeblatt",
+          "HINT": "Die in das Formular einzutragenden Werte, in seiner Reihenfolge. Kopieren Sie sie einzeln oder alle auf einmal.",
+          "COPY_ALL": "Alles kopieren",
+          "PRINT": "Drucken",
+          "NOT_GENERATED": "Diese Unterlage ist noch nicht erzeugt: das Blatt ist leer.",
+          "YES": "Ja",
+          "NO": "Nein"
+        },
+        "MARK_SENT_HINT": "Erzeugen Sie die endgültigen Fassungen, bevor Sie das Verfahren als versendet markieren."
       },
       "RESPONSE": {
         "TITLE": "Antwort hinzufügen",
@@ -2876,6 +2963,16 @@
           "SENT_DATE": "Geben Sie das Versanddatum für die « Laufend »-Elemente an: {{refs}}.",
           "CONFLICT": "Diese EANs werden an diesen Daten bereits in einer anderen Operation verfolgt; nichts wurde bestätigt: {{refs}}."
         }
+      },
+      "VERSION_STAGE": {
+        "1": "Entwurf",
+        "2": "Endgültig",
+        "3": "Zu unterschreiben"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identisch",
+        "2": "Abweichend",
+        "3": "Prüfung fehlgeschlagen"
       }
     }
   },

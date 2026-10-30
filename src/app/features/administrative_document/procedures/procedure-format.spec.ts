@@ -1,17 +1,30 @@
+import { RenderState } from '../../../shared/dtos/administrative-document.dtos';
 import {
   ChangeStatus,
+  CheckOutcome,
   DocumentKind,
+  EntrySheetOut,
+  PieceOut,
   ProcedureDocumentStatus,
+  RenderPurpose,
+  VersionStage,
 } from '../../../shared/dtos/administrative-procedure.dtos';
 import { modifDefinition, procedureDetail, procedureItem } from './procedure-fixtures';
 import {
   canActOnChange,
   canGenerate,
+  canRegenerate,
   canUpload,
+  canVerify,
+  checkOutcomeSeverity,
+  entrySheetsHtml,
+  entryValueText,
   changeKindText,
   definitionOf,
   dueText,
   pickLabel,
+  pieceStatusSeverity,
+  piecesNotFinal,
   piecesToSend,
   primaryAction,
   recipientText,
@@ -20,6 +33,7 @@ import {
   stepDelays,
   threadLine,
   variantText,
+  versionStageSeverity,
 } from './procedure-format';
 
 const P = 'ADMINISTRATIVE_DOCUMENT.PROCEDURES';
@@ -220,6 +234,105 @@ describe('procedure-format', () => {
         reference: '[OPT-12]',
         pieces: '- Annexe 6',
       });
+    });
+  });
+
+  describe('drafts, finals and checks (phase 2)', () => {
+    const t = (key: string): string => key;
+    const draft = (): PieceOut => procedureDetail().pieces[1];
+    const withVersion = (
+      piece: PieceOut,
+      changes: Partial<NonNullable<PieceOut['current_version']>>,
+    ): PieceOut => ({
+      ...piece,
+      current_version: { ...piece.current_version!, ...changes },
+    });
+    const rendering: PieceOut['render'] = {
+      state: RenderState.PENDING,
+      purpose: RenderPurpose.RENDER,
+      stage: VersionStage.FINAL,
+      requested_at: '2026-10-30T10:00:00Z',
+      error: null,
+    };
+
+    it('gives a stale piece its own colour', () => {
+      expect(pieceStatusSeverity(ProcedureDocumentStatus.STALE)).toBe('danger');
+      expect(pieceStatusSeverity(ProcedureDocumentStatus.MISSING)).toBe('warn');
+    });
+
+    it('tells a draft, a final and a form to sign apart', () => {
+      expect(versionStageSeverity(VersionStage.FINAL)).toBe('success');
+      expect(versionStageSeverity(VersionStage.DRAFT)).toBe('info');
+      expect(versionStageSeverity(VersionStage.TO_SIGN)).toBe('contrast');
+      expect(checkOutcomeSeverity(CheckOutcome.DIFFERENT)).toBe('danger');
+    });
+
+    it('regenerates in one click only a stale piece the annex rendered', () => {
+      const detail = procedureDetail();
+      const stale = { ...draft(), status: ProcedureDocumentStatus.STALE };
+      expect(canRegenerate(detail, stale)).toBe(true);
+      expect(canRegenerate(detail, draft())).toBe(false); // not stale
+      expect(canRegenerate(detail, withVersion(stale, { generated: false }))).toBe(false);
+      expect(canRegenerate(detail, { ...stale, render: rendering })).toBe(false);
+      expect(canRegenerate({ ...detail, frozen_at: '2026-10-29T10:00:00Z' }, stale)).toBe(false);
+    });
+
+    it('verifies only a rendered final', () => {
+      const final = withVersion(draft(), { stage: VersionStage.FINAL });
+      expect(canVerify(final)).toBe(true);
+      expect(canVerify(draft())).toBe(false);
+      expect(canVerify(withVersion(final, { generated: false }))).toBe(false);
+      expect(canVerify({ ...final, render: rendering })).toBe(false);
+    });
+
+    it('sends what was supplied, never a form still waiting for its signature', () => {
+      const detail = procedureDetail();
+      const toSign: PieceOut = {
+        ...draft(),
+        id: 23,
+        kind: DocumentKind.COLLECTED,
+        status: ProcedureDocumentStatus.MISSING,
+        current_version: { ...draft().current_version!, stage: VersionStage.TO_SIGN },
+      };
+      expect(
+        piecesToSend({ ...detail, pieces: [...detail.pieces, toSign] }).map((p) => p.id),
+      ).toEqual([22]);
+    });
+
+    it('lists the pieces still to render as finals', () => {
+      const detail = procedureDetail();
+      expect(piecesNotFinal(detail).map((p) => p.id)).toEqual([22]);
+      const done = {
+        ...detail,
+        pieces: [detail.pieces[0], withVersion(draft(), { stage: VersionStage.FINAL })],
+      };
+      expect(piecesNotFinal(done)).toEqual([]);
+    });
+
+    it('reads a fiche value as text to paste', () => {
+      expect(entryValueText(null, t)).toBe('');
+      expect(entryValueText(true, t)).toBe(`${P}.SEND.SHEET.YES`);
+      expect(entryValueText(false, t)).toBe(`${P}.SEND.SHEET.NO`);
+      expect(entryValueText(12, t)).toBe('12');
+    });
+
+    it('prints the fiche on a page of its own, escaped', () => {
+      const sheet: EntrySheetOut = {
+        piece_id: 22,
+        code: 'community_modification',
+        labels: { fr: 'Modification' },
+        version: null,
+        sections: [
+          {
+            labels: { fr: 'Référence' },
+            fields: [{ key: 'name', labels: { fr: 'Nom' }, value: '<b>A & B</b>' }],
+          },
+        ],
+      };
+      const html = entrySheetsHtml('[OPT-12] <Modif>', [sheet], 'fr', t);
+      expect(html).toContain('<title>[OPT-12] &lt;Modif&gt;</title>');
+      expect(html).toContain('<h2>Modification</h2><h3>Référence</h3>');
+      expect(html).toContain('<td>&lt;b&gt;A &amp; B&lt;/b&gt;</td>');
     });
   });
 });

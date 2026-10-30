@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
+import { Checkbox } from 'primeng/checkbox';
 import { InputText } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
 import { Tooltip } from 'primeng/tooltip';
@@ -41,6 +42,10 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 export interface GenerateDialogData {
   documentId: number;
   title: string;
+  /** A collected piece: the render is the form a participant signs, unstamped. */
+  toSign?: boolean;
+  /** A newer version of the form is in force than the one the piece keeps. */
+  upgradeAvailable?: boolean;
 }
 
 /**
@@ -51,12 +56,14 @@ export interface GenerateDialogData {
  * difference between "generated from the CRM" and "generated from what a human
  * approved". Fields the CRM cannot know arrive blank on purpose.
  *
- * Submitting only *queues* the render; the caller polls for the artifact.
+ * Submitting only *queues* the render; the caller polls for the artifact. A
+ * generated piece renders as a draft, stamped: its final is rendered from this
+ * same reviewed snapshot when the procedure is sent.
  */
 @Component({
   selector: 'app-generate-dialog',
   standalone: true,
-  imports: [TranslatePipe, RouterLink, FormsModule, Button, InputText, Message, Tooltip],
+  imports: [TranslatePipe, RouterLink, FormsModule, Button, Checkbox, InputText, Message, Tooltip],
   templateUrl: './generate-dialog.html',
   providers: [ErrorMessageHandler],
 })
@@ -88,6 +95,10 @@ export class GenerateDialog implements OnInit {
   readonly form = signal<PrefillForm>({ fields: [], tables: [] });
 
   readonly documentTitle = this.dialogData?.title ?? '';
+  readonly toSign = this.dialogData?.toSign ?? false;
+  readonly upgradeAvailable = this.dialogData?.upgradeAvailable ?? false;
+  /** Render with the form in force today (an explicit choice, never a default). */
+  upgradeTemplate = false;
 
   readonly labelKey = prefillLabelKey;
   readonly tableLabelKey = prefillTableLabelKey;
@@ -157,7 +168,11 @@ export class GenerateDialog implements OnInit {
     this.dirty.set(true);
   }
 
-  setField(key: string, value: string): void {
+  isBoolean(value: unknown): value is boolean {
+    return typeof value === 'boolean';
+  }
+
+  setField(key: string, value: string | boolean): void {
     this.dirty.set(true);
     this.form.update((form) => ({
       ...form,
@@ -192,7 +207,10 @@ export class GenerateDialog implements OnInit {
     // 409 (GENERATION_NOT_ALLOWED) then lands in the form, below.
     this.submitting.set(true);
     this.service
-      .generateDocument(id, { data: toPayload(this.form(), this.original) })
+      .generateDocument(id, {
+        data: toPayload(this.form(), this.original),
+        upgrade_template: this.upgradeTemplate,
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {

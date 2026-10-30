@@ -13,6 +13,8 @@ import {
   ChangeExcludeIn,
   CorrespondenceIn,
   CorrespondenceProposalOut,
+  EntrySheetOut,
+  FinalizeOut,
   InboxOut,
   InboxQuery,
   ProcedureCreateIn,
@@ -24,7 +26,9 @@ import {
   ProcedureListQuery,
   ProcedureModuleStatusOut,
   ProcedureTransitionIn,
+  RegenerateOut,
   SendIn,
+  VerifyAccepted,
 } from '../dtos/administrative-procedure.dtos';
 import { ServiceBase } from './service.base';
 
@@ -227,6 +231,64 @@ export class AdministrativeProcedureService extends ServiceBase {
         form,
       ),
     );
+  }
+
+  /**
+   * Render the finals before sending: each reviewed draft again, unstamped.
+   * 409 (2386) unless the pieces are complete and it is not sent yet. Each
+   * final lands later (realtime `admin.document.ready`).
+   */
+  finalize(id: number): Observable<ApiResponse<FinalizeOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<FinalizeOut>>(`${this.apiAddress}/dossiers/${id}/finalize`, {}),
+    );
+  }
+
+  /**
+   * One click: the stale pieces (or the ones named) from a fresh pre-fill, the
+   * reviewer's own edits carried over. `needs_review` ones need the review form.
+   */
+  regenerate(id: number, documentIds?: number[]): Observable<ApiResponse<RegenerateOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<RegenerateOut>>(`${this.apiAddress}/dossiers/${id}/regenerate`, {
+        document_ids: documentIds ?? null,
+      }),
+    );
+  }
+
+  /** Regenerate a rendered version from what it froze and compare the bytes. */
+  verify(id: number, pieceId: number, versionId: number): Observable<ApiResponse<VerifyAccepted>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<VerifyAccepted>>(
+        `${this.apiAddress}/dossiers/${id}/documents/${pieceId}/versions/${versionId}/verify`,
+        {},
+      ),
+    );
+  }
+
+  /** The fiches de saisie of the procedure's form pieces. Uncached: a render may just have landed. */
+  getEntrySheets(id: number): Observable<ApiResponse<EntrySheetOut[]>> {
+    return this.http.get<ApiResponse<EntrySheetOut[]>>(
+      `${this.apiAddress}/dossiers/${id}/entry-sheet`,
+    );
+  }
+
+  /** Every final in one archive, with SHA256SUMS.txt. 409 (2385) while one is a draft. */
+  downloadFinals(id: number): Observable<{ blob: Blob; filename: string }> {
+    return this.http
+      .get(`${this.apiAddress}/dossiers/${id}/finals.zip`, {
+        observe: 'response',
+        responseType: 'blob',
+      })
+      .pipe(
+        map((response) => {
+          const disposition = response.headers.get('Content-Disposition') ?? '';
+          const match = /filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i.exec(disposition);
+          const filename = match?.[1] ? decodeURIComponent(match[1]) : `OPT-${id}-pieces.zip`;
+          return { blob: response.body as Blob, filename };
+        }),
+        catchError((error: HttpErrorResponse) => this.blobErrorHandler(error)),
+      );
   }
 
   /** What recording this response would do. Writes nothing, so it invalidates nothing. */

@@ -338,7 +338,7 @@ export class ProcedureDetail implements OnInit {
   // ---- dialogs ------------------------------------------------------------
 
   openSend(): void {
-    this.openDialog(ProcedureSendDialog, 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.SEND.TITLE', '44rem');
+    this.openDialog(ProcedureSendDialog, 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.SEND.TITLE', '48rem');
   }
 
   openRespond(): void {

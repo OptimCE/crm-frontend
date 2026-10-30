@@ -20,6 +20,7 @@ import {
   ProcedureItemOut,
   ProcedureModuleStatusOut,
   ProcedureStatus,
+  VersionStage,
 } from '../../../shared/dtos/administrative-procedure.dtos';
 
 const L = (fr: string, en: string): Record<string, string> => ({
@@ -215,9 +216,15 @@ export function procedureDetail(overrides: Partial<ProcedureDetailOut> = {}): Pr
         status: ProcedureDocumentStatus.MISSING,
         id_member: null,
         condition: null,
+        member_name: null,
         current_version_id: null,
         versions: 0,
         template: 'sharing_modification',
+        template_version: 1,
+        template_superseded: false,
+        current_version: null,
+        render: null,
+        last_check: null,
       },
       {
         id: 22,
@@ -228,9 +235,23 @@ export function procedureDetail(overrides: Partial<ProcedureDetailOut> = {}): Pr
         status: ProcedureDocumentStatus.READY,
         id_member: null,
         condition: null,
+        member_name: null,
         current_version_id: 90,
         versions: 1,
         template: 'annex6_sharing_form',
+        template_version: 1,
+        template_superseded: false,
+        current_version: {
+          id: 90,
+          version_no: 1,
+          stage: VersionStage.DRAFT,
+          created_at: '2026-10-28T11:00:00Z',
+          content_sha256: 'abc',
+          original_filename: 'annexe6-partage-brouillon.xlsx',
+          generated: true,
+        },
+        render: null,
+        last_check: null,
       },
     ],
     deadlines: [],
@@ -276,6 +297,8 @@ export function procedureDetail(overrides: Partial<ProcedureDetailOut> = {}): Pr
       grd_ref: 'ores',
       channel: 'email',
     },
+    finals_ready: false,
+    has_entry_sheet: false,
     ...overrides,
   };
 }

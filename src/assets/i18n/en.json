@@ -2506,7 +2506,10 @@
         "TITLE": "Generate the document",
         "REVIEW_HINT": "The data comes from the CRM. Correct it if needed: what you approve here is what gets filed.",
         "SUBMIT": "Generate",
-        "QUEUED": "Generation started"
+        "QUEUED": "Generation started",
+        "DRAFT_NOTICE": "This version is a draft: it carries a watermark. The final version is generated when sending, from what you approve here.",
+        "TO_SIGN_NOTICE": "This form is pre-filled for the participant to sign; then upload the signed copy.",
+        "UPGRADE_TEMPLATE": "Use the newer version of the form"
       }
     },
     "PREFILL": {
@@ -2549,13 +2552,68 @@
         "PUISSANCE_KVA": "Capacity (kVA)",
         "FILIERE": "Production type",
         "PART_INJECTEE": "Shared injection %",
-        "CONFIGURATION": "Configuration"
+        "CONFIGURATION": "Configuration",
+        "COMMUNITY_LEGAL_FORM": "Legal form",
+        "COMMUNITY_BOX": "Box",
+        "REPRESENTATIVE_NAME": "Representative (name or company name)",
+        "REPRESENTATIVE_VAT_NUMBER": "Representative's company number",
+        "REPRESENTATIVE_STREET": "Representative's street",
+        "REPRESENTATIVE_NUMBER": "Number (representative)",
+        "REPRESENTATIVE_BOX": "Box (representative)",
+        "REPRESENTATIVE_POSTCODE": "Postcode (representative)",
+        "REPRESENTATIVE_CITY": "Municipality (representative)",
+        "REPRESENTATIVE_COUNTRY": "Country (representative)",
+        "CONTACT_LAST_NAME": "Contact person's last name",
+        "CONTACT_FIRST_NAME": "Contact person's first name",
+        "CONTACT_STREET": "Street (contact)",
+        "CONTACT_NUMBER": "Number (contact)",
+        "CONTACT_BOX": "Box (contact)",
+        "CONTACT_POSTCODE": "Postcode (contact)",
+        "CONTACT_CITY": "Municipality (contact)",
+        "CONTACT_PHONE": "Phone (contact)",
+        "CONTACT_MOBILE": "Mobile (contact)",
+        "CONTACT_EMAIL": "Email (contact)",
+        "BUILDING_REFERENCE": "Sharing reference (same building)",
+        "COMMUNITY_REFERENCE": "Sharing reference (community)",
+        "PROJECT_DESCRIPTION": "Project description",
+        "SHARING_WITHIN_BUILDING": "Sharing within one building",
+        "SHARING_WITHIN_COMMUNITY": "Sharing within an energy community",
+        "SINGLE_GRID_OPERATOR": "A single grid operator",
+        "CWAPE_REFERENCE_DIGITS": "CWaPE reference (CE-…)",
+        "ENTITY_NAME": "Company name",
+        "ENTITY_VAT_DIGITS": "Company number",
+        "CONTROLLING_ENTITY_NAME": "Controlling entity",
+        "DECLARANT_NAME": "Declarant's full name",
+        "DECLARANT_REPRESENTATIVE": "Represented by",
+        "DECLARANT_COMPANY_NAME": "Company (if any)",
+        "DECLARANT_ADDRESS": "Declarant's address",
+        "DECLARANT_PHONE": "Declarant's phone",
+        "DECLARANT_EMAIL": "Declarant's email",
+        "SIGNED_AT": "Signed at",
+        "SIGNED_ON": "On",
+        "WAIVES_RESIDENTIAL_RIGHT": "Waives the residential customer's right",
+        "WILL_REQUEST_METERING_REGIME": "Will request the required metering regime",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Will switch to the injection service",
+        "GRID_OPERATOR_NAME": "Grid operator",
+        "SHARING_DESCRIPTION": "Description of the sharing",
+        "DISTRIBUTION_KEY": "Allocation key",
+        "START_DATE": "Effective date",
+        "SUSPENSIVE_CONDITION": "Suspensive condition",
+        "UNMET_CONDITION": "Unmet condition",
+        "KEY_NAME": "Key",
+        "KEY_DESCRIPTION": "Key description",
+        "KEY_SINCE": "Applied from",
+        "ITERATION": "Iteration",
+        "PART": "Share (%)",
+        "CONSOMMATEUR": "Consumer"
       },
       "TABLES": {
         "MEMBERS": "Members and shareholders",
         "PARTICIPANTS": "Delivery points",
         "INSTALLATIONS": "Production installations",
-        "STORAGE": "Storage installations"
+        "STORAGE": "Storage installations",
+        "ITERATIONS": "Iterations",
+        "KEY_SHARES": "Consumers' shares"
       },
       "WARNINGS": {
         "COUNT": "{{count}} issue(s) to fix before filing",
@@ -2766,7 +2824,18 @@
         "TITLE": "Documents",
         "EMPTY": "This procedure requires no document.",
         "OPTIONAL": "Optional",
-        "VERSIONS": "{{n}} version(s)"
+        "VERSIONS": "{{n}} version(s)",
+        "STALE_HINT": "{{n}} piece(s) outdated by a later change.",
+        "REGENERATE_STALE": "Regenerate the outdated pieces",
+        "REGENERATE": "Regenerate in one click (your corrections are kept)",
+        "REGENERATE_REQUESTED": "Regeneration requested",
+        "REVIEW": "Review and regenerate",
+        "GENERATE_TO_SIGN": "Prepare the form to sign",
+        "UPLOAD_SIGNED": "Upload the signed copy",
+        "VERIFY": "Check that the final regenerates identically",
+        "VERIFY_REQUESTED": "Check requested",
+        "VERIFY_DONE": "Check finished",
+        "TEMPLATE_SUPERSEDED": "a newer version of the form is in force"
       },
       "THREAD": {
         "OPENED": "Opened at « {{to}} »",
@@ -2797,7 +2866,25 @@
         "BODY": "Hello,\n\nPlease find attached our request: {{procedure}} (operation: {{operation}}).\nPlease quote the reference {{reference}} in your answer.\n\nAttached documents:\n{{pieces}}\n\nKind regards,",
         "ERRORS": {
           "DATE_REQUIRED": "Give the date it was sent."
-        }
+        },
+        "FINALS": {
+          "TITLE": "Pieces to attach",
+          "GENERATE": "Generate the final versions",
+          "RENDERING": "Generating the final versions… ({{n}} left)",
+          "READY": "Every piece is final: download them and attach them to your sending.",
+          "HINT": "Generated pieces are drafts, stamped with a watermark. Generate their final versions before attaching them.",
+          "ZIP": "Download all (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Entry sheet",
+          "HINT": "The values to enter in the form, in its order. Copy them one by one, or all at once.",
+          "COPY_ALL": "Copy all",
+          "PRINT": "Print",
+          "NOT_GENERATED": "This piece is not generated yet: the sheet is empty.",
+          "YES": "Yes",
+          "NO": "No"
+        },
+        "MARK_SENT_HINT": "Generate the final versions before marking the procedure as sent."
       },
       "RESPONSE": {
         "TITLE": "Add a response",
@@ -2876,6 +2963,16 @@
           "SENT_DATE": "Give the date it was sent for the « In progress » items: {{refs}}.",
           "CONFLICT": "These EANs are already tracked in another operation on those dates; nothing was confirmed: {{refs}}."
         }
+      },
+      "VERSION_STAGE": {
+        "1": "Draft",
+        "2": "Final",
+        "3": "To sign"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identical",
+        "2": "Different",
+        "3": "Check failed"
       }
     }
   },

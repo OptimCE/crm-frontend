@@ -2506,7 +2506,10 @@
         "TITLE": "Document genereren",
         "REVIEW_HINT": "De gegevens komen uit de CRM. Corrigeer ze indien nodig: wat u hier goedkeurt, wordt ingediend.",
         "SUBMIT": "Genereren",
-        "QUEUED": "Genereren gestart"
+        "QUEUED": "Genereren gestart",
+        "DRAFT_NOTICE": "Deze versie is een concept: ze krijgt een watermerk. De definitieve versie wordt bij het verzenden gegenereerd, op basis van wat u hier goedkeurt.",
+        "TO_SIGN_NOTICE": "Dit formulier is vooraf ingevuld om door de deelnemer te worden ondertekend; upload daarna de ondertekende versie.",
+        "UPGRADE_TEMPLATE": "De nieuwere versie van het formulier gebruiken"
       }
     },
     "PREFILL": {
@@ -2549,13 +2552,68 @@
         "PUISSANCE_KVA": "Vermogen (kVA)",
         "FILIERE": "Productietype",
         "PART_INJECTEE": "Gedeeld injectie-%",
-        "CONFIGURATION": "Configuratie"
+        "CONFIGURATION": "Configuratie",
+        "COMMUNITY_LEGAL_FORM": "Rechtsvorm",
+        "COMMUNITY_BOX": "Bus",
+        "REPRESENTATIVE_NAME": "Vertegenwoordiger (naam of benaming)",
+        "REPRESENTATIVE_VAT_NUMBER": "Ondernemingsnummer van de vertegenwoordiger",
+        "REPRESENTATIVE_STREET": "Straat van de vertegenwoordiger",
+        "REPRESENTATIVE_NUMBER": "Nr. (vertegenwoordiger)",
+        "REPRESENTATIVE_BOX": "Bus (vertegenwoordiger)",
+        "REPRESENTATIVE_POSTCODE": "Postcode (vertegenwoordiger)",
+        "REPRESENTATIVE_CITY": "Gemeente (vertegenwoordiger)",
+        "REPRESENTATIVE_COUNTRY": "Land (vertegenwoordiger)",
+        "CONTACT_LAST_NAME": "Naam van de contactpersoon",
+        "CONTACT_FIRST_NAME": "Voornaam van de contactpersoon",
+        "CONTACT_STREET": "Straat (contact)",
+        "CONTACT_NUMBER": "Nr. (contact)",
+        "CONTACT_BOX": "Bus (contact)",
+        "CONTACT_POSTCODE": "Postcode (contact)",
+        "CONTACT_CITY": "Gemeente (contact)",
+        "CONTACT_PHONE": "Telefoon (contact)",
+        "CONTACT_MOBILE": "Gsm (contact)",
+        "CONTACT_EMAIL": "E-mail (contact)",
+        "BUILDING_REFERENCE": "Referentie van de deling (zelfde gebouw)",
+        "COMMUNITY_REFERENCE": "Referentie van de deling (gemeenschap)",
+        "PROJECT_DESCRIPTION": "Beschrijving van het project",
+        "SHARING_WITHIN_BUILDING": "Delen binnen hetzelfde gebouw",
+        "SHARING_WITHIN_COMMUNITY": "Delen binnen een energiegemeenschap",
+        "SINGLE_GRID_OPERATOR": "Eén enkele netbeheerder",
+        "CWAPE_REFERENCE_DIGITS": "CWaPE-referentie (CE-…)",
+        "ENTITY_NAME": "Benaming van de vennootschap",
+        "ENTITY_VAT_DIGITS": "Ondernemingsnummer van de vennootschap",
+        "CONTROLLING_ENTITY_NAME": "Controlerende entiteit",
+        "DECLARANT_NAME": "Naam en voornaam van de aangever",
+        "DECLARANT_REPRESENTATIVE": "Vertegenwoordigd door",
+        "DECLARANT_COMPANY_NAME": "Vennootschap (indien van toepassing)",
+        "DECLARANT_ADDRESS": "Adres van de aangever",
+        "DECLARANT_PHONE": "Telefoon van de aangever",
+        "DECLARANT_EMAIL": "E-mail van de aangever",
+        "SIGNED_AT": "Opgemaakt te",
+        "SIGNED_ON": "Op",
+        "WAIVES_RESIDENTIAL_RIGHT": "Ziet af van het recht van de residentiële klant",
+        "WILL_REQUEST_METERING_REGIME": "Zal het vereiste meetregime aanvragen",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Zal overstappen naar de injectiedienst",
+        "GRID_OPERATOR_NAME": "Netbeheerder",
+        "SHARING_DESCRIPTION": "Beschrijving van de deling",
+        "DISTRIBUTION_KEY": "Verdeelsleutel",
+        "START_DATE": "Datum van inwerkingtreding",
+        "SUSPENSIVE_CONDITION": "Opschortende voorwaarde",
+        "UNMET_CONDITION": "Niet vervulde voorwaarde",
+        "KEY_NAME": "Sleutel",
+        "KEY_DESCRIPTION": "Beschrijving van de sleutel",
+        "KEY_SINCE": "Toegepast vanaf",
+        "ITERATION": "Iteratie",
+        "PART": "Aandeel (%)",
+        "CONSOMMATEUR": "Verbruiker"
       },
       "TABLES": {
         "MEMBERS": "Leden en aandeelhouders",
         "PARTICIPANTS": "Afnamepunten",
         "INSTALLATIONS": "Productie-installaties",
-        "STORAGE": "Opslaginstallaties"
+        "STORAGE": "Opslaginstallaties",
+        "ITERATIONS": "Iteraties",
+        "KEY_SHARES": "Aandelen van de verbruikers"
       },
       "WARNINGS": {
         "COUNT": "{{count}} punt(en) te corrigeren voor indiening",
@@ -2766,7 +2824,18 @@
         "TITLE": "Documenten",
         "EMPTY": "Deze procedure vraagt geen documenten.",
         "OPTIONAL": "Facultatief",
-        "VERSIONS": "{{n}} versie(s)"
+        "VERSIONS": "{{n}} versie(s)",
+        "STALE_HINT": "{{n}} stuk(ken) verouderd door een latere wijziging.",
+        "REGENERATE_STALE": "Verouderde stukken opnieuw genereren",
+        "REGENERATE": "Met één klik opnieuw genereren (uw correcties blijven behouden)",
+        "REGENERATE_REQUESTED": "Opnieuw genereren gevraagd",
+        "REVIEW": "Nakijken en opnieuw genereren",
+        "GENERATE_TO_SIGN": "Het te ondertekenen formulier voorbereiden",
+        "UPLOAD_SIGNED": "De ondertekende versie uploaden",
+        "VERIFY": "Controleren of de definitieve versie identiek opnieuw wordt gegenereerd",
+        "VERIFY_REQUESTED": "Controle gevraagd",
+        "VERIFY_DONE": "Controle voltooid",
+        "TEMPLATE_SUPERSEDED": "een nieuwere versie van het formulier is van kracht"
       },
       "THREAD": {
         "OPENED": "Geopend bij « {{to}} »",
@@ -2797,7 +2866,25 @@
         "BODY": "Goedendag,\n\nIn bijlage vindt u onze aanvraag: {{procedure}} (verrichting: {{operation}}).\nGelieve de referentie {{reference}} in uw antwoord te vermelden.\n\nBijlagen:\n{{pieces}}\n\nMet vriendelijke groeten,",
         "ERRORS": {
           "DATE_REQUIRED": "Geef de verzenddatum op."
-        }
+        },
+        "FINALS": {
+          "TITLE": "Bij te voegen stukken",
+          "GENERATE": "De definitieve versies genereren",
+          "RENDERING": "De definitieve versies worden gegenereerd… (nog {{n}})",
+          "READY": "Alle stukken zijn definitief: download ze en voeg ze bij uw verzending.",
+          "HINT": "Gegenereerde stukken zijn concepten met een watermerk. Genereer hun definitieve versies voordat u ze bijvoegt.",
+          "ZIP": "Alles downloaden (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Invulfiche",
+          "HINT": "De waarden om in het formulier in te vullen, in de volgorde ervan. Kopieer ze één voor één, of allemaal tegelijk.",
+          "COPY_ALL": "Alles kopiëren",
+          "PRINT": "Afdrukken",
+          "NOT_GENERATED": "Dit stuk is nog niet gegenereerd: de fiche is leeg.",
+          "YES": "Ja",
+          "NO": "Nee"
+        },
+        "MARK_SENT_HINT": "Genereer de definitieve versies voordat u de procedure als verzonden markeert."
       },
       "RESPONSE": {
         "TITLE": "Een antwoord toevoegen",
@@ -2876,6 +2963,16 @@
           "SENT_DATE": "Geef de verzenddatum op voor de « Lopend »-elementen: {{refs}}.",
           "CONFLICT": "Deze EAN's worden op die data al in een andere verrichting gevolgd; er werd niets bevestigd: {{refs}}."
         }
+      },
+      "VERSION_STAGE": {
+        "1": "Concept",
+        "2": "Definitief",
+        "3": "Te ondertekenen"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identiek",
+        "2": "Verschillend",
+        "3": "Controle mislukt"
       }
     }
   },

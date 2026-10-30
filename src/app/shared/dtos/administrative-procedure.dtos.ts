@@ -48,6 +48,30 @@ export enum DocumentKind {
   RECEIVED = 3,
 }
 
+/** What a version is for (`document_version.stage`). */
+export enum VersionStage {
+  /** A working render, stamped with the regulator's watermark. */
+  DRAFT = 1,
+  /** What is sent: an unstamped render of a reviewed draft, or an upload. */
+  FINAL = 2,
+  /** A pre-filled form a participant signs; the signed upload is the final. */
+  TO_SIGN = 3,
+}
+
+/** Why a render holds a piece's slot. */
+export enum RenderPurpose {
+  RENDER = 1,
+  /** Regenerate an existing version and compare its bytes; no version comes of it. */
+  VERIFY = 2,
+}
+
+/** What regenerating a version from its snapshot gave. */
+export enum CheckOutcome {
+  IDENTICAL = 1,
+  DIFFERENT = 2,
+  FAILED = 3,
+}
+
 export enum ChangeStatus {
   PENDING = 1,
   ATTACHED = 2,
@@ -264,6 +288,35 @@ export interface ChangeOut {
   excluded_reason: string | null;
 }
 
+/** A piece's current version: what is downloaded, and what would be sent. */
+export interface PieceVersionOut {
+  id: number;
+  version_no: number;
+  stage: VersionStage;
+  created_at: string;
+  content_sha256: string | null;
+  original_filename: string | null;
+  /** Rendered by OptimCE, so it can be verified. */
+  generated: boolean;
+}
+
+/** A render holding the piece's slot: in flight, or failed. */
+export interface PieceRenderOut {
+  /** RenderState: 1 pending, 2 failed. */
+  state: number;
+  purpose: RenderPurpose;
+  stage: VersionStage;
+  requested_at: string;
+  error: { code?: string | null; message?: string | null } | null;
+}
+
+/** The last regeneration of the current version from its snapshot. */
+export interface PieceCheckOut {
+  outcome: CheckOutcome;
+  checked_at: string;
+  content_sha256: string | null;
+}
+
 export interface PieceOut {
   id: number;
   /** The catalogue requirement's code (sharing_modification, ...). */
@@ -273,11 +326,19 @@ export interface PieceOut {
   required: boolean;
   status: ProcedureDocumentStatus;
   id_member: number | null;
+  /** Who a per-member piece is for. */
+  member_name: string | null;
   condition: Record<string, unknown> | null;
   current_version_id: number | null;
   versions: number;
-  /** Set when the piece can be generated from a registered template. */
+  /** The registered template the piece renders with; null when nothing can render it. */
   template: string | null;
+  template_version: number | null;
+  /** A newer version of the form is in force; the piece keeps its own unless upgraded. */
+  template_superseded: boolean;
+  current_version: PieceVersionOut | null;
+  render: PieceRenderOut | null;
+  last_check: PieceCheckOut | null;
 }
 
 export interface ThreadEntryOut {
@@ -328,6 +389,31 @@ export interface ProcedureDetailOut extends ProcedureItemOut {
   deadlines: ProcedureDeadlineOut[];
   thread: ThreadEntryOut[];
   send_preview: SendPreviewOut;
+  /** Every supplied piece is final and nothing renders: it can be sent. */
+  finals_ready: boolean;
+  /** A piece has a fiche de saisie (`GET .../entry-sheet`). */
+  has_entry_sheet: boolean;
+}
+
+export interface EntryFieldOut {
+  key: string;
+  labels: Labels;
+  value: unknown;
+}
+
+export interface EntrySectionOut {
+  labels: Labels;
+  fields: EntryFieldOut[];
+}
+
+/** A form piece's values in the order of the regulator's form (fiche de saisie). */
+export interface EntrySheetOut {
+  piece_id: number;
+  code: string;
+  labels: Labels;
+  /** The version the values come from; null before the piece is generated. */
+  version: PieceVersionOut | null;
+  sections: EntrySectionOut[];
 }
 
 // ---------------------------------------------------------------------------
@@ -402,6 +488,23 @@ export interface ProcedureTransitionIn {
   reason: string;
   /** The day it happened; today if omitted. */
   on?: string | null;
+}
+
+/** The finals asked of the renderer (piece ids); each landing comes in realtime. */
+export interface FinalizeOut {
+  requested: number[];
+  in_flight: number[];
+}
+
+/** `needs_review`: the review form is the way (an upload, an older render). */
+export interface RegenerateOut {
+  requested: number[];
+  needs_review: number[];
+  in_flight: number[];
+}
+
+export interface VerifyAccepted {
+  docgen_request_id: string;
 }
 
 /** "Mark as sent": the sending as it was done. Sent as multipart. */

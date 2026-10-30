@@ -2506,7 +2506,10 @@
         "TITLE": "Générer le document",
         "REVIEW_HINT": "Les données proviennent du CRM. Corrigez-les si nécessaire : c'est ce que vous validez ici qui sera déposé.",
         "SUBMIT": "Générer",
-        "QUEUED": "Génération lancée"
+        "QUEUED": "Génération lancée",
+        "DRAFT_NOTICE": "Cette version est un brouillon : elle portera un filigrane. La version finale se génère à l'envoi, à partir de ce que vous validez ici.",
+        "TO_SIGN_NOTICE": "Ce formulaire est prérempli pour être signé par le participant ; téléversez ensuite la version signée.",
+        "UPGRADE_TEMPLATE": "Utiliser la nouvelle version du formulaire"
       }
     },
     "PREFILL": {
@@ -2549,13 +2552,68 @@
         "PUISSANCE_KVA": "Puissance (kVA)",
         "FILIERE": "Filière de production",
         "PART_INJECTEE": "% injecté partagé",
-        "CONFIGURATION": "Configuration"
+        "CONFIGURATION": "Configuration",
+        "COMMUNITY_LEGAL_FORM": "Forme juridique",
+        "COMMUNITY_BOX": "Boîte",
+        "REPRESENTATIVE_NAME": "Représentant (nom ou dénomination)",
+        "REPRESENTATIVE_VAT_NUMBER": "N° BCE du représentant",
+        "REPRESENTATIVE_STREET": "Rue du représentant",
+        "REPRESENTATIVE_NUMBER": "N° (représentant)",
+        "REPRESENTATIVE_BOX": "Boîte (représentant)",
+        "REPRESENTATIVE_POSTCODE": "Code postal (représentant)",
+        "REPRESENTATIVE_CITY": "Commune (représentant)",
+        "REPRESENTATIVE_COUNTRY": "Pays (représentant)",
+        "CONTACT_LAST_NAME": "Nom de la personne de contact",
+        "CONTACT_FIRST_NAME": "Prénom de la personne de contact",
+        "CONTACT_STREET": "Rue (contact)",
+        "CONTACT_NUMBER": "N° (contact)",
+        "CONTACT_BOX": "Boîte (contact)",
+        "CONTACT_POSTCODE": "Code postal (contact)",
+        "CONTACT_CITY": "Commune (contact)",
+        "CONTACT_PHONE": "Téléphone (contact)",
+        "CONTACT_MOBILE": "GSM (contact)",
+        "CONTACT_EMAIL": "Courriel (contact)",
+        "BUILDING_REFERENCE": "Référence du partage (même bâtiment)",
+        "COMMUNITY_REFERENCE": "Référence du partage (communauté)",
+        "PROJECT_DESCRIPTION": "Description du projet",
+        "SHARING_WITHIN_BUILDING": "Partage au sein d'un même bâtiment",
+        "SHARING_WITHIN_COMMUNITY": "Partage au sein d'une communauté d'énergie",
+        "SINGLE_GRID_OPERATOR": "Un seul gestionnaire de réseau",
+        "CWAPE_REFERENCE_DIGITS": "Référence CWaPE (CE-…)",
+        "ENTITY_NAME": "Dénomination de la société",
+        "ENTITY_VAT_DIGITS": "N° BCE de la société",
+        "CONTROLLING_ENTITY_NAME": "Entité qui la contrôle",
+        "DECLARANT_NAME": "Nom et prénom du déclarant",
+        "DECLARANT_REPRESENTATIVE": "Représenté par",
+        "DECLARANT_COMPANY_NAME": "Société (le cas échéant)",
+        "DECLARANT_ADDRESS": "Adresse du déclarant",
+        "DECLARANT_PHONE": "Téléphone du déclarant",
+        "DECLARANT_EMAIL": "Courriel du déclarant",
+        "SIGNED_AT": "Fait à",
+        "SIGNED_ON": "Le",
+        "WAIVES_RESIDENTIAL_RIGHT": "Renonce au droit du client résidentiel",
+        "WILL_REQUEST_METERING_REGIME": "Demandera le régime de comptage requis",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Basculera vers le service d'injection",
+        "GRID_OPERATOR_NAME": "Gestionnaire de réseau",
+        "SHARING_DESCRIPTION": "Description du partage",
+        "DISTRIBUTION_KEY": "Clé de répartition",
+        "START_DATE": "Date de prise d'effet",
+        "SUSPENSIVE_CONDITION": "Condition suspensive",
+        "UNMET_CONDITION": "Condition non remplie",
+        "KEY_NAME": "Clé",
+        "KEY_DESCRIPTION": "Description de la clé",
+        "KEY_SINCE": "Appliquée à partir du",
+        "ITERATION": "Itération",
+        "PART": "Part (%)",
+        "CONSOMMATEUR": "Consommateur"
       },
       "TABLES": {
         "MEMBERS": "Membres et actionnaires",
         "PARTICIPANTS": "Points de prélèvement",
         "INSTALLATIONS": "Installations de production",
-        "STORAGE": "Installations de stockage"
+        "STORAGE": "Installations de stockage",
+        "ITERATIONS": "Itérations",
+        "KEY_SHARES": "Parts des consommateurs"
       },
       "WARNINGS": {
         "COUNT": "{{count}} point(s) à corriger avant le dépôt",
@@ -2766,7 +2824,18 @@
         "TITLE": "Pièces",
         "EMPTY": "Cette démarche ne demande aucune pièce.",
         "OPTIONAL": "Facultative",
-        "VERSIONS": "{{n}} version(s)"
+        "VERSIONS": "{{n}} version(s)",
+        "STALE_HINT": "{{n}} pièce(s) périmée(s) par un changement ultérieur.",
+        "REGENERATE_STALE": "Régénérer les pièces périmées",
+        "REGENERATE": "Régénérer en un clic (vos corrections sont conservées)",
+        "REGENERATE_REQUESTED": "Régénération demandée",
+        "REVIEW": "Revoir et régénérer",
+        "GENERATE_TO_SIGN": "Préparer le formulaire à signer",
+        "UPLOAD_SIGNED": "Téléverser la version signée",
+        "VERIFY": "Vérifier que la version finale se régénère à l'identique",
+        "VERIFY_REQUESTED": "Vérification demandée",
+        "VERIFY_DONE": "Vérification terminée",
+        "TEMPLATE_SUPERSEDED": "une nouvelle version du formulaire est en vigueur"
       },
       "THREAD": {
         "OPENED": "Ouverte à l'étape « {{to}} »",
@@ -2797,7 +2866,25 @@
         "BODY": "Bonjour,\n\nVeuillez trouver ci-joint notre demande : {{procedure}} (opération : {{operation}}).\nMerci de rappeler la référence {{reference}} dans votre réponse.\n\nPièces jointes :\n{{pieces}}\n\nBien cordialement,",
         "ERRORS": {
           "DATE_REQUIRED": "Indiquez la date d'envoi."
-        }
+        },
+        "FINALS": {
+          "TITLE": "Pièces à joindre",
+          "GENERATE": "Générer les versions finales",
+          "RENDERING": "Génération des versions finales… ({{n}} restante(s))",
+          "READY": "Toutes les pièces sont en version finale : téléchargez-les et joignez-les à votre envoi.",
+          "HINT": "Les pièces générées sont des brouillons, marqués d'un filigrane. Générez leurs versions finales avant de les joindre.",
+          "ZIP": "Tout télécharger (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Fiche de saisie",
+          "HINT": "Les valeurs à reporter dans le formulaire, dans son ordre. Copiez-les une à une, ou tout d'un coup.",
+          "COPY_ALL": "Tout copier",
+          "PRINT": "Imprimer",
+          "NOT_GENERATED": "Cette pièce n'est pas encore générée : la fiche est vide.",
+          "YES": "Oui",
+          "NO": "Non"
+        },
+        "MARK_SENT_HINT": "Générez les versions finales avant de marquer la démarche comme envoyée."
       },
       "RESPONSE": {
         "TITLE": "Ajouter une réponse",
@@ -2876,6 +2963,16 @@
           "SENT_DATE": "Indiquez la date d'envoi des éléments « En cours » : {{refs}}.",
           "CONFLICT": "Ces EAN sont déjà suivis dans une autre opération à ces dates ; rien n'a été confirmé : {{refs}}."
         }
+      },
+      "VERSION_STAGE": {
+        "1": "Brouillon",
+        "2": "Finale",
+        "3": "À signer"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identique",
+        "2": "Différente",
+        "3": "Vérification échouée"
       }
     }
   },

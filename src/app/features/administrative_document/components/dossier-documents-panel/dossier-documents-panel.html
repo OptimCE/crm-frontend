@@ -7,6 +7,33 @@
       </p>
     </div>
   } @else {
+    <!-- A later change outdated generated pieces: one click brings them back,
+         the reviewer's own edits carried over. -->
+    @if (stalePieces().length > 0) {
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2"
+        data-testid="dossier-documents-panel__message--stale"
+      >
+        <span class="text-sm text-red-800">
+          <i class="pi pi-history"></i>
+          {{
+            'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.STALE_HINT'
+              | translate: { n: stalePieces().length }
+          }}
+        </span>
+        <p-button
+          icon="pi pi-refresh"
+          size="small"
+          severity="danger"
+          [outlined]="true"
+          [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE_STALE' | translate"
+          [loading]="busyIds().size > 0"
+          (onClick)="regenerate()"
+          data-testid="dossier-documents-panel__btn--regenerate-stale"
+        />
+      </div>
+    }
+
     <!-- Test-ids by position, not by piece id: an in-app tour points at "the
          first piece" of whatever procedure the user is on. -->
     @for (piece of detail().pieces; track piece.id; let i = $index) {
@@ -22,6 +49,15 @@
               [severity]="statusSeverity(piece)"
               data-testid="dossier-documents-panel__tag--status"
             />
+            <!-- What the current version is: a stamped draft, the final that is
+                 sent, or the form a participant signs. -->
+            @if (stageLabelKey(piece); as stage) {
+              <p-tag
+                [value]="stage | translate"
+                [severity]="stageSeverity(piece)"
+                [attr.data-testid]="'dossier-documents-panel__tag--stage-' + i"
+              />
+            }
             @if (!piece.required) {
               <p-tag
                 severity="secondary"
@@ -37,6 +73,14 @@
                 [attr.data-testid]="'dossier-documents-panel__tag--render-' + i"
               />
             }
+            @if (checkLabelKey(piece); as check) {
+              <p-tag
+                [value]="check | translate"
+                [severity]="checkSeverity(piece)"
+                icon="pi pi-verified"
+                [attr.data-testid]="'dossier-documents-panel__tag--check-' + i"
+              />
+            }
           </div>
           <span class="text-xs text-surface-500">
             {{ kindLabelKey(piece) | translate }}
@@ -49,26 +93,50 @@
             } @else {
               {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_VERSION' | translate }}
             }
+            @if (piece.template_superseded) {
+              &middot;
+              <span class="text-amber-700">{{
+                'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.TEMPLATE_SUPERSEDED' | translate
+              }}</span>
+            }
           </span>
         </div>
 
         <div class="flex items-center gap-1 shrink-0">
+          @if (canRegenerate(piece)) {
+            <p-button
+              icon="pi pi-refresh"
+              text
+              rounded
+              size="small"
+              severity="danger"
+              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE' | translate"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE' | translate"
+              [loading]="isBusy(piece)"
+              (onClick)="regenerate(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--regenerate-' + i"
+            />
+          }
           @if (canGenerate(piece)) {
             <p-button
-              [icon]="piece.versions > 0 ? 'pi pi-refresh' : 'pi pi-sparkles'"
+              [icon]="piece.versions > 0 ? 'pi pi-pencil' : 'pi pi-sparkles'"
               text
               rounded
               size="small"
               [pTooltip]="
-                (piece.versions > 0
-                  ? 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.REGENERATE'
-                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.GENERATE_TO_SIGN'
+                  : piece.versions > 0
+                    ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REVIEW'
+                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
                 ) | translate
               "
               [attr.aria-label]="
-                (piece.versions > 0
-                  ? 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.REGENERATE'
-                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.GENERATE_TO_SIGN'
+                  : piece.versions > 0
+                    ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REVIEW'
+                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
                 ) | translate
               "
               [disabled]="isRendering(piece)"
@@ -82,11 +150,35 @@
               text
               rounded
               size="small"
-              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
-              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
+              [pTooltip]="
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.UPLOAD_SIGNED'
+                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD'
+                ) | translate
+              "
+              [attr.aria-label]="
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.UPLOAD_SIGNED'
+                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD'
+                ) | translate
+              "
               [disabled]="isRendering(piece)"
               (onClick)="openUpload(piece)"
               [attr.data-testid]="'dossier-documents-panel__btn--upload-' + i"
+            />
+          }
+          @if (canVerify(piece)) {
+            <p-button
+              icon="pi pi-verified"
+              text
+              rounded
+              size="small"
+              severity="secondary"
+              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERIFY' | translate"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERIFY' | translate"
+              [loading]="isBusy(piece)"
+              (onClick)="verify(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--verify-' + i"
             />
           }
           <!-- Outside the editable rules on purpose: once sent, downloading what
