@@ -17,6 +17,7 @@ import {
   ChangeStatus,
   ProcedureDetailOut,
   ProcedureStatus,
+  RegulatoryStatus,
 } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -54,6 +55,7 @@ describe('ProcedureDetail', () => {
       getStatus: vi.fn().mockReturnValue(of(new ApiResponse(moduleStatus()))),
       listDefinitions: vi.fn().mockReturnValue(of(new ApiResponse([modifDefinition()]))),
       deferChange: vi.fn(),
+      refile: vi.fn().mockReturnValue(of(new ApiResponse({ id_dossier: 31, changes: [41] }))),
       invalidate: vi.fn(),
     };
     dialogOpen = vi.fn().mockReturnValue({ onClose: new Subject(), destroy: vi.fn() });
@@ -188,6 +190,99 @@ describe('ProcedureDetail', () => {
       'procedure-detail__thread-entry--correspondence',
       'procedure-detail__thread-entry--step',
     ]);
+  });
+
+  it('shows what the CRM shows of each change: its regulatory badge', async () => {
+    const base = procedureDetail();
+    await setup(
+      procedureDetail({
+        changes: [
+          {
+            ...base.changes[0],
+            regulatory_status: RegulatoryStatus.LEAVING,
+            valid_from: '2025-06-01',
+            valid_to: '2026-11-30',
+          },
+        ],
+      }),
+    );
+    expect(byTestId('procedure-detail__regulatory--7')?.textContent).toContain(
+      "Sortie prévue, actif jusqu'au 30/11/2026",
+    );
+  });
+
+  it('after a refusal, offers to withdraw in the CRM or to correct and refile', async () => {
+    const base = procedureDetail();
+    await setup(
+      procedureDetail({
+        status: ProcedureStatus.REFUSED,
+        step: 'refused',
+        changes: [
+          {
+            ...base.changes[0],
+            kind: 'meter_added',
+            status: ChangeStatus.REFUSED,
+            regulatory_status: RegulatoryStatus.REFUSED,
+            in_operation: true,
+          },
+        ],
+        refusal: { changes: [7], id_sharing_operation: 3, draft_id: null },
+      }),
+    );
+
+    expect(byTestId('procedure-detail__refusal')?.textContent).toContain('1 élément(s)');
+    expect(byTestId('procedure-detail__link--withdraw')?.getAttribute('href')).toBe(
+      '/sharing_operations/3',
+    );
+    expect(byTestId('procedure-detail__regulatory--7')?.textContent).toContain('Refusé');
+
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    byTestId('procedure-detail__btn--refile')?.querySelector('button')?.click();
+    await fixture.whenStable();
+
+    expect(service['refile']).toHaveBeenCalledWith(12);
+    expect(navigate).toHaveBeenCalledWith(['/administrative-document/procedures', 31]);
+  });
+
+  it('says a change refiled elsewhere, and one withdrawn from the CRM', async () => {
+    const base = procedureDetail();
+    await setup(
+      procedureDetail({
+        status: ProcedureStatus.REFUSED,
+        step: 'refused',
+        changes: [
+          {
+            ...base.changes[0],
+            status: ChangeStatus.REFUSED,
+            refiled_into: 31,
+            in_operation: false,
+          },
+        ],
+        refusal: null,
+      }),
+    );
+
+    expect(byTestId('procedure-detail__refusal')).toBeNull();
+    expect(byTestId('procedure-detail__link--refiled-7')?.getAttribute('href')).toBe(
+      '/administrative-document/procedures/31',
+    );
+    expect(byTestId('procedure-detail__change--7')?.textContent).toContain('retiré du CRM');
+  });
+
+  it('says a blocked effect date, and which meters block it', async () => {
+    await setup(
+      procedureDetail({
+        effect_error: {
+          kind: 'in_force',
+          code: 'exclude',
+          subjects: ['541448000000000009'],
+          at: '2026-11-02T05:00:00Z',
+        },
+      }),
+    );
+    const message = byTestId('procedure-detail__message--effect-error')?.textContent ?? '';
+    expect(message).toContain("La prise d'effet est bloquée");
+    expect(message).toContain('541448000000000009');
   });
 
   it('says a procedure of another community is not found', async () => {

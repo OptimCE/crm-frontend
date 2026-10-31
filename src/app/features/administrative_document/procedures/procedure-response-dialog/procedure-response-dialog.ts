@@ -1,4 +1,6 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { RegulatoryBadgeComponent } from '../../../../shared/components/regulatory-badge/regulatory-badge';
+import { RegulatorySubjectType } from '../../../../shared/dtos/regulatory-status.dtos';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -14,7 +16,9 @@ import { Subject, catchError, of, switchMap } from 'rxjs';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import {
+  ChangeSubjectType,
   CorrespondenceProposalOut,
+  EffectPreviewOut,
   ProposalDeadlineOut,
 } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
@@ -50,6 +54,10 @@ interface Consequence {
   started: I18nText[];
   met: I18nText[];
   allowed: boolean;
+  /** "Takes effect on …", when the response sets the effect date. */
+  effect: I18nText | null;
+  /** What the CRM would show differently, one badge per subject. */
+  effects: { ref: string; subjectType: RegulatorySubjectType; state: EffectPreviewOut }[];
 }
 
 /**
@@ -62,7 +70,17 @@ interface Consequence {
 @Component({
   selector: 'app-procedure-response-dialog',
   standalone: true,
-  imports: [TranslatePipe, FormsModule, Button, DatePicker, InputText, Message, Select, Textarea],
+  imports: [
+    TranslatePipe,
+    FormsModule,
+    Button,
+    DatePicker,
+    InputText,
+    Message,
+    Select,
+    Textarea,
+    RegulatoryBadgeComponent,
+  ],
   templateUrl: './procedure-response-dialog.html',
   providers: [ErrorMessageHandler],
 })
@@ -224,6 +242,20 @@ export class ProcedureResponseDialog implements OnInit {
         params: { label: ruleLabel(code) },
       })),
       allowed: proposal.transition_allowed,
+      effect: proposal.effective_date
+        ? {
+            key: `${prefix}.WILL_TAKE_EFFECT`,
+            params: { date: formatApiDate(proposal.effective_date) },
+          }
+        : null,
+      effects: (proposal.effects ?? []).map((state) => ({
+        ref: state.subject_ref,
+        subjectType:
+          state.subject_type === ChangeSubjectType.KEY
+            ? RegulatorySubjectType.KEY
+            : RegulatorySubjectType.METER,
+        state,
+      })),
     };
   }
 }

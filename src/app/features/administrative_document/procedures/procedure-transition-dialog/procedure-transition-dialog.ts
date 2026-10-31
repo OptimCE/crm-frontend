@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { ProcedureStatus } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -22,6 +23,8 @@ import { ProcedureDialogData, pickLabel } from '../procedure-format';
 
 /** The annex's TRANSITION_NOT_ALLOWED: the procedure moved while this was open. */
 const TRANSITION_NOT_ALLOWED = 2379;
+/** EFFECT_CONFLICT: into force, the core refused (one EAN per operation per date). */
+const EFFECT_CONFLICT = 2391;
 const REASON_MAX = 500;
 
 interface StepOption {
@@ -75,9 +78,18 @@ export class ProcedureTransitionDialog {
 
   readonly submitting = signal<boolean>(false);
   readonly formError = signal<string | null>(null);
+  /** The EANs the core refused, on a step into force. */
+  readonly conflicts = signal<string[]>([]);
+
+  /** Into force by hand: the core is written first, on this date (the effect date). */
+  targetInForce(): boolean {
+    const step = this.detail?.timeline.find((s) => s.code === this.toStep);
+    return step?.status === ProcedureStatus.IN_FORCE;
+  }
 
   submit(): void {
     this.formError.set(null);
+    this.conflicts.set([]);
     const detail = this.detail;
     if (!detail) return;
     const reason = this.reason.trim();
@@ -103,8 +115,11 @@ export class ProcedureTransitionDialog {
         },
         error: (error: unknown) => {
           this.submitting.set(false);
-          if (extractApiErrorCode(error) === TRANSITION_NOT_ALLOWED) {
+          const code = extractApiErrorCode(error);
+          if (code === TRANSITION_NOT_ALLOWED || code === EFFECT_CONFLICT) {
             this.formError.set(extractApiErrorMessage(error));
+            const listed = (error as { error?: { conflicts?: unknown } } | null)?.error?.conflicts;
+            this.conflicts.set(Array.isArray(listed) ? listed.map(String) : []);
             return;
           }
           this.errorHandler.handleError(extractApiErrorMessage(error));

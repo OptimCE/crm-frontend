@@ -68,6 +68,25 @@
           @for (line of c.met; track $index) {
             <span>{{ line.key | translate: line.params }}</span>
           }
+          @if (c.effect; as effect) {
+            <span class="font-medium" data-testid="procedure-response-dialog__will-take-effect">{{
+              effect.key | translate: effect.params
+            }}</span>
+          }
+          @if (c.effects.length > 0) {
+            <span>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.IN_THE_CRM' | translate }}</span>
+            <ul
+              class="list-none m-0 p-0 flex flex-col gap-1"
+              data-testid="procedure-response-dialog__effects"
+            >
+              @for (e of c.effects; track e.ref) {
+                <li class="flex items-center gap-2 flex-wrap">
+                  <span class="font-mono text-xs">{{ e.ref }}</span>
+                  <app-regulatory-badge [state]="e.state" [subjectType]="e.subjectType" />
+                </li>
+              }
+            </ul>
+          }
         }
       </div>
     </p-message>

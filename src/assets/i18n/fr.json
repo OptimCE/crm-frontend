@@ -497,6 +497,39 @@
     "BE-BRU-BRUGEL": "Brugel (Bruxelles)",
     "BE-VLA-VREG": "VREG (Flandre)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "Ouvrir la démarche",
+      "METER": {
+        "TO_NOTIFY": "À notifier",
+        "PENDING_GRD": "En attente du GRD",
+        "PENDING_REGULATOR": "En attente du régulateur",
+        "AUTHORIZED": "Autorisé",
+        "AUTHORIZED_FROM": "Autorisé, effet le {{date}}",
+        "ACTIVE": "Actif depuis le {{date}}",
+        "ACTIVE_UNDATED": "Actif",
+        "LEAVING": "Sortie demandée",
+        "LEAVING_UNTIL": "Sortie prévue, actif jusqu'au {{date}}",
+        "ENDED": "Sorti, actif jusqu'au {{date}}",
+        "ENDED_UNDATED": "Sorti",
+        "REFUSED": "Refusé",
+        "WITHDRAWN": "Statut retiré"
+      },
+      "KEY": {
+        "TO_NOTIFY": "Nouvelle clé à notifier",
+        "PENDING_GRD": "En attente du GRD",
+        "PENDING_REGULATOR": "En attente du régulateur",
+        "AUTHORIZED": "Autorisée",
+        "AUTHORIZED_FROM": "Effet prévu le {{date}}",
+        "ACTIVE": "Active depuis le {{date}}",
+        "ACTIVE_UNDATED": "Active",
+        "ENDED": "Remplacée, active jusqu'au {{date}}",
+        "ENDED_UNDATED": "Remplacée",
+        "REFUSED": "Refusée",
+        "WITHDRAWN": "Ancienne clé conservée"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Infos de la communauté",
     "SUBTITLE": "Consulter et gérer les informations de votre communauté",
@@ -1591,7 +1624,11 @@
       },
       "RELATED_LABEL": "Voir aussi :",
       "RELATED_DOSSIERS": "Ses dossiers administratifs",
-      "RELATED_BILLING": "Sa facturation"
+      "RELATED_BILLING": "Sa facturation",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} changement(s) pas encore notifié(s) au GRD ou au régulateur.",
+        "OPEN_DRAFT": "Voir la démarche"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Opération de partage",
@@ -2799,7 +2836,8 @@
         "EXTERNAL_REF": "Référence externe",
         "REQUESTED_EFFECT": "Date d'effet demandée",
         "EFFECT": "Date d'effet",
-        "EFFECT_ERROR": "Le CRM a refusé l'effet de cette démarche : un EAN est déjà suivi dans une autre opération à ces dates. La démarche reste à son étape.",
+        "EFFECT_ERROR": "Le CRM n'a pas pu mettre à jour le statut réglementaire : ces compteurs sont déjà suivis dans une autre opération. Nouvel essai chaque jour.",
+        "EFFECT_ERROR_IN_FORCE": "La prise d'effet est bloquée : ces compteurs sont encore suivis dans une autre opération à cette date. La démarche reste à son étape ; nouvel essai chaque jour.",
         "FROZEN": "Envoyée le {{date}} : la démarche est figée. Les nouveaux changements iront dans un nouveau brouillon.",
         "STEPS": "Étapes",
         "DEADLINES": "Échéances",
@@ -2818,7 +2856,18 @@
         "EFFECTIVE": "effet le {{date}}",
         "ERRORS": {
           "REASON_REQUIRED": "Indiquez le motif de l'exclusion."
-        }
+        },
+        "REFILED_INTO": "renvoyé dans une nouvelle démarche",
+        "REFILED_FROM": "reprend un changement refusé",
+        "WITHDRAWN_IN_CRM": "retiré du CRM"
+      },
+      "REFUSAL": {
+        "TITLE": "Après le refus",
+        "HINT": "Rien n'est supprimé dans le CRM : {{count}} élément(s) passent en « Refusé ». Retirez-les de l'opération, ou corrigez puis renvoyez-les dans une nouvelle démarche.",
+        "WITHDRAW": "Retirer de l'opération",
+        "REFILE": "Corriger et renvoyer",
+        "REFILE_CONFIRM": "Les éléments refusés seront repris dans le brouillon de la prochaine démarche, où vous pourrez les corriger avant de l'envoyer. Continuer ?",
+        "REFILED": "Éléments repris dans une nouvelle démarche."
       },
       "PIECES": {
         "TITLE": "Pièces",
@@ -2900,6 +2949,8 @@
         "NO_MOVE": "Elle est ajoutée au fil, sans changer d'étape.",
         "WILL_START": "Nouvelle échéance : {{label}} ({{party}}), pour le {{date}}.",
         "WILL_MEET": "Échéance respectée : {{label}}.",
+        "WILL_TAKE_EFFECT": "Prise d'effet prévue le {{date}}.",
+        "IN_THE_CRM": "Dans le CRM :",
         "NOT_NOW": "Cette réponse ne correspond pas à l'étape actuelle de la démarche.",
         "SUBMIT": "Enregistrer",
         "DONE": "Réponse enregistrée",
@@ -2915,6 +2966,8 @@
         "TO_STEP_PLACEHOLDER": "Sélectionnez une étape",
         "AUTOMATIC": "{{step}} (normalement automatique)",
         "ON": "Date",
+        "EFFECTIVE_ON": "Date de prise d'effet",
+        "IN_FORCE_HINT": "Le CRM est mis à jour d'abord : les compteurs passent « Actif depuis » cette date.",
         "REASON": "Motif",
         "SUBMIT": "Changer d'étape",
         "DONE": "Étape modifiée",

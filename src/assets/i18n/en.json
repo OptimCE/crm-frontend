@@ -497,6 +497,39 @@
     "BE-BRU-BRUGEL": "Brugel (Brussels)",
     "BE-VLA-VREG": "VREG (Flanders)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "Open the procedure",
+      "METER": {
+        "TO_NOTIFY": "To notify",
+        "PENDING_GRD": "Awaiting the DSO",
+        "PENDING_REGULATOR": "Awaiting the regulator",
+        "AUTHORIZED": "Authorised",
+        "AUTHORIZED_FROM": "Authorised, effective {{date}}",
+        "ACTIVE": "Active since {{date}}",
+        "ACTIVE_UNDATED": "Active",
+        "LEAVING": "Exit requested",
+        "LEAVING_UNTIL": "Exit planned, active until {{date}}",
+        "ENDED": "Left, active until {{date}}",
+        "ENDED_UNDATED": "Left",
+        "REFUSED": "Refused",
+        "WITHDRAWN": "Status withdrawn"
+      },
+      "KEY": {
+        "TO_NOTIFY": "New key to notify",
+        "PENDING_GRD": "Awaiting the DSO",
+        "PENDING_REGULATOR": "Awaiting the regulator",
+        "AUTHORIZED": "Authorised",
+        "AUTHORIZED_FROM": "Effective {{date}}",
+        "ACTIVE": "Active since {{date}}",
+        "ACTIVE_UNDATED": "Active",
+        "ENDED": "Replaced, active until {{date}}",
+        "ENDED_UNDATED": "Replaced",
+        "REFUSED": "Refused",
+        "WITHDRAWN": "Previous key kept"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Community info",
     "SUBTITLE": "View and manage your community's details",
@@ -1591,7 +1624,11 @@
       },
       "RELATED_LABEL": "See also:",
       "RELATED_DOSSIERS": "Its administrative dossiers",
-      "RELATED_BILLING": "Its billing"
+      "RELATED_BILLING": "Its billing",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} change(s) not yet notified to the DSO or the regulator.",
+        "OPEN_DRAFT": "See the procedure"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Sharing operation",
@@ -2799,7 +2836,8 @@
         "EXTERNAL_REF": "External reference",
         "REQUESTED_EFFECT": "Requested effective date",
         "EFFECT": "Effective date",
-        "EFFECT_ERROR": "The CRM refused this procedure's effect: an EAN is already tracked in another operation on those dates. The procedure stays at its step.",
+        "EFFECT_ERROR": "The CRM could not update the regulatory status: these meters are already tracked in another operation. Retried every day.",
+        "EFFECT_ERROR_IN_FORCE": "The effect is blocked: these meters are still tracked in another operation on that date. The procedure stays at its step; retried every day.",
         "FROZEN": "Sent on {{date}}: the procedure is frozen. New changes go into a new draft.",
         "STEPS": "Steps",
         "DEADLINES": "Deadlines",
@@ -2818,7 +2856,18 @@
         "EFFECTIVE": "effective {{date}}",
         "ERRORS": {
           "REASON_REQUIRED": "Give the reason for the exclusion."
-        }
+        },
+        "REFILED_INTO": "refiled into a new procedure",
+        "REFILED_FROM": "takes up a refused change",
+        "WITHDRAWN_IN_CRM": "withdrawn from the CRM"
+      },
+      "REFUSAL": {
+        "TITLE": "After the refusal",
+        "HINT": "Nothing is deleted in the CRM: {{count}} item(s) are now « Refused ». Remove them from the operation, or correct them and refile them in a new procedure.",
+        "WITHDRAW": "Remove from the operation",
+        "REFILE": "Correct and refile",
+        "REFILE_CONFIRM": "The refused items will be taken up in the draft of the next procedure, where you can correct them before sending it. Continue?",
+        "REFILED": "Items taken up in a new procedure."
       },
       "PIECES": {
         "TITLE": "Documents",
@@ -2900,6 +2949,8 @@
         "NO_MOVE": "It is added to the activity, with no change of step.",
         "WILL_START": "New deadline: {{label}} ({{party}}), by {{date}}.",
         "WILL_MEET": "Deadline met: {{label}}.",
+        "WILL_TAKE_EFFECT": "Takes effect on {{date}}.",
+        "IN_THE_CRM": "In the CRM:",
         "NOT_NOW": "This response does not fit the procedure's current step.",
         "SUBMIT": "Record",
         "DONE": "Response recorded",
@@ -2915,6 +2966,8 @@
         "TO_STEP_PLACEHOLDER": "Select a step",
         "AUTOMATIC": "{{step}} (normally automatic)",
         "ON": "Date",
+        "EFFECTIVE_ON": "Effective date",
+        "IN_FORCE_HINT": "The CRM is updated first: the meters become « Active since » that date.",
         "REASON": "Reason",
         "SUBMIT": "Change step",
         "DONE": "Step changed",

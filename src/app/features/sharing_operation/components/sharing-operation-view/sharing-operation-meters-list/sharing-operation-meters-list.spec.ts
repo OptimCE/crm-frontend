@@ -23,6 +23,7 @@ import { ConfirmPopup } from 'primeng/confirmpopup';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Toast } from 'primeng/toast';
 import { AddressDTO } from '../../../../../shared/dtos/address.dtos';
+import { provideRegulatoryTesting } from '../../../../../shared/components/regulatory-badge/regulatory-testing';
 
 function buildAddress(): AddressDTO {
   return {
@@ -82,6 +83,7 @@ describe('SharingOperationMetersList', () => {
     await TestBed.configureTestingModule({
       imports: [SharingOperationMetersList, TranslateModule.forRoot()],
       providers: [
+        ...provideRegulatoryTesting(),
         { provide: SharingOperationService, useValue: sharingServiceSpy },
         {
           provide: SharingOperationMeterEventService,

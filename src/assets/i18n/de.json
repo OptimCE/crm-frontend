@@ -497,6 +497,39 @@
     "BE-BRU-BRUGEL": "Brugel (Brüssel)",
     "BE-VLA-VREG": "VREG (Flandern)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "Das Verfahren öffnen",
+      "METER": {
+        "TO_NOTIFY": "Zu melden",
+        "PENDING_GRD": "Wartet auf den Netzbetreiber",
+        "PENDING_REGULATOR": "Wartet auf die Regulierungsbehörde",
+        "AUTHORIZED": "Genehmigt",
+        "AUTHORIZED_FROM": "Genehmigt, wirksam am {{date}}",
+        "ACTIVE": "Aktiv seit {{date}}",
+        "ACTIVE_UNDATED": "Aktiv",
+        "LEAVING": "Austritt beantragt",
+        "LEAVING_UNTIL": "Austritt geplant, aktiv bis {{date}}",
+        "ENDED": "Ausgetreten, aktiv bis {{date}}",
+        "ENDED_UNDATED": "Ausgetreten",
+        "REFUSED": "Abgelehnt",
+        "WITHDRAWN": "Status zurückgezogen"
+      },
+      "KEY": {
+        "TO_NOTIFY": "Neuer Schlüssel zu melden",
+        "PENDING_GRD": "Wartet auf den Netzbetreiber",
+        "PENDING_REGULATOR": "Wartet auf die Regulierungsbehörde",
+        "AUTHORIZED": "Genehmigt",
+        "AUTHORIZED_FROM": "Wirksam am {{date}}",
+        "ACTIVE": "Aktiv seit {{date}}",
+        "ACTIVE_UNDATED": "Aktiv",
+        "ENDED": "Ersetzt, aktiv bis {{date}}",
+        "ENDED_UNDATED": "Ersetzt",
+        "REFUSED": "Abgelehnt",
+        "WITHDRAWN": "Bisheriger Schlüssel beibehalten"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Gemeinschaftsinfo",
     "SUBTITLE": "Anzeigen und Verwalten der Daten Ihrer Gemeinschaft",
@@ -1591,7 +1624,11 @@
       },
       "RELATED_LABEL": "Siehe auch:",
       "RELATED_DOSSIERS": "Seine Verwaltungsdossiers",
-      "RELATED_BILLING": "Seine Abrechnung"
+      "RELATED_BILLING": "Seine Abrechnung",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} Änderung(en) noch nicht an den Netzbetreiber oder die Regulierungsbehörde gemeldet.",
+        "OPEN_DRAFT": "Das Verfahren ansehen"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Teilungsoperation",
@@ -2799,7 +2836,8 @@
         "EXTERNAL_REF": "Externe Referenz",
         "REQUESTED_EFFECT": "Beantragtes Wirksamkeitsdatum",
         "EFFECT": "Wirksamkeitsdatum",
-        "EFFECT_ERROR": "Das CRM hat die Wirkung dieses Verfahrens abgelehnt: Eine EAN wird an diesen Daten bereits in einer anderen Operation verfolgt. Das Verfahren bleibt bei seinem Schritt.",
+        "EFFECT_ERROR": "Das CRM konnte den regulatorischen Status nicht aktualisieren: Diese Zähler werden bereits in einer anderen Operation geführt. Täglich neuer Versuch.",
+        "EFFECT_ERROR_IN_FORCE": "Das Inkrafttreten ist blockiert: Diese Zähler werden an diesem Datum noch in einer anderen Operation geführt. Das Verfahren bleibt bei seinem Schritt; täglich neuer Versuch.",
         "FROZEN": "Gesendet am {{date}}: Das Verfahren ist eingefroren. Neue Änderungen kommen in einen neuen Entwurf.",
         "STEPS": "Schritte",
         "DEADLINES": "Fristen",
@@ -2818,7 +2856,18 @@
         "EFFECTIVE": "wirksam am {{date}}",
         "ERRORS": {
           "REASON_REQUIRED": "Geben Sie den Grund für den Ausschluss an."
-        }
+        },
+        "REFILED_INTO": "in einem neuen Verfahren erneut eingereicht",
+        "REFILED_FROM": "übernimmt eine abgelehnte Änderung",
+        "WITHDRAWN_IN_CRM": "aus dem CRM entfernt"
+      },
+      "REFUSAL": {
+        "TITLE": "Nach der Ablehnung",
+        "HINT": "Im CRM wird nichts gelöscht: {{count}} Element(e) stehen jetzt auf « Abgelehnt ». Entfernen Sie sie aus der Operation, oder korrigieren Sie sie und reichen Sie sie in einem neuen Verfahren erneut ein.",
+        "WITHDRAW": "Aus der Operation entfernen",
+        "REFILE": "Korrigieren und erneut einreichen",
+        "REFILE_CONFIRM": "Die abgelehnten Elemente werden in den Entwurf des nächsten Verfahrens übernommen, wo Sie sie vor dem Senden korrigieren können. Fortfahren?",
+        "REFILED": "Elemente in ein neues Verfahren übernommen."
       },
       "PIECES": {
         "TITLE": "Unterlagen",
@@ -2900,6 +2949,8 @@
         "NO_MOVE": "Sie wird dem Verlauf hinzugefügt, ohne den Schritt zu ändern.",
         "WILL_START": "Neue Frist: {{label}} ({{party}}), bis zum {{date}}.",
         "WILL_MEET": "Frist eingehalten: {{label}}.",
+        "WILL_TAKE_EFFECT": "Wirksam am {{date}}.",
+        "IN_THE_CRM": "Im CRM:",
         "NOT_NOW": "Diese Antwort passt nicht zum aktuellen Schritt des Verfahrens.",
         "SUBMIT": "Speichern",
         "DONE": "Antwort gespeichert",
@@ -2915,6 +2966,8 @@
         "TO_STEP_PLACEHOLDER": "Schritt auswählen",
         "AUTOMATIC": "{{step}} (normalerweise automatisch)",
         "ON": "Datum",
+        "EFFECTIVE_ON": "Datum des Inkrafttretens",
+        "IN_FORCE_HINT": "Das CRM wird zuerst aktualisiert: Die Zähler werden ab diesem Datum « Aktiv seit ».",
         "REASON": "Grund",
         "SUBMIT": "Schritt ändern",
         "DONE": "Schritt geändert",

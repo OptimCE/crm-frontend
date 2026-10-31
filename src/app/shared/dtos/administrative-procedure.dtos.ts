@@ -13,6 +13,10 @@
  * datetimes. See administrative-document.dtos.ts for how to format each.
  */
 
+import { RegulatoryStatus } from './regulatory-status.dtos';
+
+export { RegulatoryStatus };
+
 /** A label per language (fr, en, nl, de), from the regulator's catalogue. */
 export type Labels = Partial<Record<string, string>>;
 
@@ -286,6 +290,47 @@ export interface ChangeOut {
   injection_status: number | null;
   effective_date: string | null;
   excluded_reason: string | null;
+  /** What the core shows of its subject (its regulatory_link_status row); absent: none yet. */
+  regulatory_status?: RegulatoryStatus | null;
+  valid_from?: string | null;
+  /** Its last day in the operation. */
+  valid_to?: string | null;
+  /** The refused change it refiles. */
+  refiled_from?: number | null;
+  /** The procedure this refused change was refiled into. */
+  refiled_into?: number | null;
+  /** A refused change: is the CRM still so (meter in the operation, key current)? */
+  in_operation?: boolean | null;
+}
+
+/** Why the core refused the procedure's effects, kept until they land. */
+export interface EffectErrorOut {
+  /** `sync`: the badges; `in_force`: the effect date (retried each day). */
+  kind: 'sync' | 'in_force';
+  code: 'exclude' | 'unavailable';
+  /** The EANs tracked in another operation. */
+  subjects: string[];
+  at: string;
+}
+
+/** A refused (or lapsed) procedure's offer: withdraw in the CRM, or correct and refile. */
+export interface RefusalOut {
+  /** The changes that can still be refiled. */
+  changes: number[];
+  id_sharing_operation: number | null;
+  /** The family's open draft a refile would join. */
+  draft_id: number | null;
+}
+
+export interface RefileIn {
+  /** All the refusable changes when omitted. */
+  change_ids?: number[];
+}
+
+export interface RefileOut {
+  /** The draft they were filed into. */
+  id_dossier: number;
+  changes: number[];
 }
 
 /** A piece's current version: what is downloaded, and what would be sent. */
@@ -380,7 +425,7 @@ export interface ProcedureDetailOut extends ProcedureItemOut {
   /** Set once sent: no change and no new version of a sent piece after it. */
   frozen_at: string | null;
   /** The core refused an effect; the procedure stays where it was. */
-  effect_error: Record<string, unknown> | null;
+  effect_error: EffectErrorOut | null;
   timeline: ProcedureStepOut[];
   transitions: TransitionOptionOut[];
   response_types: ResponseTypeOut[];
@@ -393,6 +438,8 @@ export interface ProcedureDetailOut extends ProcedureItemOut {
   finals_ready: boolean;
   /** A piece has a fiche de saisie (`GET .../entry-sheet`). */
   has_entry_sheet: boolean;
+  /** Set on a refused (or lapsed) procedure that still has something to refile. */
+  refusal?: RefusalOut | null;
 }
 
 export interface EntryFieldOut {
@@ -543,10 +590,25 @@ export interface CorrespondenceProposalOut {
   from_step: string;
   to_step: string | null;
   to_step_labels: Labels | null;
+  /** ProcedureStatus of the step it moves to. */
+  to_status?: ProcedureStatus | null;
   transition_allowed: boolean;
   deadlines_started: ProposalDeadlineOut[];
   /** The rule codes this response meets. */
   deadlines_met: string[];
+  /** The effect date it would set (the 20th working day...). */
+  effective_date?: string | null;
+  /** What the CRM would show differently. */
+  effects?: EffectPreviewOut[];
+}
+
+/** What the core would show of a subject once the response is recorded. */
+export interface EffectPreviewOut {
+  subject_type: ChangeSubjectType;
+  subject_ref: string;
+  regulatory_status: RegulatoryStatus;
+  valid_from: string | null;
+  valid_to: string | null;
 }
 
 // ---------------------------------------------------------------------------

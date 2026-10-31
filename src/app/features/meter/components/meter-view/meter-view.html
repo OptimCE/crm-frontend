@@ -94,6 +94,14 @@
                 />
               }
             }
+            @if (regulatoryState(); as reg) {
+              <app-regulatory-badge
+                [state]="reg"
+                [subjectType]="SubjectType.METER"
+                [procedureId]="reg.regulatory_ref"
+                testId="meter-view__regulatory"
+              />
+            }
           </div>
           <p class="text-sm text-surface-500 m-0 truncate">
             {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}: {{ meter()!.meter_number }}

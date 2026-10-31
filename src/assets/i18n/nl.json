@@ -497,6 +497,39 @@
     "BE-BRU-BRUGEL": "Brugel (Brussel)",
     "BE-VLA-VREG": "VREG (Vlaanderen)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "De procedure openen",
+      "METER": {
+        "TO_NOTIFY": "Te melden",
+        "PENDING_GRD": "Wacht op de netbeheerder",
+        "PENDING_REGULATOR": "Wacht op de regulator",
+        "AUTHORIZED": "Toegestaan",
+        "AUTHORIZED_FROM": "Toegestaan, van kracht op {{date}}",
+        "ACTIVE": "Actief sinds {{date}}",
+        "ACTIVE_UNDATED": "Actief",
+        "LEAVING": "Uittreding gevraagd",
+        "LEAVING_UNTIL": "Uittreding gepland, actief tot {{date}}",
+        "ENDED": "Uitgetreden, actief tot {{date}}",
+        "ENDED_UNDATED": "Uitgetreden",
+        "REFUSED": "Geweigerd",
+        "WITHDRAWN": "Status ingetrokken"
+      },
+      "KEY": {
+        "TO_NOTIFY": "Nieuwe sleutel te melden",
+        "PENDING_GRD": "Wacht op de netbeheerder",
+        "PENDING_REGULATOR": "Wacht op de regulator",
+        "AUTHORIZED": "Toegestaan",
+        "AUTHORIZED_FROM": "Van kracht op {{date}}",
+        "ACTIVE": "Actief sinds {{date}}",
+        "ACTIVE_UNDATED": "Actief",
+        "ENDED": "Vervangen, actief tot {{date}}",
+        "ENDED_UNDATED": "Vervangen",
+        "REFUSED": "Geweigerd",
+        "WITHDRAWN": "Vorige sleutel behouden"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Gemeenschapsinfo",
     "SUBTITLE": "Bekijk en beheer de gegevens van uw gemeenschap",
@@ -1591,7 +1624,11 @@
       },
       "RELATED_LABEL": "Zie ook:",
       "RELATED_DOSSIERS": "Haar administratieve dossiers",
-      "RELATED_BILLING": "Haar facturatie"
+      "RELATED_BILLING": "Haar facturatie",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} wijziging(en) nog niet gemeld aan de netbeheerder of de regulator.",
+        "OPEN_DRAFT": "De procedure bekijken"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Deeloperatie",
@@ -2799,7 +2836,8 @@
         "EXTERNAL_REF": "Externe referentie",
         "REQUESTED_EFFECT": "Gevraagde ingangsdatum",
         "EFFECT": "Ingangsdatum",
-        "EFFECT_ERROR": "Het CRM heeft het gevolg van deze procedure geweigerd: een EAN wordt op die data al in een andere verrichting gevolgd. De procedure blijft bij haar stap.",
+        "EFFECT_ERROR": "Het CRM kon de regelgevende status niet bijwerken: deze meters worden al in een andere operatie gevolgd. Elke dag opnieuw geprobeerd.",
+        "EFFECT_ERROR_IN_FORCE": "De inwerkingtreding is geblokkeerd: deze meters worden op die datum nog in een andere operatie gevolgd. De procedure blijft bij haar stap; elke dag opnieuw geprobeerd.",
         "FROZEN": "Verstuurd op {{date}}: de procedure is vastgelegd. Nieuwe wijzigingen komen in een nieuw concept.",
         "STEPS": "Stappen",
         "DEADLINES": "Termijnen",
@@ -2818,7 +2856,18 @@
         "EFFECTIVE": "ingang op {{date}}",
         "ERRORS": {
           "REASON_REQUIRED": "Geef de reden voor de uitsluiting op."
-        }
+        },
+        "REFILED_INTO": "opnieuw ingediend in een nieuwe procedure",
+        "REFILED_FROM": "neemt een geweigerde wijziging over",
+        "WITHDRAWN_IN_CRM": "uit het CRM verwijderd"
+      },
+      "REFUSAL": {
+        "TITLE": "Na de weigering",
+        "HINT": "Niets wordt in het CRM verwijderd: {{count}} element(en) staan nu op « Geweigerd ». Verwijder ze uit de operatie, of corrigeer ze en dien ze opnieuw in via een nieuwe procedure.",
+        "WITHDRAW": "Uit de operatie verwijderen",
+        "REFILE": "Corrigeren en opnieuw indienen",
+        "REFILE_CONFIRM": "De geweigerde elementen worden overgenomen in het concept van de volgende procedure, waar u ze kunt corrigeren voor u die verstuurt. Doorgaan?",
+        "REFILED": "Elementen overgenomen in een nieuwe procedure."
       },
       "PIECES": {
         "TITLE": "Documenten",
@@ -2900,6 +2949,8 @@
         "NO_MOVE": "Het wordt aan de activiteit toegevoegd, zonder van stap te veranderen.",
         "WILL_START": "Nieuwe termijn: {{label}} ({{party}}), tegen {{date}}.",
         "WILL_MEET": "Termijn nageleefd: {{label}}.",
+        "WILL_TAKE_EFFECT": "Van kracht op {{date}}.",
+        "IN_THE_CRM": "In het CRM:",
         "NOT_NOW": "Dit antwoord past niet bij de huidige stap van de procedure.",
         "SUBMIT": "Opslaan",
         "DONE": "Antwoord opgeslagen",
@@ -2915,6 +2966,8 @@
         "TO_STEP_PLACEHOLDER": "Kies een stap",
         "AUTOMATIC": "{{step}} (normaal automatisch)",
         "ON": "Datum",
+        "EFFECTIVE_ON": "Datum van inwerkingtreding",
+        "IN_FORCE_HINT": "Het CRM wordt eerst bijgewerkt: de meters worden « Actief sinds » die datum.",
         "REASON": "Reden",
         "SUBMIT": "Stap wijzigen",
         "DONE": "Stap gewijzigd",

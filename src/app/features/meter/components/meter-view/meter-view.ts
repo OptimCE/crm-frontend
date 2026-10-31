@@ -1,4 +1,10 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { RegulatoryBadgeComponent } from '../../../../shared/components/regulatory-badge/regulatory-badge';
+import {
+  operationRegulatoryStatus,
+  regulatoryKey,
+} from '../../../../shared/components/regulatory-badge/operation-regulatory-status';
+import { RegulatorySubjectType } from '../../../../shared/dtos/regulatory-status.dtos';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
@@ -49,6 +55,7 @@ import { meterPeriodOptions } from '../../../../shared/utils/meter-period-option
     Skeleton,
     Avatar,
     MeterConsumptionChart,
+    RegulatoryBadgeComponent,
   ],
   templateUrl: './meter-view.html',
   styleUrl: './meter-view.css',
@@ -77,6 +84,15 @@ export class MeterView implements OnInit {
   readonly futureOptions = meterPeriodOptions(() => this.meter()?.futur_meter_data);
 
   readonly currentStatus = computed(() => this.meter()?.meter_data?.status);
+  /** What the regulator authorised for it in its current operation, beside the CRM's status. */
+  private readonly regulatory = operationRegulatoryStatus(
+    () => this.meter()?.meter_data?.sharing_operation?.id ?? null,
+  );
+  readonly regulatoryState = computed(() => {
+    const ean = this.meter()?.EAN;
+    return ean ? this.regulatory().get(regulatoryKey(RegulatorySubjectType.METER, ean)) : undefined;
+  });
+  readonly SubjectType = RegulatorySubjectType;
 
   readonly productionChainMap = signal<string[]>([]);
   readonly readingFrequencyMap = signal<string[]>([]);

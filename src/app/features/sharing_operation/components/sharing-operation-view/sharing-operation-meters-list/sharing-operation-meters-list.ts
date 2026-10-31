@@ -30,6 +30,15 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { toLocalDateString } from '../../../../../shared/utils/date.utils';
 import { translatedOptions } from '../../../../../shared/utils/translated-options.utils';
+import { RegulatoryBadgeComponent } from '../../../../../shared/components/regulatory-badge/regulatory-badge';
+import {
+  operationRegulatoryStatus,
+  regulatoryKey,
+} from '../../../../../shared/components/regulatory-badge/operation-regulatory-status';
+import {
+  RegulatoryStatusDTO,
+  RegulatorySubjectType,
+} from '../../../../../shared/dtos/regulatory-status.dtos';
 
 @Component({
   selector: 'app-sharing-operation-meters-list',
@@ -47,6 +56,7 @@ import { translatedOptions } from '../../../../../shared/utils/translated-option
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
+    RegulatoryBadgeComponent,
   ],
   templateUrl: './sharing-operation-meters-list.html',
   styleUrl: './sharing-operation-meters-list.css',
@@ -64,6 +74,8 @@ export class SharingOperationMetersList implements OnInit {
   private meterEventService = inject(SharingOperationMeterEventService);
 
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
+  /** What the regulator authorised, beside the CRM's own status (espace administratif). */
+  readonly regulatory = operationRegulatoryStatus(() => this.id_sharing());
   readonly loading = signal<boolean>(true);
   readonly pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
   readonly filter = signal<Omit<SharingOperationMetersQuery, 'type'>>({
@@ -411,4 +423,9 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   public MeterStatus = MeterDataStatus;
+  readonly SubjectType = RegulatorySubjectType;
+
+  regulatoryOf(ean: string): RegulatoryStatusDTO | undefined {
+    return this.regulatory().get(regulatoryKey(RegulatorySubjectType.METER, ean));
+  }
 }

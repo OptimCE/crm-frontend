@@ -9,9 +9,11 @@ import fr from '../../../../../assets/i18n/fr.json';
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import { LocaleService } from '../../../../core/services/language/locale.service';
 import {
+  ChangeSubjectType,
   CorrespondenceProposalOut,
   DeadlineKind,
   DeadlineParty,
+  RegulatoryStatus,
 } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
@@ -104,6 +106,36 @@ describe('ProcedureResponseDialog', () => {
       'Compléments avant caducité (La communauté), pour le 29/04/2027',
     );
     expect(component.canSubmit()).toBe(true);
+  });
+
+  it('says when it takes effect and what the CRM will show, before confirming', () => {
+    previewResponse.mockReturnValue(
+      of(
+        new ApiResponse(
+          proposal({
+            effective_date: '2026-11-27',
+            effects: [
+              {
+                subject_type: ChangeSubjectType.METER,
+                subject_ref: '541448000000000001',
+                regulatory_status: RegulatoryStatus.AUTHORIZED,
+                valid_from: '2026-11-27',
+                valid_to: null,
+              },
+            ],
+          }),
+        ),
+      ),
+    );
+
+    choose('incomplete_notice');
+
+    expect(byTestId('procedure-response-dialog__will-take-effect')?.textContent).toContain(
+      "Prise d'effet prévue le 27/11/2026.",
+    );
+    const effects = byTestId('procedure-response-dialog__effects')?.textContent ?? '';
+    expect(effects).toContain('541448000000000001');
+    expect(effects).toContain('Autorisé, effet le 27/11/2026');
   });
 
   it('refuses one the current step does not allow, and says so', () => {

@@ -221,6 +221,16 @@
             />
           }
         }
+        @if (regulatoryOf(meter.EAN); as reg) {
+          <div class="mt-1">
+            <app-regulatory-badge
+              [state]="reg"
+              [subjectType]="SubjectType.METER"
+              [procedureId]="reg.regulatory_ref"
+              [testId]="'op-meters-list__regulatory--desktop--' + rowIndex"
+            />
+          </div>
+        }
       </td>
       <td>
         <div
@@ -323,6 +333,16 @@
               }
             }
           </div>
+          @if (regulatoryOf(meter.EAN); as reg) {
+            <div class="mb-3">
+              <app-regulatory-badge
+                [state]="reg"
+                [subjectType]="SubjectType.METER"
+                [procedureId]="reg.regulatory_ref"
+                [testId]="'op-meters-list__regulatory--mobile--' + rowIndex"
+              />
+            </div>
+          }
           <!-- Card body: details grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>

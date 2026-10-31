@@ -1,0 +1,23 @@
+@if (badge(); as b) {
+  @if (link(); as route) {
+    <a
+      [routerLink]="route"
+      class="inline-flex no-underline"
+      [attr.data-testid]="testId()"
+      [attr.title]="'REGULATORY.BADGE.OPEN_PROCEDURE' | translate"
+    >
+      <p-tag
+        [value]="b.labelKey | translate: { date: b.date }"
+        [severity]="b.severity"
+        icon="pi pi-file-check"
+      />
+    </a>
+  } @else {
+    <p-tag
+      [value]="b.labelKey | translate: { date: b.date }"
+      [severity]="b.severity"
+      icon="pi pi-file-check"
+      [attr.data-testid]="testId()"
+    />
+  }
+}

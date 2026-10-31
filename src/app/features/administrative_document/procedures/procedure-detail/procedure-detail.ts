@@ -1,4 +1,5 @@
 import { Component, DestroyRef, OnInit, Type, computed, inject, signal } from '@angular/core';
+import { RegulatoryBadgeComponent } from '../../../../shared/components/regulatory-badge/regulatory-badge';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -111,6 +112,7 @@ interface ThreadRow {
     Tooltip,
     LocaleDatePipe,
     DossierDocumentsPanel,
+    RegulatoryBadgeComponent,
   ],
   templateUrl: './procedure-detail.html',
   providers: [DialogService, ConfirmationService, ErrorMessageHandler],
@@ -210,9 +212,16 @@ export class ProcedureDetail implements OnInit {
       .map((entry) => ({ entry, line: threadLine(entry, d, lang, steps) }));
   });
   readonly effectSubjects = computed<string[]>(() => {
-    const subjects = this.detail()?.effect_error?.['subjects'];
+    const subjects = this.detail()?.effect_error?.subjects;
     return Array.isArray(subjects) ? subjects.map(String) : [];
   });
+  /** `in_force`: the effect date is blocked; `sync`: only the CRM's badges are behind. */
+  readonly effectErrorKey = computed(() =>
+    this.detail()?.effect_error?.kind === 'in_force'
+      ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.EFFECT_ERROR_IN_FORCE'
+      : 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.EFFECT_ERROR',
+  );
+  readonly refiling = signal(false);
 
   constructor() {
     this.destroyRef.onDestroy(() => this.dialogRef?.destroy());
@@ -449,6 +458,42 @@ export class ProcedureDetail implements OnInit {
 
   isBusy(change: ChangeOut): boolean {
     return this.busyChangeIds().has(change.id);
+  }
+
+  // ---- after a refusal --------------------------------------------------------
+
+  /** « Corriger et renvoyer »: the refused changes, filed again into a draft, which opens. */
+  refile(): void {
+    this.confirmation.confirm({
+      header: this.translate.instant('ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.REFILE') as string,
+      message: this.translate.instant(
+        'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.REFILE_CONFIRM',
+      ) as string,
+      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
+      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
+      accept: () => this.runRefile(),
+    });
+  }
+
+  private runRefile(): void {
+    this.refiling.set(true);
+    this.service
+      .refile(this.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.refiling.set(false);
+          this.snackbar.openSnackBar(
+            this.translate.instant('ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.REFILED') as string,
+            VALIDATION_TYPE,
+          );
+          void this.router.navigate(['/administrative-document/procedures', res.data.id_dossier]);
+        },
+        error: (error: unknown) => {
+          this.refiling.set(false);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
   }
 
   // ---- thread ----------------------------------------------------------------

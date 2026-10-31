@@ -26,6 +26,8 @@ import {
   ProcedureListQuery,
   ProcedureModuleStatusOut,
   ProcedureTransitionIn,
+  RefileIn,
+  RefileOut,
   RegenerateOut,
   SendIn,
   VerifyAccepted,
@@ -309,6 +311,17 @@ export class AdministrativeProcedureService extends ServiceBase {
         `${this.apiAddress}/dossiers/${id}/correspondence`,
         this.correspondenceForm(body),
       ),
+    );
+  }
+
+  /**
+   * « Corriger et renvoyer »: file a refused (or lapsed) procedure's changes
+   * again, as new changes, into the family's open draft (created if none).
+   * 409 (2392) when one cannot be refiled, (2393) when the CRM no longer holds it so.
+   */
+  refile(id: number, body: RefileIn = {}): Observable<ApiResponse<RefileOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<RefileOut>>(`${this.apiAddress}/dossiers/${id}/refile`, body),
     );
   }
 

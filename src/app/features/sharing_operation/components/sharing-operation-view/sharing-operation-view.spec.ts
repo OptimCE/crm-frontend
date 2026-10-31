@@ -2,6 +2,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommunityServicesStore } from '../../../../core/services/community-services.store';
+import { RegulatoryStatusService } from '../../../../shared/services/regulatory-status.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
 import { ActivatedRoute, convertToParamMap, Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -194,6 +196,12 @@ describe('SharingOperationView', () => {
         {
           provide: CommunityServicesStore,
           useValue: { canReach: () => false, isActive: () => false, ensureLoaded: () => of([]) },
+        },
+        // The espace administratif's badges and banner: never asked while unreachable.
+        { provide: RegulatoryStatusService, useValue: { status: () => of({ data: [] }) } },
+        {
+          provide: AdministrativeProcedureService,
+          useValue: { getInbox: () => of(null), invalidate: () => undefined },
         },
         { provide: SharingOperationService, useValue: sharingOperationServiceSpy },
         { provide: MeterService, useValue: meterServiceSpy },

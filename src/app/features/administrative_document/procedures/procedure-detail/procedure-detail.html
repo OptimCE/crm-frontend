@@ -131,7 +131,7 @@
 
     @if (d.effect_error) {
       <p-message severity="error" data-testid="procedure-detail__message--effect-error">
-        {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.EFFECT_ERROR' | translate }}
+        {{ effectErrorKey() | translate }}
         @if (effectSubjects().length > 0) {
           <span class="font-mono">{{ effectSubjects().join(', ') }}</span>
         }
@@ -239,6 +239,11 @@
                     [value]="changeStatusKey(change) | translate"
                     [severity]="changeSeverity(change)"
                   />
+                  <app-regulatory-badge
+                    [state]="change"
+                    [subjectType]="change.subject_type === 2 ? 2 : 1"
+                    [testId]="'procedure-detail__regulatory--' + change.id"
+                  />
                 </span>
                 <span class="text-xs text-surface-500">
                   {{ change.detected_at | localeDate: 'short' }}
@@ -255,6 +260,24 @@
                       'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.EXCLUDED_BECAUSE'
                         | translate: { reason: change.excluded_reason }
                     }}
+                  }
+                  @if (change.refiled_into) {
+                    &middot;
+                    <a
+                      class="text-primary-500 hover:text-primary-700 underline"
+                      [routerLink]="['/administrative-document/procedures', change.refiled_into]"
+                      [attr.data-testid]="'procedure-detail__link--refiled-' + change.id"
+                    >
+                      {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.REFILED_INTO' | translate }}
+                    </a>
+                  }
+                  @if (change.refiled_from) {
+                    &middot;
+                    {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.REFILED_FROM' | translate }}
+                  }
+                  @if (change.in_operation === false) {
+                    &middot;
+                    {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.WITHDRAWN_IN_CRM' | translate }}
                   }
                 </span>
               </div>
@@ -285,6 +308,44 @@
             </li>
           }
         </ul>
+      </section>
+    }
+
+    <!-- After a refusal: withdraw in the CRM, or correct and refile (spec: a refusal deletes nothing) -->
+    @if (d.refusal; as refusal) {
+      <section
+        class="rounded-lg border border-red-200 bg-red-50 p-3 flex flex-col gap-2"
+        data-testid="procedure-detail__refusal"
+      >
+        <h2 class="text-base font-semibold text-surface-800 m-0">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.TITLE' | translate }}
+        </h2>
+        <p class="text-sm text-surface-700 m-0">
+          {{
+            'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.HINT'
+              | translate: { count: refusal.changes.length }
+          }}
+        </p>
+        <div class="flex flex-wrap gap-2">
+          @if (refusal.id_sharing_operation) {
+            <a
+              class="p-button p-button-outlined p-button-secondary p-button-sm no-underline"
+              [routerLink]="['/sharing_operations', refusal.id_sharing_operation]"
+              data-testid="procedure-detail__link--withdraw"
+            >
+              <i class="pi pi-external-link mr-2"></i>
+              {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.WITHDRAW' | translate }}
+            </a>
+          }
+          <p-button
+            icon="pi pi-replay"
+            size="small"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.REFILE' | translate"
+            [loading]="refiling()"
+            (onClick)="refile()"
+            data-testid="procedure-detail__btn--refile"
+          />
+        </div>
       </section>
     }
 
