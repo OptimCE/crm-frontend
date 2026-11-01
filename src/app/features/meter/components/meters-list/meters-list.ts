@@ -29,6 +29,12 @@ import { ViewToggle } from '../../../../shared/components/view-toggle/view-toggl
 import { MetersMap } from './meters-map/meters-map';
 import type { MapViewMode } from '../../../../shared/components/map/map.types';
 import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
+import { MeterStatusComponent } from '../../../../shared/components/regulatory-badge/meter-status';
+import {
+  meterInOperationKey,
+  metersRegulatoryStatus,
+} from '../../../../shared/components/regulatory-badge/operation-regulatory-status';
+import { RegulatoryStatusDTO } from '../../../../shared/dtos/regulatory-status.dtos';
 
 @Component({
   selector: 'app-meters-list',
@@ -48,6 +54,7 @@ import { translatedOptions } from '../../../../shared/utils/translated-options.u
     DebouncedPInputComponent,
     ViewToggle,
     MetersMap,
+    MeterStatusComponent,
   ],
   templateUrl: './meters-list.html',
   styleUrl: './meters-list.css',
@@ -65,6 +72,15 @@ export class MetersList {
   ref?: DynamicDialogRef | null;
 
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
+  /**
+   * The procedures' status of the visible page's meters (espace administratif),
+   * each in its current operation: shown in place of the CRM's own status.
+   */
+  private readonly regulatory = metersRegulatoryStatus(() =>
+    this.metersPartialList()
+      .filter((meter) => !!meter.sharing_operation)
+      .map((meter) => meter.EAN),
+  );
   readonly filter = signal<MeterPartialQuery>({ page: 1, limit: 10 });
   readonly paginationInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
   readonly currentPageReportTemplate = signal('');
@@ -321,4 +337,10 @@ export class MetersList {
   }
 
   protected readonly MeterStatus = MeterDataStatus;
+
+  /** The meter's episode in its current operation, if its procedure tracks it. */
+  regulatoryOf(meter: PartialMeterDTO): RegulatoryStatusDTO | undefined {
+    const operation = meter.sharing_operation?.id;
+    return operation ? this.regulatory().get(meterInOperationKey(operation, meter.EAN)) : undefined;
+  }
 }

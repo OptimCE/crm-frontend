@@ -64,44 +64,38 @@
             <h1 class="text-xl md:text-2xl font-semibold text-surface-900 truncate m-0">
               {{ meter()!.EAN }}
             </h1>
-            @switch (currentStatus()) {
-              @case (MeterStatus.ACTIVE) {
-                <p-tag
-                  severity="success"
-                  value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
-                />
+            <app-meter-status [regulatory]="regulatoryState()" testId="meter-view__regulatory">
+              @switch (currentStatus()) {
+                @case (MeterStatus.ACTIVE) {
+                  <p-tag
+                    severity="success"
+                    value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                    data-testid="meter-view__tag--status"
+                  />
+                }
+                @case (MeterStatus.INACTIVE) {
+                  <p-tag
+                    severity="danger"
+                    value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                    data-testid="meter-view__tag--status"
+                  />
+                }
+                @case (MeterStatus.WAITING_GRD) {
+                  <p-tag
+                    severity="info"
+                    value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                    data-testid="meter-view__tag--status"
+                  />
+                }
+                @case (MeterStatus.WAITING_MANAGER) {
+                  <p-tag
+                    severity="info"
+                    value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                    data-testid="meter-view__tag--status"
+                  />
+                }
               }
-              @case (MeterStatus.INACTIVE) {
-                <p-tag
-                  severity="danger"
-                  value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
-                />
-              }
-              @case (MeterStatus.WAITING_GRD) {
-                <p-tag
-                  severity="info"
-                  value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
-                />
-              }
-              @case (MeterStatus.WAITING_MANAGER) {
-                <p-tag
-                  severity="info"
-                  value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                  data-testid="meter-view__tag--status"
-                />
-              }
-            }
-            @if (regulatoryState(); as reg) {
-              <app-regulatory-badge
-                [state]="reg"
-                [subjectType]="SubjectType.METER"
-                [procedureId]="reg.regulatory_ref"
-                testId="meter-view__regulatory"
-              />
-            }
+            </app-meter-status>
           </div>
           <p class="text-sm text-surface-500 m-0 truncate">
             {{ 'METER.INFORMATIONS.METER_NUMBER_LABEL' | translate }}: {{ meter()!.meter_number }}

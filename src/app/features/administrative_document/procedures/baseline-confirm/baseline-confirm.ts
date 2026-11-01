@@ -175,6 +175,15 @@ export class BaselineConfirm implements OnInit {
     return row.choice === 'active' || row.choice === 'ended';
   }
 
+  /**
+   * A meter the CRM still has waiting, called active, needs the date it became
+   * active: the core then writes it into the CRM's own status (one status per
+   * meter), so no default is guessed for it.
+   */
+  needsEffectiveDate(row: BaselineRow): boolean {
+    return row.choice === 'active' && isWaiting(row.item);
+  }
+
   confirm(): void {
     this.formError.set(null);
     this.conflicts.set(new Set());
@@ -184,6 +193,16 @@ export class BaselineConfirm implements OnInit {
         this.translate.instant('ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.ERRORS.SENT_DATE', {
           refs: missing.map((row) => row.item.subject_ref).join(', '),
         }) as string,
+      );
+      return;
+    }
+    const undated = this.rows().filter((row) => this.needsEffectiveDate(row) && !row.effectiveDate);
+    if (undated.length > 0) {
+      this.formError.set(
+        this.translate.instant(
+          'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.ERRORS.EFFECTIVE_DATE',
+          { refs: undated.map((row) => row.item.subject_ref).join(', ') },
+        ) as string,
       );
       return;
     }
@@ -245,14 +264,24 @@ export class BaselineConfirm implements OnInit {
       : row.item.subject_ref;
   }
 
-  /** "ORES · since 01/03/2025", either part alone when the other is unknown. */
+  /**
+   * "ORES · since 01/03/2025", either part alone when the other is unknown,
+   * plus "waiting for the GRD in the CRM" for a meter the CRM has waiting.
+   */
   context(row: BaselineRow): string {
     const since = row.item.start_date
       ? (this.translate.instant('ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.SINCE', {
           date: formatApiDate(row.item.start_date),
         }) as string)
       : '';
-    return [row.item.grd ? grdLabel(row.item.grd) : '', since].filter(Boolean).join(' · ');
+    const waiting = isWaiting(row.item)
+      ? (this.translate.instant(
+          row.item.crm_status === CRM_WAITING_MANAGER
+            ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.CRM_WAITING_MANAGER'
+            : 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.CRM_WAITING_GRD',
+        ) as string)
+      : '';
+    return [row.item.grd ? grdLabel(row.item.grd) : '', since, waiting].filter(Boolean).join(' · ');
   }
 
   choiceLabelKey(choice: BaselineChoice | null): string {
@@ -262,9 +291,22 @@ export class BaselineConfirm implements OnInit {
   protected readonly formatApiDate = formatApiDate;
 }
 
-/** An active meter is active since it joined, unless the admin knows better. */
+/** `meter_data.status` of a meter waiting for the GRD (3) or the manager (4). */
+const CRM_WAITING_MANAGER = 4;
+
+function isWaiting(item: BaselineItemOut): boolean {
+  return item.subject_type === 'meter' && item.crm_status !== null && item.crm_status !== undefined
+    ? item.crm_status !== 1
+    : false;
+}
+
+/**
+ * An active meter is active since it joined, unless the admin knows better. A
+ * waiting one is not guessed: it joined the operation then, but became active
+ * for the GRD later, if at all.
+ */
 function defaultEffective(item: BaselineItemOut, choice: BaselineChoice): string | null {
-  return choice === 'active' ? item.start_date : null;
+  return choice === 'active' && !isWaiting(item) ? item.start_date : null;
 }
 
 /** The 409's `conflicts`, next to `data` and `error_code` in the error body. */

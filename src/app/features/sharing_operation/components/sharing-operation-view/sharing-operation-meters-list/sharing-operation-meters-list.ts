@@ -30,7 +30,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { toLocalDateString } from '../../../../../shared/utils/date.utils';
 import { translatedOptions } from '../../../../../shared/utils/translated-options.utils';
-import { RegulatoryBadgeComponent } from '../../../../../shared/components/regulatory-badge/regulatory-badge';
+import { MeterStatusComponent } from '../../../../../shared/components/regulatory-badge/meter-status';
+import { drivesStatus } from '../../../../../shared/components/regulatory-badge/regulatory-badge.format';
 import {
   operationRegulatoryStatus,
   regulatoryKey,
@@ -56,7 +57,7 @@ import {
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
-    RegulatoryBadgeComponent,
+    MeterStatusComponent,
   ],
   templateUrl: './sharing-operation-meters-list.html',
   styleUrl: './sharing-operation-meters-list.css',
@@ -74,7 +75,10 @@ export class SharingOperationMetersList implements OnInit {
   private meterEventService = inject(SharingOperationMeterEventService);
 
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
-  /** What the regulator authorised, beside the CRM's own status (espace administratif). */
+  /**
+   * What the regulator authorised (espace administratif): shown in place of the
+   * CRM's own status for a meter its procedure tracks.
+   */
   readonly regulatory = operationRegulatoryStatus(() => this.id_sharing());
   readonly loading = signal<boolean>(true);
   readonly pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
@@ -326,15 +330,19 @@ export class SharingOperationMetersList implements OnInit {
     this.dateStartMeter.set(null);
   }
 
+  /**
+   * Takes the meter out of the operation from the picked date: the soft remove
+   * (`DELETE /:id/meter` with a date), which ends its participation and files
+   * the removal with the procedures. A status PATCH cannot remove (INACTIVE is
+   * refused there, 75005), which this button sent until 2026-11-01.
+   */
   removeMeter(meter: PartialMeterDTO): void {
-    const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.resolvePickedDate(this.dateStartMeter()),
-      id_meter: meter.EAN,
-      id_sharing: this.id_sharing(),
-      status: MeterDataStatus.INACTIVE,
-    };
     this.sharingOperationService
-      .patchMeterStatus(patchedMeterStatus)
+      .deleteMeterFromSharingOperation(this.id_sharing(), {
+        id_meter: meter.EAN,
+        id_sharing: this.id_sharing(),
+        date: this.resolvePickedDate(this.dateStartMeter()),
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -423,7 +431,15 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   public MeterStatus = MeterDataStatus;
-  readonly SubjectType = RegulatorySubjectType;
+
+  /**
+   * Whether the CRM's own status is the manager's to set here: false while the
+   * meter's procedure drives it (the approve and waiting buttons are hidden;
+   * crm-backend would refuse them, 409).
+   */
+  handSet(ean: string): boolean {
+    return !drivesStatus(this.regulatoryOf(ean));
+  }
 
   regulatoryOf(ean: string): RegulatoryStatusDTO | undefined {
     return this.regulatory().get(regulatoryKey(RegulatorySubjectType.METER, ean));

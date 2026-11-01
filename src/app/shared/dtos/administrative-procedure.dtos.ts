@@ -635,6 +635,11 @@ export interface BaselineItemOut {
   grd: string | null;
   injection_status: number | null;
   start_date: string | null;
+  /**
+   * A meter's own status in the CRM: 1 active, 3 waiting for the GRD, 4 for the
+   * manager. A waiting meter called active needs its effective date.
+   */
+  crm_status?: number | null;
   /** Once confirmed: what was chosen. */
   chosen: BaselineChoice | null;
   effective_date: string | null;

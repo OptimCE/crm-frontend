@@ -95,6 +95,49 @@ describe('BaselineConfirm (criterion 1.8)', () => {
     expect(component.formError()).toContain('541448000000000001');
   });
 
+  describe('a meter the CRM has waiting (one status per meter)', () => {
+    function waiting(): BaselineOut {
+      const data = baseline();
+      data.items[0] = {
+        ...data.items[0],
+        crm_status: 3,
+        default_choice: 'not_notified',
+      };
+      return data;
+    }
+
+    it('is not dated for the GRD from when it joined the operation', async () => {
+      await setup(waiting());
+      const [meter] = component.rows();
+      expect(meter.choice).toBe('not_notified');
+      component.setChoice(meter, 'active');
+      expect(component.rows()[0].effectiveDate).toBeNull();
+    });
+
+    it('says the CRM has it waiting', async () => {
+      await setup(waiting());
+      expect(component.context(component.rows()[0])).toContain('en attente du GRD dans le CRM');
+    });
+
+    it('called active, needs the date it became active before confirming', async () => {
+      await setup(waiting());
+      component.setChoice(component.rows()[0], 'active');
+      component.confirm();
+      expect(confirmBaseline).not.toHaveBeenCalled();
+      expect(component.formError()).toContain('541448000000000001');
+
+      component.rows()[0].effectiveDate = new Date(2026, 4, 1);
+      confirmBaseline.mockReturnValue(of(new ApiResponse(baseline({ status: 'confirmed' }))));
+      component.confirm();
+      expect(confirmBaseline).toHaveBeenCalledWith({
+        choices: [
+          { key: METER, choice: 'active', effective_date: '2026-05-01', sent_date: null },
+          { key: KEY, choice: 'active', effective_date: '2025-03-01', sent_date: null },
+        ],
+      });
+    });
+  });
+
   it('applies one choice to every line that accepts it', async () => {
     await setup();
     component.bulkChoice = 'not_notified';

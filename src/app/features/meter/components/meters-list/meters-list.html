@@ -143,40 +143,45 @@
             ></span>
           </td>
           <td>
-            @if (!meter.status) {
-              <p-tag severity="danger" value="/" class="text-xs" />
-            } @else {
-              @switch (meter.status) {
-                @case (MeterStatus.ACTIVE) {
-                  <p-tag
-                    severity="success"
-                    value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                    class="text-xs"
-                  />
-                }
-                @case (MeterStatus.INACTIVE) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                    class="text-xs"
-                  />
-                }
-                @case (MeterStatus.WAITING_GRD) {
-                  <p-tag
-                    severity="warn"
-                    value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                    class="text-xs"
-                  />
-                }
-                @case (MeterStatus.WAITING_MANAGER) {
-                  <p-tag
-                    severity="warn"
-                    value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                    class="text-xs"
-                  />
+            <app-meter-status
+              [regulatory]="regulatoryOf(meter)"
+              [testId]="'meters-list__regulatory--desktop--' + meter.EAN"
+            >
+              @if (!meter.status) {
+                <p-tag severity="danger" value="/" class="text-xs" />
+              } @else {
+                @switch (meter.status) {
+                  @case (MeterStatus.ACTIVE) {
+                    <p-tag
+                      severity="success"
+                      value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                  @case (MeterStatus.INACTIVE) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                  @case (MeterStatus.WAITING_GRD) {
+                    <p-tag
+                      severity="warn"
+                      value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
+                  @case (MeterStatus.WAITING_MANAGER) {
+                    <p-tag
+                      severity="warn"
+                      value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                      class="text-xs"
+                    />
+                  }
                 }
               }
-            }
+            </app-meter-status>
           </td>
           <td class="text-sm">
             {{ meter.sharing_operation ? meter.sharing_operation.name : '/' }}
@@ -193,40 +198,45 @@
               <!-- Card header: EAN + status -->
               <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
                 <span class="font-semibold text-sm text-primary-700">{{ meter.EAN }}</span>
-                @if (!meter.status) {
-                  <p-tag severity="danger" value="/" class="text-xs" />
-                } @else {
-                  @switch (meter.status) {
-                    @case (MeterStatus.ACTIVE) {
-                      <p-tag
-                        severity="success"
-                        value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                        class="text-xs"
-                      />
-                    }
-                    @case (MeterStatus.INACTIVE) {
-                      <p-tag
-                        severity="danger"
-                        value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                        class="text-xs"
-                      />
-                    }
-                    @case (MeterStatus.WAITING_GRD) {
-                      <p-tag
-                        severity="warn"
-                        value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                        class="text-xs"
-                      />
-                    }
-                    @case (MeterStatus.WAITING_MANAGER) {
-                      <p-tag
-                        severity="warn"
-                        value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                        class="text-xs"
-                      />
+                <app-meter-status
+                  [regulatory]="regulatoryOf(meter)"
+                  [testId]="'meters-list__regulatory--mobile--' + meter.EAN"
+                >
+                  @if (!meter.status) {
+                    <p-tag severity="danger" value="/" class="text-xs" />
+                  } @else {
+                    @switch (meter.status) {
+                      @case (MeterStatus.ACTIVE) {
+                        <p-tag
+                          severity="success"
+                          value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                          class="text-xs"
+                        />
+                      }
+                      @case (MeterStatus.INACTIVE) {
+                        <p-tag
+                          severity="danger"
+                          value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                          class="text-xs"
+                        />
+                      }
+                      @case (MeterStatus.WAITING_GRD) {
+                        <p-tag
+                          severity="warn"
+                          value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                          class="text-xs"
+                        />
+                      }
+                      @case (MeterStatus.WAITING_MANAGER) {
+                        <p-tag
+                          severity="warn"
+                          value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                          class="text-xs"
+                        />
+                      }
                     }
                   }
-                }
+                </app-meter-status>
               </div>
               <!-- Card body: details grid -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">

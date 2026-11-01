@@ -42,6 +42,24 @@ const SEVERITY: Record<RegulatoryStatus, BadgeSeverity> = {
 };
 
 /**
+ * Whether the procedure drives this meter's status, so the screen hides its
+ * hand controls (approve, put on waiting, the status select): a live episode
+ * (to notify … leaving) or a refusal the manager has to act on. Ended and
+ * withdrawn hand the status back. crm-backend refuses the same edits (409):
+ * `RegulatoryRepository.drivesMeter`.
+ */
+export function drivesStatus(row: RegulatoryState | null | undefined): boolean {
+  const status = row?.regulatory_status;
+  return (
+    status !== null &&
+    status !== undefined &&
+    status !== RegulatoryStatus.ENDED &&
+    status !== RegulatoryStatus.WITHDRAWN &&
+    status in SEVERITY
+  );
+}
+
+/**
  * The badge, or null when there is nothing to show: no row (not tracked), or a
  * withdrawn meter (filed, then cancelled before anything was authorised). A
  * withdrawn key still says its old key is kept.

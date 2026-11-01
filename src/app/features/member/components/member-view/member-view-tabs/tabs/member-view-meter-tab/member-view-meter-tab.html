@@ -105,40 +105,45 @@
       <td class="text-sm">{{ meter.EAN }}</td>
       <td class="text-sm">{{ meter.meter_number }}</td>
       <td>
-        @if (!meter.status) {
-          <p-tag severity="danger" value="/" class="text-sm"></p-tag>
-        } @else {
-          @switch (meter.status) {
-            @case (MeterDataStatus.ACTIVE) {
-              <p-tag
-                severity="success"
-                value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MeterDataStatus.INACTIVE) {
-              <p-tag
-                severity="danger"
-                value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MeterDataStatus.WAITING_GRD) {
-              <p-tag
-                severity="danger"
-                value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
-            }
-            @case (MeterDataStatus.WAITING_MANAGER) {
-              <p-tag
-                severity="danger"
-                value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                class="text-sm"
-              ></p-tag>
+        <app-meter-status
+          [regulatory]="regulatoryOf(meter)"
+          [testId]="'member-view-meter-tab__regulatory--desktop--' + rowIndex"
+        >
+          @if (!meter.status) {
+            <p-tag severity="danger" value="/" class="text-sm"></p-tag>
+          } @else {
+            @switch (meter.status) {
+              @case (MeterDataStatus.ACTIVE) {
+                <p-tag
+                  severity="success"
+                  value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
+              @case (MeterDataStatus.INACTIVE) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
+              @case (MeterDataStatus.WAITING_GRD) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
+              @case (MeterDataStatus.WAITING_MANAGER) {
+                <p-tag
+                  severity="danger"
+                  value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                  class="text-sm"
+                ></p-tag>
+              }
             }
           }
-        }
+        </app-meter-status>
       </td>
     </tr>
 
@@ -155,40 +160,45 @@
               class="font-semibold text-sm text-primary-700 truncate mr-2"
               [innerHTML]="meter.address | address"
             ></span>
-            @if (!meter.status) {
-              <p-tag severity="danger" value="/" class="text-xs"></p-tag>
-            } @else {
-              @switch (meter.status) {
-                @case (MeterDataStatus.ACTIVE) {
-                  <p-tag
-                    severity="success"
-                    value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
-                @case (MeterDataStatus.INACTIVE) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
-                @case (MeterDataStatus.WAITING_GRD) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
-                }
-                @case (MeterDataStatus.WAITING_MANAGER) {
-                  <p-tag
-                    severity="danger"
-                    value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
-                    class="text-xs"
-                  ></p-tag>
+            <app-meter-status
+              [regulatory]="regulatoryOf(meter)"
+              [testId]="'member-view-meter-tab__regulatory--mobile--' + rowIndex"
+            >
+              @if (!meter.status) {
+                <p-tag severity="danger" value="/" class="text-xs"></p-tag>
+              } @else {
+                @switch (meter.status) {
+                  @case (MeterDataStatus.ACTIVE) {
+                    <p-tag
+                      severity="success"
+                      value="{{ 'METER.STATUS.ACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                  @case (MeterDataStatus.INACTIVE) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.INACTIVE_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                  @case (MeterDataStatus.WAITING_GRD) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.WAITING_GRD_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
+                  @case (MeterDataStatus.WAITING_MANAGER) {
+                    <p-tag
+                      severity="danger"
+                      value="{{ 'METER.STATUS.WAITING_MANAGER_LABEL' | translate }}"
+                      class="text-xs"
+                    ></p-tag>
+                  }
                 }
               }
-            }
+            </app-meter-status>
           </div>
 
           <!-- Card body: field grid -->

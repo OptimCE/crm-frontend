@@ -38,9 +38,11 @@ export interface RegulatoryStatusDTO {
 }
 
 export interface RegulatoryStatusQuery {
-  id_sharing_operation: number;
+  /** Every operation of the community when omitted (the global meters list). */
+  id_sharing_operation?: number;
   subject_type?: RegulatorySubjectType;
-  subject_ref?: string;
+  /** One or several EANs (or key ids), at most 200. */
+  subject_ref?: string | string[];
   /** `YYYY-MM-DD`: prefer the episode whose authorised period covers it. */
   date?: string;
 }

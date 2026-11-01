@@ -186,51 +186,46 @@
       <td class="text-sm">{{ meter.EAN }}</td>
       <td class="text-sm">{{ meter.meter_number }}</td>
       <td>
-        @switch (meter.status) {
-          @case (MeterStatus.ACTIVE) {
-            <p-tag
-              severity="success"
-              value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"
-              class="text-xs"
-            />
+        <app-meter-status
+          [regulatory]="regulatoryOf(meter.EAN)"
+          [testId]="'op-meters-list__regulatory--desktop--' + rowIndex"
+        >
+          @switch (meter.status) {
+            @case (MeterStatus.ACTIVE) {
+              <p-tag
+                severity="success"
+                value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"
+                class="text-xs"
+              />
+            }
+            @case (MeterStatus.INACTIVE) {
+              <p-tag
+                severity="danger"
+                value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"
+                class="text-xs"
+              />
+            }
+            @case (MeterStatus.WAITING_GRD) {
+              <p-tag
+                severity="warn"
+                value="{{
+                  'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate
+                }}"
+                class="text-xs"
+              />
+            }
+            @case (MeterStatus.WAITING_MANAGER) {
+              <p-tag
+                severity="warn"
+                value="{{
+                  'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+                    | translate
+                }}"
+                class="text-xs"
+              />
+            }
           }
-          @case (MeterStatus.INACTIVE) {
-            <p-tag
-              severity="danger"
-              value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"
-              class="text-xs"
-            />
-          }
-          @case (MeterStatus.WAITING_GRD) {
-            <p-tag
-              severity="warn"
-              value="{{
-                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL' | translate
-              }}"
-              class="text-xs"
-            />
-          }
-          @case (MeterStatus.WAITING_MANAGER) {
-            <p-tag
-              severity="warn"
-              value="{{
-                'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
-                  | translate
-              }}"
-              class="text-xs"
-            />
-          }
-        }
-        @if (regulatoryOf(meter.EAN); as reg) {
-          <div class="mt-1">
-            <app-regulatory-badge
-              [state]="reg"
-              [subjectType]="SubjectType.METER"
-              [procedureId]="reg.regulatory_ref"
-              [testId]="'op-meters-list__regulatory--desktop--' + rowIndex"
-            />
-          </div>
-        }
+        </app-meter-status>
       </td>
       <td>
         <div
@@ -239,26 +234,28 @@
           tabindex="0"
           (click)="$event.stopPropagation()"
         >
-          @if (meter.status === MeterStatus.ACTIVE) {
-            <p-button
-              label="{{
-                'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
-              }}"
-              severity="warn"
-              (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
-              icon="pi pi-clock"
-              size="small"
-              [attr.data-testid]="'op-meters-list__btn--waiting-list--' + rowIndex"
-            />
-          } @else {
-            <p-button
-              label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
-              severity="success"
-              (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
-              icon="pi pi-check"
-              size="small"
-              [attr.data-testid]="'op-meters-list__btn--approve--' + rowIndex"
-            />
+          @if (handSet(meter.EAN)) {
+            @if (meter.status === MeterStatus.ACTIVE) {
+              <p-button
+                label="{{
+                  'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
+                }}"
+                severity="warn"
+                (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
+                icon="pi pi-clock"
+                size="small"
+                [attr.data-testid]="'op-meters-list__btn--waiting-list--' + rowIndex"
+              />
+            } @else {
+              <p-button
+                label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
+                severity="success"
+                (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
+                icon="pi pi-check"
+                size="small"
+                [attr.data-testid]="'op-meters-list__btn--approve--' + rowIndex"
+              />
+            }
           }
           <p-button
             label="{{ 'SHARING_OPERATION.VIEW.METER.DELETE_BUTTON_LABEL' | translate }}"
@@ -296,53 +293,50 @@
           <!-- Card header: EAN + status -->
           <div class="flex items-center justify-between mb-3 pb-2 border-b border-primary-100">
             <span class="font-semibold text-sm text-primary-700">{{ meter.EAN }}</span>
-            @switch (meter.status) {
-              @case (MeterStatus.ACTIVE) {
-                <p-tag
-                  severity="success"
-                  value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"
-                  class="text-xs"
-                />
+            <app-meter-status
+              [regulatory]="regulatoryOf(meter.EAN)"
+              [testId]="'op-meters-list__regulatory--mobile--' + rowIndex"
+            >
+              @switch (meter.status) {
+                @case (MeterStatus.ACTIVE) {
+                  <p-tag
+                    severity="success"
+                    value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.ACTIVATED_LABEL' | translate }}"
+                    class="text-xs"
+                  />
+                }
+                @case (MeterStatus.INACTIVE) {
+                  <p-tag
+                    severity="danger"
+                    value="{{
+                      'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate
+                    }}"
+                    class="text-xs"
+                  />
+                }
+                @case (MeterStatus.WAITING_GRD) {
+                  <p-tag
+                    severity="warn"
+                    value="{{
+                      'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
+                        | translate
+                    }}"
+                    class="text-xs"
+                  />
+                }
+                @case (MeterStatus.WAITING_MANAGER) {
+                  <p-tag
+                    severity="warn"
+                    value="{{
+                      'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
+                        | translate
+                    }}"
+                    class="text-xs"
+                  />
+                }
               }
-              @case (MeterStatus.INACTIVE) {
-                <p-tag
-                  severity="danger"
-                  value="{{ 'SHARING_OPERATION.VIEW.METER.STATUS.DEACTIVATED_LABEL' | translate }}"
-                  class="text-xs"
-                />
-              }
-              @case (MeterStatus.WAITING_GRD) {
-                <p-tag
-                  severity="warn"
-                  value="{{
-                    'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_GRD_ACCEPTANCE_LABEL'
-                      | translate
-                  }}"
-                  class="text-xs"
-                />
-              }
-              @case (MeterStatus.WAITING_MANAGER) {
-                <p-tag
-                  severity="warn"
-                  value="{{
-                    'SHARING_OPERATION.VIEW.METER.STATUS.WAITING_FOR_MANAGER_ACCEPTANCE_LABEL'
-                      | translate
-                  }}"
-                  class="text-xs"
-                />
-              }
-            }
+            </app-meter-status>
           </div>
-          @if (regulatoryOf(meter.EAN); as reg) {
-            <div class="mb-3">
-              <app-regulatory-badge
-                [state]="reg"
-                [subjectType]="SubjectType.METER"
-                [procedureId]="reg.regulatory_ref"
-                [testId]="'op-meters-list__regulatory--mobile--' + rowIndex"
-              />
-            </div>
-          }
           <!-- Card body: details grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -365,26 +359,28 @@
             tabindex="0"
             (click)="$event.stopPropagation()"
           >
-            @if (meter.status === MeterStatus.ACTIVE) {
-              <p-button
-                label="{{
-                  'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
-                }}"
-                severity="warn"
-                (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
-                icon="pi pi-clock"
-                size="small"
-                [attr.data-testid]="'op-meters-list__btn--card-waiting-list--' + rowIndex"
-              />
-            } @else {
-              <p-button
-                label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
-                severity="success"
-                (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
-                icon="pi pi-check"
-                size="small"
-                [attr.data-testid]="'op-meters-list__btn--card-approve--' + rowIndex"
-              />
+            @if (handSet(meter.EAN)) {
+              @if (meter.status === MeterStatus.ACTIVE) {
+                <p-button
+                  label="{{
+                    'SHARING_OPERATION.VIEW.METER.PUT_TO_WAITING_LIST_BUTTON_LABEL' | translate
+                  }}"
+                  severity="warn"
+                  (onClick)="openMeterChangeStatusPopup($event, meter, 3)"
+                  icon="pi pi-clock"
+                  size="small"
+                  [attr.data-testid]="'op-meters-list__btn--card-waiting-list--' + rowIndex"
+                />
+              } @else {
+                <p-button
+                  label="{{ 'SHARING_OPERATION.VIEW.METER.APPROVE_BUTTON_LABEL' | translate }}"
+                  severity="success"
+                  (onClick)="openMeterChangeStatusPopup($event, meter, 1)"
+                  icon="pi pi-check"
+                  size="small"
+                  [attr.data-testid]="'op-meters-list__btn--card-approve--' + rowIndex"
+                />
+              }
             }
             <p-button
               label="{{ 'SHARING_OPERATION.VIEW.METER.DELETE_BUTTON_LABEL' | translate }}"

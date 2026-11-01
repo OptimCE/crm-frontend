@@ -15,6 +15,7 @@ import { MeterService } from '../../../../../../../shared/services/meter.service
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../../../../shared/services-ui/snackbar.notifcation.service';
 import { MeterDataStatus } from '../../../../../../../shared/types/meter.types';
+import { provideRegulatoryTesting } from '../../../../../../../shared/components/regulatory-badge/regulatory-testing';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -84,6 +85,7 @@ describe('MemberViewMeterTab', () => {
     await TestBed.configureTestingModule({
       imports: [MemberViewMeterTab, TranslateModule.forRoot()],
       providers: [
+        ...provideRegulatoryTesting(),
         { provide: MeterService, useValue: meterServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },

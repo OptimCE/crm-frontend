@@ -7,9 +7,9 @@ import { RegulatorySubjectType } from '../../dtos/regulatory-status.dtos';
 import { RegulatoryState, regulatoryBadge } from './regulatory-badge.format';
 
 /**
- * A meter's or a key's regulatory status, beside the CRM's own status (never in
- * place of it: that one stays the manager's), linking to the procedure that
- * drives it. Renders nothing when the subject is not tracked.
+ * A meter's or a key's regulatory status, linking to the procedure that drives
+ * it. Renders nothing when the subject is not tracked. For a meter, screens use
+ * `app-meter-status`, which shows it in place of the CRM's own status.
  */
 @Component({
   selector: 'app-regulatory-badge',

@@ -15,6 +15,7 @@ import { PartialMeterDTO } from '../../../../shared/dtos/meter.dtos';
 import { MeterDataStatus } from '../../../../shared/types/meter.types';
 import { MeterCreation } from '../meter-creation/meter-creation';
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { provideRegulatoryTesting } from '../../../../shared/components/regulatory-badge/regulatory-testing';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -71,6 +72,7 @@ describe('MetersList', () => {
     await TestBed.configureTestingModule({
       imports: [MetersList, TranslateModule.forRoot()],
       providers: [
+        ...provideRegulatoryTesting(),
         // Deep links (?holder_id=, ?status=) are read on construction now.
         { provide: ActivatedRoute, useValue: { queryParamMap: routeParams } },
         { provide: MeterService, useValue: meterServiceSpy },

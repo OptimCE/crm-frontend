@@ -1293,6 +1293,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Een status selecteren",
+      "STATUS_FOLLOWS_PROCEDURE": "Deze status volgt de administratieve procedure van de meter: hij verandert wanneer de procedure vordert.",
       "ENERGY_CHARACTERISTIC_TITLE": "Energiekenmerken",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Financiële kenmerken",
       "START_DATE_METER_LABEL": "Datum van ingebruikname",
@@ -3003,6 +3004,8 @@
         },
         "CHOICE_FIELD": "Toestand",
         "SINCE": "sinds {{date}}",
+        "CRM_WAITING_GRD": "wacht op de DNB in de CRM",
+        "CRM_WAITING_MANAGER": "wacht op de beheerder in de CRM",
         "ACTIVE_SINCE": "Actief sinds",
         "ENDED_ON": "Beëindigd op",
         "SENT_ON": "Verstuurd op",
@@ -3014,6 +3017,7 @@
         "TO_DASHBOARD": "Terug naar de procedures",
         "ERRORS": {
           "SENT_DATE": "Geef de verzenddatum op voor de « Lopend »-elementen: {{refs}}.",
+          "EFFECTIVE_DATE": "Geef aan sinds wanneer deze meters, die in de CRM wachten, actief zijn: {{refs}}.",
           "CONFLICT": "Deze EAN's worden op die data al in een andere verrichting gevolgd; er werd niets bevestigd: {{refs}}."
         }
       },

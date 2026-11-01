@@ -1293,6 +1293,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Select a status",
+      "STATUS_FOLLOWS_PROCEDURE": "This status follows the meter's administrative procedure: it changes as the procedure moves on.",
       "ENERGY_CHARACTERISTIC_TITLE": "Energy characteristics",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Financial characteristics",
       "START_DATE_METER_LABEL": "Start date",
@@ -3003,6 +3004,8 @@
         },
         "CHOICE_FIELD": "State",
         "SINCE": "since {{date}}",
+        "CRM_WAITING_GRD": "waiting for the DSO in the CRM",
+        "CRM_WAITING_MANAGER": "waiting for the manager in the CRM",
         "ACTIVE_SINCE": "Active since",
         "ENDED_ON": "Ended on",
         "SENT_ON": "Sent on",
@@ -3014,6 +3017,7 @@
         "TO_DASHBOARD": "Back to the procedures",
         "ERRORS": {
           "SENT_DATE": "Give the date it was sent for the « In progress » items: {{refs}}.",
+          "EFFECTIVE_DATE": "Say since when these meters, waiting in the CRM, are active: {{refs}}.",
           "CONFLICT": "These EANs are already tracked in another operation on those dates; nothing was confirmed: {{refs}}."
         }
       },

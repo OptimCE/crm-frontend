@@ -77,6 +77,69 @@ export function operationRegulatoryStatus(
   return rows.asReadonly();
 }
 
+/** The map key of a meter in an operation: `<operation>:<EAN>`. */
+export function meterInOperationKey(operation: number, ean: string): string {
+  return `${operation}:${ean}`;
+}
+
+/**
+ * The regulatory status of meters across the community's operations, for a
+ * screen listing meters of several operations (the global meters list, a
+ * member's meters): one request for the visible EANs, keyed by
+ * `meterInOperationKey` so each row picks the episode of its CURRENT
+ * operation. Same refresh rules as `operationRegulatoryStatus`.
+ */
+export function metersRegulatoryStatus(
+  eans: () => readonly string[],
+): Signal<ReadonlyMap<string, RegulatoryStatusDTO>> {
+  const service = inject(RegulatoryStatusService);
+  const services = inject(CommunityServicesStore);
+  const realtime = inject(RealtimeService);
+  const destroyRef = inject(DestroyRef);
+  const rows = signal<ReadonlyMap<string, RegulatoryStatusDTO>>(new Map());
+
+  const load = (): void => {
+    const refs = untracked(eans);
+    if (refs.length === 0 || !untracked(() => services.canReach('administrative-document'))) {
+      rows.set(new Map());
+      return;
+    }
+    service
+      .status({ subject_type: RegulatorySubjectType.METER, subject_ref: [...refs] })
+      .pipe(takeUntilDestroyed(destroyRef))
+      .subscribe({
+        next: (response) => {
+          const data = Array.isArray(response.data) ? response.data : [];
+          rows.set(
+            new Map(
+              data.map((row) => [
+                meterInOperationKey(row.id_sharing_operation, row.subject_ref),
+                row,
+              ]),
+            ),
+          );
+        },
+        error: () => rows.set(new Map()),
+      });
+  };
+
+  effect(() => {
+    eans();
+    services.canReach('administrative-document');
+    untracked(load);
+  });
+  realtime
+    .on(
+      REALTIME_TOPICS.ADMIN_DOSSIER_UPDATED,
+      REALTIME_TOPICS.ADMIN_CHANGE_DETECTED,
+      REALTIME_RECONNECTED,
+    )
+    .pipe(debounceTime(REALTIME_DEBOUNCE_MS), takeUntilDestroyed(destroyRef))
+    .subscribe(() => load());
+
+  return rows.asReadonly();
+}
+
 /** The changes of an operation still to notify: its open drafts' changes. */
 export interface Unnotified {
   count: number;

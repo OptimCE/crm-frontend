@@ -388,6 +388,7 @@ describe('MeterView', () => {
             data: {
               id: buildMeter().EAN,
               meterData: component.meter()?.meter_data,
+              statusDrivenByProcedure: false,
             },
           }),
         );

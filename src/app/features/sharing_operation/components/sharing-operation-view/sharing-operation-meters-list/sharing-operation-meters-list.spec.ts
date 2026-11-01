@@ -503,15 +503,15 @@ describe('SharingOperationMetersList', () => {
   describe('removeMeter', () => {
     const meter = buildMeter();
 
-    it('should call patchMeterStatus with INACTIVE status', () => {
+    it('removes the meter from the picked date (the soft remove, never a status PATCH)', () => {
+      component['dateStartMeter'].set(new Date(2026, 10, 3));
       component.removeMeter(meter);
-      expect(sharingServiceSpy.patchMeterStatus).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id_meter: 'EAN001',
-          id_sharing: 1,
-          status: MeterDataStatus.INACTIVE,
-        }),
-      );
+      expect(sharingServiceSpy.deleteMeterFromSharingOperation).toHaveBeenCalledWith(1, {
+        id_meter: 'EAN001',
+        id_sharing: 1,
+        date: '2026-11-03',
+      });
+      expect(sharingServiceSpy.patchMeterStatus).not.toHaveBeenCalled();
     });
 
     it('should reset dateStartMeter to null', () => {
@@ -522,7 +522,7 @@ describe('SharingOperationMetersList', () => {
 
     it('should call errorHandler on error', () => {
       const message = 'This meter is not active in the sharing operation';
-      sharingServiceSpy.patchMeterStatus.mockReturnValue(
+      sharingServiceSpy.deleteMeterFromSharingOperation.mockReturnValue(
         throwError(
           () => new HttpErrorResponse({ status: 409, error: { data: message, error_code: 3022 } }),
         ),

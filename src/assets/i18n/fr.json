@@ -1293,6 +1293,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Sélectionner un statut",
+      "STATUS_FOLLOWS_PROCEDURE": "Ce statut suit la démarche administrative du compteur : il change quand la démarche avance.",
       "ENERGY_CHARACTERISTIC_TITLE": "Caractéristiques énergétiques",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Caractéristiques financières",
       "START_DATE_METER_LABEL": "Date d'entrée en fonction",
@@ -3003,6 +3004,8 @@
         },
         "CHOICE_FIELD": "État",
         "SINCE": "depuis le {{date}}",
+        "CRM_WAITING_GRD": "en attente du GRD dans le CRM",
+        "CRM_WAITING_MANAGER": "en attente du gestionnaire dans le CRM",
         "ACTIVE_SINCE": "Actif depuis le",
         "ENDED_ON": "Terminé le",
         "SENT_ON": "Envoyé le",
@@ -3014,6 +3017,7 @@
         "TO_DASHBOARD": "Retour aux démarches",
         "ERRORS": {
           "SENT_DATE": "Indiquez la date d'envoi des éléments « En cours » : {{refs}}.",
+          "EFFECTIVE_DATE": "Indiquez depuis quand ces compteurs, en attente dans le CRM, sont actifs : {{refs}}.",
           "CONFLICT": "Ces EAN sont déjà suivis dans une autre opération à ces dates ; rien n'a été confirmé : {{refs}}."
         }
       },

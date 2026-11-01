@@ -1293,6 +1293,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Einen Status auswählen",
+      "STATUS_FOLLOWS_PROCEDURE": "Dieser Status folgt dem Verwaltungsverfahren des Zählers: Er ändert sich mit dem Fortgang des Verfahrens.",
       "ENERGY_CHARACTERISTIC_TITLE": "Energetische Merkmale",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Finanzielle Merkmale",
       "START_DATE_METER_LABEL": "Inbetriebnahmedatum",
@@ -3003,6 +3004,8 @@
         },
         "CHOICE_FIELD": "Zustand",
         "SINCE": "seit dem {{date}}",
+        "CRM_WAITING_GRD": "wartet im CRM auf den VNB",
+        "CRM_WAITING_MANAGER": "wartet im CRM auf den Verwalter",
         "ACTIVE_SINCE": "Aktiv seit",
         "ENDED_ON": "Beendet am",
         "SENT_ON": "Gesendet am",
@@ -3014,6 +3017,7 @@
         "TO_DASHBOARD": "Zurück zu den Verfahren",
         "ERRORS": {
           "SENT_DATE": "Geben Sie das Versanddatum für die « Laufend »-Elemente an: {{refs}}.",
+          "EFFECTIVE_DATE": "Geben Sie an, seit wann diese im CRM wartenden Zähler aktiv sind: {{refs}}.",
           "CONFLICT": "Diese EANs werden an diesen Daten bereits in einer anderen Operation verfolgt; nichts wurde bestätigt: {{refs}}."
         }
       },
