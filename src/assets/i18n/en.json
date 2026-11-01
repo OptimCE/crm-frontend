@@ -88,7 +88,11 @@
       "member_invitation": "Member invitations",
       "news_poll": "Polls",
       "news_post": "News posts",
-      "producer_statement": "Producer statements"
+      "producer_statement": "Producer statements",
+      "admin_correspondence": "Answers to procedures",
+      "admin_digest": "Administrative summary by email",
+      "admin_effect": "Procedures taking effect",
+      "admin_meter": "My meters in the sharing"
     },
     "TYPES": {
       "document": {
@@ -155,6 +159,21 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "An administrative dossier has been acknowledged"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "An administrative procedure has taken effect"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Your meter {{ean}} is now active in the sharing"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "An answer was recorded on a procedure"
         }
       }
     }
@@ -369,14 +388,19 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Choose how you want to be told about each kind of activity.",
-      "TRANSACTIONAL_NOTICE": "Essential messages — invoices, invitations and missed regulatory deadlines — are always delivered and cannot be turned off.",
+      "TRANSACTIONAL_NOTICE": "Essential messages — invoices and invitations — are always sent and cannot be turned off. A missed regulatory deadline is always shown in the app; by email, it is part of the administrative summary.",
       "CATEGORY": "Category",
       "IN_APP": "In app",
       "EMAIL": "Email",
       "DEFAULT_LABEL": "Everything else",
       "SAVE": "Save preferences",
       "SAVED": "Preferences saved",
-      "EMPTY": "No categories available"
+      "EMPTY": "No categories available",
+      "FREQUENCY": {
+        "DAILY": "Every day",
+        "WEEKLY": "Every week (on Mondays)",
+        "OFF": "Never"
+      }
     },
     "TABS": {
       "HEADERS": {

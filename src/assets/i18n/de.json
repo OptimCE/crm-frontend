@@ -88,7 +88,11 @@
       "member_invitation": "Mitglieder-Einladungen",
       "news_poll": "Umfragen",
       "news_post": "Beiträge",
-      "producer_statement": "Erzeugerabrechnungen"
+      "producer_statement": "Erzeugerabrechnungen",
+      "admin_correspondence": "Antworten auf Verfahren",
+      "admin_digest": "Verwaltungsübersicht per E-Mail",
+      "admin_effect": "Inkrafttreten von Verfahren",
+      "admin_meter": "Meine Zähler in der Teilung"
     },
     "TYPES": {
       "document": {
@@ -155,6 +159,21 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "Ein Verwaltungsdossier wurde bestätigt"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "Ein Verwaltungsverfahren ist in Kraft getreten"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Ihr Zähler {{ean}} ist jetzt in der Teilung aktiv"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "Zu einem Verfahren wurde eine Antwort erfasst"
         }
       }
     }
@@ -369,14 +388,19 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Wählen Sie, wie Sie über die jeweilige Art von Aktivität informiert werden möchten.",
-      "TRANSACTIONAL_NOTICE": "Wesentliche Nachrichten — Rechnungen, Einladungen und versäumte regulatorische Fristen — werden immer zugestellt und können nicht abgeschaltet werden.",
+      "TRANSACTIONAL_NOTICE": "Wichtige Nachrichten — Rechnungen und Einladungen — werden immer versendet und können nicht deaktiviert werden. Eine überschrittene regulatorische Frist wird in der App immer gemeldet; per E-Mail steht sie in der Verwaltungsübersicht.",
       "CATEGORY": "Kategorie",
       "IN_APP": "In der App",
       "EMAIL": "E-Mail",
       "DEFAULT_LABEL": "Alles Übrige",
       "SAVE": "Einstellungen speichern",
       "SAVED": "Einstellungen gespeichert",
-      "EMPTY": "Keine Kategorien verfügbar"
+      "EMPTY": "Keine Kategorien verfügbar",
+      "FREQUENCY": {
+        "DAILY": "Jeden Tag",
+        "WEEKLY": "Jede Woche (montags)",
+        "OFF": "Nie"
+      }
     },
     "TABS": {
       "HEADERS": {

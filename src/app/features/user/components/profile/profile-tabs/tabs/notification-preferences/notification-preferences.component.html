@@ -31,20 +31,37 @@
     <ng-template pTemplate="body" let-row>
       <tr [attr.data-testid]="'notification-preferences__row--' + (row.prefix || 'default')">
         <td>{{ row.labelKey | translate }}</td>
-        <td class="text-center">
-          <p-toggleswitch
-            [(ngModel)]="row.inapp"
-            (ngModelChange)="onToggle()"
-            [attr.data-testid]="'notification-preferences__inapp--' + (row.prefix || 'default')"
-          ></p-toggleswitch>
-        </td>
-        <td class="text-center">
-          <p-toggleswitch
-            [(ngModel)]="row.email"
-            (ngModelChange)="onToggle()"
-            [attr.data-testid]="'notification-preferences__email--' + (row.prefix || 'default')"
-          ></p-toggleswitch>
-        </td>
+        @if (row.frequency !== undefined) {
+          <!-- A summary: email only, daily (the default), weekly or none. -->
+          <td class="text-center text-surface-400">—</td>
+          <td class="text-center">
+            <p-select
+              [(ngModel)]="row.frequency"
+              (ngModelChange)="onToggle()"
+              [options]="frequencyOptions()"
+              optionLabel="label"
+              optionValue="value"
+              appendTo="body"
+              [attr.aria-label]="row.labelKey | translate"
+              [attr.data-testid]="'notification-preferences__frequency--' + row.prefix"
+            ></p-select>
+          </td>
+        } @else {
+          <td class="text-center">
+            <p-toggleswitch
+              [(ngModel)]="row.inapp"
+              (ngModelChange)="onToggle()"
+              [attr.data-testid]="'notification-preferences__inapp--' + (row.prefix || 'default')"
+            ></p-toggleswitch>
+          </td>
+          <td class="text-center">
+            <p-toggleswitch
+              [(ngModel)]="row.email"
+              (ngModelChange)="onToggle()"
+              [attr.data-testid]="'notification-preferences__email--' + (row.prefix || 'default')"
+            ></p-toggleswitch>
+          </td>
+        }
       </tr>
     </ng-template>
 

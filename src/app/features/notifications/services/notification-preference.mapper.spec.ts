@@ -100,3 +100,49 @@ describe('preferencesFromRows', () => {
     expect(reloaded.find((r) => r.prefix === 'invoice')?.email).toBe(true);
   });
 });
+
+describe('a summary prefix (the administrative daily summary)', () => {
+  const DIGEST: NotificationPreferencesDTO = {
+    type_prefixes: ['admin_deadline', 'admin_digest'],
+    digest_prefixes: ['admin_digest'],
+    preferences: [],
+  };
+
+  it('is daily with no row, weekly with WEEKLY, none with OFF; other rows have no frequency', () => {
+    const at = (mode?: PreferenceMode): PreferenceRow | undefined =>
+      rowsFromPreferences({
+        ...DIGEST,
+        preferences:
+          mode === undefined
+            ? []
+            : [{ type_prefix: 'admin_digest', channel: NotificationChannel.EMAIL, mode }],
+      }).find((r) => r.prefix === 'admin_digest');
+
+    expect(at()?.frequency).toBe('daily');
+    expect(at(PreferenceMode.WEEKLY)?.frequency).toBe('weekly');
+    expect(at(PreferenceMode.OFF)?.frequency).toBe('off');
+    const deadline = rowsFromPreferences(DIGEST).find((r) => r.prefix === 'admin_deadline');
+    expect(deadline?.frequency).toBeUndefined();
+  });
+
+  it('sends daily as no row, weekly and none as their email row, never an in-app row', () => {
+    const rows = rowsFromPreferences(DIGEST);
+    const digest = rows.find((r) => r.prefix === 'admin_digest');
+    if (!digest) throw new Error('no summary row');
+
+    expect(preferencesFromRows(rows)).toEqual([]);
+    digest.frequency = 'weekly';
+    digest.inapp = false; // ignored: a summary is email only
+    expect(preferencesFromRows(rows)).toEqual([
+      {
+        type_prefix: 'admin_digest',
+        channel: NotificationChannel.EMAIL,
+        mode: PreferenceMode.WEEKLY,
+      },
+    ]);
+    digest.frequency = 'off';
+    expect(preferencesFromRows(rows)).toEqual([
+      { type_prefix: 'admin_digest', channel: NotificationChannel.EMAIL, mode: PreferenceMode.OFF },
+    ]);
+  });
+});

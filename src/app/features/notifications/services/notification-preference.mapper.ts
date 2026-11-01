@@ -8,6 +8,9 @@ import {
 /** The catch-all row: applies to every type with no more specific setting. */
 export const DEFAULT_PREFIX = '';
 
+/** How often a summary is emailed: daily (no row), weekly, or none (OFF). */
+export type DigestFrequency = 'daily' | 'weekly' | 'off';
+
 /** One editable line in the preferences table: a prefix and its two toggles. */
 export interface PreferenceRow {
   /** `''` for the default row, else a prefix the backend recognises. */
@@ -16,6 +19,11 @@ export interface PreferenceRow {
   labelKey: string;
   inapp: boolean;
   email: boolean;
+  /**
+   * Set on a summary prefix only (`digest_prefixes`): email only, so the row
+   * shows this choice instead of its two toggles.
+   */
+  frequency?: DigestFrequency;
 }
 
 /**
@@ -37,15 +45,28 @@ export function rowsFromPreferences(response: NotificationPreferencesDTO): Prefe
       preference.mode,
     ]),
   );
-  return [DEFAULT_PREFIX, ...response.type_prefixes].map((prefix) => ({
-    prefix,
-    labelKey:
-      prefix === DEFAULT_PREFIX
-        ? 'PROFILE.NOTIFICATION_PREFERENCES.DEFAULT_LABEL'
-        : `NOTIFICATIONS.PREFIXES.${prefix}`,
-    inapp: isOn(stored, prefix, NotificationChannel.INAPP),
-    email: isOn(stored, prefix, NotificationChannel.EMAIL),
-  }));
+  const digests = new Set(response.digest_prefixes ?? []);
+  return [DEFAULT_PREFIX, ...response.type_prefixes].map((prefix) => {
+    const row: PreferenceRow = {
+      prefix,
+      labelKey:
+        prefix === DEFAULT_PREFIX
+          ? 'PROFILE.NOTIFICATION_PREFERENCES.DEFAULT_LABEL'
+          : `NOTIFICATIONS.PREFIXES.${prefix}`,
+      inapp: isOn(stored, prefix, NotificationChannel.INAPP),
+      email: isOn(stored, prefix, NotificationChannel.EMAIL),
+    };
+    if (digests.has(prefix)) {
+      row.frequency = frequencyOf(stored.get(keyOf(prefix, NotificationChannel.EMAIL)));
+    }
+    return row;
+  });
+}
+
+function frequencyOf(mode: PreferenceMode | undefined): DigestFrequency {
+  if (mode === PreferenceMode.OFF) return 'off';
+  if (mode === PreferenceMode.WEEKLY) return 'weekly';
+  return 'daily';
 }
 
 /**
@@ -61,6 +82,17 @@ export function rowsFromPreferences(response: NotificationPreferencesDTO): Prefe
 export function preferencesFromRows(rows: PreferenceRow[]): NotificationPreferenceDTO[] {
   const payload: NotificationPreferenceDTO[] = [];
   for (const row of rows) {
+    if (row.frequency !== undefined) {
+      // A summary: email only; daily is the default, so no row.
+      if (row.frequency !== 'daily') {
+        payload.push({
+          type_prefix: row.prefix,
+          channel: NotificationChannel.EMAIL,
+          mode: row.frequency === 'weekly' ? PreferenceMode.WEEKLY : PreferenceMode.OFF,
+        });
+      }
+      continue;
+    }
     if (!row.inapp) {
       payload.push({
         type_prefix: row.prefix,

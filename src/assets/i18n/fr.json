@@ -88,7 +88,11 @@
       "member_invitation": "Invitations de membre",
       "news_poll": "Sondages",
       "news_post": "Actualités",
-      "producer_statement": "Décomptes producteur"
+      "producer_statement": "Décomptes producteur",
+      "admin_correspondence": "Réponses aux démarches",
+      "admin_digest": "Récapitulatif administratif par e-mail",
+      "admin_effect": "Prises d'effet des démarches",
+      "admin_meter": "Mes compteurs dans le partage"
     },
     "TYPES": {
       "document": {
@@ -155,6 +159,21 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "Un dossier administratif a reçu un accusé de réception"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "Une démarche administrative est entrée en vigueur"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Votre compteur {{ean}} est désormais actif dans le partage"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "Une réponse a été enregistrée sur une démarche"
         }
       }
     }
@@ -359,14 +378,19 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Choisissez comment vous souhaitez être informé de chaque type d'activité.",
-      "TRANSACTIONAL_NOTICE": "Les messages essentiels — factures, invitations et échéances réglementaires dépassées — sont toujours envoyés et ne peuvent pas être désactivés.",
+      "TRANSACTIONAL_NOTICE": "Les messages essentiels — factures et invitations — sont toujours envoyés et ne peuvent pas être désactivés. Une échéance réglementaire dépassée est toujours signalée dans l'application ; par e-mail, elle figure dans le récapitulatif administratif.",
       "CATEGORY": "Catégorie",
       "IN_APP": "Dans l'application",
       "EMAIL": "E-mail",
       "DEFAULT_LABEL": "Tout le reste",
       "SAVE": "Enregistrer les préférences",
       "SAVED": "Préférences enregistrées",
-      "EMPTY": "Aucune catégorie disponible"
+      "EMPTY": "Aucune catégorie disponible",
+      "FREQUENCY": {
+        "DAILY": "Chaque jour",
+        "WEEKLY": "Chaque semaine (le lundi)",
+        "OFF": "Jamais"
+      }
     },
     "TABS": {
       "HEADERS": {

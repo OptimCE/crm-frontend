@@ -4,14 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { Select } from 'primeng/select';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/error.message.handler';
 import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import {
+  DigestFrequency,
   PreferenceRow,
   preferencesFromRows,
   rowsFromPreferences,
 } from '../../../../../../notifications/services/notification-preference.mapper';
+import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
 import { NotificationService } from '../../../../../../notifications/services/notification.service';
 
 /**
@@ -25,7 +28,7 @@ import { NotificationService } from '../../../../../../notifications/services/no
  */
 @Component({
   selector: 'app-notification-preferences-user',
-  imports: [TranslatePipe, TableModule, ToggleSwitch, FormsModule, Button],
+  imports: [TranslatePipe, TableModule, ToggleSwitch, Select, FormsModule, Button],
   templateUrl: './notification-preferences.component.html',
   styleUrl: './notification-preferences.component.css',
   providers: [ErrorMessageHandler],
@@ -40,6 +43,12 @@ export class NotificationPreferencesComponent {
   readonly saving = signal<boolean>(false);
   readonly saved = signal<boolean>(false);
   readonly hasRows = computed(() => this.rows().length > 0);
+  /** A summary's rhythm (the administrative daily summary). */
+  readonly frequencyOptions = translatedOptions<{ value: DigestFrequency; label: string }>([
+    { value: 'daily', label: 'PROFILE.NOTIFICATION_PREFERENCES.FREQUENCY.DAILY' },
+    { value: 'weekly', label: 'PROFILE.NOTIFICATION_PREFERENCES.FREQUENCY.WEEKLY' },
+    { value: 'off', label: 'PROFILE.NOTIFICATION_PREFERENCES.FREQUENCY.OFF' },
+  ]);
 
   constructor() {
     this.load();

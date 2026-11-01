@@ -88,7 +88,11 @@
       "member_invitation": "Ledenuitnodigingen",
       "news_poll": "Peilingen",
       "news_post": "Nieuwsberichten",
-      "producer_statement": "Producentafrekeningen"
+      "producer_statement": "Producentafrekeningen",
+      "admin_correspondence": "Antwoorden op procedures",
+      "admin_digest": "Administratief overzicht per e-mail",
+      "admin_effect": "Inwerkingtreding van procedures",
+      "admin_meter": "Mijn meters in de deling"
     },
     "TYPES": {
       "document": {
@@ -155,6 +159,21 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "Een administratief dossier heeft een ontvangstbevestiging gekregen"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "Een administratieve procedure is in werking getreden"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Uw meter {{ean}} is nu actief in de deling"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "Er werd een antwoord geregistreerd bij een procedure"
         }
       }
     }
@@ -369,14 +388,19 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Kies hoe u op de hoogte wilt worden gebracht van elk soort activiteit.",
-      "TRANSACTIONAL_NOTICE": "Essentiële berichten — facturen, uitnodigingen en gemiste regelgevende deadlines — worden altijd verzonden en kunnen niet worden uitgeschakeld.",
+      "TRANSACTIONAL_NOTICE": "Essentiële berichten — facturen en uitnodigingen — worden altijd verstuurd en kunnen niet worden uitgeschakeld. Een verstreken regelgevende termijn wordt altijd in de app gemeld; per e-mail staat hij in het administratieve overzicht.",
       "CATEGORY": "Categorie",
       "IN_APP": "In de app",
       "EMAIL": "E-mail",
       "DEFAULT_LABEL": "Al het overige",
       "SAVE": "Voorkeuren opslaan",
       "SAVED": "Voorkeuren opgeslagen",
-      "EMPTY": "Geen categorieën beschikbaar"
+      "EMPTY": "Geen categorieën beschikbaar",
+      "FREQUENCY": {
+        "DAILY": "Elke dag",
+        "WEEKLY": "Elke week (op maandag)",
+        "OFF": "Nooit"
+      }
     },
     "TABS": {
       "HEADERS": {

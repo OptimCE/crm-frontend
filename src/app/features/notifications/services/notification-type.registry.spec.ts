@@ -87,6 +87,23 @@ describe('routeFor', () => {
     }
   });
 
+  it("sends a member's meter notice to their own meter, an EAN of 18 digits only", () => {
+    expect(routeFor(notification('admin_meter.active', { ean: '541448000000000001' }))).toBe(
+      '/users/me/meters/541448000000000001',
+    );
+    for (const bad of ['../../evil', '54144800000000000', 541448, null]) {
+      expect(routeFor(notification('admin_meter.active', { ean: bad }))).toBe('/users');
+    }
+  });
+
+  it('deep-links an effect applied and an answer recorded to their procedure', () => {
+    for (const type of ['admin_effect.applied', 'admin_correspondence.recorded']) {
+      expect(routeFor(notification(type, { dossier_id: 7 }))).toBe(
+        '/administrative-document/procedures/7',
+      );
+    }
+  });
+
   it('returns undefined for a type with no destination', () => {
     expect(routeFor(notification('member.updated', { member_id: 1 }))).toBeUndefined();
     expect(routeFor(notification('something.unknown'))).toBeUndefined();

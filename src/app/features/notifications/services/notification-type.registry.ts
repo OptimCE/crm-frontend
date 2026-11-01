@@ -76,6 +76,15 @@ function dossierRoute(data: NotificationData): string {
   return id ? `/administrative-document/procedures/${id}` : '/administrative-document';
 }
 
+/**
+ * A member's own meter, from its EAN (18 digits, nothing else: the value goes
+ * to `navigateByUrl`), falling back to the member's profile.
+ */
+function ownMeterRoute(data: NotificationData): string {
+  const ean = data['ean'];
+  return typeof ean === 'string' && /^\d{18}$/.test(ean) ? `/users/me/meters/${ean}` : '/users';
+}
+
 const REGISTRY: Record<string, NotificationPresentation> = {
   'member_invitation.received': {
     icon: 'pi pi-envelope',
@@ -129,6 +138,22 @@ const REGISTRY: Record<string, NotificationPresentation> = {
     icon: 'pi pi-file-check',
     route: dossierRoute,
     feature: 'administrative-document',
+  },
+  // Phase 4: a procedure in force, an answer recorded (to the managers), and
+  // the member's own meter made active (in the member portal, no annexe gate).
+  'admin_effect.applied': {
+    icon: 'pi pi-check-circle',
+    route: dossierRoute,
+    feature: 'administrative-document',
+  },
+  'admin_correspondence.recorded': {
+    icon: 'pi pi-inbox',
+    route: dossierRoute,
+    feature: 'administrative-document',
+  },
+  'admin_meter.active': {
+    icon: 'pi pi-bolt',
+    route: ownMeterRoute,
   },
 };
 
