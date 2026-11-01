@@ -24,6 +24,7 @@ import {
   ProcedureDeadlineOut,
   ProcedureDeadlineStatus,
   ProcedureDefinitionOut,
+  InboundMailOut,
   ProcedureDetailOut,
   ProcedureStepOut,
   ThreadEntryOut,
@@ -67,6 +68,7 @@ import {
   variantText,
 } from '../procedure-format';
 import { ProcedureResponseDialog } from '../procedure-response-dialog/procedure-response-dialog';
+import { InboundChoice, InboundMailList } from '../inbound-mail-list/inbound-mail-list';
 import { ProcedureSendDialog } from '../procedure-send-dialog/procedure-send-dialog';
 import { ProcedureTransitionDialog } from '../procedure-transition-dialog/procedure-transition-dialog';
 
@@ -113,6 +115,7 @@ interface ThreadRow {
     LocaleDatePipe,
     DossierDocumentsPanel,
     RegulatoryBadgeComponent,
+    InboundMailList,
   ],
   templateUrl: './procedure-detail.html',
   providers: [DialogService, ConfirmationService, ErrorMessageHandler],
@@ -358,6 +361,24 @@ export class ProcedureDetail implements OnInit {
     );
   }
 
+  /** « Ajouter une réponse » from a mail the reception address attached here. */
+  openRespondFrom(mail: InboundMailOut): void {
+    this.openDialog(
+      ProcedureResponseDialog,
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.TITLE',
+      '40rem',
+      mail,
+    );
+  }
+
+  /** The pieces an attachment of a received mail may supply. */
+  readonly pieceChoices = computed<InboundChoice[]>(() =>
+    (this.detail()?.pieces ?? []).map((piece) => ({
+      id: piece.id,
+      label: pickLabel(piece.labels, this.lang(), piece.code),
+    })),
+  );
+
   openTransition(): void {
     this.openDialog(
       ProcedureTransitionDialog,
@@ -366,10 +387,15 @@ export class ProcedureDetail implements OnInit {
     );
   }
 
-  private openDialog(component: Type<unknown>, headerKey: string, width: string): void {
+  private openDialog(
+    component: Type<unknown>,
+    headerKey: string,
+    width: string,
+    inbound: InboundMailOut | null = null,
+  ): void {
     const detail = this.detail();
     if (!detail) return;
-    const data: ProcedureDialogData = { detail, regulator: this.regulator() };
+    const data: ProcedureDialogData = { detail, regulator: this.regulator(), inbound };
     this.dialogRef = this.dialogService.open(component, {
       modal: true,
       closable: true,

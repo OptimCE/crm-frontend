@@ -1,0 +1,125 @@
+<ul class="list-none m-0 p-0 flex flex-col gap-3" data-testid="inbound-mail-list">
+  @for (mail of mails(); track mail.id) {
+    <li
+      class="border border-surface-200 rounded-lg p-3 flex flex-col gap-2"
+      [attr.data-testid]="'inbound-mail-list__mail--' + mail.id"
+    >
+      <div class="flex flex-wrap items-center gap-2 justify-between">
+        <span class="flex flex-col min-w-0">
+          <span class="text-sm font-semibold text-surface-800 truncate">
+            {{ mail.subject || ('ADMINISTRATIVE_DOCUMENT.INBOUND.NO_SUBJECT' | translate) }}
+          </span>
+          <span class="text-xs text-surface-500">
+            {{ mail.from_address || '—' }} &middot; {{ mail.received_at | localeDate: 'short' }}
+          </span>
+        </span>
+        @if (mail.status === Status.UNMATCHED) {
+          <p-tag
+            severity="warn"
+            [value]="'ADMINISTRATIVE_DOCUMENT.INBOUND.STATUS.UNMATCHED' | translate"
+          />
+        } @else if (mail.status === Status.ATTACHED) {
+          <p-tag
+            severity="info"
+            [value]="'ADMINISTRATIVE_DOCUMENT.INBOUND.STATUS.ATTACHED' | translate"
+          />
+        }
+      </div>
+      @if (snippet(mail); as text) {
+        <p class="text-sm text-surface-600 m-0 whitespace-pre-line">{{ text }}</p>
+      }
+      <div class="flex flex-wrap items-center gap-2">
+        <p-button
+          icon="pi pi-download"
+          size="small"
+          [outlined]="true"
+          [label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.DOWNLOAD_MAIL' | translate"
+          (onClick)="download(mail)"
+          [attr.data-testid]="'inbound-mail-list__download--' + mail.id"
+        />
+        @for (attachment of mail.attachments; track attachment.id) {
+          <span class="flex items-center gap-1">
+            <p-button
+              icon="pi pi-paperclip"
+              size="small"
+              [text]="true"
+              [label]="attachment.filename"
+              (onClick)="download(mail, attachment)"
+              [attr.data-testid]="'inbound-mail-list__attachment--' + attachment.id"
+            />
+            @if (pieces().length > 0) {
+              <p-select
+                [(ngModel)]="pieceFor[attachment.id]"
+                [options]="pieces()"
+                optionLabel="label"
+                optionValue="id"
+                appendTo="body"
+                size="small"
+                [placeholder]="'ADMINISTRATIVE_DOCUMENT.INBOUND.AS_PIECE' | translate"
+                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.AS_PIECE' | translate"
+                [attr.data-testid]="'inbound-mail-list__piece--' + attachment.id"
+              />
+              <p-button
+                icon="pi pi-check"
+                size="small"
+                [text]="true"
+                [disabled]="!pieceFor[attachment.id] || busy() === mail.id"
+                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.AS_PIECE' | translate"
+                (onClick)="supply(mail, attachment)"
+                [attr.data-testid]="'inbound-mail-list__supply--' + attachment.id"
+              />
+            }
+          </span>
+        }
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        @if (mail.status === Status.ATTACHED && dossierId()) {
+          <p-button
+            icon="pi pi-reply"
+            size="small"
+            [label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.QUALIFY' | translate"
+            (onClick)="respond.emit(mail)"
+            [attr.data-testid]="'inbound-mail-list__qualify--' + mail.id"
+          />
+        }
+        @if (mail.status === Status.ATTACHED && !dossierId() && mail.id_dossier) {
+          <a
+            [routerLink]="['/administrative-document/procedures', mail.id_dossier]"
+            class="text-sm text-primary-700"
+            [attr.data-testid]="'inbound-mail-list__open--' + mail.id"
+            >{{ 'ADMINISTRATIVE_DOCUMENT.INBOUND.OPEN_PROCEDURE' | translate }}</a
+          >
+        }
+        @if (mail.status === Status.UNMATCHED && procedures().length > 0) {
+          <p-select
+            [(ngModel)]="attachTo[mail.id]"
+            [options]="procedures()"
+            optionLabel="label"
+            optionValue="id"
+            appendTo="body"
+            size="small"
+            [placeholder]="'ADMINISTRATIVE_DOCUMENT.INBOUND.PICK_PROCEDURE' | translate"
+            [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.PICK_PROCEDURE' | translate"
+            [attr.data-testid]="'inbound-mail-list__pick--' + mail.id"
+          />
+          <p-button
+            size="small"
+            [label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.ATTACH' | translate"
+            [disabled]="!attachTo[mail.id] || busy() === mail.id"
+            (onClick)="attach(mail)"
+            [attr.data-testid]="'inbound-mail-list__attach--' + mail.id"
+          />
+        }
+        <p-button
+          size="small"
+          severity="secondary"
+          [text]="true"
+          [label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.DISCARD' | translate"
+          [disabled]="busy() === mail.id"
+          (onClick)="discard(mail)"
+          [attr.data-testid]="'inbound-mail-list__discard--' + mail.id"
+        />
+      </div>
+    </li>
+  }
+</ul>

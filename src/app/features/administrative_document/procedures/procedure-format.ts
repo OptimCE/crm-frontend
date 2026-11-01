@@ -29,6 +29,7 @@ import {
   ProcedureStatus,
   ThreadEntryOut,
   VersionStage,
+  InboundMailOut,
 } from '../../../shared/dtos/administrative-procedure.dtos';
 import { RenderState } from '../../../shared/dtos/administrative-document.dtos';
 import { TagSeverity, formatApiDate } from '../administrative-document-format';
@@ -43,6 +44,8 @@ export interface ProcedureDialogData {
   detail: ProcedureDetailOut;
   /** The community's regulator code, to name it when it is the recipient. */
   regulator?: string | null;
+  /** « Ajouter une réponse » from a received mail: its .eml, subject, text, date. */
+  inbound?: InboundMailOut | null;
 }
 
 /** A translation key and its parameters, for `| translate: params`. */
@@ -477,6 +480,13 @@ export function threadLine(
         key: `${PREFIX}.THREAD.${outbound ? 'OUTBOUND' : 'INBOUND'}`,
         params: { type: label },
       },
+      note: entry.subject,
+    };
+  }
+  if (entry.kind === 'inbound') {
+    return {
+      icon: 'pi pi-envelope',
+      text: { key: `${PREFIX}.THREAD.RECEIVED` },
       note: entry.subject,
     };
   }

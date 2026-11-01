@@ -24,6 +24,7 @@ import { AdministrativeProcedureService } from '../../../../shared/services/admi
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { deadlineItem, inbox, moduleStatus, procedureItem } from '../procedure-fixtures';
 import { ProcedureDashboard } from './procedure-dashboard';
+import { UserContextService } from '../../../../core/services/authorization/authorization.service';
 
 function event(topic: RealtimeSubscribable): RealtimeEvent {
   return {
@@ -56,6 +57,7 @@ describe('ProcedureDashboard', () => {
   ): Promise<void> {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     events = new Subject<RealtimeEvent>();
+    topics = [];
     getInbox = vi.fn().mockReturnValue(of(new ApiResponse(data)));
     getStatus = vi.fn().mockReturnValue(of(new ApiResponse(status)));
     invalidate = vi.fn();
@@ -64,7 +66,17 @@ describe('ProcedureDashboard', () => {
       providers: [
         provideRouter([]),
         { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap(query)) } },
-        { provide: AdministrativeProcedureService, useValue: { getInbox, getStatus, invalidate } },
+        {
+          provide: AdministrativeProcedureService,
+          useValue: {
+            getInbox,
+            getStatus,
+            invalidate,
+            // The reception address is off here: the hub shows none.
+            getInboundAddress: () => of(new ApiResponse({ enabled: false, address: null })),
+          },
+        },
+        { provide: UserContextService, useValue: { compareWithActiveRole: () => false } },
         {
           provide: AdministrativeDocumentService,
           useValue: { listSharingOperations: vi.fn().mockReturnValue(of(new ApiResponse([]))) },
@@ -73,8 +85,10 @@ describe('ProcedureDashboard', () => {
           provide: RealtimeService,
           useValue: {
             live: signal(true),
+            // The dashboard's own subscription is the first; the reception
+            // address panel subscribes after it.
             on: (...asked: RealtimeSubscribable[]) => {
-              topics = asked;
+              if (topics.length === 0) topics = asked;
               return events;
             },
           },

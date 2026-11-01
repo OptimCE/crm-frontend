@@ -349,6 +349,23 @@
       </section>
     }
 
+    <!-- Received at the reception address, to qualify (phase 4) -->
+    @if (d.inbound?.length) {
+      <section class="flex flex-col gap-2" data-testid="procedure-detail__inbound">
+        <h2 class="text-base font-semibold text-surface-800 m-0">
+          {{ 'ADMINISTRATIVE_DOCUMENT.INBOUND.TO_QUALIFY' | translate }}
+        </h2>
+        <app-inbound-mail-list
+          [mails]="d.inbound ?? []"
+          [dossierId]="d.id"
+          [pieces]="pieceChoices()"
+          (respond)="openRespondFrom($event)"
+          (changed)="reload()"
+          (pieceSupplied)="show($event)"
+        />
+      </section>
+    }
+
     <!-- Pieces -->
     <section id="pieces" class="flex flex-col gap-2 scroll-mt-4">
       <h2 class="text-base font-semibold text-surface-800 m-0">

@@ -415,7 +415,8 @@ export interface PieceOut {
 
 export interface ThreadEntryOut {
   at: string;
-  kind: 'step' | 'correspondence' | 'version';
+  /** `inbound`: a mail the reception address attached here, to qualify. */
+  kind: 'step' | 'correspondence' | 'version' | 'inbound';
   /** A Keycloak subject, or `system:*`. Never rendered as is. */
   actor: string | null;
   from_step: string | null;
@@ -429,6 +430,48 @@ export interface ThreadEntryOut {
   has_file: boolean;
   id_document: number | null;
   version_no: number | null;
+  id_inbound_mail?: number | null;
+}
+
+/** `GET /admin/inbound-address`: the community's reception address. */
+export interface InboundAddressOut {
+  /** False: no reception address on this instance. */
+  enabled: boolean;
+  address: string | null;
+}
+
+export enum InboundMailStatus {
+  UNMATCHED = 1,
+  ATTACHED = 2,
+  RECORDED = 3,
+  DISCARDED = 4,
+}
+
+export interface InboundAttachmentOut {
+  id: number;
+  filename: string;
+  content_type: string;
+  byte_size: number;
+  content_sha256: string;
+}
+
+/** A mail the reception address received. */
+export interface InboundMailOut {
+  id: number;
+  status: InboundMailStatus;
+  from_address: string | null;
+  subject: string | null;
+  sent_at: string | null;
+  received_at: string;
+  body_text: string | null;
+  id_dossier: number | null;
+  /** `reference` ([OPT-<id>]), `external_ref`, `manual`. */
+  match_reason: string | null;
+  /** A response type the procedure offers from its step. */
+  suggested_response: string | null;
+  id_correspondence: number | null;
+  byte_size: number;
+  attachments: InboundAttachmentOut[];
 }
 
 export interface SendPreviewOut {
@@ -467,6 +510,8 @@ export interface ProcedureDetailOut extends ProcedureItemOut {
   has_entry_sheet: boolean;
   /** Set on a refused (or lapsed) procedure that still has something to refile. */
   refusal?: RefusalOut | null;
+  /** Mails the reception address attached here, to qualify. */
+  inbound?: InboundMailOut[];
 }
 
 export interface EntryFieldOut {
@@ -599,6 +644,8 @@ export interface CorrespondenceIn {
   body_text?: string | null;
   external_ref?: string | null;
   file?: File | null;
+  /** Record it from a received mail: its .eml as the file. */
+  inbound_mail_id?: number | null;
 }
 
 export interface ProposalDeadlineOut {

@@ -9,6 +9,8 @@ import { UserContextService } from '../../core/services/authorization/authorizat
 import { environments } from '../../../environments/environments';
 import {
   AdminSummaryOut,
+  InboundAddressOut,
+  InboundMailOut,
   ChangeSummaryOut,
   BaselineConfirmIn,
   BaselineOut,
@@ -348,6 +350,7 @@ export class AdministrativeProcedureService extends ServiceBase {
     if (body.subject) form.append('subject', body.subject);
     if (body.body_text) form.append('body_text', body.body_text);
     if (body.external_ref) form.append('external_ref', body.external_ref);
+    if (body.inbound_mail_id) form.append('inbound_mail_id', String(body.inbound_mail_id));
     if (body.file) form.append('file', body.file);
     return form;
   }
@@ -360,6 +363,85 @@ export class AdministrativeProcedureService extends ServiceBase {
     return this.invalidating(
       this.http.post<ApiResponse<BaselineOut>>(`${this.apiAddress}/baseline/confirm`, body),
     );
+  }
+
+  // ---- the reception address (phase 4) ----------------------------------------
+
+  /** The community's reception address (made on first sight). */
+  getInboundAddress(): Observable<ApiResponse<InboundAddressOut>> {
+    return this.http.get<ApiResponse<InboundAddressOut>>(`${this.apiAddress}/inbound-address`);
+  }
+
+  /** A new code for the address (admins); the old one reaches nobody. */
+  rotateInboundAddress(): Observable<ApiResponse<InboundAddressOut>> {
+    return this.http.post<ApiResponse<InboundAddressOut>>(
+      `${this.apiAddress}/inbound-address/rotate`,
+      {},
+    );
+  }
+
+  /** What was received, newest first; `open` = unmatched or to qualify. */
+  getInboundMail(
+    status: 'open' | 'unmatched' | 'attached' | 'all' = 'open',
+  ): Observable<ApiResponse<InboundMailOut[]>> {
+    return this.http.get<ApiResponse<InboundMailOut[]>>(`${this.apiAddress}/inbound-mail`, {
+      params: { status },
+    });
+  }
+
+  attachInboundMail(mailId: number, idDossier: number): Observable<ApiResponse<InboundMailOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<InboundMailOut>>(
+        `${this.apiAddress}/inbound-mail/${mailId}/attach`,
+        { id_dossier: idDossier },
+      ),
+    );
+  }
+
+  discardInboundMail(mailId: number): Observable<ApiResponse<InboundMailOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<InboundMailOut>>(
+        `${this.apiAddress}/inbound-mail/${mailId}/discard`,
+        {},
+      ),
+    );
+  }
+
+  /** An attachment of a received mail as a new version of a piece. */
+  pieceFromInbound(
+    id: number,
+    documentId: number,
+    mailId: number,
+    attachmentId: number,
+  ): Observable<ApiResponse<ProcedureDetailOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<ProcedureDetailOut>>(
+        `${this.apiAddress}/dossiers/${id}/documents/${documentId}/versions/from-inbound`,
+        { id_inbound_mail: mailId, id_attachment: attachmentId },
+      ),
+    );
+  }
+
+  /** A received mail (.eml), or one of its attachments, as it arrived. */
+  downloadInbound(
+    mailId: number,
+    attachmentId: number | null = null,
+  ): Observable<{ blob: Blob; filename: string }> {
+    const path =
+      attachmentId === null
+        ? `inbound-mail/${mailId}/file`
+        : `inbound-mail/${mailId}/attachments/${attachmentId}/file`;
+    return this.http
+      .get(`${this.apiAddress}/${path}`, { observe: 'response', responseType: 'blob' })
+      .pipe(
+        map((response) => {
+          const disposition = response.headers.get('Content-Disposition') ?? '';
+          const match = /filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i.exec(disposition);
+          const filename = match?.[1] ? decodeURIComponent(match[1]) : `message-${mailId}.eml`;
+          return { blob: response.body as Blob, filename };
+        }),
+        catchError((error: HttpErrorResponse) => this.blobErrorHandler(error)),
+      );
   }
 
   /** A message's file, exactly as it was recorded. Never cached. */

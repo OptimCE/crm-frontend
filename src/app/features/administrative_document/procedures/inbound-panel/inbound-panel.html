@@ -1,0 +1,44 @@
+@if (address()?.enabled) {
+  <section class="flex flex-col gap-3" data-testid="inbound-panel">
+    <h2 class="text-base font-semibold text-surface-800 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.INBOUND.TITLE' | translate }}
+    </h2>
+    <div class="flex flex-wrap items-center gap-2 text-sm text-surface-700">
+      <span>{{ 'ADMINISTRATIVE_DOCUMENT.INBOUND.ADDRESS_INTRO' | translate }}</span>
+      <code class="px-2 py-1 bg-surface-100 rounded" data-testid="inbound-panel__address">{{
+        address()?.address
+      }}</code>
+      <p-button
+        icon="pi pi-copy"
+        size="small"
+        [text]="true"
+        [label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.COPY' | translate"
+        (onClick)="copy()"
+        data-testid="inbound-panel__copy"
+      />
+      @if (canRotate()) {
+        <p-button
+          icon="pi pi-refresh"
+          size="small"
+          severity="secondary"
+          [text]="true"
+          [loading]="rotating()"
+          [label]="'ADMINISTRATIVE_DOCUMENT.INBOUND.ROTATE' | translate"
+          (onClick)="rotate()"
+          data-testid="inbound-panel__rotate"
+        />
+      }
+    </div>
+    @if (mails().length > 0) {
+      <app-inbound-mail-list
+        [mails]="mails()"
+        [procedures]="procedures()"
+        (changed)="loadMails()"
+      />
+    } @else {
+      <p class="text-sm text-surface-500 m-0" data-testid="inbound-panel__empty">
+        {{ 'ADMINISTRATIVE_DOCUMENT.INBOUND.NOTHING' | translate }}
+      </p>
+    }
+  </section>
+}

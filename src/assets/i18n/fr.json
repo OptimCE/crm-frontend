@@ -174,6 +174,9 @@
       "admin_correspondence": {
         "recorded": {
           "title": "Une réponse a été enregistrée sur une démarche"
+        },
+        "received": {
+          "title": "Un courrier est arrivé à l'adresse de réception"
         }
       }
     }
@@ -2917,7 +2920,8 @@
         "STEP": "« {{from}} » → « {{to}} »",
         "OUTBOUND": "Envoyé : {{type}}",
         "INBOUND": "Reçu : {{type}}",
-        "VERSION": "{{piece}} : version {{n}}"
+        "VERSION": "{{piece}} : version {{n}}",
+        "RECEIVED": "Courrier reçu à l'adresse de réception"
       },
       "SEND": {
         "TITLE": "Envoyer la démarche",
@@ -3059,6 +3063,27 @@
     },
     "TOAST": {
       "CHANGE_FILED": "{{change}} ({{subject}}). À notifier à {{recipient}} : ajouté au brouillon « {{procedure}} » n° {{id}}."
+    },
+    "INBOUND": {
+      "TITLE": "Courrier reçu",
+      "ADDRESS_INTRO": "Transférez ou mettez en copie les réponses du GRD et de la CWaPE à :",
+      "COPY": "Copier",
+      "COPIED": "Adresse copiée",
+      "ROTATE": "Changer d'adresse",
+      "NOTHING": "Aucun courrier en attente.",
+      "TO_QUALIFY": "Courrier reçu à qualifier",
+      "NO_SUBJECT": "(sans objet)",
+      "STATUS": {
+        "UNMATCHED": "Non rattaché",
+        "ATTACHED": "À qualifier"
+      },
+      "DOWNLOAD_MAIL": "Le message (.eml)",
+      "AS_PIECE": "Utiliser comme pièce",
+      "QUALIFY": "Ajouter une réponse",
+      "OPEN_PROCEDURE": "Ouvrir la démarche",
+      "PICK_PROCEDURE": "Choisir une démarche",
+      "ATTACH": "Rattacher",
+      "DISCARD": "Écarter"
     }
   },
   "HOME": {

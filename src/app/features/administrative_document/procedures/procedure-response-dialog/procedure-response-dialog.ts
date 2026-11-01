@@ -95,6 +95,8 @@ export class ProcedureResponseDialog implements OnInit {
   private readonly lang = inject(LocaleService).locale();
 
   readonly detail = (this.config.data as ProcedureDialogData | undefined)?.detail ?? null;
+  /** Recording from a mail the reception address received (phase 4). */
+  readonly inbound = (this.config.data as ProcedureDialogData | undefined)?.inbound ?? null;
 
   /** Applicable types first; the others are shown, disabled, so none seems missing. */
   readonly typeOptions: TypeOption[] = (this.detail?.response_types ?? [])
@@ -131,6 +133,16 @@ export class ProcedureResponseDialog implements OnInit {
   private readonly preview$ = new Subject<void>();
 
   ngOnInit(): void {
+    const mail = this.inbound;
+    if (mail) {
+      this.subject = mail.subject ?? '';
+      this.bodyText = mail.body_text ?? '';
+      if (mail.sent_at) this.occurredOn = new Date(mail.sent_at);
+      const suggested = this.typeOptions.find(
+        (option) => option.value === mail.suggested_response && !option.disabled,
+      );
+      if (suggested) this.type = suggested.value;
+    }
     this.preview$
       .pipe(
         switchMap(() => {
@@ -153,6 +165,7 @@ export class ProcedureResponseDialog implements OnInit {
         this.previewing.set(false);
         this.proposal.set(res?.data ?? null);
       });
+    if (this.type) this.preview$.next();
   }
 
   onInputsChange(): void {
@@ -192,6 +205,7 @@ export class ProcedureResponseDialog implements OnInit {
         body_text: this.bodyText.trim() || null,
         external_ref: this.externalRef.trim() || null,
         file: this.file(),
+        ...(this.inbound ? { inbound_mail_id: this.inbound.id } : {}),
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

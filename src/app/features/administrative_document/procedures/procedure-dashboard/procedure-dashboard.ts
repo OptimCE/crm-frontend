@@ -32,6 +32,8 @@ import { AdministrativeDocumentService } from '../../../../shared/services/admin
 import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
 import { extractApiErrorMessage } from '../../administrative-document-format';
 import { DossierCreateDialog } from '../../components/dossier-create-dialog/dossier-create-dialog';
+import { InboundChoice } from '../inbound-mail-list/inbound-mail-list';
+import { InboundPanel } from '../inbound-panel/inbound-panel';
 import {
   I18nText,
   PrimaryAction,
@@ -69,7 +71,7 @@ interface Group {
 @Component({
   selector: 'app-procedure-dashboard',
   standalone: true,
-  imports: [TranslatePipe, FormsModule, Button, Message, Select, Tag],
+  imports: [TranslatePipe, FormsModule, Button, Message, Select, Tag, InboundPanel],
   templateUrl: './procedure-dashboard.html',
   providers: [DialogService, ErrorMessageHandler],
 })
@@ -121,6 +123,18 @@ export class ProcedureDashboard implements OnInit {
     })).filter((group) => group.rows.length > 0);
   });
   readonly empty = computed(() => this.inbox() !== null && this.groups().length === 0);
+  /** The open procedures a received mail may be attached to (the reception address). */
+  readonly inboundChoices = computed<InboundChoice[]>(() => {
+    const inbox = this.inbox();
+    if (!inbox) return [];
+    const rows = [...inbox.groups.todo, ...inbox.groups.waiting, ...inbox.groups.planned];
+    return rows.map((row) => ({
+      id: row.id,
+      label: [`#${row.id}`, pickLabel(row.labels, this.lang(), row.code), row.operation_name]
+        .filter(Boolean)
+        .join(' · '),
+    }));
+  });
 
   constructor() {
     this.destroyRef.onDestroy(() => this.dialogRef?.destroy());

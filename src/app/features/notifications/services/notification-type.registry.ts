@@ -151,6 +151,13 @@ const REGISTRY: Record<string, NotificationPresentation> = {
     route: dossierRoute,
     feature: 'administrative-document',
   },
+  // At the reception address: its procedure when a reference placed it, else
+  // the hub, where an unmatched mail waits.
+  'admin_correspondence.received': {
+    icon: 'pi pi-envelope',
+    route: dossierRoute,
+    feature: 'administrative-document',
+  },
   'admin_meter.active': {
     icon: 'pi pi-bolt',
     route: ownMeterRoute,
