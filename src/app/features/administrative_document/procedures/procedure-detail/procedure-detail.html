@@ -105,6 +105,16 @@
             data-testid="procedure-detail__btn--primary"
           />
         }
+        @if (d.effective_date_correctable) {
+          <p-button
+            icon="pi pi-calendar"
+            [outlined]="true"
+            severity="secondary"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.OPEN' | translate"
+            (onClick)="openEffectiveDate()"
+            data-testid="procedure-detail__btn--effective-date"
+          />
+        }
         @if (d.transitions.length > 0) {
           <p-button
             icon="pi pi-directions"

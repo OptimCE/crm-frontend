@@ -415,8 +415,11 @@ export interface PieceOut {
 
 export interface ThreadEntryOut {
   at: string;
-  /** `inbound`: a mail the reception address attached here, to qualify. */
-  kind: 'step' | 'correspondence' | 'version' | 'inbound';
+  /**
+   * `inbound`: a mail the reception address attached here, to qualify.
+   * `effective_date`: the effect date corrected by hand (with its reason).
+   */
+  kind: 'step' | 'correspondence' | 'version' | 'inbound' | 'effective_date';
   /** A Keycloak subject, or `system:*`. Never rendered as is. */
   actor: string | null;
   from_step: string | null;
@@ -431,6 +434,9 @@ export interface ThreadEntryOut {
   id_document: number | null;
   version_no: number | null;
   id_inbound_mail?: number | null;
+  /** `effective_date`: from that day to this one. */
+  effective_date?: string | null;
+  previous_effective_date?: string | null;
 }
 
 /** `GET /admin/inbound-address`: the community's reception address. */
@@ -492,6 +498,8 @@ export interface ProcedureDetailOut extends ProcedureItemOut {
   opened_by: OpenedBy | null;
   requested_effective_date: string | null;
   effective_date: string | null;
+  /** An effect still to come: its date may be corrected by hand. */
+  effective_date_correctable?: boolean;
   /** Set once sent: no change and no new version of a sent piece after it. */
   frozen_at: string | null;
   /** The core refused an effect; the procedure stays where it was. */
@@ -602,6 +610,13 @@ export interface ChangeExcludeIn {
   reason: string;
 }
 
+/** `POST /admin/dossiers/{id}/effective-date`: the effect date by hand, with its reason. */
+export interface EffectiveDateIn {
+  /** `YYYY-MM-DD`: the day the change takes effect, as the GRD says. */
+  on: string;
+  reason: string;
+}
+
 export interface ProcedureTransitionIn {
   to_step: string;
   reason: string;
@@ -694,10 +709,18 @@ export type BaselineChoice = 'active' | 'not_notified' | 'in_progress' | 'ended'
 export interface BaselineItemOut {
   /** Send it back with the item's choice. */
   key: string;
-  subject_type: 'meter' | 'key';
-  /** The EAN, or the key's id. */
+  /**
+   * `procedure`: a procedure the baseline asks about (phase 4): was it already
+   * done (`active`), not yet (`not_notified`), or sent and waiting
+   * (`in_progress`)? Once per operation, or once for the community (no operation).
+   */
+  subject_type: 'meter' | 'key' | 'procedure';
+  /** The EAN, the key's id, the operation's or the community's. */
   subject_ref: string;
-  id_sharing_operation: number;
+  id_sharing_operation: number | null;
+  /** A procedure asked about: its code and its name in four languages. */
+  procedure_code?: string | null;
+  procedure_labels?: Labels | null;
   operation_name: string | null;
   /** `present` on a first activation; `added`/`removed` on a reactivation. */
   change: 'present' | 'added' | 'removed';

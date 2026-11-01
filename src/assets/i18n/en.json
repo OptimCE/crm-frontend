@@ -589,10 +589,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Account holder name",
     "ACCOUNT_HOLDER_HINT": "Only fill in if the account is not held under the legal name",
+    "REPRESENTATIVE_SECTION": "Community representative and documents",
+    "REPRESENTATIVE_HINT": "Changing the representative, or the date of the statutes or internal rules, prepares the update procedure with the regulator when the administrative space is on.",
+    "REPRESENTATIVE": "Representative",
+    "REPRESENTATIVE_FIRST_NAME": "Representative's first name",
+    "REPRESENTATIVE_LAST_NAME": "Representative's last name",
+    "REPRESENTATIVE_EMAIL": "Representative's email",
+    "STATUTES_DATE": "Date of the statutes",
+    "INTERNAL_RULES_DATE": "Date of the internal rules",
     "ERRORS": {
       "INVALID_URL": "Please enter a valid URL starting with http:// or https://",
       "PARTIAL_ADDRESS": "Please complete every required address field or leave them all empty",
-      "INVALID_IBAN": "Please enter a valid IBAN"
+      "INVALID_IBAN": "Please enter a valid IBAN",
+      "INVALID_EMAIL": "Please enter a valid email address"
     }
   },
   "COMMUNITY": {
@@ -1608,7 +1617,9 @@
           "DEACTIVATED_LABEL": "Deactivated",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Pending DSO approval",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Pending manager approval"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} meter(s) in this list are no longer in the sharing for the DSO since {{date}}: remove them from the operation.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} meter(s) in this list are no longer in the sharing for the DSO: remove them from the operation."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Consumption monitoring",
@@ -2921,7 +2932,8 @@
         "OUTBOUND": "Sent: {{type}}",
         "INBOUND": "Received: {{type}}",
         "VERSION": "{{piece}}: version {{n}}",
-        "RECEIVED": "Mail received at the reception address"
+        "RECEIVED": "Mail received at the reception address",
+        "EFFECTIVE_DATE": "Effective date corrected: from {{from}} to {{to}}"
       },
       "SEND": {
         "TITLE": "Send the procedure",
@@ -3019,7 +3031,8 @@
           "ACTIVE": "Active: notified to the DSO and in force.",
           "NOT_NOTIFIED": "Not notified yet: it joins a draft, to be sent.",
           "IN_PROGRESS": "In progress: already sent, the answer is awaited (give the date it was sent).",
-          "ENDED": "Ended: it is no longer part of the operation."
+          "ENDED": "Ended: it is no longer part of the operation.",
+          "ASKED": "Procedures: say whether the procedure was already done with the regulator, is still to do (a draft opens) or was sent (give the date it was sent)."
         },
         "CHOICE": {
           "ACTIVE": "Active",
@@ -3048,6 +3061,14 @@
           "SENT_DATE": "Give the date it was sent for the « In progress » items: {{refs}}.",
           "EFFECTIVE_DATE": "Say since when these meters, waiting in the CRM, are active: {{refs}}.",
           "CONFLICT": "These EANs are already tracked in another operation on those dates; nothing was confirmed: {{refs}}."
+        },
+        "COMMUNITY_GROUP": "The community",
+        "ASKED": "Already done with the regulator?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Already done",
+          "NOT_NOTIFIED": "To do",
+          "IN_PROGRESS": "Sent, awaiting an answer",
+          "ENDED": "Ended"
         }
       },
       "VERSION_STAGE": {
@@ -3059,6 +3080,18 @@
         "1": "Identical",
         "2": "Different",
         "3": "Check failed"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Correct the effective date",
+        "TITLE": "Correct the effective date",
+        "INTRO": "When the DSO takes effect on another day than the one counted (the amendment received later, a date the DSO set). The authorised meters follow; it goes in force on that day.",
+        "ON": "New effective date",
+        "REASON": "Reason",
+        "SUBMIT": "Correct",
+        "DONE": "Effective date corrected",
+        "ERRORS": {
+          "REQUIRED": "Give the date and the reason."
+        }
       }
     },
     "TOAST": {

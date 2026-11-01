@@ -28,7 +28,9 @@ import { SharingOperationMeterEventService } from '../sharing-operation.meter.su
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
-import { toLocalDateString } from '../../../../../shared/utils/date.utils';
+import { fromLocalDateString, toLocalDateString } from '../../../../../shared/utils/date.utils';
+import { Message } from 'primeng/message';
+import { LocaleDatePipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 import { translatedOptions } from '../../../../../shared/utils/translated-options.utils';
 import { MeterStatusComponent } from '../../../../../shared/components/regulatory-badge/meter-status';
 import { drivesStatus } from '../../../../../shared/components/regulatory-badge/regulatory-badge.format';
@@ -37,6 +39,7 @@ import {
   regulatoryKey,
 } from '../../../../../shared/components/regulatory-badge/operation-regulatory-status';
 import {
+  RegulatoryStatus,
   RegulatoryStatusDTO,
   RegulatorySubjectType,
 } from '../../../../../shared/dtos/regulatory-status.dtos';
@@ -44,6 +47,8 @@ import {
 @Component({
   selector: 'app-sharing-operation-meters-list',
   imports: [
+    Message,
+    LocaleDatePipe,
     TableModule,
     Button,
     TranslatePipe,
@@ -444,4 +449,26 @@ export class SharingOperationMetersList implements OnInit {
   regulatoryOf(ean: string): RegulatoryStatusDTO | undefined {
     return this.regulatory().get(regulatoryKey(RegulatorySubjectType.METER, ean));
   }
+
+  /**
+   * The meters shown that the GRD no longer counts in the sharing (the end of
+   * the sharing in force, or a removal whose CRM date is later): the CRM's
+   * membership stays the manager's to change, so the list says so. Null when
+   * there are none on this page, or this is not the list of current meters.
+   */
+  readonly ended = computed<{ count: number; since: Date | null } | null>(() => {
+    if (this.type() !== SharingOperationMetersQueryType.NOW) return null;
+    const rows = this.metersPartialList()
+      .map((meter) => this.regulatoryOf(meter.EAN))
+      .filter((row) => row?.regulatory_status === RegulatoryStatus.ENDED);
+    if (rows.length === 0) return null;
+    const lastDays = rows
+      .map((row) => fromLocalDateString(row?.valid_to))
+      .filter((day): day is Date => day !== null);
+    const since =
+      lastDays.length > 0
+        ? new Date(Math.min(...lastDays.map((day) => day.getTime())) + 24 * 60 * 60 * 1000)
+        : null;
+    return { count: rows.length, since };
+  });
 }

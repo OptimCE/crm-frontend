@@ -54,6 +54,7 @@
               {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.IN_PROGRESS' | translate }}
             </li>
             <li>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.ENDED' | translate }}</li>
+            <li>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.HELP.ASKED' | translate }}</li>
           </ul>
 
           <div class="flex flex-col sm:flex-row sm:items-end gap-2">
@@ -101,10 +102,7 @@
                 >
                   <div class="flex-1 min-w-0 flex flex-col gap-1">
                     <span class="flex items-center gap-2 flex-wrap text-sm">
-                      <i
-                        [class]="row.item.subject_type === 'key' ? 'pi pi-key' : 'pi pi-bolt'"
-                        class="text-surface-500 text-xs"
-                      ></i>
+                      <i [class]="icon(row)" class="text-surface-500 text-xs"></i>
                       <span
                         class="text-surface-800"
                         [class.font-mono]="row.item.subject_type === 'meter'"
@@ -171,7 +169,7 @@
                     </div>
                   } @else {
                     <span class="text-sm text-surface-700 shrink-0">
-                      {{ choiceLabelKey(row.item.chosen) | translate }}
+                      {{ choiceLabelKey(row) | translate }}
                       @if (row.item.effective_date) {
                         &middot; {{ formatApiDate(row.item.effective_date) }}
                       }

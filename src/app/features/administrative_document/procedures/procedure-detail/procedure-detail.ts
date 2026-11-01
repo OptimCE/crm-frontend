@@ -71,6 +71,7 @@ import { ProcedureResponseDialog } from '../procedure-response-dialog/procedure-
 import { InboundChoice, InboundMailList } from '../inbound-mail-list/inbound-mail-list';
 import { ProcedureSendDialog } from '../procedure-send-dialog/procedure-send-dialog';
 import { ProcedureTransitionDialog } from '../procedure-transition-dialog/procedure-transition-dialog';
+import { ProcedureEffectiveDateDialog } from '../procedure-effective-date-dialog/procedure-effective-date-dialog';
 
 const REALTIME_DEBOUNCE_MS = 400;
 
@@ -378,6 +379,14 @@ export class ProcedureDetail implements OnInit {
       label: pickLabel(piece.labels, this.lang(), piece.code),
     })),
   );
+
+  openEffectiveDate(): void {
+    this.openDialog(
+      ProcedureEffectiveDateDialog,
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.TITLE',
+      '30rem',
+    );
+  }
 
   openTransition(): void {
     this.openDialog(

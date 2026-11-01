@@ -10,6 +10,7 @@ import { Select } from 'primeng/select';
 import { Tag } from 'primeng/tag';
 
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { LocaleService } from '../../../../core/services/language/locale.service';
 import { grdLabel } from '../../../../shared/constants/grd';
 import {
   BaselineChoice,
@@ -27,12 +28,15 @@ import {
   parseApiDate,
   toApiDate,
 } from '../../administrative-document-format';
-import { baselineChoiceLabelKey } from '../procedure-format';
+import { baselineChoiceLabelKey, pickLabel } from '../procedure-format';
 
 const BASELINE_INVALID = 2372;
 const BASELINE_CONFLICT = 2373;
 
 const ALL_CHOICES: readonly BaselineChoice[] = ['active', 'not_notified', 'in_progress', 'ended'];
+
+/** The community's own procedures (no operation) are listed first, under this id. */
+const COMMUNITY_GROUP = 0;
 
 interface ChoiceOption {
   label: string;
@@ -65,6 +69,10 @@ interface OperationGroup {
  * effects to the core; nothing before the activation is replayed.
  *
  * On a reactivation only the difference is asked (`change`: added, removed).
+ *
+ * Phase 4: a first activation also asks about the procedures whose trigger
+ * came before the module (the creation's notification, each operation's
+ * authorisation): already done, to do (its draft opens), or sent.
  */
 @Component({
   selector: 'app-baseline-confirm',
@@ -79,6 +87,7 @@ export class BaselineConfirm implements OnInit {
   private readonly snackbar = inject(SnackbarNotification);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService);
 
   readonly baseline = signal<BaselineOut | null>(null);
   readonly rows = signal<BaselineRow[]>([]);
@@ -96,10 +105,15 @@ export class BaselineConfirm implements OnInit {
   readonly groups = computed<OperationGroup[]>(() => {
     const groups = new Map<number, OperationGroup>();
     for (const row of this.rows()) {
-      const id = row.item.id_sharing_operation;
+      const id = row.item.id_sharing_operation ?? COMMUNITY_GROUP;
       const group = groups.get(id) ?? {
         id,
-        name: row.item.operation_name ?? `#${id}`,
+        name:
+          id === COMMUNITY_GROUP
+            ? (this.translate.instant(
+                'ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.COMMUNITY_GROUP',
+              ) as string)
+            : (row.item.operation_name ?? `#${id}`),
         rows: [],
       };
       group.rows.push(row);
@@ -140,7 +154,7 @@ export class BaselineConfirm implements OnInit {
         const choice = item.chosen ?? item.default_choice;
         return {
           item,
-          options: item.choices.map((value) => this.option(value)),
+          options: item.choices.map((value) => this.option(value, isAsked(item))),
           choice,
           effectiveDate: parseApiDate(item.effective_date ?? defaultEffective(item, choice)),
           sentDate: parseApiDate(item.sent_date),
@@ -149,8 +163,11 @@ export class BaselineConfirm implements OnInit {
     );
   }
 
-  private option(value: BaselineChoice): ChoiceOption {
-    return { value, label: this.translate.instant(baselineChoiceLabelKey(value)) as string };
+  private option(value: BaselineChoice, asked = false): ChoiceOption {
+    return {
+      value,
+      label: this.translate.instant(baselineChoiceLabelKey(value, asked)) as string,
+    };
   }
 
   applyBulk(): void {
@@ -259,9 +276,21 @@ export class BaselineConfirm implements OnInit {
   }
 
   subject(row: BaselineRow): string {
+    if (isAsked(row.item)) {
+      return pickLabel(
+        row.item.procedure_labels,
+        this.locale.locale(),
+        row.item.procedure_code ?? '',
+      );
+    }
     return row.item.subject_type === 'key'
       ? (row.item.label ?? `#${row.item.subject_ref}`)
       : row.item.subject_ref;
+  }
+
+  icon(row: BaselineRow): string {
+    if (isAsked(row.item)) return 'pi pi-file';
+    return row.item.subject_type === 'key' ? 'pi pi-key' : 'pi pi-bolt';
   }
 
   /**
@@ -269,6 +298,9 @@ export class BaselineConfirm implements OnInit {
    * plus "waiting for the GRD in the CRM" for a meter the CRM has waiting.
    */
   context(row: BaselineRow): string {
+    if (isAsked(row.item)) {
+      return this.translate.instant('ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.ASKED') as string;
+    }
     const since = row.item.start_date
       ? (this.translate.instant('ADMINISTRATIVE_DOCUMENT.PROCEDURES.BASELINE.SINCE', {
           date: formatApiDate(row.item.start_date),
@@ -284,8 +316,9 @@ export class BaselineConfirm implements OnInit {
     return [row.item.grd ? grdLabel(row.item.grd) : '', since, waiting].filter(Boolean).join(' · ');
   }
 
-  choiceLabelKey(choice: BaselineChoice | null): string {
-    return choice ? baselineChoiceLabelKey(choice) : '';
+  choiceLabelKey(row: BaselineRow): string {
+    const chosen = row.item.chosen;
+    return chosen ? baselineChoiceLabelKey(chosen, isAsked(row.item)) : '';
   }
 
   protected readonly formatApiDate = formatApiDate;
@@ -293,6 +326,10 @@ export class BaselineConfirm implements OnInit {
 
 /** `meter_data.status` of a meter waiting for the GRD (3) or the manager (4). */
 const CRM_WAITING_MANAGER = 4;
+
+function isAsked(item: BaselineItemOut): boolean {
+  return item.subject_type === 'procedure';
+}
 
 function isWaiting(item: BaselineItemOut): boolean {
   return item.subject_type === 'meter' && item.crm_status !== null && item.crm_status !== undefined

@@ -156,4 +156,22 @@ describe('SharingOperationMetersList — one status', () => {
 
     expect(el.querySelector('[data-testid="op-meters-list__btn--approve--0"]')).not.toBeNull();
   });
+
+  it('says which meters the GRD no longer counts in the sharing, and since when', async () => {
+    const ended = { ...episode('TRACKED', RegulatoryStatus.ENDED), valid_to: '2026-11-30' };
+    const el = await render([ended]);
+
+    const banner = el.querySelector('[data-testid="op-meters-list__message--ended"]');
+    expect(banner).not.toBeNull();
+    expect(banner?.textContent).toContain('ENDED_STILL_IN');
+    expect(fixture.componentInstance.ended()).toEqual({
+      count: 1,
+      since: new Date(2026, 11, 1),
+    });
+  });
+
+  it('says nothing while every meter is still in the sharing', async () => {
+    const el = await render([episode('TRACKED', RegulatoryStatus.ACTIVE)]);
+    expect(el.querySelector('[data-testid="op-meters-list__message--ended"]')).toBeNull();
+  });
 });

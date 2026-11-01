@@ -30,6 +30,7 @@ import {
   ProcedureListQuery,
   ProcedureModuleStatusOut,
   ProcedureTransitionIn,
+  EffectiveDateIn,
   RefileIn,
   RefileOut,
   RegenerateOut,
@@ -203,6 +204,19 @@ export class AdministrativeProcedureService extends ServiceBase {
     return this.invalidating(
       this.http.post<ApiResponse<ProcedureDetailOut>>(
         `${this.apiAddress}/dossiers/${id}/changes/${changeId}/exclude`,
+        body,
+      ),
+    );
+  }
+
+  /** The effect date by hand, while it is still to come, with its reason. */
+  correctEffectiveDate(
+    id: number,
+    body: EffectiveDateIn,
+  ): Observable<ApiResponse<ProcedureDetailOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<ProcedureDetailOut>>(
+        `${this.apiAddress}/dossiers/${id}/effective-date`,
         body,
       ),
     );

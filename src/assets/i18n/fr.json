@@ -589,10 +589,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Titulaire du compte",
     "ACCOUNT_HOLDER_HINT": "À remplir uniquement si le compte n'est pas au nom de la dénomination légale",
+    "REPRESENTATIVE_SECTION": "Représentant et documents de la communauté",
+    "REPRESENTATIVE_HINT": "Changer le représentant, ou la date des statuts ou du ROI, prépare la démarche d’actualisation auprès du régulateur lorsque l’espace administratif est activé.",
+    "REPRESENTATIVE": "Représentant",
+    "REPRESENTATIVE_FIRST_NAME": "Prénom du représentant",
+    "REPRESENTATIVE_LAST_NAME": "Nom du représentant",
+    "REPRESENTATIVE_EMAIL": "E-mail du représentant",
+    "STATUTES_DATE": "Date des statuts",
+    "INTERNAL_RULES_DATE": "Date du règlement d’ordre intérieur",
     "ERRORS": {
       "INVALID_URL": "Veuillez saisir une URL valide commençant par http:// ou https://",
       "PARTIAL_ADDRESS": "Veuillez compléter tous les champs d’adresse requis ou les laisser vides",
-      "INVALID_IBAN": "Veuillez saisir un IBAN valide"
+      "INVALID_IBAN": "Veuillez saisir un IBAN valide",
+      "INVALID_EMAIL": "Veuillez saisir une adresse e-mail valide"
     }
   },
   "COMMUNITY": {
@@ -1608,7 +1617,9 @@
           "DEACTIVATED_LABEL": "Désactivé",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "En attente d'acceptation du GRD",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "En attente d'acceptation du gestionnaire"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} compteur(s) de cette liste ne font plus partie du partage pour le GRD depuis le {{date}} : retirez-les de l'opération.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} compteur(s) de cette liste ne font plus partie du partage pour le GRD : retirez-les de l'opération."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Suivi de consommation",
@@ -2921,7 +2932,8 @@
         "OUTBOUND": "Envoyé : {{type}}",
         "INBOUND": "Reçu : {{type}}",
         "VERSION": "{{piece}} : version {{n}}",
-        "RECEIVED": "Courrier reçu à l'adresse de réception"
+        "RECEIVED": "Courrier reçu à l'adresse de réception",
+        "EFFECTIVE_DATE": "Date d'effet corrigée : du {{from}} au {{to}}"
       },
       "SEND": {
         "TITLE": "Envoyer la démarche",
@@ -3019,7 +3031,8 @@
           "ACTIVE": "Actif : notifié au GRD et en vigueur.",
           "NOT_NOTIFIED": "Pas encore notifié : il rejoint un brouillon, à envoyer.",
           "IN_PROGRESS": "En cours : déjà envoyé, la réponse est attendue (indiquez la date d'envoi).",
-          "ENDED": "Terminé : il ne fait plus partie de l'opération."
+          "ENDED": "Terminé : il ne fait plus partie de l'opération.",
+          "ASKED": "Démarches : dites si la démarche est déjà faite auprès du régulateur, encore à faire (un brouillon s'ouvre) ou envoyée (indiquez la date d'envoi)."
         },
         "CHOICE": {
           "ACTIVE": "Actif",
@@ -3048,6 +3061,14 @@
           "SENT_DATE": "Indiquez la date d'envoi des éléments « En cours » : {{refs}}.",
           "EFFECTIVE_DATE": "Indiquez depuis quand ces compteurs, en attente dans le CRM, sont actifs : {{refs}}.",
           "CONFLICT": "Ces EAN sont déjà suivis dans une autre opération à ces dates ; rien n'a été confirmé : {{refs}}."
+        },
+        "COMMUNITY_GROUP": "La communauté",
+        "ASKED": "Déjà faite auprès du régulateur ?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Déjà faite",
+          "NOT_NOTIFIED": "À faire",
+          "IN_PROGRESS": "Envoyée, réponse attendue",
+          "ENDED": "Terminée"
         }
       },
       "VERSION_STAGE": {
@@ -3059,6 +3080,18 @@
         "1": "Identique",
         "2": "Différente",
         "3": "Vérification échouée"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Corriger la date d'effet",
+        "TITLE": "Corriger la date d'effet",
+        "INTRO": "Si le GRD fait prendre effet un autre jour que celui calculé (avenant reçu plus tard, date fixée par le GRD). Les compteurs autorisés suivent ; le passage en vigueur se fera ce jour-là.",
+        "ON": "Nouvelle date d'effet",
+        "REASON": "Motif",
+        "SUBMIT": "Corriger",
+        "DONE": "Date d'effet corrigée",
+        "ERRORS": {
+          "REQUIRED": "Indiquez la date et le motif."
+        }
       }
     },
     "TOAST": {

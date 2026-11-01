@@ -140,6 +140,17 @@
   </div>
 </div>
 
+@if (ended(); as gone) {
+  <p-message severity="warn" styleClass="mb-3" data-testid="op-meters-list__message--ended">
+    {{
+      (gone.since
+        ? 'SHARING_OPERATION.VIEW.METER.ENDED_STILL_IN'
+        : 'SHARING_OPERATION.VIEW.METER.ENDED_STILL_IN_UNDATED'
+      ) | translate: { count: gone.count, date: gone.since ? (gone.since | localeDate) : '' }
+    }}
+  </p-message>
+}
+
 <!-- Data table -->
 <p-table
   #dt

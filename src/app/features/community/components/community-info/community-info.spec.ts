@@ -405,6 +405,11 @@ describe('CommunityInfo', () => {
         legal_name: null,
         iban: null,
         account_holder_name: null,
+        representative_first_name: null,
+        representative_last_name: null,
+        representative_email: null,
+        statutes_date: null,
+        internal_rules_date: null,
       });
       expect(component.saving()).toBe(false);
       expect(component.editMode()).toBe(false);
@@ -750,6 +755,72 @@ describe('CommunityInfo', () => {
       expect(component.form.controls.iban.errors).toEqual({ invalidIban: true });
 
       component.save();
+      expect(communitySpy.updateCommunity).not.toHaveBeenCalled();
+    });
+  });
+
+  // ── representative and founding documents ─────────────────────────
+
+  describe('representative and documents', () => {
+    beforeEach(async () => {
+      await configure({ isAdmin: true });
+    });
+
+    it('loads them, the dates as the picker shows them', () => {
+      communitySpy.getCommunityDetail.mockReturnValue(
+        of(
+          new ApiResponse(
+            buildDetail({
+              representative_first_name: 'Anne',
+              representative_last_name: 'Dupont',
+              representative_email: 'anne@ce.be',
+              statutes_date: '2024-03-01',
+              internal_rules_date: null,
+            }),
+          ),
+        ),
+      );
+      create();
+
+      const controls = component.form.controls;
+      expect(controls.representative_first_name.value).toBe('Anne');
+      expect(controls.representative_last_name.value).toBe('Dupont');
+      expect(controls.representative_email.value).toBe('anne@ce.be');
+      expect(controls.statutes_date.value).toEqual(new Date(2024, 2, 1));
+      expect(controls.internal_rules_date.value).toBeNull();
+    });
+
+    it('sends them trimmed, the dates as YYYY-MM-DD', () => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({
+        name: 'Updated',
+        representative_first_name: '  Anne ',
+        representative_last_name: 'Martin',
+        representative_email: 'anne@ce.be',
+        statutes_date: new Date(2026, 9, 1),
+        internal_rules_date: null,
+      });
+
+      component.save();
+
+      expect(communitySpy.updateCommunity.mock.calls[0][0]).toMatchObject({
+        representative_first_name: 'Anne',
+        representative_last_name: 'Martin',
+        representative_email: 'anne@ce.be',
+        statutes_date: '2026-10-01',
+        internal_rules_date: null,
+      });
+    });
+
+    it('refuses a malformed email', () => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({ name: 'Updated', representative_email: 'pas-un-email' });
+
+      component.save();
+
+      expect(component.form.controls.representative_email.errors).toEqual({ email: true });
       expect(communitySpy.updateCommunity).not.toHaveBeenCalled();
     });
   });

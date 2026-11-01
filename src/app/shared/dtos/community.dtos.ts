@@ -83,6 +83,13 @@ export interface CommunityDetailDTO {
   iban?: string | null;
   /** Account holder name — only set when it differs from the legal name. */
   account_holder_name?: string | null;
+  /** Who represents the community towards the GRD and the regulator. */
+  representative_first_name?: string | null;
+  representative_last_name?: string | null;
+  representative_email?: string | null;
+  /** Dates (`YYYY-MM-DD`) of the statutes and internal rules (ROI) in force. */
+  statutes_date?: string | null;
+  internal_rules_date?: string | null;
 }
 
 export interface UsersCommunityDTO {
@@ -113,6 +120,17 @@ export interface UpdateCommunityDTO {
   iban?: string | null;
   /** Only sent when it differs from legal_name; otherwise null. */
   account_holder_name?: string | null;
+  /**
+   * Changing a recorded representative, statutes date or internal rules date
+   * tells the regulator's procedures (espace administratif).
+   */
+  /** Who represents the community towards the GRD and the regulator. */
+  representative_first_name?: string | null;
+  representative_last_name?: string | null;
+  representative_email?: string | null;
+  /** Dates (`YYYY-MM-DD`) of the statutes and internal rules (ROI) in force. */
+  statutes_date?: string | null;
+  internal_rules_date?: string | null;
 }
 
 export interface UploadLogoResponse {

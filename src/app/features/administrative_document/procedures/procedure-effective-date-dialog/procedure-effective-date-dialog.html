@@ -1,0 +1,61 @@
+<form (ngSubmit)="submit()" class="flex flex-col gap-4">
+  <p class="text-sm text-surface-600 m-0">
+    {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.INTRO' | translate }}
+  </p>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="effective-date-on">{{
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.ON' | translate
+    }}</label>
+    <p-datepicker
+      inputId="effective-date-on"
+      name="on"
+      [(ngModel)]="on"
+      dateFormat="dd/mm/yy"
+      appendTo="body"
+      [fluid]="true"
+      [showIcon]="true"
+      data-testid="procedure-effective-date-dialog__date--on"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="effective-date-reason">{{
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.REASON' | translate
+    }}</label>
+    <textarea
+      pTextarea
+      id="effective-date-reason"
+      name="reason"
+      [(ngModel)]="reason"
+      rows="3"
+      [maxlength]="reasonMax"
+      class="w-full"
+      data-testid="procedure-effective-date-dialog__input--reason"
+    ></textarea>
+  </div>
+
+  @if (formError()) {
+    <p class="text-red-600 text-sm m-0" data-testid="procedure-effective-date-dialog__error">
+      <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+    </p>
+  }
+
+  <div class="flex justify-end gap-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+      data-testid="procedure-effective-date-dialog__btn--cancel"
+    />
+    <p-button
+      type="submit"
+      [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.SUBMIT' | translate"
+      [loading]="submitting()"
+      data-testid="procedure-effective-date-dialog__btn--submit"
+    />
+  </div>
+</form>

@@ -339,8 +339,9 @@ export function partyLabelKey(party: DeadlineParty | null): string {
   return `${PREFIX}.PARTY.${party ?? 'UNKNOWN'}`;
 }
 
-export function baselineChoiceLabelKey(choice: BaselineChoice): string {
-  return `${PREFIX}.BASELINE.CHOICE.${choice.toUpperCase()}`;
+/** A choice's label; a procedure the baseline asks about says it otherwise. */
+export function baselineChoiceLabelKey(choice: BaselineChoice, asked = false): string {
+  return `${PREFIX}.BASELINE.${asked ? 'PROCEDURE_CHOICE' : 'CHOICE'}.${choice.toUpperCase()}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -488,6 +489,19 @@ export function threadLine(
       icon: 'pi pi-envelope',
       text: { key: `${PREFIX}.THREAD.RECEIVED` },
       note: entry.subject,
+    };
+  }
+  if (entry.kind === 'effective_date') {
+    return {
+      icon: 'pi pi-calendar',
+      text: {
+        key: `${PREFIX}.THREAD.EFFECTIVE_DATE`,
+        params: {
+          from: formatApiDate(entry.previous_effective_date ?? null) || '—',
+          to: formatApiDate(entry.effective_date ?? null) || '—',
+        },
+      },
+      note: entry.reason,
     };
   }
   const piece = detail.pieces.find((p) => p.id === entry.id_document);

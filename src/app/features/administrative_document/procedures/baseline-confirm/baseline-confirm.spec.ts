@@ -175,6 +175,70 @@ describe('BaselineConfirm (criterion 1.8)', () => {
     );
   });
 
+  describe('the procedures it asks about (phase 4)', () => {
+    const CREATION = 'ask:CE_NOTIFICATION:0';
+    const AUTHORISATION = 'ask:PARTAGE_AUTORISATION:3';
+
+    function asking(): BaselineOut {
+      const data = baseline();
+      const asked = (key: string, code: string, fr: string, operation: number | null) => ({
+        ...data.items[0],
+        key,
+        subject_type: 'procedure' as const,
+        subject_ref: String(operation ?? 1),
+        id_sharing_operation: operation,
+        operation_name: operation ? 'Op Centre' : null,
+        default_choice: 'not_notified' as const,
+        procedure_code: code,
+        procedure_labels: { fr, en: fr, nl: fr, de: fr },
+        grd: null,
+        start_date: null,
+        crm_status: null,
+      });
+      data.items = [
+        asked(CREATION, 'CE_NOTIFICATION', 'Notification de création de la CE', null),
+        asked(AUTHORISATION, 'PARTAGE_AUTORISATION', 'Autorisation de partage', 3),
+        ...data.items,
+      ];
+      return data;
+    }
+
+    it('lists the community first, then each operation above its meters', async () => {
+      await setup(asking());
+      const groups = component.groups();
+      expect(groups.map((g) => g.name)).toEqual(['La communauté', 'Op Centre']);
+      expect(groups[1].rows.map((r) => r.item.key)).toEqual([AUTHORISATION, METER, KEY]);
+      const creation = byTestId(`baseline-confirm__row--${CREATION}`);
+      expect(creation?.textContent).toContain('Notification de création de la CE');
+      expect(creation?.textContent).toContain('Déjà faite auprès du régulateur ?');
+    });
+
+    it('says its choices as a procedure: done, to do, sent', async () => {
+      await setup(asking());
+      expect(component.rows()[0].options.map((o) => o.label)).toEqual([
+        'Déjà faite',
+        'À faire',
+        'Envoyée, réponse attendue',
+      ]);
+    });
+
+    it('sends its choice with the others', async () => {
+      await setup(asking());
+      component.setChoice(component.rows()[0], 'active');
+      confirmBaseline.mockReturnValue(of(new ApiResponse(baseline({ status: 'confirmed' }))));
+
+      component.confirm();
+
+      const sent = confirmBaseline.mock.calls[0][0] as {
+        choices: { key: string; choice: string }[];
+      };
+      expect(sent.choices.slice(0, 2)).toEqual([
+        { key: CREATION, choice: 'active', effective_date: null, sent_date: null },
+        { key: AUTHORISATION, choice: 'not_notified', effective_date: null, sent_date: null },
+      ]);
+    });
+  });
+
   it('says the regulator is not supported: there is no starting state', async () => {
     await setup(baseline({ status: 'not_supported', regulator: 'BE-VLA-VREG', items: [] }));
     expect(byTestId('baseline-confirm__message--unsupported')?.textContent).toContain('VREG');

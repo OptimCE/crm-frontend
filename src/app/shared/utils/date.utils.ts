@@ -13,6 +13,16 @@ export function toLocalDateString(d: Date): string {
 }
 
 /**
+ * The inverse of `toLocalDateString`: a `YYYY-MM-DD` calendar date as a `Date` at
+ * local midnight (what the datepicker shows), or null for a blank or malformed one.
+ */
+export function fromLocalDateString(value: string | null | undefined): Date | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value ?? '');
+  if (!match) return null;
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+/**
  * Format a UTC ISO timestamp as Brussels wall-clock time (dd/MM/yyyy HH:mm:ss).
  * Consumption data is stored as timestamptz but represents Belgian local slots.
  */

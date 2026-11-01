@@ -589,10 +589,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Kontoinhaber",
     "ACCOUNT_HOLDER_HINT": "Nur ausfüllen, wenn das Konto nicht auf den rechtlichen Namen lautet",
+    "REPRESENTATIVE_SECTION": "Vertreter und Dokumente der Gemeinschaft",
+    "REPRESENTATIVE_HINT": "Ein neuer Vertreter oder ein neues Datum der Satzung oder der Geschäftsordnung bereitet das Aktualisierungsverfahren bei der Regulierungsbehörde vor, wenn der Verwaltungsbereich aktiv ist.",
+    "REPRESENTATIVE": "Vertreter",
+    "REPRESENTATIVE_FIRST_NAME": "Vorname des Vertreters",
+    "REPRESENTATIVE_LAST_NAME": "Name des Vertreters",
+    "REPRESENTATIVE_EMAIL": "E-Mail des Vertreters",
+    "STATUTES_DATE": "Datum der Satzung",
+    "INTERNAL_RULES_DATE": "Datum der Geschäftsordnung",
     "ERRORS": {
       "INVALID_URL": "Bitte geben Sie eine gültige URL ein, die mit http:// oder https:// beginnt",
       "PARTIAL_ADDRESS": "Bitte vervollständigen Sie alle erforderlichen Adressfelder oder lassen Sie sie leer",
-      "INVALID_IBAN": "Bitte geben Sie eine gültige IBAN ein"
+      "INVALID_IBAN": "Bitte geben Sie eine gültige IBAN ein",
+      "INVALID_EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
     }
   },
   "COMMUNITY": {
@@ -1608,7 +1617,9 @@
           "DEACTIVATED_LABEL": "Deaktiviert",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Ausstehende GRD-Genehmigung",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Ausstehende Managergenehmigung"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} Zähler dieser Liste gehören für den Netzbetreiber seit dem {{date}} nicht mehr zur Teilung: Entfernen Sie sie aus der Operation.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} Zähler dieser Liste gehören für den Netzbetreiber nicht mehr zur Teilung: Entfernen Sie sie aus der Operation."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Verbrauchsverfolgung",
@@ -2921,7 +2932,8 @@
         "OUTBOUND": "Gesendet: {{type}}",
         "INBOUND": "Erhalten: {{type}}",
         "VERSION": "{{piece}}: Version {{n}}",
-        "RECEIVED": "Post an der Empfangsadresse eingegangen"
+        "RECEIVED": "Post an der Empfangsadresse eingegangen",
+        "EFFECTIVE_DATE": "Datum des Inkrafttretens korrigiert: vom {{from}} auf den {{to}}"
       },
       "SEND": {
         "TITLE": "Verfahren senden",
@@ -3019,7 +3031,8 @@
           "ACTIVE": "Aktiv: dem Netzbetreiber gemeldet und in Kraft.",
           "NOT_NOTIFIED": "Noch nicht gemeldet: Er kommt in einen Entwurf, der noch zu senden ist.",
           "IN_PROGRESS": "Laufend: bereits gesendet, die Antwort wird erwartet (Versanddatum angeben).",
-          "ENDED": "Beendet: Er gehört nicht mehr zur Operation."
+          "ENDED": "Beendet: Er gehört nicht mehr zur Operation.",
+          "ASKED": "Verfahren: Geben Sie an, ob das Verfahren bei der Regulierungsbehörde bereits erledigt ist, noch zu erledigen ist (ein Entwurf wird geöffnet) oder gesendet wurde (mit Sendedatum)."
         },
         "CHOICE": {
           "ACTIVE": "Aktiv",
@@ -3048,6 +3061,14 @@
           "SENT_DATE": "Geben Sie das Versanddatum für die « Laufend »-Elemente an: {{refs}}.",
           "EFFECTIVE_DATE": "Geben Sie an, seit wann diese im CRM wartenden Zähler aktiv sind: {{refs}}.",
           "CONFLICT": "Diese EANs werden an diesen Daten bereits in einer anderen Operation verfolgt; nichts wurde bestätigt: {{refs}}."
+        },
+        "COMMUNITY_GROUP": "Die Gemeinschaft",
+        "ASKED": "Bei der Regulierungsbehörde bereits erledigt?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Bereits erledigt",
+          "NOT_NOTIFIED": "Zu erledigen",
+          "IN_PROGRESS": "Gesendet, Antwort erwartet",
+          "ENDED": "Beendet"
         }
       },
       "VERSION_STAGE": {
@@ -3059,6 +3080,18 @@
         "1": "Identisch",
         "2": "Abweichend",
         "3": "Prüfung fehlgeschlagen"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Datum des Inkrafttretens korrigieren",
+        "TITLE": "Datum des Inkrafttretens korrigieren",
+        "INTRO": "Wenn der Netzbetreiber es an einem anderen Tag als dem berechneten in Kraft setzt (Nachtrag später erhalten, vom Netzbetreiber festgelegtes Datum). Die genehmigten Zähler folgen; das Inkrafttreten erfolgt an diesem Tag.",
+        "ON": "Neues Datum des Inkrafttretens",
+        "REASON": "Grund",
+        "SUBMIT": "Korrigieren",
+        "DONE": "Datum des Inkrafttretens korrigiert",
+        "ERRORS": {
+          "REQUIRED": "Geben Sie das Datum und den Grund an."
+        }
       }
     },
     "TOAST": {

@@ -589,10 +589,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Rekeninghouder",
     "ACCOUNT_HOLDER_HINT": "Alleen invullen als de rekening niet op de juridische naam staat",
+    "REPRESENTATIVE_SECTION": "Vertegenwoordiger en documenten van de gemeenschap",
+    "REPRESENTATIVE_HINT": "Een andere vertegenwoordiger, of een nieuwe datum van de statuten of het huishoudelijk reglement, bereidt de bijwerkingsprocedure bij de regulator voor wanneer de administratieve ruimte actief is.",
+    "REPRESENTATIVE": "Vertegenwoordiger",
+    "REPRESENTATIVE_FIRST_NAME": "Voornaam van de vertegenwoordiger",
+    "REPRESENTATIVE_LAST_NAME": "Naam van de vertegenwoordiger",
+    "REPRESENTATIVE_EMAIL": "E-mail van de vertegenwoordiger",
+    "STATUTES_DATE": "Datum van de statuten",
+    "INTERNAL_RULES_DATE": "Datum van het huishoudelijk reglement",
     "ERRORS": {
       "INVALID_URL": "Voer een geldige URL in die begint met http:// of https://",
       "PARTIAL_ADDRESS": "Vul alle verplichte adresvelden in of laat ze allemaal leeg",
-      "INVALID_IBAN": "Voer een geldig IBAN in"
+      "INVALID_IBAN": "Voer een geldig IBAN in",
+      "INVALID_EMAIL": "Voer een geldig e-mailadres in"
     }
   },
   "COMMUNITY": {
@@ -1608,7 +1617,9 @@
           "DEACTIVATED_LABEL": "Gedeactiveerd",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "In afwachting van GRD-goedkeuring",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "In afwachting van goedkeuring van de manager"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} meter(s) in deze lijst maken sinds {{date}} voor de netbeheerder geen deel meer uit van het delen: verwijder ze uit de operatie.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} meter(s) in deze lijst maken voor de netbeheerder geen deel meer uit van het delen: verwijder ze uit de operatie."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Verbruiksopvolging",
@@ -2921,7 +2932,8 @@
         "OUTBOUND": "Verstuurd: {{type}}",
         "INBOUND": "Ontvangen: {{type}}",
         "VERSION": "{{piece}}: versie {{n}}",
-        "RECEIVED": "Post ontvangen op het ontvangstadres"
+        "RECEIVED": "Post ontvangen op het ontvangstadres",
+        "EFFECTIVE_DATE": "Datum van inwerkingtreding gecorrigeerd: van {{from}} naar {{to}}"
       },
       "SEND": {
         "TITLE": "De procedure versturen",
@@ -3019,7 +3031,8 @@
           "ACTIVE": "Actief: aan de netbeheerder gemeld en van kracht.",
           "NOT_NOTIFIED": "Nog niet gemeld: het komt in een concept dat nog verstuurd moet worden.",
           "IN_PROGRESS": "Lopend: al verstuurd, het antwoord wordt verwacht (geef de verzenddatum op).",
-          "ENDED": "Beëindigd: het maakt geen deel meer uit van de verrichting."
+          "ENDED": "Beëindigd: het maakt geen deel meer uit van de verrichting.",
+          "ASKED": "Procedures: geef aan of de procedure al bij de regulator is gebeurd, nog moet gebeuren (er opent een concept) of verstuurd is (vermeld de verzenddatum)."
         },
         "CHOICE": {
           "ACTIVE": "Actief",
@@ -3048,6 +3061,14 @@
           "SENT_DATE": "Geef de verzenddatum op voor de « Lopend »-elementen: {{refs}}.",
           "EFFECTIVE_DATE": "Geef aan sinds wanneer deze meters, die in de CRM wachten, actief zijn: {{refs}}.",
           "CONFLICT": "Deze EAN's worden op die data al in een andere verrichting gevolgd; er werd niets bevestigd: {{refs}}."
+        },
+        "COMMUNITY_GROUP": "De gemeenschap",
+        "ASKED": "Al gebeurd bij de regulator?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Al gebeurd",
+          "NOT_NOTIFIED": "Nog te doen",
+          "IN_PROGRESS": "Verstuurd, antwoord verwacht",
+          "ENDED": "Beëindigd"
         }
       },
       "VERSION_STAGE": {
@@ -3059,6 +3080,18 @@
         "1": "Identiek",
         "2": "Verschillend",
         "3": "Controle mislukt"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Datum van inwerkingtreding corrigeren",
+        "TITLE": "Datum van inwerkingtreding corrigeren",
+        "INTRO": "Als de netbeheerder het op een andere dag laat ingaan dan berekend (bijakte later ontvangen, datum door de netbeheerder vastgelegd). De gemachtigde meters volgen; de inwerkingtreding gebeurt op die dag.",
+        "ON": "Nieuwe datum van inwerkingtreding",
+        "REASON": "Reden",
+        "SUBMIT": "Corrigeren",
+        "DONE": "Datum van inwerkingtreding gecorrigeerd",
+        "ERRORS": {
+          "REQUIRED": "Vul de datum en de reden in."
+        }
       }
     },
     "TOAST": {
