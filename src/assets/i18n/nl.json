@@ -352,7 +352,8 @@
     "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
     "DASHBOARD": "Dashboard",
     "HOME": "Start",
-    "LIVE_DATA": "Live gegevens"
+    "LIVE_DATA": "Live gegevens",
+    "ADMINISTRATIVE_BADGE": "{{todo}} procedure(s) te doen · {{overdue}} termijn(en) verstreken"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -3055,6 +3056,9 @@
         "2": "Verschillend",
         "3": "Controle mislukt"
       }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). Te melden aan {{recipient}}: toegevoegd aan het concept “{{procedure}}” nr. {{id}}."
     }
   },
   "HOME": {

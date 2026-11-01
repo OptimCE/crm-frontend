@@ -152,6 +152,33 @@ export type SendChannel = 'email' | 'online_form' | 'post';
 // Module state
 // ---------------------------------------------------------------------------
 
+/** `GET /admin/summary`: the navigation's badge. */
+export interface AdminSummaryOut {
+  /** Procedures whose next action is the community's (bucket todo). */
+  todo: number;
+  /** Deadlines past due: missed ones, and third parties' late answers. */
+  overdue: number;
+}
+
+/** `GET /admin/changes/{id}`: a change and where it was filed, for the toast. */
+export interface ChangeSummaryOut {
+  id: number;
+  kind: string;
+  subject_type: number;
+  subject_ref: string;
+  /** ChangeStatus: 2 attached. */
+  status: number;
+  id_dossier: number | null;
+  procedure_code: string | null;
+  procedure_labels: Record<string, string> | null;
+  /** ProcedureStatus: 1 draft, 6 ready. */
+  procedure_status: number | null;
+  recipient: string | null;
+  grd_ref: string | null;
+  id_sharing_operation: number | null;
+  operation_name: string | null;
+}
+
 export interface ProcedureModuleStatusOut {
   active: boolean;
   regulator: string | null;

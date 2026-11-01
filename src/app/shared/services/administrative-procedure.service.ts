@@ -8,6 +8,8 @@ import { defineTTL } from '../../core/services/cache/cache.helper';
 import { UserContextService } from '../../core/services/authorization/authorization.service';
 import { environments } from '../../../environments/environments';
 import {
+  AdminSummaryOut,
+  ChangeSummaryOut,
   BaselineConfirmIn,
   BaselineOut,
   ChangeExcludeIn,
@@ -89,6 +91,20 @@ export class AdministrativeProcedureService extends ServiceBase {
    * annex opens the tracking period on first sight, so this is not cached for
    * long.
    */
+  /**
+   * The navigation's badge: procedures to do, deadlines past due. A plain GET:
+   * it is read on navigation and on the annexe's hints, and a cached copy
+   * would lag behind exactly those.
+   */
+  getSummary(): Observable<ApiResponse<AdminSummaryOut>> {
+    return this.http.get<ApiResponse<AdminSummaryOut>>(`${this.apiAddress}/summary`);
+  }
+
+  /** A change and the procedure it was filed in, for the CRM's toast. */
+  getChange(id: number): Observable<ApiResponse<ChangeSummaryOut>> {
+    return this.http.get<ApiResponse<ChangeSummaryOut>>(`${this.apiAddress}/changes/${id}`);
+  }
+
   getStatus(): Observable<ApiResponse<ProcedureModuleStatusOut>> {
     return this.cachedGet<ApiResponse<ProcedureModuleStatusOut>>(
       this.key('status'),

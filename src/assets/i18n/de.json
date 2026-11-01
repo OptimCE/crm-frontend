@@ -352,7 +352,8 @@
     "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
     "DASHBOARD": "Übersicht",
     "HOME": "Start",
-    "LIVE_DATA": "Live-Daten"
+    "LIVE_DATA": "Live-Daten",
+    "ADMINISTRATIVE_BADGE": "{{todo}} Verfahren zu erledigen · {{overdue}} Frist(en) überschritten"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -3055,6 +3056,9 @@
         "2": "Abweichend",
         "3": "Prüfung fehlgeschlagen"
       }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). An {{recipient}} zu melden: dem Entwurf „{{procedure}}“ Nr. {{id}} hinzugefügt."
     }
   },
   "HOME": {

@@ -352,7 +352,8 @@
     "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
     "DASHBOARD": "Dashboard",
     "HOME": "Home",
-    "LIVE_DATA": "Live data"
+    "LIVE_DATA": "Live data",
+    "ADMINISTRATIVE_BADGE": "{{todo}} procedure(s) to do · {{overdue}} deadline(s) past due"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -3055,6 +3056,9 @@
         "2": "Different",
         "3": "Check failed"
       }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). To notify to {{recipient}}: added to the draft “{{procedure}}” no. {{id}}."
     }
   },
   "HOME": {

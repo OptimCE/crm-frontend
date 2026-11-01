@@ -36,6 +36,11 @@ import {
 } from '../../features/guided_tours/components/help-dialog/help-dialog';
 import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
 import { ERROR_TYPE } from '../../core/dtos/notification';
+import {
+  AdminChangeToasts,
+  administrativeAttention,
+  attentionBadge,
+} from '../../features/administrative_document/administrative-attention';
 
 interface RouteActiveState {
   dashboard: boolean;
@@ -112,9 +117,27 @@ export class Navbar implements OnInit {
   private readonly tours = inject(SteppyTours);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly snackbar = inject(SnackbarNotification);
+  private readonly adminToasts = inject(AdminChangeToasts);
   private helpRef: DynamicDialogRef | null = null;
 
   readonly sidebarPinChanged = output<boolean>();
+
+  /**
+   * The « Administratif » entry's badge (spec, Notifications): the procedures
+   * to do, red when a deadline is past due. Managers of a community with the
+   * module only.
+   */
+  protected readonly adminAttention = administrativeAttention();
+  protected readonly adminBadge = computed(() => attentionBadge(this.adminAttention()));
+  protected readonly adminBadgeSeverity = computed<'info' | 'danger'>(() =>
+    (this.adminAttention()?.overdue ?? 0) > 0 ? 'danger' : 'info',
+  );
+  protected readonly adminBadgeTitle = computed(() => {
+    const summary = this.adminAttention();
+    return summary
+      ? (this.translateService.instant('NAVBAR.ADMINISTRATIVE_BADGE', summary) as string)
+      : null;
+  });
 
   /** Unread badge shown on the logo while collapsed; capped at 99+, empty when none. */
   protected readonly notificationBadge = computed(() => {
@@ -208,6 +231,8 @@ export class Navbar implements OnInit {
   }
 
   ngOnInit(): void {
+    // « Compteur ajouté. À notifier à … » when the annexe files a CRM change.
+    this.adminToasts.start(this.destroyRef);
     const mq = window.matchMedia('(max-width: 1023px)');
     const handler = (e: MediaQueryListEvent | MediaQueryList) => {
       this.mobile.set(e.matches);

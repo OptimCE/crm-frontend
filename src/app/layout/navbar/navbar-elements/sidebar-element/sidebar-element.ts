@@ -15,6 +15,12 @@ export class SidebarElement {
   readonly name = input.required<string>();
   readonly icon = input.required<string>();
   readonly routerLinkUrl = input.required<string>();
+  /** A count to show on the entry (« 3 », « 99+ »); nothing when null or empty. */
+  readonly badge = input<string | null>(null);
+  /** `danger` when something is late, `info` otherwise. */
+  readonly badgeSeverity = input<'info' | 'danger'>('info');
+  /** What the badge counts, for the tooltip and screen readers. */
+  readonly badgeTitle = input<string | null>(null);
   readonly sidebarClose = output<void>();
 
   closeSideBar(): void {

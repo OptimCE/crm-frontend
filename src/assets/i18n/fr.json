@@ -352,7 +352,8 @@
     "ADMINISTRATIVE_DOCUMENT": "Documents administratifs",
     "DASHBOARD": "Tableau de bord",
     "HOME": "Accueil",
-    "LIVE_DATA": "Données en direct"
+    "LIVE_DATA": "Données en direct",
+    "ADMINISTRATIVE_BADGE": "{{todo}} démarche(s) à faire · {{overdue}} échéance(s) dépassée(s)"
   },
   "PROFILE": {
     "MY_PROFILE": "Mon profil",
@@ -3055,6 +3056,9 @@
         "2": "Différente",
         "3": "Vérification échouée"
       }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). À notifier à {{recipient}} : ajouté au brouillon « {{procedure}} » n° {{id}}."
     }
   },
   "HOME": {

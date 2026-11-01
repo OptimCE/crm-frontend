@@ -151,4 +151,35 @@ describe('SidebarElement', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
   });
+
+  describe('a badge (the administrative entry)', () => {
+    it('shows nothing without one', () => {
+      expect(queryEl(fixture, '[data-testid="sidebar-element__badge--collapsed"]')).toBeNull();
+    });
+
+    it('shows the count on the icon while collapsed, after the label when open', () => {
+      fixture.componentRef.setInput('badge', '3');
+      fixture.componentRef.setInput('badgeTitle', '3 à faire');
+      fixture.detectChanges();
+      const dot = queryEl(fixture, '[data-testid="sidebar-element__badge--collapsed"]');
+      expect(dot?.textContent?.trim()).toBe('3');
+      expect(dot?.getAttribute('aria-label')).toBe('3 à faire');
+
+      fixture.componentRef.setInput('sidebarOpen', true);
+      fixture.detectChanges();
+      expect(queryEl(fixture, '[data-testid="sidebar-element__badge--collapsed"]')).toBeNull();
+      expect(queryEl(fixture, '[data-testid="sidebar-element__badge"]')?.textContent?.trim()).toBe(
+        '3',
+      );
+    });
+
+    it('turns red when something is late', () => {
+      fixture.componentRef.setInput('badge', '1');
+      fixture.componentRef.setInput('badgeSeverity', 'danger');
+      fixture.detectChanges();
+      expect(
+        queryEl(fixture, '[data-testid="sidebar-element__badge--collapsed"]')?.className,
+      ).toContain('sidebar-item__badge--danger');
+    });
+  });
 });
