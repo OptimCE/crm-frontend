@@ -400,11 +400,7 @@
       "SAVE": "Voorkeuren opslaan",
       "SAVED": "Voorkeuren opgeslagen",
       "EMPTY": "Geen categorieën beschikbaar",
-      "FREQUENCY": {
-        "DAILY": "Elke dag",
-        "WEEKLY": "Elke week (op maandag)",
-        "OFF": "Nooit"
-      }
+      "DIGEST_HINT": "Als een beheerder van uw gemeenschap u als ontvanger heeft gekozen. Schakel het uit om het niet meer te ontvangen."
     },
     "TABS": {
       "HEADERS": {
@@ -3117,6 +3113,45 @@
       "PICK_PROCEDURE": "Een procedure kiezen",
       "ATTACH": "Koppelen",
       "DISCARD": "Terzijde leggen"
+    },
+    "DIGEST": {
+      "TITLE": "Overzicht per e-mail",
+      "INTRO": "Een e-mail die voor de gekozen ontvangers samenvat wat er sinds het vorige in de procedures veranderde, wat te laat is en wat vervalt. Standaard uitgeschakeld; het wordt alleen verstuurd als er iets te melden is.",
+      "OFF": "Uitgeschakeld: er wordt geen overzicht verstuurd.",
+      "ENABLED": "Het overzicht versturen",
+      "RHYTHM_LABEL": "Ritme",
+      "WEEKDAY_LABEL": "Dag",
+      "WEEKDAY_MONTHLY_LABEL": "De eerste van de maand",
+      "FIRST_ON_LABEL": "Eerste verzending",
+      "RECIPIENTS_LABEL": "Ontvangers",
+      "RECIPIENTS_PLACEHOLDER": "Kiezen uit de beheerders en managers",
+      "RECIPIENTS_REQUIRED": "Kies ten minste één ontvanger.",
+      "NEXT_ON": "Volgende verzending: {{date}}",
+      "OPTED_OUT": "ontvangt het niet meer (uitgeschakeld in het profiel)",
+      "OPTED_OUT_NOTE": "Ontvangen het niet meer (uitgeschakeld in hun profiel): {{names}}",
+      "SAVE": "Opslaan",
+      "SAVED": "Overzicht opgeslagen",
+      "CADENCE": {
+        "working_days": "Elke werkdag (maandag tot vrijdag)",
+        "weekly": "Elke week",
+        "biweekly": "Om de twee weken",
+        "monthly": "Eén keer per maand"
+      },
+      "RHYTHM": {
+        "working_days": "Elke werkdag",
+        "weekly": "Elke {{day}}",
+        "biweekly": "Om de twee weken op {{day}}",
+        "monthly": "De eerste {{day}} van de maand"
+      },
+      "WEEKDAYS": {
+        "1": "maandag",
+        "2": "dinsdag",
+        "3": "woensdag",
+        "4": "donderdag",
+        "5": "vrijdag",
+        "6": "zaterdag",
+        "7": "zondag"
+      }
     }
   },
   "HOME": {

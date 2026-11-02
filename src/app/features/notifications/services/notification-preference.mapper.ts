@@ -8,9 +8,6 @@ import {
 /** The catch-all row: applies to every type with no more specific setting. */
 export const DEFAULT_PREFIX = '';
 
-/** How often a summary is emailed: daily (no row), weekly, or none (OFF). */
-export type DigestFrequency = 'daily' | 'weekly' | 'off';
-
 /** One editable line in the preferences table: a prefix and its two toggles. */
 export interface PreferenceRow {
   /** `''` for the default row, else a prefix the backend recognises. */
@@ -21,9 +18,10 @@ export interface PreferenceRow {
   email: boolean;
   /**
    * Set on a summary prefix only (`digest_prefixes`): email only, so the row
-   * shows this choice instead of its two toggles.
+   * shows its email toggle alone. Whether it is sent at all, and how often, is
+   * a community admin's setting.
    */
-  frequency?: DigestFrequency;
+  digest?: true;
 }
 
 /**
@@ -56,17 +54,9 @@ export function rowsFromPreferences(response: NotificationPreferencesDTO): Prefe
       inapp: isOn(stored, prefix, NotificationChannel.INAPP),
       email: isOn(stored, prefix, NotificationChannel.EMAIL),
     };
-    if (digests.has(prefix)) {
-      row.frequency = frequencyOf(stored.get(keyOf(prefix, NotificationChannel.EMAIL)));
-    }
+    if (digests.has(prefix)) row.digest = true;
     return row;
   });
-}
-
-function frequencyOf(mode: PreferenceMode | undefined): DigestFrequency {
-  if (mode === PreferenceMode.OFF) return 'off';
-  if (mode === PreferenceMode.WEEKLY) return 'weekly';
-  return 'daily';
 }
 
 /**
@@ -82,13 +72,13 @@ function frequencyOf(mode: PreferenceMode | undefined): DigestFrequency {
 export function preferencesFromRows(rows: PreferenceRow[]): NotificationPreferenceDTO[] {
   const payload: NotificationPreferenceDTO[] = [];
   for (const row of rows) {
-    if (row.frequency !== undefined) {
-      // A summary: email only; daily is the default, so no row.
-      if (row.frequency !== 'daily') {
+    if (row.digest) {
+      // A summary: email only, never an in-app row.
+      if (!row.email) {
         payload.push({
           type_prefix: row.prefix,
           channel: NotificationChannel.EMAIL,
-          mode: row.frequency === 'weekly' ? PreferenceMode.WEEKLY : PreferenceMode.OFF,
+          mode: PreferenceMode.OFF,
         });
       }
       continue;

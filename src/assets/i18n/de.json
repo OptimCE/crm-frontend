@@ -400,11 +400,7 @@
       "SAVE": "Einstellungen speichern",
       "SAVED": "Einstellungen gespeichert",
       "EMPTY": "Keine Kategorien verfügbar",
-      "FREQUENCY": {
-        "DAILY": "Jeden Tag",
-        "WEEKLY": "Jede Woche (montags)",
-        "OFF": "Nie"
-      }
+      "DIGEST_HINT": "Wenn ein Administrator Ihrer Gemeinschaft Sie als Empfänger ausgewählt hat. Deaktivieren Sie sie, um sie nicht mehr zu erhalten."
     },
     "TABS": {
       "HEADERS": {
@@ -3117,6 +3113,45 @@
       "PICK_PROCEDURE": "Ein Verfahren wählen",
       "ATTACH": "Zuordnen",
       "DISCARD": "Verwerfen"
+    },
+    "DIGEST": {
+      "TITLE": "Zusammenfassung per E-Mail",
+      "INTRO": "Eine E-Mail, die für die gewählten Empfänger zusammenfasst, was sich seit der letzten in den Verfahren bewegt hat, was überfällig ist und was fällig wird. Standardmäßig deaktiviert; sie wird nur versandt, wenn es etwas zu melden gibt.",
+      "OFF": "Deaktiviert: Es wird keine Zusammenfassung versandt.",
+      "ENABLED": "Die Zusammenfassung versenden",
+      "RHYTHM_LABEL": "Rhythmus",
+      "WEEKDAY_LABEL": "Tag",
+      "WEEKDAY_MONTHLY_LABEL": "Der erste des Monats",
+      "FIRST_ON_LABEL": "Erster Versand",
+      "RECIPIENTS_LABEL": "Empfänger",
+      "RECIPIENTS_PLACEHOLDER": "Unter den Administratoren und Verwaltern wählen",
+      "RECIPIENTS_REQUIRED": "Wählen Sie mindestens einen Empfänger.",
+      "NEXT_ON": "Nächster Versand: {{date}}",
+      "OPTED_OUT": "erhält sie nicht mehr (im Profil deaktiviert)",
+      "OPTED_OUT_NOTE": "Erhalten sie nicht mehr (im Profil deaktiviert): {{names}}",
+      "SAVE": "Speichern",
+      "SAVED": "Zusammenfassung gespeichert",
+      "CADENCE": {
+        "working_days": "Jeden Werktag (Montag bis Freitag)",
+        "weekly": "Jede Woche",
+        "biweekly": "Alle zwei Wochen",
+        "monthly": "Einmal im Monat"
+      },
+      "RHYTHM": {
+        "working_days": "Jeden Werktag",
+        "weekly": "Jeden {{day}}",
+        "biweekly": "Jeden zweiten {{day}}",
+        "monthly": "Am ersten {{day}} des Monats"
+      },
+      "WEEKDAYS": {
+        "1": "Montag",
+        "2": "Dienstag",
+        "3": "Mittwoch",
+        "4": "Donnerstag",
+        "5": "Freitag",
+        "6": "Samstag",
+        "7": "Sonntag"
+      }
     }
   },
   "HOME": {

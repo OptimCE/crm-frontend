@@ -30,23 +30,25 @@
 
     <ng-template pTemplate="body" let-row>
       <tr [attr.data-testid]="'notification-preferences__row--' + (row.prefix || 'default')">
-        <td>{{ row.labelKey | translate }}</td>
-        @if (row.frequency !== undefined) {
-          <!-- A summary: email only, daily (the default), weekly or none. -->
+        @if (row.digest) {
+          <!-- A summary: email only. A community admin chooses whether it is
+               sent, how often and to whom; its recipient may stop it here. -->
+          <td>
+            {{ row.labelKey | translate }}
+            <span class="block text-xs text-surface-500">
+              {{ 'PROFILE.NOTIFICATION_PREFERENCES.DIGEST_HINT' | translate }}
+            </span>
+          </td>
           <td class="text-center text-surface-400">—</td>
           <td class="text-center">
-            <p-select
-              [(ngModel)]="row.frequency"
+            <p-toggleswitch
+              [(ngModel)]="row.email"
               (ngModelChange)="onToggle()"
-              [options]="frequencyOptions()"
-              optionLabel="label"
-              optionValue="value"
-              appendTo="body"
-              [attr.aria-label]="row.labelKey | translate"
-              [attr.data-testid]="'notification-preferences__frequency--' + row.prefix"
-            ></p-select>
+              [attr.data-testid]="'notification-preferences__email--' + row.prefix"
+            ></p-toggleswitch>
           </td>
         } @else {
+          <td>{{ row.labelKey | translate }}</td>
           <td class="text-center">
             <p-toggleswitch
               [(ngModel)]="row.inapp"

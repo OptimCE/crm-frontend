@@ -1,0 +1,153 @@
+@if (setting(); as saved) {
+  <section class="flex flex-col gap-3" data-testid="digest-settings">
+    <h2 class="text-base font-semibold text-surface-800 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.DIGEST.TITLE' | translate }}
+    </h2>
+    <p class="text-sm text-surface-600 m-0">
+      {{ 'ADMINISTRATIVE_DOCUMENT.DIGEST.INTRO' | translate }}
+    </p>
+    <p class="text-sm text-surface-700 m-0" data-testid="digest-settings__status">
+      @if (saved.enabled) {
+        {{ rhythm() }}
+        @if (saved.next_on) {
+          &middot;
+          <span data-testid="digest-settings__next">{{
+            'ADMINISTRATIVE_DOCUMENT.DIGEST.NEXT_ON'
+              | translate: { date: (saved.next_on | localeDate: 'fullDate') }
+          }}</span>
+        }
+      } @else {
+        {{ 'ADMINISTRATIVE_DOCUMENT.DIGEST.OFF' | translate }}
+      }
+    </p>
+
+    @if (canEdit()) {
+      <div class="flex flex-col gap-3" data-testid="digest-settings__form">
+        <div class="flex items-center gap-2 text-sm">
+          <p-toggleswitch
+            inputId="digest-enabled"
+            [ngModel]="enabled()"
+            (ngModelChange)="enabled.set($event)"
+            data-testid="digest-settings__enabled"
+          />
+          <label for="digest-enabled">{{
+            'ADMINISTRATIVE_DOCUMENT.DIGEST.ENABLED' | translate
+          }}</label>
+        </div>
+
+        @if (enabled()) {
+          <div class="flex flex-wrap gap-3">
+            <div class="flex flex-col gap-1 min-w-64">
+              <label for="digest-cadence" class="text-sm font-medium">{{
+                'ADMINISTRATIVE_DOCUMENT.DIGEST.RHYTHM_LABEL' | translate
+              }}</label>
+              <p-select
+                inputId="digest-cadence"
+                [options]="cadenceOptions()"
+                optionLabel="label"
+                optionValue="value"
+                [ngModel]="cadence()"
+                (ngModelChange)="onCadence($event)"
+                appendTo="body"
+                data-testid="digest-settings__cadence"
+              />
+            </div>
+            @if (cadence() !== 'working_days') {
+              <div class="flex flex-col gap-1 min-w-40">
+                <label for="digest-weekday" class="text-sm font-medium">{{
+                  (cadence() === 'monthly'
+                    ? 'ADMINISTRATIVE_DOCUMENT.DIGEST.WEEKDAY_MONTHLY_LABEL'
+                    : 'ADMINISTRATIVE_DOCUMENT.DIGEST.WEEKDAY_LABEL'
+                  ) | translate
+                }}</label>
+                <p-select
+                  inputId="digest-weekday"
+                  [options]="weekdayOptions()"
+                  optionLabel="label"
+                  optionValue="value"
+                  [ngModel]="weekday()"
+                  (ngModelChange)="onWeekday($event)"
+                  appendTo="body"
+                  data-testid="digest-settings__weekday"
+                />
+              </div>
+            }
+            @if (cadence() === 'biweekly') {
+              <div class="flex flex-col gap-1 min-w-64">
+                <label for="digest-first-on" class="text-sm font-medium">{{
+                  'ADMINISTRATIVE_DOCUMENT.DIGEST.FIRST_ON_LABEL' | translate
+                }}</label>
+                <p-select
+                  inputId="digest-first-on"
+                  [options]="firstOnOptions()"
+                  optionLabel="label"
+                  optionValue="value"
+                  [ngModel]="firstOn()"
+                  (ngModelChange)="firstOn.set($event)"
+                  appendTo="body"
+                  data-testid="digest-settings__first-on"
+                />
+              </div>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="digest-recipients" class="text-sm font-medium">{{
+              'ADMINISTRATIVE_DOCUMENT.DIGEST.RECIPIENTS_LABEL' | translate
+            }}</label>
+            <p-multiselect
+              inputId="digest-recipients"
+              [options]="recipientOptions()"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="recipientIds()"
+              (ngModelChange)="recipientIds.set($event)"
+              [placeholder]="'ADMINISTRATIVE_DOCUMENT.DIGEST.RECIPIENTS_PLACEHOLDER' | translate"
+              display="chip"
+              [filter]="true"
+              appendTo="body"
+              styleClass="w-full"
+              data-testid="digest-settings__recipients"
+            />
+            @if (recipientIds().length === 0) {
+              <small class="text-red-600" data-testid="digest-settings__recipients-required">{{
+                'ADMINISTRATIVE_DOCUMENT.DIGEST.RECIPIENTS_REQUIRED' | translate
+              }}</small>
+            }
+            @if (optedOutNames()) {
+              <small class="text-surface-500" data-testid="digest-settings__opted-out">{{
+                'ADMINISTRATIVE_DOCUMENT.DIGEST.OPTED_OUT_NOTE'
+                  | translate: { names: optedOutNames() }
+              }}</small>
+            }
+          </div>
+        }
+
+        <div>
+          <p-button
+            icon="pi pi-check"
+            size="small"
+            [label]="'ADMINISTRATIVE_DOCUMENT.DIGEST.SAVE' | translate"
+            [loading]="saving()"
+            [disabled]="!canSave()"
+            (onClick)="save()"
+            data-testid="digest-settings__save"
+          />
+        </div>
+      </div>
+    } @else if (saved.enabled) {
+      <ul class="m-0 pl-5 text-sm text-surface-700" data-testid="digest-settings__recipients-view">
+        @for (recipient of recipients(); track recipient.id) {
+          <li>
+            {{ recipient.name }}
+            @if (recipient.optedOut) {
+              <span class="text-surface-500">
+                — {{ 'ADMINISTRATIVE_DOCUMENT.DIGEST.OPTED_OUT' | translate }}</span
+              >
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}

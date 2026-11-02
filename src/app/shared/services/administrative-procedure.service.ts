@@ -9,6 +9,8 @@ import { UserContextService } from '../../core/services/authorization/authorizat
 import { environments } from '../../../environments/environments';
 import {
   AdminSummaryOut,
+  DigestSettingIn,
+  DigestSettingOut,
   InboundAddressOut,
   InboundMailOut,
   ChangeSummaryOut,
@@ -392,6 +394,16 @@ export class AdministrativeProcedureService extends ServiceBase {
       `${this.apiAddress}/inbound-address/rotate`,
       {},
     );
+  }
+
+  /** The summary email's setting (every manager reads it). */
+  getDigestSettings(): Observable<ApiResponse<DigestSettingOut>> {
+    return this.http.get<ApiResponse<DigestSettingOut>>(`${this.apiAddress}/digest-settings`);
+  }
+
+  /** Turn the summary email on or off, its rhythm and recipients (admins). */
+  saveDigestSettings(body: DigestSettingIn): Observable<ApiResponse<DigestSettingOut>> {
+    return this.http.put<ApiResponse<DigestSettingOut>>(`${this.apiAddress}/digest-settings`, body);
   }
 
   /** What was received, newest first; `open` = unmatched or to qualify. */

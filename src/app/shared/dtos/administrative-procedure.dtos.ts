@@ -440,6 +440,33 @@ export interface ThreadEntryOut {
 }
 
 /** `GET /admin/inbound-address`: the community's reception address. */
+/** How often the summary email goes out (`digest_setting`). */
+export type DigestCadence = 'working_days' | 'weekly' | 'biweekly' | 'monthly';
+
+/** The community's summary email, as an admin saves it. */
+export interface DigestSettingIn {
+  enabled: boolean;
+  cadence: DigestCadence;
+  /** ISO weekday, 1 Monday … 7 Sunday; null for working days. */
+  weekday: number | null;
+  /** Every two weeks: the first send (ISO date), one of `first_dates`. */
+  first_on: string | null;
+  /** CRM user ids, admins or managers of the community. */
+  recipient_ids: number[];
+}
+
+/** GET /admin/digest-settings: off by default. */
+export interface DigestSettingOut extends DigestSettingIn {
+  /** The recipients who turned it off in their profile. */
+  opted_out: number[];
+  /** The next scheduled send while it is on (ISO date). */
+  next_on: string | null;
+  /** Per ISO weekday (index 0 Monday), the two dates every two weeks may start on. */
+  first_dates: string[][];
+  updated_at: string | null;
+  updated_by: string | null;
+}
+
 export interface InboundAddressOut {
   /** False: no reception address on this instance. */
   enabled: boolean;

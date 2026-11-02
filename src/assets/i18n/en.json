@@ -400,11 +400,7 @@
       "SAVE": "Save preferences",
       "SAVED": "Preferences saved",
       "EMPTY": "No categories available",
-      "FREQUENCY": {
-        "DAILY": "Every day",
-        "WEEKLY": "Every week (on Mondays)",
-        "OFF": "Never"
-      }
+      "DIGEST_HINT": "If an administrator of your community chose you as a recipient. Turn it off to stop receiving it."
     },
     "TABS": {
       "HEADERS": {
@@ -3117,6 +3113,45 @@
       "PICK_PROCEDURE": "Pick a procedure",
       "ATTACH": "Attach",
       "DISCARD": "Discard"
+    },
+    "DIGEST": {
+      "TITLE": "Summary by email",
+      "INTRO": "An email that sums up, for the chosen recipients, what moved in the procedures since the previous one, what is overdue and what falls due. Off by default; it is only sent when there is something to report.",
+      "OFF": "Off: no summary is sent.",
+      "ENABLED": "Send the summary",
+      "RHYTHM_LABEL": "Rhythm",
+      "WEEKDAY_LABEL": "Day",
+      "WEEKDAY_MONTHLY_LABEL": "The first of the month",
+      "FIRST_ON_LABEL": "First send",
+      "RECIPIENTS_LABEL": "Recipients",
+      "RECIPIENTS_PLACEHOLDER": "Choose among the admins and managers",
+      "RECIPIENTS_REQUIRED": "Choose at least one recipient.",
+      "NEXT_ON": "Next send: {{date}}",
+      "OPTED_OUT": "no longer receives it (turned off in their profile)",
+      "OPTED_OUT_NOTE": "No longer receive it (turned off in their profile): {{names}}",
+      "SAVE": "Save",
+      "SAVED": "Summary saved",
+      "CADENCE": {
+        "working_days": "Every working day (Monday to Friday)",
+        "weekly": "Every week",
+        "biweekly": "Every two weeks",
+        "monthly": "Once a month"
+      },
+      "RHYTHM": {
+        "working_days": "Every working day",
+        "weekly": "Every {{day}}",
+        "biweekly": "Every other {{day}}",
+        "monthly": "The first {{day}} of the month"
+      },
+      "WEEKDAYS": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+      }
     }
   },
   "HOME": {

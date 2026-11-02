@@ -2,7 +2,7 @@ import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
-import { Subject, of } from 'rxjs';
+import { EMPTY, Subject, of } from 'rxjs';
 import { vi } from 'vitest';
 
 import fr from '../../../../../assets/i18n/fr.json';
@@ -21,6 +21,7 @@ import {
 } from '../../../../shared/dtos/administrative-procedure.dtos';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { CommunityService } from '../../../../shared/services/community.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { deadlineItem, inbox, moduleStatus, procedureItem } from '../procedure-fixtures';
 import { ProcedureDashboard } from './procedure-dashboard';
@@ -74,8 +75,11 @@ describe('ProcedureDashboard', () => {
             invalidate,
             // The reception address is off here: the hub shows none.
             getInboundAddress: () => of(new ApiResponse({ enabled: false, address: null })),
+            // The summary email's card has its own spec.
+            getDigestSettings: () => EMPTY,
           },
         },
+        { provide: CommunityService, useValue: { getAdmins: () => EMPTY } },
         { provide: UserContextService, useValue: { compareWithActiveRole: () => false } },
         {
           provide: AdministrativeDocumentService,

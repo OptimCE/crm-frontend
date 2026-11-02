@@ -69,8 +69,6 @@ export enum NotificationChannel {
 export enum PreferenceMode {
   IMMEDIATE = 1,
   OFF = 3,
-  /** A summary prefix's email only (`digest_prefixes`): Mondays instead of daily. */
-  WEEKLY = 4,
 }
 
 /** One stored preference. `type_prefix` is `''` for the catch-all default. */
@@ -90,8 +88,9 @@ export interface NotificationPreferenceDTO {
 export interface NotificationPreferencesDTO {
   type_prefixes: string[];
   /**
-   * Which of `type_prefixes` are summaries (the administrative daily summary):
-   * email only, chosen as daily (no row), weekly or none.
+   * Which of `type_prefixes` are summaries (the administrative summary): email
+   * only. Its rhythm and recipients are a community admin's setting; a
+   * recipient only turns its email off.
    */
   digest_prefixes?: string[];
   preferences: NotificationPreferenceDTO[];

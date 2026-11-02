@@ -33,6 +33,7 @@ import { AdministrativeProcedureService } from '../../../../shared/services/admi
 import { extractApiErrorMessage } from '../../administrative-document-format';
 import { DossierCreateDialog } from '../../components/dossier-create-dialog/dossier-create-dialog';
 import { InboundChoice } from '../inbound-mail-list/inbound-mail-list';
+import { DigestSettings } from '../digest-settings/digest-settings';
 import { InboundPanel } from '../inbound-panel/inbound-panel';
 import {
   I18nText,
@@ -71,7 +72,7 @@ interface Group {
 @Component({
   selector: 'app-procedure-dashboard',
   standalone: true,
-  imports: [TranslatePipe, FormsModule, Button, Message, Select, Tag, InboundPanel],
+  imports: [TranslatePipe, FormsModule, Button, Message, Select, Tag, InboundPanel, DigestSettings],
   templateUrl: './procedure-dashboard.html',
   providers: [DialogService, ErrorMessageHandler],
 })

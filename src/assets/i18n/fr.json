@@ -390,11 +390,7 @@
       "SAVE": "Enregistrer les préférences",
       "SAVED": "Préférences enregistrées",
       "EMPTY": "Aucune catégorie disponible",
-      "FREQUENCY": {
-        "DAILY": "Chaque jour",
-        "WEEKLY": "Chaque semaine (le lundi)",
-        "OFF": "Jamais"
-      }
+      "DIGEST_HINT": "Si un administrateur de votre communauté vous a choisi comme destinataire. Désactivez-le pour ne plus le recevoir."
     },
     "TABS": {
       "HEADERS": {
@@ -3117,6 +3113,45 @@
       "PICK_PROCEDURE": "Choisir une démarche",
       "ATTACH": "Rattacher",
       "DISCARD": "Écarter"
+    },
+    "DIGEST": {
+      "TITLE": "Récapitulatif par e-mail",
+      "INTRO": "Un e-mail qui résume, pour les destinataires choisis, ce qui a bougé dans les démarches depuis le précédent, ce qui est en retard et ce qui arrive à échéance. Désactivé par défaut ; il n'est envoyé que s'il y a quelque chose à signaler.",
+      "OFF": "Désactivé : aucun récapitulatif n'est envoyé.",
+      "ENABLED": "Envoyer le récapitulatif",
+      "RHYTHM_LABEL": "Rythme",
+      "WEEKDAY_LABEL": "Jour",
+      "WEEKDAY_MONTHLY_LABEL": "Le premier du mois",
+      "FIRST_ON_LABEL": "Premier envoi",
+      "RECIPIENTS_LABEL": "Destinataires",
+      "RECIPIENTS_PLACEHOLDER": "Choisir parmi les administrateurs et gestionnaires",
+      "RECIPIENTS_REQUIRED": "Choisissez au moins un destinataire.",
+      "NEXT_ON": "Prochain envoi : {{date}}",
+      "OPTED_OUT": "ne le reçoit plus (désactivé dans son profil)",
+      "OPTED_OUT_NOTE": "Ne le reçoivent plus (désactivé dans leur profil) : {{names}}",
+      "SAVE": "Enregistrer",
+      "SAVED": "Récapitulatif enregistré",
+      "CADENCE": {
+        "working_days": "Chaque jour ouvrable (du lundi au vendredi)",
+        "weekly": "Chaque semaine",
+        "biweekly": "Toutes les deux semaines",
+        "monthly": "Une fois par mois"
+      },
+      "RHYTHM": {
+        "working_days": "Chaque jour ouvrable",
+        "weekly": "Chaque {{day}}",
+        "biweekly": "Un {{day}} sur deux",
+        "monthly": "Le premier {{day}} du mois"
+      },
+      "WEEKDAYS": {
+        "1": "lundi",
+        "2": "mardi",
+        "3": "mercredi",
+        "4": "jeudi",
+        "5": "vendredi",
+        "6": "samedi",
+        "7": "dimanche"
+      }
     }
   },
   "HOME": {
