@@ -51,6 +51,7 @@ export function signerView(overrides: Partial<SignerView> = {}): SignerView {
     slot: { page: 0, rect: [100, 100, 300, 150] },
     invited_at: '2026-11-03T09:00:00Z',
     signed_at: null,
+    signed_by_name: null,
     declined_at: null,
     decline_reason: null,
     ...overrides,

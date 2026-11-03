@@ -41,6 +41,7 @@ import {
   isYourTurn,
   requestStatusKey,
   requestStatusSeverity,
+  signedByOther,
   signerStatusKey,
   signerStatusSeverity,
   sourceText,
@@ -144,6 +145,10 @@ export class SignatureRequestView {
 
   capacity(signer: SignerView): I18nText {
     return capacityText(signer);
+  }
+
+  signedBy(signer: SignerView): string | null {
+    return signedByOther(signer);
   }
 
   signerStatusKey(signer: SignerView): string {

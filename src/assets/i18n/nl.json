@@ -3196,7 +3196,8 @@
     "CAPACITY": {
       "SELF": "In eigen naam",
       "LEGAL_REPRESENTATIVE": "Voor {{member}} (wettelijk vertegenwoordiger)",
-      "COMMUNITY_ADMIN": "Voor de gemeenschap (beheerder)"
+      "COMMUNITY_ADMIN": "Voor de gemeenschap (beheerder)",
+      "ON_BEHALF": "In naam en voor rekening van {{member}}"
     },
     "REQUEST_STATUS": {
       "PREPARING": "In voorbereiding",
@@ -3288,6 +3289,7 @@
       "DOCUMENTS_PENDING": "Het ondertekende document en het bewijs zijn beschikbaar zodra alle partijen hebben ondertekend.",
       "SIGN_NOW": "Nu ondertekenen",
       "DECLINE_REASON": "Reden: {{reason}}",
+      "SIGNED_BY": "Ondertekend door {{name}}",
       "TIMELINE": "Geschiedenis",
       "CHAIN_OK": "Logboek intact",
       "CHAIN_BROKEN": "Logboek gewijzigd bij gebeurtenis {{n}}",

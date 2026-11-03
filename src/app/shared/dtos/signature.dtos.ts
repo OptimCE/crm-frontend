@@ -71,6 +71,11 @@ export interface SignerView {
   slot: SignatureSlot | null;
   invited_at: string | null;
   signed_at: string | null;
+  /**
+   * Who signed, as the PDF names them: the member's own name when its account
+   * signed, else the account's (a representative, another linked account).
+   */
+  signed_by_name: string | null;
   declined_at: string | null;
   decline_reason: string | null;
 }

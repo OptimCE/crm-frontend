@@ -24,11 +24,29 @@ export interface I18nText {
 // ---------------------------------------------------------------------------
 
 /** « En votre nom », « Pour ACME SRL (représentant légal) », « Pour la communauté (administrateur) ». */
+/**
+ * The name of whoever signed, when it is not the slot's own: a company's
+ * representative, or another account linked to the member. Null otherwise.
+ */
+export function signedByOther(signer: {
+  display_name: string;
+  signed_by_name?: string | null;
+}): string | null {
+  const name = signer.signed_by_name;
+  return name && name !== signer.display_name ? name : null;
+}
+
 export function capacityText(signer: {
   capacity: SignerCapacity;
   member_label: string | null;
   display_name: string;
+  signed_by_name?: string | null;
 }): I18nText {
+  // A member's own slot signed by another linked account: the PDF, the consent
+  // and the evidence all say « au nom et pour le compte de », so does the screen.
+  if (signer.capacity === 'SELF' && signedByOther(signer)) {
+    return { key: 'SIGNATURE.CAPACITY.ON_BEHALF', params: { member: signer.display_name } };
+  }
   switch (signer.capacity) {
     case 'LEGAL_REPRESENTATIVE':
       return {

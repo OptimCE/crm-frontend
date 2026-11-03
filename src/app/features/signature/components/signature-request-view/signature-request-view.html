@@ -143,6 +143,13 @@
                     | translate: { date: (signer.signed_at | localeDate: 'medium') }
                 }}</span>
               }
+              @if (signedBy(signer); as name) {
+                <span
+                  class="text-xs text-surface-600 break-words"
+                  [attr.data-testid]="'signature-request__signed-by--' + i"
+                  >{{ 'SIGNATURE.REQUEST.SIGNED_BY' | translate: { name } }}</span
+                >
+              }
               @if (signer.declined_at) {
                 <span class="text-xs text-surface-500">{{
                   'SIGNATURE.INBOX.DECLINED_ON'

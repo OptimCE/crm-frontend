@@ -13,6 +13,7 @@ import {
   pendingRows,
   requiredFieldsFilled,
   saveDraft,
+  signedByOther,
   viewportRectToBox,
 } from './signature-format';
 import { SIGNER_ID, signatureRow } from './signature-fixtures';
@@ -36,6 +37,40 @@ describe('signature-format', () => {
       expect(
         capacityText({ capacity: 'COMMUNITY_ADMIN', member_label: null, display_name: 'A' }).key,
       ).toBe('SIGNATURE.CAPACITY.COMMUNITY_ADMIN');
+    });
+
+    it('says « au nom et pour le compte de » once another account signed the member slot', () => {
+      const alice = { capacity: 'SELF' as const, member_label: null, display_name: 'Alice Dupont' };
+      expect(capacityText({ ...alice, signed_by_name: 'Eve Outsider' })).toEqual({
+        key: 'SIGNATURE.CAPACITY.ON_BEHALF',
+        params: { member: 'Alice Dupont' },
+      });
+      // Her own account: unchanged.
+      expect(capacityText({ ...alice, signed_by_name: 'Alice Dupont' }).key).toBe(
+        'SIGNATURE.CAPACITY.SELF',
+      );
+      // A representative already reads « Pour ACME SRL (représentant légal) ».
+      expect(
+        capacityText({
+          capacity: 'LEGAL_REPRESENTATIVE',
+          member_label: 'ACME SRL',
+          display_name: 'ACME SRL',
+          signed_by_name: 'Bob Martin',
+        }).key,
+      ).toBe('SIGNATURE.CAPACITY.LEGAL_REPRESENTATIVE');
+    });
+
+    it('names who signed only when it is not the slot itself', () => {
+      expect(signedByOther({ display_name: 'ACME SRL', signed_by_name: 'Bob Martin' })).toBe(
+        'Bob Martin',
+      );
+      expect(signedByOther({ display_name: 'Alice Dupont', signed_by_name: 'Eve Outsider' })).toBe(
+        'Eve Outsider',
+      );
+      expect(signedByOther({ display_name: 'Alice Dupont', signed_by_name: 'Alice Dupont' })).toBe(
+        null,
+      );
+      expect(signedByOther({ display_name: 'Alice Dupont', signed_by_name: null })).toBe(null);
     });
   });
 

@@ -3196,7 +3196,8 @@
     "CAPACITY": {
       "SELF": "In your own name",
       "LEGAL_REPRESENTATIVE": "For {{member}} (legal representative)",
-      "COMMUNITY_ADMIN": "For the community (administrator)"
+      "COMMUNITY_ADMIN": "For the community (administrator)",
+      "ON_BEHALF": "In the name and on behalf of {{member}}"
     },
     "REQUEST_STATUS": {
       "PREPARING": "Being prepared",
@@ -3288,6 +3289,7 @@
       "DOCUMENTS_PENDING": "The signed document and the evidence will be available once all parties have signed.",
       "SIGN_NOW": "Sign now",
       "DECLINE_REASON": "Reason: {{reason}}",
+      "SIGNED_BY": "Signed by {{name}}",
       "TIMELINE": "History",
       "CHAIN_OK": "Log intact",
       "CHAIN_BROKEN": "Log altered at event {{n}}",

@@ -3196,7 +3196,8 @@
     "CAPACITY": {
       "SELF": "In Ihrem eigenen Namen",
       "LEGAL_REPRESENTATIVE": "Für {{member}} (gesetzlicher Vertreter)",
-      "COMMUNITY_ADMIN": "Für die Gemeinschaft (Administrator)"
+      "COMMUNITY_ADMIN": "Für die Gemeinschaft (Administrator)",
+      "ON_BEHALF": "Im Namen und im Auftrag von {{member}}"
     },
     "REQUEST_STATUS": {
       "PREPARING": "In Vorbereitung",
@@ -3288,6 +3289,7 @@
       "DOCUMENTS_PENDING": "Das unterschriebene Dokument und der Nachweis sind verfügbar, sobald alle Parteien unterschrieben haben.",
       "SIGN_NOW": "Jetzt unterschreiben",
       "DECLINE_REASON": "Grund: {{reason}}",
+      "SIGNED_BY": "Unterschrieben von {{name}}",
       "TIMELINE": "Verlauf",
       "CHAIN_OK": "Protokoll unversehrt",
       "CHAIN_BROKEN": "Protokoll verändert bei Ereignis {{n}}",
