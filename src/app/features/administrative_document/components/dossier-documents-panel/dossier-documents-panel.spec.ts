@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, of } from 'rxjs';
@@ -21,6 +22,7 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { SignatureService } from '../../../../shared/services/signature.service';
 import { procedureDetail } from '../../procedures/procedure-fixtures';
 import { DossierDocumentsPanel } from './dossier-documents-panel';
 import { GenerateDialog } from '../generate-dialog/generate-dialog';
@@ -48,6 +50,8 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
   let openSnackBar: ReturnType<typeof vi.fn>;
   let regenerate: ReturnType<typeof vi.fn>;
   let verify: ReturnType<typeof vi.fn>;
+  let requestSignature: ReturnType<typeof vi.fn>;
+  let downloadArtifact: ReturnType<typeof vi.fn>;
 
   const root = (): HTMLElement => fixture.nativeElement as HTMLElement;
   const byTestId = (id: string): HTMLElement | null =>
@@ -61,14 +65,21 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
     openSnackBar = vi.fn();
     regenerate = vi.fn();
     verify = vi.fn();
+    requestSignature = vi.fn();
+    downloadArtifact = vi.fn();
     await TestBed.configureTestingModule({
       imports: [Host, TranslateModule.forRoot()],
       providers: [
+        provideRouter([]),
+        { provide: SignatureService, useValue: { downloadArtifact } },
         {
           provide: AdministrativeDocumentService,
           useValue: { renderStatus, downloadVersion: vi.fn() },
         },
-        { provide: AdministrativeProcedureService, useValue: { regenerate, verify } },
+        {
+          provide: AdministrativeProcedureService,
+          useValue: { regenerate, verify, requestSignature },
+        },
         { provide: RealtimeService, useValue: { live: signal(true), on: () => events } },
         { provide: LocaleService, useValue: { locale: signal('fr') } },
         { provide: SnackbarNotification, useValue: { openSnackBar } },
@@ -310,5 +321,98 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
     expect(byTestId('dossier-documents-panel__row--0')?.textContent).toContain(
       'Formulaire de modification — Alice Dupont',
     );
+  });
+
+  // ---- the electronic signature (the signature annexe) ------------------------
+
+  const REQUEST_ID = '1b4e28ba-2fa1-11d2-883f-0016d3cca427';
+
+  it('offers « Demander la signature » on a signable piece with nothing asked yet', () => {
+    expect(byTestId('dossier-documents-panel__button--request-signature-0')).toBeNull();
+    fixture.componentInstance.detail.set(withPiece(0, { signature_requestable: true }));
+    fixture.detectChanges();
+    expect(byTestId('dossier-documents-panel__button--request-signature-0')).not.toBeNull();
+    expect(byTestId('dossier-documents-panel__signature-status-0')).toBeNull();
+  });
+
+  it('asks the annex, then reads the procedure again', () => {
+    fixture.componentInstance.detail.set(withPiece(0, { signature_requestable: true }));
+    fixture.detectChanges();
+    requestSignature.mockReturnValue(of(new ApiResponse({ status: 'requested' })));
+
+    byTestId('dossier-documents-panel__button--request-signature-0')
+      ?.querySelector('button')
+      ?.click();
+
+    expect(requestSignature).toHaveBeenCalledWith(12, 21);
+    expect(fixture.componentInstance.stale).toBe(1);
+    expect(openSnackBar).toHaveBeenCalled();
+  });
+
+  it('offers nothing more while a request is under way or done, and again once it ended', () => {
+    const at = '2026-11-03T10:00:00Z';
+    for (const status of ['requested', 'open', 'signed'] as const) {
+      fixture.componentInstance.detail.set(
+        withPiece(0, {
+          signature_requestable: true,
+          signature: { status, request_id: REQUEST_ID, reason: null, updated_at: at },
+        }),
+      );
+      fixture.detectChanges();
+      expect(byTestId('dossier-documents-panel__button--request-signature-0')).toBeNull();
+    }
+    for (const status of ['declined', 'expired', 'cancelled', 'failed'] as const) {
+      fixture.componentInstance.detail.set(
+        withPiece(0, {
+          signature_requestable: true,
+          signature: { status, request_id: REQUEST_ID, reason: null, updated_at: at },
+        }),
+      );
+      fixture.detectChanges();
+      expect(byTestId('dossier-documents-panel__button--request-signature-0')).not.toBeNull();
+    }
+  });
+
+  it('says where the signature stands, with the decline reason, and links to its follow-up', () => {
+    fixture.componentInstance.detail.set(
+      withPiece(0, {
+        signature: {
+          status: 'declined',
+          request_id: REQUEST_ID,
+          reason: 'Mauvais compteur',
+          updated_at: '2026-11-03T10:00:00Z',
+        },
+      }),
+    );
+    fixture.detectChanges();
+    expect(byTestId('dossier-documents-panel__signature-status-0')?.textContent).toContain(
+      'SIGNATURE.PIECE.STATUS.DECLINED',
+    );
+    expect(
+      byTestId('dossier-documents-panel__link--signature-follow-0')?.getAttribute('href'),
+    ).toBe(`/signatures/requests/${REQUEST_ID}`);
+    expect(byTestId('dossier-documents-panel__button--signature-evidence-0')).toBeNull();
+  });
+
+  it('downloads the evidence of a signed piece from the signature annex', () => {
+    fixture.componentInstance.detail.set(
+      withPiece(0, {
+        signature: {
+          status: 'signed',
+          request_id: REQUEST_ID,
+          reason: null,
+          updated_at: '2026-11-03T10:00:00Z',
+        },
+      }),
+    );
+    fixture.detectChanges();
+    expect(byTestId('dossier-documents-panel__signature-status-0')?.textContent).toContain(
+      'SIGNATURE.PIECE.STATUS.SIGNED',
+    );
+    downloadArtifact.mockReturnValue(new Subject());
+    byTestId('dossier-documents-panel__button--signature-evidence-0')
+      ?.querySelector('button')
+      ?.click();
+    expect(downloadArtifact).toHaveBeenCalledWith(REQUEST_ID, 'evidence-pdf');
   });
 });

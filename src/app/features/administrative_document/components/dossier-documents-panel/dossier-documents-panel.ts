@@ -10,6 +10,7 @@ import {
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -25,6 +26,7 @@ import { RenderState } from '../../../../shared/dtos/administrative-document.dto
 import {
   DocumentKind,
   PieceOut,
+  PieceSignatureStatus,
   ProcedureDetailOut,
   RenderPurpose,
 } from '../../../../shared/dtos/administrative-procedure.dtos';
@@ -32,6 +34,7 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { SignatureService } from '../../../../shared/services/signature.service';
 import { downloadBlob } from '../../../../shared/utils/download.utils';
 import {
   TagSeverity,
@@ -62,6 +65,16 @@ const RENDER_POLL_INTERVAL_MS = 4000;
 /** While the realtime stream is live it says when a render ends; poll only as a safety net. */
 const SAFETY_POLL_INTERVAL_MS = 20_000;
 
+/** A request to sign that is under way or done: nothing more to ask. */
+const LIVE_SIGNATURE = new Set<PieceSignatureStatus>(['requested', 'open', 'signed']);
+
+/** What the piece's signature chip says, and how. */
+export interface PieceSignatureChip {
+  key: string;
+  params: Record<string, unknown>;
+  severity: TagSeverity;
+}
+
 /**
  * A procedure's pieces: the checklist, with Generate, Upload and Download on
  * each (spec "Détail d'une démarche"), the stage of what each holds (draft,
@@ -78,13 +91,14 @@ const SAFETY_POLL_INTERVAL_MS = 20_000;
 @Component({
   selector: 'app-dossier-documents-panel',
   standalone: true,
-  imports: [TranslatePipe, Button, Tag, Tooltip],
+  imports: [TranslatePipe, RouterLink, Button, Tag, Tooltip],
   templateUrl: './dossier-documents-panel.html',
   providers: [DialogService, ErrorMessageHandler],
 })
 export class DossierDocumentsPanel {
   private readonly documents = inject(AdministrativeDocumentService);
   private readonly procedures = inject(AdministrativeProcedureService);
+  private readonly signatures = inject(SignatureService);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly translate = inject(TranslateService);
   private readonly snackbar = inject(SnackbarNotification);
@@ -106,6 +120,8 @@ export class DossierDocumentsPanel {
   /** Why each watched piece renders, for what to say when it ends. */
   private readonly renderPurposes = new Map<number, RenderPurpose>();
   readonly downloadingIds = signal<ReadonlySet<number>>(new Set());
+  /** The piece whose signature evidence is downloading. */
+  readonly evidenceId = signal<number | null>(null);
   readonly busyIds = signal<ReadonlySet<number>>(new Set());
 
   /** The stale pieces one click regenerates. */
@@ -388,6 +404,94 @@ export class DossierDocumentsPanel {
         },
         error: (error: unknown) => {
           this.stopDownloading(piece.id);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
+  }
+
+  // ---- electronic signature (the signature annexe) ----------------------------
+
+  /**
+   * « Demander la signature »: the annexe says the piece can be signed in the
+   * app (a per-member collected piece whose participant has an account), and
+   * no request is under way or done.
+   */
+  canRequestSignature(piece: PieceOut): boolean {
+    if (piece.signature_requestable !== true) return false;
+    const status = piece.signature?.status;
+    return !status || !LIVE_SIGNATURE.has(status);
+  }
+
+  requestSignature(piece: PieceOut): void {
+    if (this.isBusy(piece)) return;
+    this.setBusy([piece.id], true);
+    this.procedures
+      .requestSignature(this.detail().id, piece.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.setBusy([piece.id], false);
+          this.snackbar.openSnackBar(
+            this.translate.instant('SIGNATURE.PIECE.REQUESTED_TOAST') as string,
+            VALIDATION_TYPE,
+          );
+          // The piece's `signature` is the annex's to say: read the procedure again.
+          this.stale.emit();
+        },
+        error: (error: unknown) => {
+          this.setBusy([piece.id], false);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
+  }
+
+  /** « Signature demandée », « Signé électroniquement », « Refusé : <raison> »… */
+  signatureChip(piece: PieceOut): PieceSignatureChip | null {
+    const signature = piece.signature;
+    if (!signature) return null;
+    switch (signature.status) {
+      case 'requested':
+      case 'open':
+        return { key: 'SIGNATURE.PIECE.STATUS.REQUESTED', params: {}, severity: 'info' };
+      case 'signed':
+        return { key: 'SIGNATURE.PIECE.STATUS.SIGNED', params: {}, severity: 'success' };
+      case 'declined':
+        return signature.reason
+          ? {
+              key: 'SIGNATURE.PIECE.STATUS.DECLINED',
+              params: { reason: signature.reason },
+              severity: 'danger',
+            }
+          : { key: 'SIGNATURE.PIECE.STATUS.DECLINED_NO_REASON', params: {}, severity: 'danger' };
+      case 'expired':
+        return { key: 'SIGNATURE.PIECE.STATUS.EXPIRED', params: {}, severity: 'warn' };
+      case 'cancelled':
+        return { key: 'SIGNATURE.PIECE.STATUS.CANCELLED', params: {}, severity: 'secondary' };
+      default:
+        return { key: 'SIGNATURE.PIECE.STATUS.FAILED', params: {}, severity: 'danger' };
+    }
+  }
+
+  /** The annexe's request, for « Suivre » and « Preuve ». */
+  signatureRequestId(piece: PieceOut): string | null {
+    return piece.signature?.request_id ?? null;
+  }
+
+  /** « Preuve »: the evidence report of a signed piece, from the signature annexe. */
+  downloadEvidence(piece: PieceOut): void {
+    const requestId = this.signatureRequestId(piece);
+    if (!requestId || this.evidenceId() !== null) return;
+    this.evidenceId.set(piece.id);
+    this.signatures
+      .downloadArtifact(requestId, 'evidence-pdf')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ blob, filename }) => {
+          this.evidenceId.set(null);
+          downloadBlob(blob, filename);
+        },
+        error: (error: unknown) => {
+          this.evidenceId.set(null);
           this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });

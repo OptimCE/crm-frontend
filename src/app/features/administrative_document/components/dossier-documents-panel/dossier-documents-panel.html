@@ -81,6 +81,16 @@
                 [attr.data-testid]="'dossier-documents-panel__tag--check-' + i"
               />
             }
+            <!-- The participant's electronic signature (the signature annexe). -->
+            @if (signatureChip(piece); as chip) {
+              <p-tag
+                [value]="chip.key | translate: chip.params"
+                [severity]="chip.severity"
+                icon="pi pi-pen-to-square"
+                styleClass="max-w-full whitespace-normal text-left"
+                [attr.data-testid]="'dossier-documents-panel__signature-status-' + i"
+              />
+            }
           </div>
           <span class="text-xs text-surface-500">
             {{ kindLabelKey(piece) | translate }}
@@ -100,9 +110,41 @@
               }}</span>
             }
           </span>
+          @if (signatureRequestId(piece); as requestId) {
+            <span class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+              <a
+                [routerLink]="['/signatures/requests', requestId]"
+                class="text-primary-700 underline"
+                [attr.data-testid]="'dossier-documents-panel__link--signature-follow-' + i"
+                >{{ 'SIGNATURE.PIECE.FOLLOW' | translate }}</a
+              >
+              @if (piece.signature?.status === 'signed') {
+                <p-button
+                  icon="pi pi-verified"
+                  size="small"
+                  [text]="true"
+                  [label]="'SIGNATURE.PIECE.EVIDENCE' | translate"
+                  [loading]="evidenceId() === piece.id"
+                  (onClick)="downloadEvidence(piece)"
+                  [attr.data-testid]="'dossier-documents-panel__button--signature-evidence-' + i"
+                />
+              }
+            </span>
+          }
         </div>
 
-        <div class="flex items-center gap-1 shrink-0">
+        <div class="flex flex-wrap items-center gap-1 shrink-0">
+          @if (canRequestSignature(piece)) {
+            <p-button
+              icon="pi pi-pen-to-square"
+              size="small"
+              [outlined]="true"
+              [label]="'SIGNATURE.PIECE.REQUEST' | translate"
+              [loading]="isBusy(piece)"
+              (onClick)="requestSignature(piece)"
+              [attr.data-testid]="'dossier-documents-panel__button--request-signature-' + i"
+            />
+          }
           @if (canRegenerate(piece)) {
             <p-button
               icon="pi pi-refresh"

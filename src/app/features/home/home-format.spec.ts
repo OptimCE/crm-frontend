@@ -9,6 +9,7 @@ import {
   incompleteRecordItems,
   invitationItems,
   orgIdByCommunityId,
+  signatureItems,
   unreadNotificationItems,
 } from './home-format';
 import type { MeMembersPartialDTO } from '../../shared/dtos/me.dtos';
@@ -154,6 +155,19 @@ describe('unreadNotificationItems', () => {
     const [item] = unreadNotificationItems(3);
     expect(item.params['count']).toBe(3);
     expect(item.route).toBe('/notifications');
+  });
+});
+
+describe('signatureItems', () => {
+  it('produces nothing when nothing can be signed now', () => {
+    expect(signatureItems(0)).toEqual([]);
+  });
+
+  it('produces one row to the « À signer » inbox, carrying the count', () => {
+    const [item] = signatureItems(2);
+    expect(item.kind).toBe('signature');
+    expect(item.params['count']).toBe(2);
+    expect(item.route).toBe('/signatures');
   });
 });
 

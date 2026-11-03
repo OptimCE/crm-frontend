@@ -41,6 +41,8 @@ import {
   administrativeAttention,
   attentionBadge,
 } from '../../features/administrative_document/administrative-attention';
+import { SignatureStore } from '../../features/signature/signature.store';
+import { countBadge } from '../../features/signature/signature-format';
 
 interface RouteActiveState {
   dashboard: boolean;
@@ -58,6 +60,8 @@ interface RouteActiveState {
   billing: boolean;
   live_data: boolean;
   administrative_document: boolean;
+  signatures: boolean;
+  signatures_community: boolean;
   users_communities: boolean;
   users_invitations: boolean;
   users: boolean;
@@ -67,6 +71,8 @@ interface RouteActiveState {
 /** Map each state key to its actual route prefix. Ordered longest-first for correct matching. */
 const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['dashboard', '/dashboard'],
+  ['signatures_community', '/signatures/community'],
+  ['signatures', '/signatures'],
   ['sharing_operations', '/sharing_operations'],
   ['communities_managers', '/communities/managers'],
   ['communities_public', '/communities/public'],
@@ -139,6 +145,22 @@ export class Navbar implements OnInit {
       : null;
   });
 
+  /**
+   * « À signer »: the user's own signature slots, every community. The entry
+   * shows once there is anything (pending or past); its badge counts the
+   * slots that can be signed now.
+   */
+  protected readonly signatureStore = inject(SignatureStore);
+  protected readonly signatureBadge = computed(() =>
+    countBadge(this.signatureStore.pendingCount()),
+  );
+  protected readonly signatureBadgeTitle = computed(() => {
+    const count = this.signatureStore.pendingCount();
+    return count > 0
+      ? (this.translateService.instant('NAVBAR.SIGNATURES_BADGE', { count }) as string)
+      : null;
+  });
+
   /** Unread badge shown on the logo while collapsed; capped at 99+, empty when none. */
   protected readonly notificationBadge = computed(() => {
     const count = this.notificationStore.unreadCount();
@@ -167,6 +189,8 @@ export class Navbar implements OnInit {
     billing: false,
     live_data: false,
     administrative_document: false,
+    signatures: false,
+    signatures_community: false,
     users_communities: false,
     users_invitations: false,
     users: false,
@@ -267,6 +291,8 @@ export class Navbar implements OnInit {
           billing: false,
           live_data: false,
           administrative_document: false,
+          signatures: false,
+          signatures_community: false,
           users_communities: false,
           users_invitations: false,
           users: false,

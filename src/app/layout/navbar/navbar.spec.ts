@@ -14,6 +14,12 @@ import { SteppyTours, TourPosition } from '@steppy/angular';
 import { HelpDialog } from '../../features/guided_tours/components/help-dialog/help-dialog';
 import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
 import { ERROR_TYPE } from '../../core/dtos/notification';
+import { By } from '@angular/platform-browser';
+import { Role } from '../../core/dtos/role';
+import { CommunityServicesStore } from '../../core/services/community-services.store';
+import { CommunityAnnex } from '../../shared/dtos/annexes_services.dtos';
+import { SignatureStore } from '../../features/signature/signature.store';
+import { signatureRow } from '../../features/signature/signature-fixtures';
 
 describe('Navbar', () => {
   let component: Navbar;
@@ -220,6 +226,8 @@ describe('Navbar', () => {
       ['users_invitations', '/users/invitations'],
       ['users', '/users'],
       ['home', '/home'],
+      ['signatures', '/signatures'],
+      ['signatures_community', '/signatures/community'],
     ];
 
     routeTests.forEach(([stateKey, routeUrl]) => {
@@ -854,6 +862,64 @@ describe('Navbar', () => {
       expect(toursSpy.start).not.toHaveBeenCalled();
       component.openHelp(click());
       expect(dialogServiceSpy.open).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('Signatures entries', () => {
+    const entry = (testId: string) =>
+      fixture.debugElement.query(By.css(`[data-testid="${testId}"]`));
+
+    beforeEach(async () => {
+      mockMatchMedia(false);
+      await setupTestBed();
+      fixture.detectChanges();
+    });
+
+    it('shows « À signer » only once the user has a signature row, with the count to sign now', () => {
+      expect(entry('navbar__menu--signatures')).toBeNull();
+
+      TestBed.inject(SignatureStore).rows.set([
+        signatureRow({ your_turn: true }),
+        signatureRow({ your_turn: true }, { id: 's2' }),
+        signatureRow({ pending: false, your_turn: false }, { id: 's3', status: 'SIGNED' }),
+      ]);
+      fixture.detectChanges();
+
+      expect(entry('navbar__menu--signatures').properties['badge']).toBe('2');
+    });
+
+    it('keeps the entry without a badge when everything is signed', () => {
+      TestBed.inject(SignatureStore).rows.set([
+        signatureRow({ pending: false, your_turn: false }, { status: 'SIGNED' }),
+      ]);
+      fixture.detectChanges();
+
+      expect(entry('navbar__menu--signatures')).not.toBeNull();
+      expect(entry('navbar__menu--signatures').properties['badge']).toBeNull();
+    });
+
+    it('gives the community’s managers « Signatures » when the module is on', () => {
+      const services = TestBed.inject(CommunityServicesStore).services;
+      services.set([{ feature: 'signature', subscribed: true } as CommunityAnnex]);
+      userContextServiceSpy.compareWithActiveRole.mockImplementation(
+        (role: Role) => role !== Role.ADMIN,
+      );
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+      expect(entry('navbar__menu--signatures-community')).not.toBeNull();
+
+      // A member does not, nor a manager without the module.
+      userContextServiceSpy.compareWithActiveRole.mockImplementation(
+        (role: Role) => role === Role.MEMBER,
+      );
+      services.set([{ feature: 'signature', subscribed: true } as CommunityAnnex]);
+      fixture.detectChanges();
+      expect(entry('navbar__menu--signatures-community')).toBeNull();
+
+      userContextServiceSpy.compareWithActiveRole.mockReturnValue(true);
+      services.set([]);
+      fixture.detectChanges();
+      expect(entry('navbar__menu--signatures-community')).toBeNull();
     });
   });
 

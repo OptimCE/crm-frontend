@@ -15,7 +15,11 @@ import {
  */
 
 /** What kind of thing is waiting for the user. Drives icon and copy, not layout. */
-export type NeedsYouKind = 'invitation' | 'incomplete_record' | 'unread_notifications';
+export type NeedsYouKind =
+  | 'invitation'
+  | 'incomplete_record'
+  | 'unread_notifications'
+  | 'signature';
 
 /**
  * One row of the "needs you" band.
@@ -124,6 +128,25 @@ export function incompleteRecordItems(
         actionKey: 'HOME.NEEDS_YOU.RECORD_ACTION',
       };
     });
+}
+
+/**
+ * A single row for the documents the user can sign now (the signature
+ * annexe's « À signer » inbox, every community), or none.
+ */
+export function signatureItems(count: number): NeedsYouItem[] {
+  if (count <= 0) return [];
+  return [
+    {
+      kind: 'signature',
+      id: 'signatures-pending',
+      icon: 'pi pi-pen-to-square',
+      labelKey: 'HOME.NEEDS_YOU.SIGNATURE',
+      params: { count },
+      route: '/signatures',
+      actionKey: 'HOME.NEEDS_YOU.SIGNATURE_ACTION',
+    },
+  ];
 }
 
 /** A single row for unread notifications, or none when there are none. */

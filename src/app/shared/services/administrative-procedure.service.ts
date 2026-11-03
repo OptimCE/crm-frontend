@@ -37,6 +37,7 @@ import {
   RefileOut,
   RegenerateOut,
   SendIn,
+  SignatureRequestedOut,
   VerifyAccepted,
 } from '../dtos/administrative-procedure.dtos';
 import { ServiceBase } from './service.base';
@@ -297,6 +298,23 @@ export class AdministrativeProcedureService extends ServiceBase {
     return this.invalidating(
       this.http.post<ApiResponse<VerifyAccepted>>(
         `${this.apiAddress}/dossiers/${id}/documents/${pieceId}/versions/${versionId}/verify`,
+        {},
+      ),
+    );
+  }
+
+  /**
+   * Ask the participant to sign a per-member piece in the app (the signature
+   * annexe). 202; the piece's `signature` then says where it stands. 409:
+   * module off (2600), not signable (2601), no account (2602), already asked (2603).
+   */
+  requestSignature(
+    dossierId: number,
+    documentId: number,
+  ): Observable<ApiResponse<SignatureRequestedOut>> {
+    return this.invalidating(
+      this.http.post<ApiResponse<SignatureRequestedOut>>(
+        `${this.apiAddress}/dossiers/${dossierId}/documents/${documentId}/signature-request`,
         {},
       ),
     );

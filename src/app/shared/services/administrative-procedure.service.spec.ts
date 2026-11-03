@@ -88,6 +88,16 @@ describe('AdministrativeProcedureService', () => {
     expect(invalidate).toHaveBeenCalledWith('administrative-document');
   });
 
+  it('asks the signature annexe for a piece’s signature, and invalidates', () => {
+    const invalidate = vi.spyOn(cache, 'invalidate');
+    service.requestSignature(12, 21).subscribe();
+    const request = http.expectOne(`${API}/dossiers/12/documents/21/signature-request`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({});
+    request.flush({ data: { status: 'requested' } }, { status: 202, statusText: 'Accepted' });
+    expect(invalidate).toHaveBeenCalledWith('administrative-document');
+  });
+
   it('confirms the starting state with every choice', () => {
     service.confirmBaseline({ choices: [{ key: 'k', choice: 'active' }] }).subscribe();
     const request = http.expectOne(`${API}/baseline/confirm`);

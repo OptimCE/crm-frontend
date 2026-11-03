@@ -23,6 +23,7 @@ import { ErrorMessageHandler } from '../../../../shared/services-ui/error.messag
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
 import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { SignatureService } from '../../../../shared/services/signature.service';
 import { modifDefinition, moduleStatus, procedureDetail } from '../procedure-fixtures';
 import { ProcedureSendDialog } from '../procedure-send-dialog/procedure-send-dialog';
 import { ProcedureDetail } from './procedure-detail';
@@ -78,6 +79,8 @@ describe('ProcedureDetail', () => {
         },
         { provide: AdministrativeProcedureService, useValue: service },
         { provide: AdministrativeDocumentService, useValue: {} },
+        // The pieces panel downloads a signed piece's evidence from the signature annexe.
+        { provide: SignatureService, useValue: { downloadArtifact: vi.fn() } },
         { provide: RealtimeService, useValue: { live: signal(true), on: () => events } },
         { provide: SnackbarNotification, useValue: { openSnackBar: vi.fn() } },
       ],

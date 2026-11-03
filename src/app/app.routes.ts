@@ -136,4 +136,13 @@ export const routes: Routes = [
         (m) => m.ADMINISTRATIVE_DOCUMENT_ROUTES,
       ),
   },
+  {
+    // Authentication only: a signer's inbox spans every community they belong
+    // to, and the annexe filters by module and by slot. The community
+    // follow-up list carries its own module and role guards (signature.routes).
+    path: 'signatures',
+    canActivate: [canActivateAuth],
+    loadChildren: () =>
+      import('./features/signature/signature.routes').then((m) => m.SIGNATURE_ROUTES),
+  },
 ];

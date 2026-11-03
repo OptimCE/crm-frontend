@@ -104,6 +104,58 @@ describe('routeFor', () => {
     }
   });
 
+  const SIGNATURE_TYPES = [
+    'signature.requested',
+    'signature.reminder',
+    'signature.signed',
+    'signature.declined',
+    'signature.completed',
+  ];
+
+  it('registers the five signature types with the pen icon, cross-community', () => {
+    // /signatures is not the active community's (only /signatures/community
+    // is, and no notification points there): no feature gate.
+    for (const type of SIGNATURE_TYPES) {
+      const presentation = presentationFor(type);
+      expect(presentation.icon).toBe('pi pi-pen-to-square');
+      expect(presentation.crossCommunity).toBe(true);
+      expect(presentation.feature).toBeUndefined();
+    }
+  });
+
+  it('follows the signature annexe’s own link: the signing screen, a request, the inbox', () => {
+    const request = '1b4e28ba-2fa1-11d2-883f-0016d3cca427';
+    const signer = '6fa459ea-ee8a-3ca4-894e-db77e160355e';
+    expect(
+      routeFor(
+        notification('signature.requested', { path: `/signatures/${request}/signers/${signer}` }),
+      ),
+    ).toBe(`/signatures/${request}/signers/${signer}`);
+    expect(
+      routeFor(notification('signature.signed', { path: `/signatures/requests/${request}` })),
+    ).toBe(`/signatures/requests/${request}`);
+    expect(routeFor(notification('signature.completed', { path: '/signatures' }))).toBe(
+      '/signatures',
+    );
+  });
+
+  it('refuses any other path and falls back to the inbox', () => {
+    // `route()` output goes to navigateByUrl: nothing but the three shapes.
+    for (const bad of [
+      '/users',
+      '/signatures/../users',
+      '/signatures/requests/abc?x=1',
+      '//evil.example/signatures',
+      'https://evil.example',
+      '/signatures/a/signers/b/extra',
+      null,
+      42,
+    ]) {
+      expect(routeFor(notification('signature.reminder', { path: bad }))).toBe('/signatures');
+    }
+    expect(routeFor(notification('signature.declined'))).toBe('/signatures');
+  });
+
   it('returns undefined for a type with no destination', () => {
     expect(routeFor(notification('member.updated', { member_id: 1 }))).toBeUndefined();
     expect(routeFor(notification('something.unknown'))).toBeUndefined();

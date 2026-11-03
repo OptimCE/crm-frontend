@@ -389,6 +389,32 @@ export interface PieceCheckOut {
   content_sha256: string | null;
 }
 
+/** Where the piece's latest request to the signature annexe stands. */
+export type PieceSignatureStatus =
+  | 'requested'
+  | 'open'
+  | 'signed'
+  | 'declined'
+  | 'expired'
+  | 'cancelled'
+  | 'failed';
+
+/** The piece's latest request to the signature annexe (`signature` on a piece). */
+export interface PieceSignatureOut {
+  status: PieceSignatureStatus;
+  /** The annexe's request: its follow-up page, its evidence. Null until it accepted it. */
+  request_id: string | null;
+  /** Why it was declined or failed. */
+  reason: string | null;
+  updated_at: string;
+}
+
+/** `POST .../documents/{id}/signature-request` (202). */
+export interface SignatureRequestedOut {
+  status: 'requested';
+  idempotency_key?: string;
+}
+
 export interface PieceOut {
   id: number;
   /** The catalogue requirement's code (sharing_modification, ...). */
@@ -411,6 +437,13 @@ export interface PieceOut {
   current_version: PieceVersionOut | null;
   render: PieceRenderOut | null;
   last_check: PieceCheckOut | null;
+  /**
+   * The signature annexe (2026-11-03). Optional: an annex older than the
+   * feature sends neither, which reads as « nothing asked, nothing to ask ».
+   */
+  signature?: PieceSignatureOut | null;
+  /** A manager can ask the participant to sign it in the app now. */
+  signature_requestable?: boolean;
 }
 
 export interface ThreadEntryOut {

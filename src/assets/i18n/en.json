@@ -77,6 +77,7 @@
     "JUST_NOW": "Just now",
     "NEW_TOAST": "You have new notifications",
     "PREFIXES": {
+      "signature": "Electronic signatures",
       "admin_deadline": "Administrative deadlines",
       "admin_dossier": "Administrative dossiers",
       "billing_run": "Billing runs",
@@ -95,6 +96,23 @@
       "admin_meter": "My meters in the sharing"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "“{{title}}” is waiting for your signature ({{community}})"
+        },
+        "reminder": {
+          "title": "Reminder: “{{title}}” is still waiting for your signature ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} signed “{{title}}”"
+        },
+        "declined": {
+          "title": "{{signer}} declined to sign “{{title}}”: {{reason}}"
+        },
+        "completed": {
+          "title": "“{{title}}” has been signed by all parties"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "A new document was uploaded"
@@ -353,6 +371,9 @@
     "NEWS": "News",
     "BILLING": "Billing",
     "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
+    "SIGNATURES": "To sign",
+    "SIGNATURES_COMMUNITY": "Signatures",
+    "SIGNATURES_BADGE": "{{count}} document(s) to sign",
     "DASHBOARD": "Dashboard",
     "HOME": "Home",
     "LIVE_DATA": "Live data",
@@ -1769,6 +1790,10 @@
       "NAME": "Administrative documents",
       "DESCRIPTION": "Track the regulatory dossiers filed with the CWaPE and the grid operator: statuses, derived deadlines, and every version of every document sent."
     },
+    "SIGNATURE": {
+      "NAME": "Electronic signature",
+      "DESCRIPTION": "Have the community's documents signed online: a typed or drawn signature in the app, a sealed document and verifiable evidence for every signature."
+    },
     "LIVE_DATA": {
       "NAME": "Live data",
       "DESCRIPTION": "Read the community's smart meters every quarter of an hour: production as it happens, device health, and a privacy threshold you control.",
@@ -3154,6 +3179,179 @@
       }
     }
   },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Loading…",
+      "RETRY": "Try again",
+      "REFERENCE": "Ref. {{reference}}",
+      "COMMUNITY": "Community: {{community}}",
+      "EXPIRES": "To sign by {{date}}",
+      "BACK_TO_INBOX": "Back to my signatures",
+      "DETAILS": "Details",
+      "DOWNLOAD_SIGNED": "Download the signed document",
+      "DOWNLOAD_EVIDENCE_PDF": "Evidence (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Evidence (JSON)",
+      "LOAD_ERROR": "This signature request could not be loaded."
+    },
+    "CAPACITY": {
+      "SELF": "In your own name",
+      "LEGAL_REPRESENTATIVE": "For {{member}} (legal representative)",
+      "COMMUNITY_ADMIN": "For the community (administrator)"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "Being prepared",
+      "OPEN": "In progress",
+      "COMPLETING": "Finalising",
+      "COMPLETED": "Completed",
+      "DECLINED": "Declined",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired",
+      "FAILED": "Failed"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "Waiting",
+      "INVITED": "To sign",
+      "VIEWED": "Viewed",
+      "SIGNING": "Being sealed",
+      "SIGNED": "Signed",
+      "DECLINED": "Declined"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "To sign",
+      "SUBTITLE": "The documents waiting for your signature, in all your communities.",
+      "PENDING_TITLE": "Waiting for your signature",
+      "PAST_TITLE": "Already handled",
+      "EMPTY_PENDING": "Nothing to sign right now.",
+      "SIGN": "Sign",
+      "READ": "View",
+      "NOT_YOUR_TURN": "Not your turn yet: another party signs first.",
+      "SIGNED_ON": "Signed on {{date}}",
+      "DECLINED_ON": "Declined on {{date}}",
+      "LOAD_ERROR": "Your signature requests could not be loaded."
+    },
+    "SIGN": {
+      "DOCUMENT": "Document to sign",
+      "GO_TO_SLOT": "Go to my signature",
+      "YOUR_SLOT": "Your signature here",
+      "DATE_FIELD": "Signing date",
+      "DATE_AUTO": "filled in automatically when you sign",
+      "FIELDS_TITLE": "To fill in",
+      "FIELDS_HINT": "Fill in these fields here or directly on the document.",
+      "PANEL_TITLE": "Your signature",
+      "TAB_TYPED": "Type",
+      "TAB_DRAWN": "Draw",
+      "TYPED_LABEL": "Your name, as it will appear",
+      "TYPED_PLACEHOLDER": "First name Last name",
+      "PREVIEW": "Preview",
+      "DRAW_HINT": "Sign inside the frame, with your mouse or finger.",
+      "CLEAR": "Clear",
+      "SIGN": "Sign",
+      "DECLINE": "Decline",
+      "MISSING": "To sign: tick your consent, fill in the required fields (*) and add your signature.",
+      "RESTORED": "Your signature was kept, click Sign.",
+      "STEP_UP": "For your security, please confirm your identity: you will come back here afterwards.",
+      "IMAGE_FAILED": "Your signature could not be prepared. Try again, or draw it.",
+      "RELOAD": "Reload the document",
+      "STATUS": {
+        "LOADING": "Loading the document…",
+        "READY": "Your turn to sign: read the document, then sign in the panel.",
+        "WAITING": "Not your turn yet: another party signs first. You can already read the document.",
+        "SEALING": "Sealing…",
+        "SEALING_HINT": "Your signature is being applied to the document and sealed. This takes a few seconds.",
+        "SLOW": "Sealing is taking longer than expected. Nothing is lost: you will get a notification as soon as it is done.",
+        "SIGNED": "Signed",
+        "FINAL_READY": "The document signed by all parties is available.",
+        "FINAL_PENDING": "The final document will be available once all parties have signed.",
+        "DECLINED": "You declined to sign this document.",
+        "CLOSED": "This request is no longer open for signing ({{status}}).",
+        "STALE": "The document changed since you opened it. Reload it before signing: what you entered is kept.",
+        "ERROR": "This signature request cannot be found, or does not concern you."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Decline to sign",
+        "MESSAGE": "Tell us why you decline: the reason is passed on to the person who requested the signature.",
+        "REASON": "Reason for declining",
+        "CONFIRM": "Decline to sign",
+        "CANCEL": "Cancel"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} of {{total}} signed",
+      "CREATED": "Requested on {{date}}",
+      "CLOSED": "Closed on {{date}}",
+      "SIGNERS": "Signers",
+      "DOCUMENTS": "Documents",
+      "DOCUMENTS_PENDING": "The signed document and the evidence will be available once all parties have signed.",
+      "SIGN_NOW": "Sign now",
+      "DECLINE_REASON": "Reason: {{reason}}",
+      "TIMELINE": "History",
+      "CHAIN_OK": "Log intact",
+      "CHAIN_BROKEN": "Log altered at event {{n}}",
+      "REMIND": "Send a reminder",
+      "CANCEL": "Cancel the request",
+      "REMINDED": "{{n}} signer(s) reminded.",
+      "CANCELLED": "The signature request was cancelled."
+    },
+    "FOLLOW": {
+      "TITLE": "Community signatures",
+      "SUBTITLE": "Follow the signature requests: who has signed, who still has to, and by when.",
+      "FILTER_STATUS": "Status",
+      "ALL": "All statuses",
+      "EMPTY": "No signature request in this community.",
+      "OPEN_DETAIL": "Open the details",
+      "LAST_REMINDED": "Reminded on {{date}}",
+      "LOAD_ERROR": "The signature requests could not be loaded.",
+      "COLUMNS": {
+        "TITLE": "Document",
+        "SOURCE": "Origin",
+        "PROGRESS": "Progress",
+        "EXPIRES": "Due date",
+        "STATUS": "Status",
+        "ACTIONS": "Actions"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Cancel the signature request",
+      "MESSAGE": "The signers will no longer be able to sign this document. This cannot be undone.",
+      "REASON": "Reason (optional)",
+      "CONFIRM": "Cancel the request",
+      "BACK": "Back"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Request created",
+      "DOCUMENT_PREPARED": "Document prepared for signing",
+      "SIGNER_INVITED": "{{signer}} was invited to sign",
+      "SIGNER_VIEWED": "{{signer}} viewed the document",
+      "SIGNER_REAUTHENTICATED": "{{signer}} confirmed their identity",
+      "SIGNER_SIGNED": "{{signer}} signed",
+      "SIGNER_DECLINED": "{{signer}} declined to sign",
+      "REQUEST_REMINDED": "Reminder sent to the signers",
+      "REQUEST_COMPLETED": "All parties signed: document finalised",
+      "REQUEST_CANCELLED": "Request cancelled",
+      "REQUEST_EXPIRED": "Request expired",
+      "REQUEST_FAILED": "The request failed (technical error)",
+      "UNKNOWN": "Event “{{type}}”"
+    },
+    "PIECE": {
+      "REQUEST": "Request signature",
+      "REQUESTED_TOAST": "The signature request has been sent to the participant.",
+      "FOLLOW": "Follow",
+      "EVIDENCE": "Evidence",
+      "STATUS": {
+        "REQUESTED": "Signature requested",
+        "SIGNED": "Signed electronically",
+        "DECLINED": "Declined: {{reason}}",
+        "DECLINED_NO_REASON": "Signature declined",
+        "EXPIRED": "Signature expired",
+        "CANCELLED": "Signature cancelled",
+        "FAILED": "Signature failed"
+      }
+    }
+  },
   "HOME": {
     "GREETING": "Hello {{name}}",
     "GREETING_ANON": "Hello",
@@ -3167,6 +3365,8 @@
       "RECORD_ONE": "{{field}} is missing from your record in “{{community}}”",
       "RECORD_MANY": "{{field}} and {{others}} more detail(s) are missing from your record in “{{community}}”",
       "RECORD_ACTION": "Complete",
+      "SIGNATURE": "You have {{count}} document(s) to sign",
+      "SIGNATURE_ACTION": "Sign",
       "UNREAD": "You have {{count}} unread notification(s)",
       "UNREAD_ACTION": "Read"
     },

@@ -77,6 +77,7 @@
     "JUST_NOW": "Zojuist",
     "NEW_TOAST": "U hebt nieuwe meldingen",
     "PREFIXES": {
+      "signature": "Elektronische handtekeningen",
       "admin_deadline": "Administratieve deadlines",
       "admin_dossier": "Administratieve dossiers",
       "billing_run": "Facturatierondes",
@@ -95,6 +96,23 @@
       "admin_meter": "Mijn meters in de deling"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "“{{title}}” wacht op uw handtekening ({{community}})"
+        },
+        "reminder": {
+          "title": "Herinnering: “{{title}}” wacht nog steeds op uw handtekening ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} heeft “{{title}}” ondertekend"
+        },
+        "declined": {
+          "title": "{{signer}} weigerde “{{title}}” te ondertekenen: {{reason}}"
+        },
+        "completed": {
+          "title": "“{{title}}” is door alle partijen ondertekend"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "Er is een nieuw document geüpload"
@@ -353,6 +371,9 @@
     "NEWS": "Nieuws",
     "BILLING": "Facturatie",
     "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
+    "SIGNATURES": "Te ondertekenen",
+    "SIGNATURES_COMMUNITY": "Handtekeningen",
+    "SIGNATURES_BADGE": "{{count}} document(en) te ondertekenen",
     "DASHBOARD": "Dashboard",
     "HOME": "Start",
     "LIVE_DATA": "Live gegevens",
@@ -1769,6 +1790,10 @@
       "NAME": "Administratieve documenten",
       "DESCRIPTION": "Volg de reglementaire dossiers bij de CWaPE en de netbeheerder: statussen, afgeleide termijnen en elke versie van elk ingediend document."
     },
+    "SIGNATURE": {
+      "NAME": "Elektronische handtekening",
+      "DESCRIPTION": "Laat de documenten van de gemeenschap online ondertekenen: een getypte of getekende handtekening in de app, een verzegeld document en controleerbaar bewijs voor elke handtekening."
+    },
     "LIVE_DATA": {
       "NAME": "Live gegevens",
       "DESCRIPTION": "Lees de slimme meters van de gemeenschap elk kwartier uit: productie zoals ze gebeurt, toestand van de apparaten, en een privacydrempel die u zelf bepaalt.",
@@ -3154,6 +3179,179 @@
       }
     }
   },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Laden…",
+      "RETRY": "Opnieuw proberen",
+      "REFERENCE": "Ref. {{reference}}",
+      "COMMUNITY": "Gemeenschap: {{community}}",
+      "EXPIRES": "Te ondertekenen vóór {{date}}",
+      "BACK_TO_INBOX": "Terug naar mijn handtekeningen",
+      "DETAILS": "Details",
+      "DOWNLOAD_SIGNED": "Het ondertekende document downloaden",
+      "DOWNLOAD_EVIDENCE_PDF": "Bewijs (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Bewijs (JSON)",
+      "LOAD_ERROR": "Dit handtekeningverzoek kon niet worden geladen."
+    },
+    "CAPACITY": {
+      "SELF": "In eigen naam",
+      "LEGAL_REPRESENTATIVE": "Voor {{member}} (wettelijk vertegenwoordiger)",
+      "COMMUNITY_ADMIN": "Voor de gemeenschap (beheerder)"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "In voorbereiding",
+      "OPEN": "Lopend",
+      "COMPLETING": "Wordt afgerond",
+      "COMPLETED": "Afgerond",
+      "DECLINED": "Geweigerd",
+      "CANCELLED": "Geannuleerd",
+      "EXPIRED": "Verlopen",
+      "FAILED": "Mislukt"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "Wachtend",
+      "INVITED": "Te ondertekenen",
+      "VIEWED": "Bekeken",
+      "SIGNING": "Wordt verzegeld",
+      "SIGNED": "Ondertekend",
+      "DECLINED": "Geweigerd"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "Te ondertekenen",
+      "SUBTITLE": "De documenten die op uw handtekening wachten, in al uw gemeenschappen.",
+      "PENDING_TITLE": "Wachtend op uw handtekening",
+      "PAST_TITLE": "Al behandeld",
+      "EMPTY_PENDING": "Er is momenteel niets te ondertekenen.",
+      "SIGN": "Ondertekenen",
+      "READ": "Bekijken",
+      "NOT_YOUR_TURN": "Nog niet uw beurt: een andere partij ondertekent eerst.",
+      "SIGNED_ON": "Ondertekend op {{date}}",
+      "DECLINED_ON": "Geweigerd op {{date}}",
+      "LOAD_ERROR": "Uw handtekeningverzoeken konden niet worden geladen."
+    },
+    "SIGN": {
+      "DOCUMENT": "Te ondertekenen document",
+      "GO_TO_SLOT": "Naar mijn handtekening",
+      "YOUR_SLOT": "Uw handtekening hier",
+      "DATE_FIELD": "Datum van ondertekening",
+      "DATE_AUTO": "automatisch ingevuld bij het ondertekenen",
+      "FIELDS_TITLE": "In te vullen",
+      "FIELDS_HINT": "Vul deze velden hier of rechtstreeks in het document in.",
+      "PANEL_TITLE": "Uw handtekening",
+      "TAB_TYPED": "Typen",
+      "TAB_DRAWN": "Tekenen",
+      "TYPED_LABEL": "Uw naam, zoals hij zal verschijnen",
+      "TYPED_PLACEHOLDER": "Voornaam Naam",
+      "PREVIEW": "Voorbeeld",
+      "DRAW_HINT": "Onderteken in het kader, met de muis of met uw vinger.",
+      "CLEAR": "Wissen",
+      "SIGN": "Ondertekenen",
+      "DECLINE": "Weigeren",
+      "MISSING": "Om te ondertekenen: vink uw akkoord aan, vul de verplichte velden (*) in en voeg uw handtekening toe.",
+      "RESTORED": "Uw handtekening is bewaard, klik op Ondertekenen.",
+      "STEP_UP": "Bevestig voor uw veiligheid uw identiteit: daarna keert u hier terug.",
+      "IMAGE_FAILED": "Uw handtekening kon niet worden voorbereid. Probeer opnieuw, of teken ze.",
+      "RELOAD": "Het document opnieuw laden",
+      "STATUS": {
+        "LOADING": "Het document wordt geladen…",
+        "READY": "Uw beurt om te ondertekenen: lees het document en onderteken in het paneel.",
+        "WAITING": "Nog niet uw beurt: een andere partij ondertekent eerst. U kunt het document al lezen.",
+        "SEALING": "Verzegelen…",
+        "SEALING_HINT": "Uw handtekening wordt op het document aangebracht en verzegeld. Dit duurt enkele seconden.",
+        "SLOW": "Het verzegelen duurt langer dan verwacht. Er gaat niets verloren: u krijgt een melding zodra het klaar is.",
+        "SIGNED": "Ondertekend",
+        "FINAL_READY": "Het door alle partijen ondertekende document is beschikbaar.",
+        "FINAL_PENDING": "Het definitieve document is beschikbaar zodra alle partijen hebben ondertekend.",
+        "DECLINED": "U hebt geweigerd dit document te ondertekenen.",
+        "CLOSED": "Dit verzoek staat niet meer open voor ondertekening ({{status}}).",
+        "STALE": "Het document is gewijzigd sinds u het opende. Laad het opnieuw voordat u ondertekent: uw invoer blijft bewaard.",
+        "ERROR": "Dit handtekeningverzoek bestaat niet, of betreft u niet."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Ondertekening weigeren",
+        "MESSAGE": "Geef aan waarom u weigert: de reden wordt doorgegeven aan wie de handtekening heeft gevraagd.",
+        "REASON": "Reden van de weigering",
+        "CONFIRM": "Ondertekening weigeren",
+        "CANCEL": "Annuleren"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} van {{total}} ondertekend",
+      "CREATED": "Gevraagd op {{date}}",
+      "CLOSED": "Afgesloten op {{date}}",
+      "SIGNERS": "Ondertekenaars",
+      "DOCUMENTS": "Documenten",
+      "DOCUMENTS_PENDING": "Het ondertekende document en het bewijs zijn beschikbaar zodra alle partijen hebben ondertekend.",
+      "SIGN_NOW": "Nu ondertekenen",
+      "DECLINE_REASON": "Reden: {{reason}}",
+      "TIMELINE": "Geschiedenis",
+      "CHAIN_OK": "Logboek intact",
+      "CHAIN_BROKEN": "Logboek gewijzigd bij gebeurtenis {{n}}",
+      "REMIND": "Herinneren",
+      "CANCEL": "Het verzoek annuleren",
+      "REMINDED": "{{n}} ondertekenaar(s) herinnerd.",
+      "CANCELLED": "Het handtekeningverzoek is geannuleerd."
+    },
+    "FOLLOW": {
+      "TITLE": "Handtekeningen van de gemeenschap",
+      "SUBTITLE": "Volg de handtekeningverzoeken: wie heeft ondertekend, wie nog moet en tegen wanneer.",
+      "FILTER_STATUS": "Status",
+      "ALL": "Alle statussen",
+      "EMPTY": "Geen handtekeningverzoek in deze gemeenschap.",
+      "OPEN_DETAIL": "Details openen",
+      "LAST_REMINDED": "Herinnerd op {{date}}",
+      "LOAD_ERROR": "De handtekeningverzoeken konden niet worden geladen.",
+      "COLUMNS": {
+        "TITLE": "Document",
+        "SOURCE": "Herkomst",
+        "PROGRESS": "Voortgang",
+        "EXPIRES": "Vervaldatum",
+        "STATUS": "Status",
+        "ACTIONS": "Acties"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Het handtekeningverzoek annuleren",
+      "MESSAGE": "De ondertekenaars kunnen dit document niet meer ondertekenen. Dit is definitief.",
+      "REASON": "Reden (optioneel)",
+      "CONFIRM": "Het verzoek annuleren",
+      "BACK": "Terug"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Verzoek aangemaakt",
+      "DOCUMENT_PREPARED": "Document voorbereid voor ondertekening",
+      "SIGNER_INVITED": "{{signer}} werd uitgenodigd om te ondertekenen",
+      "SIGNER_VIEWED": "{{signer}} heeft het document bekeken",
+      "SIGNER_REAUTHENTICATED": "{{signer}} heeft zijn of haar identiteit bevestigd",
+      "SIGNER_SIGNED": "{{signer}} heeft ondertekend",
+      "SIGNER_DECLINED": "{{signer}} weigerde te ondertekenen",
+      "REQUEST_REMINDED": "Herinnering verstuurd naar de ondertekenaars",
+      "REQUEST_COMPLETED": "Alle partijen hebben ondertekend: document afgerond",
+      "REQUEST_CANCELLED": "Verzoek geannuleerd",
+      "REQUEST_EXPIRED": "Verzoek verlopen",
+      "REQUEST_FAILED": "Het verzoek is mislukt (technische fout)",
+      "UNKNOWN": "Gebeurtenis “{{type}}”"
+    },
+    "PIECE": {
+      "REQUEST": "Handtekening vragen",
+      "REQUESTED_TOAST": "Het handtekeningverzoek is naar de deelnemer verstuurd.",
+      "FOLLOW": "Volgen",
+      "EVIDENCE": "Bewijs",
+      "STATUS": {
+        "REQUESTED": "Handtekening gevraagd",
+        "SIGNED": "Elektronisch ondertekend",
+        "DECLINED": "Geweigerd: {{reason}}",
+        "DECLINED_NO_REASON": "Handtekening geweigerd",
+        "EXPIRED": "Handtekening verlopen",
+        "CANCELLED": "Handtekening geannuleerd",
+        "FAILED": "Handtekening mislukt"
+      }
+    }
+  },
   "HOME": {
     "GREETING": "Hallo {{name}}",
     "GREETING_ANON": "Hallo",
@@ -3167,6 +3365,8 @@
       "RECORD_ONE": "{{field}} ontbreekt in uw fiche van “{{community}}”",
       "RECORD_MANY": "{{field}} en {{others}} ander(e) gegeven(s) ontbreken in uw fiche van “{{community}}”",
       "RECORD_ACTION": "Aanvullen",
+      "SIGNATURE": "U hebt {{count}} document(en) te ondertekenen",
+      "SIGNATURE_ACTION": "Ondertekenen",
       "UNREAD": "U hebt {{count}} ongelezen melding(en)",
       "UNREAD_ACTION": "Lezen"
     },

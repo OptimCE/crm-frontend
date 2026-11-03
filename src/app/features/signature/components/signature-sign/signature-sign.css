@@ -1,0 +1,98 @@
+/* The typed signature's face (@fontsource/dancing-script, global in angular.json). */
+.signature-script {
+  font-family: 'Dancing Script', cursive;
+  color: #1e3a8a;
+  line-height: 1.1;
+}
+
+/* The signer's own slot over the page: dashed, tinted, never hiding the page. */
+.signature-slot {
+  container-type: size;
+  border: 2px dashed var(--p-primary-500);
+  background: color-mix(in srgb, var(--p-primary-100) 45%, transparent);
+  border-radius: 4px;
+  overflow: hidden;
+  scroll-margin: 6rem;
+}
+
+.signature-slot__label {
+  font-size: clamp(8px, 28cqh, 14px);
+  font-weight: 600;
+  color: var(--p-primary-800);
+  text-align: center;
+  padding: 0 2px;
+}
+
+.signature-slot__typed {
+  font-size: 60cqh;
+  max-width: 100%;
+}
+
+/* The signer's fields over the page: real inputs, sized by their slot. */
+.signature-field {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 2px;
+  border: 1px solid var(--p-primary-400);
+  background: color-mix(in srgb, #fef9c3 85%, transparent);
+  border-radius: 2px;
+  font-size: clamp(7px, 1.4cqw, 14px);
+  color: #0f172a;
+}
+
+.signature-field:focus {
+  outline: 2px solid var(--p-primary-600);
+  outline-offset: 0;
+}
+
+.signature-field--date {
+  justify-content: center;
+  color: var(--p-surface-600);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.signature-field--check {
+  accent-color: var(--p-primary-600);
+}
+
+.signature-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--p-surface-700);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.signature-tab--active {
+  background: var(--p-primary-50);
+  color: var(--p-primary-800);
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--p-primary-200);
+}
+
+.signature-tab:focus-visible {
+  outline: 2px solid var(--p-primary-600);
+}
+
+.signature-preview {
+  height: 5rem;
+}
+
+.signature-preview__text {
+  font-size: 2.5rem;
+  max-width: 100%;
+}
+
+/* The drawing pad: a fixed height, and no page scroll while drawing on a phone. */
+.signature-pad {
+  height: 11rem;
+  touch-action: none;
+}

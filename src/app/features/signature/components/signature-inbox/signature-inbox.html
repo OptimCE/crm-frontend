@@ -1,0 +1,182 @@
+<div class="mx-auto w-full max-w-5xl flex flex-col gap-5 min-w-0">
+  <app-header-page
+    icon="pi pi-pen-to-square"
+    [text]="'SIGNATURE.INBOX.TITLE' | translate"
+    [subtitle]="'SIGNATURE.INBOX.SUBTITLE' | translate"
+  />
+
+  @if (!store.loaded()) {
+    <p class="text-sm text-surface-500 m-0" role="status" data-testid="signature-inbox__loading">
+      <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+      {{ 'SIGNATURE.COMMON.LOADING' | translate }}
+    </p>
+  } @else {
+    @if (store.failed()) {
+      <div
+        class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2"
+        data-testid="signature-inbox__error"
+      >
+        <span class="text-sm text-red-800 flex-1">{{
+          'SIGNATURE.INBOX.LOAD_ERROR' | translate
+        }}</span>
+        <p-button
+          icon="pi pi-refresh"
+          size="small"
+          [outlined]="true"
+          [label]="'SIGNATURE.COMMON.RETRY' | translate"
+          (onClick)="store.refresh()"
+        />
+      </div>
+    }
+
+    <section class="flex flex-col gap-3" aria-labelledby="signature-inbox-pending">
+      <h2 id="signature-inbox-pending" class="text-base font-semibold m-0">
+        {{ 'SIGNATURE.INBOX.PENDING_TITLE' | translate }}
+      </h2>
+      @if (pending().length === 0) {
+        <p
+          class="text-sm text-surface-500 m-0 flex items-center gap-2"
+          data-testid="signature-inbox__empty--pending"
+        >
+          <i class="pi pi-check-circle text-primary-600" aria-hidden="true"></i>
+          {{ 'SIGNATURE.INBOX.EMPTY_PENDING' | translate }}
+        </p>
+      }
+      @for (row of pending(); track row.signer.id; let i = $index) {
+        <article
+          class="rounded-xl border bg-white p-4 flex flex-col md:flex-row md:items-center gap-3"
+          [class.border-primary-200]="row.your_turn"
+          [class.border-surface-200]="!row.your_turn"
+          [attr.data-testid]="'signature-inbox__row--' + i"
+        >
+          <div class="flex flex-col gap-1 flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-medium text-surface-900 break-words">{{ row.request.title }}</span>
+              <p-tag [value]="signerStatusKey(row) | translate" [severity]="signerSeverity(row)" />
+            </div>
+            <span class="text-sm text-surface-700">
+              {{ capacity(row).key | translate: capacity(row).params }}
+              @if (row.signer.role_label) {
+                &middot; {{ row.signer.role_label }}
+              }
+            </span>
+            <span class="text-xs text-surface-500 flex flex-wrap gap-x-3 gap-y-1">
+              @if (row.request.community) {
+                <span>{{ row.request.community }}</span>
+              }
+              <span>{{
+                'SIGNATURE.COMMON.REFERENCE' | translate: { reference: row.request.reference }
+              }}</span>
+              @if (row.request.expires_at) {
+                <span>{{
+                  'SIGNATURE.COMMON.EXPIRES'
+                    | translate: { date: (row.request.expires_at | localeDate: 'mediumDate') }
+                }}</span>
+              }
+            </span>
+            @if (!row.your_turn) {
+              <span
+                class="text-xs text-surface-600"
+                [attr.data-testid]="'signature-inbox__waiting-' + i"
+              >
+                <i class="pi pi-hourglass" aria-hidden="true"></i>
+                {{ 'SIGNATURE.INBOX.NOT_YOUR_TURN' | translate }}
+              </span>
+            }
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            @if (row.your_turn) {
+              <p-button
+                icon="pi pi-pen-to-square"
+                [label]="'SIGNATURE.INBOX.SIGN' | translate"
+                (onClick)="openSign(row)"
+                [attr.data-testid]="'signature-inbox__button--sign-' + i"
+              />
+            } @else {
+              <a
+                [routerLink]="signLink(row)"
+                class="text-sm text-primary-700 underline"
+                [attr.data-testid]="'signature-inbox__link--view-' + i"
+                >{{ 'SIGNATURE.INBOX.READ' | translate }}</a
+              >
+            }
+          </div>
+        </article>
+      }
+    </section>
+
+    @if (past().length > 0) {
+      <section class="flex flex-col gap-3" aria-labelledby="signature-inbox-past">
+        <h2 id="signature-inbox-past" class="text-base font-semibold m-0">
+          {{ 'SIGNATURE.INBOX.PAST_TITLE' | translate }}
+        </h2>
+        @for (row of past(); track row.signer.id; let i = $index) {
+          <article
+            class="rounded-xl border border-surface-200 bg-white p-4 flex flex-col md:flex-row md:items-center gap-3"
+            [attr.data-testid]="'signature-inbox__past-row--' + i"
+          >
+            <div class="flex flex-col gap-1 flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-medium text-surface-900 break-words">{{
+                  row.request.title
+                }}</span>
+                <p-tag
+                  [value]="signerStatusKey(row) | translate"
+                  [severity]="signerSeverity(row)"
+                />
+                <p-tag
+                  [value]="requestStatusKey(row) | translate"
+                  [severity]="requestSeverity(row)"
+                />
+              </div>
+              <span class="text-sm text-surface-700">{{
+                capacity(row).key | translate: capacity(row).params
+              }}</span>
+              <span class="text-xs text-surface-500 flex flex-wrap gap-x-3 gap-y-1">
+                @if (row.request.community) {
+                  <span>{{ row.request.community }}</span>
+                }
+                @if (row.signer.signed_at) {
+                  <span>{{
+                    'SIGNATURE.INBOX.SIGNED_ON'
+                      | translate: { date: (row.signer.signed_at | localeDate: 'medium') }
+                  }}</span>
+                }
+                @if (row.signer.declined_at) {
+                  <span>{{
+                    'SIGNATURE.INBOX.DECLINED_ON'
+                      | translate: { date: (row.signer.declined_at | localeDate: 'medium') }
+                  }}</span>
+                }
+              </span>
+              @if (row.signer.status === 'SIGNED' && !row.request.has_artifacts) {
+                <span class="text-xs text-surface-600">{{
+                  'SIGNATURE.SIGN.STATUS.FINAL_PENDING' | translate
+                }}</span>
+              }
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              @if (row.request.has_artifacts) {
+                <p-button
+                  icon="pi pi-download"
+                  size="small"
+                  [outlined]="true"
+                  [label]="'SIGNATURE.COMMON.DOWNLOAD_SIGNED' | translate"
+                  [loading]="isDownloading(row)"
+                  (onClick)="download(row)"
+                  [attr.data-testid]="'signature-inbox__button--download-' + i"
+                />
+              }
+              <a
+                [routerLink]="detailLink(row)"
+                class="text-sm text-primary-700 underline"
+                [attr.data-testid]="'signature-inbox__link--detail-' + i"
+                >{{ 'SIGNATURE.COMMON.DETAILS' | translate }}</a
+              >
+            </div>
+          </article>
+        }
+      </section>
+    }
+  }
+</div>

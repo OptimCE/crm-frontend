@@ -77,6 +77,7 @@
     "JUST_NOW": "À l'instant",
     "NEW_TOAST": "Vous avez de nouvelles notifications",
     "PREFIXES": {
+      "signature": "Signatures électroniques",
       "admin_deadline": "Échéances administratives",
       "admin_dossier": "Dossiers administratifs",
       "billing_run": "Campagnes de facturation",
@@ -95,6 +96,23 @@
       "admin_meter": "Mes compteurs dans le partage"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "« {{title}} » attend votre signature ({{community}})"
+        },
+        "reminder": {
+          "title": "Rappel : « {{title}} » attend toujours votre signature ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} a signé « {{title}} »"
+        },
+        "declined": {
+          "title": "{{signer}} a refusé de signer « {{title}} » : {{reason}}"
+        },
+        "completed": {
+          "title": "« {{title}} » est signé par toutes les parties"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "Un nouveau document a été téléversé"
@@ -353,6 +371,9 @@
     "NEWS": "Actualités",
     "BILLING": "Facturation",
     "ADMINISTRATIVE_DOCUMENT": "Documents administratifs",
+    "SIGNATURES": "À signer",
+    "SIGNATURES_COMMUNITY": "Signatures",
+    "SIGNATURES_BADGE": "{{count}} document(s) à signer",
     "DASHBOARD": "Tableau de bord",
     "HOME": "Accueil",
     "LIVE_DATA": "Données en direct",
@@ -1769,6 +1790,10 @@
       "NAME": "Documents administratifs",
       "DESCRIPTION": "Suivez les dossiers réglementaires déposés auprès de la CWaPE et du GRD : statuts, échéances calculées et chaque version de chaque document transmis."
     },
+    "SIGNATURE": {
+      "NAME": "Signature électronique",
+      "DESCRIPTION": "Faites signer en ligne les documents de la communauté : signature tapée ou dessinée dans l'application, document scellé et preuve vérifiable pour chaque signature."
+    },
     "LIVE_DATA": {
       "NAME": "Données en direct",
       "DESCRIPTION": "Relevez les compteurs communicants de la communauté tous les quarts d'heure : production en temps réel, état des appareils et seuil de confidentialité que vous maîtrisez.",
@@ -3154,6 +3179,179 @@
       }
     }
   },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Chargement…",
+      "RETRY": "Réessayer",
+      "REFERENCE": "Réf. {{reference}}",
+      "COMMUNITY": "Communauté : {{community}}",
+      "EXPIRES": "À signer avant le {{date}}",
+      "BACK_TO_INBOX": "Retour à mes signatures",
+      "DETAILS": "Détails",
+      "DOWNLOAD_SIGNED": "Télécharger le document signé",
+      "DOWNLOAD_EVIDENCE_PDF": "Preuve (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Preuve (JSON)",
+      "LOAD_ERROR": "Cette demande de signature n'a pas pu être chargée."
+    },
+    "CAPACITY": {
+      "SELF": "En votre nom",
+      "LEGAL_REPRESENTATIVE": "Pour {{member}} (représentant légal)",
+      "COMMUNITY_ADMIN": "Pour la communauté (administrateur)"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "En préparation",
+      "OPEN": "En cours",
+      "COMPLETING": "Finalisation",
+      "COMPLETED": "Terminée",
+      "DECLINED": "Refusée",
+      "CANCELLED": "Annulée",
+      "EXPIRED": "Expirée",
+      "FAILED": "En échec"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "En attente",
+      "INVITED": "À signer",
+      "VIEWED": "Consulté",
+      "SIGNING": "Scellement en cours",
+      "SIGNED": "Signé",
+      "DECLINED": "Refusé"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Documents administratifs",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "À signer",
+      "SUBTITLE": "Les documents qui attendent votre signature, dans toutes vos communautés.",
+      "PENDING_TITLE": "En attente de votre signature",
+      "PAST_TITLE": "Déjà traitées",
+      "EMPTY_PENDING": "Rien à signer pour le moment.",
+      "SIGN": "Signer",
+      "READ": "Consulter",
+      "NOT_YOUR_TURN": "Pas encore votre tour : une autre partie signe d'abord.",
+      "SIGNED_ON": "Signé le {{date}}",
+      "DECLINED_ON": "Refusé le {{date}}",
+      "LOAD_ERROR": "Vos demandes de signature n'ont pas pu être chargées."
+    },
+    "SIGN": {
+      "DOCUMENT": "Document à signer",
+      "GO_TO_SLOT": "Aller à ma signature",
+      "YOUR_SLOT": "Votre signature ici",
+      "DATE_FIELD": "Date de signature",
+      "DATE_AUTO": "complétée automatiquement à la signature",
+      "FIELDS_TITLE": "À compléter",
+      "FIELDS_HINT": "Remplissez ces champs ici ou directement sur le document.",
+      "PANEL_TITLE": "Votre signature",
+      "TAB_TYPED": "Taper",
+      "TAB_DRAWN": "Dessiner",
+      "TYPED_LABEL": "Votre nom, tel qu'il apparaîtra",
+      "TYPED_PLACEHOLDER": "Prénom Nom",
+      "PREVIEW": "Aperçu",
+      "DRAW_HINT": "Signez dans le cadre, à la souris ou du doigt.",
+      "CLEAR": "Effacer",
+      "SIGN": "Signer",
+      "DECLINE": "Refuser",
+      "MISSING": "Pour signer : cochez votre accord, complétez les champs obligatoires (*) et ajoutez votre signature.",
+      "RESTORED": "Votre signature a été conservée, cliquez sur Signer.",
+      "STEP_UP": "Pour votre sécurité, confirmez votre identité : vous reviendrez ensuite ici.",
+      "IMAGE_FAILED": "Votre signature n'a pas pu être préparée. Réessayez, ou dessinez-la.",
+      "RELOAD": "Recharger le document",
+      "STATUS": {
+        "LOADING": "Chargement du document…",
+        "READY": "À vous de signer : lisez le document, puis signez dans le panneau.",
+        "WAITING": "Pas encore votre tour : une autre partie signe d'abord. Vous pouvez déjà lire le document.",
+        "SEALING": "Scellement…",
+        "SEALING_HINT": "Votre signature est apposée sur le document et scellée. Cela prend quelques secondes.",
+        "SLOW": "Le scellement prend plus de temps que prévu. Rien n'est perdu : vous recevrez une notification dès qu'il sera terminé.",
+        "SIGNED": "Signé",
+        "FINAL_READY": "Le document signé par toutes les parties est disponible.",
+        "FINAL_PENDING": "Le document final sera disponible quand toutes les parties auront signé.",
+        "DECLINED": "Vous avez refusé de signer ce document.",
+        "CLOSED": "Cette demande n'est plus ouverte à la signature ({{status}}).",
+        "STALE": "Le document a changé depuis que vous l'avez ouvert. Rechargez-le avant de signer : votre saisie est conservée.",
+        "ERROR": "Cette demande de signature est introuvable, ou ne vous concerne pas."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Refuser de signer",
+        "MESSAGE": "Indiquez pourquoi vous refusez : la raison est transmise à la personne qui a demandé la signature.",
+        "REASON": "Raison du refus",
+        "CONFIRM": "Refuser de signer",
+        "CANCEL": "Annuler"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} sur {{total}} signés",
+      "CREATED": "Demandée le {{date}}",
+      "CLOSED": "Clôturée le {{date}}",
+      "SIGNERS": "Signataires",
+      "DOCUMENTS": "Documents",
+      "DOCUMENTS_PENDING": "Le document signé et la preuve seront disponibles quand toutes les parties auront signé.",
+      "SIGN_NOW": "Signer maintenant",
+      "DECLINE_REASON": "Raison : {{reason}}",
+      "TIMELINE": "Historique",
+      "CHAIN_OK": "Journal intègre",
+      "CHAIN_BROKEN": "Journal altéré à l'événement {{n}}",
+      "REMIND": "Relancer",
+      "CANCEL": "Annuler la demande",
+      "REMINDED": "{{n}} signataire(s) relancé(s).",
+      "CANCELLED": "La demande de signature a été annulée."
+    },
+    "FOLLOW": {
+      "TITLE": "Signatures de la communauté",
+      "SUBTITLE": "Suivez les demandes de signature : qui a signé, qui doit encore le faire, jusqu'à quand.",
+      "FILTER_STATUS": "Statut",
+      "ALL": "Tous les statuts",
+      "EMPTY": "Aucune demande de signature dans cette communauté.",
+      "OPEN_DETAIL": "Ouvrir le détail",
+      "LAST_REMINDED": "Relancée le {{date}}",
+      "LOAD_ERROR": "Les demandes de signature n'ont pas pu être chargées.",
+      "COLUMNS": {
+        "TITLE": "Document",
+        "SOURCE": "Origine",
+        "PROGRESS": "Avancement",
+        "EXPIRES": "Échéance",
+        "STATUS": "Statut",
+        "ACTIONS": "Actions"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Annuler la demande de signature",
+      "MESSAGE": "Les signataires ne pourront plus signer ce document. Cette action est définitive.",
+      "REASON": "Raison (facultative)",
+      "CONFIRM": "Annuler la demande",
+      "BACK": "Retour"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Demande créée",
+      "DOCUMENT_PREPARED": "Document préparé pour la signature",
+      "SIGNER_INVITED": "{{signer}} a été invité(e) à signer",
+      "SIGNER_VIEWED": "{{signer}} a consulté le document",
+      "SIGNER_REAUTHENTICATED": "{{signer}} a confirmé son identité",
+      "SIGNER_SIGNED": "{{signer}} a signé",
+      "SIGNER_DECLINED": "{{signer}} a refusé de signer",
+      "REQUEST_REMINDED": "Relance envoyée aux signataires",
+      "REQUEST_COMPLETED": "Toutes les parties ont signé : document finalisé",
+      "REQUEST_CANCELLED": "Demande annulée",
+      "REQUEST_EXPIRED": "Demande expirée",
+      "REQUEST_FAILED": "La demande a échoué (erreur technique)",
+      "UNKNOWN": "Événement « {{type}} »"
+    },
+    "PIECE": {
+      "REQUEST": "Demander la signature",
+      "REQUESTED_TOAST": "La demande de signature est envoyée au participant.",
+      "FOLLOW": "Suivre",
+      "EVIDENCE": "Preuve",
+      "STATUS": {
+        "REQUESTED": "Signature demandée",
+        "SIGNED": "Signé électroniquement",
+        "DECLINED": "Refusé : {{reason}}",
+        "DECLINED_NO_REASON": "Signature refusée",
+        "EXPIRED": "Signature expirée",
+        "CANCELLED": "Signature annulée",
+        "FAILED": "Échec de la signature"
+      }
+    }
+  },
   "HOME": {
     "GREETING": "Bonjour {{name}}",
     "GREETING_ANON": "Bonjour",
@@ -3167,6 +3365,8 @@
       "RECORD_ONE": "Il manque {{field}} dans votre fiche de « {{community}} »",
       "RECORD_MANY": "Il manque {{field}} et {{others}} autre(s) information(s) dans votre fiche de « {{community}} »",
       "RECORD_ACTION": "Compléter",
+      "SIGNATURE": "Vous avez {{count}} document(s) à signer",
+      "SIGNATURE_ACTION": "Signer",
       "UNREAD": "Vous avez {{count}} notification(s) non lue(s)",
       "UNREAD_ACTION": "Lire"
     },

@@ -31,6 +31,13 @@ export interface NotificationPresentation {
    */
   feature?: GatedFeature;
   /**
+   * The destination is not the ACTIVE community's: it loads by its own id and
+   * the annexe decides who may see it (the signature inbox, a request's page,
+   * a signing screen). Clicking it never depends on which community is active,
+   * nor on the active community's subscriptions.
+   */
+  crossCommunity?: true;
+  /**
    * Resolve the click-through destination from `notification.data`, or
    * `undefined` when there is nothing to open.
    *
@@ -83,6 +90,20 @@ function dossierRoute(data: NotificationData): string {
 function ownMeterRoute(data: NotificationData): string {
   const ean = data['ean'];
   return typeof ean === 'string' && /^\d{18}$/.test(ean) ? `/users/me/meters/${ean}` : '/users';
+}
+
+/**
+ * The signature annexe's own in-app link (`data.path`): the inbox, a request's
+ * page, or a signing screen, and nothing else — ids of hex digits and dashes
+ * only, since the value goes to `navigateByUrl`. Anything else lands on the
+ * inbox, which lists the same request.
+ */
+const SIGNATURE_PATH =
+  /^\/signatures(?:\/requests\/[0-9a-fA-F-]{1,64}|\/[0-9a-fA-F-]{1,64}\/signers\/[0-9a-fA-F-]{1,64})?$/;
+
+function signatureRoute(data: NotificationData): string {
+  const path = data['path'];
+  return typeof path === 'string' && SIGNATURE_PATH.test(path) ? path : '/signatures';
 }
 
 const REGISTRY: Record<string, NotificationPresentation> = {
@@ -162,6 +183,33 @@ const REGISTRY: Record<string, NotificationPresentation> = {
     icon: 'pi pi-bolt',
     route: ownMeterRoute,
   },
+  // signature — to the signer (requested, reminder: the signing screen) and to
+  // the requester (signed, declined, completed: the request's page).
+  'signature.requested': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.reminder': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.signed': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.declined': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.completed': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
 };
 
 /** Resolve presentation for a notification type, falling back to a generic bell. */
@@ -184,6 +232,11 @@ export function routeFor(notification: NotificationDTO): string | undefined {
  */
 export function featureFor(notification: NotificationDTO): GatedFeature | undefined {
   return presentationFor(notification.type).feature;
+}
+
+/** Whether a notification's destination is reachable whatever community is active. */
+export function isCrossCommunity(notification: NotificationDTO): boolean {
+  return presentationFor(notification.type).crossCommunity === true;
 }
 
 /** Every registered type key. Used by the i18n coverage spec. */

@@ -1,0 +1,185 @@
+<div class="mx-auto w-full max-w-6xl flex flex-col gap-4 min-w-0">
+  <app-header-page
+    icon="pi pi-pen-to-square"
+    [text]="'SIGNATURE.FOLLOW.TITLE' | translate"
+    [subtitle]="'SIGNATURE.FOLLOW.SUBTITLE' | translate"
+  />
+
+  <div class="filter-bar rounded-xl p-4 border border-primary-100">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div>
+        <span class="field-label" id="signature-follow-status-label">{{
+          'SIGNATURE.FOLLOW.FILTER_STATUS' | translate
+        }}</span>
+        <p-select
+          [options]="statusOptions()"
+          [ngModel]="status()"
+          (ngModelChange)="onStatus($event)"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'SIGNATURE.FOLLOW.ALL' | translate"
+          ariaLabelledBy="signature-follow-status-label"
+          appendTo="body"
+          class="w-full"
+          data-testid="signature-follow__select--status"
+        />
+      </div>
+    </div>
+  </div>
+
+  @if (failed(); as message) {
+    <div
+      class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2"
+      data-testid="signature-follow__error"
+    >
+      <span class="text-sm text-red-800 flex-1">{{ message }}</span>
+      <p-button
+        icon="pi pi-refresh"
+        size="small"
+        [outlined]="true"
+        [label]="'SIGNATURE.COMMON.RETRY' | translate"
+        (onClick)="load(true)"
+      />
+    </div>
+  }
+
+  <p-table
+    [value]="rows()"
+    [lazy]="true"
+    (onLazyLoad)="onPage($event)"
+    [rows]="pageSize"
+    [first]="first()"
+    [totalRecords]="total()"
+    [paginator]="total() > pageSize"
+    [loading]="loading()"
+    dataKey="id"
+    data-testid="signature-follow__table"
+  >
+    <ng-template #header>
+      <tr>
+        <th class="text-base px-3">{{ 'SIGNATURE.FOLLOW.COLUMNS.TITLE' | translate }}</th>
+        <th class="text-base px-3">{{ 'SIGNATURE.FOLLOW.COLUMNS.SOURCE' | translate }}</th>
+        <th class="text-base px-3">{{ 'SIGNATURE.FOLLOW.COLUMNS.PROGRESS' | translate }}</th>
+        <th class="text-base px-3">{{ 'SIGNATURE.FOLLOW.COLUMNS.EXPIRES' | translate }}</th>
+        <th class="text-base px-3">{{ 'SIGNATURE.FOLLOW.COLUMNS.STATUS' | translate }}</th>
+        <th class="text-base px-3">
+          <span class="sr-only">{{ 'SIGNATURE.FOLLOW.COLUMNS.ACTIONS' | translate }}</span>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-row let-i="rowIndex">
+      <tr [attr.data-testid]="'signature-follow__row--' + i">
+        <td class="text-sm">
+          <span class="font-medium block break-words">{{ row.title }}</span>
+          <span class="text-xs text-surface-500">{{
+            'SIGNATURE.COMMON.REFERENCE' | translate: { reference: row.reference }
+          }}</span>
+          @if (row.last_reminded_at) {
+            <span class="text-xs text-surface-500 block">{{
+              'SIGNATURE.FOLLOW.LAST_REMINDED'
+                | translate: { date: (row.last_reminded_at | localeDate: 'short') }
+            }}</span>
+          }
+        </td>
+        <td class="text-sm">{{ source(row).key | translate: source(row).params }}</td>
+        <td
+          class="text-sm whitespace-nowrap"
+          [attr.data-testid]="'signature-follow__progress-' + i"
+        >
+          {{
+            'SIGNATURE.REQUEST.PROGRESS'
+              | translate: { signed: row.progress.signed, total: row.progress.total }
+          }}
+        </td>
+        <td class="text-sm whitespace-nowrap">
+          {{ row.expires_at ? (row.expires_at | localeDate: 'mediumDate') : '—' }}
+        </td>
+        <td class="text-sm">
+          <p-tag [value]="statusKey(row) | translate" [severity]="statusSeverity(row)" />
+        </td>
+        <td class="text-sm">
+          <div class="flex items-center justify-end gap-1">
+            @if (isOpen(row)) {
+              <p-button
+                icon="pi pi-bell"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                [pTooltip]="'SIGNATURE.REQUEST.REMIND' | translate"
+                [attr.aria-label]="'SIGNATURE.REQUEST.REMIND' | translate"
+                [loading]="reminding() === row.id"
+                (onClick)="remind(row)"
+                [attr.data-testid]="'signature-follow__button--remind-' + i"
+              />
+              <p-button
+                icon="pi pi-ban"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                severity="danger"
+                [pTooltip]="'SIGNATURE.REQUEST.CANCEL' | translate"
+                [attr.aria-label]="'SIGNATURE.REQUEST.CANCEL' | translate"
+                (onClick)="askCancel(row)"
+                [attr.data-testid]="'signature-follow__button--cancel-' + i"
+              />
+            }
+            @if (row.has_artifacts) {
+              <p-button
+                icon="pi pi-download"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                [pTooltip]="'SIGNATURE.COMMON.DOWNLOAD_SIGNED' | translate"
+                [attr.aria-label]="'SIGNATURE.COMMON.DOWNLOAD_SIGNED' | translate"
+                [loading]="isDownloading(row, 'final')"
+                (onClick)="download(row, 'final')"
+                [attr.data-testid]="'signature-follow__button--download-' + i"
+              />
+              <p-button
+                icon="pi pi-verified"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                [pTooltip]="'SIGNATURE.COMMON.DOWNLOAD_EVIDENCE_PDF' | translate"
+                [attr.aria-label]="'SIGNATURE.COMMON.DOWNLOAD_EVIDENCE_PDF' | translate"
+                [loading]="isDownloading(row, 'evidence-pdf')"
+                (onClick)="download(row, 'evidence-pdf')"
+                [attr.data-testid]="'signature-follow__button--evidence-' + i"
+              />
+            }
+            <p-button
+              icon="pi pi-arrow-right"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              [pTooltip]="'SIGNATURE.FOLLOW.OPEN_DETAIL' | translate"
+              [attr.aria-label]="'SIGNATURE.FOLLOW.OPEN_DETAIL' | translate"
+              (onClick)="open(row)"
+              [attr.data-testid]="'signature-follow__button--open-' + i"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">
+          <div class="py-8 text-center" data-testid="signature-follow__empty">
+            <i class="pi pi-pen-to-square text-3xl text-surface-300 mb-2" aria-hidden="true"></i>
+            <p class="text-surface-400 m-0">{{ 'SIGNATURE.FOLLOW.EMPTY' | translate }}</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-signature-cancel-dialog
+  [visible]="cancelTarget() !== null"
+  [busy]="cancelling()"
+  (confirmed)="cancel($event)"
+  (dismissed)="cancelTarget.set(null)"
+/>

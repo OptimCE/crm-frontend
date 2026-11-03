@@ -1,5 +1,5 @@
 import { NotificationDTO } from '../dtos/notification.dto';
-import { featureFor } from './notification-type.registry';
+import { featureFor, isCrossCommunity } from './notification-type.registry';
 
 /**
  * Whether clicking a notification may navigate to its destination.
@@ -16,6 +16,10 @@ import { featureFor } from './notification-type.registry';
  *  2. **Unsubscribed annexe.** A community that stops paying for billing keeps
  *     its old invoice notifications; `activeFeatureGuard` then bounces the click.
  *
+ * Neither applies to a cross-community destination (the signature annexe's
+ * inbox, request pages and signing screens load by their own ids, whatever
+ * community is active): those always navigate.
+ *
  * Kept as a pure function, outside both call sites, so it is unit-testable
  * without a TestBed — the same reason the registry itself has no DI.
  *
@@ -27,6 +31,10 @@ export function canNavigate(
   activeOrgId: string | null,
   isActive: (feature: string) => boolean,
 ): boolean {
+  if (isCrossCommunity(notification)) {
+    return true;
+  }
+
   // A null community means the notification is user-scoped (an invitation), and
   // its destination is a core `/users/*` route — always reachable.
   if (notification.community && notification.community.auth_community_id !== activeOrgId) {

@@ -77,6 +77,7 @@
     "JUST_NOW": "Gerade eben",
     "NEW_TOAST": "Sie haben neue Benachrichtigungen",
     "PREFIXES": {
+      "signature": "Elektronische Signaturen",
       "admin_deadline": "Verwaltungsfristen",
       "admin_dossier": "Verwaltungsdossiers",
       "billing_run": "Abrechnungsläufe",
@@ -95,6 +96,23 @@
       "admin_meter": "Meine Zähler in der Teilung"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "„{{title}}“ wartet auf Ihre Unterschrift ({{community}})"
+        },
+        "reminder": {
+          "title": "Erinnerung: „{{title}}“ wartet noch auf Ihre Unterschrift ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} hat „{{title}}“ unterschrieben"
+        },
+        "declined": {
+          "title": "{{signer}} hat die Unterschrift von „{{title}}“ abgelehnt: {{reason}}"
+        },
+        "completed": {
+          "title": "„{{title}}“ wurde von allen Parteien unterschrieben"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "Ein neues Dokument wurde hochgeladen"
@@ -353,6 +371,9 @@
     "NEWS": "Aktuelles",
     "BILLING": "Abrechnung",
     "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
+    "SIGNATURES": "Zu unterschreiben",
+    "SIGNATURES_COMMUNITY": "Unterschriften",
+    "SIGNATURES_BADGE": "{{count}} Dokument(e) zu unterschreiben",
     "DASHBOARD": "Übersicht",
     "HOME": "Start",
     "LIVE_DATA": "Live-Daten",
@@ -1769,6 +1790,10 @@
       "NAME": "Verwaltungsdokumente",
       "DESCRIPTION": "Verfolgen Sie die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers: Status, abgeleitete Fristen und jede Version jedes übermittelten Dokuments."
     },
+    "SIGNATURE": {
+      "NAME": "Elektronische Signatur",
+      "DESCRIPTION": "Lassen Sie die Dokumente der Gemeinschaft online unterschreiben: getippte oder gezeichnete Unterschrift in der App, versiegeltes Dokument und überprüfbarer Nachweis für jede Unterschrift."
+    },
     "LIVE_DATA": {
       "NAME": "Live-Daten",
       "DESCRIPTION": "Lesen Sie die intelligenten Zähler der Gemeinschaft viertelstündlich aus: Erzeugung in Echtzeit, Gerätezustand und eine Datenschutzschwelle, die Sie selbst bestimmen.",
@@ -3154,6 +3179,179 @@
       }
     }
   },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Wird geladen…",
+      "RETRY": "Erneut versuchen",
+      "REFERENCE": "Ref. {{reference}}",
+      "COMMUNITY": "Gemeinschaft: {{community}}",
+      "EXPIRES": "Zu unterschreiben bis {{date}}",
+      "BACK_TO_INBOX": "Zurück zu meinen Unterschriften",
+      "DETAILS": "Details",
+      "DOWNLOAD_SIGNED": "Unterschriebenes Dokument herunterladen",
+      "DOWNLOAD_EVIDENCE_PDF": "Nachweis (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Nachweis (JSON)",
+      "LOAD_ERROR": "Diese Signaturanfrage konnte nicht geladen werden."
+    },
+    "CAPACITY": {
+      "SELF": "In Ihrem eigenen Namen",
+      "LEGAL_REPRESENTATIVE": "Für {{member}} (gesetzlicher Vertreter)",
+      "COMMUNITY_ADMIN": "Für die Gemeinschaft (Administrator)"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "In Vorbereitung",
+      "OPEN": "Laufend",
+      "COMPLETING": "Wird abgeschlossen",
+      "COMPLETED": "Abgeschlossen",
+      "DECLINED": "Abgelehnt",
+      "CANCELLED": "Storniert",
+      "EXPIRED": "Abgelaufen",
+      "FAILED": "Fehlgeschlagen"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "Wartend",
+      "INVITED": "Zu unterschreiben",
+      "VIEWED": "Angesehen",
+      "SIGNING": "Wird versiegelt",
+      "SIGNED": "Unterschrieben",
+      "DECLINED": "Abgelehnt"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "Zu unterschreiben",
+      "SUBTITLE": "Die Dokumente, die auf Ihre Unterschrift warten, in all Ihren Gemeinschaften.",
+      "PENDING_TITLE": "Warten auf Ihre Unterschrift",
+      "PAST_TITLE": "Bereits erledigt",
+      "EMPTY_PENDING": "Im Moment ist nichts zu unterschreiben.",
+      "SIGN": "Unterschreiben",
+      "READ": "Ansehen",
+      "NOT_YOUR_TURN": "Noch nicht an der Reihe: Eine andere Partei unterschreibt zuerst.",
+      "SIGNED_ON": "Unterschrieben am {{date}}",
+      "DECLINED_ON": "Abgelehnt am {{date}}",
+      "LOAD_ERROR": "Ihre Signaturanfragen konnten nicht geladen werden."
+    },
+    "SIGN": {
+      "DOCUMENT": "Zu unterschreibendes Dokument",
+      "GO_TO_SLOT": "Zu meiner Unterschrift",
+      "YOUR_SLOT": "Ihre Unterschrift hier",
+      "DATE_FIELD": "Datum der Unterschrift",
+      "DATE_AUTO": "wird beim Unterschreiben automatisch ausgefüllt",
+      "FIELDS_TITLE": "Auszufüllen",
+      "FIELDS_HINT": "Füllen Sie diese Felder hier oder direkt im Dokument aus.",
+      "PANEL_TITLE": "Ihre Unterschrift",
+      "TAB_TYPED": "Tippen",
+      "TAB_DRAWN": "Zeichnen",
+      "TYPED_LABEL": "Ihr Name, wie er erscheinen wird",
+      "TYPED_PLACEHOLDER": "Vorname Nachname",
+      "PREVIEW": "Vorschau",
+      "DRAW_HINT": "Unterschreiben Sie im Rahmen, mit der Maus oder dem Finger.",
+      "CLEAR": "Löschen",
+      "SIGN": "Unterschreiben",
+      "DECLINE": "Ablehnen",
+      "MISSING": "Zum Unterschreiben: Zustimmung ankreuzen, Pflichtfelder (*) ausfüllen und Ihre Unterschrift hinzufügen.",
+      "RESTORED": "Ihre Unterschrift wurde aufbewahrt, klicken Sie auf Unterschreiben.",
+      "STEP_UP": "Bestätigen Sie zu Ihrer Sicherheit Ihre Identität: Danach kehren Sie hierher zurück.",
+      "IMAGE_FAILED": "Ihre Unterschrift konnte nicht vorbereitet werden. Versuchen Sie es erneut oder zeichnen Sie sie.",
+      "RELOAD": "Dokument neu laden",
+      "STATUS": {
+        "LOADING": "Das Dokument wird geladen…",
+        "READY": "Sie sind an der Reihe: Lesen Sie das Dokument und unterschreiben Sie im Bereich rechts.",
+        "WAITING": "Noch nicht an der Reihe: Eine andere Partei unterschreibt zuerst. Sie können das Dokument bereits lesen.",
+        "SEALING": "Versiegelung…",
+        "SEALING_HINT": "Ihre Unterschrift wird auf das Dokument gesetzt und versiegelt. Das dauert einige Sekunden.",
+        "SLOW": "Die Versiegelung dauert länger als erwartet. Nichts geht verloren: Sie erhalten eine Benachrichtigung, sobald sie abgeschlossen ist.",
+        "SIGNED": "Unterschrieben",
+        "FINAL_READY": "Das von allen Parteien unterschriebene Dokument ist verfügbar.",
+        "FINAL_PENDING": "Das endgültige Dokument ist verfügbar, sobald alle Parteien unterschrieben haben.",
+        "DECLINED": "Sie haben abgelehnt, dieses Dokument zu unterschreiben.",
+        "CLOSED": "Diese Anfrage ist nicht mehr zur Unterschrift offen ({{status}}).",
+        "STALE": "Das Dokument hat sich geändert, seit Sie es geöffnet haben. Laden Sie es vor dem Unterschreiben neu: Ihre Eingaben bleiben erhalten.",
+        "ERROR": "Diese Signaturanfrage wurde nicht gefunden oder betrifft Sie nicht."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Unterschrift ablehnen",
+        "MESSAGE": "Geben Sie an, warum Sie ablehnen: Der Grund wird an die Person weitergegeben, die die Unterschrift angefordert hat.",
+        "REASON": "Grund der Ablehnung",
+        "CONFIRM": "Unterschrift ablehnen",
+        "CANCEL": "Abbrechen"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} von {{total}} unterschrieben",
+      "CREATED": "Angefordert am {{date}}",
+      "CLOSED": "Abgeschlossen am {{date}}",
+      "SIGNERS": "Unterzeichnende",
+      "DOCUMENTS": "Dokumente",
+      "DOCUMENTS_PENDING": "Das unterschriebene Dokument und der Nachweis sind verfügbar, sobald alle Parteien unterschrieben haben.",
+      "SIGN_NOW": "Jetzt unterschreiben",
+      "DECLINE_REASON": "Grund: {{reason}}",
+      "TIMELINE": "Verlauf",
+      "CHAIN_OK": "Protokoll unversehrt",
+      "CHAIN_BROKEN": "Protokoll verändert bei Ereignis {{n}}",
+      "REMIND": "Erinnern",
+      "CANCEL": "Anfrage stornieren",
+      "REMINDED": "{{n}} Unterzeichnende(r) erinnert.",
+      "CANCELLED": "Die Signaturanfrage wurde storniert."
+    },
+    "FOLLOW": {
+      "TITLE": "Unterschriften der Gemeinschaft",
+      "SUBTITLE": "Verfolgen Sie die Signaturanfragen: Wer hat unterschrieben, wer muss noch, und bis wann.",
+      "FILTER_STATUS": "Status",
+      "ALL": "Alle Status",
+      "EMPTY": "Keine Signaturanfrage in dieser Gemeinschaft.",
+      "OPEN_DETAIL": "Details öffnen",
+      "LAST_REMINDED": "Erinnert am {{date}}",
+      "LOAD_ERROR": "Die Signaturanfragen konnten nicht geladen werden.",
+      "COLUMNS": {
+        "TITLE": "Dokument",
+        "SOURCE": "Herkunft",
+        "PROGRESS": "Fortschritt",
+        "EXPIRES": "Frist",
+        "STATUS": "Status",
+        "ACTIONS": "Aktionen"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Signaturanfrage stornieren",
+      "MESSAGE": "Die Unterzeichnenden können dieses Dokument nicht mehr unterschreiben. Dies ist endgültig.",
+      "REASON": "Grund (optional)",
+      "CONFIRM": "Anfrage stornieren",
+      "BACK": "Zurück"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Anfrage erstellt",
+      "DOCUMENT_PREPARED": "Dokument für die Unterschrift vorbereitet",
+      "SIGNER_INVITED": "{{signer}} wurde zur Unterschrift eingeladen",
+      "SIGNER_VIEWED": "{{signer}} hat das Dokument angesehen",
+      "SIGNER_REAUTHENTICATED": "{{signer}} hat die eigene Identität bestätigt",
+      "SIGNER_SIGNED": "{{signer}} hat unterschrieben",
+      "SIGNER_DECLINED": "{{signer}} hat die Unterschrift abgelehnt",
+      "REQUEST_REMINDED": "Erinnerung an die Unterzeichnenden gesendet",
+      "REQUEST_COMPLETED": "Alle Parteien haben unterschrieben: Dokument abgeschlossen",
+      "REQUEST_CANCELLED": "Anfrage storniert",
+      "REQUEST_EXPIRED": "Anfrage abgelaufen",
+      "REQUEST_FAILED": "Die Anfrage ist fehlgeschlagen (technischer Fehler)",
+      "UNKNOWN": "Ereignis „{{type}}“"
+    },
+    "PIECE": {
+      "REQUEST": "Unterschrift anfordern",
+      "REQUESTED_TOAST": "Die Signaturanfrage wurde an den Teilnehmer gesendet.",
+      "FOLLOW": "Verfolgen",
+      "EVIDENCE": "Nachweis",
+      "STATUS": {
+        "REQUESTED": "Unterschrift angefordert",
+        "SIGNED": "Elektronisch unterschrieben",
+        "DECLINED": "Abgelehnt: {{reason}}",
+        "DECLINED_NO_REASON": "Unterschrift abgelehnt",
+        "EXPIRED": "Unterschrift abgelaufen",
+        "CANCELLED": "Unterschrift storniert",
+        "FAILED": "Unterschrift fehlgeschlagen"
+      }
+    }
+  },
   "HOME": {
     "GREETING": "Hallo {{name}}",
     "GREETING_ANON": "Hallo",
@@ -3167,6 +3365,8 @@
       "RECORD_ONE": "{{field}} fehlt in Ihrem Datensatz von „{{community}}“",
       "RECORD_MANY": "{{field}} und {{others}} weitere Angabe(n) fehlen in Ihrem Datensatz von „{{community}}“",
       "RECORD_ACTION": "Vervollständigen",
+      "SIGNATURE": "Sie haben {{count}} Dokument(e) zu unterschreiben",
+      "SIGNATURE_ACTION": "Unterschreiben",
       "UNREAD": "Sie haben {{count}} ungelesene Benachrichtigung(en)",
       "UNREAD_ACTION": "Lesen"
     },

@@ -25,6 +25,10 @@ export const REALTIME_TOPICS = {
   ADMIN_DOCUMENT_READY: 'admin.document.ready',
   /** Espace administratif: a deadline is due soon, or went past due. */
   ADMIN_DEADLINE_DUE: 'admin.deadline.due',
+  /** Signature: one signer's seal is done; the signing screen waits for it. */
+  SIGNATURE_SIGNED: 'signature.signed',
+  /** Signature: a request changed; the inbox and the follow-up view refresh. */
+  SIGNATURE_REQUEST_UPDATED: 'signature.request.updated',
 } as const;
 
 export type RealtimeTopic = (typeof REALTIME_TOPICS)[keyof typeof REALTIME_TOPICS];
