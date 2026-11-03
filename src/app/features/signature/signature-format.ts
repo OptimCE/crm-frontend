@@ -41,10 +41,12 @@ export function capacityText(signer: {
   member_label: string | null;
   display_name: string;
   signed_by_name?: string | null;
+  on_behalf_of?: string | null;
 }): I18nText {
-  // A member's own slot signed by another linked account: the PDF, the consent
-  // and the evidence all say « au nom et pour le compte de », so does the screen.
-  if (signer.capacity === 'SELF' && signedByOther(signer)) {
+  // A member's own slot signed (or about to be) by another linked account: the
+  // PDF, the consent and the evidence all say « au nom et pour le compte de »,
+  // so does the screen.
+  if (signer.capacity === 'SELF' && (signedByOther(signer) || signer.on_behalf_of)) {
     return { key: 'SIGNATURE.CAPACITY.ON_BEHALF', params: { member: signer.display_name } };
   }
   switch (signer.capacity) {

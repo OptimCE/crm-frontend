@@ -76,6 +76,11 @@ export interface SignerView {
    * signed, else the account's (a representative, another linked account).
    */
   signed_by_name: string | null;
+  /**
+   * Only on the caller's own slots (`GET /me/requests`, `mine` on a request):
+   * the member they sign for when it is not themselves, before signing too.
+   */
+  on_behalf_of?: string | null;
   declined_at: string | null;
   decline_reason: string | null;
 }

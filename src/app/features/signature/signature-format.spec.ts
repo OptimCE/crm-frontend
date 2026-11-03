@@ -49,6 +49,13 @@ describe('signature-format', () => {
       expect(capacityText({ ...alice, signed_by_name: 'Alice Dupont' }).key).toBe(
         'SIGNATURE.CAPACITY.SELF',
       );
+      // Before signing: the API flags the caller's slot they would sign for her.
+      expect(
+        capacityText({ ...alice, signed_by_name: null, on_behalf_of: 'Alice Dupont' }),
+      ).toEqual({ key: 'SIGNATURE.CAPACITY.ON_BEHALF', params: { member: 'Alice Dupont' } });
+      expect(capacityText({ ...alice, signed_by_name: null, on_behalf_of: null }).key).toBe(
+        'SIGNATURE.CAPACITY.SELF',
+      );
       // A representative already reads « Pour ACME SRL (représentant légal) ».
       expect(
         capacityText({
