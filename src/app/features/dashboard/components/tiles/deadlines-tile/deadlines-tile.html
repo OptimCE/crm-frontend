@@ -24,9 +24,9 @@
       <li class="flex items-center gap-2 text-sm">
         <a
           class="text-primary-500 hover:text-primary-700 underline flex-1 min-w-0 truncate"
-          [routerLink]="['/administrative-document/dossiers', deadline.id_dossier]"
+          [routerLink]="['/administrative-document/procedures', deadline.id_dossier]"
           data-testid="deadlines-tile__link--dossier"
-          >{{ deadline.deadline_type }}</a
+          >{{ label(deadline) }}</a
         >
         <span class="text-xs text-surface-500 shrink-0">{{
           formatApiDate(deadline.due_date)

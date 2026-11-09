@@ -1,158 +1,245 @@
-<div class="flex flex-col gap-3 mt-4">
-  <div class="flex justify-end">
-    <p-button
-      icon="pi pi-plus"
-      [label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.ADD' | translate"
-      size="small"
-      (onClick)="openCreate()"
-      data-testid="dossier-documents-panel__btn--add"
-    />
-  </div>
-
-  @if (documents().length === 0) {
+<div class="flex flex-col gap-3">
+  @if (detail().pieces.length === 0) {
     <div class="py-8 text-center" data-testid="dossier-documents-panel__empty--message">
       <i class="pi pi-file text-3xl text-surface-300 mb-2"></i>
       <p class="text-surface-400 m-0">
-        {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.EMPTY' | translate }}
+        {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.EMPTY' | translate }}
       </p>
     </div>
   } @else {
-    @for (document of documents(); track document.id; let i = $index) {
+    <!-- A later change outdated generated pieces: one click brings them back,
+         the reviewer's own edits carried over. -->
+    @if (stalePieces().length > 0) {
       <div
-        class="rounded-lg border border-surface-200 p-3 flex flex-col gap-2"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2"
+        data-testid="dossier-documents-panel__message--stale"
+      >
+        <span class="text-sm text-red-800">
+          <i class="pi pi-history"></i>
+          {{
+            'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.STALE_HINT'
+              | translate: { n: stalePieces().length }
+          }}
+        </span>
+        <p-button
+          icon="pi pi-refresh"
+          size="small"
+          severity="danger"
+          [outlined]="true"
+          [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE_STALE' | translate"
+          [loading]="busyIds().size > 0"
+          (onClick)="regenerate()"
+          data-testid="dossier-documents-panel__btn--regenerate-stale"
+        />
+      </div>
+    }
+
+    <!-- Test-ids by position, not by piece id: an in-app tour points at "the
+         first piece" of whatever procedure the user is on. -->
+    @for (piece of detail().pieces; track piece.id; let i = $index) {
+      <div
+        class="rounded-lg border border-surface-200 p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
         [attr.data-testid]="'dossier-documents-panel__row--' + i"
       >
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div class="flex flex-col gap-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-sm font-medium text-surface-800">
-                {{ document.title ?? (docTypeKey(document) | translate) }}
-              </span>
+        <div class="flex flex-col gap-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-medium text-surface-800">{{ label(piece) }}</span>
+            <p-tag
+              [value]="statusLabelKey(piece) | translate"
+              [severity]="statusSeverity(piece)"
+              data-testid="dossier-documents-panel__tag--status"
+            />
+            <!-- What the current version is: a stamped draft, the final that is
+                 sent, or the form a participant signs. -->
+            @if (stageLabelKey(piece); as stage) {
               <p-tag
-                [value]="statusLabelKey(document) | translate"
-                [severity]="statusSeverity(document)"
-                data-testid="dossier-documents-panel__tag--status"
+                [value]="stage | translate"
+                [severity]="stageSeverity(piece)"
+                [attr.data-testid]="'dossier-documents-panel__tag--stage-' + i"
               />
-              <!-- Render state is separate from status on purpose: generating is
-                   a technical step and never moves the regulatory lifecycle. -->
-              @if (renderState(document); as state) {
-                <p-tag
-                  [value]="renderLabelKey(state) | translate"
-                  [severity]="renderSeverity(state)"
-                  [icon]="isRendering(document) ? 'pi pi-spin pi-spinner' : 'pi pi-times-circle'"
-                  [attr.data-testid]="'dossier-documents-panel__tag--render-' + document.id"
+            }
+            @if (!piece.required) {
+              <p-tag
+                severity="secondary"
+                [value]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.OPTIONAL' | translate"
+              />
+            }
+            <!-- Rendering is a technical step, never a status of the piece. -->
+            @if (renderState(piece); as state) {
+              <p-tag
+                [value]="renderLabelKey(state) | translate"
+                [severity]="renderSeverity(state)"
+                [icon]="isRendering(piece) ? 'pi pi-spin pi-spinner' : 'pi pi-times-circle'"
+                [attr.data-testid]="'dossier-documents-panel__tag--render-' + i"
+              />
+            }
+            @if (checkLabelKey(piece); as check) {
+              <p-tag
+                [value]="check | translate"
+                [severity]="checkSeverity(piece)"
+                icon="pi pi-verified"
+                [attr.data-testid]="'dossier-documents-panel__tag--check-' + i"
+              />
+            }
+            <!-- The participant's electronic signature (the signature annexe). -->
+            @if (signatureChip(piece); as chip) {
+              <p-tag
+                [value]="chip.key | translate: chip.params"
+                [severity]="chip.severity"
+                icon="pi pi-pen-to-square"
+                styleClass="max-w-full whitespace-normal text-left"
+                [attr.data-testid]="'dossier-documents-panel__signature-status-' + i"
+              />
+            }
+          </div>
+          <span class="text-xs text-surface-500">
+            {{ kindLabelKey(piece) | translate }}
+            &middot;
+            @if (piece.versions > 0) {
+              {{
+                'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERSIONS'
+                  | translate: { n: piece.versions }
+              }}
+            } @else {
+              {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_VERSION' | translate }}
+            }
+            @if (piece.template_superseded) {
+              &middot;
+              <span class="text-amber-700">{{
+                'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.TEMPLATE_SUPERSEDED' | translate
+              }}</span>
+            }
+          </span>
+          @if (signatureRequestId(piece); as requestId) {
+            <span class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+              <a
+                [routerLink]="['/signatures/requests', requestId]"
+                class="text-primary-700 underline"
+                [attr.data-testid]="'dossier-documents-panel__link--signature-follow-' + i"
+                >{{ 'SIGNATURE.PIECE.FOLLOW' | translate }}</a
+              >
+              @if (piece.signature?.status === 'signed') {
+                <p-button
+                  icon="pi pi-verified"
+                  size="small"
+                  [text]="true"
+                  [label]="'SIGNATURE.PIECE.EVIDENCE' | translate"
+                  [loading]="evidenceId() === piece.id"
+                  (onClick)="downloadEvidence(piece)"
+                  [attr.data-testid]="'dossier-documents-panel__button--signature-evidence-' + i"
                 />
               }
-            </div>
-            <span class="text-xs text-surface-500">
-              @if (document.title) {
-                {{ docTypeKey(document) | translate }} &middot;
-              }
-              @if (document.version_count > 0) {
-                {{ document.version_count }}
-                {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.VERSIONS' | translate }}
-              } @else {
-                {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_VERSION' | translate }}
-              }
-              &middot; {{ document.updated_at | localeDate: 'short' }}
             </span>
-          </div>
+          }
+        </div>
 
-          <div class="flex items-center gap-1 shrink-0">
+        <div class="flex flex-wrap items-center gap-1 shrink-0">
+          @if (canRequestSignature(piece)) {
             <p-button
-              icon="pi pi-list"
+              icon="pi pi-pen-to-square"
+              size="small"
+              [outlined]="true"
+              [label]="'SIGNATURE.PIECE.REQUEST' | translate"
+              [loading]="isBusy(piece)"
+              (onClick)="requestSignature(piece)"
+              [attr.data-testid]="'dossier-documents-panel__button--request-signature-' + i"
+            />
+          }
+          @if (canRegenerate(piece)) {
+            <p-button
+              icon="pi pi-refresh"
+              text
+              rounded
+              size="small"
+              severity="danger"
+              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE' | translate"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE' | translate"
+              [loading]="isBusy(piece)"
+              (onClick)="regenerate(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--regenerate-' + i"
+            />
+          }
+          @if (canGenerate(piece)) {
+            <p-button
+              [icon]="piece.versions > 0 ? 'pi pi-pencil' : 'pi pi-sparkles'"
+              text
+              rounded
+              size="small"
+              [pTooltip]="
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.GENERATE_TO_SIGN'
+                  : piece.versions > 0
+                    ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REVIEW'
+                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
+                ) | translate
+              "
+              [attr.aria-label]="
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.GENERATE_TO_SIGN'
+                  : piece.versions > 0
+                    ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REVIEW'
+                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
+                ) | translate
+              "
+              [disabled]="isRendering(piece)"
+              (onClick)="openGenerate(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--generate-' + i"
+            />
+          }
+          @if (canUpload(piece)) {
+            <p-button
+              icon="pi pi-upload"
+              text
+              rounded
+              size="small"
+              [pTooltip]="
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.UPLOAD_SIGNED'
+                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD'
+                ) | translate
+              "
+              [attr.aria-label]="
+                (isToSign(piece)
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.UPLOAD_SIGNED'
+                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD'
+                ) | translate
+              "
+              [disabled]="isRendering(piece)"
+              (onClick)="openUpload(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--upload-' + i"
+            />
+          }
+          @if (canVerify(piece)) {
+            <p-button
+              icon="pi pi-verified"
               text
               rounded
               size="small"
               severity="secondary"
-              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DETAIL' | translate"
-              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DETAIL' | translate"
-              (onClick)="openDetail(document)"
-              [attr.data-testid]="'dossier-documents-panel__btn--detail-' + document.id"
+              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERIFY' | translate"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERIFY' | translate"
+              [loading]="isBusy(piece)"
+              (onClick)="verify(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--verify-' + i"
             />
-            @if (canUpload(document)) {
-              <!-- Same rule as upload: only while the document is still editable.
-                   A registered template is the backend's business (422 if none),
-                   so the action is offered and the error explains. -->
-              <p-button
-                [icon]="document.version_count > 0 ? 'pi pi-refresh' : 'pi pi-sparkles'"
-                text
-                rounded
-                size="small"
-                [pTooltip]="
-                  (document.version_count > 0
-                    ? 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.REGENERATE'
-                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
-                  ) | translate
-                "
-                [attr.aria-label]="
-                  (document.version_count > 0
-                    ? 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.REGENERATE'
-                    : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.GENERATE'
-                  ) | translate
-                "
-                [disabled]="isBusy(document) || isRendering(document)"
-                (onClick)="openGenerate(document)"
-                [attr.data-testid]="'dossier-documents-panel__btn--generate-' + document.id"
-              />
-              <p-button
-                icon="pi pi-upload"
-                text
-                rounded
-                size="small"
-                [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
-                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.UPLOAD' | translate"
-                [disabled]="isBusy(document)"
-                (onClick)="openUpload(document)"
-                [attr.data-testid]="'dossier-documents-panel__btn--upload-' + document.id"
-              />
-            }
-            <!-- Last in the action group, and deliberately OUTSIDE the editable
-                 guard above: a sent or acknowledged document can no longer be
-                 regenerated, but downloading what was filed is exactly when you
-                 need it most. -->
-            @if (canDownload(document)) {
-              <p-button
-                icon="pi pi-download"
-                text
-                rounded
-                size="small"
-                [loading]="isDownloading(document)"
-                [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
-                [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
-                (onClick)="download(document)"
-                [attr.data-testid]="'dossier-documents-panel__btn--download-' + document.id"
-              />
-            }
-          </div>
-        </div>
-
-        <!-- Only legal transitions are rendered; the backend 409 is the backstop. -->
-        <div class="flex flex-wrap items-center gap-2 border-t border-surface-100 pt-2">
-          @if (isTerminalDocument(document)) {
-            <span class="text-xs text-surface-400">
-              {{ 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.NO_FURTHER_ACTION' | translate }}
-            </span>
-          } @else {
-            @for (target of targets(document); track target) {
-              <p-button
-                [icon]="targetIcon(document, target)"
-                [label]="targetLabelKey(target) | translate"
-                size="small"
-                [outlined]="true"
-                [severity]="targetSeverity(document, target)"
-                [disabled]="isBusy(document)"
-                (onClick)="transition(document, target)"
-                [attr.data-testid]="
-                  'dossier-documents-panel__btn--transition-' + document.id + '-' + target
-                "
-              />
-            }
+          }
+          <!-- Outside the editable rules on purpose: once sent, downloading what
+               was filed is exactly when it is needed most. -->
+          @if (canDownload(piece)) {
+            <p-button
+              icon="pi pi-download"
+              text
+              rounded
+              size="small"
+              [loading]="isDownloading(piece)"
+              [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
+              [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
+              (onClick)="download(piece)"
+              [attr.data-testid]="'dossier-documents-panel__btn--download-' + i"
+            />
           }
         </div>
       </div>
     }
   }
 </div>
-
-<p-confirmDialog />

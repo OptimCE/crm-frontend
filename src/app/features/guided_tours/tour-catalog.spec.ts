@@ -24,6 +24,7 @@ import {
   filterSelection,
   HIDDEN_TOURS,
   matchEntryRoute,
+  NEEDS_DATA,
   PAGE_ONLY,
   personaMatches,
   routeAllows,
@@ -42,6 +43,7 @@ const ALL_FEATURES = new Set([
   'billing',
   'live-data',
   'administrative-document',
+  'signature',
 ]);
 
 function tour(id: string, role: string, route: string, titleFr = id): TourManifestEntry {
@@ -49,7 +51,13 @@ function tour(id: string, role: string, route: string, titleFr = id): TourManife
 }
 
 function ctx(overrides: Partial<TourContext> = {}): TourContext {
-  return { role: Role.GESTIONNAIRE, activeFeatures: new Set(), url: '/home', ...overrides };
+  return {
+    role: Role.GESTIONNAIRE,
+    activeFeatures: new Set(),
+    url: '/home',
+    pendingSignatures: 0,
+    ...overrides,
+  };
 }
 
 function ids(selection: TourSelection): { here: string[]; elsewhere: string[] } {
@@ -327,7 +335,7 @@ describe('the shipped tours.manifest.json', () => {
       acc[t.role] = (acc[t.role] ?? 0) + 1;
       return acc;
     }, {});
-    expect(counts).toEqual({ member: 8, admin: 47 });
+    expect(counts).toEqual({ member: 9, admin: 50 });
   });
 
   it('should list in HIDDEN_TOURS only tours still compiled with the broken entry (remove regenerated ones)', () => {
@@ -371,6 +379,34 @@ describe('the shipped tours.manifest.json', () => {
     expect(Object.keys(PAGE_ONLY).filter((id) => !known.has(id))).toEqual([]);
   });
 
+  it('should name only existing tours in NEEDS_DATA', () => {
+    const known = new Set(manifest.tours.map((t) => t.id));
+    expect(Object.keys(NEEDS_DATA).filter((id) => !known.has(id))).toEqual([]);
+  });
+
+  it('should offer the signing tour only while something waits to be signed', () => {
+    const offered = (pendingSignatures: number) => {
+      const s = selectTours(
+        manifest,
+        ctx({ role: Role.MEMBER, activeFeatures: ALL_FEATURES, pendingSignatures }),
+        'fr',
+      );
+      return [...s.onThisPage, ...s.byArea.flatMap((g) => g.tours)].map((t) => t.id);
+    };
+    expect(offered(0)).not.toContain('signature-sign');
+    expect(offered(1)).toContain('signature-sign');
+  });
+
+  it('should offer the community signatures tour to its managers, with the module on', () => {
+    const offered = (role: Role, activeFeatures: Set<string>) => {
+      const s = selectTours(manifest, ctx({ role, activeFeatures }), 'fr');
+      return s.byArea.flatMap((g) => g.tours).map((t) => t.id);
+    };
+    expect(offered(Role.GESTIONNAIRE, ALL_FEATURES)).toContain('signature-manager-follows');
+    expect(offered(Role.GESTIONNAIRE, new Set())).not.toContain('signature-manager-follows');
+    expect(offered(Role.MEMBER, ALL_FEATURES)).not.toContain('signature-manager-follows');
+  });
+
   it('should have a title in each of the four languages for every tour', () => {
     const incomplete = manifest.tours.filter((t) =>
       ['fr', 'en', 'nl', 'de'].some((l) => !t.title[l]),
@@ -411,14 +447,14 @@ describe('the shipped tours.manifest.json', () => {
     expect(offered.filter((id) => stillBroken.some((t) => t.id === id))).toEqual([]);
   });
 
-  it('should offer a member of a fully subscribed community all eight member tours', () => {
+  it('should offer a member of a fully subscribed community all nine member tours, with one to sign', () => {
     const selection = selectTours(
       manifest,
-      ctx({ role: Role.MEMBER, activeFeatures: ALL_FEATURES, url: '/home' }),
+      ctx({ role: Role.MEMBER, activeFeatures: ALL_FEATURES, url: '/home', pendingSignatures: 1 }),
       'fr',
     );
     const offered = [...selection.onThisPage, ...selection.byArea.flatMap((g) => g.tours)];
-    expect(offered).toHaveLength(8);
+    expect(offered).toHaveLength(9);
   });
 
   it('should keep every area label pointing at a sidebar key', () => {

@@ -1,0 +1,99 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-sign/en.html",
+  "id": "signature-sign",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-inbox__row--0",
+      "target": "signature-inbox__row--0",
+      "targetClick": "next",
+      "text": "Under **\"Waiting for your signature\"**, each document says which community it comes from, in what capacity you sign and until when. The documents already signed are listed further down.",
+      "title": "The documents to sign",
+      "waitFor": "signature-inbox__button--sign-0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-inbox__button--sign-0",
+      "target": "signature-inbox__button--sign-0",
+      "text": "Click **\"Sign\"** to open the document.",
+      "title": "Open the document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__document",
+      "target": "signature-sign__document",
+      "targetClick": "next",
+      "text": "The whole document is shown: read it before you sign. The place of your signature is framed on it, and **\"Go to my signature\"** takes you there.",
+      "title": "Read the document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__capacity",
+      "target": "signature-sign__capacity",
+      "targetClick": "next",
+      "text": "Under the title, the app says in what capacity you sign. When you sign for a participant, it is **\"In the name and on behalf of\"** that participant: the signed PDF will carry your name and theirs.",
+      "title": "Who you sign for"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__field--place",
+      "target": "signature-sign__field--place",
+      "text": "Under **\"To fill in\"**, fill in the fields the document asks for, here the place. The date fills itself in when you sign.",
+      "title": "Fill in the fields"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__tab--typed",
+      "target": "signature-sign__tab--typed",
+      "text": "Under **\"Your signature\"**, choose to **\"Type\"** your name or to **\"Draw\"** your signature with a finger or the mouse.",
+      "title": "Choose how to sign"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__typed-name",
+      "target": "signature-sign__typed-name",
+      "text": "Type **your name, as it will appear** on the document. The preview below shows the signature that will be applied.",
+      "title": "Type your name"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__consent-text",
+      "target": "signature-sign__consent-text",
+      "text": "Read the consent text and tick it: you confirm that you sign this document electronically. The **\"Sign\"** button turns on once everything is filled in.",
+      "title": "Give your consent"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__button--sign",
+      "target": "signature-sign__button--sign",
+      "text": "Click **\"Sign\"**. If you logged in more than a few minutes ago, the app first asks you to log in again: that is what proves it is really you. What you have prepared is kept.",
+      "title": "Sign"
+    }
+  ],
+  "title": "Sign a document in the app"
+}

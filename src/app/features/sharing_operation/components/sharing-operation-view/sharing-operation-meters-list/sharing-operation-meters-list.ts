@@ -28,12 +28,27 @@ import { SharingOperationMeterEventService } from '../sharing-operation.meter.su
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DebouncedPInputComponent } from '../../../../../shared/components/debounced-p-input/debounced-p-input.component';
-import { toLocalDateString } from '../../../../../shared/utils/date.utils';
+import { fromLocalDateString, toLocalDateString } from '../../../../../shared/utils/date.utils';
+import { Message } from 'primeng/message';
+import { LocaleDatePipe } from '../../../../../shared/pipes/locale-format/locale-format-pipes';
 import { translatedOptions } from '../../../../../shared/utils/translated-options.utils';
+import { MeterStatusComponent } from '../../../../../shared/components/regulatory-badge/meter-status';
+import { drivesStatus } from '../../../../../shared/components/regulatory-badge/regulatory-badge.format';
+import {
+  operationRegulatoryStatus,
+  regulatoryKey,
+} from '../../../../../shared/components/regulatory-badge/operation-regulatory-status';
+import {
+  RegulatoryStatus,
+  RegulatoryStatusDTO,
+  RegulatorySubjectType,
+} from '../../../../../shared/dtos/regulatory-status.dtos';
 
 @Component({
   selector: 'app-sharing-operation-meters-list',
   imports: [
+    Message,
+    LocaleDatePipe,
     TableModule,
     Button,
     TranslatePipe,
@@ -47,6 +62,7 @@ import { translatedOptions } from '../../../../../shared/utils/translated-option
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
+    MeterStatusComponent,
   ],
   templateUrl: './sharing-operation-meters-list.html',
   styleUrl: './sharing-operation-meters-list.css',
@@ -64,6 +80,11 @@ export class SharingOperationMetersList implements OnInit {
   private meterEventService = inject(SharingOperationMeterEventService);
 
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
+  /**
+   * What the regulator authorised (espace administratif): shown in place of the
+   * CRM's own status for a meter its procedure tracks.
+   */
+  readonly regulatory = operationRegulatoryStatus(() => this.id_sharing());
   readonly loading = signal<boolean>(true);
   readonly pagination = signal<Pagination>({ total: 0, total_pages: 0, page: 0, limit: 0 });
   readonly filter = signal<Omit<SharingOperationMetersQuery, 'type'>>({
@@ -314,15 +335,19 @@ export class SharingOperationMetersList implements OnInit {
     this.dateStartMeter.set(null);
   }
 
+  /**
+   * Takes the meter out of the operation from the picked date: the soft remove
+   * (`DELETE /:id/meter` with a date), which ends its participation and files
+   * the removal with the procedures. A status PATCH cannot remove (INACTIVE is
+   * refused there, 75005), which this button sent until 2026-11-01.
+   */
   removeMeter(meter: PartialMeterDTO): void {
-    const patchedMeterStatus: PatchMeterToSharingOperationDTO = {
-      date: this.resolvePickedDate(this.dateStartMeter()),
-      id_meter: meter.EAN,
-      id_sharing: this.id_sharing(),
-      status: MeterDataStatus.INACTIVE,
-    };
     this.sharingOperationService
-      .patchMeterStatus(patchedMeterStatus)
+      .deleteMeterFromSharingOperation(this.id_sharing(), {
+        id_meter: meter.EAN,
+        id_sharing: this.id_sharing(),
+        date: this.resolvePickedDate(this.dateStartMeter()),
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -411,4 +436,39 @@ export class SharingOperationMetersList implements OnInit {
   }
 
   public MeterStatus = MeterDataStatus;
+
+  /**
+   * Whether the CRM's own status is the manager's to set here: false while the
+   * meter's procedure drives it (the approve and waiting buttons are hidden;
+   * crm-backend would refuse them, 409).
+   */
+  handSet(ean: string): boolean {
+    return !drivesStatus(this.regulatoryOf(ean));
+  }
+
+  regulatoryOf(ean: string): RegulatoryStatusDTO | undefined {
+    return this.regulatory().get(regulatoryKey(RegulatorySubjectType.METER, ean));
+  }
+
+  /**
+   * The meters shown that the GRD no longer counts in the sharing (the end of
+   * the sharing in force, or a removal whose CRM date is later): the CRM's
+   * membership stays the manager's to change, so the list says so. Null when
+   * there are none on this page, or this is not the list of current meters.
+   */
+  readonly ended = computed<{ count: number; since: Date | null } | null>(() => {
+    if (this.type() !== SharingOperationMetersQueryType.NOW) return null;
+    const rows = this.metersPartialList()
+      .map((meter) => this.regulatoryOf(meter.EAN))
+      .filter((row) => row?.regulatory_status === RegulatoryStatus.ENDED);
+    if (rows.length === 0) return null;
+    const lastDays = rows
+      .map((row) => fromLocalDateString(row?.valid_to))
+      .filter((day): day is Date => day !== null);
+    const since =
+      lastDays.length > 0
+        ? new Date(Math.min(...lastDays.map((day) => day.getTime())) + 24 * 60 * 60 * 1000)
+        : null;
+    return { count: rows.length, since };
+  });
 }

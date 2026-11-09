@@ -1,0 +1,74 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures/community"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-manager-follows/de.html",
+  "id": "signature-manager-follows",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__table",
+      "target": "signature-follow__table",
+      "targetClick": "next",
+      "text": "Jede Signaturanfrage ist mit ihrem Dokument, ihrer Herkunft, ihrem Fortschritt, ihrer Frist und ihrem Status aufgeführt. Der Filter oben zeigt nur die Anfragen eines Status.",
+      "title": "Die Anfragen der Gemeinschaft",
+      "waitFor": "signature-follow__row--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__progress-0",
+      "target": "signature-follow__progress-0",
+      "targetClick": "next",
+      "text": "Der **„Fortschritt“** zählt die erhaltenen Unterschriften: hier **„0 von 1 unterschrieben“**, der Teilnehmer hat noch nicht unterschrieben.",
+      "title": "Wie weit die Anfrage ist"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--remind-0",
+      "target": "signature-follow__button--remind-0",
+      "text": "Klicken Sie auf **„Erinnern“**: Jede unterzeichnende Person, die noch nicht unterschrieben hat, erhält eine Erinnerung per Benachrichtigung und per E-Mail.",
+      "title": "Die unterzeichnende Person erinnern"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--open-0",
+      "target": "signature-follow__button--open-0",
+      "text": "Klicken Sie auf **„Details öffnen“**, um die ganze Anfrage zu sehen.",
+      "title": "Die Anfrage öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Oben auf der Seite stehen der Status der Anfrage und ihre Frist. Unter **„Unterzeichnende“** ist jede Person mit dem aufgeführt, was sie getan hat: eingeladen, angesehen, unterschrieben oder abgelehnt.",
+      "title": "Die Unterzeichnenden",
+      "waitFor": "signature-request__timeline"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "Der **„Verlauf“** zeigt jeden Schritt, die Erinnerung eingeschlossen. **„Protokoll unversehrt“** bestätigt, dass ihn niemand verändert hat. Das unterschriebene Dokument erscheint erst, wenn alle unterschrieben haben.",
+      "title": "Der Verlauf"
+    }
+  ],
+  "title": "Die Signaturanfragen verfolgen"
+}

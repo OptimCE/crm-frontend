@@ -1,0 +1,76 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-signed-evidence/de.html",
+  "id": "signature-signed-evidence",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Sobald der Teilnehmer unterschrieben hat, zeigt die Unterlage **„Elektronisch unterschrieben“**. Das unterschriebene und versiegelte PDF ist ihre endgültige Version geworden: Sie müssen nichts hochladen.",
+      "title": "Die Unterlage ist unterschrieben",
+      "waitFor": "dossier-documents-panel__signature-status-2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__button--signature-evidence-2",
+      "target": "dossier-documents-panel__button--signature-evidence-2",
+      "targetClick": "next",
+      "text": "**„Nachweis“** lädt den Nachweisbericht herunter: wer unterschrieben hat, wann, in wessen Auftrag, und den Fingerabdruck des Dokuments. Bewahren Sie ihn beim Dossier auf: Er belegt die Unterschrift.",
+      "title": "Der Nachweis der Unterschrift",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "text": "Klicken Sie auf **„Verfolgen“**, um die Seite der Anfrage zu öffnen.",
+      "title": "Die Signaturanfrage öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Jede unterzeichnende Person ist mit dem Datum ihrer Unterschrift aufgeführt. Unterschreibt jemand anderes für den Teilnehmer, nennt die Zeile **„Im Namen und im Auftrag von“** den Teilnehmer und **„Unterschrieben von“** die Person, die unterschrieben hat, wie das PDF.",
+      "title": "Wer unterschrieben hat",
+      "waitFor": "signature-request__signed-by--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__button--download-final",
+      "target": "signature-request__button--download-final",
+      "targetClick": "next",
+      "text": "**„Unterschriebenes Dokument herunterladen“** liefert das versiegelte PDF. **„Nachweis (PDF)“** ist der lesbare Bericht, **„Nachweis (JSON)“** dieselben Fakten für eine automatische Prüfung.",
+      "title": "Das unterschriebene Dokument und sein Nachweis"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "Der **„Verlauf“** zeigt jeden Schritt, von der Erstellung der Anfrage bis zum fertigen Dokument. **„Protokoll unversehrt“** bestätigt, dass ihn seitdem niemand verändert hat.",
+      "title": "Der Verlauf"
+    }
+  ],
+  "title": "Ein unterschriebenes Dokument und seinen Nachweis finden"
+}

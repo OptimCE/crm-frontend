@@ -15,9 +15,29 @@
     [class.sidebar-item__icon-wrapper--active]="isRouteActive()"
   >
     <i data-testid="sidebar-element__icon" class="{{ icon() }}"></i>
+    @if (badge() && !sidebarOpen()) {
+      <span
+        data-testid="sidebar-element__badge--collapsed"
+        class="sidebar-item__badge sidebar-item__badge--dot"
+        [class.sidebar-item__badge--danger]="badgeSeverity() === 'danger'"
+        [attr.title]="badgeTitle()"
+        [attr.aria-label]="badgeTitle()"
+        >{{ badge() }}</span
+      >
+    }
   </div>
   @if (sidebarOpen()) {
     <span data-testid="sidebar-element__label" class="sidebar-item__label">{{ name() }}</span>
+    @if (badge()) {
+      <span
+        data-testid="sidebar-element__badge"
+        class="sidebar-item__badge"
+        [class.sidebar-item__badge--danger]="badgeSeverity() === 'danger'"
+        [attr.title]="badgeTitle()"
+        [attr.aria-label]="badgeTitle()"
+        >{{ badge() }}</span
+      >
+    }
   }
   @if (isRouteActive()) {
     <div

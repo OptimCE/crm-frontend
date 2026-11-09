@@ -1,0 +1,163 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
+
+import { environments } from '../../../environments/environments';
+import { UserContextService } from '../../core/services/authorization/authorization.service';
+import { CacheService } from '../../core/services/cache/cache.service';
+import { AdministrativeProcedureService } from './administrative-procedure.service';
+
+const API = `${environments.apiUrl}/administrative-document/admin`;
+
+describe('AdministrativeProcedureService', () => {
+  let service: AdministrativeProcedureService;
+  let http: HttpTestingController;
+  let cache: CacheService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: UserContextService, useValue: { activeCommunityId: signal('org-a') } },
+      ],
+    });
+    service = TestBed.inject(AdministrativeProcedureService);
+    http = TestBed.inject(HttpTestingController);
+    cache = TestBed.inject(CacheService);
+  });
+
+  afterEach(() => {
+    http.match(() => true);
+    http.verify();
+    TestBed.resetTestingModule();
+  });
+
+  it('reads the dashboard with its filters, and caches it per community', () => {
+    service.getInbox({ grd: 'ores', operation_id: 3 }).subscribe();
+    const request = http.expectOne((r) => r.url === `${API}/inbox`);
+    expect(request.request.params.get('grd')).toBe('ores');
+    expect(request.request.params.get('operation_id')).toBe('3');
+    request.flush({ data: {} });
+
+    // Same query, other key order: one cache entry, no second request.
+    service.getInbox({ operation_id: 3, grd: 'ores' }).subscribe();
+    http.expectNone(`${API}/inbox`);
+  });
+
+  it('lists every procedure, paged', () => {
+    service.listProcedures({ page: 2, limit: 20, code: 'PARTAGE_FIN' }).subscribe();
+    const request = http.expectOne((r) => r.url === `${API}/dossiers`);
+    expect(request.request.params.get('page')).toBe('2');
+    expect(request.request.params.get('code')).toBe('PARTAGE_FIN');
+    // Answered, or cachedGet's 10 s timeout retries it after the TestBed is gone (NG0205).
+    request.flush({ data: [] });
+  });
+
+  it('marks as sent in multipart, without a Content-Type of its own', () => {
+    const file = new File(['From: x'], 'sent.eml');
+    service
+      .send(12, { sent_on: '2026-10-29', channel: 'email', subject: 'S', body_text: null, file })
+      .subscribe();
+    const request = http.expectOne(`${API}/dossiers/12/send`);
+    const form = request.request.body as FormData;
+    expect(request.request.headers.has('Content-Type')).toBe(false);
+    expect(form.get('sent_on')).toBe('2026-10-29');
+    expect(form.get('channel')).toBe('email');
+    expect(form.get('subject')).toBe('S');
+    expect(form.has('body_text')).toBe(false);
+    expect(form.get('file')).toBe(file);
+  });
+
+  it('previews a response with dry_run, writes nothing, invalidates nothing', () => {
+    const invalidate = vi.spyOn(cache, 'invalidate');
+    service.previewResponse(12, { type: 'receipt', occurred_on: '2026-10-29' }).subscribe();
+    const request = http.expectOne((r) => r.url === `${API}/dossiers/12/correspondence`);
+    expect(request.request.params.get('dry_run')).toBe('true');
+    expect((request.request.body as FormData).get('type')).toBe('receipt');
+    request.flush({ data: {} });
+    expect(invalidate).not.toHaveBeenCalled();
+  });
+
+  it('invalidates the whole prefix after an action, the July routes’ entries included', () => {
+    const invalidate = vi.spyOn(cache, 'invalidate');
+    service.recordResponse(12, { type: 'receipt', occurred_on: '2026-10-29' }).subscribe();
+    const request = http.expectOne((r) => r.url === `${API}/dossiers/12/correspondence`);
+    expect(request.request.params.has('dry_run')).toBe(false);
+    request.flush({ data: {} });
+    expect(invalidate).toHaveBeenCalledWith('administrative-document');
+  });
+
+  it('asks the signature annexe for a piece’s signature, and invalidates', () => {
+    const invalidate = vi.spyOn(cache, 'invalidate');
+    service.requestSignature(12, 21).subscribe();
+    const request = http.expectOne(`${API}/dossiers/12/documents/21/signature-request`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({});
+    request.flush({ data: { status: 'requested' } }, { status: 202, statusText: 'Accepted' });
+    expect(invalidate).toHaveBeenCalledWith('administrative-document');
+  });
+
+  it('confirms the starting state with every choice', () => {
+    service.confirmBaseline({ choices: [{ key: 'k', choice: 'active' }] }).subscribe();
+    const request = http.expectOne(`${API}/baseline/confirm`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({ choices: [{ key: 'k', choice: 'active' }] });
+  });
+
+  it('downloads a message’s file under its recorded name', () => {
+    let name = '';
+    service.downloadCorrespondence(12, 3).subscribe(({ filename }) => (name = filename));
+    http.expectOne(`${API}/dossiers/12/correspondence/3/file`).flush(new Blob(['x']), {
+      headers: { 'Content-Disposition': 'attachment; filename="AR ORES.eml"' },
+    });
+    expect(name).toBe('AR ORES.eml');
+  });
+
+  // ---- phase 2 ---------------------------------------------------------------
+
+  it('asks for the finals, and invalidates what it read', () => {
+    const invalidate = vi.spyOn(cache, 'invalidate');
+    service.finalize(12).subscribe();
+    const request = http.expectOne(`${API}/dossiers/12/finalize`);
+    expect(request.request.method).toBe('POST');
+    request.flush({ data: { requested: [22], in_flight: [] } });
+    expect(invalidate).toHaveBeenCalledWith('administrative-document');
+  });
+
+  it('regenerates the stale pieces, or the ones named', () => {
+    service.regenerate(12).subscribe();
+    expect(http.expectOne(`${API}/dossiers/12/regenerate`).request.body).toEqual({
+      document_ids: null,
+    });
+    service.regenerate(12, [21]).subscribe();
+    expect(http.expectOne(`${API}/dossiers/12/regenerate`).request.body).toEqual({
+      document_ids: [21],
+    });
+  });
+
+  it('verifies one version of one piece', () => {
+    service.verify(12, 22, 90).subscribe();
+    expect(
+      http.expectOne(`${API}/dossiers/12/documents/22/versions/90/verify`).request.method,
+    ).toBe('POST');
+  });
+
+  it('reads the fiche de saisie uncached', () => {
+    service.getEntrySheets(12).subscribe();
+    http.expectOne(`${API}/dossiers/12/entry-sheet`).flush({ data: [] });
+    service.getEntrySheets(12).subscribe();
+    http.expectOne(`${API}/dossiers/12/entry-sheet`);
+  });
+
+  it('downloads the finals as the archive the annex names', () => {
+    let filename = '';
+    service.downloadFinals(12).subscribe((file) => (filename = file.filename));
+    http.expectOne(`${API}/dossiers/12/finals.zip`).flush(new Blob(['PK']), {
+      headers: { 'Content-Disposition': 'attachment; filename="OPT-12-pieces.zip"' },
+    });
+    expect(filename).toBe('OPT-12-pieces.zip');
+  });
+});

@@ -76,7 +76,10 @@ describe('MeterDataUpdate', () => {
 
   const janeDoe = buildMember({ id: 2, name: 'Jane Doe' });
 
-  async function configureTestBed(meterData: MetersDataDTO | undefined) {
+  async function configureTestBed(
+    meterData: MetersDataDTO | undefined,
+    statusDrivenByProcedure = false,
+  ) {
     membersSubject$ = new Subject();
     memberServiceSpy = {
       getMembersList: vi.fn().mockReturnValue(membersSubject$.asObservable()),
@@ -93,7 +96,7 @@ describe('MeterDataUpdate', () => {
         { provide: MeterService, useValue: meterServiceSpy },
         {
           provide: DynamicDialogConfig,
-          useValue: { data: { meterData, id: 'EAN123' } },
+          useValue: { data: { meterData, id: 'EAN123', statusDrivenByProcedure } },
         },
         { provide: DynamicDialogRef, useValue: dialogRefSpy },
         { provide: ErrorMessageHandler, useValue: errorHandlerSpy },
@@ -816,6 +819,32 @@ describe('MeterDataUpdate', () => {
 
   // PrimeNG copies an option's label into the select's aria-label, so a key
   // there is what a screen reader announces.
+  describe('while the procedure of the meter drives its status (one status per meter)', () => {
+    beforeEach(async () => {
+      await configureTestBed(buildMeterData({ status: MeterDataStatus.WAITING_GRD }), true);
+    });
+
+    it('locks the status on its current value and says why', () => {
+      initAndEmitMembers();
+      fixture.detectChanges();
+
+      expect(component.metersForm.get('status')?.disabled).toBe(true);
+      expect(
+        fixture.debugElement.query(
+          By.css('[data-testid="meter-data-update__hint--status-follows"]'),
+        ),
+      ).not.toBeNull();
+    });
+
+    it('still sends the current status, unchanged, with any other edit', () => {
+      initAndEmitMembers();
+      fixture.detectChanges();
+
+      const raw = component.metersForm.getRawValue() as { status: MeterDataStatus };
+      expect(raw.status).toBe(MeterDataStatus.WAITING_GRD);
+    });
+  });
+
   describe('status select labels', () => {
     let translate: TranslateService;
 

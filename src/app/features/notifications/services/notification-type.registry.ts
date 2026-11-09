@@ -31,6 +31,13 @@ export interface NotificationPresentation {
    */
   feature?: GatedFeature;
   /**
+   * The destination is not the ACTIVE community's: it loads by its own id and
+   * the annexe decides who may see it (the signature inbox, a request's page,
+   * a signing screen). Clicking it never depends on which community is active,
+   * nor on the active community's subscriptions.
+   */
+  crossCommunity?: true;
+  /**
    * Resolve the click-through destination from `notification.data`, or
    * `undefined` when there is nothing to open.
    *
@@ -67,12 +74,36 @@ function idFrom(data: NotificationData, key: string): string | undefined {
 }
 
 /**
- * Dossier deep link, falling back to the hub when the producer omitted
+ * Procedure deep link (a July dossier became the procedure with its id),
+ * falling back to the hub when the producer omitted
  * `dossier_id` — landing on the list beats a click that does nothing.
  */
 function dossierRoute(data: NotificationData): string {
   const id = idFrom(data, 'dossier_id');
-  return id ? `/administrative-document/dossiers/${id}` : '/administrative-document';
+  return id ? `/administrative-document/procedures/${id}` : '/administrative-document';
+}
+
+/**
+ * A member's own meter, from its EAN (18 digits, nothing else: the value goes
+ * to `navigateByUrl`), falling back to the member's profile.
+ */
+function ownMeterRoute(data: NotificationData): string {
+  const ean = data['ean'];
+  return typeof ean === 'string' && /^\d{18}$/.test(ean) ? `/users/me/meters/${ean}` : '/users';
+}
+
+/**
+ * The signature annexe's own in-app link (`data.path`): the inbox, a request's
+ * page, or a signing screen, and nothing else — ids of hex digits and dashes
+ * only, since the value goes to `navigateByUrl`. Anything else lands on the
+ * inbox, which lists the same request.
+ */
+const SIGNATURE_PATH =
+  /^\/signatures(?:\/requests\/[0-9a-fA-F-]{1,64}|\/[0-9a-fA-F-]{1,64}\/signers\/[0-9a-fA-F-]{1,64})?$/;
+
+function signatureRoute(data: NotificationData): string {
+  const path = data['path'];
+  return typeof path === 'string' && SIGNATURE_PATH.test(path) ? path : '/signatures';
 }
 
 const REGISTRY: Record<string, NotificationPresentation> = {
@@ -129,6 +160,56 @@ const REGISTRY: Record<string, NotificationPresentation> = {
     route: dossierRoute,
     feature: 'administrative-document',
   },
+  // Phase 4: a procedure in force, an answer recorded (to the managers), and
+  // the member's own meter made active (in the member portal, no annexe gate).
+  'admin_effect.applied': {
+    icon: 'pi pi-check-circle',
+    route: dossierRoute,
+    feature: 'administrative-document',
+  },
+  'admin_correspondence.recorded': {
+    icon: 'pi pi-inbox',
+    route: dossierRoute,
+    feature: 'administrative-document',
+  },
+  // At the reception address: its procedure when a reference placed it, else
+  // the hub, where an unmatched mail waits.
+  'admin_correspondence.received': {
+    icon: 'pi pi-envelope',
+    route: dossierRoute,
+    feature: 'administrative-document',
+  },
+  'admin_meter.active': {
+    icon: 'pi pi-bolt',
+    route: ownMeterRoute,
+  },
+  // signature — to the signer (requested, reminder: the signing screen) and to
+  // the requester (signed, declined, completed: the request's page).
+  'signature.requested': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.reminder': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.signed': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.declined': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
+  'signature.completed': {
+    icon: 'pi pi-pen-to-square',
+    route: signatureRoute,
+    crossCommunity: true,
+  },
 };
 
 /** Resolve presentation for a notification type, falling back to a generic bell. */
@@ -151,6 +232,11 @@ export function routeFor(notification: NotificationDTO): string | undefined {
  */
 export function featureFor(notification: NotificationDTO): GatedFeature | undefined {
   return presentationFor(notification.type).feature;
+}
+
+/** Whether a notification's destination is reachable whatever community is active. */
+export function isCrossCommunity(notification: NotificationDTO): boolean {
+  return presentationFor(notification.type).crossCommunity === true;
 }
 
 /** Every registered type key. Used by the i18n coverage spec. */

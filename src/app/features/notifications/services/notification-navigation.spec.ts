@@ -52,6 +52,19 @@ describe('canNavigate', () => {
     expect(canNavigate(invitation, null, NONE_SUBSCRIBED)).toBe(true);
   });
 
+  it('always follows a cross-community destination', () => {
+    // A signer of community B is told to sign while A is active: the signing
+    // screen loads by its own ids, and the annexe checks the module and the
+    // signer, not the active community.
+    const toSign = notification({
+      type: 'signature.requested',
+      community: { id: 8, name: 'B', auth_community_id: ORG_B },
+      data: { path: '/signatures/r/signers/s' },
+    });
+    expect(canNavigate(toSign, ORG_A, NONE_SUBSCRIBED)).toBe(true);
+    expect(canNavigate(toSign, null, NONE_SUBSCRIBED)).toBe(true);
+  });
+
   it('checks the feature only for the community it belongs to', () => {
     const own = notification({ community: { id: 7, name: 'A', auth_community_id: ORG_A } });
     expect(canNavigate(own, ORG_A, (f) => f === 'billing')).toBe(true);

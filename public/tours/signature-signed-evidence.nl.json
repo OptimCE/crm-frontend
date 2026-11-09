@@ -1,0 +1,76 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-signed-evidence/nl.html",
+  "id": "signature-signed-evidence",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Zodra de deelnemer heeft ondertekend, toont het document **“Elektronisch ondertekend”**. De ondertekende en verzegelde pdf is de definitieve versie geworden: u hoeft niets te uploaden.",
+      "title": "Het document is ondertekend",
+      "waitFor": "dossier-documents-panel__signature-status-2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__button--signature-evidence-2",
+      "target": "dossier-documents-panel__button--signature-evidence-2",
+      "targetClick": "next",
+      "text": "**“Bewijs”** downloadt het bewijsrapport: wie heeft ondertekend, wanneer, voor wiens rekening, en de vingerafdruk van het document. Bewaar het bij het dossier: het staaft de handtekening.",
+      "title": "Het bewijs van de handtekening",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "text": "Klik op **“Volgen”** om de pagina van het verzoek te openen.",
+      "title": "Het handtekeningverzoek openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Elke ondertekenaar staat vermeld met de datum van zijn handtekening. Wanneer iemand anders voor de deelnemer ondertekent, vermeldt de regel **“In naam en voor rekening van”** de deelnemer en **“Ondertekend door”** de persoon die heeft ondertekend, zoals de pdf.",
+      "title": "Wie heeft ondertekend",
+      "waitFor": "signature-request__signed-by--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__button--download-final",
+      "target": "signature-request__button--download-final",
+      "targetClick": "next",
+      "text": "**“Het ondertekende document downloaden”** geeft de verzegelde pdf. **“Bewijs (PDF)”** is het leesbare rapport, **“Bewijs (JSON)”** dezelfde feiten voor een automatische controle.",
+      "title": "Het ondertekende document en het bewijs"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "De **“Geschiedenis”** toont elke stap, van het aanmaken van het verzoek tot het definitieve document. **“Logboek intact”** bevestigt dat niemand het sindsdien heeft gewijzigd.",
+      "title": "De geschiedenis"
+    }
+  ],
+  "title": "Een ondertekend document en het bewijs ervan terugvinden"
+}

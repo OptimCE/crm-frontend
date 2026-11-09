@@ -1,0 +1,55 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-request/de.html",
+  "id": "signature-request",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Nach der Erzeugung wartet die eidesstattliche Erklärung eines Teilnehmers (Anlage 8) auf seine Unterschrift. Statt sie auszudrucken und zurückzusenden, kann der Teilnehmer sie in der Anwendung **elektronisch unterschreiben**.",
+      "title": "Die zu unterschreibende Unterlage",
+      "waitFor": "dossier-documents-panel__button--request-signature-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__button--request-signature-2",
+      "target": "dossier-documents-panel__button--request-signature-2",
+      "text": "Klicken Sie auf **„Unterschrift anfordern“**. Der Teilnehmer wird zum Unterschreiben eingeladen: Er erhält eine Benachrichtigung und eine E-Mail, und das Dokument erscheint in seinem Menü „Zu unterschreiben“.",
+      "title": "Die Unterschrift anfordern",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__signature-status-2",
+      "target": "dossier-documents-panel__signature-status-2",
+      "targetClick": "next",
+      "text": "Die Unterlage zeigt **„Unterschrift angefordert“**. Sobald der Teilnehmer unterschrieben hat, wechselt sie zu „Elektronisch unterschrieben“, und das unterschriebene PDF wird ihre endgültige Version, ohne dass Sie etwas hochladen müssen.",
+      "title": "Die Unterschrift ist angefordert"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "targetClick": "next",
+      "text": "Der Link **„Verfolgen“** öffnet die Seite der Anfrage: wer unterschreiben muss, wie weit es ist, und ihren Verlauf. Alle Anfragen der Gemeinschaft finden Sie auch im Menü „Unterschriften“.",
+      "title": "Die Anfrage verfolgen"
+    }
+  ],
+  "title": "Eine elektronische Unterschrift anfordern"
+}

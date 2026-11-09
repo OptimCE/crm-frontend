@@ -236,6 +236,11 @@
               <div>{{ option.label }}</div>
             </ng-template>
           </p-select>
+          @if (statusDrivenByProcedure) {
+            <small class="text-surface-500" data-testid="meter-data-update__hint--status-follows">
+              {{ 'METER.UPDATE_DATA.STATUS_FOLLOWS_PROCEDURE' | translate }}
+            </small>
+          }
           <app-error-handler controlName="status" />
         </div>
         <div class="flex flex-col">

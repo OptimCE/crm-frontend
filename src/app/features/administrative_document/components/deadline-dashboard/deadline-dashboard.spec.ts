@@ -1,103 +1,105 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService, TranslationObject } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { vi } from 'vitest';
 
-import en from '../../../../../assets/i18n/en.json';
 import fr from '../../../../../assets/i18n/fr.json';
-import { ApiResponse, ApiResponsePaginated, Pagination } from '../../../../core/dtos/api.response';
-import { DeadlineStatus } from '../../../../shared/dtos/administrative-document.dtos';
-import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
-import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
-import { deadlineStatusLabelKey, deadlineTypeLabelKey } from '../../administrative-document-format';
+import { ApiResponse } from '../../../../core/dtos/api.response';
+import { LocaleService } from '../../../../core/services/language/locale.service';
+import { RealtimeService } from '../../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS, RealtimeEvent } from '../../../../core/services/realtime/realtime.types';
+import { ProcedureDeadlineStatus } from '../../../../shared/dtos/administrative-procedure.dtos';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { deadlineItem } from '../../procedures/procedure-fixtures';
 import { DeadlineDashboard } from './deadline-dashboard';
 
-/** The string a dotted i18n key points at in a locale bundle. */
-function lookup(bundle: unknown, key: string): string {
-  const value = key
-    .split('.')
-    .reduce<unknown>((node, part) => (node as Record<string, unknown>)?.[part], bundle);
-  if (typeof value !== 'string') throw new Error(`no string at ${key}`);
-  return value;
-}
-
-describe('DeadlineDashboard', () => {
+describe('DeadlineDashboard (the agenda)', () => {
   let fixture: ComponentFixture<DeadlineDashboard>;
   let component: DeadlineDashboard;
-  let translate: TranslateService;
+  let listDeadlines: ReturnType<typeof vi.fn>;
+  let invalidate: ReturnType<typeof vi.fn>;
+  let events: Subject<RealtimeEvent>;
 
-  function ariaLabelOf(testId: string): string | null {
-    return (
-      (fixture.nativeElement as HTMLElement)
-        .querySelector(`[data-testid="${testId}"] [role="combobox"]`)
-        ?.getAttribute('aria-label') ?? null
-    );
-  }
+  const root = (): HTMLElement => fixture.nativeElement as HTMLElement;
 
   beforeEach(async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    events = new Subject<RealtimeEvent>();
+    listDeadlines = vi
+      .fn()
+      .mockReturnValue(
+        of(
+          new ApiResponse([
+            deadlineItem({ id: 1, due_date: '2026-10-20', due_in_working_days: -7, overdue: true }),
+            deadlineItem({ id: 2 }),
+          ]),
+        ),
+      );
+    invalidate = vi.fn();
     await TestBed.configureTestingModule({
       imports: [DeadlineDashboard, TranslateModule.forRoot()],
       providers: [
         provideRouter([]),
-        {
-          provide: AdministrativeDocumentService,
-          useValue: {
-            listDeadlines: vi
-              .fn()
-              .mockReturnValue(of(new ApiResponsePaginated([], new Pagination(1, 50, 0, 0)))),
-            listSharingOperations: vi.fn().mockReturnValue(of(new ApiResponse([]))),
-            invalidate: vi.fn(),
-          },
-        },
-        { provide: SnackbarNotification, useValue: { openSnackBar: vi.fn() } },
+        { provide: AdministrativeProcedureService, useValue: { listDeadlines, invalidate } },
+        { provide: RealtimeService, useValue: { live: signal(true), on: () => events } },
+        { provide: LocaleService, useValue: { locale: signal('fr') } },
       ],
     }).compileComponents();
 
-    translate = TestBed.inject(TranslateService);
-    // Cast: the PRIMENG block carries a number (`firstDayOfWeek`), which the
-    // strict TranslationObject type does not admit. The strings are what matter.
+    const translate = TestBed.inject(TranslateService);
     translate.setTranslation('fr', fr as unknown as TranslationObject);
-    translate.setTranslation('en', en as unknown as TranslationObject);
     translate.use('fr');
 
     fixture = TestBed.createComponent(DeadlineDashboard);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  // The labels used to be translated once, in ngOnInit: a language switch left
-  // the filters - and their aria-labels - in the old language until a reload.
-  describe('filter select labels', () => {
-    it('should label the status and type options in the current language', () => {
-      expect(component.statusOptions().map((o) => o.label)).toEqual(
-        component.statusOptions().map((o) => lookup(fr, deadlineStatusLabelKey(o.value))),
-      );
-      expect(component.typeOptions().map((o) => o.label)).toEqual(
-        component.typeOptions().map((o) => lookup(fr, deadlineTypeLabelKey(o.value))),
-      );
+  afterEach(() => vi.useRealTimers());
+
+  it('lists what is still owed by default: no period sent', () => {
+    expect(listDeadlines).toHaveBeenCalledWith({});
+    expect(
+      root().querySelector('[data-testid="deadline-dashboard__row--1"]')?.textContent,
+    ).toContain('dans 20 jours ouvrables');
+  });
+
+  it('marks the late ones from the annex’s verdict, and counts them', () => {
+    const first = root().querySelector('[data-testid="deadline-dashboard__row--0"]');
+    expect(first?.textContent).toContain('En retard');
+    expect(first?.textContent).toContain('en retard de 7 jours ouvrables');
+    expect(component.overdueCount()).toBe(1);
+  });
+
+  it('sends the period as bare dates', () => {
+    component.from = new Date(2026, 10, 1);
+    component.to = new Date(2026, 11, 31);
+    component.applyFilters();
+    expect(listDeadlines).toHaveBeenLastCalledWith({ from: '2026-11-01', to: '2026-12-31' });
+  });
+
+  it('labels a met deadline with the deadline statuses’ labels', () => {
+    expect(component.statusKey(deadlineItem({ status: ProcedureDeadlineStatus.MET }))).toBe(
+      'ADMINISTRATIVE_DOCUMENT.DEADLINE_STATUS.MET',
+    );
+  });
+
+  it('refetches, fresh, when the annex says a deadline is due', async () => {
+    listDeadlines.mockClear();
+    events.next({
+      v: 1,
+      id: 'a',
+      topic: REALTIME_TOPICS.ADMIN_DEADLINE_DUE,
+      at: '',
+      scope: { community_id: 1 },
+      ref: { kind: 'deadline', id: '1' },
+      hint: {},
     });
-
-    it('should translate the options again when the language changes', () => {
-      translate.use('en');
-
-      expect(component.statusOptions().map((o) => o.label)).toEqual(
-        component.statusOptions().map((o) => lookup(en, deadlineStatusLabelKey(o.value))),
-      );
-      expect(component.typeOptions().map((o) => o.label)).toEqual(
-        component.typeOptions().map((o) => lookup(en, deadlineTypeLabelKey(o.value))),
-      );
-    });
-
-    it('should name the default status filter in the language now in use', async () => {
-      const key = deadlineStatusLabelKey(DeadlineStatus.OPEN);
-      expect(ariaLabelOf('deadline-dashboard__select--status')).toBe(lookup(fr, key));
-
-      translate.use('en');
-      await fixture.whenStable();
-
-      expect(lookup(en, key)).not.toBe(lookup(fr, key));
-      expect(ariaLabelOf('deadline-dashboard__select--status')).toBe(lookup(en, key));
-    });
+    await vi.advanceTimersByTimeAsync(500);
+    expect(invalidate).toHaveBeenCalled();
+    expect(listDeadlines).toHaveBeenCalledTimes(1);
   });
 });

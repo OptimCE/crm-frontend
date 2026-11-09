@@ -55,6 +55,7 @@ export type TourArea =
   | 'billing'
   | 'live_data'
   | 'administrative_document'
+  | 'signature'
   | 'keys'
   | 'members'
   | 'meters'
@@ -72,6 +73,7 @@ export const TOUR_AREAS: readonly { area: TourArea; label: string }[] = [
   { area: 'billing', label: 'NAVBAR.BILLING' },
   { area: 'live_data', label: 'NAVBAR.LIVE_DATA' },
   { area: 'administrative_document', label: 'NAVBAR.ADMINISTRATIVE_DOCUMENT' },
+  { area: 'signature', label: 'NAVBAR.SIGNATURES_COMMUNITY' },
   { area: 'keys', label: 'NAVBAR.HANDLE_KEY' },
   { area: 'members', label: 'NAVBAR.HANDLE_MEMBRE' },
   { area: 'meters', label: 'NAVBAR.HANDLE_METER' },
@@ -122,6 +124,17 @@ export const ENTRY_ROUTES: Readonly<Record<string, EntryRouteRule>> = {
     area: 'administrative_document',
     feature: 'administrative-document',
   },
+  '/administrative-document/procedures/:dossierId': {
+    area: 'administrative_document',
+    feature: 'administrative-document',
+  },
+  // The signer's own inbox spans every community: authentication only.
+  '/signatures': { area: 'signature' },
+  '/signatures/community': {
+    area: 'signature',
+    minRole: Role.GESTIONNAIRE,
+    feature: 'signature',
+  },
   '/keys': { area: 'keys', minRole: Role.GESTIONNAIRE },
   '/keys/:keyId': { area: 'keys', minRole: Role.GESTIONNAIRE },
   '/members': { area: 'members', minRole: Role.GESTIONNAIRE },
@@ -141,6 +154,15 @@ export const ENTRY_ROUTES: Readonly<Record<string, EntryRouteRule>> = {
 export const PAGE_ONLY: Readonly<Record<string, { query: Record<string, string> }>> = {
   // Starts on `meters-map__button--repair`, which only the map view renders.
   'meter-address-repair': { query: { view: 'map' } },
+};
+
+/**
+ * Tours that walk data the user must have, which neither the route nor the
+ * URL can tell. They are offered only while it is there.
+ */
+export const NEEDS_DATA: Readonly<Record<string, (ctx: TourContext) => boolean>> = {
+  // Opens and signs the first document waiting for the user's signature.
+  'signature-sign': (ctx) => ctx.pendingSignatures > 0,
 };
 
 export interface HiddenTour {
@@ -164,6 +186,8 @@ export interface TourContext {
   activeFeatures: ReadonlySet<string>;
   /** The router URL, query included. */
   url: string;
+  /** Signature slots the user can sign now (`SignatureStore.pendingCount`). */
+  pendingSignatures: number;
 }
 
 export interface OfferedTour {
@@ -264,6 +288,7 @@ export function selectTours(
     if (!rule) continue;
     if (!personaMatches(entry.role, ctx.role)) continue;
     if (!routeAllows(rule, ctx)) continue;
+    if (NEEDS_DATA[entry.id] && !NEEDS_DATA[entry.id](ctx)) continue;
 
     const offered: OfferedTour = {
       id: entry.id,

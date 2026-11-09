@@ -8,6 +8,7 @@ import { of, throwError } from 'rxjs';
 import { Role } from '../../../core/dtos/role';
 import { UserContextService } from '../../../core/services/authorization/authorization.service';
 import { CommunityServicesStore } from '../../../core/services/community-services.store';
+import { SignatureStore } from '../../signature/signature.store';
 import { TourManifest } from '../tour-catalog';
 import { GuidedToursService, TOUR_MANIFEST_URL } from './guided-tours.service';
 
@@ -17,6 +18,7 @@ describe('GuidedToursService', () => {
   let http: HttpTestingController;
   let ensureLoaded: ReturnType<typeof vi.fn>;
   const role = signal<Role | null>(Role.GESTIONNAIRE);
+  const pendingCount = signal(2);
 
   beforeEach(() => {
     ensureLoaded = vi.fn().mockReturnValue(
@@ -32,6 +34,7 @@ describe('GuidedToursService', () => {
         { provide: Router, useValue: { url: '/meters?view=map' } },
         { provide: UserContextService, useValue: { activeCommunityRole: role } },
         { provide: CommunityServicesStore, useValue: { ensureLoaded } },
+        { provide: SignatureStore, useValue: { pendingCount } },
       ],
     });
     http = TestBed.inject(HttpTestingController);
@@ -59,6 +62,7 @@ describe('GuidedToursService', () => {
     expect(state.context.role).toBe(Role.GESTIONNAIRE);
     expect([...state.context.activeFeatures]).toEqual(['news']);
     expect(state.context.url).toBe('/meters?view=map');
+    expect(state.context.pendingSignatures).toBe(2);
   });
 
   it('should fetch the manifest once', async () => {

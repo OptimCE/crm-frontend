@@ -10,37 +10,41 @@ import { TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 
 import { Pagination } from '../../../../core/dtos/api.response';
+import { LocaleService } from '../../../../core/services/language/locale.service';
+import { SharingOperationOut } from '../../../../shared/dtos/administrative-document.dtos';
 import {
-  DossierOut,
-  DossierQuery,
-  DossierSortField,
-  DossierStatus,
-  DossierType,
-  SharingOperationOut,
-  SortOrder,
-} from '../../../../shared/dtos/administrative-document.dtos';
-import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
-import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
-import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
-import {
-  TagSeverity,
-  dossierStatusLabelKey,
-  dossierStatusSeverity,
-  dossierTypeLabelKey,
-  extractApiErrorMessage,
-} from '../../administrative-document-format';
-import { DossierCreateDialog } from '../dossier-create-dialog/dossier-create-dialog';
+  ProcedureDefinitionOut,
+  ProcedureItemOut,
+  ProcedureListQuery,
+  ProcedureStatus,
+} from '../../../../shared/dtos/administrative-procedure.dtos';
 import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
+import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
+import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { translatedOptions } from '../../../../shared/utils/translated-options.utils';
+import { TagSeverity, extractApiErrorMessage } from '../../administrative-document-format';
+import {
+  I18nText,
+  dueText,
+  pickLabel,
+  procedureStatusLabelKey,
+  procedureStatusSeverity,
+} from '../../procedures/procedure-format';
+import { DossierCreateDialog } from '../dossier-create-dialog/dossier-create-dialog';
 
 const PAGE_LIMIT = 20;
-const DEFAULT_SORT: DossierSortField = 'created_at';
-const DEFAULT_ORDER: SortOrder = 'desc';
 
 interface SelectOption<T> {
   label: string;
   value: T;
 }
 
+/**
+ * "Toutes les démarches": every procedure of the community, newest first,
+ * finished ones included (the dashboard keeps those for a month). Filters by
+ * type (the catalogue's), common status and operation.
+ */
 @Component({
   selector: 'app-dossier-list',
   standalone: true,
@@ -49,13 +53,15 @@ interface SelectOption<T> {
   providers: [DialogService, ErrorMessageHandler],
 })
 export class DossierList implements OnInit {
-  private readonly service = inject(AdministrativeDocumentService);
+  private readonly service = inject(AdministrativeProcedureService);
+  private readonly documents = inject(AdministrativeDocumentService);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly translate = inject(TranslateService);
   private readonly dialogService = inject(DialogService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  protected readonly lang = inject(LocaleService).locale;
 
   private dialogRef?: DynamicDialogRef | null;
 
@@ -64,62 +70,65 @@ export class DossierList implements OnInit {
     this.destroyRef.onDestroy(() => this.dialogRef?.destroy());
   }
 
-  readonly dossiers = signal<DossierOut[]>([]);
+  readonly procedures = signal<ProcedureItemOut[]>([]);
   readonly pagination = signal<Pagination>(new Pagination(1, PAGE_LIMIT, 0, 0));
   readonly loading = signal<boolean>(true);
   readonly operations = signal<SharingOperationOut[]>([]);
+  readonly definitions = signal<ProcedureDefinitionOut[]>([]);
   readonly currentPageReportTemplate = signal<string>('');
 
   readonly firstRow = computed(() => (this.pagination().page - 1) * this.pagination().limit);
   readonly showPaginator = computed(() => this.pagination().total_pages > 1);
-  readonly operationNames = computed<ReadonlyMap<number, string>>(
-    () => new Map(this.operations().map((op) => [op.id, op.name])),
-  );
   readonly operationOptions = computed<SelectOption<number>[]>(() =>
     this.operations().map((op) => ({ label: op.name, value: op.id })),
   );
+  /** Every type of the catalogue, once, in the reader's language. */
+  readonly typeOptions = computed<SelectOption<string>[]>(() => {
+    const lang = this.lang();
+    const byCode = new Map<string, string>();
+    for (const d of this.definitions()) {
+      if (d.purpose === 'filing' && !byCode.has(d.code)) {
+        byCode.set(d.code, pickLabel(d.labels, lang, d.code));
+      }
+    }
+    return [...byCode].map(([value, label]) => ({ value, label }));
+  });
 
-  // Filter state is plain mutable fields bound with [(ngModel)] — only server
-  // data lives in signals.
-  statusFilter: DossierStatus | null = null;
-  typeFilter: DossierType | null = null;
+  // Filter state is plain fields bound with [(ngModel)]; server data lives in signals.
+  statusFilter: ProcedureStatus | null = null;
+  typeFilter: string | null = null;
   operationFilter: number | null = null;
-  sortField: DossierSortField = DEFAULT_SORT;
-  sortOrder: SortOrder = DEFAULT_ORDER;
 
-  readonly statusOptions = translatedOptions<SelectOption<DossierStatus>>(
+  readonly statusOptions = translatedOptions<SelectOption<ProcedureStatus>>(
     [
-      DossierStatus.IN_PREPARATION,
-      DossierStatus.SUBMITTED,
-      DossierStatus.COMPLETE,
-      DossierStatus.CLOSED,
-      DossierStatus.LAPSED,
-    ].map((value) => ({ label: dossierStatusLabelKey(value), value })),
+      ProcedureStatus.DRAFT,
+      ProcedureStatus.READY,
+      ProcedureStatus.SENT,
+      ProcedureStatus.IN_FORCE,
+      ProcedureStatus.REFUSED,
+      ProcedureStatus.CANCELLED,
+      ProcedureStatus.LAPSED,
+    ].map((value) => ({ label: procedureStatusLabelKey(value), value })),
   );
-  readonly typeOptions = translatedOptions<SelectOption<DossierType>>(
-    [
-      DossierType.CREATION_NOTIFICATION,
-      DossierType.MODIFICATION,
-      DossierType.ANNUAL_REPORT,
-      DossierType.SHARING_AUTHORIZATION,
-      DossierType.SHARING_MODIFICATION,
-      DossierType.CESSATION,
-    ].map((value) => ({ label: dossierTypeLabelKey(value), value })),
-  );
-  readonly sortOptions = translatedOptions<SelectOption<DossierSortField>>([
-    { value: 'created_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.CREATED_AT' },
-    { value: 'updated_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.UPDATED_AT' },
-    { value: 'submitted_at', label: 'ADMINISTRATIVE_DOCUMENT.SORT.SUBMITTED_AT' },
-    { value: 'status', label: 'ADMINISTRATIVE_DOCUMENT.SORT.STATUS' },
-    { value: 'dossier_type', label: 'ADMINISTRATIVE_DOCUMENT.SORT.TYPE' },
-  ]);
 
   ngOnInit(): void {
-    this.loadOperations();
+    this.documents
+      .listSharingOperations()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => this.operations.set(Array.isArray(res.data) ? res.data : []),
+        error: () => this.operations.set([]),
+      });
+    this.service
+      .listDefinitions()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => this.definitions.set(Array.isArray(res.data) ? res.data : []),
+        error: () => this.definitions.set([]),
+      });
 
     // `/administrative-document?id_sharing_operation=2` from a sharing operation.
-    // This subscription owns the first load so the filter is applied to it,
-    // rather than loading unfiltered and then re-loading.
+    // This subscription owns the first load so the filter applies to it.
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const operation = Number(params.get('id_sharing_operation'));
       this.operationFilter = Number.isInteger(operation) && operation > 0 ? operation : null;
@@ -127,41 +136,26 @@ export class DossierList implements OnInit {
     });
   }
 
-  private loadOperations(): void {
-    this.service
-      .listSharingOperations()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res) => this.operations.set(Array.isArray(res.data) ? res.data : []),
-        error: () => this.operations.set([]),
-      });
-  }
-
   load(page: number): void {
     this.loading.set(true);
-    const query: DossierQuery = {
-      page,
-      limit: PAGE_LIMIT,
-      sort: this.sortField,
-      order: this.sortOrder,
-    };
+    const query: ProcedureListQuery = { page, limit: PAGE_LIMIT };
     if (this.statusFilter != null) query.status = this.statusFilter;
-    if (this.typeFilter != null) query.dossier_type = this.typeFilter;
-    if (this.operationFilter != null) query.id_sharing_operation = this.operationFilter;
+    if (this.typeFilter != null) query.code = this.typeFilter;
+    if (this.operationFilter != null) query.operation_id = this.operationFilter;
 
     this.service
-      .listDossiers(query)
+      .listProcedures(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          this.dossiers.set(Array.isArray(res.data) ? res.data : []);
+          this.procedures.set(Array.isArray(res.data) ? res.data : []);
           this.pagination.set(res.pagination);
           this.updatePaginationTranslation();
           this.loading.set(false);
         },
         error: (error: unknown) => {
           this.loading.set(false);
-          this.handleError(error);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
   }
@@ -185,24 +179,11 @@ export class DossierList implements OnInit {
     this.statusFilter = null;
     this.typeFilter = null;
     this.operationFilter = null;
-    this.sortField = DEFAULT_SORT;
-    this.sortOrder = DEFAULT_ORDER;
     this.load(1);
   }
 
   hasActiveFilters(): boolean {
-    return (
-      this.statusFilter != null ||
-      this.typeFilter != null ||
-      this.operationFilter != null ||
-      this.sortField !== DEFAULT_SORT ||
-      this.sortOrder !== DEFAULT_ORDER
-    );
-  }
-
-  toggleSortOrder(): void {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-    this.load(1);
+    return this.statusFilter != null || this.typeFilter != null || this.operationFilter != null;
   }
 
   lazyLoad(event: TableLazyLoadEvent): void {
@@ -220,8 +201,8 @@ export class DossierList implements OnInit {
     this.load(this.pagination().page);
   }
 
-  openDossier(dossier: DossierOut): void {
-    void this.router.navigate(['/administrative-document/dossiers', dossier.id]);
+  openProcedure(procedure: ProcedureItemOut): void {
+    void this.router.navigate(['/administrative-document/procedures', procedure.id]);
   }
 
   openCreate(): void {
@@ -238,32 +219,30 @@ export class DossierList implements OnInit {
     });
     this.dialogRef?.onClose
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((created: boolean) => {
-        if (created) this.refresh();
+      .subscribe((created: number | null | undefined) => {
+        if (created) void this.router.navigate(['/administrative-document/procedures', created]);
       });
   }
 
-  // ---- presentation helpers (templates never import the format module) ----
+  // ---- presentation helpers ----------------------------------------------
 
-  typeLabelKey(dossier: DossierOut): string {
-    return dossierTypeLabelKey(dossier.dossier_type);
+  typeLabel(row: ProcedureItemOut): string {
+    return pickLabel(row.labels, this.lang(), row.code);
   }
 
-  statusLabelKey(dossier: DossierOut): string {
-    return dossierStatusLabelKey(dossier.status);
+  stepLabel(row: ProcedureItemOut): string {
+    return pickLabel(row.step_labels, this.lang(), row.step);
   }
 
-  statusSeverity(dossier: DossierOut): TagSeverity {
-    return dossierStatusSeverity(dossier.status);
+  statusSeverity(row: ProcedureItemOut): TagSeverity {
+    return procedureStatusSeverity(row.status);
   }
 
-  operationName(dossier: DossierOut): string {
-    return (
-      this.operationNames().get(dossier.id_sharing_operation) ?? `#${dossier.id_sharing_operation}`
-    );
+  nextAction(row: ProcedureItemOut): string {
+    return pickLabel(row.next_action.labels, this.lang());
   }
 
-  private handleError(error: unknown): void {
-    this.errorHandler.handleError(extractApiErrorMessage(error));
+  due(row: ProcedureItemOut): I18nText | null {
+    return dueText(row.due_in_working_days, row.next_action_due);
   }
 }

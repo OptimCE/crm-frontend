@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/administrative-document"
   },
@@ -16,7 +16,7 @@
       "id": "my-filings__doc-type",
       "target": "my-filings__doc-type",
       "targetClick": "next",
-      "text": "Als lid ziet u de dossiers van de gemeenschap niet: u ziet alleen de informatie over u die aan de regulator is bezorgd, en in welk document.",
+      "text": "Als lid ziet u de procedures van de gemeenschap niet: u ziet alleen de informatie over u die aan de regulator is bezorgd, en in welk document.",
       "title": "Wat er over mij is ingediend"
     },
     {

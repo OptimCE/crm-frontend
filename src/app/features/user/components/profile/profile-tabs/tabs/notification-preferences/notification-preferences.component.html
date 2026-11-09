@@ -30,21 +30,40 @@
 
     <ng-template pTemplate="body" let-row>
       <tr [attr.data-testid]="'notification-preferences__row--' + (row.prefix || 'default')">
-        <td>{{ row.labelKey | translate }}</td>
-        <td class="text-center">
-          <p-toggleswitch
-            [(ngModel)]="row.inapp"
-            (ngModelChange)="onToggle()"
-            [attr.data-testid]="'notification-preferences__inapp--' + (row.prefix || 'default')"
-          ></p-toggleswitch>
-        </td>
-        <td class="text-center">
-          <p-toggleswitch
-            [(ngModel)]="row.email"
-            (ngModelChange)="onToggle()"
-            [attr.data-testid]="'notification-preferences__email--' + (row.prefix || 'default')"
-          ></p-toggleswitch>
-        </td>
+        @if (row.digest) {
+          <!-- A summary: email only. A community admin chooses whether it is
+               sent, how often and to whom; its recipient may stop it here. -->
+          <td>
+            {{ row.labelKey | translate }}
+            <span class="block text-xs text-surface-500">
+              {{ 'PROFILE.NOTIFICATION_PREFERENCES.DIGEST_HINT' | translate }}
+            </span>
+          </td>
+          <td class="text-center text-surface-400">—</td>
+          <td class="text-center">
+            <p-toggleswitch
+              [(ngModel)]="row.email"
+              (ngModelChange)="onToggle()"
+              [attr.data-testid]="'notification-preferences__email--' + row.prefix"
+            ></p-toggleswitch>
+          </td>
+        } @else {
+          <td>{{ row.labelKey | translate }}</td>
+          <td class="text-center">
+            <p-toggleswitch
+              [(ngModel)]="row.inapp"
+              (ngModelChange)="onToggle()"
+              [attr.data-testid]="'notification-preferences__inapp--' + (row.prefix || 'default')"
+            ></p-toggleswitch>
+          </td>
+          <td class="text-center">
+            <p-toggleswitch
+              [(ngModel)]="row.email"
+              (ngModelChange)="onToggle()"
+              [attr.data-testid]="'notification-preferences__email--' + (row.prefix || 'default')"
+            ></p-toggleswitch>
+          </td>
+        }
       </tr>
     </ng-template>
 

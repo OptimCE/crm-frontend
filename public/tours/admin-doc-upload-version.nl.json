@@ -1,7 +1,7 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "ec8878fdeb71",
   "entry": {
-    "route": "/administrative-document"
+    "route": "/administrative-document/procedures/:dossierId"
   },
   "guideUrl": "https://guide.optimce.be/admin-doc-upload-version/nl.html",
   "id": "admin-doc-upload-version",
@@ -13,55 +13,11 @@
       "advance": {
         "on": "click"
       },
-      "id": "dossier-list__row--0",
-      "target": "dossier-list__row--0",
-      "text": "Open het dossier waaraan het stuk moet worden gekoppeld.",
-      "title": "Dossier openen"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "dossier-documents-panel__btn--add",
-      "target": "dossier-documents-panel__btn--add",
-      "text": "Een document dat buiten OptimCE is opgesteld — een ondertekend formulier, een brief van de netbeheerder — registreert u eerst hier, waarna het zijn bestand krijgt.",
-      "title": "Het stuk registreren"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
-      "id": "document-create-dialog__select--doc-type",
-      "target": "document-create-dialog__select--doc-type",
-      "text": "Kies het type document dat u aan het dossier toevoegt.",
-      "title": "Documenttype"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "document-create-dialog__input--title",
-      "target": "document-create-dialog__input--title",
-      "text": "Kies het bijbehorende formulier en geef het een titel die voor uw collega's meteen duidelijk is.",
-      "title": "Het stuk benoemen"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "document-create-dialog__btn--submit",
-      "target": "document-create-dialog__btn--submit",
-      "text": "Bevestig om het document in het dossier aan te maken.",
-      "title": "Het document aanmaken"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "dossier-documents-panel__btn--upload-1",
-      "target": "dossier-documents-panel__btn--upload-1",
-      "text": "Met het uploadpictogram voegt u uw eigen bestand toe in plaats van het door OptimCE te laten genereren.",
-      "title": "Versie uploaden"
+      "id": "dossier-documents-panel__btn--upload-0",
+      "target": "dossier-documents-panel__btn--upload-0",
+      "text": "Een document dat buiten OptimCE is ondertekend, ontvangen of opgesteld, voegt u bij met het uploadpictogram op de rij van dat document.",
+      "title": "Een bestand bijvoegen",
+      "waitFor": "dossier-documents-panel__row--0"
     },
     {
       "advance": {
@@ -79,47 +35,19 @@
       },
       "id": "upload-version-dialog__btn--submit",
       "target": "upload-version-dialog__btn--submit",
-      "text": "Elke upload maakt een extra, definitieve versie aan. Een reeds opgeslagen bestand wordt nooit vervangen: het blijft bewaard en het nieuwe wordt de huidige versie.",
-      "title": "Opslaan"
+      "text": "Bevestig: het bestand wordt de huidige versie van het document. Het wordt bewaard zoals het is, met zijn vingerafdruk, en wordt nooit meer gewijzigd.",
+      "title": "Uploaden"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "dossier-documents-panel__btn--download-1",
-      "target": "dossier-documents-panel__btn--download-1",
+      "id": "dossier-documents-panel__btn--download-0",
+      "target": "dossier-documents-panel__btn--download-0",
       "targetClick": "next",
-      "text": "Het document heeft nu een downloadbare versie, net alsof het was gegenereerd.",
-      "title": "Het stuk is toegevoegd"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "dossier-documents-panel__btn--detail-1",
-      "target": "dossier-documents-panel__btn--detail-1",
-      "text": "Open de versies om te controleren of het bestand goed is opgeslagen, met de oorspronkelijke naam en grootte.",
-      "title": "Historiek controleren"
-    },
-    {
-      "advance": {
-        "on": "manual"
-      },
-      "id": "the-uploaded-file-is-version-1",
-      "target": null,
-      "text": "Het geüploade bestand verschijnt als versie 1. Anders dan een gegenereerde versie bewaart het geen momentopname van gegevens: een willekeurig bestand zegt niets over wie het betreft.",
-      "title": "Een versie meer",
-      "waitFor": "document-detail-dialog__row--1"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "document-detail-dialog__btn--close",
-      "target": "document-detail-dialog__btn--close",
-      "text": "Sluit het venster wanneer u klaar bent.",
-      "title": "Sluiten"
+      "text": "Het document wordt “Klaar” en kan worden gedownload. Een nieuw bestand voegt een versie toe zonder de vorige te wissen. Zodra alle vereiste documenten klaar zijn, wordt de procedure vanzelf “Klaar” en stelt ze voor om te versturen.",
+      "title": "Het document is klaar"
     }
   ],
-  "title": "Een bestaand document bijvoegen"
+  "title": "Een bestand bij een document voegen"
 }

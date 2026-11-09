@@ -1,78 +1,76 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
-  @if (hasNoOperations()) {
-    <p class="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3 m-0">
-      <i class="pi pi-exclamation-triangle"></i>
-      {{ 'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.NO_OPERATIONS' | translate }}
-    </p>
-  }
-
+<form (ngSubmit)="submit()" class="flex flex-col gap-4">
   <div class="flex flex-col gap-1">
     <label class="text-sm font-medium" for="dossier-type">{{
       'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TYPE' | translate
     }}</label>
     <p-select
       inputId="dossier-type"
-      [options]="typeOptions"
-      formControlName="dossier_type"
+      name="code"
+      [options]="typeOptions()"
+      [ngModel]="code()"
+      (ngModelChange)="code.set($event)"
       optionLabel="label"
       optionValue="value"
       appendTo="body"
       class="w-full"
       [placeholder]="'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TYPE_PLACEHOLDER' | translate"
       data-testid="dossier-create-dialog__select--type"
-    />
+    >
+      <!-- One test-id per catalogue code: the labels are sorted per language,
+           so a position picks a different type in each. -->
+      <ng-template #item let-option>
+        <span [attr.data-testid]="'dossier-create-dialog__option--' + option.value">{{
+          option.label
+        }}</span>
+      </ng-template>
+    </p-select>
   </div>
 
+  @if (needsOperation()) {
+    @if (hasNoOperations()) {
+      <p class="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3 m-0">
+        <i class="pi pi-exclamation-triangle"></i>
+        {{ 'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.NO_OPERATIONS' | translate }}
+      </p>
+    }
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="dossier-operation">{{
+        'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION' | translate
+      }}</label>
+      <p-select
+        inputId="dossier-operation"
+        name="operation"
+        [options]="operationOptions()"
+        [(ngModel)]="operation"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        class="w-full"
+        [placeholder]="
+          'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION_PLACEHOLDER' | translate
+        "
+        data-testid="dossier-create-dialog__select--operation"
+      />
+    </div>
+  }
+
   <div class="flex flex-col gap-1">
-    <label class="text-sm font-medium" for="dossier-operation">{{
-      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION' | translate
+    <label class="text-sm font-medium" for="dossier-requested-effect">{{
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CREATE.REQUESTED_EFFECT' | translate
     }}</label>
-    <p-select
-      inputId="dossier-operation"
-      [options]="operationOptions()"
-      formControlName="id_sharing_operation"
-      optionLabel="label"
-      optionValue="value"
+    <p-datepicker
+      inputId="dossier-requested-effect"
+      name="requestedEffect"
+      [(ngModel)]="requestedEffect"
+      dateFormat="dd/mm/yy"
       appendTo="body"
-      class="w-full"
-      [placeholder]="
-        'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION_PLACEHOLDER' | translate
-      "
-      data-testid="dossier-create-dialog__select--operation"
+      [fluid]="true"
+      [showIcon]="true"
+      [showClear]="true"
+      data-testid="dossier-create-dialog__date--requested-effect"
     />
     <small class="text-surface-500">{{
-      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.OPERATION_HINT' | translate
-    }}</small>
-  </div>
-
-  <div class="flex flex-col gap-1">
-    <label class="text-sm font-medium" for="dossier-title">{{
-      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.TITLE_FIELD' | translate
-    }}</label>
-    <input
-      pInputText
-      id="dossier-title"
-      formControlName="title"
-      class="w-full"
-      maxlength="255"
-      data-testid="dossier-create-dialog__input--title"
-    />
-  </div>
-
-  <div class="flex flex-col gap-1">
-    <label class="text-sm font-medium" for="dossier-external-ref">{{
-      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.EXTERNAL_REF' | translate
-    }}</label>
-    <input
-      pInputText
-      id="dossier-external-ref"
-      formControlName="external_ref"
-      class="w-full"
-      maxlength="128"
-      data-testid="dossier-create-dialog__input--external-ref"
-    />
-    <small class="text-surface-500">{{
-      'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOSSIER.EXTERNAL_REF_HINT' | translate
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CREATE.REQUESTED_EFFECT_HINT' | translate
     }}</small>
   </div>
 

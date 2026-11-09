@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/administrative-document"
   },
@@ -16,7 +16,7 @@
       "id": "my-filings__doc-type",
       "target": "my-filings__doc-type",
       "targetClick": "next",
-      "text": "As a member you do not see the community's dossiers: you only see the information about you that was sent to the regulator, and in which document.",
+      "text": "As a member you do not see the community's procedures: you only see the information about you that was sent to the regulator, and in which document.",
       "title": "What has been filed about me"
     },
     {

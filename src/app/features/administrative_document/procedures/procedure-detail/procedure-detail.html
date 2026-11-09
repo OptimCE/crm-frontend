@@ -1,0 +1,468 @@
+<div class="mx-auto w-full max-w-5xl flex flex-col gap-5">
+  <a
+    routerLink="/administrative-document"
+    class="text-sm text-primary-700 no-underline hover:underline self-start"
+    data-testid="procedure-detail__link--back"
+  >
+    <i class="pi pi-arrow-left text-xs"></i>
+    {{ 'ADMINISTRATIVE_DOCUMENT.TITLE' | translate }}
+  </a>
+
+  @if (notFound()) {
+    <div class="py-10 text-center" data-testid="procedure-detail__not-found">
+      <i class="pi pi-folder-open text-3xl text-surface-300 mb-2"></i>
+      <p class="text-surface-500 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.NOT_FOUND' | translate }}
+      </p>
+    </div>
+  } @else if (detail(); as d) {
+    <!-- Header: type, recipient, route, status, references -->
+    <header class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+      <div class="flex flex-col gap-2 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1
+            class="text-xl font-semibold text-surface-900 m-0"
+            data-testid="procedure-detail__title"
+          >
+            {{ title() }}
+          </h1>
+          <p-tag
+            [value]="stepLabel()"
+            [severity]="stepSeverity()"
+            data-testid="procedure-detail__tag--step"
+          />
+        </div>
+        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 m-0 text-sm">
+          @if (recipient(); as to) {
+            <div class="flex gap-2">
+              <dt class="text-surface-500">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.RECIPIENT' | translate }}
+              </dt>
+              <dd class="m-0 text-surface-800" data-testid="procedure-detail__recipient">
+                {{ to.key | translate: to.params }}
+              </dd>
+            </div>
+          }
+          @if (d.operation_name) {
+            <div class="flex gap-2">
+              <dt class="text-surface-500">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.OPERATION' | translate }}
+              </dt>
+              <dd class="m-0 text-surface-800">{{ d.operation_name }}</dd>
+            </div>
+          }
+          @if (d.variant) {
+            <div class="flex gap-2">
+              <dt class="text-surface-500">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.ROUTE' | translate }}
+              </dt>
+              <dd class="m-0 text-surface-800" data-testid="procedure-detail__route">
+                @if (routeText(); as text) {
+                  {{ text.key | translate: text.params }}
+                }
+              </dd>
+            </div>
+          }
+          <div class="flex gap-2">
+            <dt class="text-surface-500">
+              {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.REFERENCE' | translate }}
+            </dt>
+            <dd class="m-0 font-mono text-surface-800">{{ d.send_preview.reference }}</dd>
+          </div>
+          @if (d.external_ref) {
+            <div class="flex gap-2">
+              <dt class="text-surface-500">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.EXTERNAL_REF' | translate }}
+              </dt>
+              <dd class="m-0 font-mono text-surface-800">{{ d.external_ref }}</dd>
+            </div>
+          }
+          @if (d.requested_effective_date) {
+            <div class="flex gap-2">
+              <dt class="text-surface-500">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.REQUESTED_EFFECT' | translate }}
+              </dt>
+              <dd class="m-0 text-surface-800">{{ formatApiDate(d.requested_effective_date) }}</dd>
+            </div>
+          }
+          @if (d.effective_date) {
+            <div class="flex gap-2">
+              <dt class="text-surface-500">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.EFFECT' | translate }}
+              </dt>
+              <dd class="m-0 text-surface-800">{{ formatApiDate(d.effective_date) }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0 flex-wrap">
+        @if (primary(); as action) {
+          <p-button
+            [icon]="action.icon"
+            [label]="action.labelKey | translate"
+            (onClick)="runPrimary()"
+            data-testid="procedure-detail__btn--primary"
+          />
+        }
+        @if (d.effective_date_correctable) {
+          <p-button
+            icon="pi pi-calendar"
+            [outlined]="true"
+            severity="secondary"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.EFFECTIVE_DATE.OPEN' | translate"
+            (onClick)="openEffectiveDate()"
+            data-testid="procedure-detail__btn--effective-date"
+          />
+        }
+        @if (d.transitions.length > 0) {
+          <p-button
+            icon="pi pi-directions"
+            [outlined]="true"
+            severity="secondary"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.TRANSITION.OPEN' | translate"
+            (onClick)="openTransition()"
+            data-testid="procedure-detail__btn--transition"
+          />
+        }
+        <p-button
+          icon="pi pi-refresh"
+          text
+          rounded
+          severity="secondary"
+          [loading]="loading()"
+          [pTooltip]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFRESH' | translate"
+          [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFRESH' | translate"
+          (onClick)="reload()"
+          data-testid="procedure-detail__btn--refresh"
+        />
+      </div>
+    </header>
+
+    @if (d.effect_error) {
+      <p-message severity="error" data-testid="procedure-detail__message--effect-error">
+        {{ effectErrorKey() | translate }}
+        @if (effectSubjects().length > 0) {
+          <span class="font-mono">{{ effectSubjects().join(', ') }}</span>
+        }
+      </p-message>
+    }
+    @if (d.frozen_at) {
+      <p-message severity="secondary" data-testid="procedure-detail__message--frozen">
+        {{
+          'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.FROZEN'
+            | translate: { date: (d.frozen_at | localeDate: 'mediumDate') }
+        }}
+      </p-message>
+    }
+
+    <!-- What to do, by when -->
+    @if (nextAction()) {
+      <div
+        class="rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center gap-2"
+        [class]="d.overdue ? 'border-red-300 bg-red-50' : 'border-primary-100 bg-primary-50'"
+        data-testid="procedure-detail__next-action"
+      >
+        <span class="flex-1 text-sm font-medium text-surface-800">{{ nextAction() }}</span>
+        @if (nextDue(); as due) {
+          <span
+            class="text-sm"
+            [class]="d.overdue ? 'text-red-700 font-semibold' : 'text-surface-600'"
+            >{{ due.key | translate: due.params }}</span
+          >
+        }
+      </div>
+    }
+
+    <!-- The regulator's path, with each step's legal delay -->
+    <section class="flex flex-col gap-2">
+      <h2 class="text-base font-semibold text-surface-800 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.STEPS' | translate }}
+      </h2>
+      <ol
+        class="list-none m-0 p-0 flex gap-2 overflow-x-auto pb-2"
+        data-testid="procedure-detail__frieze"
+      >
+        @for (item of frieze(); track item.step.code) {
+          <li
+            class="min-w-36 max-w-48 shrink-0 rounded-lg border p-2 flex flex-col gap-1"
+            [class]="
+              item.step.current
+                ? 'border-primary-400 bg-primary-50'
+                : item.step.visited
+                  ? 'border-surface-200 bg-surface-50'
+                  : 'border-dashed border-surface-200'
+            "
+            [attr.aria-current]="item.step.current ? 'step' : null"
+            [attr.data-testid]="'procedure-detail__step--' + item.step.code"
+          >
+            <span class="flex items-center gap-1 text-sm">
+              @if (item.step.current) {
+                <i class="pi pi-circle-fill text-primary-600 text-xs"></i>
+              } @else if (item.step.visited) {
+                <i class="pi pi-check text-surface-500 text-xs"></i>
+              } @else {
+                <i class="pi pi-circle text-surface-300 text-xs"></i>
+              }
+              <span
+                [class]="
+                  item.step.current
+                    ? 'font-semibold text-primary-800'
+                    : item.step.visited
+                      ? 'text-surface-700'
+                      : 'text-surface-400'
+                "
+                >{{ item.label }}</span
+              >
+            </span>
+            @for (delay of item.delays; track $index) {
+              <span class="text-xs text-surface-500">{{
+                delay.key | translate: delay.params
+              }}</span>
+            }
+          </li>
+        }
+      </ol>
+    </section>
+
+    <!-- Changes filed here -->
+    @if (d.changes.length > 0) {
+      <section class="flex flex-col gap-2" data-testid="procedure-detail__changes">
+        <h2 class="text-base font-semibold text-surface-800 m-0">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.TITLE' | translate }}
+        </h2>
+        <ul class="list-none m-0 p-0 flex flex-col gap-2">
+          @for (change of d.changes; track change.id) {
+            <li
+              class="rounded-lg border border-surface-200 p-3 flex flex-col sm:flex-row sm:items-center gap-2"
+              [attr.data-testid]="'procedure-detail__change--' + change.id"
+            >
+              <div class="flex-1 min-w-0 flex flex-col gap-1">
+                <span class="flex items-center gap-2 flex-wrap text-sm">
+                  @if (changeKind(change); as kind) {
+                    <span class="font-medium text-surface-800">{{
+                      kind.key | translate: kind.params
+                    }}</span>
+                  }
+                  <span class="font-mono text-surface-700">{{ change.subject_ref }}</span>
+                  <p-tag
+                    [value]="changeStatusKey(change) | translate"
+                    [severity]="changeSeverity(change)"
+                  />
+                  <app-regulatory-badge
+                    [state]="change"
+                    [subjectType]="change.subject_type === 2 ? 2 : 1"
+                    [testId]="'procedure-detail__regulatory--' + change.id"
+                  />
+                </span>
+                <span class="text-xs text-surface-500">
+                  {{ change.detected_at | localeDate: 'short' }}
+                  @if (change.effective_date) {
+                    &middot;
+                    {{
+                      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.EFFECTIVE'
+                        | translate: { date: formatApiDate(change.effective_date) }
+                    }}
+                  }
+                  @if (change.excluded_reason) {
+                    &middot;
+                    {{
+                      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.EXCLUDED_BECAUSE'
+                        | translate: { reason: change.excluded_reason }
+                    }}
+                  }
+                  @if (change.refiled_into) {
+                    &middot;
+                    <a
+                      class="text-primary-500 hover:text-primary-700 underline"
+                      [routerLink]="['/administrative-document/procedures', change.refiled_into]"
+                      [attr.data-testid]="'procedure-detail__link--refiled-' + change.id"
+                    >
+                      {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.REFILED_INTO' | translate }}
+                    </a>
+                  }
+                  @if (change.refiled_from) {
+                    &middot;
+                    {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.REFILED_FROM' | translate }}
+                  }
+                  @if (change.in_operation === false) {
+                    &middot;
+                    {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.WITHDRAWN_IN_CRM' | translate }}
+                  }
+                </span>
+              </div>
+              @if (canActOn(change)) {
+                <div class="flex gap-2 shrink-0">
+                  <p-button
+                    icon="pi pi-clock"
+                    size="small"
+                    [outlined]="true"
+                    severity="secondary"
+                    [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.DEFER' | translate"
+                    [disabled]="isBusy(change)"
+                    (onClick)="defer(change)"
+                    [attr.data-testid]="'procedure-detail__btn--defer-' + change.id"
+                  />
+                  <p-button
+                    icon="pi pi-ban"
+                    size="small"
+                    [outlined]="true"
+                    severity="warn"
+                    [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHANGES.EXCLUDE' | translate"
+                    [disabled]="isBusy(change)"
+                    (onClick)="exclude(change)"
+                    [attr.data-testid]="'procedure-detail__btn--exclude-' + change.id"
+                  />
+                </div>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <!-- After a refusal: withdraw in the CRM, or correct and refile (spec: a refusal deletes nothing) -->
+    @if (d.refusal; as refusal) {
+      <section
+        class="rounded-lg border border-red-200 bg-red-50 p-3 flex flex-col gap-2"
+        data-testid="procedure-detail__refusal"
+      >
+        <h2 class="text-base font-semibold text-surface-800 m-0">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.TITLE' | translate }}
+        </h2>
+        <p class="text-sm text-surface-700 m-0">
+          {{
+            'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.HINT'
+              | translate: { count: refusal.changes.length }
+          }}
+        </p>
+        <div class="flex flex-wrap gap-2">
+          @if (refusal.id_sharing_operation) {
+            <a
+              class="p-button p-button-outlined p-button-secondary p-button-sm no-underline"
+              [routerLink]="['/sharing_operations', refusal.id_sharing_operation]"
+              data-testid="procedure-detail__link--withdraw"
+            >
+              <i class="pi pi-external-link mr-2"></i>
+              {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.WITHDRAW' | translate }}
+            </a>
+          }
+          <p-button
+            icon="pi pi-replay"
+            size="small"
+            [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REFUSAL.REFILE' | translate"
+            [loading]="refiling()"
+            (onClick)="refile()"
+            data-testid="procedure-detail__btn--refile"
+          />
+        </div>
+      </section>
+    }
+
+    <!-- Received at the reception address, to qualify (phase 4) -->
+    @if (d.inbound?.length) {
+      <section class="flex flex-col gap-2" data-testid="procedure-detail__inbound">
+        <h2 class="text-base font-semibold text-surface-800 m-0">
+          {{ 'ADMINISTRATIVE_DOCUMENT.INBOUND.TO_QUALIFY' | translate }}
+        </h2>
+        <app-inbound-mail-list
+          [mails]="d.inbound ?? []"
+          [dossierId]="d.id"
+          [pieces]="pieceChoices()"
+          (respond)="openRespondFrom($event)"
+          (changed)="reload()"
+          (pieceSupplied)="show($event)"
+        />
+      </section>
+    }
+
+    <!-- Pieces -->
+    <section id="pieces" class="flex flex-col gap-2 scroll-mt-4">
+      <h2 class="text-base font-semibold text-surface-800 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.TITLE' | translate }}
+        @if (d.pieces_required > 0) {
+          <span class="text-sm font-normal text-surface-500">
+            &middot;
+            {{
+              'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES_PROGRESS'
+                | translate: { ready: d.pieces_ready, required: d.pieces_required }
+            }}
+          </span>
+        }
+      </h2>
+      <app-dossier-documents-panel [detail]="d" (changed)="show($event)" (stale)="reload()" />
+    </section>
+
+    <!-- Deadlines -->
+    @if (d.deadlines.length > 0) {
+      <section class="flex flex-col gap-2" data-testid="procedure-detail__deadlines">
+        <h2 class="text-base font-semibold text-surface-800 m-0">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.DEADLINES' | translate }}
+        </h2>
+        <ul class="list-none m-0 p-0 flex flex-col gap-1">
+          @for (deadline of openDeadlines(); track deadline.id) {
+            <li class="flex flex-wrap items-center gap-2 text-sm">
+              <span class="font-medium text-surface-800">{{ deadlineLabel(deadline) }}</span>
+              <span class="text-surface-500">{{ partyKey(deadline) | translate }}</span>
+              <span [class]="deadline.overdue ? 'text-red-700 font-semibold' : 'text-surface-600'">
+                {{ formatApiDate(deadline.due_date) }}
+                @if (deadlineDue(deadline); as due) {
+                  ({{ due.key | translate: due.params }})
+                }
+              </span>
+            </li>
+          }
+          @for (deadline of closedDeadlines(); track deadline.id) {
+            <li class="flex flex-wrap items-center gap-2 text-sm text-surface-400">
+              <span class="line-through">{{ deadlineLabel(deadline) }}</span>
+              <span>{{ formatApiDate(deadline.due_date) }}</span>
+              <span>{{ deadlineStatus(deadline) | translate }}</span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <!-- Activity thread -->
+    <section class="flex flex-col gap-2" data-testid="procedure-detail__thread">
+      <h2 class="text-base font-semibold text-surface-800 m-0">
+        {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.DETAIL.THREAD' | translate }}
+      </h2>
+      <ol class="list-none m-0 p-0 flex flex-col gap-2 border-l border-surface-200 pl-4">
+        @for (row of thread(); track $index) {
+          <li
+            class="flex flex-col gap-0.5"
+            [attr.data-testid]="'procedure-detail__thread-entry--' + row.entry.kind"
+          >
+            <span class="flex items-center gap-2 text-sm text-surface-800">
+              <i [class]="row.line.icon + ' text-xs text-surface-500'"></i>
+              {{ row.line.text.key | translate: row.line.text.params }}
+              @if (row.entry.has_file) {
+                <p-button
+                  icon="pi pi-download"
+                  text
+                  rounded
+                  size="small"
+                  [loading]="isDownloading(row.entry)"
+                  [pTooltip]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
+                  [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.DOWNLOAD' | translate"
+                  (onClick)="downloadMessage(row.entry)"
+                />
+              }
+            </span>
+            <span class="text-xs text-surface-500">
+              {{ row.entry.at | localeDate: 'short' }}
+              @if (row.line.note) {
+                &middot; {{ row.line.note }}
+              }
+            </span>
+          </li>
+        }
+      </ol>
+    </section>
+  } @else if (loading()) {
+    <p class="text-sm text-surface-500 m-0" role="status">{{ 'COMMON.LOADING' | translate }}</p>
+  }
+</div>
+
+<p-confirmDialog />

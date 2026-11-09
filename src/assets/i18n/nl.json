@@ -77,6 +77,7 @@
     "JUST_NOW": "Zojuist",
     "NEW_TOAST": "U hebt nieuwe meldingen",
     "PREFIXES": {
+      "signature": "Elektronische handtekeningen",
       "admin_deadline": "Administratieve deadlines",
       "admin_dossier": "Administratieve dossiers",
       "billing_run": "Facturatierondes",
@@ -88,9 +89,30 @@
       "member_invitation": "Ledenuitnodigingen",
       "news_poll": "Peilingen",
       "news_post": "Nieuwsberichten",
-      "producer_statement": "Producentafrekeningen"
+      "producer_statement": "Producentafrekeningen",
+      "admin_correspondence": "Antwoorden op procedures",
+      "admin_digest": "Administratief overzicht per e-mail",
+      "admin_effect": "Inwerkingtreding van procedures",
+      "admin_meter": "Mijn meters in de deling"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "“{{title}}” wacht op uw handtekening ({{community}})"
+        },
+        "reminder": {
+          "title": "Herinnering: “{{title}}” wacht nog steeds op uw handtekening ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} heeft “{{title}}” ondertekend"
+        },
+        "declined": {
+          "title": "{{signer}} weigerde “{{title}}” te ondertekenen: {{reason}}"
+        },
+        "completed": {
+          "title": "“{{title}}” is door alle partijen ondertekend"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "Er is een nieuw document geüpload"
@@ -155,6 +177,24 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "Een administratief dossier heeft een ontvangstbevestiging gekregen"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "Een administratieve procedure is in werking getreden"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Uw meter {{ean}} is nu actief in de deling"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "Er werd een antwoord geregistreerd bij een procedure"
+        },
+        "received": {
+          "title": "Er is post aangekomen op het ontvangstadres"
         }
       }
     }
@@ -226,9 +266,9 @@
         "SEE_ALL": "Deadlines bekijken"
       },
       "DOSSIERS": {
-        "TITLE": "Administratieve dossiers",
-        "EMPTY": "Nog geen dossier. Maak uw eerste administratieve dossier aan.",
-        "SEE_ALL": "Dossiers bekijken"
+        "TITLE": "Administratieve procedures",
+        "EMPTY": "Geen lopende procedure.",
+        "SEE_ALL": "De procedures bekijken"
       },
       "INVOICES": {
         "TITLE": "Facturatie",
@@ -331,9 +371,13 @@
     "NEWS": "Nieuws",
     "BILLING": "Facturatie",
     "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
+    "SIGNATURES": "Te ondertekenen",
+    "SIGNATURES_COMMUNITY": "Handtekeningen",
+    "SIGNATURES_BADGE": "{{count}} document(en) te ondertekenen",
     "DASHBOARD": "Dashboard",
     "HOME": "Start",
-    "LIVE_DATA": "Live gegevens"
+    "LIVE_DATA": "Live gegevens",
+    "ADMINISTRATIVE_BADGE": "{{todo}} procedure(s) te doen · {{overdue}} termijn(en) verstreken"
   },
   "PROFILE": {
     "MY_PROFILE": "Mijn profiel",
@@ -369,14 +413,15 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Kies hoe u op de hoogte wilt worden gebracht van elk soort activiteit.",
-      "TRANSACTIONAL_NOTICE": "Essentiële berichten — facturen, uitnodigingen en gemiste regelgevende deadlines — worden altijd verzonden en kunnen niet worden uitgeschakeld.",
+      "TRANSACTIONAL_NOTICE": "Essentiële berichten — facturen en uitnodigingen — worden altijd verstuurd en kunnen niet worden uitgeschakeld. Een verstreken regelgevende termijn wordt altijd in de app gemeld; per e-mail staat hij in het administratieve overzicht.",
       "CATEGORY": "Categorie",
       "IN_APP": "In de app",
       "EMAIL": "E-mail",
       "DEFAULT_LABEL": "Al het overige",
       "SAVE": "Voorkeuren opslaan",
       "SAVED": "Voorkeuren opgeslagen",
-      "EMPTY": "Geen categorieën beschikbaar"
+      "EMPTY": "Geen categorieën beschikbaar",
+      "DIGEST_HINT": "Als een beheerder van uw gemeenschap u als ontvanger heeft gekozen. Schakel het uit om het niet meer te ontvangen."
     },
     "TABS": {
       "HEADERS": {
@@ -497,6 +542,39 @@
     "BE-BRU-BRUGEL": "Brugel (Brussel)",
     "BE-VLA-VREG": "VREG (Vlaanderen)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "De procedure openen",
+      "METER": {
+        "TO_NOTIFY": "Te melden",
+        "PENDING_GRD": "Wacht op de netbeheerder",
+        "PENDING_REGULATOR": "Wacht op de regulator",
+        "AUTHORIZED": "Toegestaan",
+        "AUTHORIZED_FROM": "Toegestaan, van kracht op {{date}}",
+        "ACTIVE": "Actief sinds {{date}}",
+        "ACTIVE_UNDATED": "Actief",
+        "LEAVING": "Uittreding gevraagd",
+        "LEAVING_UNTIL": "Uittreding gepland, actief tot {{date}}",
+        "ENDED": "Uitgetreden, actief tot {{date}}",
+        "ENDED_UNDATED": "Uitgetreden",
+        "REFUSED": "Geweigerd",
+        "WITHDRAWN": "Status ingetrokken"
+      },
+      "KEY": {
+        "TO_NOTIFY": "Nieuwe sleutel te melden",
+        "PENDING_GRD": "Wacht op de netbeheerder",
+        "PENDING_REGULATOR": "Wacht op de regulator",
+        "AUTHORIZED": "Toegestaan",
+        "AUTHORIZED_FROM": "Van kracht op {{date}}",
+        "ACTIVE": "Actief sinds {{date}}",
+        "ACTIVE_UNDATED": "Actief",
+        "ENDED": "Vervangen, actief tot {{date}}",
+        "ENDED_UNDATED": "Vervangen",
+        "REFUSED": "Geweigerd",
+        "WITHDRAWN": "Vorige sleutel behouden"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Gemeenschapsinfo",
     "SUBTITLE": "Bekijk en beheer de gegevens van uw gemeenschap",
@@ -528,10 +606,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Rekeninghouder",
     "ACCOUNT_HOLDER_HINT": "Alleen invullen als de rekening niet op de juridische naam staat",
+    "REPRESENTATIVE_SECTION": "Vertegenwoordiger en documenten van de gemeenschap",
+    "REPRESENTATIVE_HINT": "Een andere vertegenwoordiger, of een nieuwe datum van de statuten of het huishoudelijk reglement, bereidt de bijwerkingsprocedure bij de regulator voor wanneer de administratieve ruimte actief is.",
+    "REPRESENTATIVE": "Vertegenwoordiger",
+    "REPRESENTATIVE_FIRST_NAME": "Voornaam van de vertegenwoordiger",
+    "REPRESENTATIVE_LAST_NAME": "Naam van de vertegenwoordiger",
+    "REPRESENTATIVE_EMAIL": "E-mail van de vertegenwoordiger",
+    "STATUTES_DATE": "Datum van de statuten",
+    "INTERNAL_RULES_DATE": "Datum van het huishoudelijk reglement",
     "ERRORS": {
       "INVALID_URL": "Voer een geldige URL in die begint met http:// of https://",
       "PARTIAL_ADDRESS": "Vul alle verplichte adresvelden in of laat ze allemaal leeg",
-      "INVALID_IBAN": "Voer een geldig IBAN in"
+      "INVALID_IBAN": "Voer een geldig IBAN in",
+      "INVALID_EMAIL": "Voer een geldig e-mailadres in"
     }
   },
   "COMMUNITY": {
@@ -1260,6 +1347,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Een status selecteren",
+      "STATUS_FOLLOWS_PROCEDURE": "Deze status volgt de administratieve procedure van de meter: hij verandert wanneer de procedure vordert.",
       "ENERGY_CHARACTERISTIC_TITLE": "Energiekenmerken",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Financiële kenmerken",
       "START_DATE_METER_LABEL": "Datum van ingebruikname",
@@ -1546,7 +1634,9 @@
           "DEACTIVATED_LABEL": "Gedeactiveerd",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "In afwachting van GRD-goedkeuring",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "In afwachting van goedkeuring van de manager"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} meter(s) in deze lijst maken sinds {{date}} voor de netbeheerder geen deel meer uit van het delen: verwijder ze uit de operatie.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} meter(s) in deze lijst maken voor de netbeheerder geen deel meer uit van het delen: verwijder ze uit de operatie."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Verbruiksopvolging",
@@ -1591,7 +1681,11 @@
       },
       "RELATED_LABEL": "Zie ook:",
       "RELATED_DOSSIERS": "Haar administratieve dossiers",
-      "RELATED_BILLING": "Haar facturatie"
+      "RELATED_BILLING": "Haar facturatie",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} wijziging(en) nog niet gemeld aan de netbeheerder of de regulator.",
+        "OPEN_DRAFT": "De procedure bekijken"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Deeloperatie",
@@ -1695,6 +1789,10 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Administratieve documenten",
       "DESCRIPTION": "Volg de reglementaire dossiers bij de CWaPE en de netbeheerder: statussen, afgeleide termijnen en elke versie van elk ingediend document."
+    },
+    "SIGNATURE": {
+      "NAME": "Elektronische handtekening",
+      "DESCRIPTION": "Laat de documenten van de gemeenschap online ondertekenen: een getypte of getekende handtekening in de app, een verzegeld document en controleerbaar bewijs voor elke handtekening."
     },
     "LIVE_DATA": {
       "NAME": "Live gegevens",
@@ -2258,6 +2356,16 @@
         },
         "deadline_rule": {
           "saved": "Termijnregel opgeslagen"
+        },
+        "regulatory_effect": {
+          "applied": "Regelgevende status in het CRM geschreven"
+        },
+        "baseline": {
+          "confirmed": "Beginsituatie bevestigd"
+        },
+        "change": {
+          "deferred": "Wijziging uitgesteld naar de volgende procedure",
+          "excluded": "Wijziging uitgesloten van de procedures"
         }
       },
       "billing": {
@@ -2402,36 +2510,11 @@
   },
   "ADMINISTRATIVE_DOCUMENT": {
     "TITLE": "Administratieve documenten",
-    "SUBTITLE": "Volg de dossiers bij de CWaPE en de netbeheerder: statussen, termijnen en elke ingediende versie.",
+    "SUBTITLE": "Uw procedures bij de netbeheerder en de CWaPE: wat te doen, en tegen wanneer.",
     "TABS": {
-      "DOSSIERS": "Dossiers",
+      "PROCEDURES": "Procedures",
+      "DOSSIERS": "Alle procedures",
       "DEADLINES": "Termijnen"
-    },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Kennisgeving van oprichting",
-      "MODIFICATION": "Wijziging",
-      "ANNUAL_REPORT": "Jaarlijkse rapportering",
-      "SHARING_AUTHORIZATION": "Deelmachtiging",
-      "SHARING_MODIFICATION": "Wijziging van de deling",
-      "CESSATION": "Stopzetting van de activiteiten"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "In voorbereiding",
-      "SUBMITTED": "Ingediend",
-      "COMPLETE": "Volledig",
-      "CLOSED": "Afgesloten",
-      "LAPSED": "Vervallen"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Concept",
-      "READY": "Gereed",
-      "SENT": "Verzonden",
-      "ACKNOWLEDGED": "Ontvangst bevestigd",
-      "OBSOLETE": "Verouderd"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Gegenereerd",
-      "UPLOADED": "Geüpload"
     },
     "RENDER_STATE": {
       "PENDING": "Bezig met genereren",
@@ -2442,15 +2525,6 @@
       "MET": "Nagekomen",
       "MISSED": "Overschreden",
       "CANCELLED": "Geannuleerd"
-    },
-    "REGION": {
-      "WAL": "Wallonië (CWaPE)",
-      "BRU": "Brussel (Brugel)",
-      "VLA": "Vlaanderen (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Volledig dossier",
-      "INCOMPLETE": "Onvolledig dossier"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Bijlage 6 — kennisgeving gemeenschap",
@@ -2465,25 +2539,11 @@
       "SHARING_MODIFICATION": "Wijzigingsformulier delen",
       "ANNEX7_LEGAL_ENTITY": "Bijlage 7 - Vennootschappen en verenigingen"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Volledigheidscontrole",
-      "LAPSE": "Verval",
-      "MODIFICATION_NOTIFICATION": "Kennisgeving van wijziging",
-      "ANNUAL_REPORT": "Jaarlijkse rapportering"
-    },
-    "SORT": {
-      "CREATED_AT": "Aanmaakdatum",
-      "UPDATED_AT": "Laatste wijziging",
-      "SUBMITTED_AT": "Indieningsdatum",
-      "STATUS": "Status",
-      "TYPE": "Type",
-      "DUE_DATE": "Vervaldatum"
-    },
     "LIST": {
-      "INTRO": "Elk dossier wordt ingediend voor één deelverrichting.",
-      "CREATE": "Nieuw dossier",
-      "EMPTY": "Nog geen dossier. Maak er een aan om de opvolging te starten.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} dossiers)",
+      "INTRO": "Alle procedures van de gemeenschap, de nieuwste eerst, ook de afgeronde.",
+      "CREATE": "Nieuwe procedure",
+      "EMPTY": "Nog geen procedure.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} procedures)",
       "FILTERS": {
         "OPERATION": "Deelverrichting",
         "ALL_OPERATIONS": "Alle verrichtingen",
@@ -2491,168 +2551,43 @@
         "ALL_TYPES": "Alle types",
         "STATUS": "Status",
         "ALL_STATUSES": "Alle statussen",
-        "SORT": "Sorteren op",
-        "TOGGLE_ORDER": "Sorteervolgorde omkeren",
         "CLEAR": "Wissen"
       },
       "COL": {
         "TYPE": "Type",
-        "TITLE": "Titel",
         "OPERATION": "Deelverrichting",
         "STATUS": "Status",
-        "EXTERNAL_REF": "Dossierreferentie",
-        "SUBMITTED_AT": "Ingediend op"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Terug naar dossiers",
-      "EDIT": "Bewerken",
-      "OPERATION": "Deelverrichting",
-      "EXTERNAL_REF": "Dossierreferentie",
-      "REGION": "Regio",
-      "SUBMITTED_AT": "Ingediend op",
-      "CREATED_AT": "Aangemaakt op",
-      "NOT_SET": "Niet ingevuld",
-      "ACTIONS": "Acties",
-      "NO_FURTHER_ACTION": "Dit dossier is afgesloten — verdere actie is niet mogelijk.",
-      "NOT_FOUND": "Dossier niet gevonden.",
-      "TABS": {
-        "DOCUMENTS": "Documenten",
-        "DEADLINES": "Termijnen",
-        "TIMELINE": "Historiek"
+        "EXTERNAL_REF": "Dossierreferentie"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Document toevoegen",
-      "EMPTY": "Nog geen document in dit dossier.",
-      "VERSIONS": "versies",
       "NO_VERSION": "Nog geen versie",
       "UPLOAD": "Versie uploaden",
-      "DETAIL": "Versies bekijken",
       "DOWNLOAD": "Downloaden",
-      "NO_FURTHER_ACTION": "Geen verdere actie mogelijk.",
-      "CONFIRM_HEADER": "Statuswijziging bevestigen",
-      "CONFIRM_MESSAGE": "Dit document naar \"{{status}}\" zetten? De wijziging wordt in de historiek vastgelegd.",
-      "STATUS_CHANGED": "Status bijgewerkt",
-      "COL": {
-        "TYPE": "Document",
-        "STATUS": "Status",
-        "VERSIONS": "Versies",
-        "UPDATED_AT": "Bijgewerkt",
-        "ACTIONS": "Acties"
-      },
       "GENERATE": "Genereren",
       "REGENERATE": "Opnieuw genereren",
       "RENDER_DONE": "Document gegenereerd",
       "RENDER_FAILED": "Genereren van het document is mislukt"
     },
     "DEADLINES": {
-      "INTRO": "Termijnen worden automatisch afgeleid uit de geregistreerde statuswijzigingen.",
-      "EMPTY": "Geen termijn voldoet aan deze filters.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Pagina {{page}} van {{total_pages}} ({{total}} termijnen)",
-      "SWEEP": "Achterstand bijwerken",
-      "SWEEP_CONFIRM_HEADER": "Verlopen termijnen bijwerken",
-      "SWEEP_CONFIRM_MESSAGE": "Alle verlopen termijnen als overschreden markeren en de volgende terugkerende termijnen inplannen?",
-      "SWEEP_DONE": "{{missed}} termijn(en) als overschreden gemarkeerd, {{rolled}} opnieuw ingepland.",
-      "RESOLVED": "Termijn bijgewerkt",
-      "MARK_MET": "Als nagekomen markeren",
-      "MARK_MET_CONFIRM_HEADER": "Termijn als nagekomen markeren",
-      "MARK_MET_CONFIRM_MESSAGE": "Bevestigen dat deze verplichting is nagekomen? Een terugkerende termijn wordt opnieuw ingepland.",
-      "CANCEL": "Termijn annuleren",
-      "CANCEL_CONFIRM_HEADER": "Termijn annuleren",
-      "CANCEL_CONFIRM_MESSAGE": "Deze termijn annuleren? Hij blijft geregistreerd maar wordt niet meer verwacht.",
-      "OVERDUE": "Te laat",
-      "RECURRING": "Terugkerend",
-      "FILTERS": {
-        "STATUS": "Status",
-        "ALL_STATUSES": "Alle statussen",
-        "TYPE": "Type",
-        "ALL_TYPES": "Alle types",
-        "OPERATION": "Deelverrichting",
-        "ALL_OPERATIONS": "Alle verrichtingen",
-        "CLEAR": "Wissen"
-      },
       "COL": {
         "DUE_DATE": "Vervaldatum",
-        "TYPE": "Type",
-        "DOSSIER": "Dossier",
-        "STATUS": "Status",
-        "ACTIONS": "Acties"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "Historiek",
-      "INTRO": "Elke statuswijziging wordt definitief vastgelegd. Correcties worden toegevoegd, nooit gewist.",
-      "EMPTY": "Nog geen historiek.",
-      "CREATED": "Aangemaakt",
-      "CORRECTIVE": "Correctie",
-      "SYSTEM": "Systeem",
-      "SHOW_RAW": "Details tonen",
-      "HIDE_RAW": "Details verbergen",
-      "NEWEST_FIRST": "Nieuwste eerst",
-      "OLDEST_FIRST": "Oudste eerst",
-      "ENTRY_COUNT": "{{count}} vermeldingen",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Datum van indiening",
-        "ACKNOWLEDGED_DATE": "Datum ontvangstbevestiging",
-        "AUTHORITY_FILE_REF": "Dossierreferentie",
-        "RESULT": "Resultaat",
-        "REASON": "Reden",
-        "NOTE": "Notitie"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Status wijzigen",
-      "TO_STATUS": "Nieuwe status",
-      "SUBMIT": "Vastleggen",
-      "SUCCESS": "Status vastgelegd",
-      "CORRECTIVE_WARNING": "Dit is een correctie. Ze wordt met uw reden aan de historiek toegevoegd — de eerdere vermelding blijft bestaan.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Datum van indiening",
-        "ACKNOWLEDGED_DATE": "Datum ontvangstbevestiging",
-        "AUTHORITY_FILE_REF": "Referentie CWaPE / netbeheerder",
-        "RESULT": "Resultaat",
-        "REASON": "Reden van de correctie",
-        "NOTE": "Notitie (optioneel)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "\"{{field}}\" is vereist voor deze statuswijziging."
+        "STATUS": "Status"
       }
     },
     "DIALOGS": {
       "CREATE_DOSSIER": {
-        "TITLE": "Nieuw dossier",
-        "TYPE": "Type dossier",
+        "TITLE": "Nieuwe procedure",
+        "TYPE": "Soort procedure",
         "TYPE_PLACEHOLDER": "Kies een type",
         "OPERATION": "Deelverrichting",
         "OPERATION_PLACEHOLDER": "Kies een verrichting",
-        "OPERATION_HINT": "Ligt vast zodra het dossier is aangemaakt.",
-        "TITLE_FIELD": "Titel (optioneel)",
-        "EXTERNAL_REF": "Dossierreferentie (optioneel)",
-        "EXTERNAL_REF_HINT": "De referentie van de CWaPE of de netbeheerder, zodra u ze kent.",
-        "NO_OPERATIONS": "Deze gemeenschap heeft nog geen deelverrichting. Maak er een aan voordat u een dossier indient.",
+        "NO_OPERATIONS": "Deze gemeenschap heeft nog geen deelverrichting. Maak er een aan voordat u deze procedure opent.",
         "SUBMIT": "Aanmaken",
-        "SUCCESS": "Dossier aangemaakt",
+        "SUCCESS": "Procedure aangemaakt",
         "ERRORS": {
-          "TYPE_REQUIRED": "Kies een type dossier.",
-          "OPERATION_REQUIRED": "Kies de deelverrichting waarvoor dit dossier wordt ingediend."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Dossier bewerken",
-        "SUBMIT": "Opslaan",
-        "SUCCESS": "Dossier bijgewerkt",
-        "OPERATION_LOCKED": "De deelverrichting kan na aanmaak niet meer worden gewijzigd."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Document toevoegen",
-        "DOC_TYPE": "Documenttype",
-        "DOC_TYPE_PLACEHOLDER": "Kies een documenttype",
-        "TITLE_FIELD": "Titel (optioneel)",
-        "SUBMIT": "Toevoegen",
-        "SUCCESS": "Document toegevoegd",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Kies een documenttype."
+          "TYPE_REQUIRED": "Kies een soort procedure.",
+          "OPERATION_REQUIRED": "Kies de betrokken deelverrichting."
         }
       },
       "UPLOAD_VERSION": {
@@ -2662,34 +2597,17 @@
         "SUBMIT": "Uploaden",
         "SUCCESS": "Versie opgeslagen",
         "ERRORS": {
-          "FILE_REQUIRED": "Kies een bestand om te uploaden.",
-          "NOT_ALLOWED": "Dit document is al verzonden. Voer een correctie uit voordat u een versie toevoegt."
+          "FILE_REQUIRED": "Kies een bestand om te uploaden."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Documentversies",
-        "CURRENT": "Huidig",
-        "DOWNLOAD": "Downloaden",
-        "DOWNLOAD_FAILED": "Downloaden mislukt",
-        "EMPTY": "Nog geen versie opgeslagen.",
-        "COL": {
-          "VERSION": "Versie",
-          "FILENAME": "Bestand",
-          "SIZE": "Grootte",
-          "CHECKSUM": "Controlesom",
-          "CREATED_AT": "Opgeslagen op"
-        },
-        "SNAPSHOT": "Vastgelegde gegevens tonen",
-        "SNAPSHOT_HINT": "De exacte gegevens waaruit deze versie is gegenereerd."
       },
       "GENERATE": {
         "TITLE": "Document genereren",
         "REVIEW_HINT": "De gegevens komen uit de CRM. Corrigeer ze indien nodig: wat u hier goedkeurt, wordt ingediend.",
         "SUBMIT": "Genereren",
         "QUEUED": "Genereren gestart",
-        "ERRORS": {
-          "NOT_ALLOWED": "Dit document is al verzonden. Voer eerst een correctie uit voordat u het opnieuw genereert."
-        }
+        "DRAFT_NOTICE": "Deze versie is een concept: ze krijgt een watermerk. De definitieve versie wordt bij het verzenden gegenereerd, op basis van wat u hier goedkeurt.",
+        "TO_SIGN_NOTICE": "Dit formulier is vooraf ingevuld om door de deelnemer te worden ondertekend; upload daarna de ondertekende versie.",
+        "UPGRADE_TEMPLATE": "De nieuwere versie van het formulier gebruiken"
       }
     },
     "PREFILL": {
@@ -2732,19 +2650,75 @@
         "PUISSANCE_KVA": "Vermogen (kVA)",
         "FILIERE": "Productietype",
         "PART_INJECTEE": "Gedeeld injectie-%",
-        "CONFIGURATION": "Configuratie"
+        "CONFIGURATION": "Configuratie",
+        "COMMUNITY_LEGAL_FORM": "Rechtsvorm",
+        "COMMUNITY_BOX": "Bus",
+        "REPRESENTATIVE_NAME": "Vertegenwoordiger (naam of benaming)",
+        "REPRESENTATIVE_VAT_NUMBER": "Ondernemingsnummer van de vertegenwoordiger",
+        "REPRESENTATIVE_STREET": "Straat van de vertegenwoordiger",
+        "REPRESENTATIVE_NUMBER": "Nr. (vertegenwoordiger)",
+        "REPRESENTATIVE_BOX": "Bus (vertegenwoordiger)",
+        "REPRESENTATIVE_POSTCODE": "Postcode (vertegenwoordiger)",
+        "REPRESENTATIVE_CITY": "Gemeente (vertegenwoordiger)",
+        "REPRESENTATIVE_COUNTRY": "Land (vertegenwoordiger)",
+        "CONTACT_LAST_NAME": "Naam van de contactpersoon",
+        "CONTACT_FIRST_NAME": "Voornaam van de contactpersoon",
+        "CONTACT_STREET": "Straat (contact)",
+        "CONTACT_NUMBER": "Nr. (contact)",
+        "CONTACT_BOX": "Bus (contact)",
+        "CONTACT_POSTCODE": "Postcode (contact)",
+        "CONTACT_CITY": "Gemeente (contact)",
+        "CONTACT_PHONE": "Telefoon (contact)",
+        "CONTACT_MOBILE": "Gsm (contact)",
+        "CONTACT_EMAIL": "E-mail (contact)",
+        "BUILDING_REFERENCE": "Referentie van de deling (zelfde gebouw)",
+        "COMMUNITY_REFERENCE": "Referentie van de deling (gemeenschap)",
+        "PROJECT_DESCRIPTION": "Beschrijving van het project",
+        "SHARING_WITHIN_BUILDING": "Delen binnen hetzelfde gebouw",
+        "SHARING_WITHIN_COMMUNITY": "Delen binnen een energiegemeenschap",
+        "SINGLE_GRID_OPERATOR": "Eén enkele netbeheerder",
+        "CWAPE_REFERENCE_DIGITS": "CWaPE-referentie (CE-…)",
+        "ENTITY_NAME": "Benaming van de vennootschap",
+        "ENTITY_VAT_DIGITS": "Ondernemingsnummer van de vennootschap",
+        "CONTROLLING_ENTITY_NAME": "Controlerende entiteit",
+        "DECLARANT_NAME": "Naam en voornaam van de aangever",
+        "DECLARANT_REPRESENTATIVE": "Vertegenwoordigd door",
+        "DECLARANT_COMPANY_NAME": "Vennootschap (indien van toepassing)",
+        "DECLARANT_ADDRESS": "Adres van de aangever",
+        "DECLARANT_PHONE": "Telefoon van de aangever",
+        "DECLARANT_EMAIL": "E-mail van de aangever",
+        "SIGNED_AT": "Opgemaakt te",
+        "SIGNED_ON": "Op",
+        "WAIVES_RESIDENTIAL_RIGHT": "Ziet af van het recht van de residentiële klant",
+        "WILL_REQUEST_METERING_REGIME": "Zal het vereiste meetregime aanvragen",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Zal overstappen naar de injectiedienst",
+        "GRID_OPERATOR_NAME": "Netbeheerder",
+        "SHARING_DESCRIPTION": "Beschrijving van de deling",
+        "DISTRIBUTION_KEY": "Verdeelsleutel",
+        "START_DATE": "Datum van inwerkingtreding",
+        "SUSPENSIVE_CONDITION": "Opschortende voorwaarde",
+        "UNMET_CONDITION": "Niet vervulde voorwaarde",
+        "KEY_NAME": "Sleutel",
+        "KEY_DESCRIPTION": "Beschrijving van de sleutel",
+        "KEY_SINCE": "Toegepast vanaf",
+        "ITERATION": "Iteratie",
+        "PART": "Aandeel (%)",
+        "CONSOMMATEUR": "Verbruiker"
       },
       "TABLES": {
         "MEMBERS": "Leden en aandeelhouders",
         "PARTICIPANTS": "Afnamepunten",
         "INSTALLATIONS": "Productie-installaties",
-        "STORAGE": "Opslaginstallaties"
+        "STORAGE": "Opslaginstallaties",
+        "ITERATIONS": "Iteraties",
+        "KEY_SHARES": "Aandelen van de verbruikers"
       },
       "WARNINGS": {
         "COUNT": "{{count}} punt(en) te corrigeren voor indiening",
         "FIX": "Corrigeren in het CRM",
         "RELOAD": "Opnieuw laden uit het CRM",
         "RELOAD_BLOCKED": "U hebt het formulier gewijzigd — opnieuw laden wist uw correcties.",
+        "BLOCKED": "Dit document kan pas worden gegenereerd als dit in het CRM is gecorrigeerd.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Leveringspunt {{subject}} is aan geen enkel lid toegewezen en kan dus niet onder een naam worden vermeld.",
@@ -2755,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Ontbrekende informatie voor een lid: {{field}}."
+          },
+          "key": {
+            "missing": "Er is geen goedgekeurde verdeelsleutel aan deze deeloperatie gekoppeld.",
+            "no_iteration": "Sleutel \"{{key}}\" heeft geen iteratie: hij verdeelt niets.",
+            "iteration_no_consumer": "Iteratie {{iteration}} van sleutel \"{{key}}\" heeft geen verbruiker.",
+            "iterations_total": "De iteraties van sleutel \"{{key}}\" komen samen op {{total}} % van de gedeelde energie, niet 100 %."
           }
         }
       }
@@ -2799,6 +2779,586 @@
         "PART_INJECTEE": "Geïnjecteerd aandeel",
         "DROITS_DE_VOTE": "Stemrechten"
       }
+    },
+    "PROCEDURES": {
+      "REFRESH": "Vernieuwen",
+      "OVERDUE": "Te laat",
+      "CHOOSE_FILE": "Een bestand kiezen",
+      "REMOVE_FILE": "Het bestand verwijderen",
+      "CHANGES_COUNT": "{{n}} wijziging(en)",
+      "PIECES_PROGRESS": "documenten {{ready}}/{{required}}",
+      "DUE": {
+        "TODAY": "vandaag",
+        "IN_ONE": "binnen 1 werkdag",
+        "IN_MANY": "binnen {{n}} werkdagen",
+        "LATE_ONE": "1 werkdag te laat",
+        "LATE_MANY": "{{n}} werkdagen te laat",
+        "ON": "tegen {{date}}"
+      },
+      "ACTIONS": {
+        "COMPLETE_DOCUMENTS": "Documenten aanvullen",
+        "SEND": "Versturen",
+        "RECORD_RESPONSE": "Een antwoord toevoegen",
+        "CONFIRM_BASELINE": "De beginsituatie bevestigen",
+        "OPEN": "Openen"
+      },
+      "BUCKETS": {
+        "TODO": "Te doen",
+        "WAITING": "In afwachting",
+        "PLANNED": "Gepland",
+        "DONE": "Onlangs afgerond"
+      },
+      "STATUS": {
+        "1": "Concept",
+        "2": "Verstuurd",
+        "5": "Vervallen",
+        "6": "Klaar",
+        "7": "Van kracht",
+        "8": "Geweigerd",
+        "9": "Geannuleerd"
+      },
+      "PIECE_STATUS": {
+        "2": "Klaar",
+        "5": "Ingetrokken",
+        "6": "Ontbreekt",
+        "7": "Verouderd",
+        "8": "Ondertekend",
+        "9": "Geweigerd"
+      },
+      "PIECE_KIND": {
+        "1": "Gegenereerd",
+        "2": "Aan te leveren",
+        "3": "Ontvangen",
+        "UNKNOWN": "Document"
+      },
+      "CHANGE_STATUS": {
+        "1": "In afwachting",
+        "2": "Opgenomen",
+        "3": "Uitgesteld",
+        "4": "Uitgesloten",
+        "5": "Gecompenseerd",
+        "6": "Toegepast",
+        "7": "Geweigerd"
+      },
+      "CHANGE_KIND": {
+        "METER_ADDED": "Meter toegevoegd",
+        "METER_REMOVED": "Meter verwijderd",
+        "KEY_CHANGED": "Nieuwe sleutel",
+        "REPRESENTATIVE_CHANGED": "Nieuwe vertegenwoordiger",
+        "INSTALLATION_ADDED": "Installatie toegevoegd",
+        "INSTALLATION_REMOVED": "Installatie verwijderd",
+        "OPERATION_CLOSED": "Einde van de verrichting",
+        "OTHER": "Wijziging ({{code}})"
+      },
+      "PARTY": {
+        "1": "De gemeenschap",
+        "2": "De netbeheerder",
+        "3": "De regulator",
+        "UNKNOWN": "—"
+      },
+      "VARIANT": {
+        "SIMPLE": "Eenvoudig",
+        "AUTHORIZATION": "Machtiging (netbeheerder, dan CWaPE)",
+        "OTHER": "{{code}}"
+      },
+      "RECIPIENT": {
+        "GRD": "{{name}} (netbeheerder)",
+        "GRD_UNKNOWN": "Referentienetbeheerder te bepalen",
+        "REGULATOR": "De regulator"
+      },
+      "DELAY": {
+        "WORKING_DAYS": "{{label}}: {{n}} werkdagen",
+        "CALENDAR_DAYS": "{{label}}: {{n}} dagen",
+        "MONTHS": "{{label}}: {{n}} maanden"
+      },
+      "DASHBOARD": {
+        "UNSUPPORTED": "De regulator van deze gemeenschap ({{regulator}}) wordt nog niet ondersteund: er wordt geen enkele procedure voor gevolgd.",
+        "BASELINE_PENDING": "Bevestig eerst de beginsituatie: wat de netbeheerder al weet van uw meters en sleutels. Pas daarna worden wijzigingen gevolgd.",
+        "FILTER_GRD": "Netbeheerder",
+        "ALL_GRDS": "Alle netbeheerders",
+        "BANNER": "Volgende termijnen",
+        "EMPTY": "Voorlopig niets te doen: geen lopende procedure."
+      },
+      "LIST": {
+        "NEXT_ACTION": "Volgende stap",
+        "UPDATED_AT": "Bijgewerkt"
+      },
+      "AGENDA": {
+        "INTRO": "Alle termijnen van uw procedures, de dichtstbijzijnde eerst.",
+        "OVERDUE": "{{n}} te laat",
+        "FROM": "Van",
+        "TO": "Tot",
+        "OPEN_HINT": "Zonder periode: wat nog openstaat, ook wat te laat is.",
+        "RANGE_HINT": "In de periode: alle termijnen, ook nageleefde en geannuleerde.",
+        "WHAT": "Wat",
+        "PROCEDURE": "Procedure",
+        "WHO": "Wie",
+        "EMPTY": "Geen termijn."
+      },
+      "DETAIL": {
+        "NOT_FOUND": "Deze procedure bestaat niet of hoort bij een andere gemeenschap.",
+        "RECIPIENT": "Bestemmeling",
+        "OPERATION": "Verrichting",
+        "ROUTE": "Route",
+        "REFERENCE": "OptimCE-referentie",
+        "EXTERNAL_REF": "Externe referentie",
+        "REQUESTED_EFFECT": "Gevraagde ingangsdatum",
+        "EFFECT": "Ingangsdatum",
+        "EFFECT_ERROR": "Het CRM kon de regelgevende status niet bijwerken: deze meters worden al in een andere operatie gevolgd. Elke dag opnieuw geprobeerd.",
+        "EFFECT_ERROR_IN_FORCE": "De inwerkingtreding is geblokkeerd: deze meters worden op die datum nog in een andere operatie gevolgd. De procedure blijft bij haar stap; elke dag opnieuw geprobeerd.",
+        "FROZEN": "Verstuurd op {{date}}: de procedure is vastgelegd. Nieuwe wijzigingen komen in een nieuw concept.",
+        "STEPS": "Stappen",
+        "DEADLINES": "Termijnen",
+        "THREAD": "Activiteit"
+      },
+      "CHANGES": {
+        "TITLE": "Opgenomen wijzigingen",
+        "DEFER": "Uitstellen naar de volgende procedure",
+        "DEFER_CONFIRM": "Deze wijziging verlaat deze procedure en gaat naar de volgende van hetzelfde type, zodra deze verstuurd of geannuleerd is.",
+        "DEFERRED": "Wijziging uitgesteld",
+        "EXCLUDE": "Uitsluiten",
+        "EXCLUDE_INTRO": "Deze wijziging wordt aan niemand gemeld. De reden wordt in het logboek bewaard.",
+        "REASON": "Reden",
+        "EXCLUDED": "Wijziging uitgesloten",
+        "EXCLUDED_BECAUSE": "uitgesloten: {{reason}}",
+        "EFFECTIVE": "ingang op {{date}}",
+        "ERRORS": {
+          "REASON_REQUIRED": "Geef de reden voor de uitsluiting op."
+        },
+        "REFILED_INTO": "opnieuw ingediend in een nieuwe procedure",
+        "REFILED_FROM": "neemt een geweigerde wijziging over",
+        "WITHDRAWN_IN_CRM": "uit het CRM verwijderd"
+      },
+      "REFUSAL": {
+        "TITLE": "Na de weigering",
+        "HINT": "Niets wordt in het CRM verwijderd: {{count}} element(en) staan nu op « Geweigerd ». Verwijder ze uit de operatie, of corrigeer ze en dien ze opnieuw in via een nieuwe procedure.",
+        "WITHDRAW": "Uit de operatie verwijderen",
+        "REFILE": "Corrigeren en opnieuw indienen",
+        "REFILE_CONFIRM": "De geweigerde elementen worden overgenomen in het concept van de volgende procedure, waar u ze kunt corrigeren voor u die verstuurt. Doorgaan?",
+        "REFILED": "Elementen overgenomen in een nieuwe procedure."
+      },
+      "PIECES": {
+        "TITLE": "Documenten",
+        "EMPTY": "Deze procedure vraagt geen documenten.",
+        "OPTIONAL": "Facultatief",
+        "VERSIONS": "{{n}} versie(s)",
+        "STALE_HINT": "{{n}} stuk(ken) verouderd door een latere wijziging.",
+        "REGENERATE_STALE": "Verouderde stukken opnieuw genereren",
+        "REGENERATE": "Met één klik opnieuw genereren (uw correcties blijven behouden)",
+        "REGENERATE_REQUESTED": "Opnieuw genereren gevraagd",
+        "REVIEW": "Nakijken en opnieuw genereren",
+        "GENERATE_TO_SIGN": "Het te ondertekenen formulier voorbereiden",
+        "UPLOAD_SIGNED": "De ondertekende versie uploaden",
+        "VERIFY": "Controleren of de definitieve versie identiek opnieuw wordt gegenereerd",
+        "VERIFY_REQUESTED": "Controle gevraagd",
+        "VERIFY_DONE": "Controle voltooid",
+        "TEMPLATE_SUPERSEDED": "een nieuwere versie van het formulier is van kracht"
+      },
+      "THREAD": {
+        "OPENED": "Geopend bij « {{to}} »",
+        "STEP": "« {{from}} » → « {{to}} »",
+        "OUTBOUND": "Verstuurd: {{type}}",
+        "INBOUND": "Ontvangen: {{type}}",
+        "VERSION": "{{piece}}: versie {{n}}",
+        "RECEIVED": "Post ontvangen op het ontvangstadres",
+        "EFFECTIVE_DATE": "Datum van inwerkingtreding gecorrigeerd: van {{from}} naar {{to}}"
+      },
+      "SEND": {
+        "TITLE": "De procedure versturen",
+        "INTRO": "Verstuur het bericht vanuit uw eigen mailbox (of het onlineformulier) met de documenten hieronder en markeer het daarna als verstuurd. Dankzij de referentie in het onderwerp kan het antwoord worden gekoppeld.",
+        "SUBJECT": "Onderwerp",
+        "BODY_FIELD": "Bericht",
+        "COPY": "Kopiëren",
+        "PIECES": "Bij te voegen documenten",
+        "NO_PIECES": "Geen document klaar om bij te voegen.",
+        "SENT_ON": "Verstuurd op",
+        "CHANNEL_FIELD": "Kanaal",
+        "CHANNEL": {
+          "EMAIL": "E-mail",
+          "ONLINE_FORM": "Onlineformulier",
+          "POST": "Post"
+        },
+        "FILE": "De verstuurde e-mail (.eml) of de ontvangstbevestiging van het formulier (facultatief)",
+        "FILE_HINT": "Ongewijzigd bewaard als bewijs van verzending.",
+        "SUBMIT": "Markeren als verstuurd",
+        "DONE": "Procedure gemarkeerd als verstuurd",
+        "BODY": "Goedendag,\n\nIn bijlage vindt u onze aanvraag: {{procedure}} (verrichting: {{operation}}).\nGelieve de referentie {{reference}} in uw antwoord te vermelden.\n\nBijlagen:\n{{pieces}}\n\nMet vriendelijke groeten,",
+        "ERRORS": {
+          "DATE_REQUIRED": "Geef de verzenddatum op."
+        },
+        "FINALS": {
+          "TITLE": "Bij te voegen stukken",
+          "GENERATE": "De definitieve versies genereren",
+          "RENDERING": "De definitieve versies worden gegenereerd… (nog {{n}})",
+          "READY": "Alle stukken zijn definitief: download ze en voeg ze bij uw verzending.",
+          "HINT": "Gegenereerde stukken zijn concepten met een watermerk. Genereer hun definitieve versies voordat u ze bijvoegt.",
+          "ZIP": "Alles downloaden (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Invulfiche",
+          "HINT": "De waarden om in het formulier in te vullen, in de volgorde ervan. Kopieer ze één voor één, of allemaal tegelijk.",
+          "COPY_ALL": "Alles kopiëren",
+          "PRINT": "Afdrukken",
+          "NOT_GENERATED": "Dit stuk is nog niet gegenereerd: de fiche is leeg.",
+          "YES": "Ja",
+          "NO": "Nee"
+        },
+        "MARK_SENT_HINT": "Genereer de definitieve versies voordat u de procedure als verzonden markeert."
+      },
+      "RESPONSE": {
+        "TITLE": "Een antwoord toevoegen",
+        "TYPE": "Soort antwoord",
+        "TYPE_PLACEHOLDER": "Kies een soort",
+        "DATE": "Datum",
+        "SUBJECT": "Onderwerp (facultatief)",
+        "BODY": "Tekst van het bericht (facultatief)",
+        "EXTERNAL_REF": "Referentie CWaPE of netbeheerder (facultatief)",
+        "FILE": "Bestand (.eml, .msg, pdf)",
+        "PREVIEWING": "Gevolgen berekenen…",
+        "WILL_MOVE": "De procedure gaat naar de stap « {{step}} ».",
+        "NO_MOVE": "Het wordt aan de activiteit toegevoegd, zonder van stap te veranderen.",
+        "WILL_START": "Nieuwe termijn: {{label}} ({{party}}), tegen {{date}}.",
+        "WILL_MEET": "Termijn nageleefd: {{label}}.",
+        "WILL_TAKE_EFFECT": "Van kracht op {{date}}.",
+        "IN_THE_CRM": "In het CRM:",
+        "NOT_NOW": "Dit antwoord past niet bij de huidige stap van de procedure.",
+        "SUBMIT": "Opslaan",
+        "DONE": "Antwoord opgeslagen",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Kies de soort antwoord en de datum."
+        }
+      },
+      "TRANSITION": {
+        "OPEN": "Stap wijzigen",
+        "TITLE": "Stap wijzigen",
+        "INTRO": "Voor wat geen antwoord vastlegt: een correctie, informatie die telefonisch is ontvangen. De reden wordt in het logboek bewaard.",
+        "TO_STEP": "Nieuwe stap",
+        "TO_STEP_PLACEHOLDER": "Kies een stap",
+        "AUTOMATIC": "{{step}} (normaal automatisch)",
+        "ON": "Datum",
+        "EFFECTIVE_ON": "Datum van inwerkingtreding",
+        "IN_FORCE_HINT": "Het CRM wordt eerst bijgewerkt: de meters worden « Actief sinds » die datum.",
+        "REASON": "Reden",
+        "SUBMIT": "Stap wijzigen",
+        "DONE": "Stap gewijzigd",
+        "ERRORS": {
+          "REQUIRED": "Kies de stap en geef de reden op."
+        }
+      },
+      "CREATE": {
+        "REQUESTED_EFFECT": "Gewenste ingangsdatum (facultatief)",
+        "REQUESTED_EFFECT_HINT": "Indicatief: de werkelijke ingangsdatum volgt uit het antwoord van de netbeheerder."
+      },
+      "BASELINE": {
+        "TITLE": "Beginsituatie",
+        "INTRO": "De module is net geactiveerd. Vertel ons voor elke meter en elke sleutel wat de netbeheerder er al van weet: wijzigingen worden pas vanaf dan gevolgd, en niets van daarvoor wordt opnieuw verwerkt.",
+        "REACTIVATION": "De module werd opnieuw geactiveerd: alleen de meters en sleutels die intussen veranderd zijn, worden getoond.",
+        "ALREADY_CONFIRMED": "De beginsituatie is bevestigd.",
+        "EMPTY": "Geen meter en geen sleutel te bevestigen.",
+        "HELP": {
+          "ACTIVE": "Actief: aan de netbeheerder gemeld en van kracht.",
+          "NOT_NOTIFIED": "Nog niet gemeld: het komt in een concept dat nog verstuurd moet worden.",
+          "IN_PROGRESS": "Lopend: al verstuurd, het antwoord wordt verwacht (geef de verzenddatum op).",
+          "ENDED": "Beëindigd: het maakt geen deel meer uit van de verrichting.",
+          "ASKED": "Procedures: geef aan of de procedure al bij de regulator is gebeurd, nog moet gebeuren (er opent een concept) of verstuurd is (vermeld de verzenddatum)."
+        },
+        "CHOICE": {
+          "ACTIVE": "Actief",
+          "NOT_NOTIFIED": "Nog niet gemeld",
+          "IN_PROGRESS": "Lopend",
+          "ENDED": "Beëindigd"
+        },
+        "CHANGE": {
+          "ADDED": "Sindsdien toegevoegd",
+          "REMOVED": "Sindsdien verwijderd"
+        },
+        "CHOICE_FIELD": "Toestand",
+        "SINCE": "sinds {{date}}",
+        "CRM_WAITING_GRD": "wacht op de DNB in de CRM",
+        "CRM_WAITING_MANAGER": "wacht op de beheerder in de CRM",
+        "ACTIVE_SINCE": "Actief sinds",
+        "ENDED_ON": "Beëindigd op",
+        "SENT_ON": "Verstuurd op",
+        "BULK": "Op alle regels toepassen",
+        "BULK_PLACEHOLDER": "Kies een toestand",
+        "BULK_APPLY": "Toepassen",
+        "SUBMIT": "De beginsituatie bevestigen",
+        "CONFIRMED": "Beginsituatie bevestigd",
+        "TO_DASHBOARD": "Terug naar de procedures",
+        "ERRORS": {
+          "SENT_DATE": "Geef de verzenddatum op voor de « Lopend »-elementen: {{refs}}.",
+          "EFFECTIVE_DATE": "Geef aan sinds wanneer deze meters, die in de CRM wachten, actief zijn: {{refs}}.",
+          "CONFLICT": "Deze EAN's worden op die data al in een andere verrichting gevolgd; er werd niets bevestigd: {{refs}}."
+        },
+        "COMMUNITY_GROUP": "De gemeenschap",
+        "ASKED": "Al gebeurd bij de regulator?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Al gebeurd",
+          "NOT_NOTIFIED": "Nog te doen",
+          "IN_PROGRESS": "Verstuurd, antwoord verwacht",
+          "ENDED": "Beëindigd"
+        }
+      },
+      "VERSION_STAGE": {
+        "1": "Concept",
+        "2": "Definitief",
+        "3": "Te ondertekenen"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identiek",
+        "2": "Verschillend",
+        "3": "Controle mislukt"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Datum van inwerkingtreding corrigeren",
+        "TITLE": "Datum van inwerkingtreding corrigeren",
+        "INTRO": "Als de netbeheerder het op een andere dag laat ingaan dan berekend (bijakte later ontvangen, datum door de netbeheerder vastgelegd). De gemachtigde meters volgen; de inwerkingtreding gebeurt op die dag.",
+        "ON": "Nieuwe datum van inwerkingtreding",
+        "REASON": "Reden",
+        "SUBMIT": "Corrigeren",
+        "DONE": "Datum van inwerkingtreding gecorrigeerd",
+        "ERRORS": {
+          "REQUIRED": "Vul de datum en de reden in."
+        }
+      }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). Te melden aan {{recipient}}: toegevoegd aan het concept “{{procedure}}” nr. {{id}}."
+    },
+    "INBOUND": {
+      "TITLE": "Ontvangen post",
+      "ADDRESS_INTRO": "Stuur de antwoorden van de DNB en de CWaPE door of zet ze in kopie naar:",
+      "COPY": "Kopiëren",
+      "COPIED": "Adres gekopieerd",
+      "ROTATE": "Adres wijzigen",
+      "NOTHING": "Geen post in afwachting.",
+      "TO_QUALIFY": "Ontvangen post te kwalificeren",
+      "NO_SUBJECT": "(geen onderwerp)",
+      "STATUS": {
+        "UNMATCHED": "Niet gekoppeld",
+        "ATTACHED": "Te kwalificeren"
+      },
+      "DOWNLOAD_MAIL": "Het bericht (.eml)",
+      "AS_PIECE": "Als stuk gebruiken",
+      "QUALIFY": "Een antwoord toevoegen",
+      "OPEN_PROCEDURE": "De procedure openen",
+      "PICK_PROCEDURE": "Een procedure kiezen",
+      "ATTACH": "Koppelen",
+      "DISCARD": "Terzijde leggen"
+    },
+    "DIGEST": {
+      "TITLE": "Overzicht per e-mail",
+      "INTRO": "Een e-mail die voor de gekozen ontvangers samenvat wat er sinds het vorige in de procedures veranderde, wat te laat is en wat vervalt. Standaard uitgeschakeld; het wordt alleen verstuurd als er iets te melden is.",
+      "OFF": "Uitgeschakeld: er wordt geen overzicht verstuurd.",
+      "ENABLED": "Het overzicht versturen",
+      "RHYTHM_LABEL": "Ritme",
+      "WEEKDAY_LABEL": "Dag",
+      "WEEKDAY_MONTHLY_LABEL": "De eerste van de maand",
+      "FIRST_ON_LABEL": "Eerste verzending",
+      "RECIPIENTS_LABEL": "Ontvangers",
+      "RECIPIENTS_PLACEHOLDER": "Kiezen uit de beheerders en managers",
+      "RECIPIENTS_REQUIRED": "Kies ten minste één ontvanger.",
+      "NEXT_ON": "Volgende verzending: {{date}}",
+      "OPTED_OUT": "ontvangt het niet meer (uitgeschakeld in het profiel)",
+      "OPTED_OUT_NOTE": "Ontvangen het niet meer (uitgeschakeld in hun profiel): {{names}}",
+      "SAVE": "Opslaan",
+      "SAVED": "Overzicht opgeslagen",
+      "CADENCE": {
+        "working_days": "Elke werkdag (maandag tot vrijdag)",
+        "weekly": "Elke week",
+        "biweekly": "Om de twee weken",
+        "monthly": "Eén keer per maand"
+      },
+      "RHYTHM": {
+        "working_days": "Elke werkdag",
+        "weekly": "Elke {{day}}",
+        "biweekly": "Om de twee weken op {{day}}",
+        "monthly": "De eerste {{day}} van de maand"
+      },
+      "WEEKDAYS": {
+        "1": "maandag",
+        "2": "dinsdag",
+        "3": "woensdag",
+        "4": "donderdag",
+        "5": "vrijdag",
+        "6": "zaterdag",
+        "7": "zondag"
+      }
+    }
+  },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Laden…",
+      "RETRY": "Opnieuw proberen",
+      "REFERENCE": "Ref. {{reference}}",
+      "COMMUNITY": "Gemeenschap: {{community}}",
+      "EXPIRES": "Te ondertekenen vóór {{date}}",
+      "BACK_TO_INBOX": "Terug naar mijn handtekeningen",
+      "DETAILS": "Details",
+      "DOWNLOAD_SIGNED": "Het ondertekende document downloaden",
+      "DOWNLOAD_EVIDENCE_PDF": "Bewijs (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Bewijs (JSON)",
+      "LOAD_ERROR": "Dit handtekeningverzoek kon niet worden geladen."
+    },
+    "CAPACITY": {
+      "SELF": "In eigen naam",
+      "LEGAL_REPRESENTATIVE": "Voor {{member}} (wettelijk vertegenwoordiger)",
+      "COMMUNITY_ADMIN": "Voor de gemeenschap (beheerder)",
+      "ON_BEHALF": "In naam en voor rekening van {{member}}"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "In voorbereiding",
+      "OPEN": "Lopend",
+      "COMPLETING": "Wordt afgerond",
+      "COMPLETED": "Afgerond",
+      "DECLINED": "Geweigerd",
+      "CANCELLED": "Geannuleerd",
+      "EXPIRED": "Verlopen",
+      "FAILED": "Mislukt"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "Wachtend",
+      "INVITED": "Te ondertekenen",
+      "VIEWED": "Bekeken",
+      "SIGNING": "Wordt verzegeld",
+      "SIGNED": "Ondertekend",
+      "DECLINED": "Geweigerd"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "Te ondertekenen",
+      "SUBTITLE": "De documenten die op uw handtekening wachten, in al uw gemeenschappen.",
+      "PENDING_TITLE": "Wachtend op uw handtekening",
+      "PAST_TITLE": "Al behandeld",
+      "EMPTY_PENDING": "Er is momenteel niets te ondertekenen.",
+      "SIGN": "Ondertekenen",
+      "READ": "Bekijken",
+      "NOT_YOUR_TURN": "Nog niet uw beurt: een andere partij ondertekent eerst.",
+      "SIGNED_ON": "Ondertekend op {{date}}",
+      "DECLINED_ON": "Geweigerd op {{date}}",
+      "LOAD_ERROR": "Uw handtekeningverzoeken konden niet worden geladen."
+    },
+    "SIGN": {
+      "DOCUMENT": "Te ondertekenen document",
+      "GO_TO_SLOT": "Naar mijn handtekening",
+      "YOUR_SLOT": "Uw handtekening hier",
+      "DATE_FIELD": "Datum van ondertekening",
+      "DATE_AUTO": "automatisch ingevuld bij het ondertekenen",
+      "FIELDS_TITLE": "In te vullen",
+      "FIELDS_HINT": "Vul deze velden hier of rechtstreeks in het document in.",
+      "PANEL_TITLE": "Uw handtekening",
+      "TAB_TYPED": "Typen",
+      "TAB_DRAWN": "Tekenen",
+      "TYPED_LABEL": "Uw naam, zoals hij zal verschijnen",
+      "TYPED_PLACEHOLDER": "Voornaam Naam",
+      "PREVIEW": "Voorbeeld",
+      "DRAW_HINT": "Onderteken in het kader, met de muis of met uw vinger.",
+      "CLEAR": "Wissen",
+      "SIGN": "Ondertekenen",
+      "DECLINE": "Weigeren",
+      "MISSING": "Om te ondertekenen: vink uw akkoord aan, vul de verplichte velden (*) in en voeg uw handtekening toe.",
+      "RESTORED": "Uw handtekening is bewaard, klik op Ondertekenen.",
+      "STEP_UP": "Bevestig voor uw veiligheid uw identiteit: daarna keert u hier terug.",
+      "IMAGE_FAILED": "Uw handtekening kon niet worden voorbereid. Probeer opnieuw, of teken ze.",
+      "RELOAD": "Het document opnieuw laden",
+      "STATUS": {
+        "LOADING": "Het document wordt geladen…",
+        "READY": "Uw beurt om te ondertekenen: lees het document en onderteken in het paneel.",
+        "WAITING": "Nog niet uw beurt: een andere partij ondertekent eerst. U kunt het document al lezen.",
+        "SEALING": "Verzegelen…",
+        "SEALING_HINT": "Uw handtekening wordt op het document aangebracht en verzegeld. Dit duurt enkele seconden.",
+        "SLOW": "Het verzegelen duurt langer dan verwacht. Er gaat niets verloren: u krijgt een melding zodra het klaar is.",
+        "SIGNED": "Ondertekend",
+        "FINAL_READY": "Het door alle partijen ondertekende document is beschikbaar.",
+        "FINAL_PENDING": "Het definitieve document is beschikbaar zodra alle partijen hebben ondertekend.",
+        "DECLINED": "U hebt geweigerd dit document te ondertekenen.",
+        "CLOSED": "Dit verzoek staat niet meer open voor ondertekening ({{status}}).",
+        "STALE": "Het document is gewijzigd sinds u het opende. Laad het opnieuw voordat u ondertekent: uw invoer blijft bewaard.",
+        "ERROR": "Dit handtekeningverzoek bestaat niet, of betreft u niet."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Ondertekening weigeren",
+        "MESSAGE": "Geef aan waarom u weigert: de reden wordt doorgegeven aan wie de handtekening heeft gevraagd.",
+        "REASON": "Reden van de weigering",
+        "CONFIRM": "Ondertekening weigeren",
+        "CANCEL": "Annuleren"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} van {{total}} ondertekend",
+      "CREATED": "Gevraagd op {{date}}",
+      "CLOSED": "Afgesloten op {{date}}",
+      "SIGNERS": "Ondertekenaars",
+      "DOCUMENTS": "Documenten",
+      "DOCUMENTS_PENDING": "Het ondertekende document en het bewijs zijn beschikbaar zodra alle partijen hebben ondertekend.",
+      "SIGN_NOW": "Nu ondertekenen",
+      "DECLINE_REASON": "Reden: {{reason}}",
+      "SIGNED_BY": "Ondertekend door {{name}}",
+      "TIMELINE": "Geschiedenis",
+      "CHAIN_OK": "Logboek intact",
+      "CHAIN_BROKEN": "Logboek gewijzigd bij gebeurtenis {{n}}",
+      "REMIND": "Herinneren",
+      "CANCEL": "Het verzoek annuleren",
+      "REMINDED": "{{n}} ondertekenaar(s) herinnerd.",
+      "CANCELLED": "Het handtekeningverzoek is geannuleerd."
+    },
+    "FOLLOW": {
+      "TITLE": "Handtekeningen van de gemeenschap",
+      "SUBTITLE": "Volg de handtekeningverzoeken: wie heeft ondertekend, wie nog moet en tegen wanneer.",
+      "FILTER_STATUS": "Status",
+      "ALL": "Alle statussen",
+      "EMPTY": "Geen handtekeningverzoek in deze gemeenschap.",
+      "OPEN_DETAIL": "Details openen",
+      "LAST_REMINDED": "Herinnerd op {{date}}",
+      "LOAD_ERROR": "De handtekeningverzoeken konden niet worden geladen.",
+      "COLUMNS": {
+        "TITLE": "Document",
+        "SOURCE": "Herkomst",
+        "PROGRESS": "Voortgang",
+        "EXPIRES": "Vervaldatum",
+        "STATUS": "Status",
+        "ACTIONS": "Acties"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Het handtekeningverzoek annuleren",
+      "MESSAGE": "De ondertekenaars kunnen dit document niet meer ondertekenen. Dit is definitief.",
+      "REASON": "Reden (optioneel)",
+      "CONFIRM": "Het verzoek annuleren",
+      "BACK": "Terug"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Verzoek aangemaakt",
+      "DOCUMENT_PREPARED": "Document voorbereid voor ondertekening",
+      "SIGNER_INVITED": "{{signer}} werd uitgenodigd om te ondertekenen",
+      "SIGNER_VIEWED": "{{signer}} heeft het document bekeken",
+      "SIGNER_REAUTHENTICATED": "{{signer}} heeft zijn of haar identiteit bevestigd",
+      "SIGNER_SIGNED": "{{signer}} heeft ondertekend",
+      "SIGNER_DECLINED": "{{signer}} weigerde te ondertekenen",
+      "REQUEST_REMINDED": "Herinnering verstuurd naar de ondertekenaars",
+      "REQUEST_COMPLETED": "Alle partijen hebben ondertekend: document afgerond",
+      "REQUEST_CANCELLED": "Verzoek geannuleerd",
+      "REQUEST_EXPIRED": "Verzoek verlopen",
+      "REQUEST_FAILED": "Het verzoek is mislukt (technische fout)",
+      "UNKNOWN": "Gebeurtenis “{{type}}”"
+    },
+    "PIECE": {
+      "REQUEST": "Handtekening vragen",
+      "REQUESTED_TOAST": "Het handtekeningverzoek is naar de deelnemer verstuurd.",
+      "FOLLOW": "Volgen",
+      "EVIDENCE": "Bewijs",
+      "STATUS": {
+        "REQUESTED": "Handtekening gevraagd",
+        "SIGNED": "Elektronisch ondertekend",
+        "DECLINED": "Geweigerd: {{reason}}",
+        "DECLINED_NO_REASON": "Handtekening geweigerd",
+        "EXPIRED": "Handtekening verlopen",
+        "CANCELLED": "Handtekening geannuleerd",
+        "FAILED": "Handtekening mislukt"
+      }
     }
   },
   "HOME": {
@@ -2814,6 +3374,8 @@
       "RECORD_ONE": "{{field}} ontbreekt in uw fiche van “{{community}}”",
       "RECORD_MANY": "{{field}} en {{others}} ander(e) gegeven(s) ontbreken in uw fiche van “{{community}}”",
       "RECORD_ACTION": "Aanvullen",
+      "SIGNATURE": "U hebt {{count}} document(en) te ondertekenen",
+      "SIGNATURE_ACTION": "Ondertekenen",
       "UNREAD": "U hebt {{count}} ongelezen melding(en)",
       "UNREAD_ACTION": "Lezen"
     },

@@ -30,6 +30,7 @@ import { BackArrow } from '../../../../layout/back-arrow/back-arrow';
 import { MeterDataView } from './meter-data-view/meter-data-view';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { MeterConsumptionChart } from './meter-consumption-chart/meter-consumption-chart';
+import { provideRegulatoryTesting } from '../../../../shared/components/regulatory-badge/regulatory-testing';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -139,6 +140,7 @@ describe('MeterView', () => {
     await TestBed.configureTestingModule({
       imports: [MeterView, TranslateModule.forRoot()],
       providers: [
+        ...provideRegulatoryTesting(),
         { provide: MeterService, useValue: meterServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: SnackbarNotification, useValue: snackbarSpy },
@@ -386,6 +388,7 @@ describe('MeterView', () => {
             data: {
               id: buildMeter().EAN,
               meterData: component.meter()?.meter_data,
+              statusDrivenByProcedure: false,
             },
           }),
         );

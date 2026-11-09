@@ -1,111 +1,189 @@
-import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  Component,
+  DestroyRef,
+  computed,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+  untracked,
+} from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ConfirmationService } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
-import { interval } from 'rxjs';
+import { interval, switchMap } from 'rxjs';
 
-import { VALIDATION_TYPE, ERROR_TYPE } from '../../../../core/dtos/notification';
+import { ERROR_TYPE, VALIDATION_TYPE } from '../../../../core/dtos/notification';
+import { LocaleService } from '../../../../core/services/language/locale.service';
+import { RealtimeService } from '../../../../core/services/realtime/realtime.service';
+import { REALTIME_TOPICS } from '../../../../core/services/realtime/realtime.types';
+import { RenderState } from '../../../../shared/dtos/administrative-document.dtos';
 import {
-  DocumentOut,
-  DocumentStatus,
-  RenderState,
-  SubjectType,
-} from '../../../../shared/dtos/administrative-document.dtos';
+  DocumentKind,
+  PieceOut,
+  PieceSignatureStatus,
+  ProcedureDetailOut,
+  RenderPurpose,
+} from '../../../../shared/dtos/administrative-procedure.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
+import { SignatureService } from '../../../../shared/services/signature.service';
 import { downloadBlob } from '../../../../shared/utils/download.utils';
 import {
   TagSeverity,
-  docTypeLabelKey,
-  documentStatusLabelKey,
-  documentStatusSeverity,
   extractApiErrorMessage,
   renderStateLabelKey,
   renderStateSeverity,
 } from '../../administrative-document-format';
 import {
-  allowedTargets,
-  canUploadVersion,
-  isCorrective,
-  isTerminal,
-  transitionFields,
-} from '../../administrative-document-transitions';
-import { DocumentCreateDialog } from '../document-create-dialog/document-create-dialog';
-import { DocumentDetailDialog } from '../document-detail-dialog/document-detail-dialog';
+  canDownload,
+  canGenerate,
+  canRegenerate,
+  canUpload,
+  canVerify,
+  checkOutcomeLabelKey,
+  checkOutcomeSeverity,
+  pickLabel,
+  pieceKindLabelKey,
+  pieceStatusLabelKey,
+  pieceStatusSeverity,
+  versionStageLabelKey,
+  versionStageSeverity,
+} from '../../procedures/procedure-format';
 import { GenerateDialog } from '../generate-dialog/generate-dialog';
-import { TransitionDialog, TransitionDialogData } from '../transition-dialog/transition-dialog';
 import { UploadVersionDialog } from '../upload-version-dialog/upload-version-dialog';
-import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
 
 /** Rendering is a NATS round trip through another service; seconds, not ms. */
 const RENDER_POLL_INTERVAL_MS = 4000;
+/** While the realtime stream is live it says when a render ends; poll only as a safety net. */
+const SAFETY_POLL_INTERVAL_MS = 20_000;
 
+/** A request to sign that is under way or done: nothing more to ask. */
+const LIVE_SIGNATURE = new Set<PieceSignatureStatus>(['requested', 'open', 'signed']);
+
+/** What the piece's signature chip says, and how. */
+export interface PieceSignatureChip {
+  key: string;
+  params: Record<string, unknown>;
+  severity: TagSeverity;
+}
+
+/**
+ * A procedure's pieces: the checklist, with Generate, Upload and Download on
+ * each (spec "Détail d'une démarche"), the stage of what each holds (draft,
+ * final, form to sign), one click for a stale piece, and, on a rendered final,
+ * a check that it regenerates identically.
+ *
+ * Which actions a piece offers is the annex's rule, mirrored in
+ * procedure-format (canGenerate / canUpload); the annex's 409 stays the
+ * enforcement. Generation goes through the July routes (prefill, generate,
+ * render-status), which accept engine pieces; an upload goes through `/admin`,
+ * which applies the sending's freeze and settles readiness, and returns the
+ * procedure as it now is.
+ */
 @Component({
   selector: 'app-dossier-documents-panel',
   standalone: true,
-  imports: [TranslatePipe, Button, Tag, ConfirmDialog, Tooltip, LocaleDatePipe],
+  imports: [TranslatePipe, RouterLink, Button, Tag, Tooltip],
   templateUrl: './dossier-documents-panel.html',
-  providers: [DialogService, ConfirmationService, ErrorMessageHandler],
+  providers: [DialogService, ErrorMessageHandler],
 })
 export class DossierDocumentsPanel {
-  private readonly service = inject(AdministrativeDocumentService);
+  private readonly documents = inject(AdministrativeDocumentService);
+  private readonly procedures = inject(AdministrativeProcedureService);
+  private readonly signatures = inject(SignatureService);
   private readonly errorHandler = inject(ErrorMessageHandler);
   private readonly translate = inject(TranslateService);
   private readonly snackbar = inject(SnackbarNotification);
-  private readonly confirmation = inject(ConfirmationService);
   private readonly dialogService = inject(DialogService);
+  private readonly realtime = inject(RealtimeService);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly lang = inject(LocaleService).locale;
 
   private dialogRef?: DynamicDialogRef | null;
 
-  readonly documents = input<DocumentOut[]>([]);
-  readonly dossierId = input.required<number>();
-  readonly changed = output<void>();
+  readonly detail = input.required<ProcedureDetailOut>();
+  /** An upload returned the procedure as it now is. */
+  readonly changed = output<ProcedureDetailOut>();
+  /** A render landed: the procedure changed server-side, refetch it. */
+  readonly stale = output<void>();
 
-  readonly busyIds = signal<ReadonlySet<number>>(new Set());
-  /** Documents whose render we are watching, and the state last observed. */
+  /** Pieces whose render we are watching, and the state last observed. */
   readonly renderStates = signal<ReadonlyMap<number, RenderState>>(new Map());
+  /** Why each watched piece renders, for what to say when it ends. */
+  private readonly renderPurposes = new Map<number, RenderPurpose>();
+  readonly downloadingIds = signal<ReadonlySet<number>>(new Set());
+  /** The piece whose signature evidence is downloading. */
+  readonly evidenceId = signal<number | null>(null);
+  readonly busyIds = signal<ReadonlySet<number>>(new Set());
+
+  /** The stale pieces one click regenerates. */
+  readonly stalePieces = computed(() =>
+    this.detail().pieces.filter((piece) => canRegenerate(this.detail(), piece)),
+  );
 
   constructor() {
     this.destroyRef.onDestroy(() => this.dialogRef?.destroy());
 
-    // One timer for the whole panel rather than one per document: a dossier can
-    // hold a dozen documents and each poll is an uncached request. Paused while
-    // the tab is hidden — a backgrounded tab has nobody to show the result to.
-    interval(RENDER_POLL_INTERVAL_MS)
-      .pipe(takeUntilDestroyed())
+    // What renders is the server's to say: a render started before a reload,
+    // in another tab or by another manager is watched like one started here.
+    effect(() => {
+      const pending = this.detail().pieces.filter(
+        (piece) => piece.render?.state === RenderState.PENDING,
+      );
+      untracked(() => {
+        for (const piece of pending) {
+          if (piece.render) this.renderPurposes.set(piece.id, piece.render.purpose);
+          this.watch(piece.id);
+        }
+      });
+    });
+
+    // One timer for the panel, paused while the tab is hidden. Slowed, not
+    // stopped, while the stream is live: a live stream proves the socket, not
+    // that the docgen result consumer published.
+    toObservable(this.realtime.live)
+      .pipe(
+        switchMap((live) => interval(live ? SAFETY_POLL_INTERVAL_MS : RENDER_POLL_INTERVAL_MS)),
+        takeUntilDestroyed(),
+      )
       .subscribe(() => {
         if (document.hidden) return;
         for (const [id, state] of this.renderStates()) {
           if (state === RenderState.PENDING) this.pollRender(id);
         }
       });
+
+    // The fast path: the annex says a render ended. Same handler as the poll.
+    this.realtime
+      .on(REALTIME_TOPICS.ADMIN_DOCUMENT_READY)
+      .pipe(takeUntilDestroyed())
+      .subscribe((event) => {
+        const id = Number(event.ref?.id);
+        if (this.renderStates().get(id) === RenderState.PENDING) this.pollRender(id);
+      });
   }
 
-  // ---- render polling ----------------------------------------------------
+  // ---- render watching -----------------------------------------------------
 
-  /**
-   * Watch a document until its render lands or fails.
-   *
-   * The backend deletes the render row on success, so `render_state: null` plus
-   * a `current_version_id` is what "done" looks like.
-   */
-  private pollRender(documentId: number): void {
-    this.service
-      .renderStatus(documentId)
+  /** `render_state: null` plus a version is what "done" looks like. */
+  private pollRender(pieceId: number): void {
+    this.documents
+      .renderStatus(pieceId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           const state = response.data.render_state;
           if (state === RenderState.PENDING) return;
-
-          this.stopWatching(documentId);
+          const purpose = this.renderPurposes.get(pieceId);
+          this.stopWatching(pieceId);
           if (state === RenderState.FAILED) {
             this.snackbar.openSnackBar(
               response.data.render_error?.message ??
@@ -116,31 +194,45 @@ export class DossierDocumentsPanel {
             );
           } else {
             this.snackbar.openSnackBar(
-              this.translate.instant('ADMINISTRATIVE_DOCUMENT.DOCUMENTS.RENDER_DONE') as string,
+              this.translate.instant(
+                purpose === RenderPurpose.VERIFY
+                  ? 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERIFY_DONE'
+                  : 'ADMINISTRATIVE_DOCUMENT.DOCUMENTS.RENDER_DONE',
+              ) as string,
               VALIDATION_TYPE,
             );
           }
-          this.changed.emit();
+          this.stale.emit();
         },
         // A transient poll failure is not worth a toast; the next tick retries.
-        error: () => this.stopWatching(documentId),
+        error: () => this.stopWatching(pieceId),
       });
   }
 
-  private stopWatching(documentId: number): void {
+  private watch(pieceId: number): void {
+    if (this.renderStates().get(pieceId) === RenderState.PENDING) return;
+    this.renderStates.update((states) => new Map(states).set(pieceId, RenderState.PENDING));
+  }
+
+  private stopWatching(pieceId: number): void {
+    this.renderPurposes.delete(pieceId);
     this.renderStates.update((states) => {
       const next = new Map(states);
-      next.delete(documentId);
+      next.delete(pieceId);
       return next;
     });
   }
 
-  renderState(document: DocumentOut): RenderState | null {
-    return this.renderStates().get(document.id) ?? null;
+  /** Watched here, or failed on the server (the slot keeps a failure until a retry). */
+  renderState(piece: PieceOut): RenderState | null {
+    return (
+      this.renderStates().get(piece.id) ??
+      (piece.render?.state === RenderState.FAILED ? RenderState.FAILED : null)
+    );
   }
 
-  isRendering(document: DocumentOut): boolean {
-    return this.renderState(document) === RenderState.PENDING;
+  isRendering(piece: PieceOut): boolean {
+    return this.renderState(piece) === RenderState.PENDING;
   }
 
   renderLabelKey(state: RenderState): string {
@@ -151,40 +243,260 @@ export class DossierDocumentsPanel {
     return renderStateSeverity(state);
   }
 
-  // ---- download ----------------------------------------------------------
+  // ---- actions -------------------------------------------------------------
 
-  readonly downloadingIds = signal<ReadonlySet<number>>(new Set());
-
-  /** A document with no version has nothing to download yet. */
-  canDownload(document: DocumentOut): boolean {
-    return document.current_version_id !== null;
+  canGenerate(piece: PieceOut): boolean {
+    return canGenerate(this.detail(), piece);
   }
 
-  isDownloading(document: DocumentOut): boolean {
-    return this.downloadingIds().has(document.id);
+  canUpload(piece: PieceOut): boolean {
+    return canUpload(this.detail(), piece);
+  }
+
+  canDownload(piece: PieceOut): boolean {
+    return canDownload(piece);
+  }
+
+  canRegenerate(piece: PieceOut): boolean {
+    return canRegenerate(this.detail(), piece) && !this.isRendering(piece);
+  }
+
+  canVerify(piece: PieceOut): boolean {
+    return canVerify(piece) && !this.isRendering(piece);
+  }
+
+  isBusy(piece: PieceOut): boolean {
+    return this.busyIds().has(piece.id);
+  }
+
+  private setBusy(ids: number[], busy: boolean): void {
+    this.busyIds.update((set) => {
+      const next = new Set(set);
+      for (const id of ids) {
+        if (busy) next.add(id);
+        else next.delete(id);
+      }
+      return next;
+    });
   }
 
   /**
-   * Download the current version straight from the row.
-   *
-   * The version history lives in the detail dialog, but the common case — "I
-   * just generated this, give me the file" — should not require opening one.
+   * One click: a fresh pre-fill with the reviewer's own edits carried over.
+   * Without a piece, every stale one. A piece whose version cannot say what was
+   * typed, or that the CRM cannot fill (blocked), opens the review form instead.
    */
-  download(document: DocumentOut): void {
-    const versionId = document.current_version_id;
-    if (versionId === null) return;
+  regenerate(piece?: PieceOut): void {
+    const targets = piece ? [piece] : this.stalePieces();
+    const ids = targets.map((p) => p.id);
+    if (ids.length === 0) return;
+    this.setBusy(ids, true);
+    this.procedures
+      .regenerate(this.detail().id, piece ? ids : undefined)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ data }) => {
+          this.setBusy(ids, false);
+          for (const id of data.requested) {
+            this.renderPurposes.set(id, RenderPurpose.RENDER);
+            this.watch(id);
+          }
+          if (data.requested.length) {
+            this.snackbar.openSnackBar(
+              this.translate.instant(
+                'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.REGENERATE_REQUESTED',
+              ) as string,
+              VALIDATION_TYPE,
+            );
+          }
+          // A piece the CRM cannot fill meaningfully (blocked, 2366) opens its
+          // review form too: that is where the reason and the link to fix it are.
+          const blocked = data.blocked ?? [];
+          const review = targets.find(
+            (p) => data.needs_review.includes(p.id) || blocked.includes(p.id),
+          );
+          if (review) this.openGenerate(review);
+        },
+        error: (error: unknown) => {
+          this.setBusy(ids, false);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
+  }
 
-    this.downloadingIds.update((set) => new Set(set).add(document.id));
-    this.service
-      .downloadVersion(document.id, versionId)
+  /** Regenerate the final from what it froze; the outcome shows on the row. */
+  verify(piece: PieceOut): void {
+    const version = piece.current_version;
+    if (version === null) return;
+    this.setBusy([piece.id], true);
+    this.procedures
+      .verify(this.detail().id, piece.id, version.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.setBusy([piece.id], false);
+          this.renderPurposes.set(piece.id, RenderPurpose.VERIFY);
+          this.watch(piece.id);
+          this.snackbar.openSnackBar(
+            this.translate.instant(
+              'ADMINISTRATIVE_DOCUMENT.PROCEDURES.PIECES.VERIFY_REQUESTED',
+            ) as string,
+            VALIDATION_TYPE,
+          );
+        },
+        error: (error: unknown) => {
+          this.setBusy([piece.id], false);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
+  }
+
+  /** Review the CRM-filled form, then queue the render and watch it land. */
+  openGenerate(piece: PieceOut): void {
+    this.dialogRef = this.dialogService.open(GenerateDialog, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      width: '58rem',
+      styleClass: 'responsive-dialog',
+      header: this.translate.instant('ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.TITLE') as string,
+      data: {
+        documentId: piece.id,
+        title: this.label(piece),
+        toSign: piece.kind === DocumentKind.COLLECTED,
+        upgradeAvailable: piece.template_superseded,
+      },
+    });
+    this.dialogRef?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((queued: boolean) => {
+        if (!queued) return;
+        this.renderPurposes.set(piece.id, RenderPurpose.RENDER);
+        this.watch(piece.id);
+      });
+  }
+
+  openUpload(piece: PieceOut): void {
+    this.dialogRef = this.dialogService.open(UploadVersionDialog, {
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      width: '32rem',
+      styleClass: 'responsive-dialog',
+      header: this.translate.instant(
+        'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.TITLE',
+      ) as string,
+      data: { dossierId: this.detail().id, pieceId: piece.id, title: this.label(piece) },
+    });
+    this.dialogRef?.onClose
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((updated: ProcedureDetailOut | null | undefined) => {
+        if (updated) this.changed.emit(updated);
+      });
+  }
+
+  /** The current version, exactly as it was filed. */
+  download(piece: PieceOut): void {
+    const versionId = piece.current_version_id;
+    if (versionId === null) return;
+    this.downloadingIds.update((set) => new Set(set).add(piece.id));
+    this.documents
+      .downloadVersion(piece.id, versionId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ blob, filename }) => {
-          this.stopDownloading(document.id);
+          this.stopDownloading(piece.id);
           downloadBlob(blob, filename);
         },
         error: (error: unknown) => {
-          this.stopDownloading(document.id);
+          this.stopDownloading(piece.id);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
+  }
+
+  // ---- electronic signature (the signature annexe) ----------------------------
+
+  /**
+   * « Demander la signature »: the annexe says the piece can be signed in the
+   * app (a per-member collected piece whose participant has an account), and
+   * no request is under way or done.
+   */
+  canRequestSignature(piece: PieceOut): boolean {
+    if (piece.signature_requestable !== true) return false;
+    const status = piece.signature?.status;
+    return !status || !LIVE_SIGNATURE.has(status);
+  }
+
+  requestSignature(piece: PieceOut): void {
+    if (this.isBusy(piece)) return;
+    this.setBusy([piece.id], true);
+    this.procedures
+      .requestSignature(this.detail().id, piece.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.setBusy([piece.id], false);
+          this.snackbar.openSnackBar(
+            this.translate.instant('SIGNATURE.PIECE.REQUESTED_TOAST') as string,
+            VALIDATION_TYPE,
+          );
+          // The piece's `signature` is the annex's to say: read the procedure again.
+          this.stale.emit();
+        },
+        error: (error: unknown) => {
+          this.setBusy([piece.id], false);
+          this.errorHandler.handleError(extractApiErrorMessage(error));
+        },
+      });
+  }
+
+  /** « Signature demandée », « Signé électroniquement », « Refusé : <raison> »… */
+  signatureChip(piece: PieceOut): PieceSignatureChip | null {
+    const signature = piece.signature;
+    if (!signature) return null;
+    switch (signature.status) {
+      case 'requested':
+      case 'open':
+        return { key: 'SIGNATURE.PIECE.STATUS.REQUESTED', params: {}, severity: 'info' };
+      case 'signed':
+        return { key: 'SIGNATURE.PIECE.STATUS.SIGNED', params: {}, severity: 'success' };
+      case 'declined':
+        return signature.reason
+          ? {
+              key: 'SIGNATURE.PIECE.STATUS.DECLINED',
+              params: { reason: signature.reason },
+              severity: 'danger',
+            }
+          : { key: 'SIGNATURE.PIECE.STATUS.DECLINED_NO_REASON', params: {}, severity: 'danger' };
+      case 'expired':
+        return { key: 'SIGNATURE.PIECE.STATUS.EXPIRED', params: {}, severity: 'warn' };
+      case 'cancelled':
+        return { key: 'SIGNATURE.PIECE.STATUS.CANCELLED', params: {}, severity: 'secondary' };
+      default:
+        return { key: 'SIGNATURE.PIECE.STATUS.FAILED', params: {}, severity: 'danger' };
+    }
+  }
+
+  /** The annexe's request, for « Suivre » and « Preuve ». */
+  signatureRequestId(piece: PieceOut): string | null {
+    return piece.signature?.request_id ?? null;
+  }
+
+  /** « Preuve »: the evidence report of a signed piece, from the signature annexe. */
+  downloadEvidence(piece: PieceOut): void {
+    const requestId = this.signatureRequestId(piece);
+    if (!requestId || this.evidenceId() !== null) return;
+    this.evidenceId.set(piece.id);
+    this.signatures
+      .downloadArtifact(requestId, 'evidence-pdf')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ blob, filename }) => {
+          this.evidenceId.set(null);
+          downloadBlob(blob, filename);
+        },
+        error: (error: unknown) => {
+          this.evidenceId.set(null);
           this.errorHandler.handleError(extractApiErrorMessage(error));
         },
       });
@@ -198,211 +510,46 @@ export class DossierDocumentsPanel {
     });
   }
 
-  // ---- state-machine driven rendering ------------------------------------
-
-  /** The statuses this document can legally move to. Drives the action buttons. */
-  targets(document: DocumentOut): readonly number[] {
-    return allowedTargets(SubjectType.DOCUMENT, document.status);
-  }
-
-  isTerminalDocument(document: DocumentOut): boolean {
-    return isTerminal(SubjectType.DOCUMENT, document.status);
-  }
-
-  canUpload(document: DocumentOut): boolean {
-    return canUploadVersion(document.status);
-  }
-
-  targetLabelKey(target: number): string {
-    return documentStatusLabelKey(target as DocumentStatus);
-  }
-
-  isCorrectiveTarget(document: DocumentOut, target: number): boolean {
-    return isCorrective(SubjectType.DOCUMENT, document.status, target);
-  }
-
-  targetIcon(document: DocumentOut, target: number): string {
-    return this.isCorrectiveTarget(document, target) ? 'pi pi-undo' : 'pi pi-arrow-right';
-  }
-
-  targetSeverity(document: DocumentOut, target: number): 'warn' | 'primary' {
-    return this.isCorrectiveTarget(document, target) ? 'warn' : 'primary';
-  }
-
-  /**
-   * A transition that needs no extra information is a one-click confirm; one
-   * that does opens the dialog. Deciding from the field descriptors keeps this
-   * component from hardcoding which statuses need what.
-   */
-  transition(document: DocumentOut, target: number): void {
-    const fields = transitionFields(SubjectType.DOCUMENT, document.status, target);
-    if (fields.length === 0) {
-      this.confirmSimpleTransition(document, target);
-      return;
-    }
-    this.openTransitionDialog(document, target);
-  }
-
-  private confirmSimpleTransition(document: DocumentOut, target: number): void {
-    this.confirmation.confirm({
-      header: this.translate.instant('ADMINISTRATIVE_DOCUMENT.DOCUMENTS.CONFIRM_HEADER') as string,
-      message: this.translate.instant('ADMINISTRATIVE_DOCUMENT.DOCUMENTS.CONFIRM_MESSAGE', {
-        status: this.translate.instant(this.targetLabelKey(target)) as string,
-      }) as string,
-      acceptLabel: this.translate.instant('COMMON.ACTIONS.VALIDATE') as string,
-      rejectLabel: this.translate.instant('COMMON.ACTIONS.CANCEL') as string,
-      accept: () => this.runSimpleTransition(document, target),
-    });
-  }
-
-  private runSimpleTransition(document: DocumentOut, target: number): void {
-    this.busyIds.update((set) => new Set(set).add(document.id));
-    const request$ =
-      (target as DocumentStatus) === DocumentStatus.READY
-        ? this.service.markDocumentReady(document.id)
-        : this.service.transitionDocument(document.id, { to_status: target, context: {} });
-
-    request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.stopBusy(document.id);
-        this.snackbar.openSnackBar(
-          this.translate.instant('ADMINISTRATIVE_DOCUMENT.DOCUMENTS.STATUS_CHANGED') as string,
-          VALIDATION_TYPE,
-        );
-        this.changed.emit();
-      },
-      error: (error: unknown) => {
-        this.stopBusy(document.id);
-        this.errorHandler.handleError(extractApiErrorMessage(error));
-      },
-    });
-  }
-
-  private openTransitionDialog(document: DocumentOut, target: number): void {
-    const data: TransitionDialogData = {
-      subject: SubjectType.DOCUMENT,
-      subjectId: document.id,
-      fromStatus: document.status,
-      toStatus: target,
-      subjectLabel:
-        document.title ?? (this.translate.instant(docTypeLabelKey(document.doc_type)) as string),
-    };
-    this.dialogRef = this.dialogService.open(TransitionDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      width: '34rem',
-      styleClass: 'responsive-dialog',
-      header: this.translate.instant('ADMINISTRATIVE_DOCUMENT.TRANSITION.HEADER') as string,
-      data,
-    });
-    this.afterDialog();
-  }
-
-  // ---- dialogs -----------------------------------------------------------
-
-  openCreate(): void {
-    this.dialogRef = this.dialogService.open(DocumentCreateDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      width: '32rem',
-      styleClass: 'responsive-dialog',
-      header: this.translate.instant(
-        'ADMINISTRATIVE_DOCUMENT.DIALOGS.CREATE_DOCUMENT.TITLE',
-      ) as string,
-      data: { dossierId: this.dossierId() },
-    });
-    this.afterDialog();
-  }
-
-  openUpload(document: DocumentOut): void {
-    this.dialogRef = this.dialogService.open(UploadVersionDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      width: '32rem',
-      styleClass: 'responsive-dialog',
-      header: this.translate.instant(
-        'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.TITLE',
-      ) as string,
-      data: { document },
-    });
-    this.afterDialog();
-  }
-
-  /**
-   * Review the CRM-filled form, then queue the render.
-   *
-   * On success we start watching rather than refreshing: the artifact does not
-   * exist yet, so an immediate reload would show the document unchanged.
-   */
-  openGenerate(document: DocumentOut): void {
-    this.dialogRef = this.dialogService.open(GenerateDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      width: '58rem',
-      styleClass: 'responsive-dialog',
-      header: this.translate.instant('ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.TITLE') as string,
-      data: { document },
-    });
-    this.dialogRef?.onClose
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((queued: boolean) => {
-        if (!queued) return;
-        this.renderStates.update((states) => new Map(states).set(document.id, RenderState.PENDING));
-      });
-  }
-
-  openDetail(document: DocumentOut): void {
-    this.dialogRef = this.dialogService.open(DocumentDetailDialog, {
-      modal: true,
-      closable: true,
-      closeOnEscape: true,
-      width: '46rem',
-      styleClass: 'responsive-dialog',
-      header: this.translate.instant(
-        'ADMINISTRATIVE_DOCUMENT.DIALOGS.DOCUMENT_DETAIL.TITLE',
-      ) as string,
-      data: { documentId: document.id },
-    });
-    // Read-only, but a download does not change anything either — still refresh
-    // in case the user uploaded from elsewhere in the meantime.
-    this.afterDialog();
-  }
-
-  private afterDialog(): void {
-    this.dialogRef?.onClose
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((changed: boolean) => {
-        if (changed) this.changed.emit();
-      });
-  }
-
-  private stopBusy(id: number): void {
-    this.busyIds.update((set) => {
-      const next = new Set(set);
-      next.delete(id);
-      return next;
-    });
+  isDownloading(piece: PieceOut): boolean {
+    return this.downloadingIds().has(piece.id);
   }
 
   // ---- presentation helpers ----------------------------------------------
 
-  isBusy(document: DocumentOut): boolean {
-    return this.busyIds().has(document.id);
+  label(piece: PieceOut): string {
+    const label = pickLabel(piece.labels, this.lang(), piece.code);
+    return piece.member_name ? `${label} — ${piece.member_name}` : label;
   }
 
-  docTypeKey(document: DocumentOut): string {
-    return docTypeLabelKey(document.doc_type);
+  isToSign(piece: PieceOut): boolean {
+    return piece.kind === DocumentKind.COLLECTED;
   }
 
-  statusLabelKey(document: DocumentOut): string {
-    return documentStatusLabelKey(document.status);
+  stageLabelKey(piece: PieceOut): string | null {
+    return piece.current_version ? versionStageLabelKey(piece.current_version.stage) : null;
   }
 
-  statusSeverity(document: DocumentOut): TagSeverity {
-    return documentStatusSeverity(document.status);
+  stageSeverity(piece: PieceOut): TagSeverity {
+    return piece.current_version ? versionStageSeverity(piece.current_version.stage) : 'secondary';
+  }
+
+  checkLabelKey(piece: PieceOut): string | null {
+    return piece.last_check ? checkOutcomeLabelKey(piece.last_check.outcome) : null;
+  }
+
+  checkSeverity(piece: PieceOut): TagSeverity {
+    return piece.last_check ? checkOutcomeSeverity(piece.last_check.outcome) : 'secondary';
+  }
+
+  statusLabelKey(piece: PieceOut): string {
+    return pieceStatusLabelKey(piece.status);
+  }
+
+  statusSeverity(piece: PieceOut): TagSeverity {
+    return pieceStatusSeverity(piece.status);
+  }
+
+  kindLabelKey(piece: PieceOut): string {
+    return pieceKindLabelKey(piece.kind);
   }
 }

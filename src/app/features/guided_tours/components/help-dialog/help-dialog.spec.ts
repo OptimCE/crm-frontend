@@ -90,6 +90,7 @@ function state(
       role: Role.GESTIONNAIRE,
       activeFeatures: new Set<string>(),
       url: '/home',
+      pendingSignatures: 0,
       ...overrides,
     },
   } satisfies GuidedToursState;

@@ -5,21 +5,25 @@ import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import { DocumentOut } from '../../../../shared/dtos/administrative-document.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
-import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
+import { AdministrativeProcedureService } from '../../../../shared/services/administrative-procedure.service';
 import {
   ERROR_CODE,
   extractApiErrorCode,
   extractApiErrorMessage,
   formatBytes,
 } from '../../administrative-document-format';
-import { canUploadVersion } from '../../administrative-document-transitions';
 
-interface UploadVersionDialogData {
-  document: DocumentOut;
+/** A piece of a procedure. Whether it may take a version is the caller's to check (canUpload). */
+export interface UploadVersionDialogData {
+  dossierId: number;
+  pieceId: number;
+  title: string;
 }
+
+/** The annex's "procedure frozen": sent, and this piece is not one received after it. */
+const PROCEDURE_FROZEN = 2378;
 
 @Component({
   selector: 'app-upload-version-dialog',
@@ -31,7 +35,7 @@ interface UploadVersionDialogData {
 export class UploadVersionDialog {
   private readonly ref = inject(DynamicDialogRef);
   private readonly config = inject(DynamicDialogConfig<UploadVersionDialogData>);
-  private readonly service = inject(AdministrativeDocumentService);
+  private readonly service = inject(AdministrativeProcedureService);
   private readonly translate = inject(TranslateService);
   private readonly snackbar = inject(SnackbarNotification);
   private readonly errorHandler = inject(ErrorMessageHandler);
@@ -45,7 +49,7 @@ export class UploadVersionDialog {
   readonly dragging = signal<boolean>(false);
   readonly selectedFile = signal<File | null>(null);
 
-  readonly documentTitle = this.dialogData?.document.title ?? '';
+  readonly documentTitle = this.dialogData?.title ?? '';
 
   pickFile(): void {
     this.fileInput()?.nativeElement.click();
@@ -85,19 +89,8 @@ export class UploadVersionDialog {
 
   submit(): void {
     this.formError.set(null);
-    const document = this.dialogData?.document;
-    if (!document) return;
-
-    // The caller already hides the button, but a document can change status
-    // while this dialog is open — re-check rather than let the request 409.
-    if (!canUploadVersion(document.status)) {
-      this.formError.set(
-        this.translate.instant(
-          'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.ERRORS.NOT_ALLOWED',
-        ) as string,
-      );
-      return;
-    }
+    const data = this.dialogData;
+    if (!data) return;
 
     const file = this.selectedFile();
     if (!file) {
@@ -111,25 +104,26 @@ export class UploadVersionDialog {
 
     this.submitting.set(true);
     this.service
-      .uploadVersion(document.id, file)
+      .uploadPiece(data.dossierId, data.pieceId, file)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.snackbar.openSnackBar(
             this.translate.instant(
               'ADMINISTRATIVE_DOCUMENT.DIALOGS.UPLOAD_VERSION.SUCCESS',
             ) as string,
             VALIDATION_TYPE,
           );
-          this.ref.close(true);
+          // The procedure as it now is: the caller swaps it in.
+          this.ref.close(res.data);
         },
         error: (error: unknown) => {
           this.submitting.set(false);
           const code = extractApiErrorCode(error);
-          // Every one of these is about the file or the document's state, so
-          // it belongs next to the field rather than in a transient toast.
+          // Every one of these is about the file or the procedure's state (sent
+          // while this dialog was open), so it belongs next to the field.
           if (
-            code === ERROR_CODE.VERSION_NOT_ALLOWED ||
+            code === PROCEDURE_FROZEN ||
             code === ERROR_CODE.FILE_TOO_LARGE ||
             code === ERROR_CODE.INVALID_FILE
           ) {
@@ -142,6 +136,6 @@ export class UploadVersionDialog {
   }
 
   close(): void {
-    this.ref.close(false);
+    this.ref.close(null);
   }
 }

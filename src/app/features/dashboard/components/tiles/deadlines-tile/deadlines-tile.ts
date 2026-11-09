@@ -4,30 +4,22 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Tag } from 'primeng/tag';
 
-import {
-  DeadlineOut,
-  DeadlineStatus,
-} from '../../../../../shared/dtos/administrative-document.dtos';
-import { AdministrativeDocumentService } from '../../../../../shared/services/administrative-document.service';
-import {
-  formatApiDate,
-  isOverdue,
-} from '../../../../administrative_document/administrative-document-format';
+import { LocaleService } from '../../../../../core/services/language/locale.service';
+import { ProcedureDeadlineOut } from '../../../../../shared/dtos/administrative-procedure.dtos';
+import { AdministrativeProcedureService } from '../../../../../shared/services/administrative-procedure.service';
+import { formatApiDate } from '../../../../administrative_document/administrative-document-format';
+import { pickLabel } from '../../../../administrative_document/procedures/procedure-format';
 import { envelopeData, TileState } from '../../../dashboard-format';
 import { DashboardTile } from '../dashboard-tile/dashboard-tile';
 
-/** Deadlines fetched to classify. Enough to see the near horizon, not the archive. */
-const FETCH_LIMIT = 20;
 /** How many upcoming deadlines are named in the tile. */
 const VISIBLE_LIMIT = 3;
 
 /**
- * Open regulatory deadlines, split into "overdue" and "still coming".
- *
- * The split has to happen here, not in the query: `status = MISSED` is only set
- * by the nightly sweep, so an OPEN deadline whose due date has passed is overdue
- * but still reads as OPEN. A `limit=1` count would therefore report the wrong
- * number until the sweep next runs.
+ * The espace administratif's open deadlines, split into "overdue" and "still
+ * coming". Both are the annex's: the agenda without a period is every deadline
+ * still owed (a community's missed one included), and `overdue` is decided
+ * server-side.
  */
 @Component({
   selector: 'app-deadlines-tile',
@@ -36,17 +28,18 @@ const VISIBLE_LIMIT = 3;
   templateUrl: './deadlines-tile.html',
 })
 export class DeadlinesTile {
-  private readonly service = inject(AdministrativeDocumentService);
+  private readonly service = inject(AdministrativeProcedureService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly lang = inject(LocaleService).locale;
 
   readonly reloadKey = input<number>(0);
 
-  readonly deadlines = signal<DeadlineOut[]>([]);
+  readonly deadlines = signal<ProcedureDeadlineOut[]>([]);
   private readonly failed = signal<boolean>(false);
   private readonly loading = signal<boolean>(true);
 
-  readonly overdue = computed(() => this.deadlines().filter((d) => isOverdue(d.due_date)));
-  readonly upcoming = computed(() => this.deadlines().filter((d) => !isOverdue(d.due_date)));
+  readonly overdue = computed(() => this.deadlines().filter((d) => d.overdue));
+  readonly upcoming = computed(() => this.deadlines().filter((d) => !d.overdue));
   readonly visible = computed(() => this.upcoming().slice(0, VISIBLE_LIMIT));
 
   readonly state = computed<TileState>(() => {
@@ -64,17 +57,18 @@ export class DeadlinesTile {
     });
   }
 
+  label(deadline: ProcedureDeadlineOut): string {
+    return (
+      pickLabel(deadline.labels, this.lang()) ||
+      pickLabel(deadline.procedure_labels, this.lang(), deadline.procedure_code)
+    );
+  }
+
   load(): void {
     this.loading.set(true);
     this.failed.set(false);
     this.service
-      .listDeadlines({
-        page: 1,
-        limit: FETCH_LIMIT,
-        status: DeadlineStatus.OPEN,
-        sort: 'due_date',
-        order: 'asc',
-      })
+      .listDeadlines()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {

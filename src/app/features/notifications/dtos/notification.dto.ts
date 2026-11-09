@@ -87,5 +87,11 @@ export interface NotificationPreferenceDTO {
  */
 export interface NotificationPreferencesDTO {
   type_prefixes: string[];
+  /**
+   * Which of `type_prefixes` are summaries (the administrative summary): email
+   * only. Its rhythm and recipients are a community admin's setting; a
+   * recipient only turns its email off.
+   */
+  digest_prefixes?: string[];
   preferences: NotificationPreferenceDTO[];
 }

@@ -1,0 +1,205 @@
+<form (ngSubmit)="submit()" class="flex flex-col gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="response-type">{{
+        'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.TYPE' | translate
+      }}</label>
+      <p-select
+        inputId="response-type"
+        name="type"
+        [options]="typeOptions"
+        [(ngModel)]="type"
+        (ngModelChange)="onInputsChange()"
+        optionLabel="label"
+        optionValue="value"
+        optionDisabled="disabled"
+        appendTo="body"
+        class="w-full"
+        [placeholder]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.TYPE_PLACEHOLDER' | translate"
+        data-testid="procedure-response-dialog__select--type"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="response-date">{{
+        'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.DATE' | translate
+      }}</label>
+      <p-datepicker
+        inputId="response-date"
+        name="occurredOn"
+        [(ngModel)]="occurredOn"
+        (ngModelChange)="onInputsChange()"
+        dateFormat="dd/mm/yy"
+        appendTo="body"
+        [fluid]="true"
+        [showIcon]="true"
+        [maxDate]="today"
+        data-testid="procedure-response-dialog__date--occurred-on"
+      />
+    </div>
+  </div>
+
+  <!-- The consequence, before anything is recorded -->
+  @if (previewing()) {
+    <p class="text-sm text-surface-500 m-0" role="status">
+      <i class="pi pi-spin pi-spinner text-xs"></i>
+      {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.PREVIEWING' | translate }}
+    </p>
+  } @else if (consequence(); as c) {
+    <p-message
+      [severity]="c.allowed ? 'info' : 'warn'"
+      data-testid="procedure-response-dialog__consequence"
+    >
+      <div class="flex flex-col gap-1">
+        @if (!c.allowed) {
+          <span>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.NOT_NOW' | translate }}</span>
+        } @else {
+          @if (c.move; as move) {
+            <span class="font-medium" data-testid="procedure-response-dialog__will-move">{{
+              move.key | translate: move.params
+            }}</span>
+          } @else {
+            <span>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.NO_MOVE' | translate }}</span>
+          }
+          @for (line of c.started; track $index) {
+            <span data-testid="procedure-response-dialog__will-start">{{
+              line.key | translate: line.params
+            }}</span>
+          }
+          @for (line of c.met; track $index) {
+            <span>{{ line.key | translate: line.params }}</span>
+          }
+          @if (c.effect; as effect) {
+            <span class="font-medium" data-testid="procedure-response-dialog__will-take-effect">{{
+              effect.key | translate: effect.params
+            }}</span>
+          }
+          @if (c.effects.length > 0) {
+            <span>{{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.IN_THE_CRM' | translate }}</span>
+            <ul
+              class="list-none m-0 p-0 flex flex-col gap-1"
+              data-testid="procedure-response-dialog__effects"
+            >
+              @for (e of c.effects; track e.ref) {
+                <li class="flex items-center gap-2 flex-wrap">
+                  <span class="font-mono text-xs">{{ e.ref }}</span>
+                  <app-regulatory-badge [state]="e.state" [subjectType]="e.subjectType" />
+                </li>
+              }
+            </ul>
+          }
+        }
+      </div>
+    </p-message>
+  }
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="response-subject">{{
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.SUBJECT' | translate
+    }}</label>
+    <input
+      pInputText
+      id="response-subject"
+      name="subject"
+      [(ngModel)]="subject"
+      maxlength="255"
+      class="w-full"
+      data-testid="procedure-response-dialog__input--subject"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium" for="response-body">{{
+      'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.BODY' | translate
+    }}</label>
+    <textarea
+      pTextarea
+      id="response-body"
+      name="bodyText"
+      [(ngModel)]="bodyText"
+      rows="4"
+      class="w-full text-sm"
+      data-testid="procedure-response-dialog__input--body"
+    ></textarea>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium" for="response-external-ref">{{
+        'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.EXTERNAL_REF' | translate
+      }}</label>
+      <input
+        pInputText
+        id="response-external-ref"
+        name="externalRef"
+        [(ngModel)]="externalRef"
+        maxlength="128"
+        class="w-full font-mono"
+        data-testid="procedure-response-dialog__input--external-ref"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-sm font-medium">{{
+        'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.FILE' | translate
+      }}</span>
+      <div class="flex items-center gap-2 min-w-0">
+        <input
+          #fileInput
+          type="file"
+          class="hidden"
+          accept=".eml,.msg,.pdf,message/rfc822,application/pdf"
+          (change)="onFileSelected($event)"
+          data-testid="procedure-response-dialog__input--file"
+        />
+        <p-button
+          type="button"
+          icon="pi pi-paperclip"
+          size="small"
+          [outlined]="true"
+          severity="secondary"
+          [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.CHOOSE_FILE' | translate"
+          (onClick)="fileInput.click()"
+          data-testid="procedure-response-dialog__btn--file"
+        />
+        @if (fileName()) {
+          <span class="text-sm text-surface-700 truncate">{{ fileName() }}</span>
+          <p-button
+            type="button"
+            icon="pi pi-times"
+            text
+            rounded
+            size="small"
+            severity="secondary"
+            [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.REMOVE_FILE' | translate"
+            (onClick)="clearFile()"
+          />
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (formError()) {
+    <p class="text-red-600 text-sm m-0" data-testid="procedure-response-dialog__error">
+      <i class="pi pi-exclamation-circle"></i> {{ formError() }}
+    </p>
+  }
+
+  <div class="flex justify-end gap-2">
+    <p-button
+      type="button"
+      text
+      severity="secondary"
+      [label]="'COMMON.ACTIONS.CANCEL' | translate"
+      [disabled]="submitting()"
+      (onClick)="close()"
+      data-testid="procedure-response-dialog__btn--cancel"
+    />
+    <p-button
+      type="submit"
+      icon="pi pi-check"
+      [label]="'ADMINISTRATIVE_DOCUMENT.PROCEDURES.RESPONSE.SUBMIT' | translate"
+      [loading]="submitting()"
+      [disabled]="!canSubmit()"
+      data-testid="procedure-response-dialog__btn--submit"
+    />
+  </div>
+</form>

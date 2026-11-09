@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/users"
   },
@@ -34,7 +34,8 @@
       "target": "users-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "This page lists the accounts attached to the community and their role. This is where you invite a manager, change a role or revoke access.",
-      "title": "The community's users"
+      "title": "The community's users",
+      "waitFor": "users-community-list__table"
     },
     {
       "advance": {

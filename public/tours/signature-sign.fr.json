@@ -1,0 +1,99 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-sign/fr.html",
+  "id": "signature-sign",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-inbox__row--0",
+      "target": "signature-inbox__row--0",
+      "targetClick": "next",
+      "text": "Sous **« En attente de votre signature »**, chaque document dit de quelle communauté il vient, en quelle qualité vous signez et jusqu'à quand. Les documents déjà signés sont listés plus bas.",
+      "title": "Les documents à signer",
+      "waitFor": "signature-inbox__button--sign-0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-inbox__button--sign-0",
+      "target": "signature-inbox__button--sign-0",
+      "text": "Cliquez sur **« Signer »** pour ouvrir le document.",
+      "title": "Ouvrir le document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__document",
+      "target": "signature-sign__document",
+      "targetClick": "next",
+      "text": "Le document s'affiche en entier : lisez-le avant de signer. L'emplacement de votre signature y est encadré, et **« Aller à ma signature »** vous y amène.",
+      "title": "Lire le document"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__capacity",
+      "target": "signature-sign__capacity",
+      "targetClick": "next",
+      "text": "Sous le titre, l'application dit en quelle qualité vous signez. Quand vous signez pour un participant, c'est **« Au nom et pour le compte de »** ce participant : le PDF signé portera votre nom et le sien.",
+      "title": "Pour qui vous signez"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__field--place",
+      "target": "signature-sign__field--place",
+      "text": "Sous **« À compléter »**, remplissez les champs que le document demande, ici le lieu. La date se complète toute seule au moment de la signature.",
+      "title": "Compléter les champs"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__tab--typed",
+      "target": "signature-sign__tab--typed",
+      "text": "Sous **« Votre signature »**, choisissez **« Taper »** votre nom ou **« Dessiner »** votre signature au doigt ou à la souris.",
+      "title": "Choisir comment signer"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__typed-name",
+      "target": "signature-sign__typed-name",
+      "text": "Tapez **votre nom, tel qu'il apparaîtra** sur le document. L'aperçu en dessous montre la signature qui sera apposée.",
+      "title": "Taper votre nom"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__consent-text",
+      "target": "signature-sign__consent-text",
+      "text": "Lisez le texte d'accord et cochez-le : vous confirmez signer ce document électroniquement. Le bouton **« Signer »** s'active quand tout est complété.",
+      "title": "Donner votre accord"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__button--sign",
+      "target": "signature-sign__button--sign",
+      "text": "Cliquez sur **« Signer »**. Si vous vous êtes connecté il y a plus de quelques minutes, l'application vous demande d'abord de vous reconnecter : c'est ce qui prouve que c'est bien vous. Ce que vous avez préparé est conservé.",
+      "title": "Signer"
+    }
+  ],
+  "title": "Signer un document dans l'application"
+}

@@ -55,6 +55,12 @@ const MEMBERS_PAGE_LIMIT = 500;
 interface MeterDataUpdateDialogData {
   meterData: MetersDataDTO;
   id: string;
+  /**
+   * The meter's procedure drives its status (espace administratif): the select
+   * is locked on the current status, which every save sends along unchanged
+   * (crm-backend refuses a change, 409).
+   */
+  statusDrivenByProcedure?: boolean;
 }
 
 interface MeterDataCategory<T = number> {
@@ -116,6 +122,7 @@ export class MeterDataUpdate implements OnInit {
 
   readonly meterData?: MetersDataDTO;
   readonly id: string;
+  readonly statusDrivenByProcedure: boolean;
   metersForm!: FormGroup;
   readonly statusOptions = translatedOptions<MeterDataStatusOption>([
     { value: MeterDataStatus.ACTIVE, label: 'METER.STATUS.ACTIVE_LABEL' },
@@ -167,6 +174,7 @@ export class MeterDataUpdate implements OnInit {
     const data = this.config.data as MeterDataUpdateDialogData;
     this.meterData = data.meterData;
     this.id = data.id;
+    this.statusDrivenByProcedure = data.statusDrivenByProcedure === true;
   }
 
   ngOnInit(): void {
@@ -233,6 +241,10 @@ export class MeterDataUpdate implements OnInit {
       // chain stays editable: locking it to "Aucun" would rewrite it on an unrelated save.
       if (productionChain === ProductionChain.NONE && injectionStatus === InjectionStatus.NONE) {
         this.metersForm.get('injectionStatus')?.disable();
+      }
+      // `getRawValue()` still sends the locked status, unchanged.
+      if (this.statusDrivenByProcedure) {
+        this.metersForm.get('status')?.disable();
       }
     }
   }

@@ -77,6 +77,7 @@
     "JUST_NOW": "Just now",
     "NEW_TOAST": "You have new notifications",
     "PREFIXES": {
+      "signature": "Electronic signatures",
       "admin_deadline": "Administrative deadlines",
       "admin_dossier": "Administrative dossiers",
       "billing_run": "Billing runs",
@@ -88,9 +89,30 @@
       "member_invitation": "Member invitations",
       "news_poll": "Polls",
       "news_post": "News posts",
-      "producer_statement": "Producer statements"
+      "producer_statement": "Producer statements",
+      "admin_correspondence": "Answers to procedures",
+      "admin_digest": "Administrative summary by email",
+      "admin_effect": "Procedures taking effect",
+      "admin_meter": "My meters in the sharing"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "“{{title}}” is waiting for your signature ({{community}})"
+        },
+        "reminder": {
+          "title": "Reminder: “{{title}}” is still waiting for your signature ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} signed “{{title}}”"
+        },
+        "declined": {
+          "title": "{{signer}} declined to sign “{{title}}”: {{reason}}"
+        },
+        "completed": {
+          "title": "“{{title}}” has been signed by all parties"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "A new document was uploaded"
@@ -155,6 +177,24 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "An administrative dossier has been acknowledged"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "An administrative procedure has taken effect"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Your meter {{ean}} is now active in the sharing"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "An answer was recorded on a procedure"
+        },
+        "received": {
+          "title": "A mail arrived at the reception address"
         }
       }
     }
@@ -226,9 +266,9 @@
         "SEE_ALL": "See deadlines"
       },
       "DOSSIERS": {
-        "TITLE": "Administrative dossiers",
-        "EMPTY": "No dossier yet. Create your first administrative dossier.",
-        "SEE_ALL": "See dossiers"
+        "TITLE": "Administrative procedures",
+        "EMPTY": "No procedure in progress.",
+        "SEE_ALL": "See the procedures"
       },
       "INVOICES": {
         "TITLE": "Billing",
@@ -331,9 +371,13 @@
     "NEWS": "News",
     "BILLING": "Billing",
     "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
+    "SIGNATURES": "To sign",
+    "SIGNATURES_COMMUNITY": "Signatures",
+    "SIGNATURES_BADGE": "{{count}} document(s) to sign",
     "DASHBOARD": "Dashboard",
     "HOME": "Home",
-    "LIVE_DATA": "Live data"
+    "LIVE_DATA": "Live data",
+    "ADMINISTRATIVE_BADGE": "{{todo}} procedure(s) to do · {{overdue}} deadline(s) past due"
   },
   "PROFILE": {
     "MY_PROFILE": "My profile",
@@ -369,14 +413,15 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Choose how you want to be told about each kind of activity.",
-      "TRANSACTIONAL_NOTICE": "Essential messages — invoices, invitations and missed regulatory deadlines — are always delivered and cannot be turned off.",
+      "TRANSACTIONAL_NOTICE": "Essential messages — invoices and invitations — are always sent and cannot be turned off. A missed regulatory deadline is always shown in the app; by email, it is part of the administrative summary.",
       "CATEGORY": "Category",
       "IN_APP": "In app",
       "EMAIL": "Email",
       "DEFAULT_LABEL": "Everything else",
       "SAVE": "Save preferences",
       "SAVED": "Preferences saved",
-      "EMPTY": "No categories available"
+      "EMPTY": "No categories available",
+      "DIGEST_HINT": "If an administrator of your community chose you as a recipient. Turn it off to stop receiving it."
     },
     "TABS": {
       "HEADERS": {
@@ -497,6 +542,39 @@
     "BE-BRU-BRUGEL": "Brugel (Brussels)",
     "BE-VLA-VREG": "VREG (Flanders)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "Open the procedure",
+      "METER": {
+        "TO_NOTIFY": "To notify",
+        "PENDING_GRD": "Awaiting the DSO",
+        "PENDING_REGULATOR": "Awaiting the regulator",
+        "AUTHORIZED": "Authorised",
+        "AUTHORIZED_FROM": "Authorised, effective {{date}}",
+        "ACTIVE": "Active since {{date}}",
+        "ACTIVE_UNDATED": "Active",
+        "LEAVING": "Exit requested",
+        "LEAVING_UNTIL": "Exit planned, active until {{date}}",
+        "ENDED": "Left, active until {{date}}",
+        "ENDED_UNDATED": "Left",
+        "REFUSED": "Refused",
+        "WITHDRAWN": "Status withdrawn"
+      },
+      "KEY": {
+        "TO_NOTIFY": "New key to notify",
+        "PENDING_GRD": "Awaiting the DSO",
+        "PENDING_REGULATOR": "Awaiting the regulator",
+        "AUTHORIZED": "Authorised",
+        "AUTHORIZED_FROM": "Effective {{date}}",
+        "ACTIVE": "Active since {{date}}",
+        "ACTIVE_UNDATED": "Active",
+        "ENDED": "Replaced, active until {{date}}",
+        "ENDED_UNDATED": "Replaced",
+        "REFUSED": "Refused",
+        "WITHDRAWN": "Previous key kept"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Community info",
     "SUBTITLE": "View and manage your community's details",
@@ -528,10 +606,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Account holder name",
     "ACCOUNT_HOLDER_HINT": "Only fill in if the account is not held under the legal name",
+    "REPRESENTATIVE_SECTION": "Community representative and documents",
+    "REPRESENTATIVE_HINT": "Changing the representative, or the date of the statutes or internal rules, prepares the update procedure with the regulator when the administrative space is on.",
+    "REPRESENTATIVE": "Representative",
+    "REPRESENTATIVE_FIRST_NAME": "Representative's first name",
+    "REPRESENTATIVE_LAST_NAME": "Representative's last name",
+    "REPRESENTATIVE_EMAIL": "Representative's email",
+    "STATUTES_DATE": "Date of the statutes",
+    "INTERNAL_RULES_DATE": "Date of the internal rules",
     "ERRORS": {
       "INVALID_URL": "Please enter a valid URL starting with http:// or https://",
       "PARTIAL_ADDRESS": "Please complete every required address field or leave them all empty",
-      "INVALID_IBAN": "Please enter a valid IBAN"
+      "INVALID_IBAN": "Please enter a valid IBAN",
+      "INVALID_EMAIL": "Please enter a valid email address"
     }
   },
   "COMMUNITY": {
@@ -1260,6 +1347,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Select a status",
+      "STATUS_FOLLOWS_PROCEDURE": "This status follows the meter's administrative procedure: it changes as the procedure moves on.",
       "ENERGY_CHARACTERISTIC_TITLE": "Energy characteristics",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Financial characteristics",
       "START_DATE_METER_LABEL": "Start date",
@@ -1546,7 +1634,9 @@
           "DEACTIVATED_LABEL": "Deactivated",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Pending DSO approval",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Pending manager approval"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} meter(s) in this list are no longer in the sharing for the DSO since {{date}}: remove them from the operation.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} meter(s) in this list are no longer in the sharing for the DSO: remove them from the operation."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Consumption monitoring",
@@ -1591,7 +1681,11 @@
       },
       "RELATED_LABEL": "See also:",
       "RELATED_DOSSIERS": "Its administrative dossiers",
-      "RELATED_BILLING": "Its billing"
+      "RELATED_BILLING": "Its billing",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} change(s) not yet notified to the DSO or the regulator.",
+        "OPEN_DRAFT": "See the procedure"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Sharing operation",
@@ -1695,6 +1789,10 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Administrative documents",
       "DESCRIPTION": "Track the regulatory dossiers filed with the CWaPE and the grid operator: statuses, derived deadlines, and every version of every document sent."
+    },
+    "SIGNATURE": {
+      "NAME": "Electronic signature",
+      "DESCRIPTION": "Have the community's documents signed online: a typed or drawn signature in the app, a sealed document and verifiable evidence for every signature."
     },
     "LIVE_DATA": {
       "NAME": "Live data",
@@ -2258,6 +2356,16 @@
         },
         "deadline_rule": {
           "saved": "Deadline rule saved"
+        },
+        "regulatory_effect": {
+          "applied": "Regulatory status written to the CRM"
+        },
+        "baseline": {
+          "confirmed": "Starting state confirmed"
+        },
+        "change": {
+          "deferred": "Change deferred to the next procedure",
+          "excluded": "Change excluded from the procedures"
         }
       },
       "billing": {
@@ -2402,36 +2510,11 @@
   },
   "ADMINISTRATIVE_DOCUMENT": {
     "TITLE": "Administrative documents",
-    "SUBTITLE": "Track the dossiers filed with the CWaPE and the grid operator: statuses, deadlines and every version sent.",
+    "SUBTITLE": "Your procedures with the DSO and the CWaPE: what to do, and by when.",
     "TABS": {
-      "DOSSIERS": "Dossiers",
+      "PROCEDURES": "Procedures",
+      "DOSSIERS": "All procedures",
       "DEADLINES": "Deadlines"
-    },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Creation notification",
-      "MODIFICATION": "Modification",
-      "ANNUAL_REPORT": "Annual reporting",
-      "SHARING_AUTHORIZATION": "Sharing authorisation",
-      "SHARING_MODIFICATION": "Sharing modification",
-      "CESSATION": "Cessation of activities"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "In preparation",
-      "SUBMITTED": "Submitted",
-      "COMPLETE": "Complete",
-      "CLOSED": "Closed",
-      "LAPSED": "Lapsed"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Draft",
-      "READY": "Ready",
-      "SENT": "Sent",
-      "ACKNOWLEDGED": "Acknowledged",
-      "OBSOLETE": "Obsolete"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Generated",
-      "UPLOADED": "Uploaded"
     },
     "RENDER_STATE": {
       "PENDING": "Generating",
@@ -2442,15 +2525,6 @@
       "MET": "Met",
       "MISSED": "Missed",
       "CANCELLED": "Cancelled"
-    },
-    "REGION": {
-      "WAL": "Wallonia (CWaPE)",
-      "BRU": "Brussels (Brugel)",
-      "VLA": "Flanders (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Complete dossier",
-      "INCOMPLETE": "Incomplete dossier"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Annex 6 — community notification",
@@ -2465,25 +2539,11 @@
       "SHARING_MODIFICATION": "Sharing modification form",
       "ANNEX7_LEGAL_ENTITY": "Annex 7 - Companies and associations"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Completeness check",
-      "LAPSE": "Lapse",
-      "MODIFICATION_NOTIFICATION": "Modification notification",
-      "ANNUAL_REPORT": "Annual reporting"
-    },
-    "SORT": {
-      "CREATED_AT": "Creation date",
-      "UPDATED_AT": "Last update",
-      "SUBMITTED_AT": "Submission date",
-      "STATUS": "Status",
-      "TYPE": "Type",
-      "DUE_DATE": "Due date"
-    },
     "LIST": {
-      "INTRO": "Every dossier is filed for one sharing operation.",
-      "CREATE": "New dossier",
-      "EMPTY": "No dossier yet. Create one to start tracking a filing.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} dossiers)",
+      "INTRO": "Every procedure of the community, newest first, finished ones included.",
+      "CREATE": "New procedure",
+      "EMPTY": "No procedure yet.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} procedures)",
       "FILTERS": {
         "OPERATION": "Sharing operation",
         "ALL_OPERATIONS": "All operations",
@@ -2491,168 +2551,43 @@
         "ALL_TYPES": "All types",
         "STATUS": "Status",
         "ALL_STATUSES": "All statuses",
-        "SORT": "Sort by",
-        "TOGGLE_ORDER": "Reverse sort order",
         "CLEAR": "Clear"
       },
       "COL": {
         "TYPE": "Type",
-        "TITLE": "Title",
         "OPERATION": "Sharing operation",
         "STATUS": "Status",
-        "EXTERNAL_REF": "File reference",
-        "SUBMITTED_AT": "Submitted"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Back to dossiers",
-      "EDIT": "Edit",
-      "OPERATION": "Sharing operation",
-      "EXTERNAL_REF": "File reference",
-      "REGION": "Region",
-      "SUBMITTED_AT": "Submitted on",
-      "CREATED_AT": "Created on",
-      "NOT_SET": "Not set",
-      "ACTIONS": "Actions",
-      "NO_FURTHER_ACTION": "This dossier is closed — no further action is possible.",
-      "NOT_FOUND": "Dossier not found.",
-      "TABS": {
-        "DOCUMENTS": "Documents",
-        "DEADLINES": "Deadlines",
-        "TIMELINE": "History"
+        "EXTERNAL_REF": "File reference"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Add document",
-      "EMPTY": "No document in this dossier yet.",
-      "VERSIONS": "versions",
       "NO_VERSION": "No version yet",
       "UPLOAD": "Upload a version",
-      "DETAIL": "View versions",
       "DOWNLOAD": "Download",
-      "NO_FURTHER_ACTION": "No further action possible.",
-      "CONFIRM_HEADER": "Confirm status change",
-      "CONFIRM_MESSAGE": "Change this document to \"{{status}}\"? The change is recorded in the history.",
-      "STATUS_CHANGED": "Status updated",
-      "COL": {
-        "TYPE": "Document",
-        "STATUS": "Status",
-        "VERSIONS": "Versions",
-        "UPDATED_AT": "Updated",
-        "ACTIONS": "Actions"
-      },
       "GENERATE": "Generate",
       "REGENERATE": "Regenerate",
       "RENDER_DONE": "Document generated",
       "RENDER_FAILED": "Document generation failed"
     },
     "DEADLINES": {
-      "INTRO": "Deadlines are derived automatically from the status changes you record.",
-      "EMPTY": "No deadline matches these filters.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Page {{page}} of {{total_pages}} ({{total}} deadlines)",
-      "SWEEP": "Refresh overdue",
-      "SWEEP_CONFIRM_HEADER": "Refresh overdue deadlines",
-      "SWEEP_CONFIRM_MESSAGE": "Mark every past-due deadline as missed and schedule the next recurring occurrences?",
-      "SWEEP_DONE": "{{missed}} deadline(s) marked missed, {{rolled}} rescheduled.",
-      "RESOLVED": "Deadline updated",
-      "MARK_MET": "Mark as met",
-      "MARK_MET_CONFIRM_HEADER": "Mark deadline as met",
-      "MARK_MET_CONFIRM_MESSAGE": "Confirm this obligation has been fulfilled? A recurring deadline will be rescheduled.",
-      "CANCEL": "Cancel deadline",
-      "CANCEL_CONFIRM_HEADER": "Cancel deadline",
-      "CANCEL_CONFIRM_MESSAGE": "Cancel this deadline? It stays on record but is no longer expected.",
-      "OVERDUE": "Overdue",
-      "RECURRING": "Recurring",
-      "FILTERS": {
-        "STATUS": "Status",
-        "ALL_STATUSES": "All statuses",
-        "TYPE": "Type",
-        "ALL_TYPES": "All types",
-        "OPERATION": "Sharing operation",
-        "ALL_OPERATIONS": "All operations",
-        "CLEAR": "Clear"
-      },
       "COL": {
         "DUE_DATE": "Due date",
-        "TYPE": "Type",
-        "DOSSIER": "Dossier",
-        "STATUS": "Status",
-        "ACTIONS": "Actions"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "History",
-      "INTRO": "Every status change is recorded permanently. Corrections are added, never erased.",
-      "EMPTY": "No history yet.",
-      "CREATED": "Created",
-      "CORRECTIVE": "Correction",
-      "SYSTEM": "System",
-      "SHOW_RAW": "Show details",
-      "HIDE_RAW": "Hide details",
-      "NEWEST_FIRST": "Newest first",
-      "OLDEST_FIRST": "Oldest first",
-      "ENTRY_COUNT": "{{count}} entries",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Submission date",
-        "ACKNOWLEDGED_DATE": "Acknowledgment date",
-        "AUTHORITY_FILE_REF": "File reference",
-        "RESULT": "Result",
-        "REASON": "Reason",
-        "NOTE": "Note"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Change status",
-      "TO_STATUS": "New status",
-      "SUBMIT": "Record",
-      "SUCCESS": "Status recorded",
-      "CORRECTIVE_WARNING": "This is a correction. It is added to the history with your reason — the earlier entry is not erased.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Submission date",
-        "ACKNOWLEDGED_DATE": "Acknowledgment date",
-        "AUTHORITY_FILE_REF": "CWaPE / DSO file reference",
-        "RESULT": "Result",
-        "REASON": "Reason for the correction",
-        "NOTE": "Note (optional)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "\"{{field}}\" is required for this status change."
+        "STATUS": "Status"
       }
     },
     "DIALOGS": {
       "CREATE_DOSSIER": {
-        "TITLE": "New dossier",
-        "TYPE": "Dossier type",
+        "TITLE": "New procedure",
+        "TYPE": "Type of procedure",
         "TYPE_PLACEHOLDER": "Select a type",
         "OPERATION": "Sharing operation",
         "OPERATION_PLACEHOLDER": "Select an operation",
-        "OPERATION_HINT": "Fixed once the dossier is created.",
-        "TITLE_FIELD": "Title (optional)",
-        "EXTERNAL_REF": "File reference (optional)",
-        "EXTERNAL_REF_HINT": "The CWaPE or DSO reference, once you have it.",
-        "NO_OPERATIONS": "This community has no sharing operation yet. Create one before filing a dossier.",
+        "NO_OPERATIONS": "This community has no sharing operation yet. Create one before opening this procedure.",
         "SUBMIT": "Create",
-        "SUCCESS": "Dossier created",
+        "SUCCESS": "Procedure created",
         "ERRORS": {
-          "TYPE_REQUIRED": "Select a dossier type.",
-          "OPERATION_REQUIRED": "Select the sharing operation this dossier is filed for."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Edit dossier",
-        "SUBMIT": "Save",
-        "SUCCESS": "Dossier updated",
-        "OPERATION_LOCKED": "The sharing operation cannot be changed after creation."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Add document",
-        "DOC_TYPE": "Document type",
-        "DOC_TYPE_PLACEHOLDER": "Select a document type",
-        "TITLE_FIELD": "Title (optional)",
-        "SUBMIT": "Add",
-        "SUCCESS": "Document added",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Select a document type."
+          "TYPE_REQUIRED": "Select a type of procedure.",
+          "OPERATION_REQUIRED": "Select the sharing operation concerned."
         }
       },
       "UPLOAD_VERSION": {
@@ -2662,34 +2597,17 @@
         "SUBMIT": "Upload",
         "SUCCESS": "Version stored",
         "ERRORS": {
-          "FILE_REQUIRED": "Choose a file to upload.",
-          "NOT_ALLOWED": "This document has already been sent. Roll it back before adding a version."
+          "FILE_REQUIRED": "Choose a file to upload."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Document versions",
-        "CURRENT": "Current",
-        "DOWNLOAD": "Download",
-        "DOWNLOAD_FAILED": "Download failed",
-        "EMPTY": "No version stored yet.",
-        "COL": {
-          "VERSION": "Version",
-          "FILENAME": "File",
-          "SIZE": "Size",
-          "CHECKSUM": "Checksum",
-          "CREATED_AT": "Stored on"
-        },
-        "SNAPSHOT": "View frozen data",
-        "SNAPSHOT_HINT": "The exact data this version was generated from."
       },
       "GENERATE": {
         "TITLE": "Generate the document",
         "REVIEW_HINT": "The data comes from the CRM. Correct it if needed: what you approve here is what gets filed.",
         "SUBMIT": "Generate",
         "QUEUED": "Generation started",
-        "ERRORS": {
-          "NOT_ALLOWED": "This document has already been sent. Roll it back before regenerating it."
-        }
+        "DRAFT_NOTICE": "This version is a draft: it carries a watermark. The final version is generated when sending, from what you approve here.",
+        "TO_SIGN_NOTICE": "This form is pre-filled for the participant to sign; then upload the signed copy.",
+        "UPGRADE_TEMPLATE": "Use the newer version of the form"
       }
     },
     "PREFILL": {
@@ -2732,19 +2650,75 @@
         "PUISSANCE_KVA": "Capacity (kVA)",
         "FILIERE": "Production type",
         "PART_INJECTEE": "Shared injection %",
-        "CONFIGURATION": "Configuration"
+        "CONFIGURATION": "Configuration",
+        "COMMUNITY_LEGAL_FORM": "Legal form",
+        "COMMUNITY_BOX": "Box",
+        "REPRESENTATIVE_NAME": "Representative (name or company name)",
+        "REPRESENTATIVE_VAT_NUMBER": "Representative's company number",
+        "REPRESENTATIVE_STREET": "Representative's street",
+        "REPRESENTATIVE_NUMBER": "Number (representative)",
+        "REPRESENTATIVE_BOX": "Box (representative)",
+        "REPRESENTATIVE_POSTCODE": "Postcode (representative)",
+        "REPRESENTATIVE_CITY": "Municipality (representative)",
+        "REPRESENTATIVE_COUNTRY": "Country (representative)",
+        "CONTACT_LAST_NAME": "Contact person's last name",
+        "CONTACT_FIRST_NAME": "Contact person's first name",
+        "CONTACT_STREET": "Street (contact)",
+        "CONTACT_NUMBER": "Number (contact)",
+        "CONTACT_BOX": "Box (contact)",
+        "CONTACT_POSTCODE": "Postcode (contact)",
+        "CONTACT_CITY": "Municipality (contact)",
+        "CONTACT_PHONE": "Phone (contact)",
+        "CONTACT_MOBILE": "Mobile (contact)",
+        "CONTACT_EMAIL": "Email (contact)",
+        "BUILDING_REFERENCE": "Sharing reference (same building)",
+        "COMMUNITY_REFERENCE": "Sharing reference (community)",
+        "PROJECT_DESCRIPTION": "Project description",
+        "SHARING_WITHIN_BUILDING": "Sharing within one building",
+        "SHARING_WITHIN_COMMUNITY": "Sharing within an energy community",
+        "SINGLE_GRID_OPERATOR": "A single grid operator",
+        "CWAPE_REFERENCE_DIGITS": "CWaPE reference (CE-…)",
+        "ENTITY_NAME": "Company name",
+        "ENTITY_VAT_DIGITS": "Company number",
+        "CONTROLLING_ENTITY_NAME": "Controlling entity",
+        "DECLARANT_NAME": "Declarant's full name",
+        "DECLARANT_REPRESENTATIVE": "Represented by",
+        "DECLARANT_COMPANY_NAME": "Company (if any)",
+        "DECLARANT_ADDRESS": "Declarant's address",
+        "DECLARANT_PHONE": "Declarant's phone",
+        "DECLARANT_EMAIL": "Declarant's email",
+        "SIGNED_AT": "Signed at",
+        "SIGNED_ON": "On",
+        "WAIVES_RESIDENTIAL_RIGHT": "Waives the residential customer's right",
+        "WILL_REQUEST_METERING_REGIME": "Will request the required metering regime",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Will switch to the injection service",
+        "GRID_OPERATOR_NAME": "Grid operator",
+        "SHARING_DESCRIPTION": "Description of the sharing",
+        "DISTRIBUTION_KEY": "Allocation key",
+        "START_DATE": "Effective date",
+        "SUSPENSIVE_CONDITION": "Suspensive condition",
+        "UNMET_CONDITION": "Unmet condition",
+        "KEY_NAME": "Key",
+        "KEY_DESCRIPTION": "Key description",
+        "KEY_SINCE": "Applied from",
+        "ITERATION": "Iteration",
+        "PART": "Share (%)",
+        "CONSOMMATEUR": "Consumer"
       },
       "TABLES": {
         "MEMBERS": "Members and shareholders",
         "PARTICIPANTS": "Delivery points",
         "INSTALLATIONS": "Production installations",
-        "STORAGE": "Storage installations"
+        "STORAGE": "Storage installations",
+        "ITERATIONS": "Iterations",
+        "KEY_SHARES": "Consumers' shares"
       },
       "WARNINGS": {
         "COUNT": "{{count}} issue(s) to fix before filing",
         "FIX": "Fix in the CRM",
         "RELOAD": "Reload from the CRM",
         "RELOAD_BLOCKED": "You have edited the form — reloading would discard your corrections.",
+        "BLOCKED": "This document cannot be generated until this is fixed in the CRM.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Delivery point {{subject}} is not attributed to any member, so it cannot be listed under a name.",
@@ -2755,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Member information is missing: {{field}}."
+          },
+          "key": {
+            "missing": "No approved allocation key is linked to this sharing operation.",
+            "no_iteration": "Key \"{{key}}\" has no iteration: it splits nothing.",
+            "iteration_no_consumer": "Iteration {{iteration}} of key \"{{key}}\" has no consumer.",
+            "iterations_total": "The iterations of key \"{{key}}\" add up to {{total}} % of the shared energy, not 100 %."
           }
         }
       }
@@ -2799,6 +2779,586 @@
         "PART_INJECTEE": "Injected share",
         "DROITS_DE_VOTE": "Voting rights"
       }
+    },
+    "PROCEDURES": {
+      "REFRESH": "Refresh",
+      "OVERDUE": "Overdue",
+      "CHOOSE_FILE": "Choose a file",
+      "REMOVE_FILE": "Remove the file",
+      "CHANGES_COUNT": "{{n}} change(s)",
+      "PIECES_PROGRESS": "documents {{ready}}/{{required}}",
+      "DUE": {
+        "TODAY": "today",
+        "IN_ONE": "in 1 working day",
+        "IN_MANY": "in {{n}} working days",
+        "LATE_ONE": "1 working day late",
+        "LATE_MANY": "{{n}} working days late",
+        "ON": "by {{date}}"
+      },
+      "ACTIONS": {
+        "COMPLETE_DOCUMENTS": "Complete the documents",
+        "SEND": "Send",
+        "RECORD_RESPONSE": "Add a response",
+        "CONFIRM_BASELINE": "Confirm the starting state",
+        "OPEN": "Open"
+      },
+      "BUCKETS": {
+        "TODO": "To do",
+        "WAITING": "Waiting",
+        "PLANNED": "Planned",
+        "DONE": "Recently done"
+      },
+      "STATUS": {
+        "1": "Draft",
+        "2": "Sent",
+        "5": "Lapsed",
+        "6": "Ready",
+        "7": "In force",
+        "8": "Refused",
+        "9": "Cancelled"
+      },
+      "PIECE_STATUS": {
+        "2": "Ready",
+        "5": "Withdrawn",
+        "6": "Missing",
+        "7": "Out of date",
+        "8": "Signed",
+        "9": "Rejected"
+      },
+      "PIECE_KIND": {
+        "1": "Generated",
+        "2": "To be supplied",
+        "3": "Received",
+        "UNKNOWN": "Document"
+      },
+      "CHANGE_STATUS": {
+        "1": "Pending",
+        "2": "Included",
+        "3": "Deferred",
+        "4": "Excluded",
+        "5": "Cancelled out",
+        "6": "Applied",
+        "7": "Refused"
+      },
+      "CHANGE_KIND": {
+        "METER_ADDED": "Meter added",
+        "METER_REMOVED": "Meter removed",
+        "KEY_CHANGED": "New key",
+        "REPRESENTATIVE_CHANGED": "New representative",
+        "INSTALLATION_ADDED": "Installation added",
+        "INSTALLATION_REMOVED": "Installation removed",
+        "OPERATION_CLOSED": "Operation ended",
+        "OTHER": "Change ({{code}})"
+      },
+      "PARTY": {
+        "1": "The community",
+        "2": "The DSO",
+        "3": "The regulator",
+        "UNKNOWN": "—"
+      },
+      "VARIANT": {
+        "SIMPLE": "Simple",
+        "AUTHORIZATION": "Authorisation (DSO, then CWaPE)",
+        "OTHER": "{{code}}"
+      },
+      "RECIPIENT": {
+        "GRD": "{{name}} (DSO)",
+        "GRD_UNKNOWN": "Reference DSO to be specified",
+        "REGULATOR": "The regulator"
+      },
+      "DELAY": {
+        "WORKING_DAYS": "{{label}}: {{n}} working days",
+        "CALENDAR_DAYS": "{{label}}: {{n}} days",
+        "MONTHS": "{{label}}: {{n}} months"
+      },
+      "DASHBOARD": {
+        "UNSUPPORTED": "This community's regulator ({{regulator}}) is not supported yet: no procedure is tracked for it.",
+        "BASELINE_PENDING": "Before changes are tracked, confirm the starting state: what the DSO already knows of your meters and keys.",
+        "FILTER_GRD": "DSO",
+        "ALL_GRDS": "All DSOs",
+        "BANNER": "Next deadlines",
+        "EMPTY": "Nothing to do for now: no procedure in progress."
+      },
+      "LIST": {
+        "NEXT_ACTION": "Next action",
+        "UPDATED_AT": "Updated"
+      },
+      "AGENDA": {
+        "INTRO": "Every deadline of your procedures, soonest first.",
+        "OVERDUE": "{{n}} overdue",
+        "FROM": "From",
+        "TO": "To",
+        "OPEN_HINT": "Without a period: what is still owed, late ones included.",
+        "RANGE_HINT": "Over the period: every deadline, met and cancelled ones included.",
+        "WHAT": "What",
+        "PROCEDURE": "Procedure",
+        "WHO": "Who",
+        "EMPTY": "No deadline."
+      },
+      "DETAIL": {
+        "NOT_FOUND": "This procedure does not exist, or belongs to another community.",
+        "RECIPIENT": "Recipient",
+        "OPERATION": "Operation",
+        "ROUTE": "Route",
+        "REFERENCE": "OptimCE reference",
+        "EXTERNAL_REF": "External reference",
+        "REQUESTED_EFFECT": "Requested effective date",
+        "EFFECT": "Effective date",
+        "EFFECT_ERROR": "The CRM could not update the regulatory status: these meters are already tracked in another operation. Retried every day.",
+        "EFFECT_ERROR_IN_FORCE": "The effect is blocked: these meters are still tracked in another operation on that date. The procedure stays at its step; retried every day.",
+        "FROZEN": "Sent on {{date}}: the procedure is frozen. New changes go into a new draft.",
+        "STEPS": "Steps",
+        "DEADLINES": "Deadlines",
+        "THREAD": "Activity"
+      },
+      "CHANGES": {
+        "TITLE": "Changes included",
+        "DEFER": "Defer to the next procedure",
+        "DEFER_CONFIRM": "This change leaves this procedure and joins the next one of the same type, once this one is sent or cancelled.",
+        "DEFERRED": "Change deferred",
+        "EXCLUDE": "Exclude",
+        "EXCLUDE_INTRO": "This change will be notified to no one. The reason is kept in the log.",
+        "REASON": "Reason",
+        "EXCLUDED": "Change excluded",
+        "EXCLUDED_BECAUSE": "excluded: {{reason}}",
+        "EFFECTIVE": "effective {{date}}",
+        "ERRORS": {
+          "REASON_REQUIRED": "Give the reason for the exclusion."
+        },
+        "REFILED_INTO": "refiled into a new procedure",
+        "REFILED_FROM": "takes up a refused change",
+        "WITHDRAWN_IN_CRM": "withdrawn from the CRM"
+      },
+      "REFUSAL": {
+        "TITLE": "After the refusal",
+        "HINT": "Nothing is deleted in the CRM: {{count}} item(s) are now « Refused ». Remove them from the operation, or correct them and refile them in a new procedure.",
+        "WITHDRAW": "Remove from the operation",
+        "REFILE": "Correct and refile",
+        "REFILE_CONFIRM": "The refused items will be taken up in the draft of the next procedure, where you can correct them before sending it. Continue?",
+        "REFILED": "Items taken up in a new procedure."
+      },
+      "PIECES": {
+        "TITLE": "Documents",
+        "EMPTY": "This procedure requires no document.",
+        "OPTIONAL": "Optional",
+        "VERSIONS": "{{n}} version(s)",
+        "STALE_HINT": "{{n}} piece(s) outdated by a later change.",
+        "REGENERATE_STALE": "Regenerate the outdated pieces",
+        "REGENERATE": "Regenerate in one click (your corrections are kept)",
+        "REGENERATE_REQUESTED": "Regeneration requested",
+        "REVIEW": "Review and regenerate",
+        "GENERATE_TO_SIGN": "Prepare the form to sign",
+        "UPLOAD_SIGNED": "Upload the signed copy",
+        "VERIFY": "Check that the final regenerates identically",
+        "VERIFY_REQUESTED": "Check requested",
+        "VERIFY_DONE": "Check finished",
+        "TEMPLATE_SUPERSEDED": "a newer version of the form is in force"
+      },
+      "THREAD": {
+        "OPENED": "Opened at « {{to}} »",
+        "STEP": "« {{from}} » → « {{to}} »",
+        "OUTBOUND": "Sent: {{type}}",
+        "INBOUND": "Received: {{type}}",
+        "VERSION": "{{piece}}: version {{n}}",
+        "RECEIVED": "Mail received at the reception address",
+        "EFFECTIVE_DATE": "Effective date corrected: from {{from}} to {{to}}"
+      },
+      "SEND": {
+        "TITLE": "Send the procedure",
+        "INTRO": "Send the message from your own mailbox (or the online form) with the documents below, then mark it as sent. The reference in the subject ties the answer back to it.",
+        "SUBJECT": "Subject",
+        "BODY_FIELD": "Message",
+        "COPY": "Copy",
+        "PIECES": "Documents to attach",
+        "NO_PIECES": "No document ready to attach.",
+        "SENT_ON": "Sent on",
+        "CHANNEL_FIELD": "Channel",
+        "CHANNEL": {
+          "EMAIL": "Email",
+          "ONLINE_FORM": "Online form",
+          "POST": "Post"
+        },
+        "FILE": "The email sent (.eml) or the form's receipt (optional)",
+        "FILE_HINT": "Kept as is, as proof of the sending.",
+        "SUBMIT": "Mark as sent",
+        "DONE": "Procedure marked as sent",
+        "BODY": "Hello,\n\nPlease find attached our request: {{procedure}} (operation: {{operation}}).\nPlease quote the reference {{reference}} in your answer.\n\nAttached documents:\n{{pieces}}\n\nKind regards,",
+        "ERRORS": {
+          "DATE_REQUIRED": "Give the date it was sent."
+        },
+        "FINALS": {
+          "TITLE": "Pieces to attach",
+          "GENERATE": "Generate the final versions",
+          "RENDERING": "Generating the final versions… ({{n}} left)",
+          "READY": "Every piece is final: download them and attach them to your sending.",
+          "HINT": "Generated pieces are drafts, stamped with a watermark. Generate their final versions before attaching them.",
+          "ZIP": "Download all (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Entry sheet",
+          "HINT": "The values to enter in the form, in its order. Copy them one by one, or all at once.",
+          "COPY_ALL": "Copy all",
+          "PRINT": "Print",
+          "NOT_GENERATED": "This piece is not generated yet: the sheet is empty.",
+          "YES": "Yes",
+          "NO": "No"
+        },
+        "MARK_SENT_HINT": "Generate the final versions before marking the procedure as sent."
+      },
+      "RESPONSE": {
+        "TITLE": "Add a response",
+        "TYPE": "Type of response",
+        "TYPE_PLACEHOLDER": "Select a type",
+        "DATE": "Date",
+        "SUBJECT": "Subject (optional)",
+        "BODY": "Text of the message (optional)",
+        "EXTERNAL_REF": "CWaPE or DSO reference (optional)",
+        "FILE": "File (.eml, .msg, PDF)",
+        "PREVIEWING": "Working out what follows…",
+        "WILL_MOVE": "The procedure will move to « {{step}} ».",
+        "NO_MOVE": "It is added to the activity, with no change of step.",
+        "WILL_START": "New deadline: {{label}} ({{party}}), by {{date}}.",
+        "WILL_MEET": "Deadline met: {{label}}.",
+        "WILL_TAKE_EFFECT": "Takes effect on {{date}}.",
+        "IN_THE_CRM": "In the CRM:",
+        "NOT_NOW": "This response does not fit the procedure's current step.",
+        "SUBMIT": "Record",
+        "DONE": "Response recorded",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Choose the type of response and its date."
+        }
+      },
+      "TRANSITION": {
+        "OPEN": "Change step",
+        "TITLE": "Change step",
+        "INTRO": "For what no response records: a correction, news received by phone. The reason is kept in the log.",
+        "TO_STEP": "New step",
+        "TO_STEP_PLACEHOLDER": "Select a step",
+        "AUTOMATIC": "{{step}} (normally automatic)",
+        "ON": "Date",
+        "EFFECTIVE_ON": "Effective date",
+        "IN_FORCE_HINT": "The CRM is updated first: the meters become « Active since » that date.",
+        "REASON": "Reason",
+        "SUBMIT": "Change step",
+        "DONE": "Step changed",
+        "ERRORS": {
+          "REQUIRED": "Choose the step and give the reason."
+        }
+      },
+      "CREATE": {
+        "REQUESTED_EFFECT": "Desired effective date (optional)",
+        "REQUESTED_EFFECT_HINT": "Indicative: the real effective date follows the DSO's answer."
+      },
+      "BASELINE": {
+        "TITLE": "Starting state",
+        "INTRO": "The module has just been switched on. Tell us, for each meter and key, what the DSO already knows of it: changes are tracked from there on, and nothing earlier is replayed.",
+        "REACTIVATION": "The module was switched on again: only the meters and keys that changed in between are listed.",
+        "ALREADY_CONFIRMED": "The starting state is confirmed.",
+        "EMPTY": "No meter and no key to confirm.",
+        "HELP": {
+          "ACTIVE": "Active: notified to the DSO and in force.",
+          "NOT_NOTIFIED": "Not notified yet: it joins a draft, to be sent.",
+          "IN_PROGRESS": "In progress: already sent, the answer is awaited (give the date it was sent).",
+          "ENDED": "Ended: it is no longer part of the operation.",
+          "ASKED": "Procedures: say whether the procedure was already done with the regulator, is still to do (a draft opens) or was sent (give the date it was sent)."
+        },
+        "CHOICE": {
+          "ACTIVE": "Active",
+          "NOT_NOTIFIED": "Not notified yet",
+          "IN_PROGRESS": "In progress",
+          "ENDED": "Ended"
+        },
+        "CHANGE": {
+          "ADDED": "Added since",
+          "REMOVED": "Removed since"
+        },
+        "CHOICE_FIELD": "State",
+        "SINCE": "since {{date}}",
+        "CRM_WAITING_GRD": "waiting for the DSO in the CRM",
+        "CRM_WAITING_MANAGER": "waiting for the manager in the CRM",
+        "ACTIVE_SINCE": "Active since",
+        "ENDED_ON": "Ended on",
+        "SENT_ON": "Sent on",
+        "BULK": "Apply to every line",
+        "BULK_PLACEHOLDER": "Choose a state",
+        "BULK_APPLY": "Apply",
+        "SUBMIT": "Confirm the starting state",
+        "CONFIRMED": "Starting state confirmed",
+        "TO_DASHBOARD": "Back to the procedures",
+        "ERRORS": {
+          "SENT_DATE": "Give the date it was sent for the « In progress » items: {{refs}}.",
+          "EFFECTIVE_DATE": "Say since when these meters, waiting in the CRM, are active: {{refs}}.",
+          "CONFLICT": "These EANs are already tracked in another operation on those dates; nothing was confirmed: {{refs}}."
+        },
+        "COMMUNITY_GROUP": "The community",
+        "ASKED": "Already done with the regulator?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Already done",
+          "NOT_NOTIFIED": "To do",
+          "IN_PROGRESS": "Sent, awaiting an answer",
+          "ENDED": "Ended"
+        }
+      },
+      "VERSION_STAGE": {
+        "1": "Draft",
+        "2": "Final",
+        "3": "To sign"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identical",
+        "2": "Different",
+        "3": "Check failed"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Correct the effective date",
+        "TITLE": "Correct the effective date",
+        "INTRO": "When the DSO takes effect on another day than the one counted (the amendment received later, a date the DSO set). The authorised meters follow; it goes in force on that day.",
+        "ON": "New effective date",
+        "REASON": "Reason",
+        "SUBMIT": "Correct",
+        "DONE": "Effective date corrected",
+        "ERRORS": {
+          "REQUIRED": "Give the date and the reason."
+        }
+      }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). To notify to {{recipient}}: added to the draft “{{procedure}}” no. {{id}}."
+    },
+    "INBOUND": {
+      "TITLE": "Received mail",
+      "ADDRESS_INTRO": "Forward or copy the DSO's and the CWaPE's answers to:",
+      "COPY": "Copy",
+      "COPIED": "Address copied",
+      "ROTATE": "Change the address",
+      "NOTHING": "No mail waiting.",
+      "TO_QUALIFY": "Received mail to qualify",
+      "NO_SUBJECT": "(no subject)",
+      "STATUS": {
+        "UNMATCHED": "Not attached",
+        "ATTACHED": "To qualify"
+      },
+      "DOWNLOAD_MAIL": "The message (.eml)",
+      "AS_PIECE": "Use as a piece",
+      "QUALIFY": "Add an answer",
+      "OPEN_PROCEDURE": "Open the procedure",
+      "PICK_PROCEDURE": "Pick a procedure",
+      "ATTACH": "Attach",
+      "DISCARD": "Discard"
+    },
+    "DIGEST": {
+      "TITLE": "Summary by email",
+      "INTRO": "An email that sums up, for the chosen recipients, what moved in the procedures since the previous one, what is overdue and what falls due. Off by default; it is only sent when there is something to report.",
+      "OFF": "Off: no summary is sent.",
+      "ENABLED": "Send the summary",
+      "RHYTHM_LABEL": "Rhythm",
+      "WEEKDAY_LABEL": "Day",
+      "WEEKDAY_MONTHLY_LABEL": "The first of the month",
+      "FIRST_ON_LABEL": "First send",
+      "RECIPIENTS_LABEL": "Recipients",
+      "RECIPIENTS_PLACEHOLDER": "Choose among the admins and managers",
+      "RECIPIENTS_REQUIRED": "Choose at least one recipient.",
+      "NEXT_ON": "Next send: {{date}}",
+      "OPTED_OUT": "no longer receives it (turned off in their profile)",
+      "OPTED_OUT_NOTE": "No longer receive it (turned off in their profile): {{names}}",
+      "SAVE": "Save",
+      "SAVED": "Summary saved",
+      "CADENCE": {
+        "working_days": "Every working day (Monday to Friday)",
+        "weekly": "Every week",
+        "biweekly": "Every two weeks",
+        "monthly": "Once a month"
+      },
+      "RHYTHM": {
+        "working_days": "Every working day",
+        "weekly": "Every {{day}}",
+        "biweekly": "Every other {{day}}",
+        "monthly": "The first {{day}} of the month"
+      },
+      "WEEKDAYS": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+      }
+    }
+  },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Loading…",
+      "RETRY": "Try again",
+      "REFERENCE": "Ref. {{reference}}",
+      "COMMUNITY": "Community: {{community}}",
+      "EXPIRES": "To sign by {{date}}",
+      "BACK_TO_INBOX": "Back to my signatures",
+      "DETAILS": "Details",
+      "DOWNLOAD_SIGNED": "Download the signed document",
+      "DOWNLOAD_EVIDENCE_PDF": "Evidence (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Evidence (JSON)",
+      "LOAD_ERROR": "This signature request could not be loaded."
+    },
+    "CAPACITY": {
+      "SELF": "In your own name",
+      "LEGAL_REPRESENTATIVE": "For {{member}} (legal representative)",
+      "COMMUNITY_ADMIN": "For the community (administrator)",
+      "ON_BEHALF": "In the name and on behalf of {{member}}"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "Being prepared",
+      "OPEN": "In progress",
+      "COMPLETING": "Finalising",
+      "COMPLETED": "Completed",
+      "DECLINED": "Declined",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired",
+      "FAILED": "Failed"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "Waiting",
+      "INVITED": "To sign",
+      "VIEWED": "Viewed",
+      "SIGNING": "Being sealed",
+      "SIGNED": "Signed",
+      "DECLINED": "Declined"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "To sign",
+      "SUBTITLE": "The documents waiting for your signature, in all your communities.",
+      "PENDING_TITLE": "Waiting for your signature",
+      "PAST_TITLE": "Already handled",
+      "EMPTY_PENDING": "Nothing to sign right now.",
+      "SIGN": "Sign",
+      "READ": "View",
+      "NOT_YOUR_TURN": "Not your turn yet: another party signs first.",
+      "SIGNED_ON": "Signed on {{date}}",
+      "DECLINED_ON": "Declined on {{date}}",
+      "LOAD_ERROR": "Your signature requests could not be loaded."
+    },
+    "SIGN": {
+      "DOCUMENT": "Document to sign",
+      "GO_TO_SLOT": "Go to my signature",
+      "YOUR_SLOT": "Your signature here",
+      "DATE_FIELD": "Signing date",
+      "DATE_AUTO": "filled in automatically when you sign",
+      "FIELDS_TITLE": "To fill in",
+      "FIELDS_HINT": "Fill in these fields here or directly on the document.",
+      "PANEL_TITLE": "Your signature",
+      "TAB_TYPED": "Type",
+      "TAB_DRAWN": "Draw",
+      "TYPED_LABEL": "Your name, as it will appear",
+      "TYPED_PLACEHOLDER": "First name Last name",
+      "PREVIEW": "Preview",
+      "DRAW_HINT": "Sign inside the frame, with your mouse or finger.",
+      "CLEAR": "Clear",
+      "SIGN": "Sign",
+      "DECLINE": "Decline",
+      "MISSING": "To sign: tick your consent, fill in the required fields (*) and add your signature.",
+      "RESTORED": "Your signature was kept, click Sign.",
+      "STEP_UP": "For your security, please confirm your identity: you will come back here afterwards.",
+      "IMAGE_FAILED": "Your signature could not be prepared. Try again, or draw it.",
+      "RELOAD": "Reload the document",
+      "STATUS": {
+        "LOADING": "Loading the document…",
+        "READY": "Your turn to sign: read the document, then sign in the panel.",
+        "WAITING": "Not your turn yet: another party signs first. You can already read the document.",
+        "SEALING": "Sealing…",
+        "SEALING_HINT": "Your signature is being applied to the document and sealed. This takes a few seconds.",
+        "SLOW": "Sealing is taking longer than expected. Nothing is lost: you will get a notification as soon as it is done.",
+        "SIGNED": "Signed",
+        "FINAL_READY": "The document signed by all parties is available.",
+        "FINAL_PENDING": "The final document will be available once all parties have signed.",
+        "DECLINED": "You declined to sign this document.",
+        "CLOSED": "This request is no longer open for signing ({{status}}).",
+        "STALE": "The document changed since you opened it. Reload it before signing: what you entered is kept.",
+        "ERROR": "This signature request cannot be found, or does not concern you."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Decline to sign",
+        "MESSAGE": "Tell us why you decline: the reason is passed on to the person who requested the signature.",
+        "REASON": "Reason for declining",
+        "CONFIRM": "Decline to sign",
+        "CANCEL": "Cancel"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} of {{total}} signed",
+      "CREATED": "Requested on {{date}}",
+      "CLOSED": "Closed on {{date}}",
+      "SIGNERS": "Signers",
+      "DOCUMENTS": "Documents",
+      "DOCUMENTS_PENDING": "The signed document and the evidence will be available once all parties have signed.",
+      "SIGN_NOW": "Sign now",
+      "DECLINE_REASON": "Reason: {{reason}}",
+      "SIGNED_BY": "Signed by {{name}}",
+      "TIMELINE": "History",
+      "CHAIN_OK": "Log intact",
+      "CHAIN_BROKEN": "Log altered at event {{n}}",
+      "REMIND": "Send a reminder",
+      "CANCEL": "Cancel the request",
+      "REMINDED": "{{n}} signer(s) reminded.",
+      "CANCELLED": "The signature request was cancelled."
+    },
+    "FOLLOW": {
+      "TITLE": "Community signatures",
+      "SUBTITLE": "Follow the signature requests: who has signed, who still has to, and by when.",
+      "FILTER_STATUS": "Status",
+      "ALL": "All statuses",
+      "EMPTY": "No signature request in this community.",
+      "OPEN_DETAIL": "Open the details",
+      "LAST_REMINDED": "Reminded on {{date}}",
+      "LOAD_ERROR": "The signature requests could not be loaded.",
+      "COLUMNS": {
+        "TITLE": "Document",
+        "SOURCE": "Origin",
+        "PROGRESS": "Progress",
+        "EXPIRES": "Due date",
+        "STATUS": "Status",
+        "ACTIONS": "Actions"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Cancel the signature request",
+      "MESSAGE": "The signers will no longer be able to sign this document. This cannot be undone.",
+      "REASON": "Reason (optional)",
+      "CONFIRM": "Cancel the request",
+      "BACK": "Back"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Request created",
+      "DOCUMENT_PREPARED": "Document prepared for signing",
+      "SIGNER_INVITED": "{{signer}} was invited to sign",
+      "SIGNER_VIEWED": "{{signer}} viewed the document",
+      "SIGNER_REAUTHENTICATED": "{{signer}} confirmed their identity",
+      "SIGNER_SIGNED": "{{signer}} signed",
+      "SIGNER_DECLINED": "{{signer}} declined to sign",
+      "REQUEST_REMINDED": "Reminder sent to the signers",
+      "REQUEST_COMPLETED": "All parties signed: document finalised",
+      "REQUEST_CANCELLED": "Request cancelled",
+      "REQUEST_EXPIRED": "Request expired",
+      "REQUEST_FAILED": "The request failed (technical error)",
+      "UNKNOWN": "Event “{{type}}”"
+    },
+    "PIECE": {
+      "REQUEST": "Request signature",
+      "REQUESTED_TOAST": "The signature request has been sent to the participant.",
+      "FOLLOW": "Follow",
+      "EVIDENCE": "Evidence",
+      "STATUS": {
+        "REQUESTED": "Signature requested",
+        "SIGNED": "Signed electronically",
+        "DECLINED": "Declined: {{reason}}",
+        "DECLINED_NO_REASON": "Signature declined",
+        "EXPIRED": "Signature expired",
+        "CANCELLED": "Signature cancelled",
+        "FAILED": "Signature failed"
+      }
     }
   },
   "HOME": {
@@ -2814,6 +3374,8 @@
       "RECORD_ONE": "{{field}} is missing from your record in “{{community}}”",
       "RECORD_MANY": "{{field}} and {{others}} more detail(s) are missing from your record in “{{community}}”",
       "RECORD_ACTION": "Complete",
+      "SIGNATURE": "You have {{count}} document(s) to sign",
+      "SIGNATURE_ACTION": "Sign",
       "UNREAD": "You have {{count}} unread notification(s)",
       "UNREAD_ACTION": "Read"
     },

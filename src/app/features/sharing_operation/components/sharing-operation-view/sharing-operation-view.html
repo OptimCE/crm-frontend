@@ -271,6 +271,26 @@
         </div>
       }
 
+      <!-- What the annexe filed for this operation and nobody notified yet. -->
+      @if (unnotified(); as pending) {
+        <div
+          class="flex flex-wrap items-center gap-2 mb-4 p-3 rounded border-l-3 border-l-yellow-500 bg-yellow-50 text-sm"
+          data-testid="op-view__banner--unnotified"
+        >
+          <i class="pi pi-exclamation-circle text-yellow-700"></i>
+          <span>{{
+            'SHARING_OPERATION.VIEW.REGULATORY.UNNOTIFIED' | translate: { count: pending.count }
+          }}</span>
+          <a
+            class="text-primary-500 hover:text-primary-700 underline"
+            [routerLink]="['/administrative-document/procedures', pending.procedureId]"
+            data-testid="op-view__link--unnotified"
+          >
+            {{ 'SHARING_OPERATION.VIEW.REGULATORY.OPEN_DRAFT' | translate }}
+          </a>
+        </div>
+      }
+
       <!-- Information Cards -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Card 1: General Info -->
@@ -362,6 +382,16 @@
                 >
                   {{ activeKey.name }}
                 </a>
+                @if (keyRegulatory(activeKey.id); as reg) {
+                  <div class="mt-1">
+                    <app-regulatory-badge
+                      [state]="reg"
+                      [subjectType]="SubjectType.KEY"
+                      [procedureId]="reg.regulatory_ref"
+                      testId="op-view__regulatory--key"
+                    />
+                  </div>
+                }
               } @else {
                 <span class="field-empty">
                   {{ 'SHARING_OPERATION.VIEW.KEY.NO_ACTUAL_KEY_LABEL' | translate }}

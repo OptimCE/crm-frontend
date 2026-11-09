@@ -17,6 +17,11 @@ const CODES = [
   'meter.no_member_attribution',
   'community.field_missing',
   'member.field_missing',
+  'meter.ean_not_form_representable',
+  'key.missing',
+  'key.no_iteration',
+  'key.iteration_no_consumer',
+  'key.iterations_total',
 ] as const;
 
 function warning(overrides: Partial<PrefillWarning> = {}): PrefillWarning {
@@ -96,6 +101,17 @@ describe('warningLink', () => {
     expect(warningLink(warning({ subject_type: 'community', subject_id: null }))).toBe(
       '/communities/info',
     );
+  });
+
+  it('points a key warning at the key, and a missing key at the operation', () => {
+    expect(warningLink(warning({ subject_type: 'key', subject_id: '2' }))).toBe('/keys/2');
+    expect(warningLink(warning({ subject_type: 'sharing_operation', subject_id: '3' }))).toBe(
+      '/sharing_operations/3',
+    );
+    expect(warningLink(warning({ subject_type: 'key', subject_id: '../2' }))).toBeNull();
+    expect(
+      warningLink(warning({ subject_type: 'sharing_operation', subject_id: null })),
+    ).toBeNull();
   });
 
   it('refuses a subject id that is not a well-formed identifier', () => {

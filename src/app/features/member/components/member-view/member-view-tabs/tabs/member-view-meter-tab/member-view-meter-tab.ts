@@ -22,6 +22,12 @@ import { ErrorMessageHandler } from '../../../../../../../shared/services-ui/err
 import { extractApiErrorMessage } from '../../../../../../../shared/utils/api-error.utils';
 import { DebouncedPInputComponent } from '../../../../../../../shared/components/debounced-p-input/debounced-p-input.component';
 import { translatedOptions } from '../../../../../../../shared/utils/translated-options.utils';
+import { MeterStatusComponent } from '../../../../../../../shared/components/regulatory-badge/meter-status';
+import {
+  meterInOperationKey,
+  metersRegulatoryStatus,
+} from '../../../../../../../shared/components/regulatory-badge/operation-regulatory-status';
+import { RegulatoryStatusDTO } from '../../../../../../../shared/dtos/regulatory-status.dtos';
 
 @Component({
   selector: 'app-member-view-meter-tab',
@@ -36,6 +42,7 @@ import { translatedOptions } from '../../../../../../../shared/utils/translated-
     InputGroup,
     InputGroupAddonModule,
     DebouncedPInputComponent,
+    MeterStatusComponent,
   ],
   templateUrl: './member-view-meter-tab.html',
   styleUrl: './member-view-meter-tab.css',
@@ -54,6 +61,12 @@ export class MemberViewMeterTab implements OnInit {
   readonly filter = signal<MeterPartialQuery>({ page: 1, limit: 10 });
   readonly paginationMetersInfo = signal<Pagination>(new Pagination(1, 10, 0, 1));
   readonly metersPartialList = signal<PartialMeterDTO[]>([]);
+  /** The procedures' status of the listed meters, each in its current operation. */
+  private readonly regulatory = metersRegulatoryStatus(() =>
+    this.metersPartialList()
+      .filter((meter) => !!meter.sharing_operation)
+      .map((meter) => meter.EAN),
+  );
   readonly currentPageReportTemplate = signal<string>('');
   ref?: DynamicDialogRef | null;
 
@@ -245,4 +258,10 @@ export class MemberViewMeterTab implements OnInit {
   }
 
   protected readonly MeterDataStatus = MeterDataStatus;
+
+  /** The meter's episode in its current operation, if its procedure tracks it. */
+  regulatoryOf(meter: PartialMeterDTO): RegulatoryStatusDTO | undefined {
+    const operation = meter.sharing_operation?.id;
+    return operation ? this.regulatory().get(meterInOperationKey(operation, meter.EAN)) : undefined;
+  }
 }

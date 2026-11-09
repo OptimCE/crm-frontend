@@ -7,6 +7,7 @@ import { UserContextService } from '../../../../core/services/authorization/auth
 import { DeadlineDashboard } from '../deadline-dashboard/deadline-dashboard';
 import { DossierList } from '../dossier-list/dossier-list';
 import { MyFilings } from '../my-filings/my-filings';
+import { ProcedureDashboard } from '../../procedures/procedure-dashboard/procedure-dashboard';
 import { AdministrativeDocumentHub } from './administrative-document-hub';
 
 /**
@@ -16,6 +17,9 @@ import { AdministrativeDocumentHub } from './administrative-document-hub';
  * compiles the hub's own template, which is what catches a bad binding or a
  * missing import.
  */
+@Component({ selector: 'app-procedure-dashboard', standalone: true, template: 'stub-dashboard' })
+class StubProcedureDashboard {}
+
 @Component({ selector: 'app-dossier-list', standalone: true, template: '' })
 class StubDossierList {}
 
@@ -47,8 +51,10 @@ describe('AdministrativeDocumentHub', () => {
     // remove/add rather than `set`: the hub's template also needs its tabs,
     // header and translate pipe, which `set` would drop.
     TestBed.overrideComponent(AdministrativeDocumentHub, {
-      remove: { imports: [DossierList, DeadlineDashboard, MyFilings] },
-      add: { imports: [StubDossierList, StubDeadlineDashboard, StubMyFilings] },
+      remove: { imports: [ProcedureDashboard, DossierList, DeadlineDashboard, MyFilings] },
+      add: {
+        imports: [StubProcedureDashboard, StubDossierList, StubDeadlineDashboard, StubMyFilings],
+      },
     });
   }
 
@@ -66,6 +72,25 @@ describe('AdministrativeDocumentHub', () => {
     const html = (fixture.nativeElement as HTMLElement).innerHTML;
     expect(html).toContain('administrative-document-hub__tab--dossiers');
     expect(html).not.toContain('stub-my-filings');
+  });
+
+  it('opens on the procedures dashboard, the first tab', async () => {
+    isManager.set(true);
+    await setup();
+
+    const fixture = TestBed.createComponent(AdministrativeDocumentHub);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const root = fixture.nativeElement as HTMLElement;
+    const tabs = [...root.querySelectorAll('[data-testid^="administrative-document-hub__tab--"]')];
+    expect(tabs.map((t) => t.getAttribute('data-testid'))).toEqual([
+      'administrative-document-hub__tab--procedures',
+      'administrative-document-hub__tab--dossiers',
+      'administrative-document-hub__tab--deadlines',
+    ]);
+    expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    expect(root.innerHTML).toContain('stub-dashboard');
   });
 
   it('renders the member filings view instead of the console for a member', async () => {

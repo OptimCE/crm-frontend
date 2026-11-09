@@ -1,0 +1,55 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-request/en.html",
+  "id": "signature-request",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Once generated, a participant's sworn statement (Annex 8) is waiting for their signature. Instead of printing it and sending it back, the participant can **sign it electronically** in the app.",
+      "title": "The document to be signed",
+      "waitFor": "dossier-documents-panel__button--request-signature-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__button--request-signature-2",
+      "target": "dossier-documents-panel__button--request-signature-2",
+      "text": "Click **\"Request signature\"**. The participant is invited to sign: they receive a notification and an email, and the document appears in their \"To sign\" menu.",
+      "title": "Request the signature",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__signature-status-2",
+      "target": "dossier-documents-panel__signature-status-2",
+      "targetClick": "next",
+      "text": "The document shows **\"Signature requested\"**. Once the participant has signed, it switches to \"Signed electronically\" and the signed PDF becomes its final version, with nothing to upload.",
+      "title": "The signature is requested"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "targetClick": "next",
+      "text": "The **\"Follow\"** link opens the request's page: who has to sign, where they stand, and its history. Every request of the community is also in the \"Signatures\" menu.",
+      "title": "Follow the request"
+    }
+  ],
+  "title": "Request an electronic signature"
+}

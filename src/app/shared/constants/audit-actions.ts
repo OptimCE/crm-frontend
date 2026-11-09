@@ -91,6 +91,10 @@ export const AUDIT_ACTIONS: readonly string[] = [
   'administrative_document.deadline.reminded',
   'administrative_document.template.saved',
   'administrative_document.deadline_rule.saved',
+  'administrative_document.regulatory_effect.applied',
+  'administrative_document.baseline.confirmed',
+  'administrative_document.change.deferred',
+  'administrative_document.change.excluded',
   // billing service
   'billing.run.created',
   'billing.run.queue_failed',

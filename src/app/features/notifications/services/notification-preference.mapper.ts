@@ -16,6 +16,12 @@ export interface PreferenceRow {
   labelKey: string;
   inapp: boolean;
   email: boolean;
+  /**
+   * Set on a summary prefix only (`digest_prefixes`): email only, so the row
+   * shows its email toggle alone. Whether it is sent at all, and how often, is
+   * a community admin's setting.
+   */
+  digest?: true;
 }
 
 /**
@@ -37,15 +43,20 @@ export function rowsFromPreferences(response: NotificationPreferencesDTO): Prefe
       preference.mode,
     ]),
   );
-  return [DEFAULT_PREFIX, ...response.type_prefixes].map((prefix) => ({
-    prefix,
-    labelKey:
-      prefix === DEFAULT_PREFIX
-        ? 'PROFILE.NOTIFICATION_PREFERENCES.DEFAULT_LABEL'
-        : `NOTIFICATIONS.PREFIXES.${prefix}`,
-    inapp: isOn(stored, prefix, NotificationChannel.INAPP),
-    email: isOn(stored, prefix, NotificationChannel.EMAIL),
-  }));
+  const digests = new Set(response.digest_prefixes ?? []);
+  return [DEFAULT_PREFIX, ...response.type_prefixes].map((prefix) => {
+    const row: PreferenceRow = {
+      prefix,
+      labelKey:
+        prefix === DEFAULT_PREFIX
+          ? 'PROFILE.NOTIFICATION_PREFERENCES.DEFAULT_LABEL'
+          : `NOTIFICATIONS.PREFIXES.${prefix}`,
+      inapp: isOn(stored, prefix, NotificationChannel.INAPP),
+      email: isOn(stored, prefix, NotificationChannel.EMAIL),
+    };
+    if (digests.has(prefix)) row.digest = true;
+    return row;
+  });
 }
 
 /**
@@ -61,6 +72,17 @@ export function rowsFromPreferences(response: NotificationPreferencesDTO): Prefe
 export function preferencesFromRows(rows: PreferenceRow[]): NotificationPreferenceDTO[] {
   const payload: NotificationPreferenceDTO[] = [];
   for (const row of rows) {
+    if (row.digest) {
+      // A summary: email only, never an in-app row.
+      if (!row.email) {
+        payload.push({
+          type_prefix: row.prefix,
+          channel: NotificationChannel.EMAIL,
+          mode: PreferenceMode.OFF,
+        });
+      }
+      continue;
+    }
     if (!row.inapp) {
       payload.push({
         type_prefix: row.prefix,

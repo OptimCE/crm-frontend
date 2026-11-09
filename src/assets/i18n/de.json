@@ -77,6 +77,7 @@
     "JUST_NOW": "Gerade eben",
     "NEW_TOAST": "Sie haben neue Benachrichtigungen",
     "PREFIXES": {
+      "signature": "Elektronische Signaturen",
       "admin_deadline": "Verwaltungsfristen",
       "admin_dossier": "Verwaltungsdossiers",
       "billing_run": "Abrechnungsläufe",
@@ -88,9 +89,30 @@
       "member_invitation": "Mitglieder-Einladungen",
       "news_poll": "Umfragen",
       "news_post": "Beiträge",
-      "producer_statement": "Erzeugerabrechnungen"
+      "producer_statement": "Erzeugerabrechnungen",
+      "admin_correspondence": "Antworten auf Verfahren",
+      "admin_digest": "Verwaltungsübersicht per E-Mail",
+      "admin_effect": "Inkrafttreten von Verfahren",
+      "admin_meter": "Meine Zähler in der Teilung"
     },
     "TYPES": {
+      "signature": {
+        "requested": {
+          "title": "„{{title}}“ wartet auf Ihre Unterschrift ({{community}})"
+        },
+        "reminder": {
+          "title": "Erinnerung: „{{title}}“ wartet noch auf Ihre Unterschrift ({{community}})"
+        },
+        "signed": {
+          "title": "{{signer}} hat „{{title}}“ unterschrieben"
+        },
+        "declined": {
+          "title": "{{signer}} hat die Unterschrift von „{{title}}“ abgelehnt: {{reason}}"
+        },
+        "completed": {
+          "title": "„{{title}}“ wurde von allen Parteien unterschrieben"
+        }
+      },
       "document": {
         "uploaded": {
           "title": "Ein neues Dokument wurde hochgeladen"
@@ -155,6 +177,24 @@
       "admin_dossier": {
         "acknowledged": {
           "title": "Ein Verwaltungsdossier wurde bestätigt"
+        }
+      },
+      "admin_effect": {
+        "applied": {
+          "title": "Ein Verwaltungsverfahren ist in Kraft getreten"
+        }
+      },
+      "admin_meter": {
+        "active": {
+          "title": "Ihr Zähler {{ean}} ist jetzt in der Teilung aktiv"
+        }
+      },
+      "admin_correspondence": {
+        "recorded": {
+          "title": "Zu einem Verfahren wurde eine Antwort erfasst"
+        },
+        "received": {
+          "title": "An der Empfangsadresse ist Post eingegangen"
         }
       }
     }
@@ -226,9 +266,9 @@
         "SEE_ALL": "Fristen ansehen"
       },
       "DOSSIERS": {
-        "TITLE": "Verwaltungsdossiers",
-        "EMPTY": "Noch kein Dossier. Erstellen Sie Ihr erstes Verwaltungsdossier.",
-        "SEE_ALL": "Dossiers ansehen"
+        "TITLE": "Verwaltungsverfahren",
+        "EMPTY": "Kein laufendes Verfahren.",
+        "SEE_ALL": "Verfahren anzeigen"
       },
       "INVOICES": {
         "TITLE": "Abrechnung",
@@ -331,9 +371,13 @@
     "NEWS": "Aktuelles",
     "BILLING": "Abrechnung",
     "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
+    "SIGNATURES": "Zu unterschreiben",
+    "SIGNATURES_COMMUNITY": "Unterschriften",
+    "SIGNATURES_BADGE": "{{count}} Dokument(e) zu unterschreiben",
     "DASHBOARD": "Übersicht",
     "HOME": "Start",
-    "LIVE_DATA": "Live-Daten"
+    "LIVE_DATA": "Live-Daten",
+    "ADMINISTRATIVE_BADGE": "{{todo}} Verfahren zu erledigen · {{overdue}} Frist(en) überschritten"
   },
   "PROFILE": {
     "MY_PROFILE": "Mein Profil",
@@ -369,14 +413,15 @@
     },
     "NOTIFICATION_PREFERENCES": {
       "INTRO": "Wählen Sie, wie Sie über die jeweilige Art von Aktivität informiert werden möchten.",
-      "TRANSACTIONAL_NOTICE": "Wesentliche Nachrichten — Rechnungen, Einladungen und versäumte regulatorische Fristen — werden immer zugestellt und können nicht abgeschaltet werden.",
+      "TRANSACTIONAL_NOTICE": "Wichtige Nachrichten — Rechnungen und Einladungen — werden immer versendet und können nicht deaktiviert werden. Eine überschrittene regulatorische Frist wird in der App immer gemeldet; per E-Mail steht sie in der Verwaltungsübersicht.",
       "CATEGORY": "Kategorie",
       "IN_APP": "In der App",
       "EMAIL": "E-Mail",
       "DEFAULT_LABEL": "Alles Übrige",
       "SAVE": "Einstellungen speichern",
       "SAVED": "Einstellungen gespeichert",
-      "EMPTY": "Keine Kategorien verfügbar"
+      "EMPTY": "Keine Kategorien verfügbar",
+      "DIGEST_HINT": "Wenn ein Administrator Ihrer Gemeinschaft Sie als Empfänger ausgewählt hat. Deaktivieren Sie sie, um sie nicht mehr zu erhalten."
     },
     "TABS": {
       "HEADERS": {
@@ -497,6 +542,39 @@
     "BE-BRU-BRUGEL": "Brugel (Brüssel)",
     "BE-VLA-VREG": "VREG (Flandern)"
   },
+  "REGULATORY": {
+    "BADGE": {
+      "OPEN_PROCEDURE": "Das Verfahren öffnen",
+      "METER": {
+        "TO_NOTIFY": "Zu melden",
+        "PENDING_GRD": "Wartet auf den Netzbetreiber",
+        "PENDING_REGULATOR": "Wartet auf die Regulierungsbehörde",
+        "AUTHORIZED": "Genehmigt",
+        "AUTHORIZED_FROM": "Genehmigt, wirksam am {{date}}",
+        "ACTIVE": "Aktiv seit {{date}}",
+        "ACTIVE_UNDATED": "Aktiv",
+        "LEAVING": "Austritt beantragt",
+        "LEAVING_UNTIL": "Austritt geplant, aktiv bis {{date}}",
+        "ENDED": "Ausgetreten, aktiv bis {{date}}",
+        "ENDED_UNDATED": "Ausgetreten",
+        "REFUSED": "Abgelehnt",
+        "WITHDRAWN": "Status zurückgezogen"
+      },
+      "KEY": {
+        "TO_NOTIFY": "Neuer Schlüssel zu melden",
+        "PENDING_GRD": "Wartet auf den Netzbetreiber",
+        "PENDING_REGULATOR": "Wartet auf die Regulierungsbehörde",
+        "AUTHORIZED": "Genehmigt",
+        "AUTHORIZED_FROM": "Wirksam am {{date}}",
+        "ACTIVE": "Aktiv seit {{date}}",
+        "ACTIVE_UNDATED": "Aktiv",
+        "ENDED": "Ersetzt, aktiv bis {{date}}",
+        "ENDED_UNDATED": "Ersetzt",
+        "REFUSED": "Abgelehnt",
+        "WITHDRAWN": "Bisheriger Schlüssel beibehalten"
+      }
+    }
+  },
   "COMMUNITY_INFO": {
     "TITLE": "Gemeinschaftsinfo",
     "SUBTITLE": "Anzeigen und Verwalten der Daten Ihrer Gemeinschaft",
@@ -528,10 +606,19 @@
     "IBAN": "IBAN",
     "ACCOUNT_HOLDER_NAME": "Kontoinhaber",
     "ACCOUNT_HOLDER_HINT": "Nur ausfüllen, wenn das Konto nicht auf den rechtlichen Namen lautet",
+    "REPRESENTATIVE_SECTION": "Vertreter und Dokumente der Gemeinschaft",
+    "REPRESENTATIVE_HINT": "Ein neuer Vertreter oder ein neues Datum der Satzung oder der Geschäftsordnung bereitet das Aktualisierungsverfahren bei der Regulierungsbehörde vor, wenn der Verwaltungsbereich aktiv ist.",
+    "REPRESENTATIVE": "Vertreter",
+    "REPRESENTATIVE_FIRST_NAME": "Vorname des Vertreters",
+    "REPRESENTATIVE_LAST_NAME": "Name des Vertreters",
+    "REPRESENTATIVE_EMAIL": "E-Mail des Vertreters",
+    "STATUTES_DATE": "Datum der Satzung",
+    "INTERNAL_RULES_DATE": "Datum der Geschäftsordnung",
     "ERRORS": {
       "INVALID_URL": "Bitte geben Sie eine gültige URL ein, die mit http:// oder https:// beginnt",
       "PARTIAL_ADDRESS": "Bitte vervollständigen Sie alle erforderlichen Adressfelder oder lassen Sie sie leer",
-      "INVALID_IBAN": "Bitte geben Sie eine gültige IBAN ein"
+      "INVALID_IBAN": "Bitte geben Sie eine gültige IBAN ein",
+      "INVALID_EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
     }
   },
   "COMMUNITY": {
@@ -1260,6 +1347,7 @@
     },
     "UPDATE_DATA": {
       "SELECT_STATUS": "Einen Status auswählen",
+      "STATUS_FOLLOWS_PROCEDURE": "Dieser Status folgt dem Verwaltungsverfahren des Zählers: Er ändert sich mit dem Fortgang des Verfahrens.",
       "ENERGY_CHARACTERISTIC_TITLE": "Energetische Merkmale",
       "FINANCIAL_CHARACTERISTIC_TITLE": "Finanzielle Merkmale",
       "START_DATE_METER_LABEL": "Inbetriebnahmedatum",
@@ -1546,7 +1634,9 @@
           "DEACTIVATED_LABEL": "Deaktiviert",
           "WAITING_FOR_GRD_ACCEPTANCE_LABEL": "Ausstehende GRD-Genehmigung",
           "WAITING_FOR_MANAGER_ACCEPTANCE_LABEL": "Ausstehende Managergenehmigung"
-        }
+        },
+        "ENDED_STILL_IN": "{{count}} Zähler dieser Liste gehören für den Netzbetreiber seit dem {{date}} nicht mehr zur Teilung: Entfernen Sie sie aus der Operation.",
+        "ENDED_STILL_IN_UNDATED": "{{count}} Zähler dieser Liste gehören für den Netzbetreiber nicht mehr zur Teilung: Entfernen Sie sie aus der Operation."
       },
       "CONSUMPTION_MONITORING": {
         "CONSUMPTION_MONITORING_TITLE": "Verbrauchsverfolgung",
@@ -1591,7 +1681,11 @@
       },
       "RELATED_LABEL": "Siehe auch:",
       "RELATED_DOSSIERS": "Seine Verwaltungsdossiers",
-      "RELATED_BILLING": "Seine Abrechnung"
+      "RELATED_BILLING": "Seine Abrechnung",
+      "REGULATORY": {
+        "UNNOTIFIED": "{{count}} Änderung(en) noch nicht an den Netzbetreiber oder die Regulierungsbehörde gemeldet.",
+        "OPEN_DRAFT": "Das Verfahren ansehen"
+      }
     },
     "LIST": {
       "SHARING_OPERATION_TITLE": "Teilungsoperation",
@@ -1695,6 +1789,10 @@
     "ADMINISTRATIVE_DOCUMENT": {
       "NAME": "Verwaltungsdokumente",
       "DESCRIPTION": "Verfolgen Sie die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers: Status, abgeleitete Fristen und jede Version jedes übermittelten Dokuments."
+    },
+    "SIGNATURE": {
+      "NAME": "Elektronische Signatur",
+      "DESCRIPTION": "Lassen Sie die Dokumente der Gemeinschaft online unterschreiben: getippte oder gezeichnete Unterschrift in der App, versiegeltes Dokument und überprüfbarer Nachweis für jede Unterschrift."
     },
     "LIVE_DATA": {
       "NAME": "Live-Daten",
@@ -2258,6 +2356,16 @@
         },
         "deadline_rule": {
           "saved": "Fristregel gespeichert"
+        },
+        "regulatory_effect": {
+          "applied": "Regulatorischer Status ins CRM geschrieben"
+        },
+        "baseline": {
+          "confirmed": "Ausgangslage bestätigt"
+        },
+        "change": {
+          "deferred": "Änderung auf das nächste Verfahren verschoben",
+          "excluded": "Änderung von den Verfahren ausgeschlossen"
         }
       },
       "billing": {
@@ -2402,36 +2510,11 @@
   },
   "ADMINISTRATIVE_DOCUMENT": {
     "TITLE": "Verwaltungsdokumente",
-    "SUBTITLE": "Verfolgen Sie die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers: Status, Fristen und jede übermittelte Version.",
+    "SUBTITLE": "Ihre Verfahren beim Netzbetreiber und bei der CWaPE: was zu tun ist, und bis wann.",
     "TABS": {
-      "DOSSIERS": "Dossiers",
+      "PROCEDURES": "Verfahren",
+      "DOSSIERS": "Alle Verfahren",
       "DEADLINES": "Fristen"
-    },
-    "DOSSIER_TYPE": {
-      "CREATION_NOTIFICATION": "Gründungsmeldung",
-      "MODIFICATION": "Änderung",
-      "ANNUAL_REPORT": "Jährliche Berichterstattung",
-      "SHARING_AUTHORIZATION": "Teilungsgenehmigung",
-      "SHARING_MODIFICATION": "Änderung der Teilung",
-      "CESSATION": "Einstellung der Tätigkeit"
-    },
-    "DOSSIER_STATUS": {
-      "IN_PREPARATION": "In Vorbereitung",
-      "SUBMITTED": "Eingereicht",
-      "COMPLETE": "Vollständig",
-      "CLOSED": "Abgeschlossen",
-      "LAPSED": "Verfallen"
-    },
-    "DOCUMENT_STATUS": {
-      "DRAFT": "Entwurf",
-      "READY": "Bereit",
-      "SENT": "Übermittelt",
-      "ACKNOWLEDGED": "Bestätigt",
-      "OBSOLETE": "Veraltet"
-    },
-    "DOC_ORIGIN": {
-      "GENERATED": "Generiert",
-      "UPLOADED": "Hochgeladen"
     },
     "RENDER_STATE": {
       "PENDING": "Wird erzeugt",
@@ -2442,15 +2525,6 @@
       "MET": "Erfüllt",
       "MISSED": "Versäumt",
       "CANCELLED": "Storniert"
-    },
-    "REGION": {
-      "WAL": "Wallonien (CWaPE)",
-      "BRU": "Brüssel (Brugel)",
-      "VLA": "Flandern (VREG)"
-    },
-    "ACK_RESULT": {
-      "COMPLETE": "Vollständiges Dossier",
-      "INCOMPLETE": "Unvollständiges Dossier"
     },
     "DOC_TYPE": {
       "ANNEX6_NOTIFICATION": "Anlage 6 — Meldung der Gemeinschaft",
@@ -2465,25 +2539,11 @@
       "SHARING_MODIFICATION": "Änderungsformular Sharing",
       "ANNEX7_LEGAL_ENTITY": "Anlage 7 - Gesellschaften und Vereinigungen"
     },
-    "DEADLINE_TYPE": {
-      "COMPLETENESS_CHECK": "Vollständigkeitsprüfung",
-      "LAPSE": "Verfall",
-      "MODIFICATION_NOTIFICATION": "Änderungsmeldung",
-      "ANNUAL_REPORT": "Jährliche Berichterstattung"
-    },
-    "SORT": {
-      "CREATED_AT": "Erstellungsdatum",
-      "UPDATED_AT": "Letzte Änderung",
-      "SUBMITTED_AT": "Einreichungsdatum",
-      "STATUS": "Status",
-      "TYPE": "Typ",
-      "DUE_DATE": "Fälligkeitsdatum"
-    },
     "LIST": {
-      "INTRO": "Jedes Dossier wird für genau eine Teilungsoperation eingereicht.",
-      "CREATE": "Neues Dossier",
-      "EMPTY": "Noch kein Dossier. Legen Sie eines an, um mit der Verfolgung zu beginnen.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Dossiers)",
+      "INTRO": "Alle Verfahren der Gemeinschaft, die neuesten zuerst, abgeschlossene eingeschlossen.",
+      "CREATE": "Neues Verfahren",
+      "EMPTY": "Noch kein Verfahren.",
+      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Verfahren)",
       "FILTERS": {
         "OPERATION": "Teilungsoperation",
         "ALL_OPERATIONS": "Alle Operationen",
@@ -2491,168 +2551,43 @@
         "ALL_TYPES": "Alle Typen",
         "STATUS": "Status",
         "ALL_STATUSES": "Alle Status",
-        "SORT": "Sortieren nach",
-        "TOGGLE_ORDER": "Sortierreihenfolge umkehren",
         "CLEAR": "Zurücksetzen"
       },
       "COL": {
         "TYPE": "Typ",
-        "TITLE": "Bezeichnung",
         "OPERATION": "Teilungsoperation",
         "STATUS": "Status",
-        "EXTERNAL_REF": "Aktenzeichen",
-        "SUBMITTED_AT": "Eingereicht am"
-      }
-    },
-    "DETAIL": {
-      "BACK": "Zurück zu den Dossiers",
-      "EDIT": "Bearbeiten",
-      "OPERATION": "Teilungsoperation",
-      "EXTERNAL_REF": "Aktenzeichen",
-      "REGION": "Region",
-      "SUBMITTED_AT": "Eingereicht am",
-      "CREATED_AT": "Erstellt am",
-      "NOT_SET": "Nicht angegeben",
-      "ACTIONS": "Aktionen",
-      "NO_FURTHER_ACTION": "Dieses Dossier ist abgeschlossen — weitere Aktionen sind nicht möglich.",
-      "NOT_FOUND": "Dossier nicht gefunden.",
-      "TABS": {
-        "DOCUMENTS": "Dokumente",
-        "DEADLINES": "Fristen",
-        "TIMELINE": "Verlauf"
+        "EXTERNAL_REF": "Aktenzeichen"
       }
     },
     "DOCUMENTS": {
-      "ADD": "Dokument hinzufügen",
-      "EMPTY": "Noch kein Dokument in diesem Dossier.",
-      "VERSIONS": "Versionen",
       "NO_VERSION": "Noch keine Version",
       "UPLOAD": "Version hochladen",
-      "DETAIL": "Versionen ansehen",
       "DOWNLOAD": "Herunterladen",
-      "NO_FURTHER_ACTION": "Keine weitere Aktion möglich.",
-      "CONFIRM_HEADER": "Statusänderung bestätigen",
-      "CONFIRM_MESSAGE": "Dieses Dokument auf „{{status}}\" setzen? Die Änderung wird im Verlauf festgehalten.",
-      "STATUS_CHANGED": "Status aktualisiert",
-      "COL": {
-        "TYPE": "Dokument",
-        "STATUS": "Status",
-        "VERSIONS": "Versionen",
-        "UPDATED_AT": "Aktualisiert",
-        "ACTIONS": "Aktionen"
-      },
       "GENERATE": "Erzeugen",
       "REGENERATE": "Neu erzeugen",
       "RENDER_DONE": "Dokument erzeugt",
       "RENDER_FAILED": "Die Dokumenterzeugung ist fehlgeschlagen"
     },
     "DEADLINES": {
-      "INTRO": "Fristen werden automatisch aus den erfassten Statusänderungen abgeleitet.",
-      "EMPTY": "Keine Frist entspricht diesen Filtern.",
-      "PAGE_REPORT_TEMPLATE_LABEL": "Seite {{page}} von {{total_pages}} ({{total}} Fristen)",
-      "SWEEP": "Überfällige aktualisieren",
-      "SWEEP_CONFIRM_HEADER": "Überfällige Fristen aktualisieren",
-      "SWEEP_CONFIRM_MESSAGE": "Alle überfälligen Fristen als versäumt markieren und die nächsten wiederkehrenden Termine einplanen?",
-      "SWEEP_DONE": "{{missed}} Frist(en) als versäumt markiert, {{rolled}} neu geplant.",
-      "RESOLVED": "Frist aktualisiert",
-      "MARK_MET": "Als erfüllt markieren",
-      "MARK_MET_CONFIRM_HEADER": "Frist als erfüllt markieren",
-      "MARK_MET_CONFIRM_MESSAGE": "Bestätigen, dass diese Verpflichtung erfüllt wurde? Eine wiederkehrende Frist wird neu geplant.",
-      "CANCEL": "Frist stornieren",
-      "CANCEL_CONFIRM_HEADER": "Frist stornieren",
-      "CANCEL_CONFIRM_MESSAGE": "Diese Frist stornieren? Sie bleibt erfasst, wird aber nicht mehr erwartet.",
-      "OVERDUE": "Überfällig",
-      "RECURRING": "Wiederkehrend",
-      "FILTERS": {
-        "STATUS": "Status",
-        "ALL_STATUSES": "Alle Status",
-        "TYPE": "Typ",
-        "ALL_TYPES": "Alle Typen",
-        "OPERATION": "Teilungsoperation",
-        "ALL_OPERATIONS": "Alle Operationen",
-        "CLEAR": "Zurücksetzen"
-      },
       "COL": {
         "DUE_DATE": "Fälligkeit",
-        "TYPE": "Typ",
-        "DOSSIER": "Dossier",
-        "STATUS": "Status",
-        "ACTIONS": "Aktionen"
-      }
-    },
-    "TIMELINE": {
-      "TITLE": "Verlauf",
-      "INTRO": "Jede Statusänderung wird dauerhaft festgehalten. Korrekturen werden ergänzt, nie gelöscht.",
-      "EMPTY": "Noch kein Verlauf.",
-      "CREATED": "Erstellt",
-      "CORRECTIVE": "Korrektur",
-      "SYSTEM": "System",
-      "SHOW_RAW": "Details anzeigen",
-      "HIDE_RAW": "Details ausblenden",
-      "NEWEST_FIRST": "Neueste zuerst",
-      "OLDEST_FIRST": "Älteste zuerst",
-      "ENTRY_COUNT": "{{count}} Einträge",
-      "CONTEXT": {
-        "SUBMISSION_DATE": "Übermittlungsdatum",
-        "ACKNOWLEDGED_DATE": "Datum der Bestätigung",
-        "AUTHORITY_FILE_REF": "Aktenzeichen",
-        "RESULT": "Ergebnis",
-        "REASON": "Grund",
-        "NOTE": "Notiz"
-      }
-    },
-    "TRANSITION": {
-      "HEADER": "Status ändern",
-      "TO_STATUS": "Neuer Status",
-      "SUBMIT": "Erfassen",
-      "SUCCESS": "Status erfasst",
-      "CORRECTIVE_WARNING": "Dies ist eine Korrektur. Sie wird mit Ihrer Begründung dem Verlauf hinzugefügt — der frühere Eintrag bleibt erhalten.",
-      "FIELDS": {
-        "SUBMISSION_DATE": "Übermittlungsdatum",
-        "ACKNOWLEDGED_DATE": "Datum der Bestätigung",
-        "AUTHORITY_FILE_REF": "Aktenzeichen CWaPE / Netzbetreiber",
-        "RESULT": "Ergebnis",
-        "REASON": "Grund der Korrektur",
-        "NOTE": "Notiz (optional)"
-      },
-      "ERRORS": {
-        "FIELD_REQUIRED": "„{{field}}\" ist für diese Statusänderung erforderlich."
+        "STATUS": "Status"
       }
     },
     "DIALOGS": {
       "CREATE_DOSSIER": {
-        "TITLE": "Neues Dossier",
-        "TYPE": "Dossiertyp",
+        "TITLE": "Neues Verfahren",
+        "TYPE": "Art des Verfahrens",
         "TYPE_PLACEHOLDER": "Typ auswählen",
         "OPERATION": "Teilungsoperation",
         "OPERATION_PLACEHOLDER": "Operation auswählen",
-        "OPERATION_HINT": "Nach dem Anlegen des Dossiers unveränderlich.",
-        "TITLE_FIELD": "Bezeichnung (optional)",
-        "EXTERNAL_REF": "Aktenzeichen (optional)",
-        "EXTERNAL_REF_HINT": "Das Aktenzeichen der CWaPE oder des Netzbetreibers, sobald bekannt.",
-        "NO_OPERATIONS": "Diese Gemeinschaft hat noch keine Teilungsoperation. Legen Sie eine an, bevor Sie ein Dossier einreichen.",
+        "NO_OPERATIONS": "Diese Gemeinschaft hat noch keine Teilungsoperation. Legen Sie eine an, bevor Sie dieses Verfahren eröffnen.",
         "SUBMIT": "Anlegen",
-        "SUCCESS": "Dossier angelegt",
+        "SUCCESS": "Verfahren angelegt",
         "ERRORS": {
-          "TYPE_REQUIRED": "Wählen Sie einen Dossiertyp.",
-          "OPERATION_REQUIRED": "Wählen Sie die Teilungsoperation, für die dieses Dossier eingereicht wird."
-        }
-      },
-      "EDIT_DOSSIER": {
-        "TITLE": "Dossier bearbeiten",
-        "SUBMIT": "Speichern",
-        "SUCCESS": "Dossier aktualisiert",
-        "OPERATION_LOCKED": "Die Teilungsoperation kann nach dem Anlegen nicht mehr geändert werden."
-      },
-      "CREATE_DOCUMENT": {
-        "TITLE": "Dokument hinzufügen",
-        "DOC_TYPE": "Dokumenttyp",
-        "DOC_TYPE_PLACEHOLDER": "Dokumenttyp auswählen",
-        "TITLE_FIELD": "Bezeichnung (optional)",
-        "SUBMIT": "Hinzufügen",
-        "SUCCESS": "Dokument hinzugefügt",
-        "ERRORS": {
-          "TYPE_REQUIRED": "Wählen Sie einen Dokumenttyp."
+          "TYPE_REQUIRED": "Wählen Sie eine Art von Verfahren.",
+          "OPERATION_REQUIRED": "Wählen Sie die betroffene Teilungsoperation."
         }
       },
       "UPLOAD_VERSION": {
@@ -2662,34 +2597,17 @@
         "SUBMIT": "Hochladen",
         "SUCCESS": "Version gespeichert",
         "ERRORS": {
-          "FILE_REQUIRED": "Wählen Sie eine Datei zum Hochladen.",
-          "NOT_ALLOWED": "Dieses Dokument wurde bereits übermittelt. Nehmen Sie eine Korrektur vor, bevor Sie eine Version hinzufügen."
+          "FILE_REQUIRED": "Wählen Sie eine Datei zum Hochladen."
         }
-      },
-      "DOCUMENT_DETAIL": {
-        "TITLE": "Dokumentversionen",
-        "CURRENT": "Aktuell",
-        "DOWNLOAD": "Herunterladen",
-        "DOWNLOAD_FAILED": "Download fehlgeschlagen",
-        "EMPTY": "Noch keine Version gespeichert.",
-        "COL": {
-          "VERSION": "Version",
-          "FILENAME": "Datei",
-          "SIZE": "Größe",
-          "CHECKSUM": "Prüfsumme",
-          "CREATED_AT": "Gespeichert am"
-        },
-        "SNAPSHOT": "Eingefrorene Daten anzeigen",
-        "SNAPSHOT_HINT": "Die genauen Daten, aus denen diese Version erzeugt wurde."
       },
       "GENERATE": {
         "TITLE": "Dokument erzeugen",
         "REVIEW_HINT": "Die Daten stammen aus dem CRM. Korrigieren Sie sie bei Bedarf: Was Sie hier freigeben, wird eingereicht.",
         "SUBMIT": "Erzeugen",
         "QUEUED": "Erzeugung gestartet",
-        "ERRORS": {
-          "NOT_ALLOWED": "Dieses Dokument wurde bereits übermittelt. Nehmen Sie eine Korrektur vor, bevor Sie es neu erzeugen."
-        }
+        "DRAFT_NOTICE": "Diese Fassung ist ein Entwurf: Sie trägt ein Wasserzeichen. Die endgültige Fassung wird beim Versand erzeugt, aus dem, was Sie hier bestätigen.",
+        "TO_SIGN_NOTICE": "Dieses Formular ist zur Unterschrift durch den Teilnehmer vorausgefüllt; laden Sie danach die unterschriebene Fassung hoch.",
+        "UPGRADE_TEMPLATE": "Die neuere Fassung des Formulars verwenden"
       }
     },
     "PREFILL": {
@@ -2732,19 +2650,75 @@
         "PUISSANCE_KVA": "Leistung (kVA)",
         "FILIERE": "Erzeugungsart",
         "PART_INJECTEE": "Geteilter Einspeise-%",
-        "CONFIGURATION": "Konfiguration"
+        "CONFIGURATION": "Konfiguration",
+        "COMMUNITY_LEGAL_FORM": "Rechtsform",
+        "COMMUNITY_BOX": "Briefkasten",
+        "REPRESENTATIVE_NAME": "Vertreter (Name oder Bezeichnung)",
+        "REPRESENTATIVE_VAT_NUMBER": "Unternehmensnummer des Vertreters",
+        "REPRESENTATIVE_STREET": "Straße des Vertreters",
+        "REPRESENTATIVE_NUMBER": "Nr. (Vertreter)",
+        "REPRESENTATIVE_BOX": "Briefkasten (Vertreter)",
+        "REPRESENTATIVE_POSTCODE": "Postleitzahl (Vertreter)",
+        "REPRESENTATIVE_CITY": "Gemeinde (Vertreter)",
+        "REPRESENTATIVE_COUNTRY": "Land (Vertreter)",
+        "CONTACT_LAST_NAME": "Name der Ansprechperson",
+        "CONTACT_FIRST_NAME": "Vorname der Ansprechperson",
+        "CONTACT_STREET": "Straße (Kontakt)",
+        "CONTACT_NUMBER": "Nr. (Kontakt)",
+        "CONTACT_BOX": "Briefkasten (Kontakt)",
+        "CONTACT_POSTCODE": "Postleitzahl (Kontakt)",
+        "CONTACT_CITY": "Gemeinde (Kontakt)",
+        "CONTACT_PHONE": "Telefon (Kontakt)",
+        "CONTACT_MOBILE": "Mobiltelefon (Kontakt)",
+        "CONTACT_EMAIL": "E-Mail (Kontakt)",
+        "BUILDING_REFERENCE": "Referenz der Teilung (gleiches Gebäude)",
+        "COMMUNITY_REFERENCE": "Referenz der Teilung (Gemeinschaft)",
+        "PROJECT_DESCRIPTION": "Projektbeschreibung",
+        "SHARING_WITHIN_BUILDING": "Teilung innerhalb desselben Gebäudes",
+        "SHARING_WITHIN_COMMUNITY": "Teilung innerhalb einer Energiegemeinschaft",
+        "SINGLE_GRID_OPERATOR": "Ein einziger Netzbetreiber",
+        "CWAPE_REFERENCE_DIGITS": "CWaPE-Referenz (CE-…)",
+        "ENTITY_NAME": "Bezeichnung der Gesellschaft",
+        "ENTITY_VAT_DIGITS": "Unternehmensnummer der Gesellschaft",
+        "CONTROLLING_ENTITY_NAME": "Kontrollierende Einheit",
+        "DECLARANT_NAME": "Name und Vorname des Erklärenden",
+        "DECLARANT_REPRESENTATIVE": "Vertreten durch",
+        "DECLARANT_COMPANY_NAME": "Gesellschaft (falls zutreffend)",
+        "DECLARANT_ADDRESS": "Adresse des Erklärenden",
+        "DECLARANT_PHONE": "Telefon des Erklärenden",
+        "DECLARANT_EMAIL": "E-Mail des Erklärenden",
+        "SIGNED_AT": "Ausgefertigt in",
+        "SIGNED_ON": "Am",
+        "WAIVES_RESIDENTIAL_RIGHT": "Verzichtet auf das Recht des Haushaltskunden",
+        "WILL_REQUEST_METERING_REGIME": "Wird das erforderliche Messregime beantragen",
+        "WILL_SWITCH_TO_INJECTION_SERVICE": "Wird zum Einspeisedienst wechseln",
+        "GRID_OPERATOR_NAME": "Netzbetreiber",
+        "SHARING_DESCRIPTION": "Beschreibung der Teilung",
+        "DISTRIBUTION_KEY": "Verteilungsschlüssel",
+        "START_DATE": "Datum des Inkrafttretens",
+        "SUSPENSIVE_CONDITION": "Aufschiebende Bedingung",
+        "UNMET_CONDITION": "Nicht erfüllte Bedingung",
+        "KEY_NAME": "Schlüssel",
+        "KEY_DESCRIPTION": "Beschreibung des Schlüssels",
+        "KEY_SINCE": "Angewandt ab",
+        "ITERATION": "Iteration",
+        "PART": "Anteil (%)",
+        "CONSOMMATEUR": "Verbraucher"
       },
       "TABLES": {
         "MEMBERS": "Mitglieder und Anteilseigner",
         "PARTICIPANTS": "Entnahmestellen",
         "INSTALLATIONS": "Erzeugungsanlagen",
-        "STORAGE": "Speicheranlagen"
+        "STORAGE": "Speicheranlagen",
+        "ITERATIONS": "Iterationen",
+        "KEY_SHARES": "Anteile der Verbraucher"
       },
       "WARNINGS": {
         "COUNT": "{{count}} Punkt(e) vor der Einreichung zu korrigieren",
         "FIX": "Im CRM korrigieren",
         "RELOAD": "Aus dem CRM neu laden",
         "RELOAD_BLOCKED": "Sie haben das Formular bearbeitet — Neuladen würde Ihre Korrekturen verwerfen.",
+        "BLOCKED": "Dieses Dokument kann erst erzeugt werden, wenn dies im CRM korrigiert ist.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Der Lieferpunkt {{subject}} ist keinem Mitglied zugeordnet und kann daher nicht unter einem Namen aufgeführt werden.",
@@ -2755,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Fehlende Angabe zu einem Mitglied: {{field}}."
+          },
+          "key": {
+            "missing": "Mit dieser Teilungsoperation ist kein genehmigter Verteilungsschlüssel verknüpft.",
+            "no_iteration": "Der Schlüssel \"{{key}}\" hat keine Iteration: er verteilt nichts.",
+            "iteration_no_consumer": "Iteration {{iteration}} des Schlüssels \"{{key}}\" hat keinen Verbraucher.",
+            "iterations_total": "Die Iterationen des Schlüssels \"{{key}}\" ergeben {{total}} % der geteilten Energie, nicht 100 %."
           }
         }
       }
@@ -2799,6 +2779,586 @@
         "PART_INJECTEE": "Eingespeister Anteil",
         "DROITS_DE_VOTE": "Stimmrechte"
       }
+    },
+    "PROCEDURES": {
+      "REFRESH": "Aktualisieren",
+      "OVERDUE": "Überfällig",
+      "CHOOSE_FILE": "Datei auswählen",
+      "REMOVE_FILE": "Datei entfernen",
+      "CHANGES_COUNT": "{{n}} Änderung(en)",
+      "PIECES_PROGRESS": "Unterlagen {{ready}}/{{required}}",
+      "DUE": {
+        "TODAY": "heute",
+        "IN_ONE": "in 1 Werktag",
+        "IN_MANY": "in {{n}} Werktagen",
+        "LATE_ONE": "1 Werktag überfällig",
+        "LATE_MANY": "{{n}} Werktage überfällig",
+        "ON": "bis zum {{date}}"
+      },
+      "ACTIONS": {
+        "COMPLETE_DOCUMENTS": "Unterlagen vervollständigen",
+        "SEND": "Senden",
+        "RECORD_RESPONSE": "Antwort hinzufügen",
+        "CONFIRM_BASELINE": "Ausgangslage bestätigen",
+        "OPEN": "Öffnen"
+      },
+      "BUCKETS": {
+        "TODO": "Zu erledigen",
+        "WAITING": "In Erwartung",
+        "PLANNED": "Geplant",
+        "DONE": "Kürzlich abgeschlossen"
+      },
+      "STATUS": {
+        "1": "Entwurf",
+        "2": "Gesendet",
+        "5": "Verfallen",
+        "6": "Bereit",
+        "7": "In Kraft",
+        "8": "Abgelehnt",
+        "9": "Storniert"
+      },
+      "PIECE_STATUS": {
+        "2": "Bereit",
+        "5": "Zurückgezogen",
+        "6": "Fehlt",
+        "7": "Veraltet",
+        "8": "Unterzeichnet",
+        "9": "Abgelehnt"
+      },
+      "PIECE_KIND": {
+        "1": "Erstellt",
+        "2": "Beizubringen",
+        "3": "Erhalten",
+        "UNKNOWN": "Unterlage"
+      },
+      "CHANGE_STATUS": {
+        "1": "Ausstehend",
+        "2": "Enthalten",
+        "3": "Verschoben",
+        "4": "Ausgeschlossen",
+        "5": "Aufgehoben",
+        "6": "Angewendet",
+        "7": "Abgelehnt"
+      },
+      "CHANGE_KIND": {
+        "METER_ADDED": "Zähler hinzugefügt",
+        "METER_REMOVED": "Zähler entfernt",
+        "KEY_CHANGED": "Neuer Schlüssel",
+        "REPRESENTATIVE_CHANGED": "Neuer Vertreter",
+        "INSTALLATION_ADDED": "Anlage hinzugefügt",
+        "INSTALLATION_REMOVED": "Anlage entfernt",
+        "OPERATION_CLOSED": "Ende der Operation",
+        "OTHER": "Änderung ({{code}})"
+      },
+      "PARTY": {
+        "1": "Die Gemeinschaft",
+        "2": "Der Netzbetreiber",
+        "3": "Die Regulierungsbehörde",
+        "UNKNOWN": "—"
+      },
+      "VARIANT": {
+        "SIMPLE": "Einfach",
+        "AUTHORIZATION": "Genehmigung (Netzbetreiber, dann CWaPE)",
+        "OTHER": "{{code}}"
+      },
+      "RECIPIENT": {
+        "GRD": "{{name}} (Netzbetreiber)",
+        "GRD_UNKNOWN": "Referenz-Netzbetreiber festzulegen",
+        "REGULATOR": "Die Regulierungsbehörde"
+      },
+      "DELAY": {
+        "WORKING_DAYS": "{{label}}: {{n}} Werktage",
+        "CALENDAR_DAYS": "{{label}}: {{n}} Tage",
+        "MONTHS": "{{label}}: {{n}} Monate"
+      },
+      "DASHBOARD": {
+        "UNSUPPORTED": "Die Regulierungsbehörde dieser Gemeinschaft ({{regulator}}) wird noch nicht unterstützt: Für sie wird kein Verfahren verfolgt.",
+        "BASELINE_PENDING": "Bevor Änderungen verfolgt werden, bestätigen Sie die Ausgangslage: Was der Netzbetreiber bereits über Ihre Zähler und Schlüssel weiß.",
+        "FILTER_GRD": "Netzbetreiber",
+        "ALL_GRDS": "Alle Netzbetreiber",
+        "BANNER": "Nächste Fristen",
+        "EMPTY": "Im Moment nichts zu tun: kein laufendes Verfahren."
+      },
+      "LIST": {
+        "NEXT_ACTION": "Nächster Schritt",
+        "UPDATED_AT": "Aktualisiert"
+      },
+      "AGENDA": {
+        "INTRO": "Alle Fristen Ihrer Verfahren, die nächste zuerst.",
+        "OVERDUE": "{{n}} überfällig",
+        "FROM": "Von",
+        "TO": "Bis",
+        "OPEN_HINT": "Ohne Zeitraum: was noch aussteht, Überfälliges eingeschlossen.",
+        "RANGE_HINT": "Im Zeitraum: alle Fristen, auch eingehaltene und stornierte.",
+        "WHAT": "Was",
+        "PROCEDURE": "Verfahren",
+        "WHO": "Wer",
+        "EMPTY": "Keine Frist."
+      },
+      "DETAIL": {
+        "NOT_FOUND": "Dieses Verfahren existiert nicht oder gehört zu einer anderen Gemeinschaft.",
+        "RECIPIENT": "Empfänger",
+        "OPERATION": "Operation",
+        "ROUTE": "Weg",
+        "REFERENCE": "OptimCE-Referenz",
+        "EXTERNAL_REF": "Externe Referenz",
+        "REQUESTED_EFFECT": "Beantragtes Wirksamkeitsdatum",
+        "EFFECT": "Wirksamkeitsdatum",
+        "EFFECT_ERROR": "Das CRM konnte den regulatorischen Status nicht aktualisieren: Diese Zähler werden bereits in einer anderen Operation geführt. Täglich neuer Versuch.",
+        "EFFECT_ERROR_IN_FORCE": "Das Inkrafttreten ist blockiert: Diese Zähler werden an diesem Datum noch in einer anderen Operation geführt. Das Verfahren bleibt bei seinem Schritt; täglich neuer Versuch.",
+        "FROZEN": "Gesendet am {{date}}: Das Verfahren ist eingefroren. Neue Änderungen kommen in einen neuen Entwurf.",
+        "STEPS": "Schritte",
+        "DEADLINES": "Fristen",
+        "THREAD": "Verlauf"
+      },
+      "CHANGES": {
+        "TITLE": "Enthaltene Änderungen",
+        "DEFER": "Auf das nächste Verfahren verschieben",
+        "DEFER_CONFIRM": "Diese Änderung verlässt dieses Verfahren und kommt in das nächste desselben Typs, sobald dieses gesendet oder storniert ist.",
+        "DEFERRED": "Änderung verschoben",
+        "EXCLUDE": "Ausschließen",
+        "EXCLUDE_INTRO": "Diese Änderung wird niemandem gemeldet. Der Grund wird im Protokoll aufbewahrt.",
+        "REASON": "Grund",
+        "EXCLUDED": "Änderung ausgeschlossen",
+        "EXCLUDED_BECAUSE": "ausgeschlossen: {{reason}}",
+        "EFFECTIVE": "wirksam am {{date}}",
+        "ERRORS": {
+          "REASON_REQUIRED": "Geben Sie den Grund für den Ausschluss an."
+        },
+        "REFILED_INTO": "in einem neuen Verfahren erneut eingereicht",
+        "REFILED_FROM": "übernimmt eine abgelehnte Änderung",
+        "WITHDRAWN_IN_CRM": "aus dem CRM entfernt"
+      },
+      "REFUSAL": {
+        "TITLE": "Nach der Ablehnung",
+        "HINT": "Im CRM wird nichts gelöscht: {{count}} Element(e) stehen jetzt auf « Abgelehnt ». Entfernen Sie sie aus der Operation, oder korrigieren Sie sie und reichen Sie sie in einem neuen Verfahren erneut ein.",
+        "WITHDRAW": "Aus der Operation entfernen",
+        "REFILE": "Korrigieren und erneut einreichen",
+        "REFILE_CONFIRM": "Die abgelehnten Elemente werden in den Entwurf des nächsten Verfahrens übernommen, wo Sie sie vor dem Senden korrigieren können. Fortfahren?",
+        "REFILED": "Elemente in ein neues Verfahren übernommen."
+      },
+      "PIECES": {
+        "TITLE": "Unterlagen",
+        "EMPTY": "Dieses Verfahren erfordert keine Unterlagen.",
+        "OPTIONAL": "Optional",
+        "VERSIONS": "{{n}} Version(en)",
+        "STALE_HINT": "{{n}} Unterlage(n) durch eine spätere Änderung veraltet.",
+        "REGENERATE_STALE": "Veraltete Unterlagen neu erzeugen",
+        "REGENERATE": "Mit einem Klick neu erzeugen (Ihre Korrekturen bleiben erhalten)",
+        "REGENERATE_REQUESTED": "Neuerzeugung angefordert",
+        "REVIEW": "Prüfen und neu erzeugen",
+        "GENERATE_TO_SIGN": "Das zu unterschreibende Formular vorbereiten",
+        "UPLOAD_SIGNED": "Die unterschriebene Fassung hochladen",
+        "VERIFY": "Prüfen, ob die endgültige Fassung identisch neu erzeugt wird",
+        "VERIFY_REQUESTED": "Prüfung angefordert",
+        "VERIFY_DONE": "Prüfung abgeschlossen",
+        "TEMPLATE_SUPERSEDED": "eine neuere Fassung des Formulars ist in Kraft"
+      },
+      "THREAD": {
+        "OPENED": "Eröffnet bei « {{to}} »",
+        "STEP": "« {{from}} » → « {{to}} »",
+        "OUTBOUND": "Gesendet: {{type}}",
+        "INBOUND": "Erhalten: {{type}}",
+        "VERSION": "{{piece}}: Version {{n}}",
+        "RECEIVED": "Post an der Empfangsadresse eingegangen",
+        "EFFECTIVE_DATE": "Datum des Inkrafttretens korrigiert: vom {{from}} auf den {{to}}"
+      },
+      "SEND": {
+        "TITLE": "Verfahren senden",
+        "INTRO": "Senden Sie die Nachricht aus Ihrem eigenen Postfach (oder über das Online-Formular) mit den Unterlagen unten und markieren Sie sie dann als gesendet. Über die Referenz im Betreff wird die Antwort zugeordnet.",
+        "SUBJECT": "Betreff",
+        "BODY_FIELD": "Nachricht",
+        "COPY": "Kopieren",
+        "PIECES": "Beizufügende Unterlagen",
+        "NO_PIECES": "Keine Unterlage zum Beifügen bereit.",
+        "SENT_ON": "Gesendet am",
+        "CHANNEL_FIELD": "Kanal",
+        "CHANNEL": {
+          "EMAIL": "E-Mail",
+          "ONLINE_FORM": "Online-Formular",
+          "POST": "Post"
+        },
+        "FILE": "Die gesendete E-Mail (.eml) oder die Bestätigung des Formulars (optional)",
+        "FILE_HINT": "Unverändert als Nachweis des Versands aufbewahrt.",
+        "SUBMIT": "Als gesendet markieren",
+        "DONE": "Verfahren als gesendet markiert",
+        "BODY": "Guten Tag,\n\nanbei erhalten Sie unseren Antrag: {{procedure}} (Operation: {{operation}}).\nBitte geben Sie in Ihrer Antwort die Referenz {{reference}} an.\n\nAnlagen:\n{{pieces}}\n\nMit freundlichen Grüßen",
+        "ERRORS": {
+          "DATE_REQUIRED": "Geben Sie das Versanddatum an."
+        },
+        "FINALS": {
+          "TITLE": "Beizufügende Unterlagen",
+          "GENERATE": "Die endgültigen Fassungen erzeugen",
+          "RENDERING": "Die endgültigen Fassungen werden erzeugt… (noch {{n}})",
+          "READY": "Alle Unterlagen sind endgültig: laden Sie sie herunter und fügen Sie sie Ihrem Versand bei.",
+          "HINT": "Erzeugte Unterlagen sind Entwürfe mit einem Wasserzeichen. Erzeugen Sie ihre endgültigen Fassungen, bevor Sie sie beifügen.",
+          "ZIP": "Alles herunterladen (zip)"
+        },
+        "SHEET": {
+          "TITLE": "Eingabeblatt",
+          "HINT": "Die in das Formular einzutragenden Werte, in seiner Reihenfolge. Kopieren Sie sie einzeln oder alle auf einmal.",
+          "COPY_ALL": "Alles kopieren",
+          "PRINT": "Drucken",
+          "NOT_GENERATED": "Diese Unterlage ist noch nicht erzeugt: das Blatt ist leer.",
+          "YES": "Ja",
+          "NO": "Nein"
+        },
+        "MARK_SENT_HINT": "Erzeugen Sie die endgültigen Fassungen, bevor Sie das Verfahren als versendet markieren."
+      },
+      "RESPONSE": {
+        "TITLE": "Antwort hinzufügen",
+        "TYPE": "Art der Antwort",
+        "TYPE_PLACEHOLDER": "Art auswählen",
+        "DATE": "Datum",
+        "SUBJECT": "Betreff (optional)",
+        "BODY": "Text der Nachricht (optional)",
+        "EXTERNAL_REF": "Referenz CWaPE oder Netzbetreiber (optional)",
+        "FILE": "Datei (.eml, .msg, PDF)",
+        "PREVIEWING": "Folgen werden berechnet…",
+        "WILL_MOVE": "Das Verfahren geht zum Schritt « {{step}} » über.",
+        "NO_MOVE": "Sie wird dem Verlauf hinzugefügt, ohne den Schritt zu ändern.",
+        "WILL_START": "Neue Frist: {{label}} ({{party}}), bis zum {{date}}.",
+        "WILL_MEET": "Frist eingehalten: {{label}}.",
+        "WILL_TAKE_EFFECT": "Wirksam am {{date}}.",
+        "IN_THE_CRM": "Im CRM:",
+        "NOT_NOW": "Diese Antwort passt nicht zum aktuellen Schritt des Verfahrens.",
+        "SUBMIT": "Speichern",
+        "DONE": "Antwort gespeichert",
+        "ERRORS": {
+          "TYPE_REQUIRED": "Wählen Sie die Art der Antwort und ihr Datum."
+        }
+      },
+      "TRANSITION": {
+        "OPEN": "Schritt ändern",
+        "TITLE": "Schritt ändern",
+        "INTRO": "Für das, was keine Antwort erfasst: eine Korrektur, eine telefonisch erhaltene Information. Der Grund wird im Protokoll aufbewahrt.",
+        "TO_STEP": "Neuer Schritt",
+        "TO_STEP_PLACEHOLDER": "Schritt auswählen",
+        "AUTOMATIC": "{{step}} (normalerweise automatisch)",
+        "ON": "Datum",
+        "EFFECTIVE_ON": "Datum des Inkrafttretens",
+        "IN_FORCE_HINT": "Das CRM wird zuerst aktualisiert: Die Zähler werden ab diesem Datum « Aktiv seit ».",
+        "REASON": "Grund",
+        "SUBMIT": "Schritt ändern",
+        "DONE": "Schritt geändert",
+        "ERRORS": {
+          "REQUIRED": "Wählen Sie den Schritt und geben Sie den Grund an."
+        }
+      },
+      "CREATE": {
+        "REQUESTED_EFFECT": "Gewünschtes Wirksamkeitsdatum (optional)",
+        "REQUESTED_EFFECT_HINT": "Unverbindlich: Das tatsächliche Wirksamkeitsdatum folgt aus der Antwort des Netzbetreibers."
+      },
+      "BASELINE": {
+        "TITLE": "Ausgangslage",
+        "INTRO": "Das Modul wurde gerade aktiviert. Sagen Sie uns für jeden Zähler und jeden Schlüssel, was der Netzbetreiber bereits darüber weiß: Änderungen werden erst ab dann verfolgt, nichts Früheres wird nachgespielt.",
+        "REACTIVATION": "Das Modul wurde wieder aktiviert: Nur die Zähler und Schlüssel, die sich inzwischen geändert haben, werden aufgeführt.",
+        "ALREADY_CONFIRMED": "Die Ausgangslage ist bestätigt.",
+        "EMPTY": "Kein Zähler und kein Schlüssel zu bestätigen.",
+        "HELP": {
+          "ACTIVE": "Aktiv: dem Netzbetreiber gemeldet und in Kraft.",
+          "NOT_NOTIFIED": "Noch nicht gemeldet: Er kommt in einen Entwurf, der noch zu senden ist.",
+          "IN_PROGRESS": "Laufend: bereits gesendet, die Antwort wird erwartet (Versanddatum angeben).",
+          "ENDED": "Beendet: Er gehört nicht mehr zur Operation.",
+          "ASKED": "Verfahren: Geben Sie an, ob das Verfahren bei der Regulierungsbehörde bereits erledigt ist, noch zu erledigen ist (ein Entwurf wird geöffnet) oder gesendet wurde (mit Sendedatum)."
+        },
+        "CHOICE": {
+          "ACTIVE": "Aktiv",
+          "NOT_NOTIFIED": "Noch nicht gemeldet",
+          "IN_PROGRESS": "Laufend",
+          "ENDED": "Beendet"
+        },
+        "CHANGE": {
+          "ADDED": "Seitdem hinzugefügt",
+          "REMOVED": "Seitdem entfernt"
+        },
+        "CHOICE_FIELD": "Zustand",
+        "SINCE": "seit dem {{date}}",
+        "CRM_WAITING_GRD": "wartet im CRM auf den VNB",
+        "CRM_WAITING_MANAGER": "wartet im CRM auf den Verwalter",
+        "ACTIVE_SINCE": "Aktiv seit",
+        "ENDED_ON": "Beendet am",
+        "SENT_ON": "Gesendet am",
+        "BULK": "Auf alle Zeilen anwenden",
+        "BULK_PLACEHOLDER": "Zustand wählen",
+        "BULK_APPLY": "Anwenden",
+        "SUBMIT": "Ausgangslage bestätigen",
+        "CONFIRMED": "Ausgangslage bestätigt",
+        "TO_DASHBOARD": "Zurück zu den Verfahren",
+        "ERRORS": {
+          "SENT_DATE": "Geben Sie das Versanddatum für die « Laufend »-Elemente an: {{refs}}.",
+          "EFFECTIVE_DATE": "Geben Sie an, seit wann diese im CRM wartenden Zähler aktiv sind: {{refs}}.",
+          "CONFLICT": "Diese EANs werden an diesen Daten bereits in einer anderen Operation verfolgt; nichts wurde bestätigt: {{refs}}."
+        },
+        "COMMUNITY_GROUP": "Die Gemeinschaft",
+        "ASKED": "Bei der Regulierungsbehörde bereits erledigt?",
+        "PROCEDURE_CHOICE": {
+          "ACTIVE": "Bereits erledigt",
+          "NOT_NOTIFIED": "Zu erledigen",
+          "IN_PROGRESS": "Gesendet, Antwort erwartet",
+          "ENDED": "Beendet"
+        }
+      },
+      "VERSION_STAGE": {
+        "1": "Entwurf",
+        "2": "Endgültig",
+        "3": "Zu unterschreiben"
+      },
+      "CHECK_OUTCOME": {
+        "1": "Identisch",
+        "2": "Abweichend",
+        "3": "Prüfung fehlgeschlagen"
+      },
+      "EFFECTIVE_DATE": {
+        "OPEN": "Datum des Inkrafttretens korrigieren",
+        "TITLE": "Datum des Inkrafttretens korrigieren",
+        "INTRO": "Wenn der Netzbetreiber es an einem anderen Tag als dem berechneten in Kraft setzt (Nachtrag später erhalten, vom Netzbetreiber festgelegtes Datum). Die genehmigten Zähler folgen; das Inkrafttreten erfolgt an diesem Tag.",
+        "ON": "Neues Datum des Inkrafttretens",
+        "REASON": "Grund",
+        "SUBMIT": "Korrigieren",
+        "DONE": "Datum des Inkrafttretens korrigiert",
+        "ERRORS": {
+          "REQUIRED": "Geben Sie das Datum und den Grund an."
+        }
+      }
+    },
+    "TOAST": {
+      "CHANGE_FILED": "{{change}} ({{subject}}). An {{recipient}} zu melden: dem Entwurf „{{procedure}}“ Nr. {{id}} hinzugefügt."
+    },
+    "INBOUND": {
+      "TITLE": "Empfangene Post",
+      "ADDRESS_INTRO": "Leiten Sie die Antworten des VNB und der CWaPE weiter oder setzen Sie sie in Kopie an:",
+      "COPY": "Kopieren",
+      "COPIED": "Adresse kopiert",
+      "ROTATE": "Adresse ändern",
+      "NOTHING": "Keine wartende Post.",
+      "TO_QUALIFY": "Empfangene Post zu qualifizieren",
+      "NO_SUBJECT": "(kein Betreff)",
+      "STATUS": {
+        "UNMATCHED": "Nicht zugeordnet",
+        "ATTACHED": "Zu qualifizieren"
+      },
+      "DOWNLOAD_MAIL": "Die Nachricht (.eml)",
+      "AS_PIECE": "Als Unterlage verwenden",
+      "QUALIFY": "Eine Antwort hinzufügen",
+      "OPEN_PROCEDURE": "Das Verfahren öffnen",
+      "PICK_PROCEDURE": "Ein Verfahren wählen",
+      "ATTACH": "Zuordnen",
+      "DISCARD": "Verwerfen"
+    },
+    "DIGEST": {
+      "TITLE": "Zusammenfassung per E-Mail",
+      "INTRO": "Eine E-Mail, die für die gewählten Empfänger zusammenfasst, was sich seit der letzten in den Verfahren bewegt hat, was überfällig ist und was fällig wird. Standardmäßig deaktiviert; sie wird nur versandt, wenn es etwas zu melden gibt.",
+      "OFF": "Deaktiviert: Es wird keine Zusammenfassung versandt.",
+      "ENABLED": "Die Zusammenfassung versenden",
+      "RHYTHM_LABEL": "Rhythmus",
+      "WEEKDAY_LABEL": "Tag",
+      "WEEKDAY_MONTHLY_LABEL": "Der erste des Monats",
+      "FIRST_ON_LABEL": "Erster Versand",
+      "RECIPIENTS_LABEL": "Empfänger",
+      "RECIPIENTS_PLACEHOLDER": "Unter den Administratoren und Verwaltern wählen",
+      "RECIPIENTS_REQUIRED": "Wählen Sie mindestens einen Empfänger.",
+      "NEXT_ON": "Nächster Versand: {{date}}",
+      "OPTED_OUT": "erhält sie nicht mehr (im Profil deaktiviert)",
+      "OPTED_OUT_NOTE": "Erhalten sie nicht mehr (im Profil deaktiviert): {{names}}",
+      "SAVE": "Speichern",
+      "SAVED": "Zusammenfassung gespeichert",
+      "CADENCE": {
+        "working_days": "Jeden Werktag (Montag bis Freitag)",
+        "weekly": "Jede Woche",
+        "biweekly": "Alle zwei Wochen",
+        "monthly": "Einmal im Monat"
+      },
+      "RHYTHM": {
+        "working_days": "Jeden Werktag",
+        "weekly": "Jeden {{day}}",
+        "biweekly": "Jeden zweiten {{day}}",
+        "monthly": "Am ersten {{day}} des Monats"
+      },
+      "WEEKDAYS": {
+        "1": "Montag",
+        "2": "Dienstag",
+        "3": "Mittwoch",
+        "4": "Donnerstag",
+        "5": "Freitag",
+        "6": "Samstag",
+        "7": "Sonntag"
+      }
+    }
+  },
+  "SIGNATURE": {
+    "COMMON": {
+      "LOADING": "Wird geladen…",
+      "RETRY": "Erneut versuchen",
+      "REFERENCE": "Ref. {{reference}}",
+      "COMMUNITY": "Gemeinschaft: {{community}}",
+      "EXPIRES": "Zu unterschreiben bis {{date}}",
+      "BACK_TO_INBOX": "Zurück zu meinen Unterschriften",
+      "DETAILS": "Details",
+      "DOWNLOAD_SIGNED": "Unterschriebenes Dokument herunterladen",
+      "DOWNLOAD_EVIDENCE_PDF": "Nachweis (PDF)",
+      "DOWNLOAD_EVIDENCE_JSON": "Nachweis (JSON)",
+      "LOAD_ERROR": "Diese Signaturanfrage konnte nicht geladen werden."
+    },
+    "CAPACITY": {
+      "SELF": "In Ihrem eigenen Namen",
+      "LEGAL_REPRESENTATIVE": "Für {{member}} (gesetzlicher Vertreter)",
+      "COMMUNITY_ADMIN": "Für die Gemeinschaft (Administrator)",
+      "ON_BEHALF": "Im Namen und im Auftrag von {{member}}"
+    },
+    "REQUEST_STATUS": {
+      "PREPARING": "In Vorbereitung",
+      "OPEN": "Laufend",
+      "COMPLETING": "Wird abgeschlossen",
+      "COMPLETED": "Abgeschlossen",
+      "DECLINED": "Abgelehnt",
+      "CANCELLED": "Storniert",
+      "EXPIRED": "Abgelaufen",
+      "FAILED": "Fehlgeschlagen"
+    },
+    "SIGNER_STATUS": {
+      "WAITING": "Wartend",
+      "INVITED": "Zu unterschreiben",
+      "VIEWED": "Angesehen",
+      "SIGNING": "Wird versiegelt",
+      "SIGNED": "Unterschrieben",
+      "DECLINED": "Abgelehnt"
+    },
+    "SOURCE": {
+      "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
+      "OTHER": "{{source}}"
+    },
+    "INBOX": {
+      "TITLE": "Zu unterschreiben",
+      "SUBTITLE": "Die Dokumente, die auf Ihre Unterschrift warten, in all Ihren Gemeinschaften.",
+      "PENDING_TITLE": "Warten auf Ihre Unterschrift",
+      "PAST_TITLE": "Bereits erledigt",
+      "EMPTY_PENDING": "Im Moment ist nichts zu unterschreiben.",
+      "SIGN": "Unterschreiben",
+      "READ": "Ansehen",
+      "NOT_YOUR_TURN": "Noch nicht an der Reihe: Eine andere Partei unterschreibt zuerst.",
+      "SIGNED_ON": "Unterschrieben am {{date}}",
+      "DECLINED_ON": "Abgelehnt am {{date}}",
+      "LOAD_ERROR": "Ihre Signaturanfragen konnten nicht geladen werden."
+    },
+    "SIGN": {
+      "DOCUMENT": "Zu unterschreibendes Dokument",
+      "GO_TO_SLOT": "Zu meiner Unterschrift",
+      "YOUR_SLOT": "Ihre Unterschrift hier",
+      "DATE_FIELD": "Datum der Unterschrift",
+      "DATE_AUTO": "wird beim Unterschreiben automatisch ausgefüllt",
+      "FIELDS_TITLE": "Auszufüllen",
+      "FIELDS_HINT": "Füllen Sie diese Felder hier oder direkt im Dokument aus.",
+      "PANEL_TITLE": "Ihre Unterschrift",
+      "TAB_TYPED": "Tippen",
+      "TAB_DRAWN": "Zeichnen",
+      "TYPED_LABEL": "Ihr Name, wie er erscheinen wird",
+      "TYPED_PLACEHOLDER": "Vorname Nachname",
+      "PREVIEW": "Vorschau",
+      "DRAW_HINT": "Unterschreiben Sie im Rahmen, mit der Maus oder dem Finger.",
+      "CLEAR": "Löschen",
+      "SIGN": "Unterschreiben",
+      "DECLINE": "Ablehnen",
+      "MISSING": "Zum Unterschreiben: Zustimmung ankreuzen, Pflichtfelder (*) ausfüllen und Ihre Unterschrift hinzufügen.",
+      "RESTORED": "Ihre Unterschrift wurde aufbewahrt, klicken Sie auf Unterschreiben.",
+      "STEP_UP": "Bestätigen Sie zu Ihrer Sicherheit Ihre Identität: Danach kehren Sie hierher zurück.",
+      "IMAGE_FAILED": "Ihre Unterschrift konnte nicht vorbereitet werden. Versuchen Sie es erneut oder zeichnen Sie sie.",
+      "RELOAD": "Dokument neu laden",
+      "STATUS": {
+        "LOADING": "Das Dokument wird geladen…",
+        "READY": "Sie sind an der Reihe: Lesen Sie das Dokument und unterschreiben Sie im Bereich rechts.",
+        "WAITING": "Noch nicht an der Reihe: Eine andere Partei unterschreibt zuerst. Sie können das Dokument bereits lesen.",
+        "SEALING": "Versiegelung…",
+        "SEALING_HINT": "Ihre Unterschrift wird auf das Dokument gesetzt und versiegelt. Das dauert einige Sekunden.",
+        "SLOW": "Die Versiegelung dauert länger als erwartet. Nichts geht verloren: Sie erhalten eine Benachrichtigung, sobald sie abgeschlossen ist.",
+        "SIGNED": "Unterschrieben",
+        "FINAL_READY": "Das von allen Parteien unterschriebene Dokument ist verfügbar.",
+        "FINAL_PENDING": "Das endgültige Dokument ist verfügbar, sobald alle Parteien unterschrieben haben.",
+        "DECLINED": "Sie haben abgelehnt, dieses Dokument zu unterschreiben.",
+        "CLOSED": "Diese Anfrage ist nicht mehr zur Unterschrift offen ({{status}}).",
+        "STALE": "Das Dokument hat sich geändert, seit Sie es geöffnet haben. Laden Sie es vor dem Unterschreiben neu: Ihre Eingaben bleiben erhalten.",
+        "ERROR": "Diese Signaturanfrage wurde nicht gefunden oder betrifft Sie nicht."
+      },
+      "DECLINE_DIALOG": {
+        "TITLE": "Unterschrift ablehnen",
+        "MESSAGE": "Geben Sie an, warum Sie ablehnen: Der Grund wird an die Person weitergegeben, die die Unterschrift angefordert hat.",
+        "REASON": "Grund der Ablehnung",
+        "CONFIRM": "Unterschrift ablehnen",
+        "CANCEL": "Abbrechen"
+      }
+    },
+    "REQUEST": {
+      "PROGRESS": "{{signed}} von {{total}} unterschrieben",
+      "CREATED": "Angefordert am {{date}}",
+      "CLOSED": "Abgeschlossen am {{date}}",
+      "SIGNERS": "Unterzeichnende",
+      "DOCUMENTS": "Dokumente",
+      "DOCUMENTS_PENDING": "Das unterschriebene Dokument und der Nachweis sind verfügbar, sobald alle Parteien unterschrieben haben.",
+      "SIGN_NOW": "Jetzt unterschreiben",
+      "DECLINE_REASON": "Grund: {{reason}}",
+      "SIGNED_BY": "Unterschrieben von {{name}}",
+      "TIMELINE": "Verlauf",
+      "CHAIN_OK": "Protokoll unversehrt",
+      "CHAIN_BROKEN": "Protokoll verändert bei Ereignis {{n}}",
+      "REMIND": "Erinnern",
+      "CANCEL": "Anfrage stornieren",
+      "REMINDED": "{{n}} Unterzeichnende(r) erinnert.",
+      "CANCELLED": "Die Signaturanfrage wurde storniert."
+    },
+    "FOLLOW": {
+      "TITLE": "Unterschriften der Gemeinschaft",
+      "SUBTITLE": "Verfolgen Sie die Signaturanfragen: Wer hat unterschrieben, wer muss noch, und bis wann.",
+      "FILTER_STATUS": "Status",
+      "ALL": "Alle Status",
+      "EMPTY": "Keine Signaturanfrage in dieser Gemeinschaft.",
+      "OPEN_DETAIL": "Details öffnen",
+      "LAST_REMINDED": "Erinnert am {{date}}",
+      "LOAD_ERROR": "Die Signaturanfragen konnten nicht geladen werden.",
+      "COLUMNS": {
+        "TITLE": "Dokument",
+        "SOURCE": "Herkunft",
+        "PROGRESS": "Fortschritt",
+        "EXPIRES": "Frist",
+        "STATUS": "Status",
+        "ACTIONS": "Aktionen"
+      }
+    },
+    "CANCEL_DIALOG": {
+      "TITLE": "Signaturanfrage stornieren",
+      "MESSAGE": "Die Unterzeichnenden können dieses Dokument nicht mehr unterschreiben. Dies ist endgültig.",
+      "REASON": "Grund (optional)",
+      "CONFIRM": "Anfrage stornieren",
+      "BACK": "Zurück"
+    },
+    "EVENTS": {
+      "REQUEST_CREATED": "Anfrage erstellt",
+      "DOCUMENT_PREPARED": "Dokument für die Unterschrift vorbereitet",
+      "SIGNER_INVITED": "{{signer}} wurde zur Unterschrift eingeladen",
+      "SIGNER_VIEWED": "{{signer}} hat das Dokument angesehen",
+      "SIGNER_REAUTHENTICATED": "{{signer}} hat die eigene Identität bestätigt",
+      "SIGNER_SIGNED": "{{signer}} hat unterschrieben",
+      "SIGNER_DECLINED": "{{signer}} hat die Unterschrift abgelehnt",
+      "REQUEST_REMINDED": "Erinnerung an die Unterzeichnenden gesendet",
+      "REQUEST_COMPLETED": "Alle Parteien haben unterschrieben: Dokument abgeschlossen",
+      "REQUEST_CANCELLED": "Anfrage storniert",
+      "REQUEST_EXPIRED": "Anfrage abgelaufen",
+      "REQUEST_FAILED": "Die Anfrage ist fehlgeschlagen (technischer Fehler)",
+      "UNKNOWN": "Ereignis „{{type}}“"
+    },
+    "PIECE": {
+      "REQUEST": "Unterschrift anfordern",
+      "REQUESTED_TOAST": "Die Signaturanfrage wurde an den Teilnehmer gesendet.",
+      "FOLLOW": "Verfolgen",
+      "EVIDENCE": "Nachweis",
+      "STATUS": {
+        "REQUESTED": "Unterschrift angefordert",
+        "SIGNED": "Elektronisch unterschrieben",
+        "DECLINED": "Abgelehnt: {{reason}}",
+        "DECLINED_NO_REASON": "Unterschrift abgelehnt",
+        "EXPIRED": "Unterschrift abgelaufen",
+        "CANCELLED": "Unterschrift storniert",
+        "FAILED": "Unterschrift fehlgeschlagen"
+      }
     }
   },
   "HOME": {
@@ -2814,6 +3374,8 @@
       "RECORD_ONE": "{{field}} fehlt in Ihrem Datensatz von „{{community}}“",
       "RECORD_MANY": "{{field}} und {{others}} weitere Angabe(n) fehlen in Ihrem Datensatz von „{{community}}“",
       "RECORD_ACTION": "Vervollständigen",
+      "SIGNATURE": "Sie haben {{count}} Dokument(e) zu unterschreiben",
+      "SIGNATURE_ACTION": "Unterschreiben",
       "UNREAD": "Sie haben {{count}} ungelesene Benachrichtigung(en)",
       "UNREAD_ACTION": "Lesen"
     },

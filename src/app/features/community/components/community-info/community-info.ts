@@ -11,6 +11,7 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
+import { DatePicker } from 'primeng/datepicker';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Tag } from 'primeng/tag';
@@ -18,6 +19,8 @@ import { Select } from 'primeng/select';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { switchMap } from 'rxjs';
+import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-format-pipes';
+import { fromLocalDateString, toLocalDateString } from '../../../../shared/utils/date.utils';
 
 import { Role } from '../../../../core/dtos/role';
 import { ApiResponse } from '../../../../core/dtos/api.response';
@@ -58,6 +61,11 @@ interface CommunityUpdatePayload {
   legal_name?: string | null;
   iban?: string | null;
   account_holder_name?: string | null;
+  representative_first_name?: string | null;
+  representative_last_name?: string | null;
+  representative_email?: string | null;
+  statutes_date?: string | null;
+  internal_rules_date?: string | null;
 }
 
 interface AddressFormValue {
@@ -78,6 +86,11 @@ interface CommunityInfoFormValue {
   legal_name: string;
   iban: string;
   account_holder_name: string;
+  representative_first_name: string;
+  representative_last_name: string;
+  representative_email: string;
+  statutes_date: Date | null;
+  internal_rules_date: Date | null;
 }
 
 /**
@@ -106,6 +119,8 @@ function partialAddressValidator(group: AbstractControl): ValidationErrors | nul
     Textarea,
     Tag,
     Select,
+    DatePicker,
+    LocaleDatePipe,
     ConfirmDialog,
     ReactiveFormsModule,
     TranslatePipe,
@@ -163,6 +178,14 @@ export class CommunityInfo {
     legal_name: new FormControl<string>('', { nonNullable: true }),
     iban: new FormControl<string>('', { nonNullable: true, validators: [ibanValidator()] }),
     account_holder_name: new FormControl<string>('', { nonNullable: true }),
+    representative_first_name: new FormControl<string>('', { nonNullable: true }),
+    representative_last_name: new FormControl<string>('', { nonNullable: true }),
+    representative_email: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.email],
+    }),
+    statutes_date: new FormControl<Date | null>(null),
+    internal_rules_date: new FormControl<Date | null>(null),
   });
 
   protected readonly Role = Role;
@@ -341,6 +364,11 @@ export class CommunityInfo {
       legal_name: c.legal_name ?? '',
       iban: c.iban ?? '',
       account_holder_name: c.account_holder_name ?? '',
+      representative_first_name: c.representative_first_name ?? '',
+      representative_last_name: c.representative_last_name ?? '',
+      representative_email: c.representative_email ?? '',
+      statutes_date: fromLocalDateString(c.statutes_date),
+      internal_rules_date: fromLocalDateString(c.internal_rules_date),
     });
   }
 
@@ -397,6 +425,13 @@ export class CommunityInfo {
         accountHolder && accountHolder.toLowerCase() === (legalName ?? '').toLowerCase()
           ? null
           : accountHolder,
+      representative_first_name: value.representative_first_name?.trim() || null,
+      representative_last_name: value.representative_last_name?.trim() || null,
+      representative_email: value.representative_email?.trim() || null,
+      statutes_date: value.statutes_date ? toLocalDateString(value.statutes_date) : null,
+      internal_rules_date: value.internal_rules_date
+        ? toLocalDateString(value.internal_rules_date)
+        : null,
     };
     const a = value.headquarters_address;
     if (a.street && a.number && a.city && a.postcode) {

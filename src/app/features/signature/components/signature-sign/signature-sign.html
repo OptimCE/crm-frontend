@@ -1,0 +1,511 @@
+<div class="mx-auto w-full max-w-6xl flex flex-col gap-4 min-w-0" (window:resize)="onResize()">
+  <app-back-arrow [text]="'SIGNATURE.COMMON.BACK_TO_INBOX' | translate" url="/signatures" />
+
+  @if (detail(); as d) {
+    <header
+      class="rounded-xl border border-primary-100 bg-white p-4 md:p-5 flex flex-col md:flex-row md:items-center gap-3"
+    >
+      <div class="flex flex-col gap-1 flex-1 min-w-0">
+        <h1 class="text-lg md:text-xl font-semibold text-surface-900 m-0 break-words">
+          {{ d.request.title }}
+        </h1>
+        <p class="text-sm text-surface-600 m-0 flex flex-wrap gap-x-3 gap-y-1">
+          @if (d.request.community) {
+            <span>{{
+              'SIGNATURE.COMMON.COMMUNITY' | translate: { community: d.request.community }
+            }}</span>
+          }
+          <span>{{
+            'SIGNATURE.COMMON.REFERENCE' | translate: { reference: d.request.reference }
+          }}</span>
+          @if (d.request.expires_at) {
+            <span>{{
+              'SIGNATURE.COMMON.EXPIRES'
+                | translate: { date: (d.request.expires_at | localeDate: 'mediumDate') }
+            }}</span>
+          }
+        </p>
+        @if (capacity(); as c) {
+          <p class="text-sm text-surface-800 m-0" data-testid="signature-sign__capacity">
+            <i class="pi pi-user text-primary-700" aria-hidden="true"></i>
+            {{ c.key | translate: c.params }}
+            @if (signer()?.role_label; as role) {
+              &middot; {{ role }}
+            }
+          </p>
+        }
+      </div>
+      @if (phase() === 'ready' && slotBox()) {
+        <p-button
+          icon="pi pi-arrow-down"
+          [label]="'SIGNATURE.SIGN.GO_TO_SLOT' | translate"
+          [outlined]="true"
+          size="small"
+          (onClick)="scrollToSlot()"
+          data-testid="signature-sign__button--go-to-slot"
+        />
+      }
+    </header>
+  }
+
+  <!-- One status line for every phase: what is happening, in words. -->
+  <div
+    class="rounded-lg border px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3"
+    [class.border-primary-200]="phase() !== 'error' && phase() !== 'stale'"
+    [class.bg-primary-50]="phase() === 'signed' || phase() === 'ready'"
+    [class.border-red-200]="phase() === 'error'"
+    [class.bg-red-50]="phase() === 'error'"
+    [class.border-amber-300]="phase() === 'stale' || phase() === 'slow'"
+    [class.bg-amber-50]="phase() === 'stale' || phase() === 'slow'"
+    role="status"
+    aria-live="polite"
+    data-testid="signature-sign__status"
+    [attr.data-phase]="phase()"
+  >
+    <div class="flex items-start gap-2 flex-1 min-w-0 text-sm">
+      @switch (phase()) {
+        @case ('loading') {
+          <i class="pi pi-spin pi-spinner mt-0.5" aria-hidden="true"></i>
+          <span>{{ 'SIGNATURE.SIGN.STATUS.LOADING' | translate }}</span>
+        }
+        @case ('ready') {
+          <i class="pi pi-pen-to-square mt-0.5 text-primary-700" aria-hidden="true"></i>
+          <span>{{ 'SIGNATURE.SIGN.STATUS.READY' | translate }}</span>
+        }
+        @case ('waiting') {
+          <i class="pi pi-hourglass mt-0.5" aria-hidden="true"></i>
+          <span>{{ 'SIGNATURE.SIGN.STATUS.WAITING' | translate }}</span>
+        }
+        @case ('sealing') {
+          <i class="pi pi-spin pi-spinner mt-0.5" aria-hidden="true"></i>
+          <span class="flex flex-col">
+            <strong>{{ 'SIGNATURE.SIGN.STATUS.SEALING' | translate }}</strong>
+            <span>{{ 'SIGNATURE.SIGN.STATUS.SEALING_HINT' | translate }}</span>
+          </span>
+        }
+        @case ('slow') {
+          <i class="pi pi-clock mt-0.5 text-amber-700" aria-hidden="true"></i>
+          <span>{{ 'SIGNATURE.SIGN.STATUS.SLOW' | translate }}</span>
+        }
+        @case ('signed') {
+          <i class="pi pi-check-circle mt-0.5 text-primary-700" aria-hidden="true"></i>
+          <span class="flex flex-col">
+            <strong>{{ 'SIGNATURE.SIGN.STATUS.SIGNED' | translate }}</strong>
+            <span>
+              @if (detail()?.request?.has_artifacts) {
+                {{ 'SIGNATURE.SIGN.STATUS.FINAL_READY' | translate }}
+              } @else {
+                {{ 'SIGNATURE.SIGN.STATUS.FINAL_PENDING' | translate }}
+              }
+            </span>
+          </span>
+        }
+        @case ('declined') {
+          <i class="pi pi-times-circle mt-0.5" aria-hidden="true"></i>
+          <span>{{ 'SIGNATURE.SIGN.STATUS.DECLINED' | translate }}</span>
+        }
+        @case ('closed') {
+          <i class="pi pi-lock mt-0.5" aria-hidden="true"></i>
+          <span>{{
+            'SIGNATURE.SIGN.STATUS.CLOSED'
+              | translate
+                : { status: (requestStatusKey(detail()?.request?.status ?? '') | translate) }
+          }}</span>
+        }
+        @case ('stale') {
+          <i class="pi pi-exclamation-triangle mt-0.5 text-amber-700" aria-hidden="true"></i>
+          <span>{{ 'SIGNATURE.SIGN.STATUS.STALE' | translate }}</span>
+        }
+        @case ('error') {
+          <i class="pi pi-exclamation-circle mt-0.5 text-red-700" aria-hidden="true"></i>
+          <span>{{ loadError() ?? ('SIGNATURE.SIGN.STATUS.ERROR' | translate) }}</span>
+        }
+      }
+    </div>
+    <div class="flex flex-wrap gap-2 shrink-0">
+      @if (phase() === 'stale') {
+        <p-button
+          icon="pi pi-refresh"
+          size="small"
+          [label]="'SIGNATURE.SIGN.RELOAD' | translate"
+          (onClick)="reload()"
+          data-testid="signature-sign__button--reload"
+        />
+      }
+      @if (phase() === 'error') {
+        <p-button
+          icon="pi pi-refresh"
+          size="small"
+          [outlined]="true"
+          [label]="'SIGNATURE.COMMON.RETRY' | translate"
+          (onClick)="load()"
+          data-testid="signature-sign__button--retry"
+        />
+      }
+      @if (phase() === 'signed' && detail()?.request?.has_artifacts) {
+        <p-button
+          icon="pi pi-download"
+          size="small"
+          [label]="'SIGNATURE.COMMON.DOWNLOAD_SIGNED' | translate"
+          [loading]="downloading()"
+          (onClick)="downloadSigned()"
+          data-testid="signature-sign__button--download"
+        />
+      }
+      @if (
+        phase() === 'signed' || phase() === 'declined' || phase() === 'closed' || phase() === 'slow'
+      ) {
+        <a
+          [routerLink]="['/signatures/requests', requestId()]"
+          class="text-sm text-primary-700 underline self-center"
+          data-testid="signature-sign__link--detail"
+          >{{ 'SIGNATURE.COMMON.DETAILS' | translate }}</a
+        >
+      }
+    </div>
+  </div>
+
+  @if (restored() && phase() === 'ready') {
+    <p
+      class="m-0 rounded-lg border border-primary-200 bg-primary-50 px-4 py-2 text-sm text-primary-900"
+      data-testid="signature-sign__message--restored"
+    >
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      {{ 'SIGNATURE.SIGN.RESTORED' | translate }}
+    </p>
+  }
+
+  @if (
+    pages().length > 0 && (phase() === 'ready' || phase() === 'waiting' || phase() === 'stale')
+  ) {
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem] items-start">
+      <!-- The document: every page on a canvas, the slot and the fields over it. -->
+      <section
+        class="flex flex-col gap-4 min-w-0"
+        [attr.aria-label]="'SIGNATURE.SIGN.DOCUMENT' | translate"
+        data-testid="signature-sign__document"
+      >
+        @for (page of pages(); track page.index) {
+          <div
+            class="@container relative w-full bg-white border border-surface-200 shadow-sm"
+            [style.aspect-ratio]="page.width + ' / ' + page.height"
+            [attr.data-testid]="'signature-sign__page--' + page.index"
+          >
+            <canvas #pageCanvas class="absolute inset-0 w-full h-full" aria-hidden="true"></canvas>
+
+            @if (slotBox(); as box) {
+              @if (box.page === page.index) {
+                <div
+                  #slotAnchor
+                  class="signature-slot absolute flex items-center justify-center"
+                  [style]="box.style"
+                  data-testid="signature-sign__slot"
+                >
+                  @if (method() === 'DRAWN' && drawnPng()) {
+                    <img
+                      [src]="drawnPng()"
+                      class="max-h-full max-w-full object-contain"
+                      [alt]="'SIGNATURE.SIGN.YOUR_SLOT' | translate"
+                    />
+                  } @else if (method() === 'TYPED' && typedName().trim()) {
+                    <span class="signature-script signature-slot__typed truncate">{{
+                      typedName()
+                    }}</span>
+                  } @else {
+                    <span class="signature-slot__label">{{
+                      'SIGNATURE.SIGN.YOUR_SLOT' | translate
+                    }}</span>
+                  }
+                </div>
+              }
+            }
+
+            @for (placed of placedFields(); track placed.field.name) {
+              @if (placed.page === page.index) {
+                @switch (placed.field.type) {
+                  @case ('DATE') {
+                    <span
+                      class="signature-field signature-field--date absolute flex items-center"
+                      [style]="placed.style"
+                      >{{ 'SIGNATURE.SIGN.DATE_FIELD' | translate }}</span
+                    >
+                  }
+                  @case ('CHECKBOX') {
+                    <input
+                      type="checkbox"
+                      class="signature-field signature-field--check absolute"
+                      [style]="placed.style"
+                      [checked]="checked(placed.field.name)"
+                      [disabled]="phase() !== 'ready'"
+                      (change)="setField(placed.field.name, $any($event.target).checked)"
+                      [attr.aria-label]="placed.field.label ?? placed.field.name"
+                      [attr.data-testid]="'signature-sign__overlay--' + placed.field.name"
+                    />
+                  }
+                  @default {
+                    <input
+                      type="text"
+                      class="signature-field absolute"
+                      [style]="placed.style"
+                      [value]="textValue(placed.field.name)"
+                      [readOnly]="phase() !== 'ready'"
+                      [attr.maxlength]="placed.field.type === 'INITIALS' ? 8 : 255"
+                      (input)="setField(placed.field.name, $any($event.target).value)"
+                      [attr.aria-label]="placed.field.label ?? placed.field.name"
+                      [attr.data-testid]="'signature-sign__overlay--' + placed.field.name"
+                    />
+                  }
+                }
+              }
+            }
+          </div>
+        }
+      </section>
+
+      <!-- The panel: what is asked, the signature, the consent, Sign. -->
+      <aside
+        class="lg:sticky lg:top-4 flex flex-col gap-4 rounded-xl border border-surface-200 bg-white p-4 min-w-0"
+        data-testid="signature-sign__panel"
+      >
+        @if (fillableFields().length > 0 || dateFields().length > 0) {
+          <section class="flex flex-col gap-3">
+            <h2 class="text-base font-semibold m-0">
+              {{ 'SIGNATURE.SIGN.FIELDS_TITLE' | translate }}
+            </h2>
+            <p class="text-xs text-surface-500 m-0">
+              {{ 'SIGNATURE.SIGN.FIELDS_HINT' | translate }}
+            </p>
+            @for (field of fillableFields(); track field.name) {
+              @if (field.type === 'CHECKBOX') {
+                <div class="flex items-start gap-2">
+                  <p-checkbox
+                    [binary]="true"
+                    [inputId]="'signature-field-' + field.name"
+                    [ngModel]="checked(field.name)"
+                    (ngModelChange)="setField(field.name, $event)"
+                    [disabled]="phase() !== 'ready'"
+                    [attr.data-testid]="'signature-sign__field--' + field.name"
+                  />
+                  <label [for]="'signature-field-' + field.name" class="text-sm">
+                    {{ field.label ?? field.name }}
+                    @if (field.required) {
+                      <span class="text-red-700">*</span>
+                    }
+                  </label>
+                </div>
+              } @else {
+                <div class="flex flex-col gap-1">
+                  <label [for]="'signature-field-' + field.name" class="text-sm font-medium">
+                    {{ field.label ?? field.name }}
+                    @if (field.required) {
+                      <span class="text-red-700">*</span>
+                    }
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    class="w-full"
+                    [id]="'signature-field-' + field.name"
+                    [value]="textValue(field.name)"
+                    [readOnly]="phase() !== 'ready'"
+                    [attr.maxlength]="field.type === 'INITIALS' ? 8 : 255"
+                    (input)="setField(field.name, $any($event.target).value)"
+                    [attr.data-testid]="'signature-sign__field--' + field.name"
+                  />
+                </div>
+              }
+            }
+            @for (field of dateFields(); track field.name) {
+              <p class="text-sm text-surface-600 m-0">
+                <i class="pi pi-calendar" aria-hidden="true"></i>
+                {{ field.label ?? ('SIGNATURE.SIGN.DATE_FIELD' | translate) }} :
+                {{ 'SIGNATURE.SIGN.DATE_AUTO' | translate }}
+              </p>
+            }
+          </section>
+        }
+
+        @if (phase() === 'ready') {
+          <section class="flex flex-col gap-3">
+            <h2 class="text-base font-semibold m-0">
+              {{ 'SIGNATURE.SIGN.PANEL_TITLE' | translate }}
+            </h2>
+            <div
+              class="grid grid-cols-2 rounded-lg border border-surface-200 p-1 gap-1"
+              role="tablist"
+            >
+              <button
+                type="button"
+                role="tab"
+                class="signature-tab"
+                [class.signature-tab--active]="method() === 'TYPED'"
+                [attr.aria-selected]="method() === 'TYPED'"
+                (click)="selectMethod('TYPED')"
+                data-testid="signature-sign__tab--typed"
+              >
+                <i class="pi pi-pencil" aria-hidden="true"></i>
+                {{ 'SIGNATURE.SIGN.TAB_TYPED' | translate }}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                class="signature-tab"
+                [class.signature-tab--active]="method() === 'DRAWN'"
+                [attr.aria-selected]="method() === 'DRAWN'"
+                (click)="selectMethod('DRAWN')"
+                data-testid="signature-sign__tab--drawn"
+              >
+                <i class="pi pi-pen-to-square" aria-hidden="true"></i>
+                {{ 'SIGNATURE.SIGN.TAB_DRAWN' | translate }}
+              </button>
+            </div>
+
+            <div class="flex flex-col gap-2" [class.hidden]="method() !== 'TYPED'" role="tabpanel">
+              <label for="signature-typed-name" class="text-sm font-medium">{{
+                'SIGNATURE.SIGN.TYPED_LABEL' | translate
+              }}</label>
+              <input
+                pInputText
+                id="signature-typed-name"
+                type="text"
+                class="w-full"
+                maxlength="120"
+                autocomplete="name"
+                [placeholder]="'SIGNATURE.SIGN.TYPED_PLACEHOLDER' | translate"
+                [value]="typedName()"
+                (input)="typedName.set($any($event.target).value)"
+                data-testid="signature-sign__typed-name"
+              />
+              <div
+                class="signature-preview rounded-lg border border-dashed border-surface-300 flex items-center justify-center px-3"
+                [attr.aria-label]="'SIGNATURE.SIGN.PREVIEW' | translate"
+              >
+                <span class="signature-script signature-preview__text truncate">{{
+                  typedName().trim() || ('SIGNATURE.SIGN.PREVIEW' | translate)
+                }}</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2" [class.hidden]="method() !== 'DRAWN'" role="tabpanel">
+              <p class="text-xs text-surface-500 m-0">
+                {{ 'SIGNATURE.SIGN.DRAW_HINT' | translate }}
+              </p>
+              <canvas
+                #padCanvas
+                class="signature-pad w-full rounded-lg border border-surface-300 bg-white"
+                [attr.aria-label]="'SIGNATURE.SIGN.TAB_DRAWN' | translate"
+                data-testid="signature-sign__pad"
+              ></canvas>
+              <div class="flex justify-end">
+                <p-button
+                  icon="pi pi-eraser"
+                  size="small"
+                  [text]="true"
+                  [label]="'SIGNATURE.SIGN.CLEAR' | translate"
+                  (onClick)="clearDrawing()"
+                  data-testid="signature-sign__button--clear"
+                />
+              </div>
+            </div>
+          </section>
+
+          @if (slot(); as s) {
+            <section class="flex items-start gap-2">
+              <p-checkbox
+                [binary]="true"
+                inputId="signature-consent"
+                [ngModel]="consent()"
+                (ngModelChange)="consent.set($event)"
+                data-testid="signature-sign__consent"
+              />
+              <label
+                for="signature-consent"
+                class="text-sm whitespace-pre-line"
+                data-testid="signature-sign__consent-text"
+                >{{ s.consent_text }}</label
+              >
+            </section>
+          }
+
+          @if (!canSign() && !submitting()) {
+            <p class="text-xs text-surface-500 m-0">{{ 'SIGNATURE.SIGN.MISSING' | translate }}</p>
+          }
+        }
+
+        <div class="flex flex-col sm:flex-row lg:flex-col gap-2">
+          @if (phase() === 'ready') {
+            <p-button
+              icon="pi pi-check"
+              styleClass="w-full"
+              class="flex-1"
+              [label]="'SIGNATURE.SIGN.SIGN' | translate"
+              [disabled]="!canSign()"
+              [loading]="submitting()"
+              (onClick)="sign()"
+              data-testid="signature-sign__button--sign"
+            />
+          }
+          @if (canDecline()) {
+            <p-button
+              icon="pi pi-times"
+              severity="secondary"
+              styleClass="w-full"
+              class="flex-1"
+              [outlined]="true"
+              [label]="'SIGNATURE.SIGN.DECLINE' | translate"
+              (onClick)="openDecline()"
+              data-testid="signature-sign__button--decline"
+            />
+          }
+        </div>
+      </aside>
+    </div>
+  }
+</div>
+
+<p-dialog
+  [header]="'SIGNATURE.SIGN.DECLINE_DIALOG.TITLE' | translate"
+  [modal]="true"
+  [visible]="declineVisible()"
+  (visibleChange)="declineVisible.set($event)"
+  [style]="{ width: '32rem' }"
+  [breakpoints]="{ '640px': '100vw' }"
+  styleClass="responsive-dialog"
+  [draggable]="false"
+  data-testid="signature-sign__dialog--decline"
+>
+  <div class="flex flex-col gap-3">
+    <p class="text-sm m-0">{{ 'SIGNATURE.SIGN.DECLINE_DIALOG.MESSAGE' | translate }}</p>
+    <label for="signature-decline-reason" class="text-sm font-medium">{{
+      'SIGNATURE.SIGN.DECLINE_DIALOG.REASON' | translate
+    }}</label>
+    <textarea
+      pTextarea
+      id="signature-decline-reason"
+      rows="4"
+      maxlength="1000"
+      class="w-full"
+      [value]="declineReason()"
+      (input)="declineReason.set($any($event.target).value)"
+      data-testid="signature-sign__decline-reason"
+    ></textarea>
+    <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+      <p-button
+        severity="secondary"
+        [text]="true"
+        [label]="'SIGNATURE.SIGN.DECLINE_DIALOG.CANCEL' | translate"
+        (onClick)="declineVisible.set(false)"
+        data-testid="signature-sign__button--decline-cancel"
+      />
+      <p-button
+        severity="danger"
+        icon="pi pi-times"
+        [label]="'SIGNATURE.SIGN.DECLINE_DIALOG.CONFIRM' | translate"
+        [disabled]="!declineReason().trim()"
+        [loading]="declining()"
+        (onClick)="decline()"
+        data-testid="signature-sign__button--decline-confirm"
+      />
+    </div>
+  </div>
+</p-dialog>

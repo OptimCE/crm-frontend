@@ -1,0 +1,74 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures/community"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-manager-follows/en.html",
+  "id": "signature-manager-follows",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__table",
+      "target": "signature-follow__table",
+      "targetClick": "next",
+      "text": "Every signature request is listed with its document, its origin, its progress, its deadline and its status. The filter at the top keeps only the requests of one status.",
+      "title": "The community's requests",
+      "waitFor": "signature-follow__row--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__progress-0",
+      "target": "signature-follow__progress-0",
+      "targetClick": "next",
+      "text": "The **\"Progress\"** counts the signatures received: here **\"0 of 1 signed\"**, the participant has not signed yet.",
+      "title": "Where the request stands"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--remind-0",
+      "target": "signature-follow__button--remind-0",
+      "text": "Click **\"Send a reminder\"**: every signer who has not signed yet gets a reminder by notification and by email.",
+      "title": "Remind the signer"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--open-0",
+      "target": "signature-follow__button--open-0",
+      "text": "Click **\"Open the details\"** to see the whole request.",
+      "title": "Open the request"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "The top of the page gives the request's status and its deadline. Under **\"Signers\"**, each one is listed with what they have done: invited, viewed, signed or declined.",
+      "title": "The signers",
+      "waitFor": "signature-request__timeline"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "The **\"History\"** traces every step, the reminder included. **\"Log intact\"** confirms that nobody has changed it. The signed document only appears once everyone has signed.",
+      "title": "The history"
+    }
+  ],
+  "title": "Follow the signature requests"
+}

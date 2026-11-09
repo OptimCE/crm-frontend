@@ -36,6 +36,13 @@ import {
 } from '../../features/guided_tours/components/help-dialog/help-dialog';
 import { SnackbarNotification } from '../../shared/services-ui/snackbar.notifcation.service';
 import { ERROR_TYPE } from '../../core/dtos/notification';
+import {
+  AdminChangeToasts,
+  administrativeAttention,
+  attentionBadge,
+} from '../../features/administrative_document/administrative-attention';
+import { SignatureStore } from '../../features/signature/signature.store';
+import { countBadge } from '../../features/signature/signature-format';
 
 interface RouteActiveState {
   dashboard: boolean;
@@ -53,6 +60,8 @@ interface RouteActiveState {
   billing: boolean;
   live_data: boolean;
   administrative_document: boolean;
+  signatures: boolean;
+  signatures_community: boolean;
   users_communities: boolean;
   users_invitations: boolean;
   users: boolean;
@@ -62,6 +71,8 @@ interface RouteActiveState {
 /** Map each state key to its actual route prefix. Ordered longest-first for correct matching. */
 const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['dashboard', '/dashboard'],
+  ['signatures_community', '/signatures/community'],
+  ['signatures', '/signatures'],
   ['sharing_operations', '/sharing_operations'],
   ['communities_managers', '/communities/managers'],
   ['communities_public', '/communities/public'],
@@ -112,9 +123,43 @@ export class Navbar implements OnInit {
   private readonly tours = inject(SteppyTours);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly snackbar = inject(SnackbarNotification);
+  private readonly adminToasts = inject(AdminChangeToasts);
   private helpRef: DynamicDialogRef | null = null;
 
   readonly sidebarPinChanged = output<boolean>();
+
+  /**
+   * The « Administratif » entry's badge (spec, Notifications): the procedures
+   * to do, red when a deadline is past due. Managers of a community with the
+   * module only.
+   */
+  protected readonly adminAttention = administrativeAttention();
+  protected readonly adminBadge = computed(() => attentionBadge(this.adminAttention()));
+  protected readonly adminBadgeSeverity = computed<'info' | 'danger'>(() =>
+    (this.adminAttention()?.overdue ?? 0) > 0 ? 'danger' : 'info',
+  );
+  protected readonly adminBadgeTitle = computed(() => {
+    const summary = this.adminAttention();
+    return summary
+      ? (this.translateService.instant('NAVBAR.ADMINISTRATIVE_BADGE', summary) as string)
+      : null;
+  });
+
+  /**
+   * « À signer »: the user's own signature slots, every community. The entry
+   * shows once there is anything (pending or past); its badge counts the
+   * slots that can be signed now.
+   */
+  protected readonly signatureStore = inject(SignatureStore);
+  protected readonly signatureBadge = computed(() =>
+    countBadge(this.signatureStore.pendingCount()),
+  );
+  protected readonly signatureBadgeTitle = computed(() => {
+    const count = this.signatureStore.pendingCount();
+    return count > 0
+      ? (this.translateService.instant('NAVBAR.SIGNATURES_BADGE', { count }) as string)
+      : null;
+  });
 
   /** Unread badge shown on the logo while collapsed; capped at 99+, empty when none. */
   protected readonly notificationBadge = computed(() => {
@@ -144,6 +189,8 @@ export class Navbar implements OnInit {
     billing: false,
     live_data: false,
     administrative_document: false,
+    signatures: false,
+    signatures_community: false,
     users_communities: false,
     users_invitations: false,
     users: false,
@@ -208,6 +255,8 @@ export class Navbar implements OnInit {
   }
 
   ngOnInit(): void {
+    // « Compteur ajouté. À notifier à … » when the annexe files a CRM change.
+    this.adminToasts.start(this.destroyRef);
     const mq = window.matchMedia('(max-width: 1023px)');
     const handler = (e: MediaQueryListEvent | MediaQueryList) => {
       this.mobile.set(e.matches);
@@ -242,6 +291,8 @@ export class Navbar implements OnInit {
           billing: false,
           live_data: false,
           administrative_document: false,
+          signatures: false,
+          signatures_community: false,
           users_communities: false,
           users_invitations: false,
           users: false,

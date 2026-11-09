@@ -6,12 +6,14 @@ import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { NotificationService } from '../../../notifications/services/notification.service';
+import { SignatureStore } from '../../../signature/signature.store';
 import { MeService } from '../../../../shared/services/me.service';
 import {
   NeedsYouItem,
   envelopeData,
   incompleteRecordItems,
   invitationItems,
+  signatureItems,
   unreadNotificationItems,
 } from '../../home-format';
 
@@ -19,10 +21,10 @@ import {
  * "N choses vous attendent" — the first thing on `/home`, and the reason the
  * page exists for a member who is not sure why they are here.
  *
- * Three sources, one list: a pending invitation, a member record missing a
- * field, and unread notifications. To the reader they are one question — *do I
- * have to do something?* — so the API's shape (two invitation endpoints with two
- * DTOs) is flattened in `home-format` rather than shown.
+ * Four sources, one list: documents to sign, a pending invitation, a member
+ * record missing a field, and unread notifications. To the reader they are one
+ * question — *do I have to do something?* — so the API's shape (two invitation
+ * endpoints with two DTOs) is flattened in `home-format` rather than shown.
  *
  * **When nothing is waiting, this collapses to a single reassuring line**, not
  * an empty card. A box saying "no items" is worse than no box: it makes the
@@ -46,8 +48,18 @@ export class NeedsYouBand {
   private readonly notificationService = inject(NotificationService);
   private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly signatures = inject(SignatureStore);
 
-  readonly items = signal<NeedsYouItem[]>([]);
+  /** What the requests below found; the documents to sign come from SignatureStore. */
+  private readonly loaded = signal<NeedsYouItem[]>([]);
+  /**
+   * The documents to sign first: they have a deadline and a counterparty
+   * waiting. The store refreshes on its own (realtime hints, every 5 min).
+   */
+  readonly items = computed(() => [
+    ...signatureItems(this.signatures.pendingCount()),
+    ...this.loaded(),
+  ]);
   readonly loading = signal<boolean>(true);
 
   readonly count = computed(() => this.items().length);
@@ -72,7 +84,7 @@ export class NeedsYouBand {
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ memberInvitations, managerInvitations, members, unread }) => {
-        this.items.set([
+        this.loaded.set([
           ...invitationItems(
             envelopeData(memberInvitations) ?? [],
             envelopeData(managerInvitations) ?? [],

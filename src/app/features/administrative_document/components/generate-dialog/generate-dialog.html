@@ -2,6 +2,29 @@
   <p class="text-sm text-surface-500 m-0">
     {{ 'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.REVIEW_HINT' | translate }}
   </p>
+  <!-- What the render will be: a stamped draft (the final comes at sending),
+       or the form a participant signs. -->
+  <p-message severity="info" data-testid="generate-dialog__message--stage">
+    {{
+      (toSign
+        ? 'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.TO_SIGN_NOTICE'
+        : 'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.DRAFT_NOTICE'
+      ) | translate
+    }}
+  </p-message>
+  @if (upgradeAvailable) {
+    <div class="flex items-center gap-2 text-sm text-surface-700">
+      <p-checkbox
+        [binary]="true"
+        [(ngModel)]="upgradeTemplate"
+        inputId="generate-upgrade"
+        data-testid="generate-dialog__checkbox--upgrade"
+      />
+      <label for="generate-upgrade">{{
+        'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.UPGRADE_TEMPLATE' | translate
+      }}</label>
+    </div>
+  }
 
   @if (loading()) {
     <div class="flex items-center gap-2 text-sm text-surface-500 py-6 justify-center">
@@ -13,15 +36,17 @@
          Each one links to the record that is wrong, because typing over a value
          here freezes the correction into the immutable snapshot while the CRM
          stays wrong — and the next generation reproduces the same error. -->
-    @if (warningCount()) {
+    @if (warnings().length) {
       <div class="flex flex-col gap-2" data-testid="generate-dialog__warnings">
         <div class="flex items-center gap-2 flex-wrap">
-          <p class="text-sm font-semibold text-surface-700 m-0">
-            {{
-              'ADMINISTRATIVE_DOCUMENT.PREFILL.WARNINGS.COUNT'
-                | translate: { count: warningCount() }
-            }}
-          </p>
+          @if (warningCount()) {
+            <p class="text-sm font-semibold text-surface-700 m-0">
+              {{
+                'ADMINISTRATIVE_DOCUMENT.PREFILL.WARNINGS.COUNT'
+                  | translate: { count: warningCount() }
+              }}
+            </p>
+          }
           <p-button
             size="small"
             [text]="true"
@@ -36,21 +61,35 @@
           />
         </div>
 
-        @for (warning of warnings(); track $index) {
+        <!-- What the annex refuses to render without (a key description of a key
+             with no iteration): first, as errors, and « Générer » stays disabled. -->
+        @for (warning of blockers(); track $index) {
+          <p-message severity="error" data-testid="generate-dialog__blocker">
+            <span>
+              <strong class="block">
+                {{ 'ADMINISTRATIVE_DOCUMENT.PREFILL.WARNINGS.BLOCKED' | translate }}
+              </strong>
+              {{ warningLabelKey(warning) | translate: warningTextParams(warning) }}
+              @if (warningLink(warning); as link) {
+                <a
+                  [routerLink]="link"
+                  (click)="close()"
+                  class="text-primary-500 hover:text-primary-700 underline ml-2"
+                  [attr.data-testid]="'generate-dialog__link--' + warning.subject_type"
+                >
+                  {{ 'ADMINISTRATIVE_DOCUMENT.PREFILL.WARNINGS.FIX' | translate }}
+                </a>
+              }
+            </span>
+          </p-message>
+        }
+
+        @for (warning of advisories(); track $index) {
           <!-- `[text]` is a plain-string binding and cannot carry a link, so the
                content is projected instead. -->
           <p-message severity="warn" data-testid="generate-dialog__warning">
             <span>
-              {{
-                warningLabelKey(warning)
-                  | translate
-                    : {
-                        subject: warning.subject_id ?? '',
-                        field: warningFieldLabelKey(warning)
-                          ? (warningFieldLabelKey(warning)! | translate)
-                          : '',
-                      }
-              }}
+              {{ warningLabelKey(warning) | translate: warningTextParams(warning) }}
               @if (warningLink(warning); as link) {
                 <a
                   [routerLink]="link"
@@ -75,16 +114,32 @@
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           @for (field of form().fields; track field.key) {
-            <label class="flex flex-col gap-1 text-xs text-surface-500">
-              {{ labelKey(field.key) | translate }}
-              <input
-                pInputText
-                class="w-full"
-                [ngModel]="field.value"
-                (ngModelChange)="setField(field.key, $event)"
-                [attr.data-testid]="'generate-dialog__field--' + field.key"
-              />
-            </label>
+            <!-- A box of the form is ticked or not: a checkbox, not the word "false". -->
+            @if (isBoolean(field.value)) {
+              <div class="flex items-center gap-2 text-xs text-surface-600 md:mt-5">
+                <p-checkbox
+                  [binary]="true"
+                  [inputId]="'generate-field-' + field.key"
+                  [ngModel]="field.value"
+                  (ngModelChange)="setField(field.key, $event)"
+                  [attr.data-testid]="'generate-dialog__field--' + field.key"
+                />
+                <label [for]="'generate-field-' + field.key">{{
+                  labelKey(field.key) | translate
+                }}</label>
+              </div>
+            } @else {
+              <label class="flex flex-col gap-1 text-xs text-surface-500">
+                {{ labelKey(field.key) | translate }}
+                <input
+                  pInputText
+                  class="w-full"
+                  [ngModel]="field.value"
+                  (ngModelChange)="setField(field.key, $event)"
+                  [attr.data-testid]="'generate-dialog__field--' + field.key"
+                />
+              </label>
+            }
           }
         </div>
       </section>
@@ -186,7 +241,7 @@
       type="button"
       [label]="'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.SUBMIT' | translate"
       [loading]="submitting()"
-      [disabled]="loading()"
+      [disabled]="loading() || blocked()"
       (onClick)="submit()"
       data-testid="generate-dialog__btn--submit"
     />

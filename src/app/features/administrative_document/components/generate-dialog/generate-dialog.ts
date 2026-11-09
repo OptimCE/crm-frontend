@@ -4,16 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
+import { Checkbox } from 'primeng/checkbox';
 import { InputText } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
 import { Tooltip } from 'primeng/tooltip';
 
 import { VALIDATION_TYPE } from '../../../../core/dtos/notification';
-import {
-  DocumentOut,
-  PrefillData,
-  PrefillWarning,
-} from '../../../../shared/dtos/administrative-document.dtos';
+import { PrefillData, PrefillWarning } from '../../../../shared/dtos/administrative-document.dtos';
 import { ErrorMessageHandler } from '../../../../shared/services-ui/error.message.handler';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
 import { AdministrativeDocumentService } from '../../../../shared/services/administrative-document.service';
@@ -39,11 +36,16 @@ import {
   warningLink,
   warningParams,
 } from '../../administrative-document-warnings';
-import { canUploadVersion } from '../../administrative-document-transitions';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
-interface GenerateDialogData {
-  document: DocumentOut;
+/** A piece of a procedure. Whether it may be generated is the caller's to check (canGenerate). */
+export interface GenerateDialogData {
+  documentId: number;
+  title: string;
+  /** A collected piece: the render is the form a participant signs, unstamped. */
+  toSign?: boolean;
+  /** A newer version of the form is in force than the one the piece keeps. */
+  upgradeAvailable?: boolean;
 }
 
 /**
@@ -54,12 +56,14 @@ interface GenerateDialogData {
  * difference between "generated from the CRM" and "generated from what a human
  * approved". Fields the CRM cannot know arrive blank on purpose.
  *
- * Submitting only *queues* the render; the caller polls for the artifact.
+ * Submitting only *queues* the render; the caller polls for the artifact. A
+ * generated piece renders as a draft, stamped: its final is rendered from this
+ * same reviewed snapshot when the procedure is sent.
  */
 @Component({
   selector: 'app-generate-dialog',
   standalone: true,
-  imports: [TranslatePipe, RouterLink, FormsModule, Button, InputText, Message, Tooltip],
+  imports: [TranslatePipe, RouterLink, FormsModule, Button, Checkbox, InputText, Message, Tooltip],
   templateUrl: './generate-dialog.html',
   providers: [ErrorMessageHandler],
 })
@@ -90,7 +94,11 @@ export class GenerateDialog implements OnInit {
   readonly dirty = signal<boolean>(false);
   readonly form = signal<PrefillForm>({ fields: [], tables: [] });
 
-  readonly documentTitle = this.dialogData?.document.title ?? '';
+  readonly documentTitle = this.dialogData?.title ?? '';
+  readonly toSign = this.dialogData?.toSign ?? false;
+  readonly upgradeAvailable = this.dialogData?.upgradeAvailable ?? false;
+  /** Render with the form in force today (an explicit choice, never a default). */
+  upgradeTemplate = false;
 
   readonly labelKey = prefillLabelKey;
   readonly tableLabelKey = prefillTableLabelKey;
@@ -99,15 +107,37 @@ export class GenerateDialog implements OnInit {
   readonly warningLink = warningLink;
   readonly warningFieldLabelKey = warningFieldLabelKey;
 
-  readonly warningCount = computed(() => this.warnings().length);
+  /**
+   * What the annex refuses to render without (a key description of a key with
+   * no iteration): shown first, as errors, and « Générer » stays disabled until
+   * the CRM is fixed and the pre-fill reloaded.
+   */
+  readonly blockers = computed(() => this.warnings().filter((w) => w.blocking));
+  /** The other warnings: worth fixing, but the form can still be filed. */
+  readonly advisories = computed(() => this.warnings().filter((w) => !w.blocking));
+  readonly warningCount = computed(() => this.advisories().length);
+  readonly blocked = computed(() => this.blockers().length > 0);
+
+  /**
+   * The sentence's interpolation values: the warning's own params (`key`,
+   * `iteration`, `total`…), its subject, and the named field's label.
+   */
+  warningTextParams(warning: PrefillWarning): Record<string, string> {
+    const fieldKey = warningFieldLabelKey(warning);
+    return {
+      ...warningParams(warning),
+      subject: warning.subject_id ?? '',
+      field: fieldKey ? (this.translate.instant(fieldKey) as string) : '',
+    };
+  }
 
   ngOnInit(): void {
-    const document = this.dialogData?.document;
-    if (!document) {
+    const id = this.dialogData?.documentId;
+    if (!id) {
       this.loading.set(false);
       return;
     }
-    this.loadPrefill(document.id);
+    this.loadPrefill(id);
   }
 
   /**
@@ -122,9 +152,9 @@ export class GenerateDialog implements OnInit {
    * serving a stale participant list would mean filing stale data.
    */
   reload(): void {
-    const document = this.dialogData?.document;
-    if (!document || this.dirty()) return;
-    this.loadPrefill(document.id);
+    const id = this.dialogData?.documentId;
+    if (!id || this.dirty()) return;
+    this.loadPrefill(id);
   }
 
   private loadPrefill(documentId: number): void {
@@ -160,7 +190,11 @@ export class GenerateDialog implements OnInit {
     this.dirty.set(true);
   }
 
-  setField(key: string, value: string): void {
+  isBoolean(value: unknown): value is boolean {
+    return typeof value === 'boolean';
+  }
+
+  setField(key: string, value: string | boolean): void {
     this.dirty.set(true);
     this.form.update((form) => ({
       ...form,
@@ -188,23 +222,17 @@ export class GenerateDialog implements OnInit {
 
   submit(): void {
     this.formError.set(null);
-    const document = this.dialogData?.document;
-    if (!document) return;
+    const id = this.dialogData?.documentId;
+    if (!id || this.blocked()) return;
 
-    // The caller hides the action, but a document can change status while this
-    // dialog is open — re-check rather than let the request 409.
-    if (!canUploadVersion(document.status)) {
-      this.formError.set(
-        this.translate.instant(
-          'ADMINISTRATIVE_DOCUMENT.DIALOGS.GENERATE.ERRORS.NOT_ALLOWED',
-        ) as string,
-      );
-      return;
-    }
-
+    // The procedure may have been sent while this dialog was open: the annex's
+    // 409 (GENERATION_NOT_ALLOWED) then lands in the form, below.
     this.submitting.set(true);
     this.service
-      .generateDocument(document.id, { data: toPayload(this.form(), this.original) })
+      .generateDocument(id, {
+        data: toPayload(this.form(), this.original),
+        upgrade_template: this.upgradeTemplate,
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -217,13 +245,15 @@ export class GenerateDialog implements OnInit {
         error: (error: unknown) => {
           this.submitting.set(false);
           const code = extractApiErrorCode(error);
-          // All four are about this document or this payload, so they belong in
-          // the form rather than in a toast that vanishes.
+          // All five are about this document or this payload, so they belong in
+          // the form rather than in a toast that vanishes. GENERATION_BLOCKED
+          // means the CRM changed while the dialog was open: « Recharger » shows why.
           if (
             code === ERROR_CODE.GENERATION_NOT_ALLOWED ||
             code === ERROR_CODE.TEMPLATE_NOT_REGISTERED ||
             code === ERROR_CODE.RENDER_ALREADY_IN_FLIGHT ||
-            code === ERROR_CODE.TOO_MANY_ROWS
+            code === ERROR_CODE.TOO_MANY_ROWS ||
+            code === ERROR_CODE.GENERATION_BLOCKED
           ) {
             this.formError.set(extractApiErrorMessage(error));
             return;

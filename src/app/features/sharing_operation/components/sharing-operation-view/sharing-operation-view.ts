@@ -30,6 +30,16 @@ import { MeterPartialQuery, PartialMeterDTO } from '../../../../shared/dtos/mete
 import { Pagination } from '../../../../core/dtos/api.response';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.utils';
 import { CommunityServicesStore } from '../../../../core/services/community-services.store';
+import { RegulatoryBadgeComponent } from '../../../../shared/components/regulatory-badge/regulatory-badge';
+import {
+  operationRegulatoryStatus,
+  operationUnnotified,
+  regulatoryKey,
+} from '../../../../shared/components/regulatory-badge/operation-regulatory-status';
+import {
+  RegulatoryStatusDTO,
+  RegulatorySubjectType,
+} from '../../../../shared/dtos/regulatory-status.dtos';
 import { SharingOperationService } from '../../../../shared/services/sharing_operation.service';
 import { MeterService } from '../../../../shared/services/meter.service';
 import { SnackbarNotification } from '../../../../shared/services-ui/snackbar.notifcation.service';
@@ -90,6 +100,7 @@ import { LocaleDatePipe } from '../../../../shared/pipes/locale-format/locale-fo
     TabList,
     Tab,
     SharingOperationMetersList,
+    RegulatoryBadgeComponent,
     TabPanel,
     TabPanels,
     BackArrow,
@@ -131,6 +142,10 @@ export class SharingOperationView implements OnInit {
   /** The operation's current perimeter, as map filters. */
   readonly mapQuery = computed<MeterMapQuery>(() => ({ sharing_operation_id: this.id() }));
   readonly sharingOperation = signal<SharingOperationDTO | undefined>(undefined);
+  /** The espace administratif's view of the operation: its keys' badges, what is still to notify. */
+  readonly regulatory = operationRegulatoryStatus(() => this.id() || null);
+  readonly unnotified = operationUnnotified(() => this.id() || null);
+  readonly SubjectType = RegulatorySubjectType;
   readonly sharingOperationKeys = signal<SharingOperationKeyDTO[]>([]);
   readonly loadingSharingOperationKeys = signal<boolean>(true);
   readonly paginationSharingOperationKey = signal<Pagination>({
@@ -152,6 +167,10 @@ export class SharingOperationView implements OnInit {
 
   readonly hasKey = computed(() => !!this.sharingOperation()?.key?.key);
   readonly hasWaitingKey = computed(() => !!this.sharingOperation()?.key_waiting_approval);
+
+  keyRegulatory(id_key: number): RegulatoryStatusDTO | undefined {
+    return this.regulatory().get(regulatoryKey(RegulatorySubjectType.KEY, id_key));
+  }
 
   ngOnInit(): void {
     this.isLoading.set(true);

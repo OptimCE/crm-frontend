@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/users"
   },
@@ -34,7 +34,8 @@
       "target": "users-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "Deze pagina toont de accounts die aan de gemeenschap gekoppeld zijn, met hun rol. Hier nodigt u een manager uit, wijzigt u een rol of trekt u een toegang in.",
-      "title": "De gebruikers van de gemeenschap"
+      "title": "De gebruikers van de gemeenschap",
+      "waitFor": "users-community-list__table"
     },
     {
       "advance": {

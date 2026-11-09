@@ -86,3 +86,40 @@
   background: var(--sidebar-accent, #43a047);
   border-radius: 0 3px 3px 0;
 }
+
+/* A count on the entry (the administrative badge): a pill after the label
+   when open, a small number on the icon when collapsed. */
+.sidebar-item__icon-wrapper {
+  position: relative;
+}
+
+.sidebar-item__badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--p-primary-100, #c8e6c9);
+  color: var(--p-primary-800, #2e7d32);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+}
+
+.sidebar-item__badge--danger {
+  background: var(--p-red-500, #ef4444);
+  color: #fff;
+}
+
+.sidebar-item__badge--dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  margin-left: 0;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 0.62rem;
+  line-height: 16px;
+}

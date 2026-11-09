@@ -69,32 +69,6 @@
         />
       </div>
 
-      <div class="sm:col-span-2">
-        <span class="field-label">{{
-          'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.SORT' | translate
-        }}</span>
-        <div class="flex gap-2">
-          <p-select
-            [options]="sortOptions()"
-            [(ngModel)]="sortField"
-            (ngModelChange)="applyFilters()"
-            optionLabel="label"
-            optionValue="value"
-            appendTo="body"
-            class="flex-1"
-            data-testid="dossier-list__select--sort"
-          />
-          <p-button
-            [icon]="sortOrder === 'asc' ? 'pi pi-sort-amount-up' : 'pi pi-sort-amount-down'"
-            [outlined]="true"
-            severity="secondary"
-            (onClick)="toggleSortOrder()"
-            [attr.aria-label]="'ADMINISTRATIVE_DOCUMENT.LIST.FILTERS.TOGGLE_ORDER' | translate"
-            data-testid="dossier-list__btn--sort-order"
-          />
-        </div>
-      </div>
-
       <div class="flex items-end">
         <p-button
           icon="pi pi-filter-slash"
@@ -110,7 +84,7 @@
 
   <!-- Data table -->
   <p-table
-    [value]="dossiers()"
+    [value]="procedures()"
     [lazy]="true"
     (onLazyLoad)="lazyLoad($event)"
     [rows]="pagination().limit"
@@ -127,16 +101,18 @@
     <ng-template pTemplate="header">
       <tr>
         <th class="text-base px-3">{{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.TYPE' | translate }}</th>
-        <th class="text-base px-3">{{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.TITLE' | translate }}</th>
         <th class="text-base px-3">
           {{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.OPERATION' | translate }}
         </th>
         <th class="text-base px-3">{{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.STATUS' | translate }}</th>
         <th class="text-base px-3">
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.LIST.NEXT_ACTION' | translate }}
+        </th>
+        <th class="text-base px-3">
           {{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.EXTERNAL_REF' | translate }}
         </th>
         <th class="text-base px-3">
-          {{ 'ADMINISTRATIVE_DOCUMENT.LIST.COL.SUBMITTED_AT' | translate }}
+          {{ 'ADMINISTRATIVE_DOCUMENT.PROCEDURES.LIST.UPDATED_AT' | translate }}
         </th>
       </tr>
     </ng-template>
@@ -144,23 +120,30 @@
     <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
       <tr
         class="hover:bg-primary-50 cursor-pointer"
-        (click)="openDossier(row)"
+        (click)="openProcedure(row)"
         [attr.data-testid]="'dossier-list__row--' + rowIndex"
       >
-        <td class="text-sm">{{ typeLabelKey(row) | translate }}</td>
-        <td class="text-sm">{{ row.title ?? '—' }}</td>
-        <td class="text-sm">{{ operationName(row) }}</td>
+        <td class="text-sm">{{ typeLabel(row) }}</td>
+        <td class="text-sm">{{ row.operation_name ?? '—' }}</td>
         <td class="text-sm">
           <p-tag
-            [value]="statusLabelKey(row) | translate"
+            [value]="stepLabel(row)"
             [severity]="statusSeverity(row)"
             data-testid="dossier-list__tag--status"
           />
         </td>
-        <td class="text-sm font-mono">{{ row.external_ref ?? '—' }}</td>
-        <td class="text-sm whitespace-nowrap">
-          {{ row.submitted_at ? (row.submitted_at | localeDate: 'short') : '—' }}
+        <td class="text-sm">
+          {{ nextAction(row) || '—' }}
+          @if (due(row); as d) {
+            <span
+              class="block text-xs"
+              [class]="row.overdue ? 'text-red-700' : 'text-surface-500'"
+              >{{ d.key | translate: d.params }}</span
+            >
+          }
         </td>
+        <td class="text-sm font-mono">{{ row.external_ref ?? '—' }}</td>
+        <td class="text-sm whitespace-nowrap">{{ row.updated_at | localeDate: 'short' }}</td>
       </tr>
     </ng-template>
 

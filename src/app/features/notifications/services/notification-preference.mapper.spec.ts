@@ -100,3 +100,42 @@ describe('preferencesFromRows', () => {
     expect(reloaded.find((r) => r.prefix === 'invoice')?.email).toBe(true);
   });
 });
+
+describe('a summary prefix (the administrative summary)', () => {
+  const DIGEST: NotificationPreferencesDTO = {
+    type_prefixes: ['admin_deadline', 'admin_digest'],
+    digest_prefixes: ['admin_digest'],
+    preferences: [],
+  };
+
+  it('is a summary row, its email on with no row and off with OFF', () => {
+    const at = (mode?: PreferenceMode): PreferenceRow | undefined =>
+      rowsFromPreferences({
+        ...DIGEST,
+        preferences:
+          mode === undefined
+            ? []
+            : [{ type_prefix: 'admin_digest', channel: NotificationChannel.EMAIL, mode }],
+      }).find((r) => r.prefix === 'admin_digest');
+
+    expect(at()?.digest).toBe(true);
+    expect(at()?.email).toBe(true);
+    expect(at(PreferenceMode.OFF)?.email).toBe(false);
+    const deadline = rowsFromPreferences(DIGEST).find((r) => r.prefix === 'admin_deadline');
+    expect(deadline?.digest).toBeUndefined();
+  });
+
+  it('sends its email OFF row when turned off, never an in-app row', () => {
+    const rows = rowsFromPreferences(DIGEST);
+    const digest = rows.find((r) => r.prefix === 'admin_digest');
+    if (!digest) throw new Error('no summary row');
+
+    expect(preferencesFromRows(rows)).toEqual([]);
+    digest.inapp = false; // ignored: a summary is email only
+    expect(preferencesFromRows(rows)).toEqual([]);
+    digest.email = false;
+    expect(preferencesFromRows(rows)).toEqual([
+      { type_prefix: 'admin_digest', channel: NotificationChannel.EMAIL, mode: PreferenceMode.OFF },
+    ]);
+  });
+});

@@ -1,5 +1,5 @@
 {
-  "buildId": "e760a2f57765",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/administrative-document"
   },
@@ -11,59 +11,21 @@
   "steps": [
     {
       "advance": {
-        "on": "manual"
+        "on": "click"
       },
-      "id": "dossier-list__empty--message",
-      "target": "dossier-list__empty--message",
-      "targetClick": "next",
-      "text": "Diese Seite verfolgt die bei der CWaPE und dem Netzbetreiber eingereichten Dossiers. Jedes Dossier betrifft genau eine Teilungsoperation: Eine Gemeinschaft, die mehrere betreibt, reicht pro Operation ein Dossier ein.",
-      "title": "Noch kein Dossier",
-      "waitFor": "dossier-list__table"
+      "id": "procedure-dashboard__btn--create",
+      "target": "procedure-dashboard__btn--create",
+      "text": "Die meisten Verfahren eröffnen sich von selbst. Diejenigen, die noch keine Änderung im CRM auslöst — die Genehmigung einer neuen Operation, das Ende einer Teilung, die Aktualisierung der Angaben der Gemeinschaft —, eröffnen Sie mit „Neues Verfahren“.",
+      "title": "Ein Verfahren von Hand eröffnen"
     },
     {
       "advance": {
         "on": "click"
       },
-      "id": "dossier-list__btn--create",
-      "target": "dossier-list__btn--create",
-      "text": "Klicken Sie auf „Neues Dossier“, um das Formular zum Anlegen zu öffnen.",
-      "title": "Dossier anlegen"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
       "id": "dossier-create-dialog__select--type",
       "target": "dossier-create-dialog__select--type",
-      "text": "Der Typ bestimmt, welche regulatorischen Fristen anschließend berechnet werden. Hier eine Gründungsmeldung für eine Gemeinschaft.",
-      "title": "Dossiertyp wählen"
-    },
-    {
-      "advance": {
-        "on": "change"
-      },
-      "id": "dossier-create-dialog__select--operation",
-      "target": "dossier-create-dialog__select--operation",
-      "text": "Wählen Sie die betreffende Teilungsoperation. Sie liefert die Mitglieder und Zähler, die in den Dokumenten des Dossiers aufgeführt werden.",
-      "title": "Teilungsoperation wählen"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "dossier-create-dialog__input--title",
-      "target": "dossier-create-dialog__input--title",
-      "text": "Geben Sie der Akte einen Titel, der sie von den anderen unterscheidet.",
-      "title": "Die Akte benennen"
-    },
-    {
-      "advance": {
-        "on": "input"
-      },
-      "id": "dossier-create-dialog__input--external-ref",
-      "target": "dossier-create-dialog__input--external-ref",
-      "text": "Die Bezeichnung ist frei wählbar: Sie hilft Ihnen, das Dossier wiederzufinden. Das Aktenzeichen ist das von der Behörde vergebene — es identifiziert das Dossier eindeutig und bleibt später änderbar.",
-      "title": "Bezeichnung und Aktenzeichen"
+      "text": "Wählen Sie das Verfahren aus dem Katalog Ihrer Regulierungsbehörde.",
+      "title": "Art des Verfahrens"
     },
     {
       "advance": {
@@ -71,38 +33,29 @@
       },
       "id": "dossier-create-dialog__btn--submit",
       "target": "dossier-create-dialog__btn--submit",
-      "text": "Bestätigen Sie: Das Dossier wird angelegt und in die Dossierliste aufgenommen.",
+      "text": "Bestätigen Sie: OptimCE eröffnet das Verfahren als Entwurf und zeigt seine Seite an.",
       "title": "Anlegen"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "the-dossier-appears-in-the-list",
-      "target": null,
-      "text": "Das Dossier erscheint in der Tabelle mit dem Status „In Vorbereitung“. Solange es nicht eingereicht ist, bleibt es bearbeitbar, und es läuft keine Frist.",
-      "title": "Das Dossier ist angelegt",
-      "waitFor": "dossier-list__row--0"
-    },
-    {
-      "advance": {
-        "on": "click"
-      },
-      "id": "dossier-list__row--0",
-      "target": "dossier-list__row--0",
-      "text": "Klicken Sie an einer beliebigen Stelle auf die Zeile, um die Dossierseite zu öffnen.",
-      "title": "Dossier öffnen"
+      "id": "procedure-detail__frieze",
+      "target": "procedure-detail__frieze",
+      "targetClick": "next",
+      "text": "Oben der Empfänger und die einzige Aktion, die jetzt zählt. Darunter die Schritte, die die Regulierungsbehörde vorsieht, jeweils mit ihrer gesetzlichen Frist: Der aktuelle Schritt ist hervorgehoben.",
+      "title": "Die Seite des Verfahrens"
     },
     {
       "advance": {
         "on": "manual"
       },
-      "id": "the-dossier-detail-page-opens",
-      "target": null,
-      "text": "Die Seite bündelt alles rund um das Dossier: seine Dokumente, seine Fristen und den Verlauf seiner Statusänderungen. Die Schaltflächen oben bieten nur die Statusänderungen an, die in diesem Moment zulässig sind.",
-      "title": "Die Dossierseite",
-      "waitFor": "dossier-detail__tag--status"
+      "id": "dossier-documents-panel__row--0",
+      "target": "dossier-documents-panel__row--0",
+      "targetClick": "next",
+      "text": "Das Verfahren listet sofort die Unterlagen auf, die die Regulierungsbehörde erwartet, bei Bedarf eine pro Mitglied. Jede wird aus dem CRM erzeugt oder als Datei angehängt; sind alle bereit, ist das Verfahren versandbereit.",
+      "title": "Die einzureichenden Unterlagen"
     }
   ],
-  "title": "Verwaltungsdossier anlegen"
+  "title": "Ein Verfahren eröffnen"
 }

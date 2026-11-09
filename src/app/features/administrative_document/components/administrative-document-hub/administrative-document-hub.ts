@@ -8,6 +8,7 @@ import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { DeadlineDashboard } from '../deadline-dashboard/deadline-dashboard';
 import { DossierList } from '../dossier-list/dossier-list';
 import { MyFilings } from '../my-filings/my-filings';
+import { ProcedureDashboard } from '../../procedures/procedure-dashboard/procedure-dashboard';
 
 /**
  * Entry point for `/administrative-document`, role-branched exactly like
@@ -30,6 +31,7 @@ import { MyFilings } from '../my-filings/my-filings';
     TabPanel,
     Tab,
     HeaderPage,
+    ProcedureDashboard,
     DossierList,
     DeadlineDashboard,
     MyFilings,

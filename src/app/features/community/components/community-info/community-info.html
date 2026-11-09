@@ -155,6 +155,56 @@
                 {{ community()!.account_holder_name || '—' }}
               </span>
             </div>
+
+            <!-- Representative and founding documents -->
+            <div class="border-t border-surface-200 mt-2 pt-4">
+              <h3 class="text-sm font-semibold text-surface-700 m-0">
+                {{ 'COMMUNITY_INFO.REPRESENTATIVE_SECTION' | translate }}
+              </h3>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.REPRESENTATIVE' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--representative">
+                @if (
+                  community()!.representative_first_name || community()!.representative_last_name
+                ) {
+                  {{ community()!.representative_first_name }}
+                  {{ community()!.representative_last_name }}
+                } @else {
+                  —
+                }
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{
+                'COMMUNITY_INFO.REPRESENTATIVE_EMAIL' | translate
+              }}</span>
+              <span class="field-value" data-testid="community-info__view--representative-email">
+                {{ community()!.representative_email || '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.STATUTES_DATE' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--statutes-date">
+                {{ community()!.statutes_date ? (community()!.statutes_date | localeDate) : '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{
+                'COMMUNITY_INFO.INTERNAL_RULES_DATE' | translate
+              }}</span>
+              <span class="field-value" data-testid="community-info__view--internal-rules-date">
+                {{
+                  community()!.internal_rules_date
+                    ? (community()!.internal_rules_date | localeDate)
+                    : '—'
+                }}
+              </span>
+            </div>
           </div>
         </div>
       </p-card>
@@ -392,6 +442,94 @@
                   <small class="text-surface-400 block mt-1">{{
                     'COMMUNITY_INFO.ACCOUNT_HOLDER_HINT' | translate
                   }}</small>
+                </div>
+              </div>
+
+              <!-- Representative and founding documents -->
+              <div class="border-t border-surface-200 mt-2 pt-4">
+                <h3 class="text-sm font-semibold text-surface-700 m-0">
+                  {{ 'COMMUNITY_INFO.REPRESENTATIVE_SECTION' | translate }}
+                </h3>
+                <small class="text-surface-500 block mt-1">{{
+                  'COMMUNITY_INFO.REPRESENTATIVE_HINT' | translate
+                }}</small>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div class="sm:col-span-6">
+                  <label class="field-label" for="community-info-representative-first-name">{{
+                    'COMMUNITY_INFO.REPRESENTATIVE_FIRST_NAME' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    id="community-info-representative-first-name"
+                    formControlName="representative_first_name"
+                    class="w-full"
+                    data-testid="community-info__input--representative-first-name"
+                  />
+                </div>
+                <div class="sm:col-span-6">
+                  <label class="field-label" for="community-info-representative-last-name">{{
+                    'COMMUNITY_INFO.REPRESENTATIVE_LAST_NAME' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    id="community-info-representative-last-name"
+                    formControlName="representative_last_name"
+                    class="w-full"
+                    data-testid="community-info__input--representative-last-name"
+                  />
+                </div>
+                <div class="sm:col-span-12">
+                  <label class="field-label" for="community-info-representative-email">{{
+                    'COMMUNITY_INFO.REPRESENTATIVE_EMAIL' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    type="email"
+                    id="community-info-representative-email"
+                    formControlName="representative_email"
+                    class="w-full"
+                    data-testid="community-info__input--representative-email"
+                  />
+                  @if (
+                    form.controls.representative_email.touched &&
+                    form.controls.representative_email.errors?.['email']
+                  ) {
+                    <small class="text-red-600">{{
+                      'COMMUNITY_INFO.ERRORS.INVALID_EMAIL' | translate
+                    }}</small>
+                  }
+                </div>
+                <div class="sm:col-span-6">
+                  <label class="field-label" for="community-info-statutes-date">{{
+                    'COMMUNITY_INFO.STATUTES_DATE' | translate
+                  }}</label>
+                  <p-datepicker
+                    inputId="community-info-statutes-date"
+                    formControlName="statutes_date"
+                    dateFormat="dd/mm/yy"
+                    appendTo="body"
+                    [fluid]="true"
+                    [showIcon]="true"
+                    [showClear]="true"
+                    data-testid="community-info__date--statutes"
+                  />
+                </div>
+                <div class="sm:col-span-6">
+                  <label class="field-label" for="community-info-internal-rules-date">{{
+                    'COMMUNITY_INFO.INTERNAL_RULES_DATE' | translate
+                  }}</label>
+                  <p-datepicker
+                    inputId="community-info-internal-rules-date"
+                    formControlName="internal_rules_date"
+                    dateFormat="dd/mm/yy"
+                    appendTo="body"
+                    [fluid]="true"
+                    [showIcon]="true"
+                    [showClear]="true"
+                    data-testid="community-info__date--internal-rules"
+                  />
                 </div>
               </div>
             </div>

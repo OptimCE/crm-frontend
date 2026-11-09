@@ -102,6 +102,23 @@
           [routerLinkUrl]="'/home'"
           [sidebarOpen]="sidebarOpen()"
         ></li>
+        <!-- « À signer »: the user's own signature slots, across every
+             community, so outside the community section. Shown once there is
+             anything to list; the badge counts what can be signed now. -->
+        @if (signatureStore.hasAny()) {
+          <li
+            data-testid="navbar__menu--signatures"
+            appSidebarItem
+            (sidebarClose)="closeSideBar()"
+            [icon]="'pi pi-pen-to-square'"
+            [isRouteActive]="isRouteActive().signatures"
+            [name]="'NAVBAR.SIGNATURES' | translate"
+            [routerLinkUrl]="'/signatures'"
+            [sidebarOpen]="sidebarOpen()"
+            [badge]="signatureBadge()"
+            [badgeTitle]="signatureBadgeTitle()"
+          ></li>
+        }
         <li
           data-testid="sidebar-element__link--users"
           appSidebarItem
@@ -242,6 +259,26 @@
               [isRouteActive]="isRouteActive().administrative_document"
               [name]="'NAVBAR.ADMINISTRATIVE_DOCUMENT' | translate"
               [routerLinkUrl]="'/administrative-document'"
+              [sidebarOpen]="sidebarOpen()"
+              [badge]="adminBadge()"
+              [badgeSeverity]="adminBadgeSeverity()"
+              [badgeTitle]="adminBadgeTitle()"
+            ></li>
+          }
+          <!-- The community's signature requests: its managers follow them
+               here (the route is module- and role-gated alike). -->
+          @if (
+            communityServicesStore.isActive('signature') &&
+            userContextService.compareWithActiveRole(Role.GESTIONNAIRE)
+          ) {
+            <li
+              data-testid="navbar__menu--signatures-community"
+              appSidebarItem
+              (sidebarClose)="closeSideBar()"
+              [icon]="'pi pi-file-check'"
+              [isRouteActive]="isRouteActive().signatures_community"
+              [name]="'NAVBAR.SIGNATURES_COMMUNITY' | translate"
+              [routerLinkUrl]="'/signatures/community'"
               [sidebarOpen]="sidebarOpen()"
             ></li>
           }

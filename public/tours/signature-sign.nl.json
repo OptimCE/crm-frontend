@@ -1,0 +1,99 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-sign/nl.html",
+  "id": "signature-sign",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-inbox__row--0",
+      "target": "signature-inbox__row--0",
+      "targetClick": "next",
+      "text": "Onder **“Wachtend op uw handtekening”** vermeldt elk document van welke gemeenschap het komt, in welke hoedanigheid u ondertekent en tot wanneer. De reeds ondertekende documenten staan verderop.",
+      "title": "De te ondertekenen documenten",
+      "waitFor": "signature-inbox__button--sign-0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-inbox__button--sign-0",
+      "target": "signature-inbox__button--sign-0",
+      "text": "Klik op **“Ondertekenen”** om het document te openen.",
+      "title": "Het document openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__document",
+      "target": "signature-sign__document",
+      "targetClick": "next",
+      "text": "Het volledige document wordt getoond: lees het voordat u ondertekent. De plaats van uw handtekening is erop omkaderd, en **“Naar mijn handtekening”** brengt u erheen.",
+      "title": "Het document lezen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__capacity",
+      "target": "signature-sign__capacity",
+      "targetClick": "next",
+      "text": "Onder de titel vermeldt de applicatie in welke hoedanigheid u ondertekent. Wanneer u voor een deelnemer ondertekent, is dat **“In naam en voor rekening van”** die deelnemer: de ondertekende pdf vermeldt uw naam en de zijne.",
+      "title": "Voor wie u ondertekent"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__field--place",
+      "target": "signature-sign__field--place",
+      "text": "Vul onder **“In te vullen”** de velden in die het document vraagt, hier de plaats. De datum wordt bij het ondertekenen vanzelf ingevuld.",
+      "title": "De velden invullen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__tab--typed",
+      "target": "signature-sign__tab--typed",
+      "text": "Kies onder **“Uw handtekening”** of u uw naam wilt **“Typen”** of uw handtekening met de vinger of de muis wilt **“Tekenen”**.",
+      "title": "Kiezen hoe u ondertekent"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__typed-name",
+      "target": "signature-sign__typed-name",
+      "text": "Typ **uw naam, zoals hij zal verschijnen** op het document. Het voorbeeld eronder toont de handtekening die wordt aangebracht.",
+      "title": "Uw naam typen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__consent-text",
+      "target": "signature-sign__consent-text",
+      "text": "Lees de akkoordtekst en vink hem aan: u bevestigt dat u dit document elektronisch ondertekent. De knop **“Ondertekenen”** wordt actief zodra alles is ingevuld.",
+      "title": "Uw akkoord geven"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__button--sign",
+      "target": "signature-sign__button--sign",
+      "text": "Klik op **“Ondertekenen”**. Als u zich meer dan enkele minuten geleden hebt aangemeld, vraagt de applicatie u eerst om opnieuw aan te melden: zo wordt bewezen dat u het echt bent. Wat u hebt voorbereid, blijft bewaard.",
+      "title": "Ondertekenen"
+    }
+  ],
+  "title": "Een document ondertekenen in de applicatie"
+}

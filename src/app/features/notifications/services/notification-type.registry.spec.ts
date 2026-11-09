@@ -52,11 +52,11 @@ describe('presentationFor', () => {
 describe('routeFor', () => {
   it('deep-links a dossier notification from its data', () => {
     expect(routeFor(notification('admin_dossier.acknowledged', { dossier_id: 42 }))).toBe(
-      '/administrative-document/dossiers/42',
+      '/administrative-document/procedures/42',
     );
     // JSONB ids can arrive as strings.
     expect(routeFor(notification('admin_deadline.missed', { dossier_id: '42' }))).toBe(
-      '/administrative-document/dossiers/42',
+      '/administrative-document/procedures/42',
     );
   });
 
@@ -85,6 +85,75 @@ describe('routeFor', () => {
     ]) {
       expect(routeFor(notification(type, { invoice_id: 8 }))).toBe('/billing');
     }
+  });
+
+  it("sends a member's meter notice to their own meter, an EAN of 18 digits only", () => {
+    expect(routeFor(notification('admin_meter.active', { ean: '541448000000000001' }))).toBe(
+      '/users/me/meters/541448000000000001',
+    );
+    for (const bad of ['../../evil', '54144800000000000', 541448, null]) {
+      expect(routeFor(notification('admin_meter.active', { ean: bad }))).toBe('/users');
+    }
+  });
+
+  it('deep-links an effect applied and an answer recorded to their procedure', () => {
+    for (const type of ['admin_effect.applied', 'admin_correspondence.recorded']) {
+      expect(routeFor(notification(type, { dossier_id: 7 }))).toBe(
+        '/administrative-document/procedures/7',
+      );
+    }
+  });
+
+  const SIGNATURE_TYPES = [
+    'signature.requested',
+    'signature.reminder',
+    'signature.signed',
+    'signature.declined',
+    'signature.completed',
+  ];
+
+  it('registers the five signature types with the pen icon, cross-community', () => {
+    // /signatures is not the active community's (only /signatures/community
+    // is, and no notification points there): no feature gate.
+    for (const type of SIGNATURE_TYPES) {
+      const presentation = presentationFor(type);
+      expect(presentation.icon).toBe('pi pi-pen-to-square');
+      expect(presentation.crossCommunity).toBe(true);
+      expect(presentation.feature).toBeUndefined();
+    }
+  });
+
+  it('follows the signature annexe’s own link: the signing screen, a request, the inbox', () => {
+    const request = '1b4e28ba-2fa1-11d2-883f-0016d3cca427';
+    const signer = '6fa459ea-ee8a-3ca4-894e-db77e160355e';
+    expect(
+      routeFor(
+        notification('signature.requested', { path: `/signatures/${request}/signers/${signer}` }),
+      ),
+    ).toBe(`/signatures/${request}/signers/${signer}`);
+    expect(
+      routeFor(notification('signature.signed', { path: `/signatures/requests/${request}` })),
+    ).toBe(`/signatures/requests/${request}`);
+    expect(routeFor(notification('signature.completed', { path: '/signatures' }))).toBe(
+      '/signatures',
+    );
+  });
+
+  it('refuses any other path and falls back to the inbox', () => {
+    // `route()` output goes to navigateByUrl: nothing but the three shapes.
+    for (const bad of [
+      '/users',
+      '/signatures/../users',
+      '/signatures/requests/abc?x=1',
+      '//evil.example/signatures',
+      'https://evil.example',
+      '/signatures/a/signers/b/extra',
+      null,
+      42,
+    ]) {
+      expect(routeFor(notification('signature.reminder', { path: bad }))).toBe('/signatures');
+    }
+    expect(routeFor(notification('signature.declined'))).toBe('/signatures');
   });
 
   it('returns undefined for a type with no destination', () => {
