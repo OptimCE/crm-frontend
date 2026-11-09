@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/keys/:keyId"
   },
@@ -41,7 +41,8 @@
       ],
       "target": null,
       "text": "Back on the keys list, \"Key 2\" no longer appears: the deletion has been saved.",
-      "title": "Key deleted"
+      "title": "Key deleted",
+      "waitFor": "keys-list__table--keys"
     }
   ],
   "title": "Delete an allocation key"

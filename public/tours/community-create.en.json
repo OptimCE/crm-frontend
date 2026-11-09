@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/users/communities"
   },
@@ -54,8 +54,7 @@
       "target": "user-communities__table",
       "targetClick": "next",
       "text": "\"E2E Community\" now appears in your list. All that's left is to activate it and start setting it up.",
-      "title": "Your new community",
-      "waitFor": "user-communities__row--mobile--0"
+      "title": "Your new community"
     },
     {
       "advance": {

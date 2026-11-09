@@ -158,6 +158,7 @@ export const ERROR_CODE = {
   TEMPLATE_NOT_REGISTERED: 2361,
   RENDER_ALREADY_IN_FLIGHT: 2364,
   TOO_MANY_ROWS: 2365,
+  GENERATION_BLOCKED: 2366,
 } as const;
 
 /** One cell of a filed row: the regulator's field name and the value filed. */

@@ -1,0 +1,76 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-signed-evidence/fr.html",
+  "id": "signature-signed-evidence",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Quand le participant a signé, la pièce affiche **« Signé électroniquement »**. Le PDF signé et scellé est devenu sa version finale : il n'y a rien à téléverser.",
+      "title": "La pièce est signée",
+      "waitFor": "dossier-documents-panel__signature-status-2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__button--signature-evidence-2",
+      "target": "dossier-documents-panel__button--signature-evidence-2",
+      "targetClick": "next",
+      "text": "**« Preuve »** télécharge le rapport de preuve : qui a signé, quand, pour le compte de qui, et l'empreinte du document. Gardez-le avec le dossier, il atteste la signature.",
+      "title": "La preuve de la signature",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "text": "Cliquez sur **« Suivre »** pour ouvrir la page de la demande.",
+      "title": "Ouvrir la demande de signature"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Chaque signataire est listé avec la date de sa signature. Quand une autre personne signe pour le participant, la ligne dit **« Au nom et pour le compte de »** le participant et **« Signé par »** la personne qui a signé, comme le PDF.",
+      "title": "Qui a signé",
+      "waitFor": "signature-request__signed-by--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__button--download-final",
+      "target": "signature-request__button--download-final",
+      "targetClick": "next",
+      "text": "**« Télécharger le document signé »** donne le PDF scellé. **« Preuve (PDF) »** est le rapport lisible, **« Preuve (JSON) »** les mêmes faits pour un contrôle automatique.",
+      "title": "Le document signé et sa preuve"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "L'**« Historique »** retrace chaque étape, de la création de la demande au document finalisé. **« Journal intègre »** confirme que personne ne l'a modifié depuis.",
+      "title": "L'historique"
+    }
+  ],
+  "title": "Retrouver un document signé et sa preuve"
+}

@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/managers"
   },
@@ -34,7 +34,8 @@
       "target": "managers-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "Deze pagina toont de beheerders en managers van de gemeenschap met hun rol. U kunt op rol filteren of een persoon zoeken. Dit is een weergave om te raadplegen: u kunt niets wijzigen.",
-      "title": "De managers van uw gemeenschap"
+      "title": "De managers van uw gemeenschap",
+      "waitFor": "managers-community-list__table"
     },
     {
       "advance": {
@@ -52,8 +53,7 @@
       "id": "managers-community-list__btn--clear-filters",
       "target": "managers-community-list__btn--clear-filters",
       "text": "De knop “Filters wissen” wist de zoekopdracht en toont opnieuw alle managers.",
-      "title": "De zoekopdracht wissen",
-      "waitFor": "managers-community-list__row--desktop--0"
+      "title": "De zoekopdracht wissen"
     }
   ],
   "title": "De beheerders van uw gemeenschap bekijken"

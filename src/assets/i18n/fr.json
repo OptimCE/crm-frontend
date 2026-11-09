@@ -2718,6 +2718,7 @@
         "FIX": "Corriger dans le CRM",
         "RELOAD": "Recharger depuis le CRM",
         "RELOAD_BLOCKED": "Vous avez modifié le formulaire — recharger effacerait vos corrections.",
+        "BLOCKED": "Ce document ne peut pas être généré tant que ce point n'est pas corrigé dans le CRM.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Le point de fourniture {{subject}} n'est attribué à aucun membre : il ne peut pas être repris sous un nom.",
@@ -2728,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Information manquante pour un membre : {{field}}."
+          },
+          "key": {
+            "missing": "Aucune clé de répartition approuvée n'est liée à cette opération de partage.",
+            "no_iteration": "La clé « {{key}} » n'a aucune itération : elle ne répartit rien.",
+            "iteration_no_consumer": "L'itération {{iteration}} de la clé « {{key}} » ne compte aucun consommateur.",
+            "iterations_total": "Les itérations de la clé « {{key}} » totalisent {{total}} % de l'énergie partagée, pas 100 %."
           }
         }
       }

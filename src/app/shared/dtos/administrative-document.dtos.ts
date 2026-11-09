@@ -63,11 +63,16 @@ export type PrefillData = Record<string, unknown>;
  */
 export interface PrefillWarning {
   code: string;
-  subject_type: 'meter' | 'member' | 'community';
-  /** EAN, member id, or null for a community-level field. Always a string. */
+  subject_type: 'meter' | 'member' | 'community' | 'key' | 'sharing_operation';
+  /** EAN, member/key/operation id, or null for a community-level field. Always a string. */
   subject_id: string | null;
   /** Interpolation values, notably `field` for the snapshot key concerned. */
   params: Record<string, string>;
+  /**
+   * The annex refuses to render (422, code 2366) until this is fixed in the CRM,
+   * e.g. a key description of a key with no iteration.
+   */
+  blocking?: boolean;
 }
 
 export interface PrefillOut {

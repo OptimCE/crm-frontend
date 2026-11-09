@@ -1,0 +1,74 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures/community"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-manager-follows/nl.html",
+  "id": "signature-manager-follows",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__table",
+      "target": "signature-follow__table",
+      "targetClick": "next",
+      "text": "Elk handtekeningverzoek staat er met het document, de herkomst, de voortgang, de vervaldatum en de status. De filter bovenaan houdt alleen de verzoeken met één status over.",
+      "title": "De verzoeken van de gemeenschap",
+      "waitFor": "signature-follow__row--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__progress-0",
+      "target": "signature-follow__progress-0",
+      "targetClick": "next",
+      "text": "De **“Voortgang”** telt de ontvangen handtekeningen: hier **“0 van 1 ondertekend”**, de deelnemer heeft nog niet ondertekend.",
+      "title": "Hoe ver het verzoek staat"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--remind-0",
+      "target": "signature-follow__button--remind-0",
+      "text": "Klik op **“Herinneren”**: elke ondertekenaar die nog niet heeft ondertekend, krijgt een herinnering via een melding en een e-mail.",
+      "title": "De ondertekenaar herinneren"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--open-0",
+      "target": "signature-follow__button--open-0",
+      "text": "Klik op **“Details openen”** om het volledige verzoek te zien.",
+      "title": "Het verzoek openen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Bovenaan de pagina staan de status van het verzoek en de vervaldatum. Onder **“Ondertekenaars”** staat elke persoon met wat hij heeft gedaan: uitgenodigd, bekeken, ondertekend of geweigerd.",
+      "title": "De ondertekenaars",
+      "waitFor": "signature-request__timeline"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "De **“Geschiedenis”** toont elke stap, de herinnering inbegrepen. **“Logboek intact”** bevestigt dat niemand het heeft gewijzigd. Het ondertekende document verschijnt pas wanneer iedereen heeft ondertekend.",
+      "title": "De geschiedenis"
+    }
+  ],
+  "title": "De handtekeningverzoeken volgen"
+}

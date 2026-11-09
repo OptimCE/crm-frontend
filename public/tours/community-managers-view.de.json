@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/managers"
   },
@@ -34,7 +34,8 @@
       "target": "managers-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "Diese Seite listet die Administratoren und Manager der Gemeinschaft mit ihrer Rolle auf. Sie können nach Rolle filtern oder nach einer Person suchen. Es handelt sich um eine reine Leseansicht: Sie können nichts ändern.",
-      "title": "Die Manager Ihrer Gemeinschaft"
+      "title": "Die Manager Ihrer Gemeinschaft",
+      "waitFor": "managers-community-list__table"
     },
     {
       "advance": {
@@ -52,8 +53,7 @@
       "id": "managers-community-list__btn--clear-filters",
       "target": "managers-community-list__btn--clear-filters",
       "text": "Die Schaltfläche „Filter löschen“ löscht die Suche und zeigt wieder alle Manager an.",
-      "title": "Suche zurücksetzen",
-      "waitFor": "managers-community-list__row--desktop--0"
+      "title": "Suche zurücksetzen"
     }
   ],
   "title": "Manager Ihrer Gemeinschaft ansehen"

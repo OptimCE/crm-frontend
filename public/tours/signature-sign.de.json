@@ -1,0 +1,99 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-sign/de.html",
+  "id": "signature-sign",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-inbox__row--0",
+      "target": "signature-inbox__row--0",
+      "targetClick": "next",
+      "text": "Unter **„Warten auf Ihre Unterschrift“** steht bei jedem Dokument, aus welcher Gemeinschaft es kommt, in welcher Eigenschaft Sie unterschreiben und bis wann. Die bereits unterschriebenen Dokumente stehen weiter unten.",
+      "title": "Die zu unterschreibenden Dokumente",
+      "waitFor": "signature-inbox__button--sign-0"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-inbox__button--sign-0",
+      "target": "signature-inbox__button--sign-0",
+      "text": "Klicken Sie auf **„Unterschreiben“**, um das Dokument zu öffnen.",
+      "title": "Das Dokument öffnen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__document",
+      "target": "signature-sign__document",
+      "targetClick": "next",
+      "text": "Das ganze Dokument wird angezeigt: Lesen Sie es, bevor Sie unterschreiben. Die Stelle Ihrer Unterschrift ist darauf umrahmt, und **„Zu meiner Unterschrift“** bringt Sie dorthin.",
+      "title": "Das Dokument lesen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-sign__capacity",
+      "target": "signature-sign__capacity",
+      "targetClick": "next",
+      "text": "Unter dem Titel nennt die Anwendung die Eigenschaft, in der Sie unterschreiben. Unterschreiben Sie für einen Teilnehmer, steht dort **„Im Namen und im Auftrag von“** diesem Teilnehmer: Das unterschriebene PDF trägt Ihren Namen und seinen.",
+      "title": "Für wen Sie unterschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__field--place",
+      "target": "signature-sign__field--place",
+      "text": "Füllen Sie unter **„Auszufüllen“** die Felder aus, die das Dokument verlangt, hier den Ort. Das Datum wird beim Unterschreiben automatisch eingetragen.",
+      "title": "Die Felder ausfüllen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__tab--typed",
+      "target": "signature-sign__tab--typed",
+      "text": "Wählen Sie unter **„Ihre Unterschrift“**, ob Sie Ihren Namen **„Tippen“** oder Ihre Unterschrift mit dem Finger oder der Maus **„Zeichnen“** möchten.",
+      "title": "Wählen, wie Sie unterschreiben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "signature-sign__typed-name",
+      "target": "signature-sign__typed-name",
+      "text": "Tippen Sie **Ihren Namen, wie er erscheinen wird** auf dem Dokument. Die Vorschau darunter zeigt die Unterschrift, die gesetzt wird.",
+      "title": "Ihren Namen tippen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__consent-text",
+      "target": "signature-sign__consent-text",
+      "text": "Lesen Sie den Zustimmungstext und kreuzen Sie ihn an: Sie bestätigen, dass Sie dieses Dokument elektronisch unterschreiben. Die Schaltfläche **„Unterschreiben“** wird aktiv, sobald alles ausgefüllt ist.",
+      "title": "Ihre Zustimmung geben"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-sign__button--sign",
+      "target": "signature-sign__button--sign",
+      "text": "Klicken Sie auf **„Unterschreiben“**. Haben Sie sich vor mehr als einigen Minuten angemeldet, bittet die Anwendung Sie zuerst, sich erneut anzumelden: So wird bewiesen, dass wirklich Sie es sind. Was Sie vorbereitet haben, bleibt erhalten.",
+      "title": "Unterschreiben"
+    }
+  ],
+  "title": "Ein Dokument in der Anwendung unterschreiben"
+}

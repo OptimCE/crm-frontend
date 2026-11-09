@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/keys/:keyId"
   },
@@ -41,7 +41,8 @@
       ],
       "target": null,
       "text": "Terug in de lijst met sleutels staat “Key 2” er niet meer bij: de verwijdering is wel degelijk opgeslagen.",
-      "title": "Sleutel verwijderd"
+      "title": "Sleutel verwijderd",
+      "waitFor": "keys-list__table--keys"
     }
   ],
   "title": "Een verdeelsleutel verwijderen"

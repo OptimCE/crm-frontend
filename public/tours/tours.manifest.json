@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "defaultLocale": "fr",
   "guideOrigin": "https://guide.optimce.be",
   "kind": "steppy-tours-manifest",
@@ -28,10 +28,10 @@
       },
       "id": "admin-doc-document-generate",
       "integrity": {
-        "de": "sha384-KQEQlB632xGE9kpD7ju3D04eeigdnoK66iFaTlPoXJUElxqhFdtUmuOUozlSu/kO",
-        "en": "sha384-wmCt5kiLMdQQQashCQKFAIGbbJED52KL9v4sgN9U5cA+4b8NgiC+EckBpBOzZ6K+",
-        "fr": "sha384-Dal5xLTLy2yq0ghtWE2pgV4Fu8NCJ/XJlRp2Ixn2fzM6QSbzGE+viEH/c2OExfR6",
-        "nl": "sha384-lYujbatBxrHEos6YmcaZwZxjYRH9F07CQWb+g8NTfGc2btuwzes2myN2qz8K28bo"
+        "de": "sha384-PfB4bbqt8buNuLqzDvQNQiTPnj9a/Dw74GoSn3bEJviSVkawuBrK3+sOX2gNc0Vv",
+        "en": "sha384-cyfQ7VwXlv0O9Ainpfh0hfdHjAatLwcEozumQ3OzbqkunBgXZ8CFtuTJ3iocyW2b",
+        "fr": "sha384-m475pvH4qvCPQZwKJZP+RXew99+OZk9YBdNl7iSH3qQ303ZmspglyKP3hvM9nqze",
+        "nl": "sha384-GB5L1UEagQSPphwc5xm8KtbhcOQSHValt7Ffh5t1WyECbgy94z6cHYeHgOEQqQf0"
       },
       "role": "admin",
       "steps": 4,
@@ -54,10 +54,10 @@
       },
       "id": "admin-doc-dossier-create",
       "integrity": {
-        "de": "sha384-j5REg0ElWYMu5DXjw40wkDpFSJvCYGpRrgEEmFB5p8W0+GgfdbQQ6QrDdmjVqSva",
-        "en": "sha384-pC9mH5ZOWM+KHZnor+9gzp9Yl0sMcFLuSXApO1SO/K1KaXjDGKaKeGnqCisqR/dm",
-        "fr": "sha384-of0Ump44Kut6XXt9ppDzZX1L9tydyyj/CwDse9OQjkOUrZiOHj4XNk0V//fWDHVT",
-        "nl": "sha384-LKN1qW2vIQBKq5KHo9soaRjIhTYkLUzypwIB+Yt9HFwhj+OaOy9baDfcjusYFFbg"
+        "de": "sha384-yT9hXybp3ZSkvhO9NFw7TK1uO6Iuqf/PldDqcolARW43Tx0zZ2vhJwBFDIGTnxgo",
+        "en": "sha384-nntssZFzgSRAZ8KweHEjNmYn83IZtGwKsxu4O6+4K0GLRgXlgyv4kzZtC6eJJ79w",
+        "fr": "sha384-JltjsEBexm8CiQHzYmAnJYvWsyHWhBE4WyKS6i31nBjUAL1m1mfFQ5c8H1UrwEWQ",
+        "nl": "sha384-QCq7OrIoGrdliqQuOP3vvyFkyyIJrCrqrwxwg+rp+SzA9qpevY/rw4GUqY/EP1Vd"
       },
       "role": "admin",
       "steps": 5,
@@ -80,10 +80,10 @@
       },
       "id": "admin-doc-my-filings",
       "integrity": {
-        "de": "sha384-128B2Nct6Y6jHIdAjOQmE0+IdLW3nYGpRL+jESUvvu8DxyPJmrf4xsYQCTPflwYT",
-        "en": "sha384-Il/ywy83r0yu2yG/aadxQtBoyRQ6NqB9vM0NCK2t7KDRCldGMU76nnZO+7hHlP+q",
-        "fr": "sha384-GIt0yox0ecMN48XsB2SrAjDcAcHGtSHnYPsmbFNsB+WFYNpA1OJpGUOuEXo29SNk",
-        "nl": "sha384-2dl0tr3wOsDYLLDIJ1hyqqZiKWqlfGVpIP02JXHsVdeIZxy/2EI7MiNOish6F8mZ"
+        "de": "sha384-mVjLgCBnSeSltSUigwg/lDrHalEYlbY1PoQTIT5w0p5s+dQ3P6rQ2me9o3YVEmqI",
+        "en": "sha384-fGdXeo5BrfCmaUPrvDqicmKrGBzMJnpMqkazIf4Nkoqi/xWUVicAy0c3rpvUpKjF",
+        "fr": "sha384-yesK899cJfIJrnlzx5skdMnDp5dyzoL7tOzDQ/zVS/61ySsxIbVUhck5LbWGQ25+",
+        "nl": "sha384-/ynsWK88XbN3l2Sa8KbQ3FmEBrSBpYgJqwr7yTZcTHp8HKKspmHpkbjoycDQOO/A"
       },
       "role": "member",
       "steps": 2,
@@ -106,10 +106,10 @@
       },
       "id": "admin-doc-submit-deadline",
       "integrity": {
-        "de": "sha384-xpzt0tNlVcr5O4ZHvTK9I+dSWZsZBeAjQzd0nwd0HquFIsRwRyuRxtBMDqDRnROf",
-        "en": "sha384-lTdzrNQgXdsAZznoWTO1Y1/0c501+NJzoYu5BoJbHYewxWZJBOnlwZfLA7ED+f8j",
-        "fr": "sha384-/NYVhVuO4Nk004dyLcl0U9PtHUJ3B2MDtJmK8M12VbbT25jYJAY1RQ70rhNT+Smv",
-        "nl": "sha384-IKEN7aT0NYDeq77jSnW9LK9ywFi8dVlo6Siuk2PedocDNKgSgrd82bRPb0MZkhfZ"
+        "de": "sha384-f8gsYx1GB/0LEnRKobPqYyyRN73smBOD4fQy1B7QaHP5lQq6XuAziH7lpeQ6LSZA",
+        "en": "sha384-ogjuQjfmrhXyy5XSAkwA3eNRsp/RAptZp17SY010mcDJaMTmukkraK0uIkC33aWl",
+        "fr": "sha384-21NzYZtTYthRz78iBNskaBgBfLURFCZBukw4GX9JxmEBdU+tlYWDaonjPb0R7B+L",
+        "nl": "sha384-unAplZBUOgUeyqnu2zRH1/y5mIjI7h8bUmxHWhmKfl7AGYd8sUZ37pfTBQFtvvy/"
       },
       "role": "admin",
       "steps": 7,
@@ -132,10 +132,10 @@
       },
       "id": "admin-doc-upload-version",
       "integrity": {
-        "de": "sha384-VwAV6LHYnoLfYMhGznTdSmLSRtVM8mrR/3p6TtkFRh2rPFngK11RnT0NxiuiBq7G",
-        "en": "sha384-ca/SS8hc7Lzl3O6MkmFSz/b0hAUNDEZkjGYh/TTN4X9h9bW1tZHIh7hQva3EKB+v",
-        "fr": "sha384-cXmovEPoyy5HjvrhzQtXf6qQaHmElby548fgnTh5dOAjLMWjoZZIxOp2ZGwUIPAH",
-        "nl": "sha384-83aqckGm4eG7Y2dPmpoJY7QjpgfExwFKSfZd3e7DjWLo6c7aqDMp5lz89tW0Wb6o"
+        "de": "sha384-F7SYrd2zrGTVlVFSjKC2BQGTOdwJH6bEKqJRnZzSll95qWKAKMD9tNgSsrVXDlgT",
+        "en": "sha384-6V2GUONCJcMhmUM/97ODneBxfbUdW+nowXW/Rvkn4ylFVxHXjQIcwAIuJSitWxSV",
+        "fr": "sha384-fX/ENbOzfcp96Ix9wYqVXuxpOP/3TKAgtAHqZolq6nDF8Fv5ALw/O7WuX6fYecCx",
+        "nl": "sha384-ffcMa76aI1EKNbsXzURmuy7k1YK5ktLruyUinRopuaprG0QVDNq+bhiB3ZrAiEXx"
       },
       "role": "admin",
       "steps": 4,
@@ -158,10 +158,10 @@
       },
       "id": "algorithm-delete-generation",
       "integrity": {
-        "de": "sha384-5fNUAR+io4jyx40UOpfjPu8Oqz+4lMXJPv5k7jazNrFVqIXYDISAL0yPG0gkJaph",
-        "en": "sha384-Qqx4v/pSmU/jCxI6g+SzNJF/c/IHlBmgf0MyabIJS0h7MaGB4qHpRwxPXGJw2C+D",
-        "fr": "sha384-6AYs9BNq62bWjenpeRKkWUJjHWRz8Tl/Lqn4aU6q5HmukuvnWM42BohTZkvFNUD+",
-        "nl": "sha384-tr5bOMYQfm6wD+AGa4SaVYAU46U7KRFiTlnDMw24O0bfEkZ2XXodx5H+uPB3qYTS"
+        "de": "sha384-1xncA2xSBKZCtQQSZovjQBq0U5i66kKyzkCd8jcN/EX+Jt5PRqX2cYuiI8ueGT/O",
+        "en": "sha384-lfOz5151iNc4YvplXsj3ZAxOQ5Sayvo1C8KX9PeZboAdc9fvb+LD7mPjj5D5azqu",
+        "fr": "sha384-9B8aETEKxmDn4QTbfbRgHXnL2opaLGWtVw5Dg1IGE0+faibO8wkS2owEYzabtPsX",
+        "nl": "sha384-3g9u3zD2+8L2NbpTfyQKcjtRioHrKflkUv44M4uvT6EXUImiq6jRaOBGjj3WTlPc"
       },
       "role": "admin",
       "steps": 5,
@@ -184,10 +184,10 @@
       },
       "id": "algorithm-delete-key",
       "integrity": {
-        "de": "sha384-LCm2vbSoBzOjVbmrOlVElLO6+9VssYGlw+/bivL5mOFwWai5xL7eMzfw3V+4JLaR",
-        "en": "sha384-raTOCfORqc1TnLsY1VBLwXwZCv30gml3EPdXFoKXDkxE7dKs4ThzORoJkZOXXc6C",
-        "fr": "sha384-XCMvSdLD6MZKvhtgh60TdwM6MPgIbdmZ6zVZGilTNe4pbcrGpwOA0oH10sI4MJc8",
-        "nl": "sha384-GhrYgvzr5xx8wrqqiFQTEG2+K9wj0awIhJPa0VYVSrPXy524k2Lh2bro0jxy95W4"
+        "de": "sha384-zrblR3hs1yQ4T5UGDfnefS4bU3sw3N2skn9YP10J5If1pF7CZyqSB/GIgZPlBlBQ",
+        "en": "sha384-xZ4gK7A8WKEwwu2nUBQgnC4fRdARONoW9VYxuC6YTGinaFD2fv1Q3L7fX8SBnho9",
+        "fr": "sha384-lJN/BgKBDtFoIi6I4rmMDXfVZctC5zpRVxStHHMnbLIZg9mNdibpW+9+X4o0NHDT",
+        "nl": "sha384-99BsB8be4lYctiKPFCbYu245/RxZfoTCV6dHHN7QLW048sNYDw5sWGGfOQpRCfGN"
       },
       "role": "admin",
       "steps": 9,
@@ -210,10 +210,10 @@
       },
       "id": "algorithm-generate",
       "integrity": {
-        "de": "sha384-oA+GczfHhQIYqeUspvrmX2f2oMxP/ArkFVQMbcv9qjqESKt8y5A9bGBtmPrOBtUl",
-        "en": "sha384-fJndkjdq8QLF1AY4AKvg0ioXoxTJyZBw3Fp0O/7+MTvaq6aMoo9KF9uJpCw3AOeA",
-        "fr": "sha384-nkonkVU5cgnJGCsabMtNdyEU8toTEiVhsSLWy5V0cJf167mjuLM+McdCOKA4qFk9",
-        "nl": "sha384-6+c3UxlmhlcQovDT5y8rvMTRIJ5YF2MFjIwQnJZ+hZWqnqdt/n025n/jQvm2UgsC"
+        "de": "sha384-L10ebIX1I5FjCYZgzv+N4A5YQ00ujDOQLzr3ghGx/zXvBlQYbrJpxEY6laX9czBl",
+        "en": "sha384-MXTKYqzKpGJy/WtGqeR0rWlGz8J0nSKKKPO/+H6JVhqsx33G0mR4ZVt7phFoqUBL",
+        "fr": "sha384-2bcP1B91u5hs9xqkLOsCRvYZRRkpIwnDLBwDE1VEcHduQs774EcNNUKKqdNp6xUz",
+        "nl": "sha384-5myC+WYCzaGuJtd/9+rXxsJ2S36lQm81Ji42rQxp2qpOadVOjdMiSeqVom/HRBSq"
       },
       "role": "admin",
       "steps": 18,
@@ -236,10 +236,10 @@
       },
       "id": "annexes-services-subscribe",
       "integrity": {
-        "de": "sha384-3JeZBQVYxXxBzTZxPN507nVj890Ajx7ZRBUg1/boRsDCcGNetcHzHJxZgHHnW8P2",
-        "en": "sha384-GNJ3euqdbuxX5vFf4G2WNUgLT35MooBQhtzyeZyW85SkbJtM3yJhNdB69yQAfkBJ",
-        "fr": "sha384-0tTvqhl+YCjMKW4jllGJRltX80GS57QlWexi/M3S/UxjUZnPhMtK2hIh7UtUlSqQ",
-        "nl": "sha384-ZoPfalcyAXUFIIZ0RcJsCuv4ijzmCWYr6iUBY/oqDct0zRFU/0io/whXUxVINCoJ"
+        "de": "sha384-TmgtKwlB3Dx0A7vdgfWyQrL2Py+U711FcFt411IKy7kte9waJz3cFrQNnbugHrMK",
+        "en": "sha384-duUCyoYwv6yJnic6gkl4jxcQuZKPN/pm5LJPUZnSXhSStq6+F3UJbOpyDtZ1ufxk",
+        "fr": "sha384-lfgJOKzPwUiGKMTiWIN4QiEDhbwvj2e9i5bbPswq2iYSYAN7I3/XGclxqFsUCoyJ",
+        "nl": "sha384-XkrMLC0MBYW6d9BuhJKolIpf83wSf8VMe+XpHXBTI7271UPGYgECIickguP/CMGl"
       },
       "role": "admin",
       "steps": 5,
@@ -262,10 +262,10 @@
       },
       "id": "annexes-services-unsubscribe",
       "integrity": {
-        "de": "sha384-l4DocVrYf6iXACZGYwqbXYIjvgxQe2evuEMZOsh4IeM7fTdla+v1PqFfVIUgSe/L",
-        "en": "sha384-lJJaArhjbNi1s750AAMzf3GXn8jyvrXV6Fab9nhM0yeURoiP1oKPcnxBJWd7hLiq",
-        "fr": "sha384-+Ow4oGD8RI0bgJ5ZiHrYmHNI2uicQolPcjP8IpW3h40W2+iSi4r8bq39Ih4V9m7r",
-        "nl": "sha384-qkH5ZP+UzpQJ/xcMUedWo7xSVuEv5wf17DvUQJE3weArs0iTGiuhXoZFccw2a45I"
+        "de": "sha384-YBx4C4DDtI9M4HU/pCZAIGYZKg1t63iosyu4hIxh/32SzIABGkQguf+c2+GltHMa",
+        "en": "sha384-IMmDvWhF19LRBnszUKs//HRA9S+JRSFV4HgfO8YI1JecMNkzwBCNRpiRe2p7akdf",
+        "fr": "sha384-RSPPXJy215GX64IBVOpCl/J1jYxUiM+oNX+JVW0wTEYJDDwiFAlaI7MzRWCxhtTv",
+        "nl": "sha384-NU7LQeVB+ULTf4YEgeexNlkdpIyaSY9mTgDj9P2vEofdIEmXG/ANLolvd4zwZfN2"
       },
       "role": "admin",
       "steps": 5,
@@ -288,10 +288,10 @@
       },
       "id": "audit-log-inspect",
       "integrity": {
-        "de": "sha384-Hb9bH/C83a+0LaCnouTGxzq241zvlfaZyiZYWQc5HvTwXze+vJd+0FVRxcrauI+C",
-        "en": "sha384-yG/bm6Ae0JMYe3N9d6En7hw/hk6uGxN8Gl1DIRjlV6tCDvKsle57SNywSQ6JPFOn",
-        "fr": "sha384-iineExOWlGuzCA6xnSA80FOB4xtDteLnA0mMcZwtY0ElkLQyCJxstwk7Hz19ivhH",
-        "nl": "sha384-cg03k0PTDUdCCoGpfTrFK2BTiPTJDriuVeawkFLTK1Pgu7tJNcfpRSZgstiNCUL/"
+        "de": "sha384-dhLSYh2ZjwlttVAim6YnGR/FFkCGtrzo829h+1NJS5F1RQdpp4nwr7UjE/GH7qZr",
+        "en": "sha384-ohwdWcmb8W9JgxNP7Q8w07w0jA0oXwwQPctmaZqQykW78lZVE3oCIzAtWO77U7lu",
+        "fr": "sha384-QhNJhBajEZtVj4ZE0fVzqysD2pce+Ur4EM5V2DY5SgPYKt6B8AKsJeitpTWQZZjT",
+        "nl": "sha384-Aw4OLzZW9ytuvl1wOm0enB6D4dbNlZJzyu0bIW8rRyKk5YaxxP+SONUqXWtK9w73"
       },
       "role": "admin",
       "steps": 6,
@@ -314,10 +314,10 @@
       },
       "id": "billing-member-view",
       "integrity": {
-        "de": "sha384-7ldys/8fW1ElqLBk9dcV6SQeW3XsuSH6VhWMlE9WgK1+HM2cgLalSqljcGBD9ZK3",
-        "en": "sha384-HoV2efAEKdD3GIirvCYSnUdMcgtj8HLRBcojpGnloAP6/UuHo6LtVstvBMJiGpDx",
-        "fr": "sha384-l6N6t/8+RS24b4WhA3XimpFCiN0LVok0Lq2FWFQiJetdgJSyzuuRhTqTPbGMlroO",
-        "nl": "sha384-5n9bEb5O5mL0j2HRGtY6Un9oUTNDRfLLz6kM+KxQEIvH+CKNrlzY2VmPyUCgL7eC"
+        "de": "sha384-ixXGvd9HzdfNqsFik9GXRrV6GKKOlFBe3+xc22Nd0JXTbTK0sLlCDldqbCrq59Kr",
+        "en": "sha384-3d3N40ObBmlvY2rnO3HyW/oSPqmLVfnol8ZNmO9OsSHqOj8TLfa+hVM3G4GwmB2f",
+        "fr": "sha384-Fq7iFN844MfSnxHOeX7NBpMLpagkgStXBxw/vDkNt+hinE1EIyytqVbIoRoEQ9AU",
+        "nl": "sha384-ye1cSrCxIqI+Pf/4axjcwdSD4PPqXj6eQfYI73DT+YbXuPYTCVP78Z9R0DdeW+NV"
       },
       "role": "member",
       "steps": 1,
@@ -340,10 +340,10 @@
       },
       "id": "billing-tarification-pay",
       "integrity": {
-        "de": "sha384-xJYM3L4PO1U1r6E67sxHFsQ2wVCFjdkzUZQuwXoM/9aUP79M3f5wnVkzi+LkyB5+",
-        "en": "sha384-IYYgNQkJ0qtP8CLgUy0/pU2SvEfUgCE2VxdnuYp897fz+35dYFo+8nuO2lpAOWsu",
-        "fr": "sha384-5+6jrG34+/An217UR51Ed7zpOE9pbNGI8eqmSVY2i5jFtXkIqBTuUCmqM8IKAX0O",
-        "nl": "sha384-nj067+5Is8iBrW/q1DjOAy8EwLCwecNYomOBra6Vn0Rojy8xcZIfS6m3cDjTRJxR"
+        "de": "sha384-RP3bjkYlmK/2rDBDMYK/L8bwcp4tmo9HFoCumIqHO4mAEUMlgNRibIr/gqXOLLTV",
+        "en": "sha384-znVfgeHJChbzRpWKhKhomRXBpeBiYSj1XwtcUmEThhseIyZh22T7uc7fr+3NWTcp",
+        "fr": "sha384-76JjgSzO17mOlXMMLaafqpH7NS/IRsl5hCYQY1nrNJH8tkwx57dAADXNjgsye52s",
+        "nl": "sha384-FWxCVtpbSjXVejV3ZvG+TMvQQv7LApD816G6jmZOyeKpbVgJ1R1f97D5H/y5yhsZ"
       },
       "role": "admin",
       "steps": 25,
@@ -366,10 +366,10 @@
       },
       "id": "community-activate",
       "integrity": {
-        "de": "sha384-ALncbsG9q3iG7v34lDB6mJd6uMqaGghQo0rTy/cxf5kKOWp+5IWlGHDacTtWYjVr",
-        "en": "sha384-L8sJqCvXHnAmdhx9Q/QKGEw65qTeeYafUGY6xnU/uqsLEtGnAqBMgh2Gc2crQFuu",
-        "fr": "sha384-CUDPfkKF9QyvBD+kcsCWuC53njL6P2bGwpufPGd+t4Upcy9GdR5gXfU+IDwVoRF/",
-        "nl": "sha384-o+or+7r8UjyBbxwkcMvqOtJCBSygJA6eRnQtXuCDUtaiqEID7/hwwl+Pyrl5TQmk"
+        "de": "sha384-lrLkdcFfXWLtUgaWFaGji5aeUktVEGjgB0NGnBDFsxg1EHt36c0KUVNvwl7A0VdM",
+        "en": "sha384-6ZyIbSGXRaqhGyYobk0KQWB/Lzf1UIo5LgtX60Iz/VPq8p+D9WW8vRC9gEDiwsUU",
+        "fr": "sha384-6wiYDjRkM+8M0Ru6evxCIW//Jk6LEhqdk88H6HVEUeuwseeudRtZ/GQDQ1/ko9yB",
+        "nl": "sha384-4TQRWtlm0afyqxXnzV+WjAfoMKB7Uz1vKAFxO6FVW1lA9O6OzS/q5m4L1yANbgTV"
       },
       "role": "admin",
       "steps": 3,
@@ -392,10 +392,10 @@
       },
       "id": "community-create",
       "integrity": {
-        "de": "sha384-xQPaF5SzW0zuwC6cOOulvKUlqfpZzWNI8504xuutJiF++rGgWmkDvdlrmYLns4tV",
-        "en": "sha384-1x9f5Uw7mu4u4kHc4JCICXT9xntKg5tWwJNjcGaSUHin/tqKoLSyeggv6NN5S1wL",
-        "fr": "sha384-fYs+zSf1xOLVBVXm5M1tGygHU2H+OUzFezEfWx0UZDbDaC5RPrQedVR1cP66yTC7",
-        "nl": "sha384-bODDZwP6DrlIGvQoaZ0xO8AQI5b57NWAOdYbPYxUmMkEBeahwCSlaaL7zTCXern6"
+        "de": "sha384-bRGkUHUqpbMcbu2vpht+zrKrzbJKYFIxYGHTRnSluyzxPMbmxd3DtvsSV8R3bp1P",
+        "en": "sha384-SWYC2VduZxBmsWaN+9pvViiIyveuzKU9mOgD3xAykNrVwPpC3EVAwqp+f2iwH5eH",
+        "fr": "sha384-VKG9x5dHvFigm0b8sTg6d0sHvmwjO/Ah2BFmxEqciVRSaWEclv+svwz256y/wcvT",
+        "nl": "sha384-Fp2rzcOVHWjycvuM7hgTtni4nz40Sw5YDy2Pnkp4pW8L7lO+SjKps7NBLSeltimp"
       },
       "role": "admin",
       "steps": 8,
@@ -418,10 +418,10 @@
       },
       "id": "community-create-member",
       "integrity": {
-        "de": "sha384-fonythIoiDniyn+P88wes3NVQNOSbLQJqa3y7FDsKWHSNAFI9dmxDgX//SJbfDNk",
-        "en": "sha384-aAEtCZ+Yp25BL0GyqehCsprhU2ghD5dPl6vCgEmIW+SJ/uJu+fFRRkH1H2Ym8Eer",
-        "fr": "sha384-EsmnDHZwpbBpI0sIfF+TW8iVK7zntP6dhCsInwpjPqUnzhtnOW704QHfo58Z06IP",
-        "nl": "sha384-tGbpj6xq7x0+Pgjs3HfL1/QHlH8Y2LUFb281LD+OJ5xqwPBeqPul1aDQHAuWfTtv"
+        "de": "sha384-G+2YREBqJmmMjSHr1thJ81s2in+LE2wVJSo/vV09O5mIHu15dHA0fy+06xbBuo/z",
+        "en": "sha384-iuzyjCvi/IgnzmLHC22zDbafqHjgGp0MUF8mZWzAQFLYKfWibJb9F4PU24L+IQh8",
+        "fr": "sha384-qehAMgEXWzqRzo+WO9mr0zdTeI6KKv2XsdgFiCKRDScCPBtnlRTIgH+o1Rge3r8a",
+        "nl": "sha384-X2/DqOLQQChqxlFxtcoBzpJvs/Obj+KLMYeRXCBSCSNsDlrdv43/p8r0rPxS4nPh"
       },
       "role": "admin",
       "steps": 20,
@@ -444,10 +444,10 @@
       },
       "id": "community-info-update",
       "integrity": {
-        "de": "sha384-5yv4MJDRZplk8M4vki8S5d8C70KxU106FcOEnl2X4w0xtJdvZ29T7JgY910kTfMd",
-        "en": "sha384-Lgg1SXjWtowpExl2Zl4f5V6HYlZd431OID5ExpZFLXdo1k1QvW4oOWjbdYVdFqws",
-        "fr": "sha384-EtQDVQCP6PrIviZg1WZfl0iAhVVo9ExxnEiuSSknDmPXkkdLnwqOpOv68f/Vg1Hz",
-        "nl": "sha384-+o6fUL3ga9H6Z+YTHsTsLUjPedd6q4w81DdMPzBHSvyWORuEZY5PVzweDu+C2K7R"
+        "de": "sha384-jrghnokY2tjQDLByustwu7rrIdUvJJ3xpzXzi+iXoEalM7Is0f8IeSU3zxpPyxxr",
+        "en": "sha384-ocHHTcmTcrk56pTEg5DwVE5cQ1gO2AzO+Ee2/9Q5nNF0puh12bK2cIoVBw3DhEs1",
+        "fr": "sha384-fQ0lnxbk1/RanYqJgq9IaJHVMzxBCjQhi6fBvoKQlu6SpbCF65oOOP7Bn2u7yQOj",
+        "nl": "sha384-vusntyPYEJbR/SGQV0OENkimZWKbWrmKDWbZJKC+EthA8nyMyitpPa/lB7pppj7H"
       },
       "role": "admin",
       "steps": 10,
@@ -470,10 +470,10 @@
       },
       "id": "community-join-inspect-key",
       "integrity": {
-        "de": "sha384-R2b8eW8he18RLIFRvLY6H6HDnADUX/Q25oFUq45o9gKrk1Gntj5N/Qv7dDERkF6Q",
-        "en": "sha384-k1GHU9MNJe2E/jKxJgVWYYryidxzvow3LeUy8q129oAJn6OOb2ryq+4qlv9sET+W",
-        "fr": "sha384-GGKfRfooD3/WkzEKklJZtQM6x41+FIQ0DICigR62RMI7aHGLWz+Yd9B8cobzP2at",
-        "nl": "sha384-sstTtf+YdSd2vZilNXA98eMsXcYfKf8pEOcAAFGThd/Eb/DrM9xLyuPUgV0FolSy"
+        "de": "sha384-SL/ziuzGJPT0rMMxfPbzzOuro2hZeppzxqaFVyZ5mn0sHbmr8+2XCIjdweopvmrl",
+        "en": "sha384-AnCZnKj7w4fD4056LLRrGSofKgSRfav3PPqtVoDIuY/nkKVKCj4o0ObImeMC2CB/",
+        "fr": "sha384-GNsKy/DhwRTWioomYVwE6bBLHLl+fO2l765g/MV2kThPdgBb8YeUdl35Nv2T5Mj4",
+        "nl": "sha384-T+zTFUP5fYj6dgc2ZMj5svAEyrKNGBfFCmjzFveQMMbz5QoVbrPs8L+MV46aKgs2"
       },
       "role": "admin",
       "steps": 2,
@@ -496,10 +496,10 @@
       },
       "id": "community-join-inspect-meter",
       "integrity": {
-        "de": "sha384-6JWs/AUxzTTuf8caG01k4rxBbn2WL4NVmXdCZN2s5DrtqHwyi2/J7k30s+fYGCca",
-        "en": "sha384-Fzi0ejNXuy7Sy2NjA8kztibTNCedyBxcBiSFQPgcwOB1Toc0KkBqQRf+Ddiv8ZLP",
-        "fr": "sha384-+Un2UIzjLhIKKiIuOqHJ0a1UiUSSmpUNUd9fmusixiOAJ9nl2uspAMVqw9nSKXIg",
-        "nl": "sha384-JV2LezpG8Jaur9tcwgSJ5WukLxDkwtqGwFQ5bZKOZ/wg6iHiXqO00Da+ziDL6MIn"
+        "de": "sha384-6vErltLa9OZnSfRdyTgSrh/cC0e+k6qG+Bzb+ymJooLzpKZKgbQkQGdmyRxxdZoN",
+        "en": "sha384-dPmGHXLwVjvDIAsbWmEVwmRG7tMsGU2FLO+fVnec1gSQ1HfDRbJRwcqmLLLzGocc",
+        "fr": "sha384-YJrisgBI9suK+57mLItN7vn/I1wcO1n0CpLUeyeEvprq2L7eRSw3CNcRpUkHktWs",
+        "nl": "sha384-rer4zJC8ibGQ5uzNWs14YXSBbHwtAbC7xie2SP7tgJN5CTSlXVZKcvPE5ZToR28N"
       },
       "role": "admin",
       "steps": 5,
@@ -522,10 +522,10 @@
       },
       "id": "community-managers-view",
       "integrity": {
-        "de": "sha384-7WD8TJOxmWbHGvxynI4owF4TyRZ7HcmSrXJmjT956Vc1GDp7SoOpRzLtJltPd0Mn",
-        "en": "sha384-GNrJ6jKy2K7B5WmcyooTlANhALNE6fLRMWOEmYIQapfHGsbUbJw8FtgIYG8NZ2Xd",
-        "fr": "sha384-0usT2eXYwGTm0J0PmtZdSY//h2Z4R+ppwPNOPhB4fWoliXNwrCowM9cD6ZI/qvNd",
-        "nl": "sha384-dfm44gkyEqUMhxiTFjR37irWplQg7R+m2FIZj9NLX8USotS+Kugm2HkkquNZ5vOr"
+        "de": "sha384-bZPlRDLooQqreBKjCgmDRhQiu3hGzxVxySuiJKEbzSlr1rHgA+S/P3VDvdZsL61x",
+        "en": "sha384-ADdXZT33nH936Nbiux3zuTHwGaQuB/f/0lPPE6awm4q8osm9NW28yljZqqaScNAs",
+        "fr": "sha384-RwUdWPRpQF0Jz+UFKU/s2YDcFCLTECRg/vFtf/qXWBTPjppp4uxZx6GTdT51pZO/",
+        "nl": "sha384-eWY5zhKqNfJgfwNdeUCdAzWiBEtqTWNcFYo2mOZJE3CqrUeS8fhw1fcf2bYnQkiG"
       },
       "role": "member",
       "steps": 4,
@@ -548,10 +548,10 @@
       },
       "id": "community-users-manage",
       "integrity": {
-        "de": "sha384-4B5So8erA68cFCDW7326xEs6P+m7ljABgAd/3pKCktj69sPZxtXKiYWmdLopHsLn",
-        "en": "sha384-r7ktSihYpN+uOtIVEnIttwsJN+8yxmyDfmoOsSDUHkqv/6Kh7f+AQpgO9/cmZrNu",
-        "fr": "sha384-gufnNkPQFznN8VcpqhGCFae+en4FYjEuc/5F7ntzpDmg698iodp5pl0iRqJuBz/F",
-        "nl": "sha384-QSlaDayfOpty8C29fcRMhMhsnbMVgxQvBmVIbEYN+YwZ1oKiXdRyyB2YeGVaor03"
+        "de": "sha384-EM+olol4w6yaV+2qh9mSP5e+q0HCbyIkJqDcLeDoA5gsh5BeOfIcHEq2ISwhpx0i",
+        "en": "sha384-ztEURePmuEipZ6L/4VE2dMa7S6T7lOXwEmsNWkYrHqiZP79vjl38SrqPCvzruk8D",
+        "fr": "sha384-ExYj7FGdQ71QJcQAAvn1+wrayJGbLJZ5izOzTy7EVpilvJT/885SMAvR4EYfGgzN",
+        "nl": "sha384-wOCmSFGZ0zFnEzRwPtGWfTnwbbcNolfAsN4zU36LkkRb5dK//A+W6xBij6PdQ3b5"
       },
       "role": "admin",
       "steps": 19,
@@ -574,10 +574,10 @@
       },
       "id": "dashboard-manager-tour",
       "integrity": {
-        "de": "sha384-yhSCVlGYa4/NmlgFT4m14lc5cD8hY7gOpODCyLMX40pa+i4BjZloDVQ0f7wJZ7N2",
-        "en": "sha384-iwHXAnmWltmfwlQjLRsZ1kt43dsRwLYrKy60G68+TI76yQwIkaRWfDf/vkReJ53f",
-        "fr": "sha384-SGHF7E/ZscoVR4yiBHWjCK9VHen83LIs/ARobKrDF4XX3YOhwbO4xvoz1sgAEwWh",
-        "nl": "sha384-sZ1Vc0ex3wEYtj9IBvMWO098pPye56QRg8h3BwHBVWcmohAfQD6M9ou7lD4g4VJm"
+        "de": "sha384-F814fa0PdZDprlNCSwBBzpDqM8mBaSUIbbHnZLf0lxWydg5r5K9xg0+IaDql3cAk",
+        "en": "sha384-gS/+SbGrcGIWpu6D5eWITFNQvYme7huZVVnNmPqMWC27lN1CTYre4/xE0nSbIfqn",
+        "fr": "sha384-mp4ZgGMNPReR5Vf6Uug2+nwSa2tc7zv7QvZcQuDEE1FSh8HfS+odTv17qzLLHSLv",
+        "nl": "sha384-ypx4rFHiN2tnunkO/Io8itZf0RTwcBfVs9kyUh6MhMv8UdXmlVCG6Vic+7uAFpxG"
       },
       "role": "admin",
       "steps": 10,
@@ -600,10 +600,10 @@
       },
       "id": "dashboard-member-tour",
       "integrity": {
-        "de": "sha384-Ju8Uyretw/NVVTiz5lFKm+ED3apdkPZz5VIasTvkNipv+RZwIeqHle/uc0kktjBG",
-        "en": "sha384-qNNfjEBFJwUdlc+EVJqXPJIndb9R9IUT5ZMBmHNo28MaP4j7S4q2anyLgLsOdZ3c",
-        "fr": "sha384-o5FJOlFTDX1V3dkPMX29Jgw/eZex6Q25W4+IdCDSnWGid68tBimudl6dZIEporv0",
-        "nl": "sha384-6x6n4IYXg0sbmij/if/sSc2BeFUX+MB4hpwjwuF88jdug8TC97onoHMEeS3RDiSp"
+        "de": "sha384-OYwnvfsfcYbFHRDlIJpJSA3m88ENYhfvPIPgORPwlDHRphfn1iGOfFOGVqysRk7E",
+        "en": "sha384-hdzVT8Nzme8dAHZf0fcLkJcSPjR9gogBQreXWMt4Vh80t7cBr2V3wettQuiWyHDB",
+        "fr": "sha384-20hsX0EzLn9DjLPpIdhiqP/y2e1xgROQu1PiakAydZtri2HrIhrHf06kl04fdkEG",
+        "nl": "sha384-AYV0JSZhm8mU8xTBJEsw25iD1x6Xz4/Teh+j3LV2psWOry5DLcdE5DSEHOmQjO0v"
       },
       "role": "member",
       "steps": 9,
@@ -626,10 +626,10 @@
       },
       "id": "home-overview",
       "integrity": {
-        "de": "sha384-nKpQQytQFBqKdsG3NdnK5xcIfT69jlLOAuWhXBsidABPk0szZ94d+yQwe8XZGh/f",
-        "en": "sha384-9pRIqr5tnHDsC9A0SVtSfdRp5Tjw8jsjNKva7glWTM4irNdL3wYy+oXZC4FJJ42S",
-        "fr": "sha384-6zguL03g4+ARkxSCiM0RkDIVw6PajZfZ7J3fPnvhHtMxLCgHA8pONLXF6b29Tj3n",
-        "nl": "sha384-0Hx8+7AfvDMIZy3n8TPy99wH6hi5NTWLReNVlRtTyF40vq+lXy7nxjp+67BIclTC"
+        "de": "sha384-Z20g0uyt+hFcjx0AwOX0zCcWe69VsoUAophDS0Uq8TsmTLWBuIXMhZYOpgFVY6Ni",
+        "en": "sha384-FVW5T6VD6ptlFzk8v3K0qPSRiYhhitF+v1LEss4Xd7HQCKNltaL3AYimaLOyccss",
+        "fr": "sha384-cJ9evp34/Ab4HT20NXCrIfs7Bim2U/gHcbs78lHu2KX4mtC2BY9ZESJ6ARaWqMS5",
+        "nl": "sha384-j9j9y/fAm3cvAnDRtOzWcVt0sPDkY89nzENICwfVRcVgS8yTken1uoNwf1Qb6d8k"
       },
       "role": "member",
       "steps": 8,
@@ -652,10 +652,10 @@
       },
       "id": "key-create-gridform",
       "integrity": {
-        "de": "sha384-NM61XwX8QGSlbWXZ12iLyHOYa1RCpOzxopLsun6D8/H2y7VBZYzKP2nM/dqFMlFa",
-        "en": "sha384-51uNMCm728dSZ5bweDjUlkUTv3Z4xxseRmep2M54sUKgvWWhjRNuJDSABbt9Fubo",
-        "fr": "sha384-S17cLUjKarKSyxyJIikEzW4fyQk67F2GJ0EZ5MZhFAtTEMHwYBnq2iLVL2aHU+J+",
-        "nl": "sha384-pGbQAJxyIikCTijNk1IxXFS0Xe5XC6hmclSW+TBtko+W8slbbcpBTG4eJPpqyfpz"
+        "de": "sha384-jj1X/AoPlg7CXE2BpjPmIk7uRWJMI5eIyp9z+fUXKkgDju2NUUZH6rUXfyEzJ9Gs",
+        "en": "sha384-ee9VMulxJU5aHAsEEilZ5pxrw2849SwXO2VZvX6RdoBwDTfearMakMusVwCkO3IS",
+        "fr": "sha384-vLlfvovOplNYp1BjA6AzIFK1iZGKB+5PkBQXlUlfudVDyJWC4LpMhxxfWVcXKGcz",
+        "nl": "sha384-2qyZZZeopq63quegEOOKaMnrfdTdGIcj5+QwKt0iMoyaK01wPNycsttvdr8boW7/"
       },
       "role": "admin",
       "steps": 14,
@@ -678,10 +678,10 @@
       },
       "id": "key-create-wizard",
       "integrity": {
-        "de": "sha384-bObHTLdtuQeE2RBK29JeZr+6g/dsJH3I3P1ObEJa+TxGOnvu2SwpYlSMGQKcx31E",
-        "en": "sha384-uiTK53I19KKV3BrJcDnmuTrxBJHsgz/3nWsou37Ndx2vb9AsOaVGskK3ysiyFu8p",
-        "fr": "sha384-mv47BN9Kg+rXl1DIPL2ABGHMVyhEnHRSu1jDhmIgCDzSAUnTz28VKcBloG9yJ6ZA",
-        "nl": "sha384-uDPKVs/Ci4S3uXyB2lemJxDlmXyaO8mtaqE8Oovf4VJXv+9iNBmpgbh0MmwPOAIH"
+        "de": "sha384-psq9ium1oG/zg9EQsgZrTcrRMat1jDMnx45gG2z0E7a7uUWfe89qk8HJ3N2Ji0er",
+        "en": "sha384-gOFmtOU+wKSi0Gna46JUoYX6XLgQrq+fBWG3/ZskEUpcbnVi5vFmEfCNIB0V1cY4",
+        "fr": "sha384-MpBEeNyCz/j4ACWR36vmx1qv2P0gPUgOCTOTDYwQlf6flCV5pOheQ0czo9iR7lDa",
+        "nl": "sha384-ziIw/7Mw/ws9SqMJHnkebqBkOULNadf+8Zk+holRj5UvZxtI60KH2gn4bQzH+Mxk"
       },
       "role": "admin",
       "steps": 19,
@@ -704,10 +704,10 @@
       },
       "id": "key-delete",
       "integrity": {
-        "de": "sha384-mpTz4Cr+LgtikAALezpZMpN3wVqS1HVRm02LBdk7kdFFXodcfglAOjlOg1yF+zzJ",
-        "en": "sha384-29/vwiHF0mUOAeyqQy1l8M3VgLgBFonVMCRz6wgAiv/YlshoqkDrJ0f5/WmmBmzC",
-        "fr": "sha384-qMwRCuXuW49i4dkWn7iGSlWpdMSw02yrOpLQ8izNcEfS7pJjLX+KnSqsEjKrv2Vu",
-        "nl": "sha384-UnuneYXi6gGhI+zHSm3ZeSyOxh1OATqzvoLiGz2iM96tv0ej38z8RCJbUjSklKe6"
+        "de": "sha384-CqL+ysRiAENtAO6xtva5P9XDif5igMGnc87L8V8M6U6zg5rSiuZMxczFrgqqvb7c",
+        "en": "sha384-ZF0uBxV9mRj6ZmNXR2UhZOTjCHs+79EYJ6GOtjl9CjrfgKCbnzuTs4YlIkYwAdIX",
+        "fr": "sha384-x7Q7B2QSPjtfVMVHVaKWsLfil9HmO9m9l/ZvuhFNE9uBV3P2DrhiHTHY+FGZ4Bgb",
+        "nl": "sha384-ZbQyupiZ2k1aQO5OGCjkdmJJsRfQ99eLJMY5g7KIEs3zDisC8tjbYoBeiXSXGdhH"
       },
       "role": "admin",
       "steps": 3,
@@ -730,10 +730,10 @@
       },
       "id": "key-helper-tour",
       "integrity": {
-        "de": "sha384-BRlOvYZIfNySqQIVVYT19/LykA6h/ejLd/1xczAdbRpYQcuO303/xBePP4gX4ThE",
-        "en": "sha384-TZ9lurHhUYFjC0VAIwtBui4eh+eUC+f3I8IiJq6Gceox5K+949XDCIPvydne3gD6",
-        "fr": "sha384-0ZC1KkB/HRFcJuFMhChI4AhxkEB6y1BHlyaaQZrFwMmUYDutDu1nppkbdmTxgxZq",
-        "nl": "sha384-mTTugfEcoZ/WyzN6fi+jSAGH9HQHhYgXl11uumdbh2DsM7bPpked0/LvfaVztbBI"
+        "de": "sha384-uICrpCtdUNHpfj9pZUApVD3fARVlxVxgO24Ie2ZOnrs3XG6dRIgTwAgGl137sLvE",
+        "en": "sha384-lz/XUzeZY7S0Tg8TgzKPId9kSzdrXx1t8NMSsYh125+zoj1/tqH+Ae+93P8GyUdn",
+        "fr": "sha384-plkaM3Rh2bCot/GSvyHIjwuw+4/0CoYCXNkFPrzxdCnhERbd9//6CMa7JJwrmDxB",
+        "nl": "sha384-dJVgqGzPmmgbNEataiaiwd6o+WoyVav1lzIltRB8Tr2zDd36fGPZq7+ow8eM/sEI"
       },
       "role": "admin",
       "steps": 3,
@@ -756,10 +756,10 @@
       },
       "id": "key-update",
       "integrity": {
-        "de": "sha384-RdVhjzK6X9Ukv+YVeox4I8nKEIvFlyj7oY4I3+vquXv0vgylNaG1IxvAmd9FMIWd",
-        "en": "sha384-mQcIhHcjlWIxKwO8hRWmKJ1WaLDH/K4XXKSDKfNV4D9QpkyhruHmHw/w0TaAI6IP",
-        "fr": "sha384-SajN7iRpzwTgETeAzWuWxfDfRmGFk1bNoVz3qLgrzP6GkD1w0ZBsVDOAL4EziIXs",
-        "nl": "sha384-IqQGjr6J9pWWkv+G3OvbCUbGhOF8RRgOkJ5R8Q0BVSNorufti4VUk+NfZAlwFKQK"
+        "de": "sha384-OuMNW9RBruqkC6kn4Gn8HOUmUMX8ooqI5b/ldOW1xHaOxZTzyEQO0QE18oZmlXNl",
+        "en": "sha384-kEhoCHyk05exxzyz/RYVW7FqtoheaH7zVqJIQDhTHxt33t2TSPYgxgG89XZ+tdE+",
+        "fr": "sha384-67i/cHtfZcsDs05CeaewKjMcN0K5bdkvOy4sfa5arcQSo2JL3JfcCzbEKSUJkgIP",
+        "nl": "sha384-IzAgXY6RptLDEhVCQoH3IjI1lgndnfg2VeFv1joUqEzYy1F4Tq84Xw09hiVlvjis"
       },
       "role": "admin",
       "steps": 6,
@@ -782,10 +782,10 @@
       },
       "id": "live-data-device-enrol",
       "integrity": {
-        "de": "sha384-OESgiT5BeO7TlvJwv0BAcz/rPlFrcm2DuCAr+1CHOoukzT3N9bZEmV1oyGcteAMk",
-        "en": "sha384-BXviUe8HEIpKdhpNebIEQ4ewlxj9MM4PdPYVt3b+R6adnw4lnxlRtLPyYYP8G6Kg",
-        "fr": "sha384-YTU++CVhLTUSrniT7ft0A1vkzgS7f/jKcp7HrxVoE7YPjjmC5T2sOsB+oXpNptYZ",
-        "nl": "sha384-qy2BGYoeCSNCqewsiv1Nka78m7+vKbjOfO7BxrDXOZtXfUHjlfM18nyNybUEfe3I"
+        "de": "sha384-VYq0f3tEpOTRpZ8/rSXcFge01CNjGrvzLXPfqwp1L4jot4LNKWfjD+Dpb7dj7S+f",
+        "en": "sha384-gYm5PvYaXYIrclKG7uEDZsPjzroZ1/jiVEfQoUtuSu1OVu1wjKIyuAjRIqEcUv0w",
+        "fr": "sha384-ke6qhsQTod55c9ZbF9jO/+8OZxzLGPeohBaz8RRyjh+VFLpDj5ixAIKErLygQs9S",
+        "nl": "sha384-Pz5W4vZsPL/Ucntgf6p3TNkb44edF4hLxxQoxMg4M+a7xYg2Sy/FdGh4Ihf+nCow"
       },
       "role": "admin",
       "steps": 9,
@@ -808,10 +808,10 @@
       },
       "id": "live-data-explore",
       "integrity": {
-        "de": "sha384-Ruucy8h79ceAltg+ky3dLrFBujcXRWB8p0fW4biqBaf9l3maCX/pyYDk/fh+jWKn",
-        "en": "sha384-f9N+qqqrRuFWtuAjLTE00K1qMCYmfsC2vjdu7PPzqlwODEFdG8/aNG/35/E5vT65",
-        "fr": "sha384-DewNtfY0KHNbuy+08PQO7L0Qpi43wDltEBquF3JhZMFlm0Ae9fRtgyOu7r7BIWCv",
-        "nl": "sha384-Zx1cOKnArt/v1HzW9RQ0KEaBPtY3G7/Wv6ZQT66Kj+aX91pnHH1T5uAwcpxC6F/y"
+        "de": "sha384-WrRlOh69BL5G4BM/polX+lKO/AUkmlhMufcqh+k1wQcubfH5mAj+bLwRAkTNSUq/",
+        "en": "sha384-2vXisJ4+iEMDvhM+Tj4QzPsewZwfDaaZjY/HOtkxDR9Kg2N47FS4OSQChELY0gtl",
+        "fr": "sha384-Yhu14S8uv1jxG9RXc3HBaA8kVrLgWRR/AOVm7YGOgebv6IdKsYqqvLAfcbAg5KPi",
+        "nl": "sha384-Tyb68Ze4qTB8cHVlxO0cbVuQVYBzvfHQWx2yXZjCKsA6q6YabcNkkIcp/aZOAzjP"
       },
       "role": "admin",
       "steps": 9,
@@ -834,10 +834,10 @@
       },
       "id": "live-data-member-view",
       "integrity": {
-        "de": "sha384-VyhiWYvRVEpJNKCVw0CF9w0QvkF2aon3frYz4NMisVqKx1oaevqrgtv9DPvikw4J",
-        "en": "sha384-SPFq8wcxkBP8Ge7UGwkIKw1DOlt2bsefZ+oHQlBDHwIUNQjC+A+lJpD9/hwBs8ef",
-        "fr": "sha384-Z2T4suQraOGxtxr29q6Vx9sBFSxxiu/LAJKle8gkuPMbW7JqjnvyBR82QPAq2KQk",
-        "nl": "sha384-y6fVHWdbqOSFAoHuoDEypyohZtrBU/xfHqdmvLCMhxZkVSCHZarYvFUkiw8MpcuK"
+        "de": "sha384-/O5QpB5vk9vfYyqZHitk++eplrp1cudVrm9aLsg4OKfXTmhBgR98gzHiqS33Jvjb",
+        "en": "sha384-LgUgZEIUadKEl3f1EKdUp9oacEazGYGKuKmNP2G5iEW6DwjxkMzkPPDv4cuNDxW8",
+        "fr": "sha384-9qiC1Jg1xX1Mr+CYR2sdbxFHVFGc7B8o8TAJ22VQE94K7wpzf60KRMqNbeqdjUiw",
+        "nl": "sha384-mqB0DlTobEo17ywYJ61YUhK9QeXhXjcXcP1tYP4zO//3JCjPHLPBCUx806/DQVsT"
       },
       "role": "member",
       "steps": 2,
@@ -860,10 +860,10 @@
       },
       "id": "live-data-sharing-operations",
       "integrity": {
-        "de": "sha384-WyqUbAl4NUlakQpqAh1vuKULEQk8Mr0B7UlJ+4MoEvO1wRbLrD4Fa/II5VdJemQx",
-        "en": "sha384-2CsdIrTFDRjdZcOGl90aaqEdFULGkqcjdqksr10KZAXAJjFlaEmJ+qyeGvqc8fJp",
-        "fr": "sha384-xsQRMRpPgQTT+4zlfgXOZGbzwk9br6xFMtFG075CUPc9EewmaD1wRAOW1nBxaRu0",
-        "nl": "sha384-LeSq+d8glyQcmzhyrPlc1kie2bdQKK6qgK7Z2K9Zv4UoT7Oro6vI88n0gSpdJMMk"
+        "de": "sha384-nO3ajoYHQy4XDL6ab3ljpOAdiYZggR2GAR6vsnYuBT+Kx9L8dr9YTz1PVNmTA3w3",
+        "en": "sha384-EecRVO5/IuDmDOd96inCHIx75O7XCY8o1n+scJ/uQn2OvRceoz+Dx/aO9IJf64gw",
+        "fr": "sha384-YzBk00PJG77eVLvIr+cexwryI9O679mpwPBfvigcTNE7aRPsf8FBgCGq8HOnWDeB",
+        "nl": "sha384-QkukkFO5y2oMXhLLxDsiBVY/G96dc52FDFjCi73sAlaSkACqzYTr6cNLr+INqTiR"
       },
       "role": "admin",
       "steps": 2,
@@ -886,10 +886,10 @@
       },
       "id": "member-create-company",
       "integrity": {
-        "de": "sha384-ynau35FQS8x5OZxUavJx/kKTvDJrtpfPGG9I0ULSqMyQvSemPdgD6BGbcDZV9A2l",
-        "en": "sha384-dG9lHlnciWmff6iu/UOG9spAYnKr7DOld1d9bOgrWlrNEeA4iwhDCNxByGZmQAdr",
-        "fr": "sha384-/zjNvOY2bU5TkoqZ/4Q+ll0eNVFBoSxk4QwxbZEZXn3RNOdH0grZK1M6plJYFfc0",
-        "nl": "sha384-AKT+5tHuWuFHkdoJzEXT4scFEosjD/iCp32sBM6VzjWobJx3ZQ8ZqzUYucnBTn4m"
+        "de": "sha384-832J7ZVSQqEeaJbEfX50+AXDxu7IRSxSer+N5uZwZYOX/uDAbgwjxf9woWebeIZl",
+        "en": "sha384-oOWsHQFwBKeiL78Pu36/qX7JrSBCLkKtVCwFJvEiaS13Xi8MTFNbaXZCuvQu3tlL",
+        "fr": "sha384-89F24LWu1wx+nbM5yhbp1s7p3fTcTCGfP07uFkNtvtJjJrg/7BvrhyK4sKZ9yQq8",
+        "nl": "sha384-wXF6GVwiu6dHbvZ6FqNvv4HP1QnLC7ygYSViNXG0azHJiLHZmU6b0d1sKAZ3jvwB"
       },
       "role": "admin",
       "steps": 24,
@@ -912,10 +912,10 @@
       },
       "id": "member-document-upload",
       "integrity": {
-        "de": "sha384-LjBwxks142GoNXbw/+NMAptjjKek/0b7O2ed9JgoUe5IB5oLcbgclo1w7coo//cd",
-        "en": "sha384-ykWtG2IRhSRexDdC1ShOyYFOtABV5oVmJp/2nDE3oWwSgU/w6hY42JMQbLWw1Ggd",
-        "fr": "sha384-qLFK7Zd14rwedsGEB7Rj5AQKDWam8NoZm4KkExpE3iH9zvmeSIjbGeNp2dDAUUXx",
-        "nl": "sha384-y00y/ENiKK5jr/WO3ougV46ailRU5bLZRfdgNo3qeFOWmisIcnh5drjRzTmOP/we"
+        "de": "sha384-NVHb302sg8jvGj0i3dSPQ0rUc3iid+rzwEoel4csBSqKNMuPTE5XMlnn9RrvqX15",
+        "en": "sha384-ONRdddwtQo3+/+XhXLoDyUGlxNFIxdyqlMkqqpeOgf+TTFB6khntzXDZtoQSNT2E",
+        "fr": "sha384-pYggVo/mfXItZ2yP/dnRfBQNXtXAfzTDV0YtRbbJ2LrxRgII54cmS6EJEM+V3FcS",
+        "nl": "sha384-Or9ixFn6ZP8MEh1+s/oY0IhV9NJ8Om/HKjJmnwZ8cvzLa0swRhYYhNfFXVGbMdj2"
       },
       "role": "admin",
       "steps": 5,
@@ -938,10 +938,10 @@
       },
       "id": "member-self-views",
       "integrity": {
-        "de": "sha384-M9aUhgVH49luzWgqpcfWOVcy+BMsjibsfWsvDBzgO0BEFSpdrLiwUj7PhxThBEB2",
-        "en": "sha384-uwQGZcux7tUAJkcii9NVh2TgNz4rYP2PzzXkSUn0OWIxufED1lWl1xHfmTtMoYdJ",
-        "fr": "sha384-stVDSp9oxz6RTgqsENLRxpDYngnNrsmJ0M8ublRB7tPTQ+NI2RCm9MNGeGX8OlNP",
-        "nl": "sha384-woLn9js9AWyT1xgxBsiSmhPuY8puHSXoJHRocUrc+fIkt6hK158mpCD97hy/yBMZ"
+        "de": "sha384-cvbE2Q0F3pl5tZwdiHZ2caXfBunhXaDNQBR1Sgojui6Fuq9gffXBbRchRJzzmwPe",
+        "en": "sha384-uhD/10R5sA8Z4PmqZB6Ka2qN3SWm6PmzC55cs1jmDPFtrYfoTNCHTHywSgth6ZBz",
+        "fr": "sha384-b8mNUnQTQXSjhMTunqTgM4SHYbYQml7GT08bUu2k3+gRJebPUibPHRl+dr1rQSR8",
+        "nl": "sha384-vOyXk+XP8Ov1CaM2q29W3ZfTBSzu8QbrXs8mCxiKdBvrQsRjGj3/2HNa94OKrO49"
       },
       "role": "member",
       "steps": 6,
@@ -964,10 +964,10 @@
       },
       "id": "member-status-lifecycle",
       "integrity": {
-        "de": "sha384-bVZghQxDDWb56ti4/2sOMcnK3wy18VXO6aDBJVA7uUox7GXqg6NN5Qka0U9+1x/g",
-        "en": "sha384-i1IrMKugEd38VTmqz4l0fKrCgq0X27QZY2Kcp9q2rpAR8Uy7/omKdyITmrVe4RpJ",
-        "fr": "sha384-DeeefygG8bHL8imFfLID3r8YRhBXw2PEHehOeA4HFZoCxlgTwN8t62jWFJfIysHp",
-        "nl": "sha384-XQKXybJB27LpdOklv+NZ7L84i+ogw1XJi+uVG1/eOqTrO0q99pGa9vVaoAxq2ve3"
+        "de": "sha384-hQW24WwFh0lvspTJ/LXwJwuuoN5Vim8qb6kKXYcLDAiheiDxJzOywxLsmblHQYEZ",
+        "en": "sha384-7ATzqbGZRxiJirrqXls2NZPG3VBCB6wbFB2ljXOJDC1l3E224A9vW2+4z487sDj/",
+        "fr": "sha384-vhjbltQWhMtdwZ6mhDlbkDVHzCTN3rHtAcKyDEuoVnt7pLtVhFh3hTLu5R4Zmxit",
+        "nl": "sha384-bmzh9Y5pqQA2q9VyDdvwCRaMlEuNGi1d0W/Mdo7mMnvgYGIA/Peadgy6sqbtYl9d"
       },
       "role": "admin",
       "steps": 8,
@@ -990,10 +990,10 @@
       },
       "id": "member-update",
       "integrity": {
-        "de": "sha384-g/4+NGl9bL/idXu+P0z735uVkPUWnDLTRwgAwMhzjNjUWJroSyuhqtTv6g7i+cTU",
-        "en": "sha384-d+6GI+H0CaPwwDF244ix8b26eFRPAlL5wXzn6vKMVUaG9HO9qqM6wTLIvXAFNMk9",
-        "fr": "sha384-gO/Wb1W2swI+7U49dpqr63BRf6O+A4VwyQ0UZ2pqD5vcRVxVcWxxps8m414p6VE5",
-        "nl": "sha384-eTyL1mNSvISWA2KGeaWiMYchekUUZuhsH4e91jl9h/TpQBjMkyzJN/MNeti26LDN"
+        "de": "sha384-qtYGaChvUEzC0BqFiwj8bgSGpu4j+ioN5tVIHF40Ko2Ety1TIbwQPXKYILQGVEuR",
+        "en": "sha384-45ocLvUBhEb3BkizmHMr9ETCH69VBxzzcEy6tLAVe6LtTyhzN59r5fygBZhJjZ9o",
+        "fr": "sha384-U9x43I5Q7uRTkChAMQAQsb4S5oHu4SWGqUhkPJ86mx9cAZV91NpZV8VyRURfVZ9G",
+        "nl": "sha384-aaoe/3GoFi9izGq95D8lNzlzZHNX5uFPPy9OpGvUD5ttvJJiePZYQDL5/XHrrGeF"
       },
       "role": "admin",
       "steps": 9,
@@ -1016,10 +1016,10 @@
       },
       "id": "meter-address-repair",
       "integrity": {
-        "de": "sha384-Gg/f6Kuhk1puP5TEnUIl8Z4l+rrOvql5WJagtYPTQhAxupG+AQq1WM9jt9kyylro",
-        "en": "sha384-Ka7+q5c9AruTze8EobLZvfH+wnQZ+fTWTRnrqOKVHtbnBIh0hms1wAeCR4LBACgM",
-        "fr": "sha384-C+To0wcBer41zLHFvEdVaBYH4gDpSzxw5AHIt031PBrw/O9X8A1O5ci+qNJCNDh4",
-        "nl": "sha384-6gzB4TWgI7WSiwoOp2Z9vurwfuvffwH5INL29oVBubqzELJ1p9//QhE9iqVPa2w0"
+        "de": "sha384-FQX2VMM2sGI+GOc/tP5tb+Ec8ZihovsE468HRjwj4xXBd0hniev6fIprc5OsHDED",
+        "en": "sha384-+ImQHz+DWZxHs5Qd9svyHbZk0FIeJYsQUmYjwT1cMrKszsgTuTIN35rfWzi11La1",
+        "fr": "sha384-CdKJgfZgpRwUcBizgri1W7oucNqumyuQoJqFr/lafWw4czU8YlhWtHA0lhqKXH0i",
+        "nl": "sha384-tS5z7Di1FcPTplxjam91CI5jIT38KzpJR2mG9RwEvhtnsTXgUFf3oji61VGU6+X/"
       },
       "role": "admin",
       "steps": 12,
@@ -1042,10 +1042,10 @@
       },
       "id": "meter-create",
       "integrity": {
-        "de": "sha384-F+iSg4aiBjejVI24P2xT+d0lejuHOsMj9bQZM51bCCLILlXKHnl4O+aDMephPDp0",
-        "en": "sha384-sWXeh9BxVLKGWsHogFlAEr5dlFEdVz0o4KHwOWF8qbv2lwWDM/HeSNwcIGrecpN/",
-        "fr": "sha384-gNKuYFr67V0yCntLg174DUHldvd94VV3RqZALxoEaHqXFD2MsKBh7+etDNA4J7JH",
-        "nl": "sha384-497uHEjy4Fu9CRkL4CzRA+nPau6py4X1POGn712wrMPG723ym/cN3InramHpmjXR"
+        "de": "sha384-e7tRb+wCmu+bzpBnH6+lfE1ouHphkO2Qe/PLjtHyfjcn2JNPNHVa4l/aiRD4KezQ",
+        "en": "sha384-Dq5IDIVbmW1f0FggN06aPllBoMzlzicT5Kpeb1HGca9cD1CCU7MPrANqxQeGQXaj",
+        "fr": "sha384-G2l7GcJdYTRZZqAm1T5h38jfL9w1+SJHiop2GoVMmq3WBdMd4zWCj1MCbE941auV",
+        "nl": "sha384-5/QthYpdOyTJEr/xq1ueHJXOh601mMyIo6PUg+8AAe3TNnytzlNlwbWpKioWHr4l"
       },
       "role": "admin",
       "steps": 29,
@@ -1068,10 +1068,10 @@
       },
       "id": "meter-data-update",
       "integrity": {
-        "de": "sha384-t8eK9nkyzeA8o6aJBBQTlMD8NFQTPKzm8xqRm0QFa6OfJ3J0lHrnjEWVXjwPTeRX",
-        "en": "sha384-wAROtEqCM6XY7LsAW7lRXqMgAppxlj6Cs9oF1BxHCHhvD6Fmh/1bSJtxCJmRaWMr",
-        "fr": "sha384-zDXVgptji+d2O54HPAUrY3zz7EeIJGFxp1WBaaf9aMYf2pi9mmnbfkaXbq0/Z1T+",
-        "nl": "sha384-GgSXPxeHk/Fz5Hx941N9ToZj6PY4P9ekqiSi7ZoIbzHbEEaYfadtW06AmpSeH5Ys"
+        "de": "sha384-IaGqRq33SSfCmyBaFr4oVQtkw4jXHOraPjvoihTDKDqesAuV67RlUaguUeBq0pMp",
+        "en": "sha384-2jVdPdPFK34gDQBUrh9gQLyTqOLAQaL7LbkdFziNF3RLxRJxSsRHP8V2Rnp6ZsGC",
+        "fr": "sha384-vIQ19jTVJkB9C0Bt9A3dJU+0pqThhOMlxMDRS66fKY7P8YYAl1vrsM8OONvpLyou",
+        "nl": "sha384-R8gzaCtrxpKENxLijONe8ckNwHWs6XM1ER7DB5DSZvT3F0h7ezSGAIjAzXhxMP/+"
       },
       "role": "admin",
       "steps": 14,
@@ -1094,10 +1094,10 @@
       },
       "id": "meter-deactivate",
       "integrity": {
-        "de": "sha384-WT5Px8eC/BH1r3EcAKnUvxaLqzPiqCV8gk+r8PFzMtpmXzAQQAskGJ2N66NYmqvs",
-        "en": "sha384-JQG+xy3e4FlQusgMn9gzQRAN4pqXw+x8QRtypSIokJWkpfXRwJF5jYqyc3BQllUy",
-        "fr": "sha384-/nxUYxxUl1qZBdXYdgfQ29V4qBbziDMknKmnLF3yN53ptyF36vOLhAg+FDLCJiqq",
-        "nl": "sha384-0EP8R59kDOBILqG5xahjfa0CKwW6n8p/jYxbR9n/o3MrV8XU0C9/hyUeRtWtotQu"
+        "de": "sha384-7F3p/y58FfkIVspHxSe+hTzAV7QuI13fpl3VpEre9NWxb1SqxNsYkan1CqpJPXJ3",
+        "en": "sha384-boIZg6mbifNEBkBuyHZeRu+VcpAhI7qpYlP58VF4J76lQ687bjuiVOMNDrm1wWkv",
+        "fr": "sha384-xlXyPQIFR7JelJONecVyiSicQW2bXkasHwWl2j5AZLLWhIAp29gPC/IvH2G49dzc",
+        "nl": "sha384-7R3lnKzH2peAeNI1HwVgsllJoPZQXry82j0hGEv42xrfmqCvoGHujyOfKQ63SUmb"
       },
       "role": "admin",
       "steps": 6,
@@ -1120,10 +1120,10 @@
       },
       "id": "meter-update",
       "integrity": {
-        "de": "sha384-n4foMWJug+7OlSaFzX5xwqozYdDr0p/8/JQcU08Bht1YjoBF1SJlvIKPCnWtKGxN",
-        "en": "sha384-wq7U7G28b6KaX2miY9mickRO0IrSbKTRYi7rMSBcFWiWpKVWliMe0cOlgC8bf8B9",
-        "fr": "sha384-noK3xFPUkV2PZNt49gq1Ss2wbzPV9gY9UbK/UGKhnjcALfnMxLbBfnvUAYiIsLdk",
-        "nl": "sha384-0GRztQ7Nf65zD8ewnlQW6kCHOpdNXIy6SreGhRD8ZqSDA9Ybugak7QAHzgBEzL6i"
+        "de": "sha384-VOO0u6Fnh6q9kd/INARaZitGiga3FXU+s7ulsxRiCFfP6+bfYkTcyhCb5BDWmC4R",
+        "en": "sha384-79WMsto8CBdD0OWUYd/Bz/Ltd14E1WKKZDHFwX3P0txw0rGbR/gnFmpr+o2HV21c",
+        "fr": "sha384-lhcWMO9nKH+fXwtvFlcncUkPHTenUO5TbdX5DWC0h8/N+es3YaUTH5riIlyhZFBw",
+        "nl": "sha384-kitqJfUnoyx4Jlyajwll6kyannfvx8Mff5Ue40b8utPt8OdXYSXOCIBrJwUfJKje"
       },
       "role": "admin",
       "steps": 12,
@@ -1146,10 +1146,10 @@
       },
       "id": "news-create",
       "integrity": {
-        "de": "sha384-8GRu6aPuqdQXq+Lo7Ip4ZR5q5c2t+dRHL5bKJlitJPAe40GawFldcbEzvQCsPgOE",
-        "en": "sha384-daGjtrrK+25RTmVsmIEAhj/5WCpNnA+1eWdjTQtulNNiIAwXOfWwvRCXvL+oSrRE",
-        "fr": "sha384-qKMlJx9gfS3lBscR+wIqpl4+hQXM8Ul/CncrEwrwVKUKVvO44lOO7cB7k5uQU459",
-        "nl": "sha384-dw7LmY+jPREgBKGz2LiRcR1i3YLVtACTft0VLUUu7iZlFaii9Mywsnlw0Tdr1vKc"
+        "de": "sha384-lUqt0UMBSfwhC9T8pvdPb9adKeHj77OtjIkU8wsKol4OuZQ2hKU2CO2J8omjYPiu",
+        "en": "sha384-G4KNz8Jo03/8J6aGmgtJw3N4YCmZQT6Rp7lxSCaPquYlUO8TMqz5IKmlE4Ur5Z/u",
+        "fr": "sha384-94aLOMGkBtevt+yDAp/m7lT7nJu800nsgO4Yj6TWfutn6ZxzCYIW31UYlA0dV5g4",
+        "nl": "sha384-CHleBw0eo+1sZN3PuPnXoZUNk8/To6yrOLKj6p5D0J4Q0gv08e5gcVDaWyriMEmf"
       },
       "role": "admin",
       "steps": 6,
@@ -1172,10 +1172,10 @@
       },
       "id": "news-poll-create",
       "integrity": {
-        "de": "sha384-4cPvYnVJ3xn302pSVKj6NPYrKDzD9XcK6tuKkOfe3oePGHz/rXZkl7+AVGbha3mD",
-        "en": "sha384-1PVUOXLge8x0r/SobAM5hasAKj34ZEsgw9aEZKS7cJT1bqKMZ7k/XE0oK2qpJ47+",
-        "fr": "sha384-NfTZ/Abc7d7KOSQJMQt6AdP/bGNZE4w6pnODepZPwHBxvh5NlDNlo/Izon6Y+JaB",
-        "nl": "sha384-00s+e0Hyz4i5tVJ+kKZxZG/khGpD9RG+wzRGD9NlPSdB93G7uWSR0xQyrRRqfBBO"
+        "de": "sha384-2KHMNMz0zVhsA14mnw04k4coN4qCisSDQi/Nep6euoCcREj0G3TnpwLwajSMXw2s",
+        "en": "sha384-vwF3S1rFK8RkKJ0iw1eX/CXPa+HN6Fi2dfIBYsaD+Tg0zq2Kp26OzH4rr3Fv7Deg",
+        "fr": "sha384-tvP+n4meStrY9rppGuktoV3VttqykI1tP7NrW+hTm+NSSZNlYE7/h+TYBpTDgKi9",
+        "nl": "sha384-Be1yAdP7siYC338w1YSSeDkv+1zxwzko6NCA0ac6Qv5D/zHl4oB4SjnOf3FOVW/g"
       },
       "role": "admin",
       "steps": 20,
@@ -1198,10 +1198,10 @@
       },
       "id": "notification-preferences",
       "integrity": {
-        "de": "sha384-c6NGFpjnNa/Z3XlMd1cJNI/AogzV1hoGQKF+1Cdm831aYDe5R26cC9LCpWE2hf6y",
-        "en": "sha384-IXuZwFMDiqQBo2aAjjLoAi8bDFK9238xg6FDZERjRmR3LkxPA8LDCXaAGuPd/D8+",
-        "fr": "sha384-qihA0lJynfAAxBg88ujbXZvR3P1YHi35UkSQz4mKoLWGBe0jRa06OakluTn7sFqx",
-        "nl": "sha384-08sdTp3u308rBH+iFygr4Z0mEzZY72FPZ941kdERaYVUsEbH4MRYl8YfBbtNddSt"
+        "de": "sha384-lqYdjSNigFMPxXhOzA/wgqyxnLYjEvP97e+4LoVpzBub6VUD9tlb90osNbCEOyct",
+        "en": "sha384-0Ue3Hr7UQu3YANngY9vj7KMXO/j7c4wgq8oIwF/Cm4qz8dFuRWmtoXDoqlVtvThr",
+        "fr": "sha384-IcfIKeeACo3IsOORzo4OVI48XZ1EeDjwzK813jBSdFXacw5hd2llC1yFQqPw3x84",
+        "nl": "sha384-0rA5HnWFI3feMXB2otIVsETvcyX1MqzBXddm+LgotygZa14R+85tOJyOXnbWjLjm"
       },
       "role": "admin",
       "steps": 5,
@@ -1224,10 +1224,10 @@
       },
       "id": "notification-view",
       "integrity": {
-        "de": "sha384-0vvxNHNeopHZHMXwxzmoopkE4xWC+biMsQHnINfF0gLB2faHxjmFnwf+p31SA41V",
-        "en": "sha384-av9Z7ZtaenUD3ap1u5EFa/XMQZSgywGt/gYwymcaY5KsWvKe9sdK1VlrSommrSg/",
-        "fr": "sha384-c631AXQ6yFRR1PTsyJTXYrcQqxkdTdmiIFWnajmpm0SVN4XR20uKnEB62ychQe61",
-        "nl": "sha384-3G+ID2kNuHPi64MsDj79pfakIp/alDJ9QZQQA6UbNNcwsesn8zHGN5hD7YO7uq5Z"
+        "de": "sha384-gN8SggDJCzUwK93to34Au3ZCMCZfYo93r8y5YtIO9/Qk5ACvK+euEkBZHNPMa6na",
+        "en": "sha384-y0L8FFd+Tcw4XqHTffb36CtM1+mwRwZjQrirEah+k5xfvSFJLjIigk4gnUorUOXy",
+        "fr": "sha384-Ivh5K0mX05b8LfQO9CgBtlKK7JFeuOA8OkFDM1DZHIatDka+0wQCTN4F/LrYDKBv",
+        "nl": "sha384-YdCtCJGnme/YI0WgexgvYSrUfGlAxTNi882/cg/W8dF3OvjN+IqDD4Gzylfkj3oD"
       },
       "role": "member",
       "steps": 6,
@@ -1250,10 +1250,10 @@
       },
       "id": "onboarding-admin",
       "integrity": {
-        "de": "sha384-jmPCgrnth59bSloO7sIOvMR/LjqYCTI3FHxw95h3DV1/FkyhB6hRSlwQ/MqwQO1s",
-        "en": "sha384-DgxkmJ8i+kFI+KDpoNnmEXaUIX7pq180ZyEKdH5rqHqVVuYWxnlt84PqJFvNw7x4",
-        "fr": "sha384-VTu01oodBu80tArRSwxjsZoUSFKulZBwik2IxjwSqXP58bqQg4mDS/XxPZwpPepQ",
-        "nl": "sha384-rwYutOamRhMSkte+GhJKRI2swf7Fqyn2BwyJUy9B/uwYUc+TphCe2KZKw1jqo2Z+"
+        "de": "sha384-2MPD06K3JQPBIXdg3emrLQukb8WZliZLLfWIxpNiLwS/1+iVKIDSsLJGhHwAKAtW",
+        "en": "sha384-AEcjaRXr4TXH866KdC/4EQ/HBntD6Vey59ob4NFn1D1GYMO5Nh3DxxGc1TDgCDgL",
+        "fr": "sha384-bbvdAELiH+swXXox9IR7nQEdKqYzoHE668auD2+0wOqGnaEso9Jm8D+7zctQU1y5",
+        "nl": "sha384-K3vygPiJCjHFAMP8Ro9AV/ztB08wEEQ+ggfzYZrQwKVSw4DrtNqU9Rxkr78dNY77"
       },
       "role": "admin",
       "steps": 14,
@@ -1276,10 +1276,10 @@
       },
       "id": "onboarding-manager",
       "integrity": {
-        "de": "sha384-WBhsA01B6Eduo212RlHgE04W97Y6kkyF9jJIK2R1o7CB0R+7wFZUQUzpNn+SNPnb",
-        "en": "sha384-4kccTU2U1SDvYVn8tKDdEA9ZSRpIbLrOte32n2+sndvi5r4DRHA5nLxm8PChdpl3",
-        "fr": "sha384-DImdSd4LRM1p7PepmZv+qFTwK4ON/wcF9XzV5MClPmw8jNAjQAEabMEwAaEwmWBq",
-        "nl": "sha384-iZuWRijXeIYDO/HnBKmQE7k7fPUpjsLlqYT/ZNwaHmIoRxP06ENzQllSqqw+805c"
+        "de": "sha384-CkRlGKdnRwGtT1lNdXShCj85KQDVia+FMHkqtrlK6Kfy1ZYtDfMoag4EhgA/ys6z",
+        "en": "sha384-RN9QX62wTS0KpRa4hMLidPTbQDIPpUVFyQXrb+uJhYZDJOKKth4uO0vQn0WVW2ex",
+        "fr": "sha384-6+9u4Ax1lO71w3seh3/BhqJshyrIvBgg8nWUfJ5yJcQapuCZ/4xelunUdV2qCPOL",
+        "nl": "sha384-1QHGzojqeLtrhQ0pI5whmhtbqWQwIZ4/Z1c/kZAgHMcahEyi4eHyr2FE/juotjOP"
       },
       "role": "manager",
       "steps": 14,
@@ -1302,10 +1302,10 @@
       },
       "id": "onboarding-member",
       "integrity": {
-        "de": "sha384-HTcvSB2xvxknVlYknuJl/oPKje4uKK3Fm+KkZDGR7BslR/VR1uboq7OHXckDGG+d",
-        "en": "sha384-d7MEQs2NfsWyzPJJFqIPcMhjPozvvydcOMPh7H7t32xxW6orbqIsWqBT5d/KAsa8",
-        "fr": "sha384-0MzJKE9o2wXKk264OmQdr6c79BuGgFy0cypkIdgJ2EiC3JcG6jfAKlgUFBOQDFDS",
-        "nl": "sha384-2d8PbQ0GH341+BwF0ZSaQMwiebgrz9u9ppYOY9FOtRjEv5Bp12xdIRe7frnOn6wV"
+        "de": "sha384-LQpPdM1cGugdgfxPfZmgSX8VLwiNAyuesY0D0W15NMqqxOJDlB3j2dwzUiweoUJj",
+        "en": "sha384-U7UoKhJCogL+ao+/Cgx+ZR/fAxImoe5hSNj2fGrZ/nHIO5/jHLLo0kV3pO4FrflC",
+        "fr": "sha384-tURbr7znxXSSMHJ7iMQYTxzCQ4uFTGB2Je9IuwB5vgZrhblnjLj0nH9o7llIV8hv",
+        "nl": "sha384-vb+krzBAgrJwmGmaPLbLIGxLD5CtVvE/0nj5SKgEmKsS7+lZW8YeJemNf6frvlCH"
       },
       "role": "member",
       "steps": 13,
@@ -1328,10 +1328,10 @@
       },
       "id": "onboarding-welcome",
       "integrity": {
-        "de": "sha384-uVmmN6c82IQtRCsr6neAVaBT3Qp9AEO1R7y/PQxjE0MrYH9XGKlEZATz5FcePY9M",
-        "en": "sha384-hDm2atUoZAh8/WCd0gMdRWqPWmkzCnCQsAZ8hyqRvsQYq3M6ED+3HZ+Oh91XAbGA",
-        "fr": "sha384-njuzk8UB9scK9b5AwPTnaUk/WzLfOYnW+789wAvEgX2xaNZLIVZZArGes/lrQ758",
-        "nl": "sha384-szq+ItrHJbrYBWphvBlkpl4r6WVBvSIiMRcMePepPdUJDsITqi+lEP97EFkG6XTy"
+        "de": "sha384-EHNUtuMGiqiO1prgwtRvTL2U3XpCvEs7GayAeQIGlo4A+ba8oDjeNWHFxJkj8c4R",
+        "en": "sha384-LAjnV/1SpziB4OMtAwVlEI2S0rllhKo7EeWIUeAXTQpGoGZxpgWtNNAtJvLFRV7c",
+        "fr": "sha384-+prHHuvx55p2tUoRjmFtvPYqEIZH6Im3OXGgaTBUw58GJy/9fd6LufTMNY74XAOB",
+        "nl": "sha384-ZGI/Hd8GR+iCO8xFWXniJGDxY+qCGiPMdL2Osq9DdOsoMR6ptBjLlGATXmAjxFnt"
       },
       "role": "newcomer",
       "steps": 17,
@@ -1354,10 +1354,10 @@
       },
       "id": "onboarding-welcome-community",
       "integrity": {
-        "de": "sha384-1scZsyM5VAJzIt6+T4Uh3VCeNI/af2Ui8u5djUT3gJ7UXD2Ln13acH8JWsteyFjG",
-        "en": "sha384-8e83f9w5s31j88MDXSxv496rll5s6CC6fJ76RIWrhYRkjpKVNv0VX6a+V/fgEG7X",
-        "fr": "sha384-ZcJydRSP/ofaiL8FB55yfeboTyA+7nyEIatuNeBWs3rfEdx/KMHOf/rtkbFej3z0",
-        "nl": "sha384-UTWkXesY35435y/UyYQ+cN39z/8HxqMbhCsmroS9nEpSvR8bsLFQYVu26UaG5WL6"
+        "de": "sha384-WyPbaUpgdC3iINnAT8N6rp38g5G1aTo5+QH+fjNmT9SVh5zARU41jWizZilWuT/3",
+        "en": "sha384-3DQLNMk9ddEf+edkKU5EBrc45uxE6UG13r7KyjStOuumJ86/xE01AvBiWfzCOZv6",
+        "fr": "sha384-EVW1Ci3jYSo5QstrX1NomcZWOLy1m0/YY5LLF7WaJqD6HJy9Yx9j+ECUCGm8UIm+",
+        "nl": "sha384-cJgsDkKCs7NoJgqu15WqtyHql5naZjSayu0f8l80/kztEhrm47LCFMTskGgElsWo"
       },
       "role": "member",
       "steps": 15,
@@ -1380,10 +1380,10 @@
       },
       "id": "profile-update",
       "integrity": {
-        "de": "sha384-/U3whOyrHag4/9/T1/YZ5+O5VkUtpZ9LqJsJ3oOvWPRDUz28Nb/yF4XTT7ntlcqZ",
-        "en": "sha384-cBTIv2fVuhrVTRvsH6NjZuz91NAOFuDAgRi5oY7pT1rvRrM+uAvbW/d/jHwamUg8",
-        "fr": "sha384-y0as1GLp0XnfRPvdJMBKyic8tjQXcYNOQ6eqLlcuP78eu8tkn0fWQyu8/a1xQts6",
-        "nl": "sha384-DmJgLT9avWEgjyq9PNmuk+WagmSiFXn39OKQKJI8frUNLi5DThsBAIAcCM/o5j2Q"
+        "de": "sha384-Hu9ipLH91DYee3JwIG3SjXsPp82xDTY/rV+sLpNZx0bOD1H4WcCO++7c01PaLhzt",
+        "en": "sha384-gIuu2AY8+m9Y469FmNqmZ6VlSPFIxKY6MdSEGSoQEvxvagvVFwDv+2sJvOMd3X9z",
+        "fr": "sha384-oyFGW0OwaFQ5shWoMRvhZSxC5hZxSf9tBJEFyCfyclMJvYvEPg4LWpjZgirKR1gB",
+        "nl": "sha384-7/PLJGn3Y/eW5fF2nT4aZpDTtpVDzBz7nDfpX38Yxd+nE4jrEXRVArnbZUTZVjJz"
       },
       "role": "admin",
       "steps": 6,
@@ -1406,10 +1406,10 @@
       },
       "id": "public-communities-browse",
       "integrity": {
-        "de": "sha384-7rQkROr7r4SPrnIayZsiyz8me8PqD/+tELDkatCUf48pCQoW2lIA+iE0UA7hEDWB",
-        "en": "sha384-mfYbyGrySOkWe/8JDpdbJNxmCPgJ3aizavJTnMjV2NMT1EfnKMlNyzNck0AqyYiM",
-        "fr": "sha384-9NzX/0wEjIImxfhCUbPxffDoJTbWpE3ktAkAv1AxLrJigpsYwiME27NtwnNcoLV5",
-        "nl": "sha384-YGm+mpchV708Ozs4YVgItO9G05fne3XSbTWwAa5Is3TVUWiSyWEhI6V+TPHp3dhS"
+        "de": "sha384-5NT/4+6Eg9rGCn5JtIK1OmJZHZGNq1iRbL2wtRAzCBfBYn19nM4V5u7/HGcn+bX1",
+        "en": "sha384-r2LVyDzIkS4Laa5OfDK/cQKzYStTTE+dUgmZudSDfpkjtnUCaRMvtzsWbnjKk7FW",
+        "fr": "sha384-DOO9TT8JAt6YWDSIon2TcXogQCsify8MqnQ4fNkZCXLSeD11AndcxNvTPW7JtC/J",
+        "nl": "sha384-DhzwCBDACV3H5+OyHmxvZAbO+OyMjFJl1liMCbTnHF8AWqsOkAD+a79DYBHUEpvk"
       },
       "role": "admin",
       "steps": 5,
@@ -1432,10 +1432,10 @@
       },
       "id": "sharing-op-create",
       "integrity": {
-        "de": "sha384-bRJiJWdqVrIDbOPAoVtqWMBYY4pAZCi5uxQDdISCFje3S5EJsoSYKP5niKuchZgg",
-        "en": "sha384-XJMn4jRS+l/NkHpPaDOa/+WuWGlvAm2xoYCSpmTQCNI2nW4VTrvIoX3ocBx6M08T",
-        "fr": "sha384-qbEtFacFWyhCM+sxs9dFb4+i3TJWK1Fce0SyBTDIy7f77/aCQGf0zMDCF/vP9G5y",
-        "nl": "sha384-CwVjDGzlx2374q8wL3UPzT0M9atx+vvuQz/tQvDck2IfvO5FjE6MXd3h7PNbi3jr"
+        "de": "sha384-YmMvawTzyGa4w5aRNsGWBwcLDeDf3AdhXxTAQxetmFnBUttazPEZtWArExiSqLym",
+        "en": "sha384-RMHppcsTgBVI/dNoo8qtEKvvz8zB9E5cOHmu84HLuNgb+cZPaTLXtnM0Jlpy/DTF",
+        "fr": "sha384-ANq5831ExDrQBeiUvsvBqfxBMJEc8GZw8uBRunBWnZN0fgVanjm5z078GtARvOc3",
+        "nl": "sha384-pn/SvOb5WJIVQLUqBF9hYwIvX+CuiqQ7DQzjDRvUNHCK4PBm6DS2L82aGNp03WAy"
       },
       "role": "admin",
       "steps": 9,
@@ -1458,10 +1458,10 @@
       },
       "id": "sharing-op-inspect",
       "integrity": {
-        "de": "sha384-CpWpLU6aha/4PsFVO49RpLVPon4bvCUixWoY/977liZ/ldbrnaSgiZqIyjK3CMV2",
-        "en": "sha384-RNaxD7OFmD+Dver77NBaTkD2n7p0vhsMDzSLP1yo94VFgIO3q5eUaBH/oQ4R+SwN",
-        "fr": "sha384-fXvVAHZm36x1O5U4QRsAwX9ShLAxXRP/ZDmmjmPmBSR0fZpnM7Y3XA2DtQd+iggQ",
-        "nl": "sha384-OutDSbpl+u8ezs/dijUpXjBGuvgDDnzZEEoyZIBpVkAaMcx59T7Gsf2r9zM9k5oE"
+        "de": "sha384-ejVUFVFMerr8bE/3RkZ++pBk/LoIvIQmJj3BiID0HalmL1PO9NCGqepB4lNhNDHv",
+        "en": "sha384-EtAwFIS2Z5lKHhGRo+FmyjqhSHKu5MRYV8kuSgwQEHQ8+h45jj+Tu2y3qpyc4NeQ",
+        "fr": "sha384-38cwM621kwVCm2PytmTxIKC7pRfomvoYeO15ToWv2PR7SSI06cBJEIpgSbmO43IW",
+        "nl": "sha384-cEDZ+0dGjp5PrwYAzEDYghb7Kf0Rmea78DxytX5z8oZbuRpHA0vGzOd5fFgZfAK7"
       },
       "role": "admin",
       "steps": 2,
@@ -1484,10 +1484,10 @@
       },
       "id": "sharing-op-set-public",
       "integrity": {
-        "de": "sha384-TWkx0SsaCWp/HgEvVCC52nguy5nNLt/QZ0YEC4n5O4s+jFW735TdUk2/ceg3EKI9",
-        "en": "sha384-EuiU3DmlrDS/4XDrUh//B7cG5cDrn2T3BhlOLxBbcNnh1Rqxl2KxCATiAXuNZSEu",
-        "fr": "sha384-0NbzUVzHRO5awCcWKQaJj+TXj4DJ94fj257cQoD6gZrh6O8SdwlIuJyfOP8Y+lt+",
-        "nl": "sha384-awGiU4uw/4Cm5n2nqndIg4BLT5K1a2vmsMRyK12mA/0WZ1o1ZVYZ7TfPdCOMKO8L"
+        "de": "sha384-ufz1sXEBYhQ6cOmKlO+ivQG2IvluuHKZtrxO09swKcUTdpWq9MI4s7I2WtOEh63s",
+        "en": "sha384-9eEq9JwXSeRA6T7mxdzlCgXqOJck8G4DUpzIDvLbZrJ5SMyUMZ5OEpkfOYfXjRy2",
+        "fr": "sha384-cotBNtA2XrVmTlmDAGiAIBwKdZAIqqsSN2BjcpLz6TzWt7/U+CLCNxMetaM47w2j",
+        "nl": "sha384-or4LwLRTfz8EvbW4QbLJmmU/smpSr6nYcaX4XDSUCtgAVkoJIi4X6pdFptuxVHvv"
       },
       "role": "admin",
       "steps": 11,
@@ -1510,10 +1510,10 @@
       },
       "id": "sharing-op-update",
       "integrity": {
-        "de": "sha384-g+fuoxHFMg7RqYJnUJEQBK2IWPNFUVvbR0qVWd9KOAkT7Ivhi/FzKmc+FOmKysAf",
-        "en": "sha384-sGFsE6Qjc/TN2TMaPATIyTpyzhv770XFb6YaTctE6W9RzZNuYqk7uQxYpGivMlh1",
-        "fr": "sha384-SmxQPUQfnRD7YibbXCrp6iH5xV8Lmi3poxLUZmfXJb0j1qt2UwlPHvaYE9nrPs8E",
-        "nl": "sha384-oWRAO+GW8id++nQ1mvxXR30KqzQgam34GOGUAArztdqTumK9WJ9DDijDIROFcUll"
+        "de": "sha384-oaI8LHrBIPCDsA3J56hyOR1RRlQMV2lXLwBYfbtjeCybrwO42JNQJZA5pG0abNu6",
+        "en": "sha384-WFSMpDp8sg7NRHcFTUzT65c1iQr8jWJeS4Buq1gmtfLagI+PPIOA1avWej8dLdPi",
+        "fr": "sha384-YHcBeuyX/sKipTyzQFLpGXmxcIU6zGQePaZVGVsGZwLXGCK09pGsJPw2IfDKAibJ",
+        "nl": "sha384-mo1/CKEtar+2Xmzg3R72qcWRhOQ8zMejYymCHTtlaVhCv+7UbGQIJUSa5+7RsPIr"
       },
       "role": "admin",
       "steps": 9,
@@ -1536,10 +1536,10 @@
       },
       "id": "sharing-operation-add-meter",
       "integrity": {
-        "de": "sha384-CXKIWVOjCOXGSO2LxLA9r5Vrb4Ie8u+sv5b3uZWAUxSmz+leCVMepWtcTJyKQPls",
-        "en": "sha384-DfPDGHoRscDoy+tZz7EHeYEJP27DCZD/G4RcxO2GvtsZcBypwG4INKScmvOKxwqo",
-        "fr": "sha384-3f+udmjWMEJToGXNQIrsF6lZ7PQ9DAiQFoV1JhaXAmp4Eot3NDDmmAm/0+8kDwc/",
-        "nl": "sha384-dAuznsN449+Y8rG44Zo2K79ZXzjb6ivj91xmxF4n0z7nPl9NhM+YeOZJJHLkgAx2"
+        "de": "sha384-cfUxO9YlyEEZZfcjcsq1tYHGgTMOJBxaxx1nz9LfIjBEyc6yElmF9oxQAage7RGS",
+        "en": "sha384-rfeDTqO6Ud3HGskKE34/CuNTu7spe8gC14a8lDi7bN4Rwj1te0D/cXtzdKCeGAst",
+        "fr": "sha384-5aUB/oaUjhlBV1w9UmsLV6eMpWZ2wMg9sdgldtcAT0u5kgFvNI3ycy5+T5Ure48d",
+        "nl": "sha384-wAdPRQYN4KhfTzSAE3hnKKdk/CFU/SqgkuzrXBaasjrFYGdcWTh73nL3kdAkEZW8"
       },
       "role": "admin",
       "steps": 8,
@@ -1548,6 +1548,110 @@
         "en": "Add a meter to a sharing operation",
         "fr": "Ajouter un compteur à une opération",
         "nl": "Een meter aan een deeloperatie toevoegen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/signatures/community"
+      },
+      "files": {
+        "de": "signature-manager-follows.de.json",
+        "en": "signature-manager-follows.en.json",
+        "fr": "signature-manager-follows.fr.json",
+        "nl": "signature-manager-follows.nl.json"
+      },
+      "id": "signature-manager-follows",
+      "integrity": {
+        "de": "sha384-jh4Z3X81LK+IYK2TOhQPDv2bQ9lordsQe9p6F31wrBQb8HgL97HzpSFH7JP4dNi1",
+        "en": "sha384-AXsYkc8i9Ycl55onBnyjmJaLyVJyY2sgInBDJQOfvXfOXFMXIqVpkgEtPAmdiGu/",
+        "fr": "sha384-Db+Qte1Smb9uOKksO1wyQMLaP0y9qgAboW9ohZ0bS0bp1ObJB1eminEm7kxySpjZ",
+        "nl": "sha384-qLqF9q0GVLbpZMK1gg6yWXd9EPhOSFZu4bjVjJdZnoCOZQlZCabDVXFcafH3TdT1"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Die Signaturanfragen verfolgen",
+        "en": "Follow the signature requests",
+        "fr": "Suivre les demandes de signature",
+        "nl": "De handtekeningverzoeken volgen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/administrative-document/procedures/:dossierId"
+      },
+      "files": {
+        "de": "signature-request.de.json",
+        "en": "signature-request.en.json",
+        "fr": "signature-request.fr.json",
+        "nl": "signature-request.nl.json"
+      },
+      "id": "signature-request",
+      "integrity": {
+        "de": "sha384-N/7zbJq50SaBWJWejCVxyJ29jL9bpwVvw1ekplG6Tk76pAQx+Z2tMjvCuYXzxK3j",
+        "en": "sha384-ld+1wTNkDX0BmiwkCgc4HYaCt3OVPFheqS2yWzjSC1iBcS2JAsuwCloji8laVFsJ",
+        "fr": "sha384-9mmtX6KKwC+BAZCDYsDyJ6KwbKyggjeNgx8LAKKfxOKi25e5GGe8CeeRpz5KZjNu",
+        "nl": "sha384-3Nr804v5gfIwn38zHv2g7FGbasOHC193xPZ7kdUp+Ugf5h+AENqzlJccrMSMBTXa"
+      },
+      "role": "admin",
+      "steps": 4,
+      "title": {
+        "de": "Eine elektronische Unterschrift anfordern",
+        "en": "Request an electronic signature",
+        "fr": "Demander une signature électronique",
+        "nl": "Een elektronische handtekening vragen"
+      }
+    },
+    {
+      "entry": {
+        "route": "/signatures"
+      },
+      "files": {
+        "de": "signature-sign.de.json",
+        "en": "signature-sign.en.json",
+        "fr": "signature-sign.fr.json",
+        "nl": "signature-sign.nl.json"
+      },
+      "id": "signature-sign",
+      "integrity": {
+        "de": "sha384-THgE7F/FlJlxU09FkPP/mdtdxC3b7stgd7mc+MbXhtJKDHn5MFbOIXbseDGHmMSF",
+        "en": "sha384-aYuciBaJ1K9uihWrVJWdouxCtcty1Wo+TL5X/QFF6zPdvgc/xTinXcv5BmEUYp5I",
+        "fr": "sha384-+gOz3ZCKrPp3haaVzJ3A3I/2LsISO0+UwXyi9N5k9bMWsAyg20/wEPP3vQM6qe92",
+        "nl": "sha384-mV8WA4Rz8fohwuNdkps6qnuOKoN+NFxvYXwxCkVUJQk4TC+twesSKjfOdlZ2Zgw2"
+      },
+      "role": "member",
+      "steps": 9,
+      "title": {
+        "de": "Ein Dokument in der Anwendung unterschreiben",
+        "en": "Sign a document in the app",
+        "fr": "Signer un document dans l'application",
+        "nl": "Een document ondertekenen in de applicatie"
+      }
+    },
+    {
+      "entry": {
+        "route": "/administrative-document/procedures/:dossierId"
+      },
+      "files": {
+        "de": "signature-signed-evidence.de.json",
+        "en": "signature-signed-evidence.en.json",
+        "fr": "signature-signed-evidence.fr.json",
+        "nl": "signature-signed-evidence.nl.json"
+      },
+      "id": "signature-signed-evidence",
+      "integrity": {
+        "de": "sha384-UV5RVd8gTiMV+uQlrBWPqU6un282AkOEgXUzZgN3GdsgPkXyqr+8LN7uswb1MBQ/",
+        "en": "sha384-I/txymM70ERFv4KbGv2tmLmX6mU4fhe/cos06U57zxd2+LkZVeDTCTaIppvC7VTh",
+        "fr": "sha384-Cn0joisfb95WEnF3O5Wv4e2CSW6Hnp/73RhaHWm4+0FeWKk3pKvVEzVyH/dox5VB",
+        "nl": "sha384-WTQ0PZjylifW6dS6vahBXC4AT2CPDTaKB896ZSZelFo3DetmUOlQC/6+onkc5rOk"
+      },
+      "role": "admin",
+      "steps": 6,
+      "title": {
+        "de": "Ein unterschriebenes Dokument und seinen Nachweis finden",
+        "en": "Find a signed document and its evidence",
+        "fr": "Retrouver un document signé et sa preuve",
+        "nl": "Een ondertekend document en het bewijs ervan terugvinden"
       }
     },
     {
@@ -1562,10 +1666,10 @@
       },
       "id": "simulation-run",
       "integrity": {
-        "de": "sha384-0ndz9x9kiwzdWkkRfsXTeQxiDLNO8bOx9bj55mpOK+7aWIhK0hINVfTdqKLSGNF4",
-        "en": "sha384-QfX8fJ/GtJqFiU3iqrdlg3Hyf0WqHnjNN6Pau8VWysJM4Y6CFklFRYT5Z8cYOXV1",
-        "fr": "sha384-xiiGyV9tVn4XdYvcVXA3VolGXPFk13Dt5hJS/sRsSX+dfc4h6HL3Jw/qcGU4wX7v",
-        "nl": "sha384-OyZP6T1sAwVLq+NN/UBPHgrDUupNCVze7FzddKJtHVgJWekpodAHJtTK6/hEobaF"
+        "de": "sha384-/91qg6RO6X7inHqrtkrIswtd/VIZR/p4dPVobhtKAS+EpS++zM1F8c1xK8rJxkUT",
+        "en": "sha384-lFE1zCvl5ZQLY0w/Eh0gD99YVkNM9RZYhwYsDKn244/g+MDAdMlRdhzbIuTkdn0t",
+        "fr": "sha384-9NUTFLkUFL4RQIYtPoKJtr6clTgIuV9hi+t/+dqM7oxgGYRNg4KkSaM+2opWrx08",
+        "nl": "sha384-cUnEWKEEfcxeb3GB5AHyT8ZdyaJe++gwb5HhOJ9Unh9ePmRsPzlwhSA+4XCvyeH2"
       },
       "role": "admin",
       "steps": 11,

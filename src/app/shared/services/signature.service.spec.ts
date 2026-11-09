@@ -68,6 +68,8 @@ describe('SignatureService', () => {
     service.myRequests('pending').subscribe();
     const request = http.expectOne((r) => r.url === `${API}/me/requests`);
     expect(request.request.params.get('status')).toBe('pending');
+    // Answered, or cachedGet's 10 s timeout retries it after the TestBed is gone (NG0205).
+    request.flush({ data: [] });
   });
 
   it('reads a request, and again when asked fresh (the seal poll)', () => {

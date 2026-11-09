@@ -52,6 +52,8 @@ describe('AdministrativeProcedureService', () => {
     const request = http.expectOne((r) => r.url === `${API}/dossiers`);
     expect(request.request.params.get('page')).toBe('2');
     expect(request.request.params.get('code')).toBe('PARTAGE_FIN');
+    // Answered, or cachedGet's 10 s timeout retries it after the TestBed is gone (NG0205).
+    request.flush({ data: [] });
   });
 
   it('marks as sent in multipart, without a Content-Type of its own', () => {

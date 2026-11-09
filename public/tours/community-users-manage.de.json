@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/users"
   },
@@ -34,7 +34,8 @@
       "target": "users-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "Diese Seite listet die mit der Gemeinschaft verknüpften Konten und ihre Rolle auf. Hier laden Sie einen Manager ein, ändern eine Rolle oder entziehen einen Zugriff.",
-      "title": "Die Benutzer der Gemeinschaft"
+      "title": "Die Benutzer der Gemeinschaft",
+      "waitFor": "users-community-list__table"
     },
     {
       "advance": {

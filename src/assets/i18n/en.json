@@ -2718,6 +2718,7 @@
         "FIX": "Fix in the CRM",
         "RELOAD": "Reload from the CRM",
         "RELOAD_BLOCKED": "You have edited the form — reloading would discard your corrections.",
+        "BLOCKED": "This document cannot be generated until this is fixed in the CRM.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Delivery point {{subject}} is not attributed to any member, so it cannot be listed under a name.",
@@ -2728,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Member information is missing: {{field}}."
+          },
+          "key": {
+            "missing": "No approved allocation key is linked to this sharing operation.",
+            "no_iteration": "Key \"{{key}}\" has no iteration: it splits nothing.",
+            "iteration_no_consumer": "Iteration {{iteration}} of key \"{{key}}\" has no consumer.",
+            "iterations_total": "The iterations of key \"{{key}}\" add up to {{total}} % of the shared energy, not 100 %."
           }
         }
       }

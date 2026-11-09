@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/managers"
   },
@@ -34,7 +34,8 @@
       "target": "managers-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "This page lists the community's administrators and managers with their role. You can filter by role or search for a person. It is a read-only view: you cannot change anything.",
-      "title": "Your community's managers"
+      "title": "Your community's managers",
+      "waitFor": "managers-community-list__table"
     },
     {
       "advance": {
@@ -52,8 +53,7 @@
       "id": "managers-community-list__btn--clear-filters",
       "target": "managers-community-list__btn--clear-filters",
       "text": "The \"Clear filters\" button clears the search and shows all the managers again.",
-      "title": "Reset the search",
-      "waitFor": "managers-community-list__row--desktop--0"
+      "title": "Reset the search"
     }
   ],
   "title": "See your community's managers"

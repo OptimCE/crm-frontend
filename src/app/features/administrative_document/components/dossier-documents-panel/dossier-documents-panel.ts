@@ -283,7 +283,7 @@ export class DossierDocumentsPanel {
   /**
    * One click: a fresh pre-fill with the reviewer's own edits carried over.
    * Without a piece, every stale one. A piece whose version cannot say what was
-   * typed opens the review form instead.
+   * typed, or that the CRM cannot fill (blocked), opens the review form instead.
    */
   regenerate(piece?: PieceOut): void {
     const targets = piece ? [piece] : this.stalePieces();
@@ -308,7 +308,12 @@ export class DossierDocumentsPanel {
               VALIDATION_TYPE,
             );
           }
-          const review = targets.find((p) => data.needs_review.includes(p.id));
+          // A piece the CRM cannot fill meaningfully (blocked, 2366) opens its
+          // review form too: that is where the reason and the link to fix it are.
+          const blocked = data.blocked ?? [];
+          const review = targets.find(
+            (p) => data.needs_review.includes(p.id) || blocked.includes(p.id),
+          );
           if (review) this.openGenerate(review);
         },
         error: (error: unknown) => {

@@ -1,0 +1,74 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/signatures/community"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-manager-follows/fr.html",
+  "id": "signature-manager-follows",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__table",
+      "target": "signature-follow__table",
+      "targetClick": "next",
+      "text": "Chaque demande de signature y figure avec le document, son origine, son avancement, son échéance et son statut. Le filtre du haut ne garde que les demandes d'un statut.",
+      "title": "Les demandes de la communauté",
+      "waitFor": "signature-follow__row--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-follow__progress-0",
+      "target": "signature-follow__progress-0",
+      "targetClick": "next",
+      "text": "L'**« Avancement »** compte les signatures reçues : ici **« 0 sur 1 signés »**, le participant n'a pas encore signé.",
+      "title": "Où en est la demande"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--remind-0",
+      "target": "signature-follow__button--remind-0",
+      "text": "Cliquez sur **« Relancer »** : chaque signataire qui n'a pas encore signé reçoit un rappel par notification et par e-mail.",
+      "title": "Relancer le signataire"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "signature-follow__button--open-0",
+      "target": "signature-follow__button--open-0",
+      "text": "Cliquez sur **« Ouvrir le détail »** pour voir la demande en entier.",
+      "title": "Ouvrir la demande"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Le haut de la page donne le statut de la demande et son échéance. Sous **« Signataires »**, chacun est listé avec ce qu'il a fait : invité, consulté, signé ou refusé.",
+      "title": "Les signataires",
+      "waitFor": "signature-request__timeline"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "L'**« Historique »** retrace chaque étape, relance comprise. **« Journal intègre »** confirme que personne ne l'a modifié. Le document signé n'apparaît qu'une fois que tout le monde a signé.",
+      "title": "L'historique"
+    }
+  ],
+  "title": "Suivre les demandes de signature"
+}

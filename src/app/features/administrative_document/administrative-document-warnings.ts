@@ -65,6 +65,14 @@ export function warningLink(warning: PrefillWarning): string | null {
       return warning.subject_id && ID_PATTERN.test(warning.subject_id)
         ? `/members/${warning.subject_id}`
         : null;
+    case 'key':
+      return warning.subject_id && ID_PATTERN.test(warning.subject_id)
+        ? `/keys/${warning.subject_id}`
+        : null;
+    case 'sharing_operation':
+      return warning.subject_id && ID_PATTERN.test(warning.subject_id)
+        ? `/sharing_operations/${warning.subject_id}`
+        : null;
     default:
       return null;
   }

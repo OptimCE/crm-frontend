@@ -1,0 +1,55 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-request/nl.html",
+  "id": "signature-request",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Na het genereren wacht de verklaring op erewoord van een deelnemer (bijlage 8) op zijn handtekening. In plaats van ze af te drukken en terug te sturen, kan de deelnemer ze **elektronisch ondertekenen** in de applicatie.",
+      "title": "Het te ondertekenen document",
+      "waitFor": "dossier-documents-panel__button--request-signature-2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__button--request-signature-2",
+      "target": "dossier-documents-panel__button--request-signature-2",
+      "text": "Klik op **“Handtekening vragen”**. De deelnemer wordt uitgenodigd om te ondertekenen: hij krijgt een melding en een e-mail, en het document verschijnt in zijn menu “Te ondertekenen”.",
+      "title": "De handtekening vragen",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__signature-status-2",
+      "target": "dossier-documents-panel__signature-status-2",
+      "targetClick": "next",
+      "text": "Het document toont **“Handtekening gevraagd”**. Zodra de deelnemer heeft ondertekend, wordt dat “Elektronisch ondertekend” en wordt de ondertekende pdf de definitieve versie, zonder iets te uploaden.",
+      "title": "De handtekening is gevraagd"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "targetClick": "next",
+      "text": "De link **“Volgen”** opent de pagina van het verzoek: wie moet ondertekenen, hoe ver het staat en de geschiedenis ervan. Alle verzoeken van de gemeenschap staan ook in het menu “Handtekeningen”.",
+      "title": "Het verzoek volgen"
+    }
+  ],
+  "title": "Een elektronische handtekening vragen"
+}

@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/keys/:keyId"
   },
@@ -41,7 +41,8 @@
       ],
       "target": null,
       "text": "Zurück in der Schlüsselliste erscheint „Key 2“ nicht mehr: Das Löschen wurde gespeichert.",
-      "title": "Schlüssel gelöscht"
+      "title": "Schlüssel gelöscht",
+      "waitFor": "keys-list__table--keys"
     }
   ],
   "title": "Verteilungsschlüssel löschen"

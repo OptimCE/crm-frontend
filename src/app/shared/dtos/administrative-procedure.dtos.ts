@@ -695,6 +695,8 @@ export interface RegenerateOut {
   requested: number[];
   needs_review: number[];
   in_flight: number[];
+  /** The CRM lacks what the piece describes (2366): the review form says what. */
+  blocked?: number[];
 }
 
 export interface VerifyAccepted {

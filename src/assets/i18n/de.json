@@ -2718,6 +2718,7 @@
         "FIX": "Im CRM korrigieren",
         "RELOAD": "Aus dem CRM neu laden",
         "RELOAD_BLOCKED": "Sie haben das Formular bearbeitet — Neuladen würde Ihre Korrekturen verwerfen.",
+        "BLOCKED": "Dieses Dokument kann erst erzeugt werden, wenn dies im CRM korrigiert ist.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Der Lieferpunkt {{subject}} ist keinem Mitglied zugeordnet und kann daher nicht unter einem Namen aufgeführt werden.",
@@ -2728,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Fehlende Angabe zu einem Mitglied: {{field}}."
+          },
+          "key": {
+            "missing": "Mit dieser Teilungsoperation ist kein genehmigter Verteilungsschlüssel verknüpft.",
+            "no_iteration": "Der Schlüssel \"{{key}}\" hat keine Iteration: er verteilt nichts.",
+            "iteration_no_consumer": "Iteration {{iteration}} des Schlüssels \"{{key}}\" hat keinen Verbraucher.",
+            "iterations_total": "Die Iterationen des Schlüssels \"{{key}}\" ergeben {{total}} % der geteilten Energie, nicht 100 %."
           }
         }
       }

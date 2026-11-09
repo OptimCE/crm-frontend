@@ -2718,6 +2718,7 @@
         "FIX": "Corrigeren in het CRM",
         "RELOAD": "Opnieuw laden uit het CRM",
         "RELOAD_BLOCKED": "U hebt het formulier gewijzigd — opnieuw laden wist uw correcties.",
+        "BLOCKED": "Dit document kan pas worden gegenereerd als dit in het CRM is gecorrigeerd.",
         "CODES": {
           "meter": {
             "no_member_attribution": "Leveringspunt {{subject}} is aan geen enkel lid toegewezen en kan dus niet onder een naam worden vermeld.",
@@ -2728,6 +2729,12 @@
           },
           "member": {
             "field_missing": "Ontbrekende informatie voor een lid: {{field}}."
+          },
+          "key": {
+            "missing": "Er is geen goedgekeurde verdeelsleutel aan deze deeloperatie gekoppeld.",
+            "no_iteration": "Sleutel \"{{key}}\" heeft geen iteratie: hij verdeelt niets.",
+            "iteration_no_consumer": "Iteratie {{iteration}} van sleutel \"{{key}}\" heeft geen verbruiker.",
+            "iterations_total": "De iteraties van sleutel \"{{key}}\" komen samen op {{total}} % van de gedeelde energie, niet 100 %."
           }
         }
       }

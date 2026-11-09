@@ -107,7 +107,29 @@ export class GenerateDialog implements OnInit {
   readonly warningLink = warningLink;
   readonly warningFieldLabelKey = warningFieldLabelKey;
 
-  readonly warningCount = computed(() => this.warnings().length);
+  /**
+   * What the annex refuses to render without (a key description of a key with
+   * no iteration): shown first, as errors, and « Générer » stays disabled until
+   * the CRM is fixed and the pre-fill reloaded.
+   */
+  readonly blockers = computed(() => this.warnings().filter((w) => w.blocking));
+  /** The other warnings: worth fixing, but the form can still be filed. */
+  readonly advisories = computed(() => this.warnings().filter((w) => !w.blocking));
+  readonly warningCount = computed(() => this.advisories().length);
+  readonly blocked = computed(() => this.blockers().length > 0);
+
+  /**
+   * The sentence's interpolation values: the warning's own params (`key`,
+   * `iteration`, `total`…), its subject, and the named field's label.
+   */
+  warningTextParams(warning: PrefillWarning): Record<string, string> {
+    const fieldKey = warningFieldLabelKey(warning);
+    return {
+      ...warningParams(warning),
+      subject: warning.subject_id ?? '',
+      field: fieldKey ? (this.translate.instant(fieldKey) as string) : '',
+    };
+  }
 
   ngOnInit(): void {
     const id = this.dialogData?.documentId;
@@ -201,7 +223,7 @@ export class GenerateDialog implements OnInit {
   submit(): void {
     this.formError.set(null);
     const id = this.dialogData?.documentId;
-    if (!id) return;
+    if (!id || this.blocked()) return;
 
     // The procedure may have been sent while this dialog was open: the annex's
     // 409 (GENERATION_NOT_ALLOWED) then lands in the form, below.
@@ -223,13 +245,15 @@ export class GenerateDialog implements OnInit {
         error: (error: unknown) => {
           this.submitting.set(false);
           const code = extractApiErrorCode(error);
-          // All four are about this document or this payload, so they belong in
-          // the form rather than in a toast that vanishes.
+          // All five are about this document or this payload, so they belong in
+          // the form rather than in a toast that vanishes. GENERATION_BLOCKED
+          // means the CRM changed while the dialog was open: « Recharger » shows why.
           if (
             code === ERROR_CODE.GENERATION_NOT_ALLOWED ||
             code === ERROR_CODE.TEMPLATE_NOT_REGISTERED ||
             code === ERROR_CODE.RENDER_ALREADY_IN_FLIGHT ||
-            code === ERROR_CODE.TOO_MANY_ROWS
+            code === ERROR_CODE.TOO_MANY_ROWS ||
+            code === ERROR_CODE.GENERATION_BLOCKED
           ) {
             this.formError.set(extractApiErrorMessage(error));
             return;

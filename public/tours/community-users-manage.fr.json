@@ -1,5 +1,5 @@
 {
-  "buildId": "4c5360479dbc",
+  "buildId": "ec8878fdeb71",
   "entry": {
     "route": "/communities/users"
   },
@@ -34,7 +34,8 @@
       "target": "users-community-list__card--mobile--0",
       "targetClick": "next",
       "text": "Cette page liste les comptes rattachés à la communauté et leur rôle. C'est ici que vous invitez un gestionnaire, changez un rôle ou retirez un accès.",
-      "title": "Les utilisateurs de la communauté"
+      "title": "Les utilisateurs de la communauté",
+      "waitFor": "users-community-list__table"
     },
     {
       "advance": {

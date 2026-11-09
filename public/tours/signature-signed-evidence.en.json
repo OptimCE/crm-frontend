@@ -1,0 +1,76 @@
+{
+  "buildId": "ec8878fdeb71",
+  "entry": {
+    "route": "/administrative-document/procedures/:dossierId"
+  },
+  "guideUrl": "https://guide.optimce.be/signature-signed-evidence/en.html",
+  "id": "signature-signed-evidence",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__row--2",
+      "target": "dossier-documents-panel__row--2",
+      "targetClick": "next",
+      "text": "Once the participant has signed, the document shows **\"Signed electronically\"**. The signed and sealed PDF has become its final version: there is nothing to upload.",
+      "title": "The document is signed",
+      "waitFor": "dossier-documents-panel__signature-status-2"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "dossier-documents-panel__button--signature-evidence-2",
+      "target": "dossier-documents-panel__button--signature-evidence-2",
+      "targetClick": "next",
+      "text": "**\"Evidence\"** downloads the evidence report: who signed, when, on whose behalf, and the document's fingerprint. Keep it with the dossier: it attests the signature.",
+      "title": "The proof of the signature",
+      "waitFor": "dossier-documents-panel__row--2"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "dossier-documents-panel__link--signature-follow-2",
+      "target": "dossier-documents-panel__link--signature-follow-2",
+      "text": "Click **\"Follow\"** to open the request's page.",
+      "title": "Open the signature request"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__signer--0",
+      "target": "signature-request__signer--0",
+      "targetClick": "next",
+      "text": "Each signer is listed with the date of their signature. When someone else signs for the participant, the line says **\"In the name and on behalf of\"** the participant and **\"Signed by\"** the person who signed, as the PDF does.",
+      "title": "Who signed",
+      "waitFor": "signature-request__signed-by--0"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__button--download-final",
+      "target": "signature-request__button--download-final",
+      "targetClick": "next",
+      "text": "**\"Download the signed document\"** gives the sealed PDF. **\"Evidence (PDF)\"** is the readable report, **\"Evidence (JSON)\"** the same facts for an automated check.",
+      "title": "The signed document and its evidence"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "signature-request__chain",
+      "target": "signature-request__chain",
+      "targetClick": "next",
+      "text": "The **\"History\"** traces every step, from the request's creation to the finalised document. **\"Log intact\"** confirms that nobody has changed it since.",
+      "title": "The history"
+    }
+  ],
+  "title": "Find a signed document and its evidence"
+}

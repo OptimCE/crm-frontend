@@ -5,6 +5,7 @@ import { catchError, firstValueFrom, of } from 'rxjs';
 
 import { CommunityServicesStore } from '../../../core/services/community-services.store';
 import { UserContextService } from '../../../core/services/authorization/authorization.service';
+import { SignatureStore } from '../../signature/signature.store';
 import { TourContext, TourManifest } from '../tour-catalog';
 
 /** The same file `provideSteppyTours({ fallbackManifest })` loads. */
@@ -23,6 +24,7 @@ export class GuidedToursService {
   private readonly router = inject(Router);
   private readonly userContext = inject(UserContextService);
   private readonly communityServices = inject(CommunityServicesStore);
+  private readonly signatures = inject(SignatureStore);
 
   /** Kept once loaded; a failed load is retried on the next open. */
   private manifest: TourManifest | null = null;
@@ -39,6 +41,7 @@ export class GuidedToursService {
         role: this.userContext.activeCommunityRole(),
         activeFeatures: new Set(services.filter((s) => s.subscribed).map((s) => s.feature)),
         url: this.router.url,
+        pendingSignatures: this.signatures.pendingCount(),
       },
     };
   }

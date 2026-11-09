@@ -250,6 +250,18 @@ describe('DossierDocumentsPanel (a procedure’s pieces)', () => {
     expect(dialogOpen.mock.calls[0][0]).toBe(GenerateDialog);
   });
 
+  it('opens the review form when the CRM cannot fill the piece (blocked): it says why', () => {
+    fixture.componentInstance.detail.set(withPiece(1, { status: ProcedureDocumentStatus.STALE }));
+    fixture.detectChanges();
+    regenerate.mockReturnValue(
+      of(new ApiResponse({ requested: [], needs_review: [], in_flight: [], blocked: [22] })),
+    );
+
+    byTestId('dossier-documents-panel__btn--regenerate-1')?.querySelector('button')?.click();
+
+    expect(dialogOpen.mock.calls[0][0]).toBe(GenerateDialog);
+  });
+
   it('does not offer one click for an uploaded piece: there is nothing to carry over', () => {
     const detail = withPiece(1, { status: ProcedureDocumentStatus.STALE });
     detail.pieces[1].current_version = { ...detail.pieces[1].current_version!, generated: false };
