@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/export-my-data/fr.html",
+  "id": "export-my-data",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--exports",
+      "target": "profile-tabs__tab--exports",
+      "text": "Cliquez sur l'onglet « Mes exports ». Vous y demandez une copie de vos données et y retrouvez les exports déjà demandés.",
+      "title": "Ouvrir « Mes exports »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Cliquez sur « Exporter mes données ». L'archive rassemble tout ce qu'OptimCE détient sur vous, dans chaque module : votre compte, vos membres, vos compteurs et leurs courbes, vos documents et vos factures. Par sécurité, l'export demande une connexion récente : si la vôtre date de plus de cinq minutes, l'app vous demande votre mot de passe, puis reprend la demande toute seule.",
+      "title": "Demander l'export",
+      "waitFor": "data-export__intro--user"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "L'export apparaît « En préparation », puis passe à « Prêt » de lui-même : la liste se met à jour sans recharger la page. Vous pouvez aussi la quitter : une notification et un e-mail vous préviennent quand il est prêt. Le fichier reste disponible sept jours.",
+      "title": "Attendre « Prêt »"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "L'export apparaît « En préparation », puis passe à « Prêt » de lui-même : la liste se met à jour sans recharger la page. Vous pouvez aussi la quitter : une notification et un e-mail vous préviennent quand il est prêt. Le fichier reste disponible sept jours.",
+      "title": "Attendre « Prêt »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Cliquez sur « Télécharger » : le fichier ZIP s'enregistre sur votre ordinateur. Ouvrez-y index.html pour lire son contenu service par service ; les données elles-mêmes sont en JSON et en CSV, lisibles par d'autres logiciels. Pour votre sécurité, l'e-mail ne contient jamais le fichier : on le télécharge uniquement depuis l'app.",
+      "title": "Télécharger l'archive"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Touchez « Télécharger » : le fichier ZIP s'enregistre sur votre appareil. Ouvrez-y index.html pour lire son contenu service par service ; les données elles-mêmes sont en JSON et en CSV, lisibles par d'autres logiciels. Pour votre sécurité, l'e-mail ne contient jamais le fichier : on le télécharge uniquement depuis l'app.",
+      "title": "Télécharger l'archive"
+    }
+  ],
+  "title": "Exporter mes données"
+}

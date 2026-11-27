@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/communities/exports"
+  },
+  "guideUrl": "https://guide.optimce.be/export-community-data/nl.html",
+  "id": "export-community-data",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Klik op “De gegevens van de gemeenschap exporteren”. Het archief bundelt de leden, de meters en hun verbruik, de deeloperaties, de verdeelsleutels, de documenten, de facturen en de geaggregeerde gegevens van de slimme meters. Het bevat geen persoonlijke meldingen en geen individuele curve van een lid. Net als bij een persoonlijke export is een recente aanmelding vereist.",
+      "title": "De export aanvragen",
+      "waitFor": "data-export__intro--community"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--warning-confirm",
+      "target": "data-export__btn--warning-confirm",
+      "text": "Het bestand bevat de persoonsgegevens van alle leden: u bent er verantwoordelijk voor. Bewaar het op een veilige plaats, deel het alleen met wie het nodig heeft en verwijder het zodra u het niet meer nodig hebt. De andere beheerders worden van uw aanvraag op de hoogte gebracht en zien ze in de lijst, maar alleen u kunt het bestand downloaden. Klik op “Exporteren” om te bevestigen.",
+      "title": "De waarschuwing lezen"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "De lijst toont elke export van de gemeenschap: wie hem heeft aangevraagd, wanneer, en de status. Deze export gaat vanzelf van “In voorbereiding” naar “Klaar”; u wordt ook verwittigd met een melding en een e-mail. Het bestand blijft zeven dagen beschikbaar.",
+      "title": "Wachten op “Klaar”"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "De lijst toont elke export van de gemeenschap: wie hem heeft aangevraagd, wanneer, en de status. Deze export gaat vanzelf van “In voorbereiding” naar “Klaar”; u wordt ook verwittigd met een melding en een e-mail. Het bestand blijft zeven dagen beschikbaar.",
+      "title": "Wachten op “Klaar”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Klik op “Downloaden”: het ZIP-bestand wordt op uw computer opgeslagen. Het bevat één map per dienst, JSON- en CSV-bestanden en een manifest.json dat elk ervan beschrijft. Een andere beheerder ziet deze export in de lijst, zonder knop “Downloaden”.",
+      "title": "Het archief downloaden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Tik op “Downloaden”: het ZIP-bestand wordt op uw toestel opgeslagen. Het bevat één map per dienst, JSON- en CSV-bestanden en een manifest.json dat elk ervan beschrijft. Een andere beheerder ziet deze export in de lijst, zonder knop “Downloaden”.",
+      "title": "Het archief downloaden"
+    }
+  ],
+  "title": "De gegevens van de gemeenschap exporteren"
+}

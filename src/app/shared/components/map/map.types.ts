@@ -1,3 +1,4 @@
+import type { Params } from '@angular/router';
 import type { MultiPolygon, Polygon } from 'geojson';
 
 /** Which of the two views a list page is showing. */
@@ -61,6 +62,11 @@ export interface MapZone {
   readonly fields?: readonly MapFieldSpec[];
   readonly badges?: readonly MapBadgeSpec[];
   readonly routerLink?: string;
+  /**
+   * Query params for `routerLink`. A `?` written into the link itself would be
+   * encoded as part of the path (`%3F`), so they travel separately.
+   */
+  readonly queryParams?: Params;
 }
 
 /** What the map should frame once its data arrives. */

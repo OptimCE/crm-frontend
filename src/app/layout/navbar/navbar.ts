@@ -55,6 +55,7 @@ interface RouteActiveState {
   communities_managers: boolean;
   communities_public: boolean;
   communities_info: boolean;
+  communities_exports: boolean;
   annexes_services: boolean;
   news: boolean;
   billing: boolean;
@@ -78,6 +79,7 @@ const ROUTE_MAP: [keyof RouteActiveState, string][] = [
   ['communities_public', '/communities/public'],
   ['communities_users', '/communities/users'],
   ['communities_info', '/communities/info'],
+  ['communities_exports', '/communities/exports'],
   ['annexes_services', '/annexes-services'],
   ['administrative_document', '/administrative-document'],
   ['news', '/news'],
@@ -184,6 +186,7 @@ export class Navbar implements OnInit {
     communities_managers: false,
     communities_public: false,
     communities_info: false,
+    communities_exports: false,
     annexes_services: false,
     news: false,
     billing: false,
@@ -286,6 +289,7 @@ export class Navbar implements OnInit {
           communities_managers: false,
           communities_public: false,
           communities_info: false,
+          communities_exports: false,
           annexes_services: false,
           news: false,
           billing: false,

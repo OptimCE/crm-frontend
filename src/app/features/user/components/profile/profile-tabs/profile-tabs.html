@@ -1,5 +1,10 @@
 <div class="mt-6">
-  <p-tabs data-testid="profile-tabs__tabs" [value]="0" styleClass="profile-tabs">
+  <p-tabs
+    data-testid="profile-tabs__tabs"
+    [value]="activeTab()"
+    (valueChange)="onTabChange($event)"
+    styleClass="profile-tabs"
+  >
     <p-tablist>
       <p-tab data-testid="profile-tabs__tab--meters" [value]="0">{{
         'PROFILE.TABS.HEADERS.METERS' | translate
@@ -15,6 +20,9 @@
       }}</p-tab>
       <p-tab data-testid="profile-tabs__tab--notifications" [value]="4">{{
         'PROFILE.TABS.HEADERS.NOTIFICATIONS' | translate
+      }}</p-tab>
+      <p-tab data-testid="profile-tabs__tab--exports" [value]="5">{{
+        'PROFILE.TABS.HEADERS.EXPORTS' | translate
       }}</p-tab>
     </p-tablist>
 
@@ -37,6 +45,13 @@
 
       <p-tabpanel [value]="4">
         <app-notification-preferences-user></app-notification-preferences-user>
+      </p-tabpanel>
+
+      <!-- Lazy: the list polls while an export is in preparation, only once this tab is opened. -->
+      <p-tabpanel [value]="5" [lazy]="true">
+        <ng-template #content>
+          <app-data-export-panel scope="user" />
+        </ng-template>
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>

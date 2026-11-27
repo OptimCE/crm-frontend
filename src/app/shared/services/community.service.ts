@@ -9,6 +9,7 @@ import {
   MyCommunityDTO,
   PatchRoleUserDTO,
   PublicCommunityDTO,
+  PublicCommunityDetailDTO,
   PublicCommunityMapDTO,
   PublicCommunityMapQuery,
   RegulatorDTO,
@@ -78,6 +79,21 @@ export class CommunityService extends ServiceBase {
     );
   }
 
+  /**
+   * The public face of a public community — presentation and public contact —
+   * readable by any signed-in user, member or not. 404 once the community has no
+   * public sharing operation any more.
+   *
+   * The key starts with `communities` on purpose: `updateCommunity` invalidates
+   * that prefix, so an admin who edits the public contact sees it right away.
+   */
+  getPublicCommunityDetail(id: number): Observable<ApiResponse<PublicCommunityDetailDTO>> {
+    return this.cachedGet<ApiResponse<PublicCommunityDetailDTO>>(
+      `communities-public-detail:${id}`,
+      this.apiAddress + `/${id}/public`,
+    );
+  }
+
   /** Static reference list of valid regulators (tenant-agnostic, cached). */
   getRegulators(): Observable<ApiResponse<RegulatorDTO[]>> {
     return this.cachedGet<ApiResponse<RegulatorDTO[]>>(
@@ -128,6 +144,9 @@ export class CommunityService extends ServiceBase {
     return this.http.put<ApiResponse<string>>(this.apiAddress + '/', updated_community).pipe(
       tap(() => {
         this.cache.invalidate('communities');
+        // Not covered by the prefix above: without it the page that just saved
+        // re-reads the old detail for the whole cache lifetime.
+        this.cache.invalidate('community-detail');
       }),
     );
   }
@@ -140,6 +159,7 @@ export class CommunityService extends ServiceBase {
       .pipe(
         tap(() => {
           this.cache.invalidate('communities');
+          this.cache.invalidate('community-detail');
         }),
       );
   }
@@ -148,6 +168,7 @@ export class CommunityService extends ServiceBase {
     return this.http.delete<ApiResponse<string>>(this.apiAddress + '/logo').pipe(
       tap(() => {
         this.cache.invalidate('communities');
+        this.cache.invalidate('community-detail');
       }),
     );
   }

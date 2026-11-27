@@ -1,0 +1,12 @@
+.intro {
+  background-color: color-mix(in srgb, var(--p-primary-50) 40%, white);
+}
+
+/* Mobile card rows: no table borders or background behind the card. */
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.lg\:hidden {
+  background: transparent;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.lg\:hidden > td {
+  border: none;
+}

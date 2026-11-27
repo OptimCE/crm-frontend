@@ -61,6 +61,10 @@ export const AUDIT_ACTIONS: readonly string[] = [
   'crm.sharing_operation_key.rejected',
   'crm.sharing_op_consumption.uploaded',
   'crm.address.geocode_backfill',
+  'crm.export_job.requested',
+  'crm.export_job.download_url_issued',
+  'crm.export_job.expired',
+  'crm.export_job.failed',
   // allocation-key-generation service
   'allocation_key_generation.generation.created',
   'allocation_key_generation.generation.queue_failed',

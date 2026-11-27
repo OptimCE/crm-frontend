@@ -156,6 +156,20 @@ describe('routeFor', () => {
     expect(routeFor(notification('signature.declined'))).toBe('/signatures');
   });
 
+  it("sends a ready or failed export to the requester's export tab, from any community", () => {
+    for (const type of ['data_export.ready', 'data_export.failed']) {
+      expect(presentationFor(type).crossCommunity).toBe(true);
+      expect(routeFor(notification(type, { export_id: 'x', scope: 'community' }))).toBe(
+        '/users?tab=exports',
+      );
+    }
+  });
+
+  it("sends a community export request to that community's export screen", () => {
+    expect(presentationFor('data_export.requested').crossCommunity).toBeUndefined();
+    expect(routeFor(notification('data_export.requested', {}))).toBe('/communities/exports');
+  });
+
   it('returns undefined for a type with no destination', () => {
     expect(routeFor(notification('member.updated', { member_id: 1 }))).toBeUndefined();
     expect(routeFor(notification('something.unknown'))).toBeUndefined();

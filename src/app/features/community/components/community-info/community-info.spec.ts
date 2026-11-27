@@ -410,6 +410,8 @@ describe('CommunityInfo', () => {
         representative_email: null,
         statutes_date: null,
         internal_rules_date: null,
+        contact_email: null,
+        contact_phone: null,
       });
       expect(component.saving()).toBe(false);
       expect(component.editMode()).toBe(false);
@@ -821,6 +823,101 @@ describe('CommunityInfo', () => {
       component.save();
 
       expect(component.form.controls.representative_email.errors).toEqual({ email: true });
+      expect(communitySpy.updateCommunity).not.toHaveBeenCalled();
+    });
+  });
+
+  // ── public contact (published in the directory) ───────────────────
+
+  describe('public contact', () => {
+    beforeEach(async () => {
+      await configure({ isAdmin: true });
+    });
+
+    it('shows it in read mode', () => {
+      communitySpy.getCommunityDetail.mockReturnValue(
+        of(
+          new ApiResponse(
+            buildDetail({ contact_email: 'contact@ce.be', contact_phone: '+32 470 12 34 56' }),
+          ),
+        ),
+      );
+      create();
+
+      const el = fixture.nativeElement as HTMLElement;
+      expect(
+        el.querySelector('[data-testid="community-info__view--contact-email"]')?.textContent,
+      ).toContain('contact@ce.be');
+      expect(
+        el.querySelector('[data-testid="community-info__view--contact-phone"]')?.textContent,
+      ).toContain('+32 470 12 34 56');
+    });
+
+    it('loads it into the form', () => {
+      communitySpy.getCommunityDetail.mockReturnValue(
+        of(
+          new ApiResponse(
+            buildDetail({ contact_email: 'contact@ce.be', contact_phone: '04/123.45.67' }),
+          ),
+        ),
+      );
+      create();
+
+      expect(component.form.controls.contact_email.value).toBe('contact@ce.be');
+      expect(component.form.controls.contact_phone.value).toBe('04/123.45.67');
+    });
+
+    it('sends it trimmed, and empty as null', () => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({
+        name: 'Updated',
+        contact_email: '  contact@ce.be ',
+        contact_phone: ' +32 470 12 34 56 ',
+      });
+      // Validators.email refuses the padded value, so re-set it unpadded.
+      component.form.controls.contact_email.setValue('contact@ce.be');
+
+      component.save();
+
+      expect(communitySpy.updateCommunity.mock.calls[0][0]).toMatchObject({
+        contact_email: 'contact@ce.be',
+        contact_phone: '+32 470 12 34 56',
+      });
+    });
+
+    it('sends null to clear it', () => {
+      communitySpy.getCommunityDetail.mockReturnValue(
+        of(
+          new ApiResponse(
+            buildDetail({ contact_email: 'contact@ce.be', contact_phone: '0470123456' }),
+          ),
+        ),
+      );
+      create();
+      component.enterEdit();
+      component.form.patchValue({ contact_email: '', contact_phone: '' });
+
+      component.save();
+
+      expect(communitySpy.updateCommunity.mock.calls[0][0]).toMatchObject({
+        contact_email: null,
+        contact_phone: null,
+      });
+    });
+
+    it.each([
+      ['contact_email', 'pas-un-email', { email: true }],
+      ['contact_phone', '1234', { invalidPhone: true }],
+      ['contact_phone', 'appelez-nous', { invalidPhone: true }],
+    ] as const)('refuses %s = %s', (field, value, errors) => {
+      create();
+      component.enterEdit();
+      component.form.patchValue({ name: 'Updated', [field]: value });
+
+      component.save();
+
+      expect(component.form.controls[field].errors).toEqual(errors);
       expect(communitySpy.updateCommunity).not.toHaveBeenCalled();
     });
   });

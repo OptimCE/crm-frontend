@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/dashboard"
   },
@@ -172,7 +172,7 @@
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
       "targetClick": "next",
-      "text": "Membres et gestionnaires lisent ces informations ; vous seul pouvez les changer. **« Modifier »** ouvre le nom, la description, l'adresse, le numéro d'entreprise et l'IBAN — ce qui figure ensuite sur les factures et les documents officiels.",
+      "text": "Membres et gestionnaires lisent ces informations ; vous seul pouvez les changer. **« Modifier »** ouvre le nom, la description, l'adresse, le numéro d'entreprise et l'IBAN — ce qui figure ensuite sur les factures et les documents officiels. Vous y renseignez aussi le contact public, affiché dans l'annuaire des communautés.",
       "title": "Les informations légales",
       "waitFor": "community-info__card--view"
     }

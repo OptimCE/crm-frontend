@@ -93,7 +93,8 @@
       "admin_correspondence": "Answers to procedures",
       "admin_digest": "Administrative summary by email",
       "admin_effect": "Procedures taking effect",
-      "admin_meter": "My meters in the sharing"
+      "admin_meter": "My meters in the sharing",
+      "data_export": "Data exports"
     },
     "TYPES": {
       "signature": {
@@ -189,6 +190,17 @@
           "title": "Your meter {{ean}} is now active in the sharing"
         }
       },
+      "data_export": {
+        "requested": {
+          "title": "{{requester_name}} asked for an export of the community's data"
+        },
+        "ready": {
+          "title": "Your data export is ready to download"
+        },
+        "failed": {
+          "title": "Your data export failed. We have been notified: you can try again."
+        }
+      },
       "admin_correspondence": {
         "recorded": {
           "title": "An answer was recorded on a procedure"
@@ -198,6 +210,54 @@
         }
       }
     }
+  },
+  "DATA_EXPORT": {
+    "MINE": {
+      "INTRO": "Download a copy of all the data OptimCE holds about you: your account, your members, your meters and their consumption, your documents and your history. The ZIP file is prepared in the background and you are notified as soon as it is ready. It stays available for a limited time, shown in the list.",
+      "REQUEST": "Export my data",
+      "EMPTY": "You have not asked for any export yet."
+    },
+    "COMMUNITY": {
+      "TITLE": "Community data exports",
+      "SUBTITLE": "A complete copy of the community's data, as a ZIP file",
+      "INTRO": "Download a copy of all the community's data: members, meters and consumption, sharing operations, allocation keys, documents and activity log. Only the person who asked for an export can download it; the other administrators see it in this list.",
+      "REQUEST": "Export the community's data",
+      "EMPTY": "No export has been asked for this community yet.",
+      "WARNING_TITLE": "Export the community's data",
+      "WARNING_BODY": "The file will contain the personal data of every member of {{name}}: identities, contact details, meters, consumption and documents.",
+      "WARNING_DUTY": "Keep it somewhere safe, share it only with the people who need it, and delete it once you no longer need it.",
+      "WARNING_VISIBILITY": "The community's other administrators will be told about your request.",
+      "WARNING_CANCEL": "Cancel",
+      "WARNING_CONFIRM": "Export"
+    },
+    "COLUMNS": {
+      "REQUESTER": "Asked by",
+      "DATE": "Asked on",
+      "SCOPE": "Scope",
+      "STATUS": "Status",
+      "EXPIRES": "Available until",
+      "ACTIONS": "Actions"
+    },
+    "SCOPE": {
+      "USER": "My data",
+      "COMMUNITY": "Community {{name}}"
+    },
+    "STATUS": {
+      "IN_PROGRESS": "In preparation",
+      "READY": "Ready",
+      "FAILED": "Failed",
+      "EXPIRED": "Expired"
+    },
+    "YOU": "you",
+    "DOWNLOAD": "Download",
+    "REQUESTED": "Export requested. You will be notified as soon as it is ready.",
+    "IN_PROGRESS_HINT": "An export is in preparation. You can ask for another one once it is finished.",
+    "POLLING_HINT": "The list updates itself while the export is prepared.",
+    "FAILED_HINT": "The last export failed. We have been notified: you can ask for a new one.",
+    "STEP_UP": "For your security, sign in again to confirm the export request.",
+    "STEP_UP_FAILED": "The new sign-in could not be confirmed. Try again in a moment.",
+    "LOAD_ERROR": "The list of exports could not be loaded.",
+    "RETRY": "Try again"
   },
   "DASHBOARD": {
     "TITLE": "Dashboard",
@@ -368,6 +428,7 @@
     "ERROR_LOADING": "An error occurred while loading data",
     "RETRY": "Retry",
     "AUDIT_LOG": "Audit log",
+    "COMMUNITY_EXPORTS": "Data exports",
     "NEWS": "News",
     "BILLING": "Billing",
     "ADMINISTRATIVE_DOCUMENT": "Administrative documents",
@@ -429,7 +490,8 @@
         "BANKING_INFORMATIONS": "Banking information",
         "DOCUMENTS": "Documents",
         "REPRESENTATIONS": "Representations",
-        "NOTIFICATIONS": "Notifications"
+        "NOTIFICATIONS": "Notifications",
+        "EXPORTS": "My exports"
       },
       "BANKING_INFORMATION": {
         "IBAN": "IBAN"
@@ -614,11 +676,17 @@
     "REPRESENTATIVE_EMAIL": "Representative's email",
     "STATUTES_DATE": "Date of the statutes",
     "INTERNAL_RULES_DATE": "Date of the internal rules",
+    "CONTACT_SECTION": "Public contact",
+    "CONTACT_HINT": "These details are shown in the public communities directory, so people can email or call you in one click. Leave them empty to publish nothing.",
+    "CONTACT_EMAIL": "Contact email",
+    "CONTACT_PHONE": "Contact phone",
+    "CONTACT_PHONE_PLACEHOLDER": "+32 470 12 34 56",
     "ERRORS": {
       "INVALID_URL": "Please enter a valid URL starting with http:// or https://",
       "PARTIAL_ADDRESS": "Please complete every required address field or leave them all empty",
       "INVALID_IBAN": "Please enter a valid IBAN",
-      "INVALID_EMAIL": "Please enter a valid email address"
+      "INVALID_EMAIL": "Please enter a valid email address",
+      "INVALID_PHONE": "Please enter a valid phone number (8 to 15 digits)"
     }
   },
   "COMMUNITY": {
@@ -662,7 +730,11 @@
       "MUNICIPALITY_FILTER_LABEL": "Filter by municipality",
       "MUNICIPALITY_FILTER_PLACEHOLDER": "Search a municipality…",
       "REGULATOR_FILTER_LABEL": "Filter by regulator",
-      "REGULATOR_FILTER_PLACEHOLDER": "All regulators"
+      "REGULATOR_FILTER_PLACEHOLDER": "All regulators",
+      "CONTACT_TITLE": "Contact the community",
+      "CONTACT_EMAIL_ARIA": "Email {{name}} ({{email}})",
+      "CONTACT_PHONE_ARIA": "Call {{name}} ({{phone}})",
+      "NO_CONTACT": "This community has not provided any contact details yet."
     },
     "CREATE": {
       "TITLE": "Create a community",
@@ -2303,6 +2375,12 @@
         },
         "address": {
           "geocode_backfill": "Addresses geocoded (batch)"
+        },
+        "export_job": {
+          "requested": "Data export requested",
+          "download_url_issued": "Export download link issued",
+          "expired": "Data export expired",
+          "failed": "Data export failed"
         }
       },
       "allocation_key_generation": {

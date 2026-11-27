@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/export-my-data/nl.html",
+  "id": "export-my-data",
+  "kind": "steppy-tour",
+  "locale": "nl",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--exports",
+      "target": "profile-tabs__tab--exports",
+      "text": "Klik op het tabblad “Mijn exports”. Hier vraagt u een kopie van uw gegevens aan en vindt u de exports die u al hebt aangevraagd.",
+      "title": "“Mijn exports” openen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Klik op “Mijn gegevens exporteren”. Het archief bundelt alles wat OptimCE over u bewaart, in elke module: uw account, uw leden, uw meters en hun curves, uw documenten en uw facturen. Om veiligheidsredenen vereist een export een recente aanmelding: is die van u ouder dan vijf minuten, dan vraagt de app uw wachtwoord en hervat ze de aanvraag vanzelf.",
+      "title": "De export aanvragen",
+      "waitFor": "data-export__intro--user"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "De export verschijnt als “In voorbereiding” en wordt vanzelf “Klaar”: de lijst wordt bijgewerkt zonder de pagina te herladen. U kunt de pagina ook verlaten: een melding en een e-mail laten u weten wanneer de export klaar is. Het bestand blijft zeven dagen beschikbaar.",
+      "title": "Wachten op “Klaar”"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "De export verschijnt als “In voorbereiding” en wordt vanzelf “Klaar”: de lijst wordt bijgewerkt zonder de pagina te herladen. U kunt de pagina ook verlaten: een melding en een e-mail laten u weten wanneer de export klaar is. Het bestand blijft zeven dagen beschikbaar.",
+      "title": "Wachten op “Klaar”"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Klik op “Downloaden”: het ZIP-bestand wordt op uw computer opgeslagen. Open daarin index.html om de inhoud per dienst te lezen; de gegevens zelf staan in JSON en CSV, leesbaar voor andere software. Voor uw veiligheid bevat de e-mail nooit het bestand: u downloadt het uitsluitend vanuit de app.",
+      "title": "Het archief downloaden"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Tik op “Downloaden”: het ZIP-bestand wordt op uw toestel opgeslagen. Open daarin index.html om de inhoud per dienst te lezen; de gegevens zelf staan in JSON en CSV, leesbaar voor andere software. Voor uw veiligheid bevat de e-mail nooit het bestand: u downloadt het uitsluitend vanuit de app.",
+      "title": "Het archief downloaden"
+    }
+  ],
+  "title": "Mijn gegevens exporteren"
+}

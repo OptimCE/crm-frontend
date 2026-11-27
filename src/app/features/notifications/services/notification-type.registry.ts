@@ -210,6 +210,23 @@ const REGISTRY: Record<string, NotificationPresentation> = {
     route: signatureRoute,
     crossCommunity: true,
   },
+  // data export — the requester's own list (Profil > Mes exports) shows both
+  // scopes and is where the file is downloaded, whatever community is active;
+  // the other admins see the request in the community's export screen.
+  'data_export.ready': {
+    icon: 'pi pi-file-export',
+    route: staticRoute('/users?tab=exports'),
+    crossCommunity: true,
+  },
+  'data_export.failed': {
+    icon: 'pi pi-exclamation-triangle',
+    route: staticRoute('/users?tab=exports'),
+    crossCommunity: true,
+  },
+  'data_export.requested': {
+    icon: 'pi pi-eye',
+    route: staticRoute('/communities/exports'),
+  },
 };
 
 /** Resolve presentation for a notification type, falling back to a generic bell. */

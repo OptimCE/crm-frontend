@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/home"
   },
@@ -55,7 +55,7 @@
       "id": "public-community-list__filter--municipality",
       "target": "public-community-list__filter--municipality",
       "targetClick": "next",
-      "text": "Hier sehen Sie die öffentlich zugänglichen Gemeinschaften. Filtern Sie sie nach Gemeinde oder Regulierungsbehörde und öffnen Sie eine, um ihre Beschreibung, ihre Website und ihre Teilungsoperationen zu lesen.",
+      "text": "Hier sehen Sie die öffentlich zugänglichen Gemeinschaften. Filtern Sie sie nach Gemeinde oder Regulierungsbehörde und öffnen Sie eine, um ihre Beschreibung, ihre Website und ihre Teilungsoperationen zu lesen und sie mit einem Klick per E-Mail oder Telefon zu kontaktieren.",
       "title": "Die öffentlichen Gemeinschaften",
       "waitFor": "public-community-list__btn--accordion--0"
     },

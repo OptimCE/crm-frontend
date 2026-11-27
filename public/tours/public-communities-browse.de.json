@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/communities/public"
   },
@@ -25,7 +25,7 @@
       },
       "id": "public-community-list__btn--accordion--0-2",
       "target": "public-community-list__btn--accordion--0",
-      "text": "Wenn Sie eine Gemeinschaft aufklappen, sehen Sie ihre Beschreibung, ihre Website, ihren Gesellschaftssitz und vor allem die Liste ihrer öffentlichen Teilungsoperationen.",
+      "text": "Wenn Sie eine Gemeinschaft aufklappen, sehen Sie ihre Beschreibung, ihre Website, ihren Gesellschaftssitz, ihre Kontaktdaten und vor allem die Liste ihrer öffentlichen Teilungsoperationen.",
       "title": "Eine Gemeinschaft aufklappen"
     },
     {
@@ -37,6 +37,16 @@
       "targetClick": "next",
       "text": "Die Gemeinschaft „Test Community“ bietet mehrere öffentliche Teilungsoperationen an (Solar, Wind). Jede Operation gibt die Gemeinden an, die sie abdeckt.",
       "title": "Die Teilungsoperationen"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__contact--0",
+      "target": "public-community-list__contact--0",
+      "targetClick": "next",
+      "text": "Um eine Frage zu stellen oder mitzumachen, kontaktieren Sie die Gemeinschaft mit einem Klick: Die E-Mail-Adresse öffnet Ihr E-Mail-Programm, die Nummer startet den Anruf von einem Telefon aus. Es sind die Angaben, die die Gemeinschaft veröffentlichen wollte; hat sie noch keine angegeben, steht das auf der Karte.",
+      "title": "Die Gemeinschaft kontaktieren"
     },
     {
       "advance": {

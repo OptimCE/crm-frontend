@@ -93,7 +93,8 @@
       "admin_correspondence": "Réponses aux démarches",
       "admin_digest": "Récapitulatif administratif par e-mail",
       "admin_effect": "Prises d'effet des démarches",
-      "admin_meter": "Mes compteurs dans le partage"
+      "admin_meter": "Mes compteurs dans le partage",
+      "data_export": "Exports de données"
     },
     "TYPES": {
       "signature": {
@@ -189,6 +190,17 @@
           "title": "Votre compteur {{ean}} est désormais actif dans le partage"
         }
       },
+      "data_export": {
+        "requested": {
+          "title": "{{requester_name}} a demandé un export des données de la communauté"
+        },
+        "ready": {
+          "title": "Votre export de données est prêt à être téléchargé"
+        },
+        "failed": {
+          "title": "Votre export de données a échoué. Nous avons été prévenus : vous pouvez réessayer."
+        }
+      },
       "admin_correspondence": {
         "recorded": {
           "title": "Une réponse a été enregistrée sur une démarche"
@@ -198,6 +210,54 @@
         }
       }
     }
+  },
+  "DATA_EXPORT": {
+    "MINE": {
+      "INTRO": "Téléchargez une copie de toutes les données qu'OptimCE détient sur vous : votre compte, vos membres, vos compteurs et leur consommation, vos documents et votre historique. Le fichier ZIP est préparé en arrière-plan et vous êtes prévenu dès qu'il est prêt. Il reste disponible pendant une durée limitée, indiquée dans la liste.",
+      "REQUEST": "Exporter mes données",
+      "EMPTY": "Vous n'avez encore demandé aucun export."
+    },
+    "COMMUNITY": {
+      "TITLE": "Exports des données de la communauté",
+      "SUBTITLE": "Une copie complète des données de la communauté, au format ZIP",
+      "INTRO": "Téléchargez une copie de toutes les données de la communauté : membres, compteurs et consommations, opérations de partage, clés de répartition, documents et journal d'activité. Seule la personne qui a demandé un export peut le télécharger ; les autres administrateurs le voient dans cette liste.",
+      "REQUEST": "Exporter les données de la communauté",
+      "EMPTY": "Aucun export n'a encore été demandé pour cette communauté.",
+      "WARNING_TITLE": "Exporter les données de la communauté",
+      "WARNING_BODY": "Le fichier contiendra les données personnelles de tous les membres de {{name}} : identités, coordonnées, compteurs, consommations et documents.",
+      "WARNING_DUTY": "Conservez-le en lieu sûr, ne le partagez qu'avec les personnes qui en ont besoin et supprimez-le quand vous n'en avez plus l'usage.",
+      "WARNING_VISIBILITY": "Les autres administrateurs de la communauté seront informés de votre demande.",
+      "WARNING_CANCEL": "Annuler",
+      "WARNING_CONFIRM": "Exporter"
+    },
+    "COLUMNS": {
+      "REQUESTER": "Demandé par",
+      "DATE": "Demandé le",
+      "SCOPE": "Périmètre",
+      "STATUS": "Statut",
+      "EXPIRES": "Disponible jusqu'au",
+      "ACTIONS": "Actions"
+    },
+    "SCOPE": {
+      "USER": "Mes données",
+      "COMMUNITY": "Communauté {{name}}"
+    },
+    "STATUS": {
+      "IN_PROGRESS": "En préparation",
+      "READY": "Prêt",
+      "FAILED": "Échoué",
+      "EXPIRED": "Expiré"
+    },
+    "YOU": "vous",
+    "DOWNLOAD": "Télécharger",
+    "REQUESTED": "Export demandé. Vous serez prévenu dès qu'il sera prêt.",
+    "IN_PROGRESS_HINT": "Un export est en préparation. Vous pourrez en demander un autre quand il sera terminé.",
+    "POLLING_HINT": "La liste se met à jour d'elle-même pendant la préparation.",
+    "FAILED_HINT": "Le dernier export a échoué. Nous avons été prévenus : vous pouvez en demander un nouveau.",
+    "STEP_UP": "Par sécurité, reconnectez-vous pour confirmer la demande d'export.",
+    "STEP_UP_FAILED": "La reconnexion n'a pas pu être confirmée. Réessayez dans un instant.",
+    "LOAD_ERROR": "La liste des exports n'a pas pu être chargée.",
+    "RETRY": "Réessayer"
   },
   "DASHBOARD": {
     "TITLE": "Tableau de bord",
@@ -368,6 +428,7 @@
     "ERROR_LOADING": "Une erreur est survenue lors du chargement des données",
     "RETRY": "Réessayer",
     "AUDIT_LOG": "Journal d'audit",
+    "COMMUNITY_EXPORTS": "Exports des données",
     "NEWS": "Actualités",
     "BILLING": "Facturation",
     "ADMINISTRATIVE_DOCUMENT": "Documents administratifs",
@@ -419,7 +480,8 @@
         "BANKING_INFORMATIONS": "Informations bancaires",
         "DOCUMENTS": "Documents",
         "REPRESENTATIONS": "Représentations",
-        "NOTIFICATIONS": "Notifications"
+        "NOTIFICATIONS": "Notifications",
+        "EXPORTS": "Mes exports"
       },
       "BANKING_INFORMATION": {
         "IBAN": "Iban"
@@ -614,11 +676,17 @@
     "REPRESENTATIVE_EMAIL": "E-mail du représentant",
     "STATUTES_DATE": "Date des statuts",
     "INTERNAL_RULES_DATE": "Date du règlement d’ordre intérieur",
+    "CONTACT_SECTION": "Contact public",
+    "CONTACT_HINT": "Ces coordonnées sont affichées dans l’annuaire public des communautés, pour que l’on puisse vous écrire ou vous appeler en un clic. Laissez-les vides pour ne rien publier.",
+    "CONTACT_EMAIL": "E-mail de contact",
+    "CONTACT_PHONE": "Téléphone de contact",
+    "CONTACT_PHONE_PLACEHOLDER": "+32 470 12 34 56",
     "ERRORS": {
       "INVALID_URL": "Veuillez saisir une URL valide commençant par http:// ou https://",
       "PARTIAL_ADDRESS": "Veuillez compléter tous les champs d’adresse requis ou les laisser vides",
       "INVALID_IBAN": "Veuillez saisir un IBAN valide",
-      "INVALID_EMAIL": "Veuillez saisir une adresse e-mail valide"
+      "INVALID_EMAIL": "Veuillez saisir une adresse e-mail valide",
+      "INVALID_PHONE": "Veuillez saisir un numéro de téléphone valide (8 à 15 chiffres)"
     }
   },
   "COMMUNITY": {
@@ -662,7 +730,11 @@
       "MUNICIPALITY_FILTER_LABEL": "Filtrer par commune",
       "MUNICIPALITY_FILTER_PLACEHOLDER": "Rechercher une commune…",
       "REGULATOR_FILTER_LABEL": "Filtrer par régulateur",
-      "REGULATOR_FILTER_PLACEHOLDER": "Tous les régulateurs"
+      "REGULATOR_FILTER_PLACEHOLDER": "Tous les régulateurs",
+      "CONTACT_TITLE": "Contacter la communauté",
+      "CONTACT_EMAIL_ARIA": "Envoyer un e-mail à {{name}} ({{email}})",
+      "CONTACT_PHONE_ARIA": "Appeler {{name}} ({{phone}})",
+      "NO_CONTACT": "Cette communauté n’a pas encore renseigné de coordonnées de contact."
     },
     "CREATE": {
       "TITLE": "Créer une communauté",
@@ -2303,6 +2375,12 @@
         },
         "address": {
           "geocode_backfill": "Adresses géocodées (lot)"
+        },
+        "export_job": {
+          "requested": "Export de données demandé",
+          "download_url_issued": "Lien de téléchargement d'export créé",
+          "expired": "Export de données expiré",
+          "failed": "Export de données échoué"
         }
       },
       "allocation_key_generation": {

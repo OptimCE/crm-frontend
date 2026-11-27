@@ -74,7 +74,9 @@ export class CommunityMap {
             { labelKey: 'MAP.POPUP.REGULATOR', value: this.regulatorLabel(community.regulator) },
             { labelKey: 'MAP.POPUP.MUNICIPALITIES', value: this.municipalityName(code) },
           ],
+          // Opens this community's card, expanded, in the list view.
           routerLink: '/communities/public',
+          queryParams: { community: community.id },
         });
       }
     }

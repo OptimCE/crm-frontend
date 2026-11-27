@@ -93,7 +93,8 @@
       "admin_correspondence": "Antworten auf Verfahren",
       "admin_digest": "Verwaltungsübersicht per E-Mail",
       "admin_effect": "Inkrafttreten von Verfahren",
-      "admin_meter": "Meine Zähler in der Teilung"
+      "admin_meter": "Meine Zähler in der Teilung",
+      "data_export": "Datenexporte"
     },
     "TYPES": {
       "signature": {
@@ -189,6 +190,17 @@
           "title": "Ihr Zähler {{ean}} ist jetzt in der Teilung aktiv"
         }
       },
+      "data_export": {
+        "requested": {
+          "title": "{{requester_name}} hat einen Export der Daten der Gemeinschaft angefordert"
+        },
+        "ready": {
+          "title": "Ihr Datenexport steht zum Herunterladen bereit"
+        },
+        "failed": {
+          "title": "Ihr Datenexport ist fehlgeschlagen. Wir wurden benachrichtigt: Sie können es erneut versuchen."
+        }
+      },
       "admin_correspondence": {
         "recorded": {
           "title": "Zu einem Verfahren wurde eine Antwort erfasst"
@@ -198,6 +210,54 @@
         }
       }
     }
+  },
+  "DATA_EXPORT": {
+    "MINE": {
+      "INTRO": "Laden Sie eine Kopie aller Daten herunter, die OptimCE über Sie speichert: Ihr Konto, Ihre Mitglieder, Ihre Zähler und deren Verbrauch, Ihre Dokumente und Ihren Verlauf. Die ZIP-Datei wird im Hintergrund vorbereitet, und Sie werden benachrichtigt, sobald sie bereit ist. Sie bleibt eine begrenzte Zeit verfügbar, die in der Liste angegeben ist.",
+      "REQUEST": "Meine Daten exportieren",
+      "EMPTY": "Sie haben noch keinen Export angefordert."
+    },
+    "COMMUNITY": {
+      "TITLE": "Exporte der Daten der Gemeinschaft",
+      "SUBTITLE": "Eine vollständige Kopie der Daten der Gemeinschaft als ZIP-Datei",
+      "INTRO": "Laden Sie eine Kopie aller Daten der Gemeinschaft herunter: Mitglieder, Zähler und Verbrauch, Teilungsoperationen, Verteilungsschlüssel, Dokumente und Aktivitätsprotokoll. Nur die Person, die einen Export angefordert hat, kann ihn herunterladen; die anderen Administratoren sehen ihn in dieser Liste.",
+      "REQUEST": "Daten der Gemeinschaft exportieren",
+      "EMPTY": "Für diese Gemeinschaft wurde noch kein Export angefordert.",
+      "WARNING_TITLE": "Daten der Gemeinschaft exportieren",
+      "WARNING_BODY": "Die Datei enthält die personenbezogenen Daten aller Mitglieder von {{name}}: Identität, Kontaktdaten, Zähler, Verbrauch und Dokumente.",
+      "WARNING_DUTY": "Bewahren Sie sie sicher auf, teilen Sie sie nur mit Personen, die sie benötigen, und löschen Sie sie, sobald Sie sie nicht mehr brauchen.",
+      "WARNING_VISIBILITY": "Die anderen Administratoren der Gemeinschaft werden über Ihre Anfrage informiert.",
+      "WARNING_CANCEL": "Abbrechen",
+      "WARNING_CONFIRM": "Exportieren"
+    },
+    "COLUMNS": {
+      "REQUESTER": "Angefordert von",
+      "DATE": "Angefordert am",
+      "SCOPE": "Umfang",
+      "STATUS": "Status",
+      "EXPIRES": "Verfügbar bis",
+      "ACTIONS": "Aktionen"
+    },
+    "SCOPE": {
+      "USER": "Meine Daten",
+      "COMMUNITY": "Gemeinschaft {{name}}"
+    },
+    "STATUS": {
+      "IN_PROGRESS": "In Vorbereitung",
+      "READY": "Bereit",
+      "FAILED": "Fehlgeschlagen",
+      "EXPIRED": "Abgelaufen"
+    },
+    "YOU": "Sie",
+    "DOWNLOAD": "Herunterladen",
+    "REQUESTED": "Export angefordert. Sie werden benachrichtigt, sobald er bereit ist.",
+    "IN_PROGRESS_HINT": "Ein Export wird vorbereitet. Sie können einen weiteren anfordern, sobald er fertig ist.",
+    "POLLING_HINT": "Die Liste aktualisiert sich während der Vorbereitung von selbst.",
+    "FAILED_HINT": "Der letzte Export ist fehlgeschlagen. Wir wurden benachrichtigt: Sie können einen neuen anfordern.",
+    "STEP_UP": "Melden Sie sich zu Ihrer Sicherheit erneut an, um die Exportanfrage zu bestätigen.",
+    "STEP_UP_FAILED": "Die erneute Anmeldung konnte nicht bestätigt werden. Versuchen Sie es gleich noch einmal.",
+    "LOAD_ERROR": "Die Liste der Exporte konnte nicht geladen werden.",
+    "RETRY": "Erneut versuchen"
   },
   "DASHBOARD": {
     "TITLE": "Übersicht",
@@ -368,6 +428,7 @@
     "ERROR_LOADING": "Beim Laden der Daten ist ein Fehler aufgetreten",
     "RETRY": "Erneut versuchen",
     "AUDIT_LOG": "Audit-Protokoll",
+    "COMMUNITY_EXPORTS": "Datenexporte",
     "NEWS": "Aktuelles",
     "BILLING": "Abrechnung",
     "ADMINISTRATIVE_DOCUMENT": "Verwaltungsdokumente",
@@ -429,7 +490,8 @@
         "BANKING_INFORMATIONS": "Bankdaten",
         "DOCUMENTS": "Dokumente",
         "REPRESENTATIONS": "Vertretungen",
-        "NOTIFICATIONS": "Benachrichtigungen"
+        "NOTIFICATIONS": "Benachrichtigungen",
+        "EXPORTS": "Meine Exporte"
       },
       "BANKING_INFORMATION": {
         "IBAN": "IBAN"
@@ -614,11 +676,17 @@
     "REPRESENTATIVE_EMAIL": "E-Mail des Vertreters",
     "STATUTES_DATE": "Datum der Satzung",
     "INTERNAL_RULES_DATE": "Datum der Geschäftsordnung",
+    "CONTACT_SECTION": "Öffentlicher Kontakt",
+    "CONTACT_HINT": "Diese Angaben werden im öffentlichen Verzeichnis der Gemeinschaften angezeigt, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann. Lassen Sie sie leer, um nichts zu veröffentlichen.",
+    "CONTACT_EMAIL": "Kontakt-E-Mail",
+    "CONTACT_PHONE": "Kontakttelefon",
+    "CONTACT_PHONE_PLACEHOLDER": "+32 470 12 34 56",
     "ERRORS": {
       "INVALID_URL": "Bitte geben Sie eine gültige URL ein, die mit http:// oder https:// beginnt",
       "PARTIAL_ADDRESS": "Bitte vervollständigen Sie alle erforderlichen Adressfelder oder lassen Sie sie leer",
       "INVALID_IBAN": "Bitte geben Sie eine gültige IBAN ein",
-      "INVALID_EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+      "INVALID_EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "INVALID_PHONE": "Bitte geben Sie eine gültige Telefonnummer ein (8 bis 15 Ziffern)"
     }
   },
   "COMMUNITY": {
@@ -662,7 +730,11 @@
       "MUNICIPALITY_FILTER_LABEL": "Nach Gemeinde filtern",
       "MUNICIPALITY_FILTER_PLACEHOLDER": "Eine Gemeinde suchen…",
       "REGULATOR_FILTER_LABEL": "Nach Regulierungsbehörde filtern",
-      "REGULATOR_FILTER_PLACEHOLDER": "Alle Regulierungsbehörden"
+      "REGULATOR_FILTER_PLACEHOLDER": "Alle Regulierungsbehörden",
+      "CONTACT_TITLE": "Die Gemeinschaft kontaktieren",
+      "CONTACT_EMAIL_ARIA": "E-Mail an {{name}} senden ({{email}})",
+      "CONTACT_PHONE_ARIA": "{{name}} anrufen ({{phone}})",
+      "NO_CONTACT": "Diese Gemeinschaft hat noch keine Kontaktdaten angegeben."
     },
     "CREATE": {
       "TITLE": "Gemeinschaft erstellen",
@@ -2303,6 +2375,12 @@
         },
         "address": {
           "geocode_backfill": "Adressen geokodiert (Stapel)"
+        },
+        "export_job": {
+          "requested": "Datenexport angefordert",
+          "download_url_issued": "Download-Link für Export erstellt",
+          "expired": "Datenexport abgelaufen",
+          "failed": "Datenexport fehlgeschlagen"
         }
       },
       "allocation_key_generation": {

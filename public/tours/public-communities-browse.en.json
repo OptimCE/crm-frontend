@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/communities/public"
   },
@@ -25,7 +25,7 @@
       },
       "id": "public-community-list__btn--accordion--0-2",
       "target": "public-community-list__btn--accordion--0",
-      "text": "Expanding a community reveals its description, website, registered office and, above all, the list of its public sharing operations.",
+      "text": "Expanding a community reveals its description, website, registered office, contact details and, above all, the list of its public sharing operations.",
       "title": "Expand a community"
     },
     {
@@ -37,6 +37,16 @@
       "targetClick": "next",
       "text": "The \"Test Community\" offers several public sharing operations (solar, wind). Each operation lists the municipalities it covers.",
       "title": "The sharing operations"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__contact--0",
+      "target": "public-community-list__contact--0",
+      "targetClick": "next",
+      "text": "To ask a question or to join, contact the community in one click: the e-mail address opens your mail app, the number starts the call from a phone. These are the details the community chose to publish; if it has not provided any yet, the card says so.",
+      "title": "Contact the community"
     },
     {
       "advance": {

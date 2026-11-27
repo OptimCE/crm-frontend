@@ -335,7 +335,7 @@ describe('the shipped tours.manifest.json', () => {
       acc[t.role] = (acc[t.role] ?? 0) + 1;
       return acc;
     }, {});
-    expect(counts).toEqual({ member: 9, admin: 50 });
+    expect(counts).toEqual({ member: 10, admin: 52 });
   });
 
   it('should list in HIDDEN_TOURS only tours still compiled with the broken entry (remove regenerated ones)', () => {
@@ -447,14 +447,15 @@ describe('the shipped tours.manifest.json', () => {
     expect(offered.filter((id) => stillBroken.some((t) => t.id === id))).toEqual([]);
   });
 
-  it('should offer a member of a fully subscribed community all nine member tours, with one to sign', () => {
+  it('should offer a member of a fully subscribed community all ten member tours, with one to sign', () => {
     const selection = selectTours(
       manifest,
       ctx({ role: Role.MEMBER, activeFeatures: ALL_FEATURES, url: '/home', pendingSignatures: 1 }),
       'fr',
     );
     const offered = [...selection.onThisPage, ...selection.byArea.flatMap((g) => g.tours)];
-    expect(offered).toHaveLength(9);
+    expect(offered).toHaveLength(10);
+    expect(offered.map((t) => t.id)).toContain('export-my-data-member');
   });
 
   it('should keep every area label pointing at a sidebar key', () => {

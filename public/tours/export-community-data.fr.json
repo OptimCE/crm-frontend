@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/communities/exports"
+  },
+  "guideUrl": "https://guide.optimce.be/export-community-data/fr.html",
+  "id": "export-community-data",
+  "kind": "steppy-tour",
+  "locale": "fr",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Cliquez sur « Exporter les données de la communauté ». L'archive rassemble ses membres, ses compteurs et leurs consommations, ses opérations de partage, ses clés de répartition, ses documents, ses factures et les agrégats de ses compteurs communicants. Elle ne contient ni les notifications de chacun, ni la courbe individuelle d'un membre. Comme pour un export personnel, une connexion récente est demandée.",
+      "title": "Demander l'export",
+      "waitFor": "data-export__intro--community"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--warning-confirm",
+      "target": "data-export__btn--warning-confirm",
+      "text": "Le fichier contiendra les données personnelles de tous les membres : vous en êtes responsable. Conservez-le en lieu sûr, ne le partagez qu'avec les personnes qui en ont besoin et supprimez-le quand vous n'en avez plus l'usage. Les autres administrateurs sont prévenus de votre demande et la voient dans la liste, mais seul vous pourrez télécharger le fichier. Cliquez sur « Exporter » pour confirmer.",
+      "title": "Lire l'avertissement"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "La liste montre chaque export de la communauté : qui l'a demandé, quand, et son état. Celui-ci passe de « En préparation » à « Prêt » de lui-même ; vous en êtes aussi prévenu par une notification et un e-mail. Le fichier reste disponible sept jours.",
+      "title": "Attendre « Prêt »"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "La liste montre chaque export de la communauté : qui l'a demandé, quand, et son état. Celui-ci passe de « En préparation » à « Prêt » de lui-même ; vous en êtes aussi prévenu par une notification et un e-mail. Le fichier reste disponible sept jours.",
+      "title": "Attendre « Prêt »"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Cliquez sur « Télécharger » : le fichier ZIP s'enregistre sur votre ordinateur. Il contient un dossier par service, des fichiers JSON et CSV, et un manifest.json qui décrit chacun d'eux. Un autre administrateur voit cet export dans la liste, sans bouton « Télécharger ».",
+      "title": "Télécharger l'archive"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Touchez « Télécharger » : le fichier ZIP s'enregistre sur votre appareil. Il contient un dossier par service, des fichiers JSON et CSV, et un manifest.json qui décrit chacun d'eux. Un autre administrateur voit cet export dans la liste, sans bouton « Télécharger ».",
+      "title": "Télécharger l'archive"
+    }
+  ],
+  "title": "Exporter les données de la communauté"
+}

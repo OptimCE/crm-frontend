@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/export-my-data/en.html",
+  "id": "export-my-data",
+  "kind": "steppy-tour",
+  "locale": "en",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--exports",
+      "target": "profile-tabs__tab--exports",
+      "text": "Click the \"My exports\" tab. This is where you ask for a copy of your data and find the exports you already asked for.",
+      "title": "Open \"My exports\""
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Click \"Export my data\". The archive gathers everything OptimCE holds about you, in every module: your account, your members, your meters and their curves, your documents and your invoices. For security, an export needs a recent sign-in: if yours is more than five minutes old, the app asks for your password, then resumes the request on its own.",
+      "title": "Ask for the export",
+      "waitFor": "data-export__intro--user"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "The export shows \"In preparation\", then turns \"Ready\" by itself: the list updates without reloading the page. You can also leave it: a notification and an email tell you when it is ready. The file stays available for seven days.",
+      "title": "Wait for \"Ready\""
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "The export shows \"In preparation\", then turns \"Ready\" by itself: the list updates without reloading the page. You can also leave it: a notification and an email tell you when it is ready. The file stays available for seven days.",
+      "title": "Wait for \"Ready\""
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Click \"Download\": the ZIP file is saved to your computer. Open index.html inside it to read its contents service by service; the data itself is in JSON and CSV, readable by other software. For your safety, the email never contains the file: you download it from the app only.",
+      "title": "Download the archive"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Tap \"Download\": the ZIP file is saved to your device. Open index.html inside it to read its contents service by service; the data itself is in JSON and CSV, readable by other software. For your safety, the email never contains the file: you download it from the app only.",
+      "title": "Download the archive"
+    }
+  ],
+  "title": "Export my data"
+}

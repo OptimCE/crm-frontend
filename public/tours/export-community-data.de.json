@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/communities/exports"
+  },
+  "guideUrl": "https://guide.optimce.be/export-community-data/de.html",
+  "id": "export-community-data",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Klicken Sie auf „Daten der Gemeinschaft exportieren“. Das Archiv enthält die Mitglieder, die Zähler und ihren Verbrauch, die Teilungsoperationen, die Verteilungsschlüssel, die Dokumente, die Rechnungen und die zusammengefassten Werte der intelligenten Zähler. Es enthält weder persönliche Benachrichtigungen noch den individuellen Lastgang eines Mitglieds. Wie bei einem persönlichen Export ist eine frische Anmeldung erforderlich.",
+      "title": "Den Export anfordern",
+      "waitFor": "data-export__intro--community"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--warning-confirm",
+      "target": "data-export__btn--warning-confirm",
+      "text": "Die Datei enthält die personenbezogenen Daten aller Mitglieder: Sie sind dafür verantwortlich. Bewahren Sie sie sicher auf, teilen Sie sie nur mit Personen, die sie benötigen, und löschen Sie sie, sobald Sie sie nicht mehr brauchen. Die anderen Administratoren werden über Ihre Anfrage informiert und sehen sie in der Liste, doch nur Sie können die Datei herunterladen. Klicken Sie zur Bestätigung auf „Exportieren“.",
+      "title": "Die Warnung lesen"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Die Liste zeigt jeden Export der Gemeinschaft: wer ihn angefordert hat, wann und seinen Status. Dieser wechselt von selbst von „In Vorbereitung“ zu „Bereit“; eine Benachrichtigung und eine E-Mail teilen es Ihnen ebenfalls mit. Die Datei bleibt sieben Tage verfügbar.",
+      "title": "Auf „Bereit“ warten"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Die Liste zeigt jeden Export der Gemeinschaft: wer ihn angefordert hat, wann und seinen Status. Dieser wechselt von selbst von „In Vorbereitung“ zu „Bereit“; eine Benachrichtigung und eine E-Mail teilen es Ihnen ebenfalls mit. Die Datei bleibt sieben Tage verfügbar.",
+      "title": "Auf „Bereit“ warten"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Klicken Sie auf „Herunterladen“: Die ZIP-Datei wird auf Ihrem Computer gespeichert. Sie enthält einen Ordner je Dienst, JSON- und CSV-Dateien und eine manifest.json, die jede davon beschreibt. Ein anderer Administrator sieht diesen Export in der Liste, ohne die Schaltfläche „Herunterladen“.",
+      "title": "Das Archiv herunterladen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Tippen Sie auf „Herunterladen“: Die ZIP-Datei wird auf Ihrem Gerät gespeichert. Sie enthält einen Ordner je Dienst, JSON- und CSV-Dateien und eine manifest.json, die jede davon beschreibt. Ein anderer Administrator sieht diesen Export in der Liste, ohne die Schaltfläche „Herunterladen“.",
+      "title": "Das Archiv herunterladen"
+    }
+  ],
+  "title": "Daten der Gemeinschaft exportieren"
+}

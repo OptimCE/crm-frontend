@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/dashboard"
   },
@@ -172,7 +172,7 @@
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
       "targetClick": "next",
-      "text": "Mitglieder und Manager lesen diese Angaben; nur Sie können sie ändern. **„Bearbeiten“** öffnet den Namen, die Beschreibung, die Adresse, die Unternehmensnummer und die IBAN — was danach auf den Rechnungen und den offiziellen Dokumenten erscheint.",
+      "text": "Mitglieder und Manager lesen diese Angaben; nur Sie können sie ändern. **„Bearbeiten“** öffnet den Namen, die Beschreibung, die Adresse, die Unternehmensnummer und die IBAN — was danach auf den Rechnungen und den offiziellen Dokumenten erscheint. Dort geben Sie auch den öffentlichen Kontakt an, der im Verzeichnis der Gemeinschaften erscheint.",
       "title": "Die rechtlichen Angaben",
       "waitFor": "community-info__card--view"
     }

@@ -119,6 +119,30 @@
               }
             </div>
 
+            <!-- Public contact (shown in the public communities directory) -->
+            <div class="border-t border-surface-200 mt-2 pt-4">
+              <h3 class="text-sm font-semibold text-surface-700 m-0">
+                {{ 'COMMUNITY_INFO.CONTACT_SECTION' | translate }}
+              </h3>
+              <small class="text-surface-500 block mt-1">{{
+                'COMMUNITY_INFO.CONTACT_HINT' | translate
+              }}</small>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.CONTACT_EMAIL' | translate }}</span>
+              <span class="field-value break-all" data-testid="community-info__view--contact-email">
+                {{ community()!.contact_email || '—' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="field-label">{{ 'COMMUNITY_INFO.CONTACT_PHONE' | translate }}</span>
+              <span class="field-value" data-testid="community-info__view--contact-phone">
+                {{ community()!.contact_phone || '—' }}
+              </span>
+            </div>
+
             <!-- Bank & legal info -->
             <div class="border-t border-surface-200 mt-2 pt-4">
               <h3 class="text-sm font-semibold text-surface-700 m-0">
@@ -386,6 +410,64 @@
                     'COMMUNITY_INFO.ERRORS.PARTIAL_ADDRESS' | translate
                   }}</small>
                 }
+              </div>
+
+              <!-- Public contact (shown in the public communities directory) -->
+              <div class="border-t border-surface-200 mt-2 pt-4">
+                <h3 class="text-sm font-semibold text-surface-700 m-0">
+                  {{ 'COMMUNITY_INFO.CONTACT_SECTION' | translate }}
+                </h3>
+                <small class="text-surface-500 block mt-1">{{
+                  'COMMUNITY_INFO.CONTACT_HINT' | translate
+                }}</small>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div class="sm:col-span-7">
+                  <label class="field-label" for="community-info-contact-email">{{
+                    'COMMUNITY_INFO.CONTACT_EMAIL' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    type="email"
+                    id="community-info-contact-email"
+                    formControlName="contact_email"
+                    autocomplete="email"
+                    class="w-full"
+                    data-testid="community-info__input--contact-email"
+                  />
+                  @if (
+                    form.controls.contact_email.touched &&
+                    form.controls.contact_email.errors?.['email']
+                  ) {
+                    <small class="text-red-600">{{
+                      'COMMUNITY_INFO.ERRORS.INVALID_EMAIL' | translate
+                    }}</small>
+                  }
+                </div>
+                <div class="sm:col-span-5">
+                  <label class="field-label" for="community-info-contact-phone">{{
+                    'COMMUNITY_INFO.CONTACT_PHONE' | translate
+                  }}</label>
+                  <input
+                    pInputText
+                    type="tel"
+                    id="community-info-contact-phone"
+                    formControlName="contact_phone"
+                    autocomplete="tel"
+                    class="w-full"
+                    [placeholder]="'COMMUNITY_INFO.CONTACT_PHONE_PLACEHOLDER' | translate"
+                    data-testid="community-info__input--contact-phone"
+                  />
+                  @if (
+                    form.controls.contact_phone.touched &&
+                    form.controls.contact_phone.errors?.['invalidPhone']
+                  ) {
+                    <small class="text-red-600">{{
+                      'COMMUNITY_INFO.ERRORS.INVALID_PHONE' | translate
+                    }}</small>
+                  }
+                </div>
               </div>
 
               <!-- Bank & legal info -->

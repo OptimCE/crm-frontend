@@ -7,7 +7,10 @@ import { PublicCommunityList } from './public-community-list';
 import { CommunityMap } from './community-map/community-map';
 import { CommunityService } from '../../../../shared/services/community.service';
 import { MunicipalityService } from '../../../../shared/services/municipality.service';
-import { CommunityDetailDTO, PublicCommunityDTO } from '../../../../shared/dtos/community.dtos';
+import {
+  PublicCommunityDetailDTO,
+  PublicCommunityDTO,
+} from '../../../../shared/dtos/community.dtos';
 import { ApiResponse } from '../../../../core/dtos/api.response';
 import {
   SharingOperationPartialDTO,
@@ -43,20 +46,20 @@ function buildCommunities(): PublicCommunityDTO[] {
   ];
 }
 
-function buildDetail(id: number, overrides: Partial<CommunityDetailDTO> = {}): CommunityDetailDTO {
+function buildDetail(
+  id: number,
+  overrides: Partial<PublicCommunityDetailDTO> = {},
+): PublicCommunityDetailDTO {
   return {
     id,
     name: `Community ${id}`,
-    auth_community_id: `auth-${id}`,
-    created_at: '2024-01-01T00:00:00.000Z',
-    updated_at: '2024-01-01T00:00:00.000Z',
-    member_count: 0,
     regulator: 'BE-WAL-CWAPE',
+    logo_presigned_url: null,
     description: null,
     website_url: null,
-    logo_url: null,
-    logo_presigned_url: null,
     headquarters_address: null,
+    contact_email: null,
+    contact_phone: null,
     ...overrides,
   };
 }
@@ -107,7 +110,7 @@ describe('PublicCommunityList', () => {
   let communityServiceSpy: {
     getPublicCommunities: ReturnType<typeof vi.fn>;
     getCommunityPublicSharingOperations: ReturnType<typeof vi.fn>;
-    getCommunityDetail: ReturnType<typeof vi.fn>;
+    getPublicCommunityDetail: ReturnType<typeof vi.fn>;
     getRegulators: ReturnType<typeof vi.fn>;
   };
   let municipalityServiceSpy: {
@@ -124,10 +127,10 @@ describe('PublicCommunityList', () => {
       getCommunityPublicSharingOperations: vi
         .fn()
         .mockReturnValue(of(buildPaginatedResponse(buildOps()))),
-      getCommunityDetail: vi
+      getPublicCommunityDetail: vi
         .fn()
         .mockImplementation((id: number) =>
-          of(new ApiResponse<CommunityDetailDTO>(buildDetail(id))),
+          of(new ApiResponse<PublicCommunityDetailDTO>(buildDetail(id))),
         ),
       getRegulators: vi.fn().mockReturnValue(of(new ApiResponse([]))),
     };
@@ -306,11 +309,11 @@ describe('PublicCommunityList', () => {
       });
     });
 
-    it('expanding a community calls getCommunityDetail', () => {
-      communityServiceSpy.getCommunityDetail.mockClear();
+    it('expanding a community calls getPublicCommunityDetail', () => {
+      communityServiceSpy.getPublicCommunityDetail.mockClear();
       component.toggleAccordion(1);
 
-      expect(communityServiceSpy.getCommunityDetail).toHaveBeenCalledWith(1);
+      expect(communityServiceSpy.getPublicCommunityDetail).toHaveBeenCalledWith(1);
     });
 
     it('collapsing a community does not call getCommunityPublicSharingOperations', () => {
@@ -403,7 +406,7 @@ describe('PublicCommunityList', () => {
 
   describe('community detail loading', () => {
     it('marks the community detail as loading while the request is pending', () => {
-      communityServiceSpy.getCommunityDetail.mockReturnValue(NEVER);
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(NEVER);
 
       component.toggleAccordion(1);
 
@@ -416,8 +419,8 @@ describe('PublicCommunityList', () => {
         description: 'Hello world',
         website_url: 'https://example.com',
       });
-      communityServiceSpy.getCommunityDetail.mockReturnValue(
-        of(new ApiResponse<CommunityDetailDTO>(detail)),
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(
+        of(new ApiResponse<PublicCommunityDetailDTO>(detail)),
       );
 
       component.toggleAccordion(1);
@@ -428,7 +431,9 @@ describe('PublicCommunityList', () => {
     });
 
     it('clears loading without caching on error', () => {
-      communityServiceSpy.getCommunityDetail.mockReturnValue(throwError(() => new Error('boom')));
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(
+        throwError(() => new Error('boom')),
+      );
 
       component.toggleAccordion(2);
 
@@ -438,12 +443,12 @@ describe('PublicCommunityList', () => {
 
     it('does not refetch detail when the same community is re-expanded', () => {
       component.toggleAccordion(1); // first expand → fetches
-      communityServiceSpy.getCommunityDetail.mockClear();
+      communityServiceSpy.getPublicCommunityDetail.mockClear();
 
       component.toggleAccordion(1); // collapse
       component.toggleAccordion(1); // expand again
 
-      expect(communityServiceSpy.getCommunityDetail).not.toHaveBeenCalled();
+      expect(communityServiceSpy.getPublicCommunityDetail).not.toHaveBeenCalled();
     });
   });
 
@@ -651,6 +656,180 @@ describe('PublicCommunityList', () => {
     });
     it('returns empty string for unknown values', () => {
       expect(component.typeLabelKey(999 as unknown as SharingOperationType)).toBe('');
+    });
+  });
+
+  // ── Public contact ──────────────────────────────────────────────────
+
+  describe('public contact', () => {
+    function expandWith(detail: PublicCommunityDetailDTO): void {
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(
+        of(new ApiResponse<PublicCommunityDetailDTO>(detail)),
+      );
+      component.toggleAccordion(1);
+      fixture.detectChanges();
+    }
+
+    it('renders a mailto: link and a dialable tel: link', () => {
+      expandWith(
+        buildDetail(1, { contact_email: 'contact@alpha.be', contact_phone: '+32 470 12 34 56' }),
+      );
+
+      const mail = el.querySelector<HTMLAnchorElement>(
+        '[data-testid="public-community-list__contact--email--0"]',
+      );
+      const phone = el.querySelector<HTMLAnchorElement>(
+        '[data-testid="public-community-list__contact--phone--0"]',
+      );
+      expect(mail?.getAttribute('href')).toBe('mailto:contact@alpha.be');
+      expect(mail?.textContent).toContain('contact@alpha.be');
+      expect(phone?.getAttribute('href')).toBe('tel:+32470123456');
+      // Shown as typed, dialled as digits.
+      expect(phone?.textContent).toContain('+32 470 12 34 56');
+      expect(
+        el.querySelector('[data-testid="public-community-list__contact--none--0"]'),
+      ).toBeNull();
+    });
+
+    it('renders only the channel that is filled in', () => {
+      expandWith(buildDetail(1, { contact_phone: '04/123.45.67' }));
+
+      expect(
+        el.querySelector('[data-testid="public-community-list__contact--email--0"]'),
+      ).toBeNull();
+      expect(
+        el
+          .querySelector('[data-testid="public-community-list__contact--phone--0"]')
+          ?.getAttribute('href'),
+      ).toBe('tel:041234567');
+    });
+
+    it('says so when the community has no contact details', () => {
+      expandWith(buildDetail(1, { website_url: 'https://alpha.be' }));
+
+      expect(
+        el.querySelector('[data-testid="public-community-list__contact--none--0"]'),
+      ).not.toBeNull();
+      expect(
+        el.querySelector('[data-testid="public-community-list__contact--email--0"]'),
+      ).toBeNull();
+      expect(
+        el.querySelector('[data-testid="public-community-list__contact--phone--0"]'),
+      ).toBeNull();
+    });
+
+    it('still shows the description, website and headquarters', () => {
+      expandWith(
+        buildDetail(1, {
+          description: 'Une communauté solaire',
+          website_url: 'https://alpha.be',
+          headquarters_address: {
+            street: 'Rue de la Gare',
+            number: '12',
+            postcode: '1360',
+            city: 'Perwez',
+          } as PublicCommunityDetailDTO['headquarters_address'],
+        }),
+      );
+
+      const info = el.querySelector('[data-testid="public-community-list__info--0"]');
+      expect(info?.textContent).toContain('Une communauté solaire');
+      expect(info?.querySelector('a[href="https://alpha.be"]')).not.toBeNull();
+      expect(info?.textContent).toContain('Perwez');
+    });
+  });
+
+  // ── Shareable link: ?community=<id> ─────────────────────────────────
+
+  describe('community link', () => {
+    it('opens the linked community with its detail and operations', () => {
+      communityServiceSpy.getPublicCommunityDetail.mockClear();
+      communityServiceSpy.getCommunityPublicSharingOperations.mockClear();
+
+      routeParams.next(convertToParamMap({ community: '2' }));
+      fixture.detectChanges();
+
+      expect(component.isExpanded(2)).toBe(true);
+      expect(communityServiceSpy.getPublicCommunityDetail).toHaveBeenCalledWith(2);
+      expect(communityServiceSpy.getCommunityPublicSharingOperations).toHaveBeenCalledWith(
+        2,
+        expect.anything(),
+      );
+      expect(el.querySelector('[data-testid="public-community-list__detail--1"]')).not.toBeNull();
+    });
+
+    it('adds the card on top when the community is not on the loaded page', () => {
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(
+        of(new ApiResponse<PublicCommunityDetailDTO>(buildDetail(42, { name: 'Far Community' }))),
+      );
+
+      routeParams.next(convertToParamMap({ community: '42' }));
+      fixture.detectChanges();
+
+      expect(component.listedCommunities().map((c) => c.id)).toEqual([42, 1, 2, 3]);
+      expect(el.querySelector('#public-community-42')?.textContent).toContain('Far Community');
+      expect(component.isExpanded(42)).toBe(true);
+    });
+
+    it('leaves the list as it is when the linked community is not public', () => {
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(
+        throwError(() => new Error('404')),
+      );
+
+      routeParams.next(convertToParamMap({ community: '42' }));
+      fixture.detectChanges();
+
+      expect(component.listedCommunities().map((c) => c.id)).toEqual([1, 2, 3]);
+    });
+
+    it.each(['abc', '0', '-3', '1.5'])('ignores a malformed id %s', (raw) => {
+      routeParams.next(convertToParamMap({ community: raw }));
+
+      expect(component.expandedCommunityId()).toBeNull();
+    });
+
+    it('writes the open card into the URL, and removes it on collapse', () => {
+      component.toggleAccordion(3);
+      expect(routerSpy.navigate).toHaveBeenLastCalledWith(
+        [],
+        expect.objectContaining({
+          queryParams: { community: 3 },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        }),
+      );
+
+      component.toggleAccordion(3);
+      expect(routerSpy.navigate).toHaveBeenLastCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { community: null } }),
+      );
+    });
+
+    it('does not reopen a card when the URL only echoes the one already open', () => {
+      component.toggleAccordion(1);
+      communityServiceSpy.getPublicCommunityDetail.mockClear();
+
+      routeParams.next(convertToParamMap({ community: '1' }));
+
+      expect(component.isExpanded(1)).toBe(true);
+      expect(communityServiceSpy.getPublicCommunityDetail).not.toHaveBeenCalled();
+    });
+
+    it('a regulator change closes the linked card and clears the URL', () => {
+      communityServiceSpy.getPublicCommunityDetail.mockReturnValue(
+        of(new ApiResponse<PublicCommunityDetailDTO>(buildDetail(42))),
+      );
+      routeParams.next(convertToParamMap({ community: '42' }));
+
+      component.onRegulatorChange('BE-WAL-CWAPE');
+
+      expect(component.expandedCommunityId()).toBeNull();
+      expect(component.listedCommunities().map((c) => c.id)).toEqual([1, 2, 3]);
+      expect(routerSpy.navigate).toHaveBeenLastCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { community: null } }),
+      );
     });
   });
 
