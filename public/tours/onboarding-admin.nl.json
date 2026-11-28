@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/dashboard"
   },
@@ -172,7 +172,7 @@
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
       "targetClick": "next",
-      "text": "Leden en managers lezen deze gegevens; alleen u kunt ze wijzigen. **“Bewerken”** opent de naam, de beschrijving, het adres, het ondernemingsnummer en het IBAN — wat daarna op de facturen en de officiële documenten staat.",
+      "text": "Leden en managers lezen deze gegevens; alleen u kunt ze wijzigen. **“Bewerken”** opent de naam, de beschrijving, het adres, het ondernemingsnummer en het IBAN — wat daarna op de facturen en de officiële documenten staat. U vult er ook het openbaar contact in dat in de gids van gemeenschappen verschijnt.",
       "title": "De juridische gegevens",
       "waitFor": "community-info__card--view"
     }

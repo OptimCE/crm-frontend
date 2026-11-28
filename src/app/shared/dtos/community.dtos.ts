@@ -44,6 +44,27 @@ export interface PublicCommunityDTO {
   logo_presigned_url: string | null;
 }
 
+/**
+ * What any signed-in user may read about a public community
+ * (`GET /communities/:id/public`): its presentation and public contact. Bank,
+ * legal and representative data stay behind the members-only detail.
+ */
+export interface PublicCommunityDetailDTO {
+  id: number;
+  name: string;
+  /** Coded regulator the community is notified to (see reference/regulators.json). */
+  regulator: string;
+  /** Short-lived presigned URL (~15 min) for direct logo display. */
+  logo_presigned_url: string | null;
+  description: string | null;
+  website_url: string | null;
+  headquarters_address: AddressDTO | null;
+  /** Public contact e-mail set by an admin, shown in the directory. */
+  contact_email: string | null;
+  /** Public contact phone number, as typed by an admin. */
+  contact_phone: string | null;
+}
+
 export interface MyCommunityDTO {
   id: number;
   auth_community_id: string;
@@ -90,6 +111,9 @@ export interface CommunityDetailDTO {
   /** Dates (`YYYY-MM-DD`) of the statutes and internal rules (ROI) in force. */
   statutes_date?: string | null;
   internal_rules_date?: string | null;
+  /** Public contact shown in the public communities directory. */
+  contact_email?: string | null;
+  contact_phone?: string | null;
 }
 
 export interface UsersCommunityDTO {
@@ -131,6 +155,9 @@ export interface UpdateCommunityDTO {
   /** Dates (`YYYY-MM-DD`) of the statutes and internal rules (ROI) in force. */
   statutes_date?: string | null;
   internal_rules_date?: string | null;
+  /** Public contact, published in the communities directory; null clears it. */
+  contact_email?: string | null;
+  contact_phone?: string | null;
 }
 
 export interface UploadLogoResponse {

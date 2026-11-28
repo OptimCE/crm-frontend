@@ -9,3 +9,33 @@
 .accordion-header .pi {
   transition: transform 0.2s ease;
 }
+
+/* One-click contact links (mailto: / tel:): a tappable pill, wide enough for a
+   thumb on a phone, that never pushes the card wider than the screen. */
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--p-primary-200);
+  border-radius: 0.5rem;
+  background: var(--p-surface-0);
+  color: var(--p-primary-700);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.contact-link:hover {
+  border-color: var(--p-primary-400);
+  background: var(--p-primary-50);
+}
+
+.contact-link:focus-visible {
+  outline: 2px solid var(--p-primary-500);
+  outline-offset: 2px;
+}

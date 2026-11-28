@@ -60,7 +60,8 @@ export type TourArea =
   | 'members'
   | 'meters'
   | 'sharing_operations'
-  | 'audit_log';
+  | 'audit_log'
+  | 'community_exports';
 
 /** Areas in sidebar order, with the sidebar's own label for each. */
 export const TOUR_AREAS: readonly { area: TourArea; label: string }[] = [
@@ -79,6 +80,7 @@ export const TOUR_AREAS: readonly { area: TourArea; label: string }[] = [
   { area: 'meters', label: 'NAVBAR.HANDLE_METER' },
   { area: 'sharing_operations', label: 'NAVBAR.HANDLE_SHARING_OP' },
   { area: 'audit_log', label: 'NAVBAR.AUDIT_LOG' },
+  { area: 'community_exports', label: 'NAVBAR.COMMUNITY_EXPORTS' },
 ];
 
 export interface EntryRouteRule {
@@ -144,6 +146,8 @@ export const ENTRY_ROUTES: Readonly<Record<string, EntryRouteRule>> = {
   '/sharing_operations': { area: 'sharing_operations', minRole: Role.GESTIONNAIRE },
   '/sharing_operations/:operationId': { area: 'sharing_operations', minRole: Role.GESTIONNAIRE },
   '/audit-logs': { area: 'audit_log', minRole: Role.GESTIONNAIRE },
+  // The community's data exports: ADMIN only (community.routes.ts).
+  '/communities/exports': { area: 'community_exports', minRole: Role.ADMIN },
 };
 
 /**

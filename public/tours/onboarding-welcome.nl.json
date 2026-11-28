@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/home"
   },
@@ -55,7 +55,7 @@
       "id": "public-community-list__filter--municipality",
       "target": "public-community-list__filter--municipality",
       "targetClick": "next",
-      "text": "Hier staan de gemeenschappen die openstaan voor het publiek. Filter ze op gemeente of op regulator en open er een om haar beschrijving, haar website en haar deeloperaties te lezen.",
+      "text": "Hier staan de gemeenschappen die openstaan voor het publiek. Filter ze op gemeente of op regulator en open er een om haar beschrijving, haar website en haar deeloperaties te lezen, en om haar met één klik te mailen of te bellen.",
       "title": "De openbare gemeenschappen",
       "waitFor": "public-community-list__btn--accordion--0"
     },

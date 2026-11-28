@@ -33,6 +33,7 @@ import { HeaderPage } from '../../../../layout/header-page/header-page';
 import { CommunityDetailDTO, MyCommunityDTO } from '../../../../shared/dtos/community.dtos';
 import { CreateAddressDTO } from '../../../../shared/dtos/address.dtos';
 import { ibanValidator } from '../../../../shared/validators/iban.validator';
+import { phoneValidator } from '../../../../shared/validators/phone.validator';
 import { CommunityLogo } from '../../../../shared/components/community-logo/community-logo';
 import {
   AddressAutocomplete,
@@ -66,6 +67,8 @@ interface CommunityUpdatePayload {
   representative_email?: string | null;
   statutes_date?: string | null;
   internal_rules_date?: string | null;
+  contact_email?: string | null;
+  contact_phone?: string | null;
 }
 
 interface AddressFormValue {
@@ -91,6 +94,8 @@ interface CommunityInfoFormValue {
   representative_email: string;
   statutes_date: Date | null;
   internal_rules_date: Date | null;
+  contact_email: string;
+  contact_phone: string;
 }
 
 /**
@@ -186,6 +191,15 @@ export class CommunityInfo {
     }),
     statutes_date: new FormControl<Date | null>(null),
     internal_rules_date: new FormControl<Date | null>(null),
+    // Public contact, published in the communities directory.
+    contact_email: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.email],
+    }),
+    contact_phone: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [phoneValidator()],
+    }),
   });
 
   protected readonly Role = Role;
@@ -369,6 +383,8 @@ export class CommunityInfo {
       representative_email: c.representative_email ?? '',
       statutes_date: fromLocalDateString(c.statutes_date),
       internal_rules_date: fromLocalDateString(c.internal_rules_date),
+      contact_email: c.contact_email ?? '',
+      contact_phone: c.contact_phone ?? '',
     });
   }
 
@@ -432,6 +448,8 @@ export class CommunityInfo {
       internal_rules_date: value.internal_rules_date
         ? toLocalDateString(value.internal_rules_date)
         : null,
+      contact_email: value.contact_email?.trim() || null,
+      contact_phone: value.contact_phone?.trim() || null,
     };
     const a = value.headquarters_address;
     if (a.street && a.number && a.city && a.postcode) {

@@ -25,6 +25,16 @@ export const COMMUNITY_ROUTES: Routes = [
     component: UsersCommunityList,
   },
   {
+    // The community's data exports: ADMIN only, the API refuses a manager (35001).
+    path: 'exports',
+    canActivate: [canActivateAuth, minRoleGuard],
+    data: { minRole: Role.ADMIN },
+    loadComponent: () =>
+      import('../data_export/components/community-exports/community-exports').then(
+        (m) => m.CommunityExports,
+      ),
+  },
+  {
     path: 'managers',
     component: ManagersCommunityList,
   },

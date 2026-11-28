@@ -341,6 +341,18 @@
             [routerLinkUrl]="'/audit-logs'"
             [sidebarOpen]="sidebarOpen()"
           ></li>
+          @if (userContextService.compareWithActiveRole(Role.ADMIN)) {
+            <li
+              data-testid="sidebar-element__link--communities_exports"
+              appSidebarItem
+              (sidebarClose)="closeSideBar()"
+              [icon]="'pi pi-file-export'"
+              [isRouteActive]="isRouteActive().communities_exports"
+              [name]="'NAVBAR.COMMUNITY_EXPORTS' | translate"
+              [routerLinkUrl]="'/communities/exports'"
+              [sidebarOpen]="sidebarOpen()"
+            ></li>
+          }
         </ul>
       </app-sidebar-section>
     }

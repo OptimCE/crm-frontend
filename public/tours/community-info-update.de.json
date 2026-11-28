@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/communities/info"
   },
@@ -16,7 +16,7 @@
       "id": "community-info__card--view",
       "target": "community-info__card--view",
       "targetClick": "next",
-      "text": "Die Seite zeigt die aktuellen Informationen der Gemeinschaft: Name, Beschreibung, Website und Adresse des Hauptsitzes. Klicken Sie auf **Bearbeiten**, um in den Bearbeitungsmodus zu wechseln.",
+      "text": "Die Seite zeigt die aktuellen Informationen der Gemeinschaft: Name, Beschreibung, Website, Adresse des Hauptsitzes und öffentlicher Kontakt. Klicken Sie auf **Bearbeiten**, um in den Bearbeitungsmodus zu wechseln.",
       "title": "Informationsseite der Gemeinschaft"
     },
     {
@@ -34,7 +34,7 @@
       },
       "id": "community-info__input--description",
       "target": "community-info__input--description",
-      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
       "title": "Informationen eingeben"
     },
     {
@@ -43,7 +43,7 @@
       },
       "id": "community-info__input--website",
       "target": "community-info__input--website",
-      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
       "title": "Informationen eingeben"
     },
     {
@@ -52,7 +52,7 @@
       },
       "id": "community-info__input--street",
       "target": "community-info__input--street",
-      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
       "title": "Informationen eingeben"
     },
     {
@@ -61,7 +61,7 @@
       },
       "id": "community-info__input--number",
       "target": "community-info__input--number",
-      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
       "title": "Informationen eingeben"
     },
     {
@@ -70,7 +70,7 @@
       },
       "id": "community-info__input--postcode",
       "target": "community-info__input--postcode",
-      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
       "title": "Informationen eingeben"
     },
     {
@@ -79,7 +79,25 @@
       },
       "id": "community-info__input--city",
       "target": "community-info__input--city",
-      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden.",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--contact-email",
+      "target": "community-info__input--contact-email",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
+      "title": "Informationen eingeben"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--contact-phone",
+      "target": "community-info__input--contact-phone",
+      "text": "Füllen Sie die Felder aus: **Beschreibung**, **Website** (vollständige URL, die mit https:// beginnt) und die Adressfelder des Hauptsitzes — Straße, Nummer, Postleitzahl und Ort. Die vier Adressfelder müssen entweder alle ausgefüllt oder alle leer gelassen werden. Unter **Öffentlicher Kontakt** werden die E-Mail-Adresse und die Telefonnummer, die Sie eingeben, im Verzeichnis der Gemeinschaften veröffentlicht, damit man Ihnen mit einem Klick schreiben oder Sie anrufen kann; lassen Sie sie leer, um nichts zu veröffentlichen.",
       "title": "Informationen eingeben"
     },
     {
@@ -98,7 +116,7 @@
       "id": "community-info__view--description",
       "target": "community-info__view--description",
       "targetClick": "next",
-      "text": "Zurück im Ansichtsmodus zeigt die Seite die Beschreibung, die Website und die Adresse genau so an, wie Sie sie eingegeben haben — die Änderungen wurden serverseitig gespeichert.",
+      "text": "Zurück im Ansichtsmodus zeigt die Seite die Beschreibung, die Website, die Adresse und den öffentlichen Kontakt genau so an, wie Sie sie eingegeben haben — die Änderungen wurden serverseitig gespeichert.",
       "title": "Informationen aktualisiert"
     }
   ],

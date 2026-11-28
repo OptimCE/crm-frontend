@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/dashboard"
   },
@@ -172,7 +172,7 @@
       "id": "community-info__btn--edit",
       "target": "community-info__btn--edit",
       "targetClick": "next",
-      "text": "Members and managers read this information; only you can change it. **\"Edit\"** opens the name, description, address, company number and IBAN — what then appears on invoices and official documents.",
+      "text": "Members and managers read this information; only you can change it. **\"Edit\"** opens the name, description, address, company number and IBAN — what then appears on invoices and official documents. It is also where you set the public contact shown in the communities directory.",
       "title": "The legal details",
       "waitFor": "community-info__card--view"
     }

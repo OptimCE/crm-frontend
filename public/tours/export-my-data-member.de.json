@@ -1,0 +1,81 @@
+{
+  "buildId": "a37cdd313b8c",
+  "entry": {
+    "route": "/users"
+  },
+  "guideUrl": "https://guide.optimce.be/export-my-data/de.html",
+  "id": "export-my-data-member",
+  "kind": "steppy-tour",
+  "locale": "de",
+  "schema": 1,
+  "steps": [
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "profile-tabs__tab--exports",
+      "target": "profile-tabs__tab--exports",
+      "text": "Klicken Sie auf den Reiter „Meine Exporte“. Hier fordern Sie eine Kopie Ihrer Daten an und finden die bereits angeforderten Exporte.",
+      "title": "„Meine Exporte“ öffnen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--request",
+      "target": "data-export__btn--request",
+      "text": "Klicken Sie auf „Meine Daten exportieren“. Das Archiv enthält alles, was OptimCE über Sie speichert, in jedem Modul: Ihr Konto, Ihre Mitglieder, Ihre Zähler und deren Lastgänge, Ihre Dokumente und Ihre Rechnungen. Aus Sicherheitsgründen setzt ein Export eine frische Anmeldung voraus: Liegt Ihre länger als fünf Minuten zurück, fragt die App nach Ihrem Passwort und setzt die Anfrage dann von selbst fort.",
+      "title": "Den Export anfordern",
+      "waitFor": "data-export__intro--user"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-desktop--0",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Der Export erscheint als „In Vorbereitung“ und wechselt von selbst zu „Bereit“: Die Liste aktualisiert sich, ohne dass Sie die Seite neu laden. Sie können die Seite auch verlassen: Eine Benachrichtigung und eine E-Mail teilen Ihnen mit, wenn er bereit ist. Die Datei bleibt sieben Tage verfügbar.",
+      "title": "Auf „Bereit“ warten"
+    },
+    {
+      "advance": {
+        "on": "visible"
+      },
+      "id": "data-export__btn--download-mobile--0",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Der Export erscheint als „In Vorbereitung“ und wechselt von selbst zu „Bereit“: Die Liste aktualisiert sich, ohne dass Sie die Seite neu laden. Sie können die Seite auch verlassen: Eine Benachrichtigung und eine E-Mail teilen Ihnen mit, wenn er bereit ist. Die Datei bleibt sieben Tage verfügbar.",
+      "title": "Auf „Bereit“ warten"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-desktop--0-2",
+      "layouts": [
+        "desktop"
+      ],
+      "target": "data-export__btn--download-desktop--0",
+      "text": "Klicken Sie auf „Herunterladen“: Die ZIP-Datei wird auf Ihrem Computer gespeichert. Öffnen Sie darin index.html, um den Inhalt Dienst für Dienst zu lesen; die Daten selbst liegen als JSON und CSV vor und sind mit anderer Software lesbar. Zu Ihrer Sicherheit enthält die E-Mail nie die Datei: Sie laden sie ausschließlich in der App herunter.",
+      "title": "Das Archiv herunterladen"
+    },
+    {
+      "advance": {
+        "on": "click"
+      },
+      "id": "data-export__btn--download-mobile--0-2",
+      "layouts": [
+        "mobile"
+      ],
+      "target": "data-export__btn--download-mobile--0",
+      "text": "Tippen Sie auf „Herunterladen“: Die ZIP-Datei wird auf Ihrem Gerät gespeichert. Öffnen Sie darin index.html, um den Inhalt Dienst für Dienst zu lesen; die Daten selbst liegen als JSON und CSV vor und sind mit anderer Software lesbar. Zu Ihrer Sicherheit enthält die E-Mail nie die Datei: Sie laden sie ausschließlich in der App herunter.",
+      "title": "Das Archiv herunterladen"
+    }
+  ],
+  "title": "Meine Daten exportieren"
+}

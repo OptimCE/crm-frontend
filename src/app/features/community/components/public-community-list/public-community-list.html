@@ -78,7 +78,7 @@
        WebGL context nor fetches its endpoints. -->
   @if (view() === 'list') {
     <!-- Community list -->
-    @if (communities().length === 0) {
+    @if (listedCommunities().length === 0) {
       <div class="py-8 text-center" data-testid="public-community-list__empty--message">
         <i class="pi pi-address-book text-3xl text-surface-300 mb-2"></i>
         <p class="text-surface-400 m-0">
@@ -87,9 +87,10 @@
       </div>
     } @else {
       <div class="flex flex-col gap-3">
-        @for (community of communities(); track community.id) {
+        @for (community of listedCommunities(); track community.id) {
           <div
-            class="bg-surface-0 border border-primary-100 rounded-xl shadow-sm hover:border-primary-400 transition-colors overflow-hidden"
+            class="bg-surface-0 border border-primary-100 rounded-xl shadow-sm hover:border-primary-400 transition-colors overflow-hidden scroll-mt-4"
+            [attr.id]="'public-community-' + community.id"
           >
             <button
               type="button"
@@ -126,52 +127,99 @@
                 [attr.data-testid]="'public-community-list__detail--' + $index"
               >
                 @if (getDetail(community.id); as detail) {
-                  @if (detail.description || detail.website_url || detail.headquarters_address) {
-                    <div
-                      class="mb-4 flex flex-col gap-2"
-                      [attr.data-testid]="'public-community-list__info--' + $index"
-                    >
-                      @if (detail.description) {
-                        <div>
-                          <span class="text-xs font-medium text-surface-500 block">{{
-                            'COMMUNITY_INFO.DESCRIPTION' | translate
-                          }}</span>
-                          <span class="text-sm text-surface-800 whitespace-pre-line">{{
-                            detail.description
-                          }}</span>
+                  <div
+                    class="mb-4 flex flex-col gap-3"
+                    [attr.data-testid]="'public-community-list__info--' + $index"
+                  >
+                    @if (detail.description) {
+                      <div>
+                        <span class="text-xs font-medium text-surface-500 block">{{
+                          'COMMUNITY_INFO.DESCRIPTION' | translate
+                        }}</span>
+                        <span class="text-sm text-surface-800 whitespace-pre-line">{{
+                          detail.description
+                        }}</span>
+                      </div>
+                    }
+                    @if (detail.website_url) {
+                      <div>
+                        <span class="text-xs font-medium text-surface-500 block">{{
+                          'COMMUNITY_INFO.WEBSITE' | translate
+                        }}</span>
+                        <a
+                          [href]="detail.website_url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-sm text-primary-600 hover:underline break-all"
+                          >{{ detail.website_url }}</a
+                        >
+                      </div>
+                    }
+                    @if (detail.headquarters_address; as addr) {
+                      <div>
+                        <span class="text-xs font-medium text-surface-500 block">{{
+                          'COMMUNITY_INFO.HEADQUARTERS' | translate
+                        }}</span>
+                        <span class="text-sm text-surface-800">
+                          {{ addr.street }} {{ addr.number }}
+                          @if (addr.supplement) {
+                            , {{ addr.supplement }}
+                          }
+                          <br />
+                          {{ addr.postcode }} {{ addr.city }}
+                        </span>
+                      </div>
+                    }
+
+                    <!-- Public contact: one click to write or call. -->
+                    <div [attr.data-testid]="'public-community-list__contact--' + $index">
+                      <span class="text-xs font-medium text-surface-500 block mb-1">{{
+                        'COMMUNITY.PUBLIC_LIST.CONTACT_TITLE' | translate
+                      }}</span>
+                      @if (detail.contact_email || detail.contact_phone) {
+                        <div class="flex flex-wrap gap-2">
+                          @if (detail.contact_email; as email) {
+                            <a
+                              [href]="mailtoHref(email)"
+                              class="contact-link"
+                              [attr.aria-label]="
+                                'COMMUNITY.PUBLIC_LIST.CONTACT_EMAIL_ARIA'
+                                  | translate: { name: community.name, email: email }
+                              "
+                              [attr.data-testid]="
+                                'public-community-list__contact--email--' + $index
+                              "
+                            >
+                              <i class="pi pi-envelope text-primary-500" aria-hidden="true"></i>
+                              <span class="break-all">{{ email }}</span>
+                            </a>
+                          }
+                          @if (detail.contact_phone; as phone) {
+                            <a
+                              [href]="telHref(phone)"
+                              class="contact-link"
+                              [attr.aria-label]="
+                                'COMMUNITY.PUBLIC_LIST.CONTACT_PHONE_ARIA'
+                                  | translate: { name: community.name, phone: phone }
+                              "
+                              [attr.data-testid]="
+                                'public-community-list__contact--phone--' + $index
+                              "
+                            >
+                              <i class="pi pi-phone text-primary-500" aria-hidden="true"></i>
+                              <span class="whitespace-nowrap">{{ phone }}</span>
+                            </a>
+                          }
                         </div>
-                      }
-                      @if (detail.website_url) {
-                        <div>
-                          <span class="text-xs font-medium text-surface-500 block">{{
-                            'COMMUNITY_INFO.WEBSITE' | translate
-                          }}</span>
-                          <a
-                            [href]="detail.website_url"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-sm text-primary-600 hover:underline"
-                            >{{ detail.website_url }}</a
-                          >
-                        </div>
-                      }
-                      @if (detail.headquarters_address; as addr) {
-                        <div>
-                          <span class="text-xs font-medium text-surface-500 block">{{
-                            'COMMUNITY_INFO.HEADQUARTERS' | translate
-                          }}</span>
-                          <span class="text-sm text-surface-800">
-                            {{ addr.street }} {{ addr.number }}
-                            @if (addr.supplement) {
-                              , {{ addr.supplement }}
-                            }
-                            <br />
-                            {{ addr.postcode }} {{ addr.city }}
-                          </span>
-                        </div>
+                      } @else {
+                        <span
+                          class="text-sm text-surface-400"
+                          [attr.data-testid]="'public-community-list__contact--none--' + $index"
+                          >{{ 'COMMUNITY.PUBLIC_LIST.NO_CONTACT' | translate }}</span
+                        >
                       }
                     </div>
-                  }
+                  </div>
                 } @else if (isLoadingDetail(community.id)) {
                   <div class="flex items-center justify-center py-2 mb-2">
                     <i class="pi pi-spinner pi-spin text-primary-400"></i>

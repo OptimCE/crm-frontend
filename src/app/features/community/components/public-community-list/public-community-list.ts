@@ -1,4 +1,14 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -7,8 +17,8 @@ import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
-  CommunityDetailDTO,
   CommunityQueryDTO,
+  PublicCommunityDetailDTO,
   PublicCommunityDTO,
 } from '../../../../shared/dtos/community.dtos';
 import {
@@ -25,6 +35,7 @@ import { CommunityLogo } from '../../../../shared/components/community-logo/comm
 import { ViewToggle } from '../../../../shared/components/view-toggle/view-toggle';
 import { CommunityMap } from './community-map/community-map';
 import type { MapViewMode } from '../../../../shared/components/map/map.types';
+import { mailtoHref, telHref } from '../../../../shared/utils/contact-links';
 
 @Component({
   selector: 'app-public-community-list',
@@ -51,6 +62,8 @@ export class PublicCommunityList {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private injector = inject(Injector);
+  private host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   communities = signal<PublicCommunityDTO[]>([]);
   /** Active regulator options (localized) + the current filter value (null = all). */
@@ -62,8 +75,12 @@ export class PublicCommunityList {
    */
   publicOperations = signal<Map<number, SharingOperationPartialDTO[]>>(new Map());
   loadingOperations = signal<Set<number>>(new Set());
-  /** Per-community detail (description, website, HQ address) lazy-loaded on expand. */
-  communityDetails = signal<Map<number, CommunityDetailDTO>>(new Map());
+  /**
+   * Per-community PUBLIC detail (description, website, HQ address, public
+   * contact) lazy-loaded on expand. Public, not the members-only detail: the
+   * directory is for people outside the community.
+   */
+  communityDetails = signal<Map<number, PublicCommunityDetailDTO>>(new Map());
   loadingDetails = signal<Set<number>>(new Set());
   expandedCommunityId = signal<number | null>(null);
 
@@ -72,6 +89,40 @@ export class PublicCommunityList {
   municipalitySuggestions = signal<MunicipalityPartialDTO[]>([]);
 
   readonly SharingOperationType = SharingOperationType;
+  readonly mailtoHref = mailtoHref;
+  readonly telHref = telHref;
+
+  /**
+   * Community opened from a link (`?community=<id>`, e.g. the map popup). The
+   * list holds only the first page, so when that community is not on it, its
+   * card is added on top from its public detail — see {@link listedCommunities}.
+   */
+  private readonly linkedCommunityId = signal<number | null>(null);
+  /** Card to bring into view once it is rendered. */
+  private readonly pendingScrollId = signal<number | null>(null);
+
+  /** The cards shown: the loaded page, plus the linked community when it is not on it. */
+  readonly listedCommunities = computed<PublicCommunityDTO[]>(() => {
+    const list = this.communities();
+    const linked = this.linkedCommunityId();
+    if (linked === null || list.some((c) => c.id === linked)) {
+      return list;
+    }
+    const detail = this.communityDetails().get(linked);
+    if (!detail) {
+      return list;
+    }
+    return [
+      {
+        id: detail.id,
+        name: detail.name,
+        regulator: detail.regulator,
+        logo_url: null,
+        logo_presigned_url: detail.logo_presigned_url,
+      },
+      ...list,
+    ];
+  });
 
   /** List or map, mirrored in `?view=` so a map link can be shared. */
   readonly view = signal<MapViewMode>('list');
@@ -82,6 +133,32 @@ export class PublicCommunityList {
   constructor() {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.view.set(params.get('view') === 'map' ? 'map' : 'list');
+      this.openLinkedCommunity(parseCommunityParam(params.get('community')));
+    });
+
+    // Scroll a linked card into view once it exists — it may only appear after
+    // the list or its detail arrives.
+    effect(() => {
+      const id = this.pendingScrollId();
+      this.listedCommunities();
+      if (id === null) {
+        return;
+      }
+      afterNextRender(
+        () => {
+          const card = this.host.nativeElement.querySelector<HTMLElement>(
+            `#public-community-${String(id)}`,
+          );
+          if (card) {
+            // jsdom has no scrollIntoView; real browsers always do.
+            if (typeof card.scrollIntoView === 'function') {
+              card.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }
+            this.pendingScrollId.set(null);
+          }
+        },
+        { injector: this.injector },
+      );
     });
 
     this.loadPublicCommunities();
@@ -121,7 +198,30 @@ export class PublicCommunityList {
     this.loadingOperations.set(new Set());
     this.communityDetails.set(new Map());
     this.expandedCommunityId.set(null);
+    this.linkedCommunityId.set(null);
+    this.setCommunityParam(null);
     this.loadPublicCommunities();
+  }
+
+  /** Open the community a link points at, unless it is already the open one. */
+  private openLinkedCommunity(id: number | null): void {
+    if (id === null || id === this.expandedCommunityId()) {
+      return;
+    }
+    this.linkedCommunityId.set(id);
+    this.expand(id);
+    this.pendingScrollId.set(id);
+  }
+
+  /** Mirror the open card in `?community=` so the page can be shared as is. */
+  private setCommunityParam(id: number | null): void {
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      // null removes the param.
+      queryParams: { community: id },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   private loadPublicCommunities(): void {
@@ -149,7 +249,7 @@ export class PublicCommunityList {
     this.loadingDetails.set(loadingNext);
 
     this.communityService
-      .getCommunityDetail(communityId)
+      .getPublicCommunityDetail(communityId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -243,11 +343,17 @@ export class PublicCommunityList {
   toggleAccordion(communityId: number): void {
     if (this.expandedCommunityId() === communityId) {
       this.expandedCommunityId.set(null);
+      this.setCommunityParam(null);
     } else {
-      this.expandedCommunityId.set(communityId);
-      this.loadCommunityDetail(communityId);
-      this.loadCommunityPublicSharingOperations(communityId);
+      this.expand(communityId);
+      this.setCommunityParam(communityId);
     }
+  }
+
+  private expand(communityId: number): void {
+    this.expandedCommunityId.set(communityId);
+    this.loadCommunityDetail(communityId);
+    this.loadCommunityPublicSharingOperations(communityId);
   }
 
   isExpanded(communityId: number): boolean {
@@ -262,7 +368,7 @@ export class PublicCommunityList {
     return this.loadingOperations().has(id);
   }
 
-  getDetail(id: number): CommunityDetailDTO | undefined {
+  getDetail(id: number): PublicCommunityDetailDTO | undefined {
     return this.communityDetails().get(id);
   }
 
@@ -306,4 +412,13 @@ export class PublicCommunityList {
         return '';
     }
   }
+}
+
+/** `?community=` as a positive integer id, or null when absent or malformed. */
+function parseCommunityParam(raw: string | null): number | null {
+  if (raw === null || !/^\d+$/.test(raw)) {
+    return null;
+  }
+  const id = Number(raw);
+  return id > 0 ? id : null;
 }

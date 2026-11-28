@@ -4,7 +4,7 @@
 
 # OptimCE CRM Frontend
 
-[![Site web](https://img.shields.io/badge/Site%20web-optimce.be-2e7d32.svg)](https://www.optimce.be/fr/)
+[![Site web](https://img.shields.io/badge/Site%20web-optimce.be-2e7d32.svg)](https://www.optimce.be)
 [![Licence](https://img.shields.io/badge/Licence-Apache%202.0-blue.svg)](../LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-21-dd0031.svg)](https://angular.dev)
 [![État des traductions](https://hosted.weblate.org/widgets/optimce/-/svg-badge.svg)](https://hosted.weblate.org/engage/optimce/)
@@ -17,7 +17,7 @@
 > doute, la version anglaise fait foi.
 
 Le **CRM frontend** est l'interface web Angular d'
-[OptimCE](https://www.optimce.be/fr/), une plateforme open source de gestion des
+[OptimCE](https://www.optimce.be), une plateforme open source de gestion des
 communautés d'énergie renouvelable dans le contexte belge du partage d'énergie.
 C'est l'application authentifiée unique que les gestionnaires et les membres
 utilisent pour administrer les membres, les compteurs, les opérations de partage

@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/communities/public"
   },
@@ -25,7 +25,7 @@
       },
       "id": "public-community-list__btn--accordion--0-2",
       "target": "public-community-list__btn--accordion--0",
-      "text": "En dépliant une communauté, vous voyez sa description, son site web, son siège social et surtout la liste de ses opérations de partage publiques.",
+      "text": "En dépliant une communauté, vous voyez sa description, son site web, son siège social, ses coordonnées de contact et surtout la liste de ses opérations de partage publiques.",
       "title": "Déplier une communauté"
     },
     {
@@ -37,6 +37,16 @@
       "targetClick": "next",
       "text": "La communauté « Test Community » propose plusieurs opérations de partage publiques (solaire, éolien). Chaque opération indique les communes qu'elle couvre.",
       "title": "Les opérations de partage"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__contact--0",
+      "target": "public-community-list__contact--0",
+      "targetClick": "next",
+      "text": "Pour poser une question ou demander à participer, contactez la communauté en un clic : l'adresse e-mail ouvre votre messagerie, le numéro lance l'appel depuis un téléphone. Ce sont les coordonnées que la communauté a choisi de publier ; si elle n'en a pas encore renseigné, la fiche l'indique.",
+      "title": "Contacter la communauté"
     },
     {
       "advance": {

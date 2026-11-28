@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/home"
   },
@@ -55,7 +55,7 @@
       "id": "public-community-list__filter--municipality",
       "target": "public-community-list__filter--municipality",
       "targetClick": "next",
-      "text": "Here are the communities open to the public. Filter them by municipality or by regulator, then open one to read its description, its website and its sharing operations.",
+      "text": "Here are the communities open to the public. Filter them by municipality or by regulator, then open one to read its description, its website and its sharing operations, and to contact it in one click by e-mail or phone.",
       "title": "Public communities",
       "waitFor": "public-community-list__btn--accordion--0"
     },

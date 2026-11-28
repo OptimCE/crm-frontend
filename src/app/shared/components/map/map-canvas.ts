@@ -405,6 +405,7 @@ export class MapCanvas {
       fields: zone.fields,
       badges: zone.badges,
       routerLink: zone.routerLink,
+      queryParams: zone.queryParams,
     }));
 
     this.showPopup(map, event, this.zonesPopupTitleKey(), entries);

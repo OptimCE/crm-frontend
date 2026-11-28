@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/communities/public"
   },
@@ -25,7 +25,7 @@
       },
       "id": "public-community-list__btn--accordion--0-2",
       "target": "public-community-list__btn--accordion--0",
-      "text": "Wanneer u een gemeenschap openklapt, ziet u haar beschrijving, website, maatschappelijke zetel en vooral de lijst van haar openbare deeloperaties.",
+      "text": "Wanneer u een gemeenschap openklapt, ziet u haar beschrijving, website, maatschappelijke zetel, contactgegevens en vooral de lijst van haar openbare deeloperaties.",
       "title": "Een gemeenschap openklappen"
     },
     {
@@ -37,6 +37,16 @@
       "targetClick": "next",
       "text": "De gemeenschap “Test Community” biedt verschillende openbare deeloperaties aan (zon, wind). Elke operatie vermeldt de gemeenten die ze dekt.",
       "title": "De deeloperaties"
+    },
+    {
+      "advance": {
+        "on": "manual"
+      },
+      "id": "public-community-list__contact--0",
+      "target": "public-community-list__contact--0",
+      "targetClick": "next",
+      "text": "Om een vraag te stellen of om deel te nemen, neemt u met één klik contact op met de gemeenschap: het e-mailadres opent uw mailprogramma, het nummer start de oproep vanaf een telefoon. Dit zijn de gegevens die de gemeenschap heeft willen publiceren; heeft ze er nog geen opgegeven, dan vermeldt de fiche dat.",
+      "title": "Contact opnemen met de gemeenschap"
     },
     {
       "advance": {

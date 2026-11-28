@@ -1,5 +1,5 @@
 {
-  "buildId": "ec8878fdeb71",
+  "buildId": "a37cdd313b8c",
   "entry": {
     "route": "/communities/info"
   },
@@ -16,7 +16,7 @@
       "id": "community-info__card--view",
       "target": "community-info__card--view",
       "targetClick": "next",
-      "text": "The page shows the community's current information: name, description, website, and registered office address. Click **Edit** to switch to edit mode.",
+      "text": "The page shows the community's current information: name, description, website, registered office address and public contact. Click **Edit** to switch to edit mode.",
       "title": "Community information page"
     },
     {
@@ -34,7 +34,7 @@
       },
       "id": "community-info__input--description",
       "target": "community-info__input--description",
-      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
       "title": "Enter the information"
     },
     {
@@ -43,7 +43,7 @@
       },
       "id": "community-info__input--website",
       "target": "community-info__input--website",
-      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
       "title": "Enter the information"
     },
     {
@@ -52,7 +52,7 @@
       },
       "id": "community-info__input--street",
       "target": "community-info__input--street",
-      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
       "title": "Enter the information"
     },
     {
@@ -61,7 +61,7 @@
       },
       "id": "community-info__input--number",
       "target": "community-info__input--number",
-      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
       "title": "Enter the information"
     },
     {
@@ -70,7 +70,7 @@
       },
       "id": "community-info__input--postcode",
       "target": "community-info__input--postcode",
-      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
       "title": "Enter the information"
     },
     {
@@ -79,7 +79,25 @@
       },
       "id": "community-info__input--city",
       "target": "community-info__input--city",
-      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty.",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--contact-email",
+      "target": "community-info__input--contact-email",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
+      "title": "Enter the information"
+    },
+    {
+      "advance": {
+        "on": "input"
+      },
+      "id": "community-info__input--contact-phone",
+      "target": "community-info__input--contact-phone",
+      "text": "Fill in the fields: **Description**, **Website** (full URL starting with https://) and the registered office address fields — street, number, postcode, and city. All four address fields must be filled together or left empty. Under **Public contact**, the e-mail and phone you enter are published in the communities directory, so people can e-mail or call you in one click; leave them empty to publish nothing.",
       "title": "Enter the information"
     },
     {
@@ -98,7 +116,7 @@
       "id": "community-info__view--description",
       "target": "community-info__view--description",
       "targetClick": "next",
-      "text": "Back in view mode, the page shows the description, website, and address exactly as you entered them — the changes have been successfully saved server-side.",
+      "text": "Back in view mode, the page shows the description, website, address and public contact exactly as you entered them — the changes have been successfully saved server-side.",
       "title": "Information updated"
     }
   ],

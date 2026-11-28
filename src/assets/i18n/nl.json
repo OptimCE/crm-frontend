@@ -93,7 +93,8 @@
       "admin_correspondence": "Antwoorden op procedures",
       "admin_digest": "Administratief overzicht per e-mail",
       "admin_effect": "Inwerkingtreding van procedures",
-      "admin_meter": "Mijn meters in de deling"
+      "admin_meter": "Mijn meters in de deling",
+      "data_export": "Gegevensexports"
     },
     "TYPES": {
       "signature": {
@@ -189,6 +190,17 @@
           "title": "Uw meter {{ean}} is nu actief in de deling"
         }
       },
+      "data_export": {
+        "requested": {
+          "title": "{{requester_name}} heeft een export van de gegevens van de gemeenschap aangevraagd"
+        },
+        "ready": {
+          "title": "Uw gegevensexport staat klaar om te downloaden"
+        },
+        "failed": {
+          "title": "Uw gegevensexport is mislukt. Wij zijn op de hoogte gebracht: u kunt het opnieuw proberen."
+        }
+      },
       "admin_correspondence": {
         "recorded": {
           "title": "Er werd een antwoord geregistreerd bij een procedure"
@@ -198,6 +210,54 @@
         }
       }
     }
+  },
+  "DATA_EXPORT": {
+    "MINE": {
+      "INTRO": "Download een kopie van alle gegevens die OptimCE over u bewaart: uw account, uw leden, uw meters en hun verbruik, uw documenten en uw geschiedenis. Het ZIP-bestand wordt op de achtergrond voorbereid en u krijgt bericht zodra het klaar is. Het blijft beperkte tijd beschikbaar, zoals aangegeven in de lijst.",
+      "REQUEST": "Mijn gegevens exporteren",
+      "EMPTY": "U hebt nog geen export aangevraagd."
+    },
+    "COMMUNITY": {
+      "TITLE": "Exports van de gegevens van de gemeenschap",
+      "SUBTITLE": "Een volledige kopie van de gegevens van de gemeenschap, als ZIP-bestand",
+      "INTRO": "Download een kopie van alle gegevens van de gemeenschap: leden, meters en verbruik, deeloperaties, verdeelsleutels, documenten en activiteitenlogboek. Alleen wie een export heeft aangevraagd, kan die downloaden; de andere beheerders zien hem in deze lijst.",
+      "REQUEST": "De gegevens van de gemeenschap exporteren",
+      "EMPTY": "Voor deze gemeenschap is nog geen export aangevraagd.",
+      "WARNING_TITLE": "De gegevens van de gemeenschap exporteren",
+      "WARNING_BODY": "Het bestand bevat de persoonsgegevens van alle leden van {{name}}: identiteit, contactgegevens, meters, verbruik en documenten.",
+      "WARNING_DUTY": "Bewaar het op een veilige plaats, deel het alleen met wie het nodig heeft en verwijder het zodra u het niet meer nodig hebt.",
+      "WARNING_VISIBILITY": "De andere beheerders van de gemeenschap worden op de hoogte gebracht van uw aanvraag.",
+      "WARNING_CANCEL": "Annuleren",
+      "WARNING_CONFIRM": "Exporteren"
+    },
+    "COLUMNS": {
+      "REQUESTER": "Aangevraagd door",
+      "DATE": "Aangevraagd op",
+      "SCOPE": "Omvang",
+      "STATUS": "Status",
+      "EXPIRES": "Beschikbaar tot",
+      "ACTIONS": "Acties"
+    },
+    "SCOPE": {
+      "USER": "Mijn gegevens",
+      "COMMUNITY": "Gemeenschap {{name}}"
+    },
+    "STATUS": {
+      "IN_PROGRESS": "In voorbereiding",
+      "READY": "Klaar",
+      "FAILED": "Mislukt",
+      "EXPIRED": "Verlopen"
+    },
+    "YOU": "u",
+    "DOWNLOAD": "Downloaden",
+    "REQUESTED": "Export aangevraagd. U krijgt bericht zodra hij klaar is.",
+    "IN_PROGRESS_HINT": "Er wordt een export voorbereid. U kunt een nieuwe aanvragen zodra die klaar is.",
+    "POLLING_HINT": "De lijst wordt tijdens de voorbereiding vanzelf bijgewerkt.",
+    "FAILED_HINT": "De laatste export is mislukt. Wij zijn op de hoogte gebracht: u kunt een nieuwe aanvragen.",
+    "STEP_UP": "Meld u voor uw veiligheid opnieuw aan om de exportaanvraag te bevestigen.",
+    "STEP_UP_FAILED": "De nieuwe aanmelding kon niet worden bevestigd. Probeer het zo meteen opnieuw.",
+    "LOAD_ERROR": "De lijst met exports kon niet worden geladen.",
+    "RETRY": "Opnieuw proberen"
   },
   "DASHBOARD": {
     "TITLE": "Dashboard",
@@ -368,6 +428,7 @@
     "ERROR_LOADING": "Er is een fout opgetreden bij het laden van de gegevens",
     "RETRY": "Opnieuw proberen",
     "AUDIT_LOG": "Auditlogboek",
+    "COMMUNITY_EXPORTS": "Gegevensexports",
     "NEWS": "Nieuws",
     "BILLING": "Facturatie",
     "ADMINISTRATIVE_DOCUMENT": "Administratieve documenten",
@@ -429,7 +490,8 @@
         "BANKING_INFORMATIONS": "Bankgegevens",
         "DOCUMENTS": "Documenten",
         "REPRESENTATIONS": "Vertegenwoordigingen",
-        "NOTIFICATIONS": "Meldingen"
+        "NOTIFICATIONS": "Meldingen",
+        "EXPORTS": "Mijn exports"
       },
       "BANKING_INFORMATION": {
         "IBAN": "IBAN"
@@ -614,11 +676,17 @@
     "REPRESENTATIVE_EMAIL": "E-mail van de vertegenwoordiger",
     "STATUTES_DATE": "Datum van de statuten",
     "INTERNAL_RULES_DATE": "Datum van het huishoudelijk reglement",
+    "CONTACT_SECTION": "Openbaar contact",
+    "CONTACT_HINT": "Deze gegevens worden getoond in de openbare gids van gemeenschappen, zodat men u met één klik kan mailen of bellen. Laat ze leeg om niets te publiceren.",
+    "CONTACT_EMAIL": "Contact-e-mail",
+    "CONTACT_PHONE": "Contacttelefoon",
+    "CONTACT_PHONE_PLACEHOLDER": "+32 470 12 34 56",
     "ERRORS": {
       "INVALID_URL": "Voer een geldige URL in die begint met http:// of https://",
       "PARTIAL_ADDRESS": "Vul alle verplichte adresvelden in of laat ze allemaal leeg",
       "INVALID_IBAN": "Voer een geldig IBAN in",
-      "INVALID_EMAIL": "Voer een geldig e-mailadres in"
+      "INVALID_EMAIL": "Voer een geldig e-mailadres in",
+      "INVALID_PHONE": "Voer een geldig telefoonnummer in (8 tot 15 cijfers)"
     }
   },
   "COMMUNITY": {
@@ -662,7 +730,11 @@
       "MUNICIPALITY_FILTER_LABEL": "Filter op gemeente",
       "MUNICIPALITY_FILTER_PLACEHOLDER": "Zoek een gemeente…",
       "REGULATOR_FILTER_LABEL": "Filter op regulator",
-      "REGULATOR_FILTER_PLACEHOLDER": "Alle regulatoren"
+      "REGULATOR_FILTER_PLACEHOLDER": "Alle regulatoren",
+      "CONTACT_TITLE": "Contact opnemen met de gemeenschap",
+      "CONTACT_EMAIL_ARIA": "E-mail sturen naar {{name}} ({{email}})",
+      "CONTACT_PHONE_ARIA": "{{name}} bellen ({{phone}})",
+      "NO_CONTACT": "Deze gemeenschap heeft nog geen contactgegevens opgegeven."
     },
     "CREATE": {
       "TITLE": "Gemeenschap aanmaken",
@@ -2303,6 +2375,12 @@
         },
         "address": {
           "geocode_backfill": "Adressen gegeocodeerd (batch)"
+        },
+        "export_job": {
+          "requested": "Gegevensexport aangevraagd",
+          "download_url_issued": "Downloadlink voor export aangemaakt",
+          "expired": "Gegevensexport verlopen",
+          "failed": "Gegevensexport mislukt"
         }
       },
       "allocation_key_generation": {

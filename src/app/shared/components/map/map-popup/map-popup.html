@@ -43,6 +43,7 @@
       @if (entry.routerLink) {
         <a
           [routerLink]="entry.routerLink"
+          [queryParams]="entry.queryParams"
           class="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline mt-1"
           [attr.data-testid]="'map-popup__link--' + entry.id"
         >

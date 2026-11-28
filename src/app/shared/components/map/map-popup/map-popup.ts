@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { type Params, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { TagModule } from 'primeng/tag';
 import type { MapBadgeSpec, MapFieldSpec } from '../map.types';
@@ -12,6 +12,8 @@ export interface MapPopupEntry {
   readonly badges?: readonly MapBadgeSpec[];
   /** Must be an ABSOLUTE path — see the note on MapPoint.routerLink. */
   readonly routerLink?: string;
+  /** Query params for `routerLink` (never written into the link string). */
+  readonly queryParams?: Params;
   /** Shown when the point is a commune centroid rather than a real address. */
   readonly approximate?: boolean;
 }
